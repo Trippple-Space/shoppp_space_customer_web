@@ -1,5 +1,19 @@
 $unit: px;
 
+/**--- App colors ---*/
+
+$green: #0B9378;
+$white: #FFFFFF;
+
+$black: #000000;
+$dimgrey: #333333;
+$grey: #676767;
+$light-grey: #A8A6A6;
+$lighter-grey: #D9D9D9B2;
+$faint-grey: #DADADA;
+
+/**--- End app colors ---*/
+
 $info-color: #88bef5;
 $warning-color: #feb062;
 $danger-color: #ff304f;
@@ -13,6 +27,3 @@ $medium: calc(14/16)+rem;
 $small: calc(12/16)+rem;
 $smaller: calc(10/16)+rem;
 
-$primary-font: 'Open Sans', "Source Sans Pro", sans-serif;
-$secondary-font: 'Open Sans', "Source Sans Pro", sans-serif;
-$tertiary-font: "Ovo", serif;

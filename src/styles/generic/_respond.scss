@@ -1,0 +1,24 @@
+@media only screen and (min-width: 576px) {
+  @mixin respond-sm {
+    @content;
+  }
+}
+
+@media only screen and (min-width: 768px) {
+  @mixin respond-md {
+    @content;
+  }
+}
+
+@media only screen and (min-width: 992px) {
+  @mixin respond-lg {
+    @content;
+  }
+}
+
+@media only screen and (min-width: 1200px) {
+  @mixin respond-xl {
+    @content;
+  }
+}
+

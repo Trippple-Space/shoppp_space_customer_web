@@ -7,6 +7,8 @@ $loop-start: 0;
 
 @for $i from $loop-end through $loop-start {
 
+  /** {{breakpoint_start}} **/
+
   /**
     * Margin
     */
@@ -259,9 +261,23 @@ $loop-start: 0;
     opacity: #{$i}+'%';
   }
 
+  @for $j from 1 through 5 {
+    $value: $i * $j;
+
+    .aspect-ratio-#{$i}-#{$value},
+    .ratio-#{$i}-#{$value} {
+      aspect-ratio: $i / calc(#{$i} * #{$value});
+    }
+  }
+
+  /** {{breakpoint_end}} **/
+
 }
 
 @for $i from 0 through 800 {
+
+  /** {{breakpoint_start}} **/
+
   .h-#{$i}vh {
     height: #{$i}vh;
   }
@@ -278,7 +294,10 @@ $loop-start: 0;
     max-width: #{$i}px;
   }
 
+  /** {{breakpoint_end}} **/
 }
+
+/** {{breakpoint_start}} **/
 
 .w-fit {
   width: fit-content;
@@ -398,7 +417,7 @@ $loop-start: 0;
   display: inline-flex;
 }
 
-.flex-column {
+.flex-column, .flex-col {
   flex-direction: column;
 }
 
@@ -519,3 +538,6 @@ $loop-start: 0;
 .box-shadow {
   box-shadow: 0px 6px 12px rgba(4, 9, 33, 0.08);
 }
+
+/** {{breakpoint_end}} **/
+

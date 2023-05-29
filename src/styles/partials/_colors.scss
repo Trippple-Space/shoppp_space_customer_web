@@ -1,0 +1,24 @@
+$colors: (
+  "white": #FFFFFF,
+  "black": #000000,
+  "dimgrey": #333333,
+  "grey": #676767,
+  "light-grey": #A8A6A6,
+  "lighter-grey": #D9D9D9B2,
+  "faint-grey": #DADADA,
+  "green": #0B9378
+);
+
+@each $color, $value in $colors {
+  .bg-#{$color} {
+    background-color: $value;
+  }
+
+  .text-#{$color} {
+    color: $value;
+  }
+
+  .border-#{$color} {
+    border-color: $value;
+  }
+}
