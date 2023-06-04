@@ -5,7 +5,7 @@ const config = require('./config-reader')
 const location = config.location || 'src/styles/generic';
 
 const SCSS_FILE = location + '/_generic.scss';
-const OUTPUT_FILE = location + '/_generic.map.scss';
+const OUTPUT_FILE = location + '/map.css.ts';
 
 const generateMap = () => {
 
@@ -36,7 +36,7 @@ const generateMap = () => {
 
   // Join the lines into a single string
   const outputContent = outputLines.join('\n');
-  console.log({outputContent, type: typeof outputContent});
+  // console.log({outputContent, type: typeof outputContent});
   const finalContent = modifyContentWithBreakpoint(outputContent);
   // Write the transformed content to _generic.map.scss
   // console.log({finalContent});
@@ -46,7 +46,7 @@ const generateMap = () => {
 }
 
 const modifyContentWithBreakpoint = (content) => {
-  console.log({config});
+  // console.log({config});
   const replacedContent = content.replaceAll(/\/\*\* \{\{breakpoint_start\}\} \*\*\/([\s\S]*?)(\/\*\* \{\{breakpoint_end\}\} \*\*\/)/g, 
   (match) => {
     console.log({match});
@@ -54,8 +54,8 @@ const modifyContentWithBreakpoint = (content) => {
     ` ${
         Object.keys(config.breakpoints).map((breakpoint) => (
     `
-@include respond(${breakpoint}) {
-        ${match.replaceAll('{{breakpoint}}', breakpoint)}
+@include ${breakpoint} {
+        ${match.replaceAll('{{breakpoint}}', breakpoint).trim()}
 }
     `
   )).join('\n') 

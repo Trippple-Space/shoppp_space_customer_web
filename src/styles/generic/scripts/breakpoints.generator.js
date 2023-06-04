@@ -24,8 +24,8 @@ function generateMixins() {
     // Generate the mixin content
     let mixinContent = '';
     Object.entries(config.breakpoints).forEach(([breakpoint, value]) => {
-      mixinContent += `@media only screen and (min-width: ${value}) {\n`;
-      mixinContent += `  @mixin respond-${breakpoint} {\n`;
+      mixinContent += `@mixin ${breakpoint} {\n`;
+      mixinContent += `  @media only screen and (min-width: ${value}) {\n`;
       mixinContent += `    @content;\n`;
       mixinContent += `  }\n`;
       mixinContent += `}\n\n`;
@@ -43,7 +43,12 @@ function generateMixins() {
   }
 }
 
+try {
+  generateMixins();  
+} catch (error) {
+    console.log('Error generating breakpoints: ', error)
+}
 // Generate mixins initially
-generateMixins();
+
 
 

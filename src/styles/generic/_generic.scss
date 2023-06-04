@@ -1,6 +1,6 @@
 @use 'variables' as *;
-@use '../mixins/util' as *;
-@use '../mixins/respond' as *;
+@use 'respond' as *;
+@use 'utilities' as *;
 
 $loop-end: 200;
 $loop-start: 0;
@@ -294,8 +294,30 @@ $loop-start: 0;
     max-width: #{$i}px;
   }
 
+  .text-#{$i},
+  .text-size-#{$i},
+  .font-#{$i}, 
+  .font-size-#{$i} {
+    font-size: #{$i}px;
+  }
+
   /** {{breakpoint_end}} **/
 }
+
+/** {{breakpoint_start}} **/
+
+@for $i from 1 through 9 {
+  $value: $i * 100;
+
+  .weight-#{$value},
+  .font-weight-#{$value}, 
+  .text-weight-#{$value}
+  {
+    font-weight: #{$value};
+  }
+}
+
+/** {{breakpoint_end}} **/
 
 /** {{breakpoint_start}} **/
 
@@ -321,6 +343,10 @@ $loop-start: 0;
 
 .p-static, .static {
   position: static;
+}
+
+.p-sticky, .sticky {
+  position: sticky;
 }
 
 .mx-auto {
@@ -365,27 +391,27 @@ $loop-start: 0;
   cursor: pointer;
 }
 
-.font-largest {
+.font-largest, .text-largest {
   font-size: $largest;
 }
 
-.font-larger {
+.font-larger, .text-larger {
   font-size: $larger;
 }
 
-.font-large {
+.font-large, .text-large {
   font-size: $large;
 }
 
-.font-medium {
+.font-medium, .text-medium {
   font-size: $medium;
 }
 
-.font-small {
+.font-small, .text-small {
   font-size: $small;
 }
 
-.font-smaller {
+.font-smaller, .text-smaller {
   font-size: $smaller;
 }
 
@@ -537,6 +563,14 @@ $loop-start: 0;
 
 .box-shadow {
   box-shadow: 0px 6px 12px rgba(4, 9, 33, 0.08);
+}
+
+.w-full {
+  width: 100%;
+}
+
+.h-full {
+  height: 100%;
 }
 
 /** {{breakpoint_end}} **/

@@ -1,6 +1,6 @@
 @use 'variables' as *;
-@use '../mixins/util' as *;
-@use '../mixins/respond' as *;
+@use 'respond' as *;
+@use 'utilities' as *;
 
 $loop-end: 200;
 $loop-start: 0;
@@ -8,7 +8,7 @@ $loop-start: 0;
 @for $i from $loop-end through $loop-start {
 
    
-@include respond(sm) {
+@include sm {
         /** {{breakpoint_start}} **/
 
   /**
@@ -276,7 +276,7 @@ $loop-start: 0;
 }
     
 
-@include respond(md) {
+@include md {
         /** {{breakpoint_start}} **/
 
   /**
@@ -544,7 +544,7 @@ $loop-start: 0;
 }
     
 
-@include respond(lg) {
+@include lg {
         /** {{breakpoint_start}} **/
 
   /**
@@ -812,7 +812,7 @@ $loop-start: 0;
 }
     
 
-@include respond(xl) {
+@include xl {
         /** {{breakpoint_start}} **/
 
   /**
@@ -1085,7 +1085,7 @@ $loop-start: 0;
 @for $i from 0 through 800 {
 
    
-@include respond(sm) {
+@include sm {
         /** {{breakpoint_start}} **/
 
   [class~='sm:h-#{$i}vh']{
@@ -1104,11 +1104,18 @@ $loop-start: 0;
     max-width: #{$i}px;
   }
 
+  [class~='sm:text-#{$i}'],
+  [class~='sm:text-size-#{$i}'],
+  [class~='sm:font-#{$i}'], 
+  [class~='sm:font-size-#{$i}']{
+    font-size: #{$i}px;
+  }
+
   /** {{breakpoint_end}} **/
 }
     
 
-@include respond(md) {
+@include md {
         /** {{breakpoint_start}} **/
 
   [class~='md:h-#{$i}vh']{
@@ -1127,11 +1134,18 @@ $loop-start: 0;
     max-width: #{$i}px;
   }
 
+  [class~='md:text-#{$i}'],
+  [class~='md:text-size-#{$i}'],
+  [class~='md:font-#{$i}'], 
+  [class~='md:font-size-#{$i}']{
+    font-size: #{$i}px;
+  }
+
   /** {{breakpoint_end}} **/
 }
     
 
-@include respond(lg) {
+@include lg {
         /** {{breakpoint_start}} **/
 
   [class~='lg:h-#{$i}vh']{
@@ -1150,11 +1164,18 @@ $loop-start: 0;
     max-width: #{$i}px;
   }
 
+  [class~='lg:text-#{$i}'],
+  [class~='lg:text-size-#{$i}'],
+  [class~='lg:font-#{$i}'], 
+  [class~='lg:font-size-#{$i}']{
+    font-size: #{$i}px;
+  }
+
   /** {{breakpoint_end}} **/
 }
     
 
-@include respond(xl) {
+@include xl {
         /** {{breakpoint_start}} **/
 
   [class~='xl:h-#{$i}vh']{
@@ -1173,13 +1194,93 @@ $loop-start: 0;
     max-width: #{$i}px;
   }
 
+  [class~='xl:text-#{$i}'],
+  [class~='xl:text-size-#{$i}'],
+  [class~='xl:font-#{$i}'], 
+  [class~='xl:font-size-#{$i}']{
+    font-size: #{$i}px;
+  }
+
   /** {{breakpoint_end}} **/
 }
     
 }
 
  
-@include respond(sm) {
+@include sm {
+        /** {{breakpoint_start}} **/
+
+@for $i from 1 through 9 {
+  $value: $i * 100;
+
+  [class~='sm:weight-#{$value}'],
+  [class~='sm:font-weight-#{$value}'], 
+  [class~='sm:text-weight-#{$value}']
+  {
+    font-weight: #{$value};
+  }
+}
+
+/** {{breakpoint_end}} **/
+}
+    
+
+@include md {
+        /** {{breakpoint_start}} **/
+
+@for $i from 1 through 9 {
+  $value: $i * 100;
+
+  [class~='md:weight-#{$value}'],
+  [class~='md:font-weight-#{$value}'], 
+  [class~='md:text-weight-#{$value}']
+  {
+    font-weight: #{$value};
+  }
+}
+
+/** {{breakpoint_end}} **/
+}
+    
+
+@include lg {
+        /** {{breakpoint_start}} **/
+
+@for $i from 1 through 9 {
+  $value: $i * 100;
+
+  [class~='lg:weight-#{$value}'],
+  [class~='lg:font-weight-#{$value}'], 
+  [class~='lg:text-weight-#{$value}']
+  {
+    font-weight: #{$value};
+  }
+}
+
+/** {{breakpoint_end}} **/
+}
+    
+
+@include xl {
+        /** {{breakpoint_start}} **/
+
+@for $i from 1 through 9 {
+  $value: $i * 100;
+
+  [class~='xl:weight-#{$value}'],
+  [class~='xl:font-weight-#{$value}'], 
+  [class~='xl:text-weight-#{$value}']
+  {
+    font-weight: #{$value};
+  }
+}
+
+/** {{breakpoint_end}} **/
+}
+    
+
+ 
+@include sm {
         /** {{breakpoint_start}} **/
 
 [class~='sm:w-fit']{
@@ -1204,6 +1305,10 @@ $loop-start: 0;
 
 [class~='sm:p-static'], [class~='sm:static']{
   position: static;
+}
+
+[class~='sm:p-sticky'], [class~='sm:sticky']{
+  position: sticky;
 }
 
 [class~='sm:mx-auto']{
@@ -1248,27 +1353,27 @@ $loop-start: 0;
   cursor: pointer;
 }
 
-[class~='sm:font-largest']{
+[class~='sm:font-largest'], [class~='sm:text-largest']{
   font-size: $largest;
 }
 
-[class~='sm:font-larger']{
+[class~='sm:font-larger'], [class~='sm:text-larger']{
   font-size: $larger;
 }
 
-[class~='sm:font-large']{
+[class~='sm:font-large'], [class~='sm:text-large']{
   font-size: $large;
 }
 
-[class~='sm:font-medium']{
+[class~='sm:font-medium'], [class~='sm:text-medium']{
   font-size: $medium;
 }
 
-[class~='sm:font-small']{
+[class~='sm:font-small'], [class~='sm:text-small']{
   font-size: $small;
 }
 
-[class~='sm:font-smaller']{
+[class~='sm:font-smaller'], [class~='sm:text-smaller']{
   font-size: $smaller;
 }
 
@@ -1422,11 +1527,19 @@ $loop-start: 0;
   box-shadow: 0px 6px 12px rgba(4, 9, 33, 0.08);
 }
 
+[class~='sm:w-full']{
+  width: 100%;
+}
+
+[class~='sm:h-full']{
+  height: 100%;
+}
+
 /** {{breakpoint_end}} **/
 }
     
 
-@include respond(md) {
+@include md {
         /** {{breakpoint_start}} **/
 
 [class~='md:w-fit']{
@@ -1451,6 +1564,10 @@ $loop-start: 0;
 
 [class~='md:p-static'], [class~='md:static']{
   position: static;
+}
+
+[class~='md:p-sticky'], [class~='md:sticky']{
+  position: sticky;
 }
 
 [class~='md:mx-auto']{
@@ -1495,27 +1612,27 @@ $loop-start: 0;
   cursor: pointer;
 }
 
-[class~='md:font-largest']{
+[class~='md:font-largest'], [class~='md:text-largest']{
   font-size: $largest;
 }
 
-[class~='md:font-larger']{
+[class~='md:font-larger'], [class~='md:text-larger']{
   font-size: $larger;
 }
 
-[class~='md:font-large']{
+[class~='md:font-large'], [class~='md:text-large']{
   font-size: $large;
 }
 
-[class~='md:font-medium']{
+[class~='md:font-medium'], [class~='md:text-medium']{
   font-size: $medium;
 }
 
-[class~='md:font-small']{
+[class~='md:font-small'], [class~='md:text-small']{
   font-size: $small;
 }
 
-[class~='md:font-smaller']{
+[class~='md:font-smaller'], [class~='md:text-smaller']{
   font-size: $smaller;
 }
 
@@ -1669,11 +1786,19 @@ $loop-start: 0;
   box-shadow: 0px 6px 12px rgba(4, 9, 33, 0.08);
 }
 
+[class~='md:w-full']{
+  width: 100%;
+}
+
+[class~='md:h-full']{
+  height: 100%;
+}
+
 /** {{breakpoint_end}} **/
 }
     
 
-@include respond(lg) {
+@include lg {
         /** {{breakpoint_start}} **/
 
 [class~='lg:w-fit']{
@@ -1698,6 +1823,10 @@ $loop-start: 0;
 
 [class~='lg:p-static'], [class~='lg:static']{
   position: static;
+}
+
+[class~='lg:p-sticky'], [class~='lg:sticky']{
+  position: sticky;
 }
 
 [class~='lg:mx-auto']{
@@ -1742,27 +1871,27 @@ $loop-start: 0;
   cursor: pointer;
 }
 
-[class~='lg:font-largest']{
+[class~='lg:font-largest'], [class~='lg:text-largest']{
   font-size: $largest;
 }
 
-[class~='lg:font-larger']{
+[class~='lg:font-larger'], [class~='lg:text-larger']{
   font-size: $larger;
 }
 
-[class~='lg:font-large']{
+[class~='lg:font-large'], [class~='lg:text-large']{
   font-size: $large;
 }
 
-[class~='lg:font-medium']{
+[class~='lg:font-medium'], [class~='lg:text-medium']{
   font-size: $medium;
 }
 
-[class~='lg:font-small']{
+[class~='lg:font-small'], [class~='lg:text-small']{
   font-size: $small;
 }
 
-[class~='lg:font-smaller']{
+[class~='lg:font-smaller'], [class~='lg:text-smaller']{
   font-size: $smaller;
 }
 
@@ -1916,11 +2045,19 @@ $loop-start: 0;
   box-shadow: 0px 6px 12px rgba(4, 9, 33, 0.08);
 }
 
+[class~='lg:w-full']{
+  width: 100%;
+}
+
+[class~='lg:h-full']{
+  height: 100%;
+}
+
 /** {{breakpoint_end}} **/
 }
     
 
-@include respond(xl) {
+@include xl {
         /** {{breakpoint_start}} **/
 
 [class~='xl:w-fit']{
@@ -1945,6 +2082,10 @@ $loop-start: 0;
 
 [class~='xl:p-static'], [class~='xl:static']{
   position: static;
+}
+
+[class~='xl:p-sticky'], [class~='xl:sticky']{
+  position: sticky;
 }
 
 [class~='xl:mx-auto']{
@@ -1989,27 +2130,27 @@ $loop-start: 0;
   cursor: pointer;
 }
 
-[class~='xl:font-largest']{
+[class~='xl:font-largest'], [class~='xl:text-largest']{
   font-size: $largest;
 }
 
-[class~='xl:font-larger']{
+[class~='xl:font-larger'], [class~='xl:text-larger']{
   font-size: $larger;
 }
 
-[class~='xl:font-large']{
+[class~='xl:font-large'], [class~='xl:text-large']{
   font-size: $large;
 }
 
-[class~='xl:font-medium']{
+[class~='xl:font-medium'], [class~='xl:text-medium']{
   font-size: $medium;
 }
 
-[class~='xl:font-small']{
+[class~='xl:font-small'], [class~='xl:text-small']{
   font-size: $small;
 }
 
-[class~='xl:font-smaller']{
+[class~='xl:font-smaller'], [class~='xl:text-smaller']{
   font-size: $smaller;
 }
 
@@ -2161,6 +2302,14 @@ $loop-start: 0;
 
 [class~='xl:box-shadow']{
   box-shadow: 0px 6px 12px rgba(4, 9, 33, 0.08);
+}
+
+[class~='xl:w-full']{
+  width: 100%;
+}
+
+[class~='xl:h-full']{
+  height: 100%;
 }
 
 /** {{breakpoint_end}} **/
