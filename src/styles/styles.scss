@@ -1,8 +1,8 @@
 /* You can add global styles to this file, and also import other style files */
-@use 'generic' as *;
+// @use 'generic' as *;
 @use './partials' as *;
 @use './mixins/util' as *;
-
+@import url('./index.css');
 
 * {
   box-sizing: border-box;

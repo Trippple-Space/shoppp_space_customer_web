@@ -3,7 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "dev": "node scripts.js && next dev --turbo && bash stop-scripts.sh",
+    "dev": "next dev --turbo",
     "generic": "",
     "build": "next build",
     "start": "next start",

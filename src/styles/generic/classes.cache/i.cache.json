@@ -1,4 +1,0 @@
-{
-  "items-baseline": ".items-baseline {    align-items: baseline;  }",
-  "items-start": ".items-start {    align-items: flex-start;  }"
-}

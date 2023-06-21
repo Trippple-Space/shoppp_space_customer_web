@@ -1000,5 +1000,8 @@
   "aspect-ratio-1-4": ".aspect-ratio-1-4, .ratio-1-4 { aspect-ratio: 1 / calc(1 * 4); }",
   "aspect-ratio-1-5": ".aspect-ratio-1-5, .ratio-1-5 { aspect-ratio: 1 / calc(1 * 5); }",
   "aspect-ratio-0-0": ".aspect-ratio-0-0, .ratio-0-0 { aspect-ratio: 0 / calc(0 * 0); }",
-  "align-items-center": ".align-items-center, .items-center {    align-items: center;  }"
+  "align-items-center": ".a-items-center {    align-items: center;  }",
+  "a-items-center": ".a-items-center {    align-items: center;  }",
+  "a-items-baseline": ".a-items-baseline {    align-items: baseline;  }",
+  "a-items-start": ".a-items-start {    align-items: flex-start;  }"
 }

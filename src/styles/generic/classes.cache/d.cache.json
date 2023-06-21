@@ -1,9 +1,0 @@
-{
-  "d-block": ".d-block, .block {    display: block;  }",
-  "d-inline-block": ".d-inline-block, .i-block {    display: inline-block;  }",
-  "d-inline": ".d-inline, .inline {    display: inline;  }",
-  "d-none": ".d-none, .hidden {    display: none;  }",
-  "d-grid": ".d-grid, .grid {    display: grid;  }",
-  "d-flex": ".d-flex, .flex {    display: flex;  }",
-  "d-inline-flex": ".d-inline-flex, .i-flex {    display: inline-flex;  }"
-}

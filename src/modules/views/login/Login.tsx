@@ -41,19 +41,19 @@ const Login = () => {
                     <p className="text-center weight-300 text-18 lg:text-20 text-light-grey  ">Please enter your details.</p>
                   </div>
 
-                  <form className="form block w-100p mt-36">
+                  <form className="form block w-100p mt-36 nth-child(5):mt-10 ">
                       <div className="input-group">
                         <label htmlFor="name" className='block w-fit mb-14 weight-500 text-14 text-grey'>Name</label>
                         <input 
                           type="text" 
                           className='block font-roboto w-100p bg-white border-1 
                                       border-lighter-grey py-17 px-24 
-                                      radius-8 box-shadow text-16 weight-500 
-                                      text-faint-grey outline-21 
-                                      g|margin-top:::8px
-                                      g|:placeholder|margin-top:::8px
-                                      mt-50 pb-8000000000 mt-890374 
-                                    ' 
+                                      radius-8 box-shadow text-16 weight-400 
+                                      hover:focus:placeholder:text-danger font-20
+                                      lg:g|border:1px_solid_#000
+                                      g|border-radius:100px!;background:pink!
+                                      h-20 
+                                    '
                           placeholder='Enter your fullname'
                           id='name' name='name' 
                         />

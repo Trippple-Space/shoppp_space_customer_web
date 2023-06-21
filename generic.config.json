@@ -1,6 +1,7 @@
 {
   "location": "src/styles/generic",
-  "output": "src/styles/",
+  "watchDirectory": "./src/",
+  "output": "./src/styles/",
   "breakpoints": {
     "sm": "576px",
     "md": "768px",

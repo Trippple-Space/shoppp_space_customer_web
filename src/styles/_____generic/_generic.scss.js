@@ -3,6 +3,7 @@ const path = require('path');
 
 const colorsDefault = require('./colors.default');
 const sizesDefault = require('./sizes.default');
+const config = require('./scripts/config-reader');
 
 const loopEnd = 200;
 const loopStart = 0;
@@ -48,11 +49,11 @@ for (let i = loopEnd; i >= loopStart; i--) {
   classes[`grid-${i}-cols-auto`] = `.grid-${i}-cols-auto { grid-template-columns: repeat(${i}, auto); }`;
   classes[`grid-${i}-cols-1fr`] = `.grid-${i}-cols-1fr { grid-template-columns: repeat(${i}, 1fr); }`;
   classes[`grid-col-span-${i}`] = `.grid-col-span-${i} { grid-column: span ${i}; }`;
-  classes[`gap-${i}`] = `.gap-${i} { gap: px-to-rem(${i}); }`;
-  classes[`border-radius-${i}`] = `.border-radius-${i}, .b-radius-${i}, .radius-${i} { border-radius: px-to-rem(${i}); }`;
-  classes[`border-b-r-${i}`] = `.border-b-r-${i} { border-bottom-right-radius: px-to-rem(${i}) !important; }`;
-  classes[`border-b-l-${i}`] = `.border-b-l-${i} { border-bottom-left-radius: px-to-rem(${i}) !important; }`;
-  classes[`bd-rad-i-${i}`] = `.bd-rad-i-${i} { border-radius: px-to-rem(${i}) !important; }`;
+  classes[`gap-${i}`] = `.gap-${i} { gap: ${i}px; }`;
+  classes[`border-radius-${i}`] = `.border-radius-${i}, .b-radius-${i}, .radius-${i} { border-radius: ${i}px; }`;
+  classes[`border-b-r-${i}`] = `.border-b-r-${i} { border-bottom-right-radius: ${i}px; }`;
+  classes[`border-b-l-${i}`] = `.border-b-l-${i} { border-bottom-left-radius: ${i}px; }`;
+  classes[`radius-${i}`] = `.radius-${i} { border-radius: ${i}px; }`;
   classes[`border-${i}`] = `.border-${i} { border: ${i}px solid; }`;
   classes[`border-t-${i}`] = `.border-t-${i} { border-top: ${i}px solid; }`;
   classes[`border-b-${i}`] = `.border-b-${i} { border-bottom: ${i}px solid; }`;
@@ -82,7 +83,7 @@ for (let i = 0; i <= 800; i++) {
   classes[`max-h-${i}vh`] = `.max-h-${i}vh { max-height: ${i}vh; }`;
   classes[`min-h-${i}vh`] = `.min-h-${i}vh { min-height: ${i}vh; }`;
   classes[`max-w-${i}`] = `.max-w-${i} { max-width: ${i}px; }`;
-  classes[`text-${i}`] = `.text-${i}, .text-size-${i}, .font-${i}, .font-size-${i} { font-size: ${i}px; }`;
+  classes[`text-${i}`] = `.text-${i} { font-size: ${i}px; }`;
   /** {{breakpoint_end}} **/
 }
 
@@ -90,7 +91,7 @@ for (let i = 0; i <= 800; i++) {
 
 for (let i = 1; i <= 9; i++) {
   const value = i * 100;
-  classes[`weight-${value}`] = `.weight-${value}, .font-weight-${value}, .text-weight-${value} { font-weight: ${value}; }`;
+  classes[`weight-${value}`] = `.weight-${value} { font-weight: ${value}; }`;
 }
 
 
@@ -103,19 +104,19 @@ classes = {
   'h-fit': `.h-fit {
     height: fit-content;
   }`,
-  'p-absolute': `.p-absolute, .absolute {
+  'p-absolute': `.absolute {
     position: absolute;
   }`,
-  'p-relative': `.p-relative, .relative {
+  'p-relative': `.relative {
     position: relative;
   }`,
-  'p-fixed': `.p-fixed, .fixed {
+  'p-fixed': `.fixed {
     position: fixed;
   }`,
-  'p-static': `.p-static, .static {
+  'p-static': `.static {
     position: static;
   }`,
-  'p-sticky': `.p-sticky, .sticky {
+  'p-sticky': `.sticky {
     position: sticky;
   }`,
   'mx-auto': `.mx-auto {
@@ -146,49 +147,49 @@ classes = {
   'text-left': `.text-left {
     text-align: left;
   }`,
-  pointer: `.pointer, .is-link {
+  pointer: `.pointer {
     cursor: pointer;
   }`,
-  'font-largest': `.font-largest, .text-largest {
+  'text-largest': `.text-largest {
     font-size: ${sizesDefault.largest};
   }`,
-  'font-larger': `.font-larger, .text-larger {
+  'text-larger': `.text-larger {
     font-size: ${sizesDefault.larger};
   }`,
-  'font-large': `.font-large, .text-large {
+  'text-large': `.text-large {
     font-size: ${sizesDefault.large};
   }`,
-  'font-medium': `.font-medium, .text-medium {
+  'text-medium': `.text-medium {
     font-size: ${sizesDefault.medium};
   }`,
-  'font-small': `.font-small, .text-small {
+  'text-small': `.text-small {
     font-size: ${sizesDefault.small};
   }`,
-  'font-smaller': `.font-smaller, .text-smaller {
+  'text-smaller': `.text-smaller {
     font-size: ${sizesDefault.smaller};
   }`,
-  'd-block': `.d-block, .block {
+  'block': `.block {
     display: block;
   }`,
-  'd-inline-block': `.d-inline-block, .i-block {
+  'inline-block': `.inline-block {
     display: inline-block;
   }`,
-  'd-inline': `.d-inline, .inline {
+  'inline': `.inline {
     display: inline;
   }`,
-  'd-none': `.d-none, .hidden {
+  'hidden': `.hidden {
     display: none;
   }`,
-  'd-grid': `.d-grid, .grid {
+  'grid': `.grid {
     display: grid;
   }`,
-  'd-flex': `.d-flex, .flex {
+  'flex': `.flex {
     display: flex;
   }`,
-  'd-inline-flex': `.d-inline-flex, .i-flex {
+  'inline-flex': `.inline-flex {
     display: inline-flex;
   }`,
-  'flex-column': `.flex-column, .flex-col {
+  'flex-col': `.flex-col {
     flex-direction: column;
   }`,
   'flex-row': `.flex-row {
@@ -200,19 +201,19 @@ classes = {
   'float-left': `.float-left {
     float: left;
   }`,
-  'space-between': `.space-between {
+  'j-content-space-between': `.j-content-space-between {
     justify-content: space-between;
   }`,
-  center: `.center {
+  'j-content-center': `.j-content-center {
     justify-content: center;
   }`,
-  'align-items-center': `.align-items-center, .items-center {
+  'a-items-center': `.a-items-center {
     align-items: center;
   }`,
-  'items-baseline': `.items-baseline {
+  'a-items-baseline': `.a-items-baseline {
     align-items: baseline;
   }`,
-  'items-start': `.items-start {
+  'a-items-start': `.a-items-start {
     align-items: flex-start;
   }`,
   'content-end': `.content-end {
@@ -230,19 +231,19 @@ classes = {
       width: 0px;
     }
   }`,
-  'bg-green': `.bg-green, .bg-success {
+  'bg-success': `.bg-success {
     background-color: ${colorsDefault.success};
   }`,
-  'bg-red': `.bg-red, .bg-danger, .bg-error {
+  'bg-danger': `.bg-danger {
     background-color: ${colorsDefault.danger};
   }`,
-  'text-red': `.text-red, .text-danger, .text-error {
+  'text-danger': `.text-danger {
     color: ${colorsDefault.danger};
   }`,
-  'bg-orange': `.bg-orange, .bg-warning {
+  'bg-warning': `.bg-warning {
     background-color: ${colorsDefault.warning};
   }`,
-  'bg-blue': `.bg-blue, .bg-info {
+  'bg-info': `.bg-info {
     background-color: ${colorsDefault.info};
   }`,
   'bg-none': `.bg-none {
@@ -284,7 +285,7 @@ classes = {
 };
 
 
-const cacheFolder = 'classes.cache.2';
+const cacheFolder = config.location + '/classes.cache';
 
 // Create the cache folder if it doesn't exist
 if (!fs.existsSync(cacheFolder)) {
