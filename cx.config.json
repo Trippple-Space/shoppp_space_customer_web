@@ -1,11 +1,10 @@
 {
-  "location": "src/styles/generic",
   "watchDirectory": "./src/",
   "output": "./src/styles/",
   "breakpoints": {
-    "sm": "576px",
-    "md": "768px",
-    "lg": "992px",
+    "s": "576px",
+    "m": "768px",
+    "l": "992px",
     "xl": "1200px" 
   },
   "colors": {
@@ -14,9 +13,11 @@
     "dimgrey": "#333333",
     "grey": "#676767",
     "light-grey": "#A8A6A6",
-    "lighter-grey": "#D9D9D9B2",
+    "lighter-grey": "#D9D9D9",
     "lightest-grey": "#D9D9D9B2",
     "faint-grey": "#DADADA",
-    "green": "#0B9378"
+    "green": "#0B9378",
+    "darkgreen": "#0C7661",
+    "danger": "#DD4B4B"
   }
 }

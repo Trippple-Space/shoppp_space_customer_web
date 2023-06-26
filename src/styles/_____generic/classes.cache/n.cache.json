@@ -1,3 +1,0 @@
-{
-  "no-scrollbar": ".no-scrollbar {    &::-webkit-scrollbar {      width: 0px;    }  }"
-}
