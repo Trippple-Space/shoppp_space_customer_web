@@ -19,6 +19,10 @@ export const metadata = {
   description: 'Fabrics touche',
 }
 
+export interface ILayout {
+  children: React.ReactNode
+}
+
 export default function RootLayout({
   children,
 }: {
@@ -26,7 +30,7 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en" className={`${inter.variable} ${roboto.variable} bg-white`}>
-      <body className='font-roboto weight-300'>{children}</body>
+      <body className='font-roboto weight-300 text-dimgrey'>{children}</body>
     </html>
   )
 }

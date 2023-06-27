@@ -1,6 +1,7 @@
 import Icon from '@/modules/lib/components/icon/Icon'
 import Image from '@/modules/lib/components/image/Image'
 import Input from '@/modules/lib/components/input/Input'
+import { paths } from '@/modules/lib/utility/paths'
 import Link from 'next/link'
 import React from 'react'
 
@@ -20,7 +21,7 @@ const Login = () => {
               <div className='relative w-100p h-100p'>
                 <Image
                   className='absolute h-95p w-fit r-0 b-0' 
-                  src='carton-man.png'
+                  src='carton-man-0.png'
                   alt='Delivery'
                 />
               </div>
@@ -44,7 +45,7 @@ const Login = () => {
                     <p className="text-center text-16 l:text-20 text-light-grey  ">Please enter your details.</p>
                   </div>
 
-                  <form className="form block w-100p mt-36  ">
+                  <form className="form block w-100p mt-36 l:mt-50 ">
                       <Input 
                         label='Email'
                         id='email'
@@ -76,9 +77,9 @@ const Login = () => {
                         <div>Forgotten password</div>
                       </div>
 
-                      <button className="bg-green text-white py-15 l:py-18 radius-10 w-full border 
+                      <button disabled className="bg-green text-white py-15 l:py-18 radius-10 w-full border 
                                           text-18 l:text-20 mt-40 hover:pointer
-                                          hover:bg-darkgreen g|transition:0.5s
+                                          hover:bg-darkgreen g|transition:0.5s disabled:bg-grey
                                         "
                       >
                         Sign In
@@ -86,7 +87,7 @@ const Login = () => {
 
                       <div className="text-18 text-light-grey mt-30 mx-auto w-fit">
                           <span>Don’t have an account?</span>
-                          <Link href='#' className='text-green'> Sign Up</Link>
+                          <Link href={paths.signup} className='text-green'> Sign Up</Link>
                       </div>
 
                   </form>
