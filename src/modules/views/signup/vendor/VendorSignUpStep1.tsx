@@ -1,22 +1,12 @@
 import BoxRadio from '@/modules/lib/components/box-radio/BoxRadio'
-import Image from '@/modules/lib/components/image/Image'
-import ProgressBar from '@/modules/lib/components/progress-bar/ProgressBar'
-import React from 'react'
+import React, { FC } from 'react'
+import { IVendorSignUpStep } from './VendorSignUp'
 
-const VendorSignUp = () => {
-  return (
-    <div className='flex content-center h-full '>
-        <div className='a-self-center w-80p mx-auto'>
-            <div className="mb-43">
-                <Image
-                    className='w-100 h-27 mb-16 a-self-left'
-                    src='asoebi-logo-colored.png'
-                    alt='logo'
-                    type='logo'
-                />
-                <ProgressBar percentage={30} />                
-            </div>
 
+
+const VendorSignUpStep1: FC<IVendorSignUpStep> = ({ setCurrentStep }) => {
+    return (
+        <div>
             <div className='mt-33'>
                 <h3 className='text-24 weight-500 text-black' >Let’s get started. Which of these best describe you?</h3>
                 <p className='text-16 mt-13'>We'll assist you in setting up your store tailored to its unique needs.</p>
@@ -37,17 +27,15 @@ const VendorSignUp = () => {
                                 text-13 l:text-16 mt-40 hover:pointer hover:text-green'>
                         Skip
                     </button>
-                    <button className='bg-green text-white py-15 l:py-15 w-117 radius-5 border 
+                    <button onClick={() => setCurrentStep(2)} className='bg-green text-white py-15 l:py-15 w-117 radius-5 border 
                                  mt-40 hover:pointer text-13 l:text-16
                                 hover:bg-darkgreen g|transition:0.5s disabled:bg-grey'>
                         Next step
                     </button>
                 </div>
             </div>
-
         </div>
-    </div>
-  )
+    )
 }
 
-export default VendorSignUp
+export default VendorSignUpStep1

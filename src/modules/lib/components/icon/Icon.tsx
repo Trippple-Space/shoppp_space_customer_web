@@ -10,6 +10,7 @@ interface IIcon {
     className?: string
 }
 const Icon: FC<IIcon> = ({name, width = 18, height = 18, alt= 'icon', className = ''}) => {
+  
   return (
     <img
         className={'inline-block ' + className}

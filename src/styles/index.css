@@ -124,7 +124,17 @@
 .bg-transparent { background-color: transparent; } 
 .w-117 { width: 117px; } 
 .border-none { border-style: none; } 
+.text-13 { font-size: 13px; } 
 [class~='hover:text-green']:hover { color: #0B9378; } 
 @media only screen and (min-width: 992px) { [class~='l:py-15'] { padding-top: 15px; padding-bottom: 15px; } } 
-.text-13 { font-size: 13px; } 
-@media only screen and (min-width: 992px) { [class~='l:text-25'] { font-size: 25px; } } 
+.py-5 { padding-top: 5px; padding-bottom: 5px; } 
+.gap-5 { gap: 5px; } 
+.py-16 { padding-top: 16px; padding-bottom: 16px; } 
+.mb-3 { margin-bottom: 3px; } 
+.text-10 { font-size: 10px; } 
+.max-w-60 { max-width: 60px; } 
+.mt-150 { margin-top: 150px; } 
+.h-70 { height: 70px; } 
+.h-700 { height: 700px; } 
+.bg-red { background-color: red; } 
+.mt-10 { margin-top: 10px; } 

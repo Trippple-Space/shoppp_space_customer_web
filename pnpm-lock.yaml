@@ -31,8 +31,8 @@ dependencies:
 
 devDependencies:
   cxcss:
-    specifier: ^0.0.10
-    version: 0.0.10
+    specifier: ^0.0.13
+    version: 0.0.13
 
 packages:
 
@@ -211,8 +211,8 @@ packages:
     resolution: {integrity: sha512-I7K1Uu0MBPzaFKg4nI5Q7Vs2t+3gWWW648spaF+Rg7pI9ds18Ugn+lvg4SHczUdKlHI5LWBXyqfS8+DufyBsgQ==}
     dev: false
 
-  /cxcss@0.0.10:
-    resolution: {integrity: sha512-stHkqyrSUoaeOy9xvpBb/lfKwAmQ9ZRZ0u8eSGl6KBeiOkatI/jY4yRZEFTY3qI+Fcv0lTLkBJYis8nJ8OEYwg==}
+  /cxcss@0.0.13:
+    resolution: {integrity: sha512-htOyGI4Q+83QsjJDhcxPlJ6OM76PyaSp3VX0GKHPp6AaEowPxfk76jJw+mbo8ku5TbB35UULZ2ddacp/YisR2g==}
     hasBin: true
     dev: true
 

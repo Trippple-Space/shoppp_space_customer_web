@@ -20,6 +20,6 @@
     "typescript": "5.0.4"
   },
   "devDependencies": {
-    "cxcss": "^0.0.10"
+    "cxcss": "^0.0.13"
   }
 }
