@@ -1,3 +1,4 @@
+import Icon from '@/modules/lib/components/icon/Icon'
 import Image from '@/modules/lib/components/image/Image'
 import Input from '@/modules/lib/components/input/Input'
 import { paths } from '@/modules/lib/utility/paths'
@@ -56,8 +57,8 @@ const SignUp = () => {
                   className='mt-30'
                   after={
                     <div className="notice text-14 flex gap-10 mt-9 text-danger">
-                      {/* <Icon name='alert-circle' className='w-18 a-self-center' />
-                  <span className='a-self-center'>Invalid email or password</span> */}
+                      <Icon name='alert-circle' className='w-18 a-self-center' />
+                      <span className='a-self-center'>Invalid email or password</span>
                     </div>
                   }
                 />

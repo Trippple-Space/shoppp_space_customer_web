@@ -26,6 +26,7 @@ const VendorSignUpStep3: FC<IVendorSignUpStep> = ({ setCurrentStep }) => {
                     type='textarea'
                     name='storeDescription'   
                     label='Store Description'
+                    placeholder="What are some interesting details about your store?"
                     className='w-full mt-40' 
                     after={
                         <span className='text-12 mt-10'>Maximum number of 20 words allowed. Please remove excess word</span>
@@ -33,7 +34,7 @@ const VendorSignUpStep3: FC<IVendorSignUpStep> = ({ setCurrentStep }) => {
                 />
             </div>
 
-            <div className='flex space-between mt-150 '>
+            <div className='flex space-between mt-40 '>
                 <div className="flex">
                     <button onClick={() => setCurrentStep(2)} className='flex gap-5 items-center bg-transparent text-dimgrey py-15 w-117 border-none 
                                  text-13 l:text-16 w-fit hover:pointer hover:text-green'>
