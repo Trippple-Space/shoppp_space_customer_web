@@ -1,6 +1,6 @@
 "use client"
 import BoxRadio from '@/modules/lib/components/box-radio/BoxRadio';
-import Image from '@/modules/lib/components/image/Image';
+import Image from '@/modules/lib/components/___image/Image';
 import ProgressBar from '@/modules/lib/components/progress-bar/ProgressBar';
 import React, { ReactNode, useState } from 'react';
 import VendorSignUpStep1 from './VendorSignUpStep1';
@@ -29,8 +29,8 @@ const VendorSignUp = () => {
   return (
     <div className='h-full'>
       <div className="text-right w-full l:w-80p mt-53 mx-25 hidden l:block">
-          <span>Not a vendor? </span>
-          <Link href={paths.signup} className='text-green pointer'>Sign up here instead</Link>
+        <span>Not a vendor? </span>
+        <Link href={paths.signup} className='text-green pointer'>Sign up here instead</Link>
       </div>
       <div className='flex content-center h-full'>
         <div className='a-self-center w-80p mx-auto'>
@@ -45,7 +45,7 @@ const VendorSignUp = () => {
           </div>
           {VendorSignUpStep && <VendorSignUpStep setCurrentStep={setCurrentStep} />}
         </div>
-      </div>      
+      </div>
     </div>
 
   );

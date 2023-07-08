@@ -2,7 +2,7 @@ import BoxRadio from '@/modules/lib/components/box-radio/BoxRadio'
 import React, { FC } from 'react'
 import { IVendorSignUpStep } from './VendorSignUp'
 import BoxSelect from '@/modules/lib/components/box-select/BoxSelect'
-import Image from '@/modules/lib/components/image/Image'
+import Image from '@/modules/lib/components/___image/Image'
 import Icon from '@/modules/lib/components/icon/Icon'
 
 
@@ -17,13 +17,13 @@ const VendorSignUpStep2: FC<IVendorSignUpStep> = ({ setCurrentStep }) => {
             <div className='mt-33 flex space-between gap-23 flex-col m:flex-row'>
                 <BoxSelect id="experience" name="experience" label={
                     <div className='flex py-5 gap-5'>
-                       <div className='py-16'>
+                        <div className='py-16'>
                             <div className="text-13 weight-400 mb-3">Fabrics</div>
                             <div className="text-10">I want to sell unsewn fabrics / clothe materials traditionally known as Asoebi</div>
-                       </div>
-                       <div className='w-100p max-w-60'>
+                        </div>
+                        <div className='w-100p max-w-60'>
                             <Icon name='fabric-on-vendor-type-icon' className='w-100p h-100p' />
-                       </div>
+                        </div>
                     </div>
                 } />
                 <BoxSelect id="experience" name="experience" label={
@@ -44,7 +44,7 @@ const VendorSignUpStep2: FC<IVendorSignUpStep> = ({ setCurrentStep }) => {
                     <button onClick={() => setCurrentStep(1)} className='flex gap-5 items-center bg-transparent text-dimgrey py-15 w-117 border-none 
                                   w-fit hover:pointer hover:text-green'>
                         <Icon name='caret-left' className='w-fit' />
-                        <span className='w-fit h-fit'>Back</span> 
+                        <span className='w-fit h-fit'>Back</span>
                     </button>
                 </div>
                 <div className='flex'>
