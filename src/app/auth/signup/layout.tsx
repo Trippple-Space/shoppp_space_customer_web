@@ -20,7 +20,7 @@ const layout: FC<ILayout> = ({ children }) => {
           </div>
           <div className='relative w-100p h-100p'>
             <Image
-              className='absolute h-95p w-fit l-50p g|transform:translate(-50%) b-0'
+              className='absolute h-95p w-fit l-50p g|transform:translate(-50%); b-0'
               src='carton-man-1.png'
               alt='Delivery'
             />

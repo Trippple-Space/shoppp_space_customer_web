@@ -13,6 +13,9 @@ dependencies:
   classnames:
     specifier: ^2.3.2
     version: 2.3.2
+  cxcss:
+    specifier: ^0.0.16
+    version: 0.0.16
   next:
     specifier: 13.4.4
     version: 13.4.4(react-dom@18.2.0)(react@18.2.0)(sass@1.63.6)
@@ -28,11 +31,6 @@ dependencies:
   typescript:
     specifier: 5.0.4
     version: 5.0.4
-
-devDependencies:
-  cxcss:
-    specifier: ^0.0.13
-    version: 0.0.13
 
 packages:
 
@@ -211,10 +209,12 @@ packages:
     resolution: {integrity: sha512-I7K1Uu0MBPzaFKg4nI5Q7Vs2t+3gWWW648spaF+Rg7pI9ds18Ugn+lvg4SHczUdKlHI5LWBXyqfS8+DufyBsgQ==}
     dev: false
 
-  /cxcss@0.0.13:
-    resolution: {integrity: sha512-htOyGI4Q+83QsjJDhcxPlJ6OM76PyaSp3VX0GKHPp6AaEowPxfk76jJw+mbo8ku5TbB35UULZ2ddacp/YisR2g==}
+  /cxcss@0.0.16:
+    resolution: {integrity: sha512-ozDusJq7xZV9obYmchINmH2ohtZXC23KympbHvsLRoTy8LnhTQt5f5hYPM1T0ospL4qIEFny5Scta54tD7JFJA==}
     hasBin: true
-    dev: true
+    dependencies:
+      chokidar: 3.5.3
+    dev: false
 
   /fill-range@7.0.1:
     resolution: {integrity: sha512-qOo9F+dMUmC2Lcb4BbVvnKJxTPjCm+RRpe4gDuGrzkL7mEVl/djYSu2OdQ2Pa302N4oqkSg9ir6jaLWJ2USVpQ==}
