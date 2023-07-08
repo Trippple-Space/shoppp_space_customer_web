@@ -1,5 +1,5 @@
 import Icon from '@/modules/lib/components/icon/Icon'
-import Image from '@/modules/lib/components/___image/Image'
+import Image from '@/modules/lib/components/image/Image'
 import Input from '@/modules/lib/components/input/Input'
 import { paths } from '@/modules/lib/utility/paths'
 import Link from 'next/link'

@@ -1,5 +1,5 @@
 import { ILayout } from '@/app/layout'
-import Image from '@/modules/lib/components/___image/Image'
+import Image from '@/modules/lib/components/image/Image'
 import Input from '@/modules/lib/components/input/Input'
 import { paths } from '@/modules/lib/utility/paths'
 import Link from 'next/link'

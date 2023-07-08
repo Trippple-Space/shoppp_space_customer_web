@@ -1,6 +1,6 @@
 "use client"
 import BoxRadio from '@/modules/lib/components/box-radio/BoxRadio';
-import Image from '@/modules/lib/components/___image/Image';
+import Image from '@/modules/lib/components/image/Image';
 import ProgressBar from '@/modules/lib/components/progress-bar/ProgressBar';
 import React, { ReactNode, useState } from 'react';
 import VendorSignUpStep1 from './VendorSignUpStep1';

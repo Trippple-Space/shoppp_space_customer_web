@@ -2,7 +2,7 @@ import BoxRadio from '@/modules/lib/components/box-radio/BoxRadio'
 import React, { FC } from 'react'
 import { IVendorSignUpStep } from './VendorSignUp'
 import BoxSelect from '@/modules/lib/components/box-select/BoxSelect'
-import Image from '@/modules/lib/components/___image/Image'
+import Image from '@/modules/lib/components/image/Image'
 import Icon from '@/modules/lib/components/icon/Icon'
 
 

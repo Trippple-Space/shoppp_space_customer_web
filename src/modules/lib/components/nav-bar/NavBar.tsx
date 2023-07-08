@@ -1,5 +1,5 @@
 import React from 'react'
-import Image from '../___image/Image'
+import Image from '../image/Image'
 import Button from '../button/Button'
 
 const NavBar = () => {
