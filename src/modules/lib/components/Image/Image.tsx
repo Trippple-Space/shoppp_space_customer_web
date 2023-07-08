@@ -19,4 +19,5 @@ const Image: FC<IImage> = ({className, src, alt, type = 'image'}) => {
   )
 }
 
+
 export default Image
