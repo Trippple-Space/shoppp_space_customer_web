@@ -18,6 +18,8 @@
     "faint-grey": "#DADADA",
     "green": "#0B9378",
     "darkgreen": "#0C7661",
-    "danger": "#DD4B4B"
+    "danger": "#DD4B4B",
+    "light-yellow": "#FFE68BB2",
+    "yellow": "#FACE33"
   }
 }

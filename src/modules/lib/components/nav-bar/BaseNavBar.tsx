@@ -1,10 +1,14 @@
-import React from 'react'
+import React, { FC, ReactNode } from 'react'
 import Image from '../image/Image'
 import Button from '../button/Button'
 
-const NavBar = () => {
+interface IBaseNavBar {
+    links: ReactNode
+}
+
+const BaseNavBar: FC<IBaseNavBar> = ({links}) => {
     return (
-        <div>
+        <div className=''>
             <div className='flex w-90p space-between items-center py-33 mx-auto'>
                 <div className='w-fit'>
                     <Image
@@ -15,7 +19,7 @@ const NavBar = () => {
                     />
                 </div>
                 <div className='w-100p text-center'>
-
+                    {links}
                 </div>
                 <div className='w-fit'>
                     <Button >Login</Button>
@@ -26,4 +30,4 @@ const NavBar = () => {
     )
 }
 
-export default NavBar
+export default BaseNavBar

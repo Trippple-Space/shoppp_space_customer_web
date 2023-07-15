@@ -1,10 +1,10 @@
-import NavBar from '@/modules/lib/components/nav-bar/NavBar'
+import BaseNavBar from '@/modules/lib/components/nav-bar/BaseNavBar'
 import React from 'react'
 
 const Home = () => {
   return (
     <div>
-        <NavBar />
+      {/* <BaseNavBar /> */}
     </div>
   )
 }
