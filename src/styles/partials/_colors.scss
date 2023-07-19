@@ -8,7 +8,9 @@ $colors: (
   "faint-grey": #DADADA,
   "green": #0B9378,
   "light-green": #E2FFFACC,
-  "shadowGrey" : "#00000014"
+  "shadowGrey" : "#00000014",
+  "deepYellow" : "#FACE33",
+  "yellow": "#FACE33"
 );
 
 @each $color, $value in $colors {

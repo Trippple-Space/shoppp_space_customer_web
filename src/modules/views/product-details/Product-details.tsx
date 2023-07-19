@@ -9,11 +9,13 @@ import { BsArrowLeftShort, BsArrowRightShort } from 'react-icons/bs';
 import { PiHeartStraightThin } from 'react-icons/pi';
 import { GrStar } from 'react-icons/gr';
 import { IoIosArrowBack, IoIosArrowForward } from 'react-icons/io';
+import ProfilePage from '@/app/profile/page'
 
 
 const ProductDetails = () => {
   return (
     <div className="w-100p p-20 l:p-70">
+      <ProfilePage />
       <div className='hidden l:block'>
         <h1 className='l:t-40 l:text-40 weight-500'>Kutonu High Grade Fabric Kutonu High Grade Fabric</h1>
       </div>

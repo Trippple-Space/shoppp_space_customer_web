@@ -3,4 +3,6 @@ export const paths = {
     signup: '/auth/signup',
     vendor_signup: '/auth/signup/vendor',
     product_details: '/product-details',
+    checkout: '/checkout',
+
 }

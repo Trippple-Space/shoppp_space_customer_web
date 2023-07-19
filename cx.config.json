@@ -20,6 +20,7 @@
     "darkgreen": "#0C7661",
     "danger": "#DD4B4B",
     "light-green" : "#E2FFFACC",
-    "shadowGrey" : "#00000014"
+    "shadowGrey" : "#00000014",
+    "deepYellow" : "#FACE33"
   }
 }
