@@ -21,5 +21,6 @@
     "danger": "#DD4B4B",
     "light-yellow": "#FFE68BB2",
     "yellow": "#FACE33"
-  }
+  },
+  "aliasesFile": "./aliases.cx"
 }

@@ -9,7 +9,7 @@ interface IBaseNavBar {
 const BaseNavBar: FC<IBaseNavBar> = ({links}) => {
     return (
         <div className=''>
-            <div className='flex w-90p space-between items-center py-33 mx-auto'>
+            <div className='flex app-width space-between items-center py-33 '>
                 <div className='w-fit'>
                     <Image
                         className='w-150'
