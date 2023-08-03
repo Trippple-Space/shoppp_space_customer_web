@@ -26,13 +26,13 @@ const AddressModal: React.FC<ModalProps> = ({modalOpen, handleCloseModal, data})
       <Modal isOpen={modalOpen} onClose={handleCloseModal}>
        <div className='w-330 l:w-1000 py-5 l:py-20 scroll'>
         <div className='flex space-between py-10 relative'>
-         <div className='w-5p l:w-3p py-5' style={{ borderBottom: '2px solid #DADADA'}}></div>
+         <div className='w-5p l:w-3p py-5 border-2 border-b border-faint-grey'></div>
          <div className='flex weight-500 w-80p l:w-31p space-between text-16 l:text-18 text-black'>
-            <p className={`px-15 l:px-10 py-5 pointer ${tabVal === 'view-address' ? 'text-green' : ''}`} style={{ borderBottom: tabVal === 'view-address' ? '3px solid green' : '2px solid #DADADA'}} onClick={() => setTabVal('view-address')}>Address book </p>
-            <p className='px-11 l:px-32 py-5' style={{ borderBottom: '2px solid #DADADA'}}></p>
-            <p className={`px-10 l:px-3 py-5 pointer ${tabVal === 'add-address' ? 'text-green' : ''}`} style={{ borderBottom: tabVal === 'add-address' ? '3px solid green' : '2px solid #DADADA'}} onClick={() => setTabVal('add-address')}>New address</p>
+            <p className={`px-15 l:px-10 pt-5 pb-20 pointer ${tabVal === 'view-address' ? 'text-green' : ''}`} style={{ borderBottom: tabVal === 'view-address' ? '3px solid green' : '2px solid #DADADA'}} onClick={() => setTabVal('view-address')}>Address book </p>
+            <p className='px-11 l:px-32 py-5 border-2 border-b border-faint-grey'></p>
+            <p className={`px-10 l:px-3 pt-5 pb-20 pointer ${tabVal === 'add-address' ? 'text-green' : ''}`} style={{ borderBottom: tabVal === 'add-address' ? '3px solid green' : '2px solid #DADADA'}} onClick={() => setTabVal('add-address')}>New address</p>
          </div>
-         <div className='w-15p l:w-67p py-5' style={{ borderBottom: '2px solid #DADADA'}}></div>
+         <div className='w-15p l:w-67p py-5 border-b border-faint-grey'></div>
          <div className='absolute t-15 l:t-0 r-10 l:r-15 pointer' onClick={handleCloseModal}>
             <AiOutlineClose className='w-15 h-15 l:w-25 l:h-25' />
          </div>
@@ -103,7 +103,7 @@ const AddressModal: React.FC<ModalProps> = ({modalOpen, handleCloseModal, data})
         ) : (
          <div className='px-10 l:px-40 pb-30'>
           {[0,0,0].map((item: any) => (
-            <div className='l:flex space-between items-center py-20' style={{ borderBottom: '1px solid #D9D9D9'}}>
+            <div className='l:flex space-between items-center py-20 border-b border-lighter-grey'>
             <div className='flex gap-10 l:gap-20 items-center py-10'>
               <div className='w-110 l:w-145 h-110'>
               <Image
@@ -113,7 +113,7 @@ const AddressModal: React.FC<ModalProps> = ({modalOpen, handleCloseModal, data})
                 type='image'
               />
               </div>
-              <div className='line-height-22 text-14 text-dimgrey opacity-70'>
+              <div className='line-height-25 text-13 text-dimgrey opacity-70'>
                 <h2 className='text-16 l:text-20 weight-400 text-black opacity-100'>Abdulhammed Ibraheem</h2>
                 <p>7, Anthony village road, Anthony Lagos.</p>
                 <p>Lagos Nigeria</p>
