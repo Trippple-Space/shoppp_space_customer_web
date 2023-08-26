@@ -24,8 +24,8 @@ const StorefrontAbout = () => {
                     </div>
                   </div>
                   <div className='mt-48'>
-                    <h1 className='text-48 weight-700'>About BillGram</h1>
-                    <p className='max-w-550 mt-20 text-20 line-height-38 letter-spacing-1 weight-400'>Launched in 2021, Billgram is the leading Asoebi fashion store for global wholesale trade. We serve millions of Buyers and suppliers around Nigeria.  </p>
+                    <h1 className='text-48 weight-600'>About BillGram</h1>
+                    <p className='max-w-550 mt-20 text-20 line-height-38 letter-spacing-1 weight-300'>Launched in 2021, Billgram is the leading Asoebi fashion store for global wholesale trade. We serve millions of Buyers and suppliers around Nigeria.  </p>
                   </div>
 
                   <div className='flex mt-44 gap-30'>
@@ -53,7 +53,7 @@ const StorefrontAbout = () => {
                 </div>
                 <div className="relative w-full">
                     <Icon className='absolute z-0 inline w-fit t--10 r-0 h-full' name='store-about-dots-bg' />
-                    <div className="pr-70 w-full grid grid-3-cols-1fr grid-3-rows-1fr w-full max-w-700 absolute r-0 h-430 gap-27 mt-50">
+                    <div className="pr-70 w-full grid grid-3-cols-1fr grid-3-rows-1fr w-full max-w-700 absolute r-0 h-430 gap-27 mt-70">
                       <div className=" grid-row-span-1 grid-col-span-2 grid grid-3-cols-1fr gap-17">
                         <div className='grid-col-span-2
                                         radius-t-l-0 radius-30 bg-cover 

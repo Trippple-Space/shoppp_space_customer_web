@@ -8,11 +8,11 @@ const Footer = () => {
     const [isFooterOpen, setIsFooterOpen] = useState(false)
   return (
     <div className='fixed b-0 l-0 w-full'>
-        <div className={cx("w-full h-500 py-55 pointer-none px-80 grid g|transition:0.5s relative g|transform:translateY(150%); bg-lightgrey", {
+        {/* <div className={cx("w-full h-500 py-55 pointer-none px-80 grid g|transition:0.5s relative g|transform:translateY(150%); bg-lightgrey", {
             "g|transform:translateY(0); pointer-all ": isFooterOpen
         })}>
 
-        </div>  
+        </div>   */}
         <div onClick={() => setIsFooterOpen((prev) => !prev)} className="flex g|transition:0.5s bg-white relative pointer w-full g|box-shadow:0px|_|-2px|_|10px|_|rgba(0,0,0,0.10); py-13">
             <div className='app-width flex whitespace-nowrap weight-400 text-16 a-self-center'>
                 <div className="w-full flex">

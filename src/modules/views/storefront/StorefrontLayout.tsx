@@ -10,20 +10,59 @@ import FabricsCategoryNav from "@/modules/lib/components/category-nav/FabricsCat
 import ProductTile from "@/modules/lib/components/product-tile/ProductTile";
 import Footer from "@/modules/lib/components/footer/Footer";
 import { ILayout } from "@/app/layout";
+import StorefrontReviews from "./StorefrontReviews";
 
 const tabs = [
     {
         icon: BsBasket3,
         text: "Products",
+        component: <></>
     },
     {
         icon: LiaCommentsDollarSolid,
         text: "Customer reviews (12,000)",
+        component: <StorefrontReviews />
     },
 ];
 
+const products = [
+    {
+        images: [
+            'https://res.cloudinary.com/codennerd/image/upload/v1689377577/WhatsApp_Image_2023-07-15_at_12.23.25_AM_mghle5.jpg',
+            'https://res.cloudinary.com/codennerd/image/upload/v1689377577/WhatsApp_Image_2023-07-15_at_12.23.25_AM_1_kxeykx.jpg',
+            'https://res.cloudinary.com/codennerd/image/upload/v1689377581/WhatsApp_Image_2023-07-15_at_12.23.38_AM_2_y2rd0d.jpg',
+            'https://res.cloudinary.com/codennerd/image/upload/v1689377581/WhatsApp_Image_2023-07-15_at_12.23.38_AM_1_samhx5.jpg',
+            'https://res.cloudinary.com/codennerd/image/upload/v1689377577/WhatsApp_Image_2023-07-15_at_12.23.25_AM_mghle5.jpg',
+        ]
+    }, 
+    {
+        images: [
+            'https://res.cloudinary.com/codennerd/image/upload/v1689377463/WhatsApp_Image_2023-07-15_at_12.23.07_AM_2_tdqxwf.jpg',
+            'https://res.cloudinary.com/codennerd/image/upload/v1689377462/WhatsApp_Image_2023-07-15_at_12.23.04_AM_2_pbukkn.jpg',
+            'https://res.cloudinary.com/codennerd/image/upload/v1689377463/WhatsApp_Image_2023-07-15_at_12.23.05_AM_hnms5f.jpg'
+        ]
+    },
+    {
+        images: [
+            'https://res.cloudinary.com/codennerd/image/upload/v1689377465/WhatsApp_Image_2023-07-15_at_12.23.10_AM_1_lagmdm.jpg',
+            'https://res.cloudinary.com/codennerd/image/upload/v1689377465/WhatsApp_Image_2023-07-15_at_12.23.10_AM_ogr4wj.jpg',
+            'https://res.cloudinary.com/codennerd/image/upload/v1689377465/WhatsApp_Image_2023-07-15_at_12.23.09_AM_ynbrho.jpg',
+            'https://res.cloudinary.com/codennerd/image/upload/v1689377465/WhatsApp_Image_2023-07-15_at_12.23.09_AM_1_cyknhk.jpg',
+        ]
+    }, 
+    {
+        images: [
+            'https://res.cloudinary.com/codennerd/image/upload/v1689377466/WhatsApp_Image_2023-07-15_at_12.23.11_AM_1_ke6sjp.jpg',
+            'https://res.cloudinary.com/codennerd/image/upload/v1689377466/WhatsApp_Image_2023-07-15_at_12.23.11_AM_ayzcab.jpg',
+            'https://res.cloudinary.com/codennerd/image/upload/v1689377462/WhatsApp_Image_2023-07-15_at_12.23.02_AM_wuuypa.jpg',
+            'https://res.cloudinary.com/codennerd/image/upload/v1689377462/WhatsApp_Image_2023-07-15_at_12.23.01_AM_guag4i.jpg'
+        ]
+    },
+
+]
+
 const StorefrontLayout: FC<ILayout> = ({children}) => {
-    const [activeTab, setActiveTab] = useState(tabs[0].text);
+    const [activeTab, setActiveTab] = useState(tabs[0]);
     return (
         <div>
             <div className="pb-500">
@@ -35,11 +74,11 @@ const StorefrontLayout: FC<ILayout> = ({children}) => {
                     <div className="flex gap-70 text-24">
                         {tabs.map((tab) => (
                             <div
-                                onClick={() => setActiveTab(tab.text)}
+                                onClick={() => setActiveTab(tab)}
                                 className={cx(
                                     "flex weight-400 w-fit white-space-nowrap hover:text-green pointer gap-15",
                                     {
-                                        "text-green": tab.text == activeTab,
+                                        "text-green": tab.text == activeTab.text,
                                     }
                                 )}
                             >
@@ -47,22 +86,24 @@ const StorefrontLayout: FC<ILayout> = ({children}) => {
                             </div>
                         ))}
                     </div>
-
                 </div>
 
-                <div className="g|box-shadow:0px|_|2px|_|4px|_|0px|_|rgba(0,0,0,0.05); mt-68 mb-50">
+                <div className="border-b border-t border-whitesmoke pt-20 mt-68 mb-50">
                     <div className="app-width">
                         <FabricsCategoryNav />
                     </div>                
                 </div>
 
                 <div className="app-width">
+                    <div>
+                        {activeTab.component}
+                    </div>
                     <section className="mt-55">
-                        <h3 className="text-30 weight-700">New Arrival</h3>
-                        <div>
+                        <h3 className="text-20 weight-300 uppercase">New Arrivals</h3>
+                        <div className="grid grid-4-cols-1fr gap-30 w-full">
                             {
-                                [0, 0].map(product => (
-                                    <ProductTile /> 
+                                [...products, ...products, ...products, ...products].map(product => (
+                                    <ProductTile product={product} /> 
                                 ))
                             }
                         </div>

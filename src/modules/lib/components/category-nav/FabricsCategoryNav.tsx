@@ -6,7 +6,7 @@ const options: ICategoryNavOption[] = [
     {
         iconSrc: 'home.svg',
         label: 'All',
-        padding: '10px'
+        padding: '7px'
     },
     {
         iconSrc: 'https://res.cloudinary.com/codennerd/image/upload/v1680366944/Asoebi%20Africa/WhatsApp_Image_2023-04-01_at_5.29.18_PM_wbawin.jpg',

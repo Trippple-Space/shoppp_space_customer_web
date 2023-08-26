@@ -15,7 +15,7 @@ dependencies:
     version: 2.3.2
   next:
     specifier: 13.4.4
-    version: 13.4.4(react-dom@18.2.0)(react@18.2.0)(sass@1.63.6)
+    version: 13.4.4(react-dom@18.2.0)(react@18.2.0)(sass@1.66.0)
   react:
     specifier: 18.2.0
     version: 18.2.0
@@ -26,16 +26,16 @@ dependencies:
     specifier: ^4.10.1
     version: 4.10.1(react@18.2.0)
   sass:
-    specifier: ^1.63.6
-    version: 1.63.6
+    specifier: ^1.66.0
+    version: 1.66.0
   typescript:
     specifier: 5.0.4
     version: 5.0.4
 
 devDependencies:
   cxcss:
-    specifier: ^0.0.36
-    version: 0.0.36
+    specifier: ^0.0.38
+    version: 0.0.38
 
 packages:
 
@@ -127,7 +127,7 @@ packages:
   /@swc/helpers@0.5.1:
     resolution: {integrity: sha512-sJ902EfIzn1Fa+qYmjdQqh8tPsoxyBz+8yBKC2HKUxyezKJFwPGOn7pv4WY6QuQW//ySQi5lJjA/ZT9sNWWNTg==}
     dependencies:
-      tslib: 2.5.2
+      tslib: 2.6.2
     dev: false
 
   /@types/node@20.2.5:
@@ -180,8 +180,8 @@ packages:
       streamsearch: 1.1.0
     dev: false
 
-  /caniuse-lite@1.0.30001489:
-    resolution: {integrity: sha512-x1mgZEXK8jHIfAxm+xgdpHpk50IN3z3q3zP261/WS+uvePxW8izXuCu6AHz0lkuYTlATDehiZ/tNyYBdSQsOUQ==}
+  /caniuse-lite@1.0.30001521:
+    resolution: {integrity: sha512-fnx1grfpEOvDGH+V17eccmNjucGUnCbP6KL+l5KqBIerp26WK/+RQ7CIDE37KGJjaPyqWXXlFUyKiWmvdNNKmQ==}
     dev: false
 
   /chokidar@3.5.3:
@@ -210,8 +210,8 @@ packages:
     resolution: {integrity: sha512-I7K1Uu0MBPzaFKg4nI5Q7Vs2t+3gWWW648spaF+Rg7pI9ds18Ugn+lvg4SHczUdKlHI5LWBXyqfS8+DufyBsgQ==}
     dev: false
 
-  /cxcss@0.0.36:
-    resolution: {integrity: sha512-89+O1oANket2XmTEXMmc3qB5E46aiAs8c6YgMdYXFPzrKvFmS3TrycpEb4n1k9eR8JKciBdnfvmuylfs6rS6HA==}
+  /cxcss@0.0.38:
+    resolution: {integrity: sha512-sBVhILMaOriihI8ZyDFjfJIR1AD8AoqcuSBdElM8eztAkKgh+EGqlvcE8iHKHnlaeRiXzXyZNu8dVIE9ydDg3A==}
     hasBin: true
     dependencies:
       chokidar: 3.5.3
@@ -236,8 +236,8 @@ packages:
     dependencies:
       is-glob: 4.0.3
 
-  /immutable@4.3.0:
-    resolution: {integrity: sha512-0AOCmOip+xgJwEVTQj1EfiDDOkPmuyllDuTuEX+DDXUgapLAsBIfkg3sxCYyCEA8mQqZrrxPUGjcOQ2JS3WLkg==}
+  /immutable@4.3.2:
+    resolution: {integrity: sha512-oGXzbEDem9OOpDWZu88jGiYCvIsLHMvGw+8OXlpsvTFvIQplQbjg1B1cvKg8f7Hoch6+NGjpPsH1Fr+Mc2D1aA==}
     dev: false
 
   /is-binary-path@2.1.0:
@@ -277,7 +277,7 @@ packages:
     hasBin: true
     dev: false
 
-  /next@13.4.4(react-dom@18.2.0)(react@18.2.0)(sass@1.63.6):
+  /next@13.4.4(react-dom@18.2.0)(react@18.2.0)(sass@1.66.0):
     resolution: {integrity: sha512-C5S0ysM0Ily9McL4Jb48nOQHT1BukOWI59uC3X/xCMlYIh9rJZCv7nzG92J6e1cOBqQbKovlpgvHWFmz4eKKEA==}
     engines: {node: '>=16.8.0'}
     hasBin: true
@@ -298,11 +298,11 @@ packages:
       '@next/env': 13.4.4
       '@swc/helpers': 0.5.1
       busboy: 1.6.0
-      caniuse-lite: 1.0.30001489
+      caniuse-lite: 1.0.30001521
       postcss: 8.4.14
       react: 18.2.0
       react-dom: 18.2.0(react@18.2.0)
-      sass: 1.63.6
+      sass: 1.66.0
       styled-jsx: 5.1.1(react@18.2.0)
       zod: 3.21.4
     optionalDependencies:
@@ -372,13 +372,13 @@ packages:
     dependencies:
       picomatch: 2.3.1
 
-  /sass@1.63.6:
-    resolution: {integrity: sha512-MJuxGMHzaOW7ipp+1KdELtqKbfAWbH7OLIdoSMnVe3EXPMTmxTmlaZDCTsgIpPCs3w99lLo9/zDKkOrJuT5byw==}
+  /sass@1.66.0:
+    resolution: {integrity: sha512-C3U+RgpAAlTXULZkWwzfysgbbBBo8IZudNAOJAVBLslFbIaZv4MBPkTqhuvpK4lqgdoFiWhnOGMoV4L1FyOBag==}
     engines: {node: '>=14.0.0'}
     hasBin: true
     dependencies:
       chokidar: 3.5.3
-      immutable: 4.3.0
+      immutable: 4.3.2
       source-map-js: 1.0.2
     dev: false
 
@@ -421,8 +421,8 @@ packages:
     dependencies:
       is-number: 7.0.0
 
-  /tslib@2.5.2:
-    resolution: {integrity: sha512-5svOrSA2w3iGFDs1HibEVBGbDrAY82bFQ3HZ3ixB+88nsbsWQoKqDRb5UBYAUPEzbBn6dAp5gRNXglySbx1MlA==}
+  /tslib@2.6.2:
+    resolution: {integrity: sha512-AEYxH93jGFPn/a2iVAwW87VuUIkR1FVUKB77NwMF7nBTDkDrrT/Hpt/IrCJ0QXhW27jTBDcf5ZY7w6RiqTMw2Q==}
     dev: false
 
   /typescript@5.0.4:
