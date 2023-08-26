@@ -2,5 +2,8 @@ export const paths = {
     login: '/auth/login',
     signup: '/auth/signup',
     vendor_signup: '/auth/signup/vendor',
-    storefront_about: '$storefront/about'
+    storefront_about: '$storefront/about',
+    product_details: '/product-details',
+    checkout: '/checkout',
+
 }

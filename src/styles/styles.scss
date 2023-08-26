@@ -48,3 +48,24 @@ ul {
   font-family: var(--font-inter);
 }
 
+.custom-progress {
+  background-color: #EAEAEA;
+  border-radius: 10px;
+}
+
+.custom-progress::-webkit-progress-value {
+  background-color: #333333;
+  border-radius: 10px;
+}
+
+.custom-progress::-moz-progress-bar {
+  background-color: #333333;
+  border-radius: 10px;
+
+}
+
+.custom-progress::-ms-fill {
+  background-color: #333333;
+  border-radius: 10px;
+
+}

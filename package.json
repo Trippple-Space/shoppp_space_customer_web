@@ -17,10 +17,18 @@
     "react": "18.2.0",
     "react-dom": "18.2.0",
     "react-icons": "^4.10.1",
+<<<<<<< HEAD
     "sass": "^1.66.0",
     "typescript": "5.0.4"
   },
   "devDependencies": {
     "cxcss": "^0.0.38"
+=======
+    "sass": "^1.63.6",
+    "typescript": "5.0.4"
+  },
+  "devDependencies": {
+    "cxcss": "^0.0.36"
+>>>>>>> c3eaf6411f6b6187c90eada62a9096c6217419f9
   }
 }

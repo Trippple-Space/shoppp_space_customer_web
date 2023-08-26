@@ -6,7 +6,14 @@ $colors: (
   "light-grey": #A8A6A6,
   "lighter-grey": #D9D9D9B2,
   "faint-grey": #DADADA,
-  "green": #0B9378
+  "green": #0B9378,
+  "light-green": #E2FFFACC,
+  "shadowGrey" : "#00000014",
+  "deepYellow" : "#FACE33",
+  "yellow": "#FACE33",
+  "deepGrey": "#A6A6A6",
+  "whisper": "#EAEAEA",
+  "whiteSmoke": "#F5F5F5"
 );
 
 @each $color, $value in $colors {
