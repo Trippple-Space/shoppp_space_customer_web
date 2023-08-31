@@ -1,0 +1,123 @@
+import React, { ReactNode, FC, useState } from 'react'
+import { TfiAngleRight } from 'react-icons/tfi'
+import { LuSettings2 } from 'react-icons/lu'
+import { RxCaretDown } from 'react-icons/rx'
+import { BsSearch } from 'react-icons/bs'
+import { AiOutlineClose } from 'react-icons/ai'
+import cx from 'classnames'
+import HomepageModal from './ModalComponent'
+import HomepageCategoryNav from '@/modules/lib/components/category-nav/HomepageCategoryNav'
+import { usePathname } from 'next/navigation'
+import FilterModal from './FilterModal'
+
+const Filters = () => {
+    const [displaySearch, setDisplaySearch] = useState(false)
+    const [open, setOpen] = useState(false);
+    const [openFilter, setOpenFilter] = useState(false);
+
+    const pathname = usePathname()
+    const isRoute = pathname.includes('homepage')
+    
+
+
+  const handleOpenModal = () => {
+    setOpen(!open);
+  };
+  const handleCloseModal = () => {
+    setOpen(false);
+  };
+
+  const handleOpenFilterModal = () => {
+    setOpenFilter(!open);
+  };
+  const toggleSearch = () => {
+    setDisplaySearch(!displaySearch);
+  }
+    return (
+    <div>
+
+
+        <div className='w-100p border-t border-lightgrey py-15 g|box-shadow:0px|_|2px|_|4px|_|0px|_|#0000000D;'>
+            <div className="app-width flex space-between items-center">
+                {isRoute && (
+                    <div className='w-50p h-45 l:w-15p l:h-55 weight-400 text-18 text-green border border-green radius-10'>
+                    <div className='flex h-100p items-center w-fit gap-10 mx-auto pointer relative' onClick={handleOpenModal}>
+                        <HomepageModal modalOpen={open} handleCloseModal={handleCloseModal} data='data' />
+                        <span>All categories</span> 
+                        <span><RxCaretDown className='w-30 h-30' /></span>
+                    </div>
+                    </div>
+                )}
+
+                {(displaySearch && !isRoute) && (
+                    <div className='w-20p'></div>
+                )}
+
+                {displaySearch ? (
+                    <div className='w-86p h-70 hidden l:flex'>
+                        <HomepageCategoryNav />
+                    </div>
+                ) : (
+                    <div className='w-50p h-70 hidden l:flex'>
+                        <div className=" w-100p pl-30 pr-7 flex overflow-hidden text-22 space-between h-100p py-5 border border-lightgrey radius-45 g|box-shadow:0px|_|2px|_|10px|_|0px|_|#00000014; ">
+                            <input type="text" placeholder='Search Product' className='border-none w-90p text-22 text-light-grey'/>
+                            <div className='w-9p flex items-center bg-green round h-100p text-white'>
+                                <BsSearch />
+                            </div>
+                        </div>
+                    </div>
+                )}
+                
+                <div className='flex items-center gap-10'>
+                    {!isRoute && (
+                        <div onClick={toggleSearch} className='w-50 h-50 flex items-center radius-7 border border-lightgrey'>
+                        {!displaySearch ? (
+                            <BsSearch />
+                            ) : (<AiOutlineClose />)}
+                        </div>
+                    )}
+                    <button className='w-35 h-40 l:w-119 l:h-50 pointer ml-7 bg-white text-16 text-grey weight-300 radius-10 border border-lightgrey'>
+                        <div className='flex w-fit gap-10 mx-auto'>
+                            <span> <LuSettings2 /> </span>
+                            <span className='hidden l:flex'>Filter</span>                    
+                        </div>
+                    </button>              
+                </div>
+
+            </div>
+
+        </div>
+        <div className='w-100p hidden l:flex py-20 g|box-shadow:0px|_|2px|_|4px|_|0px|_|#0000000D;'>
+        <div className="app-width flex items-center space-between">
+            <div className='w-35p'>
+                <p className='text-dimgrey pb-10 text-16'>Minimum price (NGN)</p>
+                <div className=" w-100p px-25 flex overflow-hidden text-22 space-between h-100p py-7 border border-deepGrey radius-5 ">
+                    <input type="text" placeholder='5,000' className='border-none h-42 w-100p text-16 text-light-grey'/>
+                </div>
+            </div>
+
+            <div className='w-35p'>
+                <p className='text-dimgrey pb-10 text-16'>Maximum price (NGN)</p>
+                <div className=" w-100p px-25 flex overflow-hidden text-22 space-between h-100p py-7 border border-deepGrey radius-5 ">
+                    <input type="text" placeholder='100,000' className='border-none h-42 w-100p text-16 text-light-grey'/>
+                </div>
+            </div>
+
+            <div className='w-10p h-55 mt-20 weight-400 text-18 text-dimgrey border border-deepGrey radius-10'>
+                <div className='flex h-100p items-center w-fit gap-10 mx-auto pointer relative' onClick={handleOpenFilterModal}>
+                    <FilterModal modalOpen={openFilter} handleCloseModal={handleCloseModal} data='data' />
+                    <span>Popular</span> 
+                    <span><RxCaretDown className='w-30 h-30' /></span>
+                </div>
+            </div>
+
+        </div>
+
+        </div>
+
+    </div>
+
+    )
+}
+
+export default Filters

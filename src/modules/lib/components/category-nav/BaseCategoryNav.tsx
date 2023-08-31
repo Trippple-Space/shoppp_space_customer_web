@@ -12,9 +12,10 @@ export interface ICategoryNavOption {
 
 interface IBaseCategoryNav {
     options: ICategoryNavOption[]
+    displayFilter?: boolean
 }
 
-const BaseCategoryNav: FC<IBaseCategoryNav> = ({ options }) => {
+const BaseCategoryNav: FC<IBaseCategoryNav> = ({ options, displayFilter }) => {
     const [activeOption, setActiveOption] = useState(0)
     return (
         <div className="flex">
@@ -50,12 +51,14 @@ const BaseCategoryNav: FC<IBaseCategoryNav> = ({ options }) => {
                         <TfiAngleRight className='w-full h-full' />
                     </button>
                 </div>  
-                <button className='w-119 h-50 pointer g|margin-top:-30px; ml-7 bg-white text-16 text-grey weight-300 radius-10 border border-lightgrey'>
+                {displayFilter !== false && (
+                    <button className='w-119 h-50 pointer g|margin-top:-30px; ml-7 bg-white text-16 text-grey weight-300 radius-10 border border-lightgrey'>
                     <div className='flex w-fit gap-10 mx-auto'>
                         <span> <LuSettings2 /> </span>
                         <span>Filter</span>                    
                     </div>
-                </button>              
+                    </button>    
+                )}          
             </div>
 
         </div>
