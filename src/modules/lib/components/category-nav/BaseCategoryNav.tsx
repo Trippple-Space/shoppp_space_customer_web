@@ -7,15 +7,16 @@ import cx from 'classnames'
 export interface ICategoryNavOption {
     label: string,
     iconSrc: string,
-    padding?: string 
+    padding?: string,
 }
 
 interface IBaseCategoryNav {
     options: ICategoryNavOption[]
     displayFilter?: boolean
+    isRoute?: boolean
 }
 
-const BaseCategoryNav: FC<IBaseCategoryNav> = ({ options, displayFilter }) => {
+const BaseCategoryNav: FC<IBaseCategoryNav> = ({ options, displayFilter, isRoute }) => {
     const [activeOption, setActiveOption] = useState(0)
     return (
         <div className="flex">
@@ -47,7 +48,7 @@ const BaseCategoryNav: FC<IBaseCategoryNav> = ({ options, displayFilter }) => {
             <div className='flex items-center'>
                 <div className="p-13 round bg-white g|margin-top:-30px;margin-left:-7px; g|box-shadow:-27px|_|0px|_|40px|_|0px|_|rgb(275,275,275,0.95);"
                 >
-                    <button className='bg-white pointer border border-lightgrey round p-7 w-35 h-35 '>
+                    <button className={cx("bg-white pointer border border-lightgrey round p-7 w-35 h-35", {'mt-13': isRoute})}>
                         <TfiAngleRight className='w-full h-full' />
                     </button>
                 </div>  

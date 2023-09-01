@@ -52,7 +52,7 @@ const CarttemModal: React.FC<ModalProps> = ({modalOpen, handleCloseModal, data})
                   <p className='text-12 text-light-grey'>4 unit left</p>
                   <h1 className='text-14 weight-400'>NGN 26,000</h1>
                   <div className='flex space-between gap-20 w-100p'>
-                    <button className='w-50p flex l:w-100p border-1 border-green bg-white text-green text-10 py-5 px-10 radius-5 weight-500'><MdOutlineLocalShipping className='w-25' /> 10% Shipping discount</button>
+                    <button className='w-100p flex l:w-100p border-1 border-green bg-white text-green text-10 py-5 px-10 radius-5 weight-500'><MdOutlineLocalShipping className='w-25' /> 10% Shipping discount</button>
                   </div>
                  
 

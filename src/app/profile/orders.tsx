@@ -29,7 +29,7 @@ const OrderModal: React.FC<ModalProps> = ({modalOpen, handleCloseModal, data}) =
   const getStatus = (status: any) => {
     switch (status) {
       case 'out':
-        return getStatusGrid('black', 'deepYellow', 'Out for delivery');
+        return getStatusGrid('black', 'deep-yellow', 'Out for delivery');
       case 'cancel':
         return getStatusGrid('white', 'dimgrey', 'Payment cancelled');
       default:

@@ -65,7 +65,7 @@ const Homepage = () => {
                     )}
                     
 
-                    <div className="w-100p fixed b-70 r-20">
+                    <div className="w-100p fixed b-70 r-10">
                         <CarttemModal modalOpen={open} handleCloseModal={handleCloseModal} data='data' />
                         <div onClick={handleOpenModal} className="mx-auto pointer flex w-140 h-50  bg-green p-4 text-white radius-10">
                             <div className="w-40p radius-10 radius-t-r-0 radius-b-r-0 flex items-center j-content-center bg-darkgreen text-white">

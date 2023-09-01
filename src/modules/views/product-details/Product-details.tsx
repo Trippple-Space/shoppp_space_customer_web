@@ -169,7 +169,7 @@ const ProductDetails = () => {
        </div>
 
        <div className='l:w-40p mt-60'>
-        <div className='border border-faint-grey radius-20 px-15 py-25 l:p-30 shadow-0-2-20-0-shadowGrey l:gap-30'>
+        <div className='border border-faint-grey radius-20 px-15 py-25 l:p-30 shadow-0-2-20-0-shadow-grey l:gap-30'>
           <div className='flex space-between items-center'>
             <div className='line-height-30 l:line-height-35'>
               <h3 className='text-18 l:text-32 l:py-10 weight-500 font-inter'>NGN 20,000</h3>
@@ -180,7 +180,7 @@ const ProductDetails = () => {
             </div>
           </div>
 
-          <div className='flex space-between my-20 py-15 px-20 text-15 m:text-20 radius-5 border border-deepGrey'>
+          <div className='flex space-between my-20 py-15 px-20 text-15 m:text-20 radius-5 border border-deep-grey'>
             <span className='text-dimgrey opacity-70'>unit</span>
             <div className='flex'>
               <Icon name='decr' className='w-25 h-25' />
@@ -188,7 +188,7 @@ const ProductDetails = () => {
               <Icon name='incr' className='w-25 h-25' />
             </div>
           </div>
-          <div className='flex space-between my-20 py-15 px-20 text-15 m:text-20 radius-5  border border-deepGrey'>
+          <div className='flex space-between my-20 py-15 px-20 text-15 m:text-20 radius-5  border border-deep-grey'>
             <span className='text-dimgrey opacity-70'>Quantity:</span>
             <select name="" id="" className='border-none text-15 m:text-20 text-grey opacity-100 weight-400'>
               <option value="">Bundle</option>

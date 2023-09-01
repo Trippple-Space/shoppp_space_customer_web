@@ -25,7 +25,7 @@ const CheckoutPage = () => {
             </div>
           </div>
           <div className='w-35p m:w-25p'>
-          <button className='border-none radius-5 text-12 m:text-16 weight-400 bg-whiteSmoke px-20 py-10'>CHANGE</button>
+          <button className='border-none radius-5 text-12 m:text-16 weight-400 bg-whitesmoke px-20 py-10'>CHANGE</button>
           </div>
         </div>
         
@@ -38,7 +38,7 @@ const CheckoutPage = () => {
               <h1 className='text-16 m:text-20 text-light-grey m:text-black weight-500 m:weight-600'>SHIPPING ADDRESS</h1>
             </div>
             <div className='w-35p m:w-25p'>
-            <button className='border-none radius-5 text-12 m:text-16 weight-400 bg-whiteSmoke px-20 py-10'>CHANGE</button>
+            <button className='border-none radius-5 text-12 m:text-16 weight-400 bg-whitesmoke px-20 py-10'>CHANGE</button>
             </div>
           </div>
 
@@ -59,7 +59,7 @@ const CheckoutPage = () => {
        </div>
 
        <div className='l:w-50p'>
-        <div className='px-10 m:px-40 radius-20 px-15 py-25 l:p-30 border border-faint-grey shadow-0-2-20-0-shadowGrey l:gap-30'>
+        <div className='px-10 m:px-40 radius-20 px-15 py-25 l:p-30 border border-faint-grey shadow-0-2-20-0-shadow-grey l:gap-30'>
           <h2 className='text-20 py-20 weight-500 border-b border-lighter-grey'>Your Order</h2>
           <div className='px-10 pb-30'>
           {[0,0].map((data: any) => (
