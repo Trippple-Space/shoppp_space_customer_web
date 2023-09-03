@@ -69,3 +69,10 @@ ul {
   border-radius: 10px;
 
 }
+
+.tilt {
+  transform: skewY(-3deg);
+}
+.notilt {
+  transform: skewY(2deg);
+}

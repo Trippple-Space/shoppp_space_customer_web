@@ -13,7 +13,8 @@ $colors: (
   "yellow": "#FACE33",
   "deep-grey": "#A6A6A6",
   "whisper": "#EAEAEA",
-  "whitesmoke": "#F5F5F5"
+  "whitesmoke": "#F5F5F5",
+  "offwhitegrey": '#F0F0F0'
 );
 
 @each $color, $value in $colors {
