@@ -5,7 +5,7 @@ interface IInput {
     label?: string,
     id?: string,
     name: string,
-    type?: 'text'|'password'|'email'|'textarea',
+    type?: 'text'|'password'|'email'|'textarea'|'date'|'checkbox',
     placeholder?: string,
     className?:string
     after?: any
