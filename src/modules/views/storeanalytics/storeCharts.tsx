@@ -2,6 +2,8 @@
 
 import StorefrontNavBar from "@/modules/lib/components/nav-bar/StorefrontNavBar";
 import React, { useState } from "react";
+import cx from "classnames";
+
 import {
     Chart as ChartJS,
     CategoryScale,
@@ -13,7 +15,12 @@ import {
   } from 'chart.js';
 import { Bar } from "react-chartjs-2";
 
+const tabs = [
+ 'Week', 'Month', 'Year', 'All Time'
+];
+
 const Charts = () => {
+  const [activeTab, setActiveTab] = useState(tabs[0]);
     ChartJS.register(
         CategoryScale,
         LinearScale,
@@ -44,23 +51,49 @@ const Charts = () => {
               beginAtZero: true,
               ticks: {
                 callback: function (value: any, index: any, values: any) {
-                  return value + " K";
-                }
+                  return value + " K  ";
+                },
+                font: {
+                  size: 24,
+                },
+                color: 'rgba(51, 51, 51, 0.70)',
               },
+              border:{
+                display:false
+              }
+              
             },
             x: {
                 grid: { display: false },
+                ticks: {
+                  font: {
+                    size: 20,
+                  },
+                  color: 'rgba(51, 51, 51, 0.70)',
+                },
+                border:{
+                  display:false
+                }
               },
           }
       };
     
     return (
         <div className="">
-            <div className="flex py-10 text-20 weight-400 text-dimgrey opacity-70 gap-40 border-b border-1 border-lighter-grey">
-                <div>Week</div>
-                <div>Month</div>
-                <div>Year</div>
-                <div>All Time</div>
+            <div className="flex text-20 weight-400 text-dimgrey opacity-70 border-b border-1 border-lighter-grey">
+                {tabs.map((tab) => (
+                    <div
+                        onClick={() => setActiveTab(tab)}
+                        className={cx(
+                          "py-8 px-25 pointer",
+                            {
+                                "text-black border-b border-3 border-black": tab == activeTab,
+                            }
+                        )}
+                    >
+                        {tab}
+                    </div>
+                ))}
             </div>
             <div className="py-25">
                 <div className="flex space-between py-5 text-16 weight-400 text-dimgrey opacity-70">

@@ -3,24 +3,31 @@
 import StorefrontNavBar from "@/modules/lib/components/nav-bar/StorefrontNavBar";
 import React, { useState } from "react";
 import cx from "classnames";
-import Footer from "@/modules/lib/components/footer/Footer";
-import { usePathname } from "next/navigation";
-import { IoIosArrowDown } from "react-icons/io";
-import { AiOutlinePlus } from 'react-icons/ai';
-import Input from "@/modules/lib/components/input/Input";
 import Image from "@/modules/lib/components/image/Image";
-import PromoProductModal from "./promoModal";
 
+const tabs = [
+    'Awaiting Orders from Store', 'Orders in Transit', 'Out for delivery', 'Delivered'
+   ];
 
 const OrderStatus = () => {
-    
+    const [activeTab, setActiveTab] = useState(tabs[0]);
     return (
         <div className="border border-1 border-lighter-grey radius-20 py-20">
-            <div className="text-20 text-dimgrey px-20 py-10 border-b border-1 border-lighter-grey weight-400 opacity-70 flex space-between">
-                <div className="">Awaiting Orders from Store</div>
-                <div>Orders in Transit</div>
-                <div>Out for delivery</div>
-                <div>Delivered</div>
+            <div className="text-20 text-dimgrey px-20 border-b border-1 border-lighter-grey weight-400 opacity-70 flex space-between">
+    
+                {tabs.map((tab) => (
+                    <div
+                        onClick={() => setActiveTab(tab)}
+                        className={cx(
+                          "py-8 px-25 pointer",
+                            {
+                                "text-black opacity-100 border-b border-3 border-black": tab == activeTab,
+                            }
+                        )}
+                    >
+                        {tab}
+                    </div>
+                ))}
             </div>
             <div className="w-100p px-30 py-10">
             <table className="w-100p" style={{borderCollapse: 'collapse'}}>

@@ -54,8 +54,8 @@ const StoreAnalytics = () => {
             <div className="app-width">
                 <div className="text-36 weight-700 text-black">Store Overview</div>
 
-                <div className="flex w-100p gap-30 py-20">
-                    <div className="w-70p">
+                <div className="flex w-100p gap-20 py-20">
+                    <div className="w-70p scroll-y pr-20 h-100vh">
                         <div>
                             <Charts />
                         </div>
@@ -63,7 +63,8 @@ const StoreAnalytics = () => {
                             <OrderStatus />
                         </div>
                     </div>
-                    <div className="w-30p border border-1 border-lighter-grey radius-20 p-20">
+                    <div className="w-30p border border-1 border-lighter-grey radius-20 py-20 px-10">
+                        <div className="scroll-y h-100vh px-10">
                         <div className="text-30 weight-700 text-black">Promotions</div>
                         
 
@@ -127,7 +128,8 @@ const StoreAnalytics = () => {
                                                 name='promotionDate'
                                                 type='text'
                                                 placeholder='10'
-                                                className='w-60p my-5 radius-t-r-0 radius-b-r-0'
+                                                className='w-60p my-5'
+                                                inputClass='radius-t-r-0 radius-b-r-0'
                                             />
                                             <div className="bg-whitesmoke border border-1 border-deep-grey py-17 px-5 radius-t-r-5 radius-b-r-5">
                                                 %
@@ -195,10 +197,13 @@ const StoreAnalytics = () => {
  
                          </div>
                         ))}
+                        </div>
                       
 
 
                     </div>
+
+                    
                 </div>
                
             </div>
