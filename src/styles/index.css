@@ -171,6 +171,13 @@
 .ml-10 { margin-left: 10px; } 
 .text-yellow { color: #FACE33; } 
 .text-10 { font-size: 10px; } 
+.p-20 { padding: 20px; } 
+.h-250 { height: 250px; } 
+.text-24 { font-size: 24px; } 
+.line-height-40 { line-height: 40px; } 
+.my-15 { margin-top: 15px; margin-bottom: 15px; } 
+.weight-700 { font-weight: 700; } 
+.my-20 { margin-top: 20px; margin-bottom: 20px; } 
 .fixed {    position: fixed;  } 
 .l-0 { left: 0px; } 
 [class~='g|box-shadow:0px|_|-2px|_|10px|_|rgba(0,0,0,0.10);']{box-shadow:0px -2px 10px rgba(0,0,0,0.10);} 
@@ -227,7 +234,6 @@
 .outline { outline: 1px solid; } 
 .outline-grey { outline-color: #676767; } 
 .t-0 { top: 0px; } 
-.text-24 { font-size: 24px; } 
 .mt-15 { margin-top: 15px; } 
 .gap-13 { gap: 13px; } 
 [class~='g|white-space:nowrap']{white-space:nowrap} 
@@ -236,7 +242,6 @@
 .gap-3 { gap: 3px; } 
 .w-12 { width: 12px; } 
 .mt-6 { margin-top: 6px; } 
-.weight-700 { font-weight: 700; } 
 .w-32 { width: 32px; } 
 .h-32 { height: 32px; } 
 .h-8 { height: 8px; } 
@@ -245,7 +250,6 @@
 .w-0 { width: 0px; } 
 .bg-deep-yellow { background-color: #FACE33; } 
 .bg-dimgrey { background-color: #333333; } 
-.p-20 { padding: 20px; } 
 .gap-5 { gap: 5px; } 
 .w-35p { width: 35%; } 
 .bg-whitesmoke { background-color: #F5F5F5; } 
@@ -262,10 +266,6 @@
 .mx-20 { margin-left: 20px; margin-right: 20px; } 
 @layer base {    .border-r {       border-right: 1px solid;     }  } 
 .px-0 { padding-left: 0px; padding-right: 0px; } 
-.h-250 { height: 250px; } 
-.line-height-40 { line-height: 40px; } 
-.my-15 { margin-top: 15px; margin-bottom: 15px; } 
-.my-20 { margin-top: 20px; margin-bottom: 20px; } 
 .text-22 { font-size: 22px; } 
 .underline { text-decoration: underline; } 
 .grid-4-cols-1fr { grid-template-columns: repeat(4, 1fr); } 
@@ -488,6 +488,9 @@
 .text-small {    font-size: 0.75rem;  } 
 .max-w-400 { max-width: 400px; } 
 .mt-25 { margin-top: 25px; } 
+.h-120 { height: 120px; } 
+.h-150 { height: 150px; } 
+.h-170 { height: 170px; } 
 
 
 
@@ -582,6 +585,8 @@
 @media only screen and (min-width: 992px) { .l\:ml-15 { margin-left: 15px; } } 
 @media only screen and (min-width: 992px) { .l\:mb-15 { margin-bottom: 15px; } } 
 @media only screen and (min-width: 992px) { .l\:text-12 { font-size: 12px; } } 
+@media only screen and (min-width: 992px) { .l\:p-70 { padding: 70px; } } 
+@media only screen and (min-width: 992px) { .l\:text-36 { font-size: 36px; } } 
 @media only screen and (min-width: 992px) { .l\:mt-60 { margin-top: 60px; } } 
 @media only screen and (min-width: 992px) { .l\:mr-15 { margin-right: 15px; } } 
 @media only screen and (min-width: 992px) { .l\:px-22 { padding-left: 22px; padding-right: 22px; } } 
@@ -591,10 +596,8 @@
 @media only screen and (min-width: 992px) { .l\:text-15 { font-size: 15px; } } 
 @media only screen and (min-width: 992px) { .l\:gap-18 { gap: 18px; } } 
 @media only screen and (min-width: 992px) { @layer base {.l\:radius-8 { border-radius: 8px; } } } 
-@media only screen and (min-width: 992px) { .l\:p-70 { padding: 70px; } } 
 @media only screen and (min-width: 992px) { .l\:p-30 { padding: 30px; } } 
 @media only screen and (min-width: 992px) { .l\:text-24 { font-size: 24px; } } 
-@media only screen and (min-width: 992px) { .l\:text-36 { font-size: 36px; } } 
 @media only screen and (min-width: 992px) { .l\:mt-50 { margin-top: 50px; } } 
 @media only screen and (min-width: 992px) { .l\:text-30 { font-size: 30px; } } 
 @media only screen and (min-width: 992px) { .l\:text-14 { font-size: 14px; } } 
@@ -661,3 +664,7 @@
 @media only screen and (min-width: 992px) { .l\:h-90 { height: 90px; } } 
 @media only screen and (min-width: 992px) { .l\:text-22 { font-size: 22px; } } 
 @media only screen and (min-width: 992px) { .l\:pr-30 { padding-right: 30px; } } 
+@media only screen and (min-width: 992px) { .l\:p-50 { padding: 50px; } } 
+@media only screen and (min-width: 992px) { .l\:h-170 { height: 170px; } } 
+@media only screen and (min-width: 992px) { .l\:w-25p { width: 25%; } } 
+@media only screen and (min-width: 992px) { .l\:pt-30 { padding-top: 30px; } } 

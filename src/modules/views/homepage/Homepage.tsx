@@ -16,6 +16,8 @@ import CarttemModal from "./CartModal";
 import AsoebiHomepage from "./AsoebiPage";
 import { usePathname } from "next/navigation";
 import AsoebiWears from "./AsoebiWears";
+import NoResultMessage from "@/modules/lib/components/error-messages/no-result-found";
+import PageNotFound from "@/modules/lib/components/error-messages/page-not-found";
 
 const products = [
     {
@@ -57,6 +59,7 @@ const Homepage = () => {
                 <HomepageNavBar />
                 <Filters />
                 <div className="app-width">
+                    <PageNotFound />
 
                     {isRoute ? (
                         <AsoebiHomepage />
