@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { FC } from 'react'
 import { BiHomeAlt2 } from 'react-icons/bi'
 import BaseCategoryNav, { ICategoryNavOption } from './BaseCategoryNav'
 
@@ -99,10 +99,16 @@ const options: ICategoryNavOption[] = [
     }
 ]
 
-const HomepageCategoryNav = () => {
+interface IBaseNavBar {
+    isRoute?: any
+  }
+
+const HomepageCategoryNav: FC<IBaseNavBar> = ({ isRoute }) => {
+
+    
     return (
         <div className=''>
-            <BaseCategoryNav options={options} displayFilter={false} />
+            <BaseCategoryNav options={options} displayFilter={false} isRoute={isRoute} />
         </div>
     )
 }

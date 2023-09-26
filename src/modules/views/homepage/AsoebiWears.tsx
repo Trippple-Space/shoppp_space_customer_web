@@ -39,47 +39,48 @@ const products = [
 const AsoebiWears = () => {
     return (
         <>
-                    <section className="mt-50">
-                       <div className="flex space-between">
-                        <h3 className="text-30 weight-700">Top selling ankara</h3>
-                        <p className="text-20 weight-600 underline text-black">View All</p>
-                       </div>
-                        <div className="grid grid-4-cols-1fr gap-30 w-full">
-                            {
-                                [...products, ...products, ...products, ...products].map(product => (
-                                    <ProductTile product={product} /> 
-                                ))
-                            }
-                        </div>
-                    </section>
+            <section className="mt-20 w-100p l:mt-50">
+                <div className="flex space-between">
+                <h3 className="text-22 l:text-30 weight-700">Top selling ankara</h3>
+                <p className="text-18 l:text-20 weight-600 underline text-black">View All</p>
+                </div>
+                <div className="grid grid-4-cols-1fr gap-10 l:gap-30 w-full">
+                    {
+                        [...products, ...products, ...products, ...products].map(product => (
+                            <ProductTile product={product} /> 
+                        ))
+                    }
+                </div>
+            </section>
 
-                    <section className="mt-50">
-                       <div className="flex space-between">
-                        <h3 className="text-30 weight-700">Popular linen</h3>
-                        <p className="text-20 weight-600 underline text-black">View All</p>
-                       </div>
-                        <div className="grid grid-4-cols-1fr gap-30 w-full">
-                            {
-                                [...products, ...products, ...products, ...products].map(product => (
-                                    <ProductTile product={product} /> 
-                                ))
-                            }
-                        </div>
-                    </section>
+            <section className="mt-20 w-100p l:mt-50">
+                <div className="flex space-between">
+                <h3 className="text-22 l:text-30 weight-700">Top selling ankara</h3>
+                <p className="text-18 l:text-20 weight-600 underline text-black">View All</p>
+                </div>
+                <div className="grid grid-4-cols-1fr gap-10 l:gap-30 w-full">
+                    {
+                        [...products, ...products, ...products, ...products].map(product => (
+                            <ProductTile product={product} /> 
+                        ))
+                    }
+                </div>
+            </section>
 
-                    <section className="my-50">
-                       <div className="flex space-between">
-                        <h3 className="text-30 weight-700">Senators</h3>
-                        <p className="text-20 weight-600 underline text-black">View All</p>
-                       </div>
-                        <div className="grid grid-4-cols-1fr gap-30 w-full">
-                            {
-                                [...products, ...products, ...products, ...products].map(product => (
-                                    <ProductTile product={product} /> 
-                                ))
-                            }
-                        </div>
-                    </section>
+
+            <section className="mt-20 w-100p l:mt-50">
+                <div className="flex space-between">
+                <h3 className="text-22 l:text-30 weight-700">Top selling ankara</h3>
+                <p className="text-18 l:text-20 weight-600 underline text-black">View All</p>
+                </div>
+                <div className="grid grid-4-cols-1fr gap-10 l:gap-30 w-full">
+                    {
+                        [...products, ...products, ...products, ...products].map(product => (
+                            <ProductTile product={product} /> 
+                        ))
+                    }
+                </div>
+            </section>
         </>
 
     );

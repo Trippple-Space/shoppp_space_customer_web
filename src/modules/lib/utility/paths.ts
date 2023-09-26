@@ -5,5 +5,7 @@ export const paths = {
     storefront_about: '$storefront/about',
     product_details: '/product-details',
     checkout: '/checkout',
+    homepage: '/homepage',
+    asoebi_wears: '/homepage/asoebiwears'
 
 }
