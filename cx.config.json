@@ -30,9 +30,6 @@
     "whitesmoke": "#F5F5F5",
     "offwhitegrey": "#F0F0F0",
     "red": "#DE3838"
-
-
-
   },
   "aliasesFile": "./aliases.cx"
 }
