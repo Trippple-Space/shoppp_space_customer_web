@@ -90,6 +90,7 @@
     "error-900": "#56120B",
     "white": "#FFFFFF",
     "black": "#000000"
+    "red": "#DE3838"
   },
   "aliasesFile": "./aliases.cx"
 }
