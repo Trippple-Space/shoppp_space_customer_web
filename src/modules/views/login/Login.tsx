@@ -71,7 +71,7 @@ const Login = () => {
 
               <div className="flex space-between w-full mt-18 text-natural-700 text-14 l:text-14">
                 <label className='pointer content-center flex'>
-                  <input type="checkbox" name="" className='accent-#0B9378 w-14 l:w-20 h-14 l:h-20 mr-5 l:mr-10 ' id="" />
+                  <input type="checkbox" name="" className='accent-#0B9378 w-14 l:w-20 h-14 l:h-20 mr-5 l:mr-10' />
                   <span>Remember me for 20 days</span>
                 </label>
                 <div>Forgotten password</div>
