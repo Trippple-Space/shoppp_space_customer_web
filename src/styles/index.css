@@ -503,7 +503,13 @@
 .text-primary-700 { color:  #047857; } 
 .text-primary-800 { color:  #065F46; } 
 .h-55p { height: 55%; } 
-.h-90p { height: 90%; }
+.h-90p { height: 90%; } 
+
+
+
+
+
+
 @media only screen and (min-width: 768px) { .m\:py-30 { padding-top: 30px; padding-bottom: 30px; } } 
 @media only screen and (min-width: 768px) { .m\:gap-60 { gap: 60px; } } 
 @media only screen and (min-width: 768px) { .m\:pr-30 { padding-right: 30px; } } 
