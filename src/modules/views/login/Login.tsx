@@ -42,7 +42,7 @@ const Login = () => {
           <div className="login w-full l:w-80p mx-auto mb-50 h-full l:h-fit">
             <div className="font-lora">
               <h3 className="text-center text-30 l:text-32 weight-500 mb-10 text-natural-900">Welcome back</h3>
-              <p className="text-center text-16 l:text-16 text-natural-700  ">Please enter your details.</p>
+              <p className="text-center text-16 l:text-16 text-natural-700">Please enter your details.</p>
             </div>
 
             <form className="form block w-100p mt-36 l:mt-50 ">
