@@ -7,7 +7,6 @@ import { AiOutlineClose } from 'react-icons/ai'
 import { BiHomeAlt2 } from 'react-icons/bi';
 import { BsArrowLeftShort, BsArrowRightShort } from 'react-icons/bs';
 
-
 interface ModalProps {
   modalOpen: boolean;
   handleCloseModal: () => void;

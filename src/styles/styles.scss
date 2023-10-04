@@ -48,6 +48,10 @@ ul {
   font-family: var(--font-inter);
 }
 
+.font-lora {
+  font-family: var(--font-lora);
+}
+
 .custom-progress {
   background-color: #EAEAEA;
   border-radius: 10px;
@@ -73,6 +77,7 @@ ul {
 .tilt {
   transform: skewY(-3deg);
 }
+
 .notilt {
   transform: skewY(2deg);
 }
