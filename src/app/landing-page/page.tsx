@@ -1,4 +1,4 @@
-import Landingpage from '@/modules/views/landingpage/Landingpage'
+import Landingpage from '@/modules/views/landing-page/LandingPage'
 import React from 'react'
 
 

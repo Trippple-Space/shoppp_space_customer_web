@@ -1,5 +1,5 @@
 import '../styles/styles.scss';
-import { Inter, Roboto } from 'next/font/google'
+import { Inter, Roboto, Lora } from 'next/font/google'
 
 const inter = Inter({
   subsets: ['latin'],
@@ -12,6 +12,12 @@ const roboto = Roboto({
   variable: '--font-roboto',
   display: 'swap',
   weight: ['100', '300', '400', '500', '700', '900']
+});
+
+const lora = Lora({
+  subsets: ['latin'],
+  variable: '--font-lora',
+  display: 'swap',
 });
 
 export const metadata = {
@@ -29,8 +35,8 @@ export default function RootLayout({
   children: React.ReactNode
 }) {
   return (
-    <html lang="en" className={`${inter.variable} ${roboto.variable} bg-white`}>
-      <body className='font-roboto weight-300 text-dimgrey'>{children}</body>
+    <html lang="en" className={`${inter.variable} ${roboto.variable} ${lora.variable} bg-white`}>
+      <body className='font-lora weight-300 text-dimgrey'>{children}</body>
     </html>
   )
 }
