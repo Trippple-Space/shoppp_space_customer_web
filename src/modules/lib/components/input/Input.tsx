@@ -2,16 +2,17 @@ import React, { FC } from 'react'
 import cx from 'classnames'
 
 interface IInput {
-    label?: string,
-    id?: string,
-    name: string,
-    type?: 'text'|'password'|'email'|'textarea'|'date'|'checkbox',
-    placeholder?: string,
+    label?: string
+    id?: string
+    name: string
+    type?: 'text'|'password'|'email'|'textarea'|'date'|'checkbox'
+    placeholder?: string
     className?:string
-    after?: any,
+    after?: any
     inputClass?: any
+    rows?: number
 }
-const Input: FC<IInput> = ({label, id, name, type, placeholder, className, after, inputClass}) => {
+const Input: FC<IInput> = ({label, id, name, type, placeholder, className, after, rows, inputClass}) => {
   const Component = type === 'textarea' ? 'textarea' : 'input';
   return (
     <div className={`input-group ${className}`}>
@@ -26,6 +27,7 @@ const Input: FC<IInput> = ({label, id, name, type, placeholder, className, after
             focus:border-green placeholder:l:text-14 ${inputClass}`
           }
           placeholder={placeholder}
+          rows={rows}
           id={id} name={name} 
         />
         {after}
