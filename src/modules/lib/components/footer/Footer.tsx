@@ -16,7 +16,7 @@ const Footer = () => {
             <div className='app-width '>
 
                 {
-                    <div className={`w-100p flex mb-5 space-between container ${isFooterOpen ? 'open' : ''}`}>
+                    <div className={`w-100p flex mb-10 space-between container ${isFooterOpen ? 'open' : ''}`}>
                         <div className='py-25'>
                             <p className='font-inter text-18 weight-600 text-dimgrey'>Follow</p>
                             <div className='flex gap-10 py-15'>
