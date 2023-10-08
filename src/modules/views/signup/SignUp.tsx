@@ -25,7 +25,7 @@ const SignUp = () => {
 
         <div className="signup w-full l:w-80p mx-auto mb-50 h-100p l:h-fit flex flex-col">
           <div className='w-full'>
-            <div className="font-lora">
+            <div className="font-inter">
               <h3 className="text-center text-30 l:text-32 weight-500 mb-10 text-natural-900">Create your account</h3>
               <p className="text-center text-16 l:text-16 text-natural-700">Please enter your details.</p>
             </div>
@@ -80,7 +80,7 @@ const SignUp = () => {
 
               <div className="text-14 text-natural-800 mt-30 mx-auto w-fit">
                 <span>Already have an account? </span>
-                <Link href={paths.login} className='text-primary-800'>Sign Up</Link>
+                <Link href={paths.login} className='text-primary-800'>Sign In</Link>
               </div>
 
             </form>

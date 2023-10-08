@@ -14,7 +14,7 @@ const HomepageNavBar = () => {
   return (
     <BaseNavBar 
         links={
-            <ul className='w-fit mx-auto hidden l:flex space-between gap-50 weight-500 text-20'>
+            <ul className='w-fit mx-auto hidden l:flex space-between gap-50 weight-500 text-18'>
                 <Link href={paths.homepage}  className='flex w-fit gap-10 hover:text-green pointer'>Asoebi</Link>
                 <Link href={paths.asoebi_wears} className='hover:text-green pointer pointer relative'>
                   <span>Asoebi wears</span>

@@ -20,7 +20,7 @@ const Input: FC<IInput> = ({label, id, name, type, placeholder, className, after
         <Component 
           type={type} 
           className={`
-            block font-lora w-full bg-white
+            block font-inter w-full bg-white
             border-solid border-1 border-natural-300 py-17 px-20  
             radius-8 text-16 weight-400 outline-none
             placeholder:text-natural-700 text-natural-700

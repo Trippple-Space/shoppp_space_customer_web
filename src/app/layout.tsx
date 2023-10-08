@@ -36,7 +36,7 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en" className={`${inter.variable} ${roboto.variable} ${lora.variable} bg-white`}>
-      <body className='font-lora weight-300 text-dimgrey'>{children}</body>
+      <body className='font-inter weight-300 text-dimgrey'>{children}</body>
     </html>
   )
 }

@@ -40,7 +40,7 @@ const Login = () => {
           </div>
 
           <div className="login w-full l:w-80p mx-auto mb-50 h-full l:h-fit">
-            <div className="font-lora">
+            <div className="font-inter">
               <h3 className="text-center text-30 l:text-32 weight-500 mb-10 text-natural-900">Welcome back</h3>
               <p className="text-center text-16 l:text-16 text-natural-700">Please enter your details.</p>
             </div>
@@ -74,7 +74,7 @@ const Login = () => {
                   <input type="checkbox" name="" className='accent-#0B9378 w-14 l:w-20 h-14 l:h-20 mr-5 l:mr-10' />
                   <span>Remember me for 20 days</span>
                 </label>
-                <div>Forgotten password</div>
+                <div className="pointer">Forgotten password</div>
               </div>
 
               <button className="bg-green text-white py-15 l:py-18 radius-8 w-full border 
