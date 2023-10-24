@@ -4,3 +4,7 @@ export const getImageDir = ( folder: ImageSrcFolder, object: string) => {
     if (object.indexOf('http') === 0) return object;
     return `/images/${folder}/${object}`
 }
+
+export const getQueryStringFromObject = (object: Record<string, string>) => {
+    return new URLSearchParams(object).toString()
+}

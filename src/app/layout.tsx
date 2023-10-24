@@ -1,3 +1,4 @@
+import { Toaster } from 'sonner';
 import '../styles/styles.scss';
 import { Inter, Roboto, Lora } from 'next/font/google'
 
@@ -36,6 +37,7 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en" className={`${inter.variable} ${roboto.variable} ${lora.variable} bg-white`}>
+      <Toaster />
       <body className='font-inter weight-300 text-dimgrey'>{children}</body>
     </html>
   )

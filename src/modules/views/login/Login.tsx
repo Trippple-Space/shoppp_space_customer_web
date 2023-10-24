@@ -6,6 +6,7 @@ import Link from 'next/link'
 import React from 'react'
 
 const Login = () => {
+  
   return (
     <div className="flex h-100vh w-100p">
       <div className="l:w-50p hidden l:block m-15">

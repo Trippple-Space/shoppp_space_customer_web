@@ -1,11 +1,15 @@
+'use client'
+
 import Icon from '@/modules/lib/components/icon/Icon'
 import Image from '@/modules/lib/components/image/Image'
 import Input from '@/modules/lib/components/input/Input'
+import { useSignUpView } from '@/modules/lib/utility/hooks/use-signup'
 import { paths } from '@/modules/lib/utility/paths'
 import Link from 'next/link'
 import React from 'react'
 
 const SignUp = () => {
+  const {formHandler} = useSignUpView()
   return (
     <>
       <div className="text-right w-full l:w-80p mt-53 mx-25 hidden l:block">
@@ -30,13 +34,14 @@ const SignUp = () => {
               <p className="text-center text-16 l:text-16 text-natural-700">Please enter your details.</p>
             </div>
 
-            <form className="form block w-100p mt-36 l:mt-50 ">
+            <form onSubmit={formHandler.handleSubmit} className="form block w-100p mt-36 l:mt-50">
 
               <Input
                 label='Name'
                 id='fullname'
-                name='fullname'
+                name='username'
                 placeholder='Enter your full name'
+                handleChange={formHandler.handleChange}
               />
 
               <Input
@@ -46,6 +51,7 @@ const SignUp = () => {
                 type='email'
                 className='mt-30'
                 placeholder='Enter your email'
+                handleChange={formHandler.handleChange}
               />
 
               <Input
@@ -55,11 +61,12 @@ const SignUp = () => {
                 type='password'
                 placeholder='********'
                 className='mt-30'
-                after={''
-                  // <div className="notice text-14 flex gap-10 mt-9 text-danger">
-                  //   <Icon name='alert-circle' className='w-18 a-self-center' />
-                  //   <span className='a-self-center'>Invalid email or password</span>
-                  // </div>
+                handleChange={formHandler.handleChange}
+                after={
+                  <div className="notice text-14 flex gap-10 mt-9 text-danger">
+                    <Icon name='alert-circle' className='w-18 a-self-center' />
+                    <span className='a-self-center'>Invalid email or password</span>
+                  </div>
                 }
               />
 
