@@ -173,9 +173,14 @@ ul {
   transition: max-height 0.5s ease-in-out, opacity 0.5s ease-in-out;
 }
 
-/* Define the final state when the container is open */
 .container.open {
-  max-height: 1000px; /* Adjust the maximum height as needed */
+  max-height: 1000px;
   opacity: 1;
   transition: max-height 0.5s ease-in-out, opacity 0.5s ease-in-out;
 }
+
+@media only screen and (max-width: 768px) { 
+  .review-tiles {
+    overflow-x: auto;
+  }
+} 

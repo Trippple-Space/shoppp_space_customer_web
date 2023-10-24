@@ -12,11 +12,10 @@ const Footer = () => {
   const [isFooterOpen, setIsFooterOpen] = useState(false)
   return (
     <div className='fixed b-0 l-0 w-full'>
-        <div className={`flex g|transition:0.5s bg-white relative pointer w-full g|box-shadow:0px|_|-2px|_|10px|_|rgba(0,0,0,0.10); py-13 `}>
-            <div className='app-width '>
-
+        <div className={`flex g|transition:0.5s bg-white relative pointer w-full g|box-shadow:0px|_|-2px|_|10px|_|rgba(0,0,0,0.10); py-13`}>
+            <div className='app-width'>
                 {
-                    <div className={`w-100p flex mb-10 space-between container ${isFooterOpen ? 'open' : ''}`}>
+                    <div className={`w-100p grid grid-1-cols-1fr l:flex mb-10 space-between container ${isFooterOpen ? 'open' : ''}`}>
                         <div className='py-25'>
                             <p className='font-inter text-18 weight-600 text-dimgrey'>Follow</p>
                             <div className='flex gap-10 py-15'>
@@ -32,7 +31,6 @@ const Footer = () => {
                                 <div className='p-10 w-50 h-50 flex a-items-center border border-1 border-light-grey round'>
                                     <AiOutlineInstagram className='w-30 h-25' />
                                 </div>
-                                
                             </div>
                             <div className='text-light-grey text-14 font-inter weight-500'>@asoebiafrica | #AsoebiAfrica</div>
                             <div className='w-fit mt-50'>
@@ -88,12 +86,14 @@ const Footer = () => {
 
                 <div className='flex whitespace-nowrap weight-400 text-14 a-self-center'>
                     <div className="w-full flex">
-                        <div className="w-fit flex gap-30 mx-auto a-self-center ">
+                        <div className="w-fit flex gap-30 mx-0 l:mx-auto a-self-center ">
                             <span>@ 2023 asoebi all reserved.</span>
-                            <span className='flex w-fit'> <BsDot className='w-20 h-20' /> <span>Let us help you</span> </span>
-                            <span className='flex w-fit'> <BsDot className='w-20 h-20' /> <span>About asoebi</span> </span>
-                            <span className='flex w-fit'> <BsDot className='w-20 h-20' /> <span>Own asoebi store</span> </span>
-                            <span className='flex w-fit'> <BsDot className='w-20 h-20' /> <span>Contact</span> </span>
+                            <div className="w-fit hidden l:flex gap-30 mx-auto a-self-center">
+                                <span className='flex w-fit'> <BsDot className='w-20 h-20' /> <span>Let us help you</span> </span>
+                                <span className='flex w-fit'> <BsDot className='w-20 h-20' /> <span>About asoebi</span> </span>
+                                <span className='flex w-fit'> <BsDot className='w-20 h-20' /> <span>Own asoebi store</span> </span>
+                                <span className='flex w-fit'> <BsDot className='w-20 h-20' /> <span>Contact</span> </span>
+                            </div>
                         </div>
                     </div>
                     <span onClick={() => setIsFooterOpen((prev) => !prev)} className='w-fit h-fit a-self-center block pointer'>
@@ -104,10 +104,7 @@ const Footer = () => {
                 </div>
                 </div>
             </div>
-
     </div>
-
-
   )
 }
 

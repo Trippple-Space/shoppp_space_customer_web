@@ -3,6 +3,7 @@
 import React from 'react'
 import BaseNavBar from './BaseNavBar'
 import { BiHomeAlt2 } from "react-icons/bi"
+
 import Link from 'next/link'
 import { paths } from '../../utility/paths'
 import { usePathname } from 'next/navigation'

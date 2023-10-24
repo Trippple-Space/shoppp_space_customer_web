@@ -46,12 +46,12 @@ const Landingpage = () => {
            <HomepageNavBar />
             <Hero /> 
             <div className="app-width">
-                <section className="mt-20 w-100p l:mt-90">
+                <section className="mt-40 w-100p l:mt-90">
                     <div className="flex space-between items-center">
                         <h3 className="text-18 l:text-24 weight-600 text-natural-900 ">TOP SELLING ANKARA</h3>
                         <div className="text-14 l:text-16 weight-500 underline text-natural-900 pointer">View All</div>
                     </div>
-                    <div className="grid grid-4-cols-1fr gap-10 l:gap-30 w-full">
+                    <div className="grid grid-2-cols-1fr l:grid-4-cols-1fr gap-10 l:gap-30 w-full">
                         {
                             [...products, ...products, ...products, ...products].map(product => (
                                 <ProductTile product={product} /> 
@@ -60,12 +60,12 @@ const Landingpage = () => {
                     </div>
                 </section>
 
-                <section className="mt-20 w-100p l:mt-70">
-                    <div className="flex space-between">
-                        <h3 className="text-18 l:text-24 weight-600 text-natural-900">SHOP OUR FEATURED ASOEBI WEARS</h3>
-                        <p className="text-14 l:text-16 weight-500 underline text-natural-900 pointer">View All</p>
+                <section className="mt-70 w-100p l:mt-70">
+                    <div className="flex space-between items-center">
+                        <h3 className="text-16 l:text-24 weight-600 text-natural-900 w-220 l:w-100p g|overflow:hidden g|white-space:nowrap g|text-overflow:ellipsis">SHOP OUR FEATURED ASOEBI WEARS</h3>
+                        <div className="text-14 l:text-16 weight-500 underline text-natural-900 pointer whitespace-nowrap">View All</div>
                     </div>
-                    <div className="grid grid-4-cols-1fr gap-10 l:gap-30 w-full">
+                    <div className="grid grid-2-cols-1fr l:grid-4-cols-1fr gap-10 l:gap-30 w-full">
                         {
                             [...products, ...products, ...products, ...products, ...products, ...products, ...products, ...products].map(product => (
                                 <ProductTile product={product} /> 
@@ -74,11 +74,11 @@ const Landingpage = () => {
                     </div>
                 </section>
 
-                <section className="mt-20 w-100p l:mt-70">
+                <section className="mt-70 w-100p l:mt-70">
                   <div className="flex space-between">
                     <h3 className="text-18 l:text-24 weight-600 text-natural-900">FROM THE CUSTOMER'S PERSPECTIVE</h3>
                     </div>
-                    <div className="flex space-between gap-10 l:gap-20 w-full mt-20">
+                    <div className="flex l:w-100p space-between gap-10 l:gap-20 w-full review-tiles">
                         {
                             [...products, ...products, ...products, ...products, ...products].map(product => (
                                 <ReviewTile product={product} /> 

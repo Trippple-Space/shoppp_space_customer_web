@@ -15,7 +15,7 @@ const ProductTile: FC<IProductTile> = ({product}) => {
   const [selectedImage, setSelectedImage] = useState(product.images[0])
   const [isFavourite, setIsFavorite] = useState(false)
   return (
-    <div className="mt-20 l:mt-40">
+    <div className="mt-20 l:mt-30">
       <div
         id="image"
         className="relative ratio-1 radius-10 g|overflow:hidden l:radius-15 tile"
@@ -32,7 +32,7 @@ const ProductTile: FC<IProductTile> = ({product}) => {
           <button className="bg-warning-600 text-natural-900 border-hidden px-10 py-10 radius-5 l:px-22 l:py-12 l:radius-10 pointer tile-add-to-cart-btn">
             <span className="hidden l:block weight-600">Add to cart</span>
             <div className="l:hidden">
-              <AiOutlinePlus size={24} />
+              <AiOutlinePlus size={16} />
             </div>
           </button>
         </div>
@@ -46,12 +46,12 @@ const ProductTile: FC<IProductTile> = ({product}) => {
       </div>
       <div
         id="product varients"
-        className="mt-15 flex a-items-center j-content-space-between gap-13 "
+        className="mt-15 flex items-center j-content-space-between gap-6 l:gap-13 "
       >
         {
           product.images.map((image, i) => (
             <Image
-              className={classNames("w-60 h-60 pointer radius-5 l:radius-8 a-self-center g|object-fit:cover", {
+              className={classNames("w-30 h-30 l:w-60 l:h-60 pointer radius-5 l:radius-8 a-self-center g|object-fit:cover", {
                 'border border-green border-2': selectedImage == image
               })}
               src={image}
@@ -66,10 +66,10 @@ const ProductTile: FC<IProductTile> = ({product}) => {
         id="product details"
         className="mt-15 g|overflow:hidden g|white-space:nowrap g|text-overflow:ellipsis"
       >
-        <h3 className="text-16 l:text-24 weight-500">
+        <h3 className="text-16 l:text-24 w-160 l:w-100p g|overflow:hidden g|white-space:nowrap g|text-overflow:ellipsis  weight-600 l:weight-500">
           24 Karat Gold Plated Ring
         </h3>
-        <div className="flex a-items-center gap-10 l:gap-18 mt-5 text-dimgrey">
+        <div className="l:flex a-items-center gap-10 l:gap-18 mt-5 text-dimgrey">
           <p className="text-14 text-natural-800 weight-400">Rotimi’s store</p>
           <div className="flex gap-3 items-center">
             {
