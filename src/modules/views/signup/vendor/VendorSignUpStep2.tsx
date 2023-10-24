@@ -10,8 +10,8 @@ const VendorSignUpStep2: FC<IVendorSignUpStep> = ({ setCurrentStep }) => {
     return (
         <div>
             <div className='mt-33'>
-                <h3 className='text-24 weight-500 text-black' >What would you like to sell?</h3>
-                <p className='text-16 mt-13'>You can select multiple choice. We’ll make sure you are set up to sell this products</p>
+                <h3 className='text-20 weight-500 text-natural-900' >What would you like to sell?</h3>
+                <p className='text-14 mt-10'>You can select multiple choice. We’ll make sure you are set up to sell this products</p>
             </div>
 
             <div className='mt-33 flex space-between gap-23 flex-col m:flex-row'>
@@ -39,10 +39,10 @@ const VendorSignUpStep2: FC<IVendorSignUpStep> = ({ setCurrentStep }) => {
                 } />
             </div>
 
-            <div className='flex space-between mt-150 text-13 l:text-16'>
+            <div className='flex space-between mt-150 text-13 l:text-14'>
                 <div className="flex">
                     <button onClick={() => setCurrentStep(1)} className='flex gap-5 items-center bg-transparent text-dimgrey py-15 w-117 border-none 
-                                  w-fit hover:pointer hover:text-green'>
+                                  w-fit hover:pointer'>
                         <Icon name='caret-left' className='w-fit' />
                         <span className='w-fit h-fit'>Back</span>
                     </button>
@@ -56,9 +56,9 @@ const VendorSignUpStep2: FC<IVendorSignUpStep> = ({ setCurrentStep }) => {
                                  hover:pointer hover:text-green'>
                         Skip
                     </button>
-                    <button onClick={() => setCurrentStep(3)} className='bg-green text-white py-15 l:py-15 w-117 radius-5 border 
-                                 hover:pointer 
-                                hover:bg-darkgreen g|transition:0.5s disabled:bg-grey'>
+                    <button onClick={() => setCurrentStep(3)} className='bg-green text-white py-10 l:py-10 px-20 w-fit-content radius-5 border 
+                        hover:pointer 
+                        hover:bg-darkgreen g|transition:0.5s disabled:bg-grey'>
                         Next step
                     </button>
                 </div>

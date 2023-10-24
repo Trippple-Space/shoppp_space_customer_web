@@ -8,8 +8,8 @@ const VendorSignUpStep1: FC<IVendorSignUpStep> = ({ setCurrentStep }) => {
     return (
         <div>
             <div className='mt-33'>
-                <h3 className='text-24 weight-500 text-black' >Let’s get started. Which of these best describe you?</h3>
-                <p className='text-16 mt-13'>We'll assist you in setting up your store tailored to its unique needs.</p>
+                <h3 className='text-20 weight-500 text-natural-900' >Let’s get started. Which of these best describe you?</h3>
+                <p className='text-14 mt-10'>We'll assist you in setting up your store tailored to its unique needs.</p>
             </div>
 
             <div className='mt-33 flex space-between gap-23 flex-col m:flex-row'>
@@ -18,18 +18,18 @@ const VendorSignUpStep1: FC<IVendorSignUpStep> = ({ setCurrentStep }) => {
             </div>
 
             <div>
-                <div className='j-content-end flex mt-110 '>
+                <div className='j-content-end gap-20 flex mt-110 '>
                     <button className='bg-transparent text-dimgrey py-15 w-117 border-none 
-                                 text-13 l:text-16 mt-40 hover:pointer hover:text-green'>
+                                 text-12 l:text-14 mt-40 hover:pointer hover:text-green'>
                         Skip All
                     </button>
                     <button className='bg-transparent text-dimgrey py-15 w-117 border-none 
-                                text-13 l:text-16 mt-40 hover:pointer hover:text-green'>
+                                text-13 l:text-14 mt-40 hover:pointer hover:text-green'>
                         Skip
                     </button>
-                    <button onClick={() => setCurrentStep(2)} className='bg-green text-white py-15 l:py-15 w-117 radius-5 border 
-                                 mt-40 hover:pointer text-13 l:text-16
-                                hover:bg-darkgreen g|transition:0.5s disabled:bg-grey'>
+                    <button onClick={() => setCurrentStep(2)} className='bg-green text-white py-15 px-20 l:py-10 w-fit-content radius-5 border 
+                        mt-40 hover:pointer text-13 l:text-14
+                        hover:bg-darkgreen g|transition:0.5s disabled:bg-grey'>
                         Next step
                     </button>
                 </div>

@@ -10,15 +10,15 @@ interface IIcon {
     alt?: string,
     className?: string
 }
-const Icon: FC<IIcon> = ({name, ext ='.svg', width = 18, height = 18, alt= 'icon', className = ''}) => {
+const Icon: React.FC<IIcon> = ({name, ext ='.svg', width = 18, height = 18, alt= 'icon', className = ''}) => {
   
   return (
     <img
-        className={'inline-block ' + className}
-        src={getImageDir('icons', `${name}${ext}`)}
-        width={width}
-        height={height}
-        alt={alt}
+      className={'inline-block ' + className}
+      src={getImageDir('icons', `${name}${ext}`)}
+      width={width}
+      height={height}
+      alt={alt}
     />
   )
 }

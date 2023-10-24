@@ -47,7 +47,6 @@ const Modal: React.FC<ModalProps> = ({ isOpen, onClose, children, extraModalClas
     backgroundColor: 'rgba(0, 0, 0, 0.3)',
     zIndex: 9999,
     ...extraModalClass
-
   };
 
   const modalContentStyle: any = {

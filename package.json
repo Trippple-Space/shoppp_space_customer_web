@@ -3,8 +3,8 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "dev": "cross-env npm run dev:start",
-    "dev:start": "cxcss && next dev --turbo",
+    "dev": "cross-env CMD_ENV=development npm run dev:start",
+    "dev:start": "cxcss & next dev --turbo",
     "build": "next build",
     "start": "next start",
     "lint": "next lint"

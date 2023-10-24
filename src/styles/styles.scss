@@ -2,6 +2,7 @@
 // @use './partials' as *;
 // @use './mixins/util' as *;
 @import url('./index.css');
+@import '../modules/lib/components/product-tile/ProductTile.module.scss';
 
 * {
   box-sizing: border-box;
@@ -48,6 +49,10 @@ ul {
   font-family: var(--font-inter);
 }
 
+.font-lora {
+  font-family: var(--font-lora);
+}
+
 .custom-progress {
   background-color: #EAEAEA;
   border-radius: 10px;
@@ -73,6 +78,7 @@ ul {
 .tilt {
   transform: skewY(-3deg);
 }
+
 .notilt {
   transform: skewY(2deg);
 }
@@ -131,3 +137,50 @@ ul {
       }
   }
 }
+
+/* SCSS for the underline animation */
+.underline-on-hover {
+  position: relative;
+  // display: inline-block;
+  width: fit-content;
+  cursor: pointer;
+  color: #333;
+  font-weight: 400;
+  text-decoration: none;
+
+  transition: all 0.3s ease;
+
+  &::before {
+    content: "";
+    position: absolute;
+    bottom: -2px; 
+    left: 0;
+    width: 0;
+    height: 2px; 
+    background-color: #333;
+    transition: width 0.3s ease; 
+  }
+
+  &:hover::before {
+    width: 100%;
+  }
+}
+
+.container {
+  max-height: 0;
+  overflow: hidden;
+  opacity: 0;
+  transition: max-height 0.5s ease-in-out, opacity 0.5s ease-in-out;
+}
+
+.container.open {
+  max-height: 1000px;
+  opacity: 1;
+  transition: max-height 0.5s ease-in-out, opacity 0.5s ease-in-out;
+}
+
+@media only screen and (max-width: 768px) { 
+  .review-tiles {
+    overflow-x: auto;
+  }
+} 

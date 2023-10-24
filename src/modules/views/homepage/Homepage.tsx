@@ -38,7 +38,7 @@ const Homepage = () => {
                 <HomepageNavBar />
                 <Filters />
                 <div className="app-width">
-                    <NoResultMessage />
+                    {/* <NoResultMessage /> */}
 
                     {isRoute ? (
                         <AsoebiHomepage />
