@@ -39,8 +39,8 @@ const SignUp = () => {
               <Input
                 label='Name'
                 id='fullname'
-                name='username'
-                placeholder='Enter your full name'
+                name='fullname'
+                placeholder='FirstName LastName'
                 handleChange={formHandler.handleChange}
               />
 
