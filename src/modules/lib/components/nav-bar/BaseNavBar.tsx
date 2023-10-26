@@ -6,15 +6,21 @@ import { FaRegCircleUser } from "react-icons/fa6";
 import ModalComponent from './ModalComponent';
 import OrdersModal from './profile-modal/OrdersModal';
 import SavedItemsModal from './profile-modal/SavedItems';
+import RecentlyViewedItems from './profile-modal/RecentlyViewedItems ';
+import RecentlySearchItems from './profile-modal/RecentlySearchItems ';
+import AddressModal from './profile-modal/AddressModal';
 
 interface IBaseNavBar {
     links: ReactNode
 }
 
 const BaseNavBar: FC<IBaseNavBar> = ({links}) => {
-    const [userProfileDropdown, setUserProfileDropdown] = useState<boolean>(false)
-    const [userOrderDropdown, setUserOrderDropdown] = useState<boolean>(false)
-    const [userSavedItemsDropdown, setUserSavedItemsDropdown] = useState<boolean>(false)
+    const [userProfileDropdown, setUserProfileDropdown] = useState<boolean>(false);
+    const [userOrderDropdown, setUserOrderDropdown] = useState<boolean>(false);
+    const [userSavedItemsDropdown, setUserSavedItemsDropdown] = useState<boolean>(false);
+    const [userRecentlyViewedDropdown, setUserRecentlyViewedDropdown] = useState<boolean>(false);
+    const [userRecentSearchDropdown, setUserRecentSearchDropdown] = useState<boolean>(false);
+    const [userAddressDropdown, setUserAddressDropdown] = useState<boolean>(false);
     return (
         <div className=''>
             <div className='flex app-width space-between items-center py-25 '>
@@ -44,6 +50,9 @@ const BaseNavBar: FC<IBaseNavBar> = ({links}) => {
                             data={setUserProfileDropdown}
                             setUserOrderDropdown={setUserOrderDropdown}
                             setUserSavedItemsDropdown={setUserSavedItemsDropdown}
+                            setUserRecentlyViewedDropdown={setUserRecentlyViewedDropdown}
+                            setUserRecentSearchDropdown={setUserRecentSearchDropdown}
+                            setUserAddressDropdown={setUserAddressDropdown}
                         />
                     }
 
@@ -56,11 +65,38 @@ const BaseNavBar: FC<IBaseNavBar> = ({links}) => {
                         />
                     }
 
-{
+                    {
                         userSavedItemsDropdown &&
                         <SavedItemsModal 
                             modalOpen={userSavedItemsDropdown} 
                             handleCloseModal={() => setUserSavedItemsDropdown(false)} 
+                            data={undefined} 
+                        />
+                    }
+
+                    {
+                        userRecentlyViewedDropdown &&
+                        <RecentlyViewedItems 
+                            modalOpen={userRecentlyViewedDropdown} 
+                            handleCloseModal={() => setUserRecentlyViewedDropdown(false)} 
+                            data={undefined} 
+                        />
+                    }
+
+                    {
+                        userRecentSearchDropdown &&
+                        <RecentlySearchItems 
+                            modalOpen={userRecentSearchDropdown} 
+                            handleCloseModal={() => setUserRecentSearchDropdown(false)} 
+                            data={undefined} 
+                        />
+                    }
+
+{
+                        userAddressDropdown &&
+                        <AddressModal 
+                            modalOpen={userAddressDropdown} 
+                            handleCloseModal={() => setUserAddressDropdown(false)} 
                             data={undefined} 
                         />
                     }

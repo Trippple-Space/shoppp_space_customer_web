@@ -9,8 +9,9 @@ interface IIcon {
     height?: number,
     alt?: string,
     className?: string
+    onClick?: any
 }
-const Icon: React.FC<IIcon> = ({name, ext ='.svg', width = 18, height = 18, alt= 'icon', className = ''}) => {
+const Icon: React.FC<IIcon> = ({name, ext ='.svg', width = 18, height = 18, alt= 'icon', className = '', onClick}) => {
   
   return (
     <img
@@ -19,6 +20,7 @@ const Icon: React.FC<IIcon> = ({name, ext ='.svg', width = 18, height = 18, alt=
       width={width}
       height={height}
       alt={alt}
+      onClick={onClick}
     />
   )
 }
