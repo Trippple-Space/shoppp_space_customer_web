@@ -5,6 +5,7 @@ import { LuAlignJustify } from "react-icons/lu";
 import { FaRegCircleUser } from "react-icons/fa6";
 import ModalComponent from './ModalComponent';
 import OrdersModal from './profile-modal/OrdersModal';
+import SavedItemsModal from './profile-modal/SavedItems';
 
 interface IBaseNavBar {
     links: ReactNode
@@ -13,6 +14,7 @@ interface IBaseNavBar {
 const BaseNavBar: FC<IBaseNavBar> = ({links}) => {
     const [userProfileDropdown, setUserProfileDropdown] = useState<boolean>(false)
     const [userOrderDropdown, setUserOrderDropdown] = useState<boolean>(false)
+    const [userSavedItemsDropdown, setUserSavedItemsDropdown] = useState<boolean>(false)
     return (
         <div className=''>
             <div className='flex app-width space-between items-center py-25 '>
@@ -41,6 +43,7 @@ const BaseNavBar: FC<IBaseNavBar> = ({links}) => {
                             handleCloseModal={() => setUserProfileDropdown(false)} 
                             data={setUserProfileDropdown}
                             setUserOrderDropdown={setUserOrderDropdown}
+                            setUserSavedItemsDropdown={setUserSavedItemsDropdown}
                         />
                     }
 
@@ -49,6 +52,15 @@ const BaseNavBar: FC<IBaseNavBar> = ({links}) => {
                         <OrdersModal 
                             modalOpen={userOrderDropdown} 
                             handleCloseModal={() => setUserOrderDropdown(false)} 
+                            data={undefined} 
+                        />
+                    }
+
+{
+                        userSavedItemsDropdown &&
+                        <SavedItemsModal 
+                            modalOpen={userSavedItemsDropdown} 
+                            handleCloseModal={() => setUserSavedItemsDropdown(false)} 
                             data={undefined} 
                         />
                     }

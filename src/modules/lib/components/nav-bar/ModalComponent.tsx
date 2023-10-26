@@ -15,9 +15,10 @@ interface ModalProps {
   handleCloseModal: () => void | any;
   data: any;
   setUserOrderDropdown?:any
+  setUserSavedItemsDropdown?:any
 }
 
-const HomepageModal: React.FC<ModalProps> = ({modalOpen, handleCloseModal, data, setUserOrderDropdown}) => {
+const HomepageModal: React.FC<ModalProps> = ({modalOpen, handleCloseModal, data, setUserOrderDropdown, setUserSavedItemsDropdown}) => {
   
   return (
     <div>
@@ -41,7 +42,10 @@ const HomepageModal: React.FC<ModalProps> = ({modalOpen, handleCloseModal, data,
               setUserOrderDropdown(true);
               data(false)
             }}>Orders</div>
-            <div className='mt-16 pointer hover:text-green'>Saved items</div>
+            <div className='mt-16 pointer hover:text-green' onClick={() => {
+              setUserSavedItemsDropdown(true);
+              data(false);
+            }}>Saved items</div>
             <div className='mt-16 pointer hover:text-green'>Recently viewed</div>
             <div className='mt-16 pointer hover:text-green'>Recent searched</div>
           </div>
