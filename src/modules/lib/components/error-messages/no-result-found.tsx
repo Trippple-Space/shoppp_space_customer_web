@@ -1,5 +1,4 @@
 import Icon from '@/modules/lib/components/icon/Icon'
-import Image from '@/modules/lib/components/image/Image'
 import React from 'react'
 
 

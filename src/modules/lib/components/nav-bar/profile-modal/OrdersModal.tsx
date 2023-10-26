@@ -19,15 +19,29 @@ const OrdersModal: React.FC<ModalProps> = ({modalOpen, handleCloseModal, data}) 
   const selected = (option: any) => {
     switch (option) {
       case 'open-orders':
-        return (<div className='text-16 weight-400 text-natural-700'><OrderCard /></div>)
+        return (
+          <div className='text-16 weight-400 text-natural-700'>
+            <OrderCard />
+          </div>
+        )
 
       case 'closed-orders':
-        return (<div className="text-16 weight-400 text-natural-700">You don’t have any closed orders yet</div>)
+        return (
+          <div className='text-16 weight-400 text-natural-700'>
+            {
+              ['', '', '', ''].map(() => (
+                <div className="pb-20 mb-20 border-b border-1 border-natural-300">
+                  <OrderCard />
+                </div>
+              ))
+            }
+          </div>
+        )
     }
   }
   return (
     <div>
-      <Modal isOpen={modalOpen} onClose={handleCloseModal} extraClass={{ overflow: 'hidden' }}>
+      <Modal isOpen={modalOpen} onClose={handleCloseModal} extraClass={{ overflow: 'auto' }}>
         <div className='w-330 l:w-1000 l:h-600'>
           <div className=''>
             <div className=''>
