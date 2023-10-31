@@ -22,7 +22,7 @@ const BaseNavBar: FC<IBaseNavBar> = ({links}) => {
     const [userRecentSearchDropdown, setUserRecentSearchDropdown] = useState<boolean>(false);
     const [userAddressDropdown, setUserAddressDropdown] = useState<boolean>(false);
     return (
-        <div className=''>
+        <div className='border-1 border-b border-natural-300'>
             <div className='flex app-width space-between items-center py-25 '>
                 <div className='w-fit'>
                     <Image
