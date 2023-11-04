@@ -5,11 +5,13 @@ import Image from '@/modules/lib/components/image/Image'
 import Input from '@/modules/lib/components/input/Input'
 import { useSignUpView } from '@/modules/lib/utility/hooks/use-signup'
 import { paths } from '@/modules/lib/utility/paths'
+import { cx } from '@/modules/lib/utility/utility'
 import Link from 'next/link'
 import React from 'react'
 
 const SignUp = () => {
   const {formHandler} = useSignUpView()
+
   return (
     <>
       <div className="text-right w-full l:w-80p mt-53 mx-25 hidden l:block">
@@ -37,11 +39,23 @@ const SignUp = () => {
             <form onSubmit={formHandler.handleSubmit} className="form block w-100p mt-36 l:mt-50">
 
               <Input
-                label='Name'
+                label='Full name'
                 id='fullname'
                 name='fullname'
                 placeholder='FirstName LastName'
                 handleChange={formHandler.handleChange}
+                handleBlur={formHandler.handleBlur}
+                inputClass={cx({
+                  'border-red!': (formHandler.touched.fullname && formHandler.errors.fullname)
+                })}
+                after={
+                  <div className={cx("notice text-12 h-0 flex gap-5 j-content-end w-full mt-12 text-danger", {
+                    'hidden!': !(formHandler.touched.fullname && formHandler.errors.fullname)
+                  })}>
+                    <Icon name='alert-circle' className='w-14 a-self-center' />
+                    <span className='a-self-center'>{formHandler.errors.fullname}</span>
+                  </div>
+                }
               />
 
               <Input
@@ -52,6 +66,18 @@ const SignUp = () => {
                 className='mt-30'
                 placeholder='Enter your email'
                 handleChange={formHandler.handleChange}
+                handleBlur={formHandler.handleBlur}
+                inputClass={cx({
+                  'border-red!': (formHandler.touched.email && formHandler.errors.email)
+                })}
+                after={
+                  <div className={cx("notice text-12 h-0 flex gap-5 j-content-end w-full mt-12 text-danger", {
+                    'hidden!': !(formHandler.touched.email && formHandler.errors.email)
+                  })}>
+                    <Icon name='alert-circle' className='w-14 a-self-center' />
+                    <span className='a-self-center'>{formHandler.errors.email}</span>
+                  </div>
+                }
               />
 
               <Input
@@ -62,10 +88,16 @@ const SignUp = () => {
                 placeholder='********'
                 className='mt-30'
                 handleChange={formHandler.handleChange}
+                handleBlur={formHandler.handleBlur}
+                inputClass={cx({
+                  'border-red!': (formHandler.touched.password && formHandler.errors.password)
+                })}
                 after={
-                  <div className="notice text-14 flex gap-10 mt-9 text-danger">
-                    <Icon name='alert-circle' className='w-18 a-self-center' />
-                    <span className='a-self-center'>Invalid email or password</span>
+                  <div className={cx("notice text-12 h-0 flex gap-5 j-content-end w-full mt-12 text-danger", {
+                    'hidden!': !(formHandler.touched.password && formHandler.errors.password)
+                  })}>
+                    <Icon name='alert-circle' className='w-14 a-self-center' />
+                    <span className='a-self-center'>{formHandler.errors.password}</span>
                   </div>
                 }
               />
@@ -80,9 +112,9 @@ const SignUp = () => {
               <button className="bg-green text-white py-15 l:py-18 radius-8 w-full border 
                 text-18 l:text-16 mt-40 hover:pointer font-inter
                 hover:bg-darkgreen g|transition:0.5s disabled:bg-grey
-                              "
+                active:bg-deep-grey"
               >
-                Sign In
+                Sign up
               </button>
 
               <div className="text-14 text-natural-800 mt-30 mx-auto w-fit">

@@ -1,3 +1,4 @@
+import classNames from "classnames";
 
 export type ImageSrcFolder = 'icons' | 'logos' | 'images'
 export const getImageDir = ( folder: ImageSrcFolder, object: string) => {
@@ -7,4 +8,8 @@ export const getImageDir = ( folder: ImageSrcFolder, object: string) => {
 
 export const getQueryStringFromObject = (object: Record<string, string>) => {
     return new URLSearchParams(object).toString()
+}
+
+export const cx = (...args: classNames.ArgumentArray) => {
+    return classNames(...args);
 }

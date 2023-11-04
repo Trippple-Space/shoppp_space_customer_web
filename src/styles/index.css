@@ -414,6 +414,10 @@
 .text-right {    text-align: right;  } 
 .mt-53 { margin-top: 53px; } 
 .text-primary-700 { color:  #047857; } 
+.active\:bg-deep-grey:active { background-color: #A6A6A6; } 
+.h-0 { height: 0px; } 
+.mt-12 { margin-top: 12px; } 
+.hidden\! {    display: none !important;  } 
 .mb-43 { margin-bottom: 43px; } 
 .w-100 { width: 100px; } 
 .h-27 { height: 27px; } 

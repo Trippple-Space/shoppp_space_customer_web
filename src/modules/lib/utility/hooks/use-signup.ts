@@ -8,7 +8,7 @@ import { toast } from "sonner";
 import * as Yup from 'yup';
 
 export const SignUpValidationSchema = Yup.object().shape({
-    username: Yup.string().trim(),
+    fullname: Yup.string().trim().min(4, 'Can your fullname be that short? I\'m not convinced').max(25, 'Over 25 characters. Kilode. Na essay?').required('Required'),
     email: Yup.string().trim()
         .test('test-username', 'Enter Valid Phone/Email',
             (value) => {
@@ -21,14 +21,14 @@ export const SignUpValidationSchema = Yup.object().shape({
                     return false;
                 }
                 return true;
-            }),
+            }).required('Required'),
     password: Yup.string().min(8, "Minimum password length is 8 characters").max(20, "Max password length is 20 characters").required("Required"),
 });
 
 
 const formikSignUpConfig = (router: AppRouterInstance): FormikConfig<IRegistrationDetails> => ({
     initialValues: {
-        username: '',
+        fullname: '',
         email: '',
         password: ''
     },

@@ -1,6 +1,7 @@
 {
   "watchDirectory": "./src/",
   "output": "./src/styles/",
+  "layers": [ "lo", "hi", "xhi" ],
   "breakpoints": {
     "s": "576px",
     "m": "768px",

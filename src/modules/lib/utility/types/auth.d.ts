@@ -4,7 +4,7 @@ export interface ILoginCredentials {
 }
 
 export interface IRegistrationDetails {
-    username: string,
+    fullname: string,
     email: string,
     password: string
 }
