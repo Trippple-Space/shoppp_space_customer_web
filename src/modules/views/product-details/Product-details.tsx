@@ -21,7 +21,7 @@ const ProductDetails = () => {
   return (
     <>
       <HomepageNavBar />
-      <div className="max-w-1440 mx-auto p-20 l:p-70 mb-40">
+      <div className="app-width mt-60">
         <div className='hidden l:block'>
           <h1 className='l:t-24 l:text-24 weight-500'>Kutonu High Grade Fabric Kutonu High Grade Fabric</h1>
         </div>

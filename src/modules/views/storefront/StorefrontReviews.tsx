@@ -13,7 +13,7 @@ const StorefrontReviews = () => {
         <div>
             <div className='max-w-1000'>
                 <div className='flex space-between'>
-                    <h2 className='weight-400 text-30'>Reviews</h2>
+                    <h2 className='weight-500 text-25'>Reviews</h2>
                     <div> <button className='py-6 px-13 bg-white border border-1 border-lightgrey radius-4'>March 2021 - February 2022</button> </div>
                 </div>
 
@@ -42,27 +42,28 @@ const StorefrontReviews = () => {
 
 
             <div className='mt-50'>
-                <div className='flex flex-wrap gap-50'>
+                <div className='grid l:grid-2-cols-auto l:gap-40'>
                 {
-                    [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,]
+                    [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]
                         .map(() => (
-                            <div>
-                                <div className='flex gap-10 items-center'>
-                                    <Image 
-                                        src="https://api.dicebear.com/6.x/thumbs/svg?seed=Boo"
-                                        alt="avatar"
-                                        className='w-40 radius-4'
+                            <div className='mb-20 l:mb-0 '>
+                                <div className='flex gap-10 l:gap-20 items-center'>
+                                    <Image
+                                        className='w-60 h-60 l:w-90 radius-50p l:h-90'
+                                        src='Ankara.jpeg'
+                                        alt='product'
+                                        type='image'
                                     />
-
-                                    <div>
-                                        <div className='text-18'>Abdulazeez Atanda</div>
-                                        <div className='text-small text-grey'>25th Sept, 2023</div>
+                                    <div className='line-height-32'>
+                                        <p className='text-16 l:text-20 weight-500'>Bolu Johnson</p>
+                                        <p className='text-14 m:text-16 weight-300'>February 2023</p>
                                     </div>
                                 </div>
-                                <div className='mt-10 text-15 max-w-400'>
-                                    Lorem ipsum dolor sit, amet consectetur adipisicing elit. Iste, omnis corporis cupiditate officiis voluptatum adipisci dolorum voluptatibus consequatur, recusandae ullam libero maiores quas aperiam dicta maxime magni reprehenderit hic esse.
+                                <div className='py-10'>
+                                    <p className='line-height-30 text-14 pr-0 l:line-height-40 l:text-16 l:pr-30 text-grey'>I just received my Ankara fabric and I am blown away by the quality! The colors are so vibrant and the patterns are absolutely stunning. I can't wait to start creating some beautiful garments with this fabric.</p>
+                                    <button className='bg-none border-none flex text-16 l:text-18 mt-10'><p className='underline pr-5'>See more</p> {'>'}</button>
                                 </div>
-                            </div>                    
+                            </div>                
                         ))}
 
                     <div>

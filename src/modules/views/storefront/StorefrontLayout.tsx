@@ -28,34 +28,38 @@ const tabs = [
 const products = [
     {
         images: [
-            'https://res.cloudinary.com/codennerd/image/upload/v1689377577/WhatsApp_Image_2023-07-15_at_12.23.25_AM_mghle5.jpg',
-            'https://res.cloudinary.com/codennerd/image/upload/v1689377577/WhatsApp_Image_2023-07-15_at_12.23.25_AM_1_kxeykx.jpg',
-            'https://res.cloudinary.com/codennerd/image/upload/v1689377581/WhatsApp_Image_2023-07-15_at_12.23.38_AM_2_y2rd0d.jpg',
-            'https://res.cloudinary.com/codennerd/image/upload/v1689377581/WhatsApp_Image_2023-07-15_at_12.23.38_AM_1_samhx5.jpg',
-            'https://res.cloudinary.com/codennerd/image/upload/v1689377577/WhatsApp_Image_2023-07-15_at_12.23.25_AM_mghle5.jpg',
+            'https://res.cloudinary.com/codennerd/image/upload/v1689377463/Asoebi%20Africa/WhatsApp_Image_2023-07-15_at_12.23.05_AM_hnms5f.jpg',
+            'https://res.cloudinary.com/codennerd/image/upload/v1689377577/Asoebi%20Africa/WhatsApp_Image_2023-07-15_at_12.23.25_AM_1_kxeykx.jpg',
+            'https://res.cloudinary.com/codennerd/image/upload/v1689377581/Asoebi%20Africa/WhatsApp_Image_2023-07-15_at_12.23.38_AM_2_y2rd0d.jpg',
+            'https://res.cloudinary.com/codennerd/image/upload/v1689377581/Asoebi%20Africa/WhatsApp_Image_2023-07-15_at_12.23.38_AM_1_samhx5.jpg',
+            'https://res.cloudinary.com/codennerd/image/upload/v1689377577/Asoebi%20Africa/WhatsApp_Image_2023-07-15_at_12.23.25_AM_mghle5.jpg',
         ]
     }, 
     {
         images: [
-            'https://res.cloudinary.com/codennerd/image/upload/v1689377463/WhatsApp_Image_2023-07-15_at_12.23.07_AM_2_tdqxwf.jpg',
-            'https://res.cloudinary.com/codennerd/image/upload/v1689377462/WhatsApp_Image_2023-07-15_at_12.23.04_AM_2_pbukkn.jpg',
-            'https://res.cloudinary.com/codennerd/image/upload/v1689377463/WhatsApp_Image_2023-07-15_at_12.23.05_AM_hnms5f.jpg'
+            'https://res.cloudinary.com/codennerd/image/upload/v1689377463/Asoebi%20Africa/WhatsApp_Image_2023-07-15_at_12.23.07_AM_2_tdqxwf.jpg',
+            'https://res.cloudinary.com/codennerd/image/upload/v1689377462/Asoebi%20Africa/WhatsApp_Image_2023-07-15_at_12.23.04_AM_2_pbukkn.jpg',
+            'https://res.cloudinary.com/codennerd/image/upload/v1689377463/Asoebi%20Africa/WhatsApp_Image_2023-07-15_at_12.23.05_AM_hnms5f.jpg',
+            'https://res.cloudinary.com/codennerd/image/upload/v1689377465/Asoebi%20Africa/WhatsApp_Image_2023-07-15_at_12.23.10_AM_ogr4wj.jpg',
+            'https://res.cloudinary.com/codennerd/image/upload/v1689377462/Asoebi%20Africa/WhatsApp_Image_2023-07-15_at_12.23.01_AM_guag4i.jpg'
         ]
     },
     {
         images: [
-            'https://res.cloudinary.com/codennerd/image/upload/v1689377465/WhatsApp_Image_2023-07-15_at_12.23.10_AM_1_lagmdm.jpg',
-            'https://res.cloudinary.com/codennerd/image/upload/v1689377465/WhatsApp_Image_2023-07-15_at_12.23.10_AM_ogr4wj.jpg',
-            'https://res.cloudinary.com/codennerd/image/upload/v1689377465/WhatsApp_Image_2023-07-15_at_12.23.09_AM_ynbrho.jpg',
-            'https://res.cloudinary.com/codennerd/image/upload/v1689377465/WhatsApp_Image_2023-07-15_at_12.23.09_AM_1_cyknhk.jpg',
+            'https://res.cloudinary.com/codennerd/image/upload/v1689377465/Asoebi%20Africa/WhatsApp_Image_2023-07-15_at_12.23.10_AM_1_lagmdm.jpg',
+            'https://res.cloudinary.com/codennerd/image/upload/v1689377465/Asoebi%20Africa/WhatsApp_Image_2023-07-15_at_12.23.10_AM_ogr4wj.jpg',
+            'https://res.cloudinary.com/codennerd/image/upload/v1689377465/Asoebi%20Africa/WhatsApp_Image_2023-07-15_at_12.23.09_AM_ynbrho.jpg',
+            'https://res.cloudinary.com/codennerd/image/upload/v1689377465/Asoebi%20Africa/WhatsApp_Image_2023-07-15_at_12.23.09_AM_1_cyknhk.jpg',
+            'https://res.cloudinary.com/codennerd/image/upload/v1689377462/Asoebi%20Africa/WhatsApp_Image_2023-07-15_at_12.23.04_AM_2_pbukkn.jpg',
         ]
     }, 
     {
         images: [
-            'https://res.cloudinary.com/codennerd/image/upload/v1689377466/WhatsApp_Image_2023-07-15_at_12.23.11_AM_1_ke6sjp.jpg',
-            'https://res.cloudinary.com/codennerd/image/upload/v1689377466/WhatsApp_Image_2023-07-15_at_12.23.11_AM_ayzcab.jpg',
-            'https://res.cloudinary.com/codennerd/image/upload/v1689377462/WhatsApp_Image_2023-07-15_at_12.23.02_AM_wuuypa.jpg',
-            'https://res.cloudinary.com/codennerd/image/upload/v1689377462/WhatsApp_Image_2023-07-15_at_12.23.01_AM_guag4i.jpg'
+            'https://res.cloudinary.com/codennerd/image/upload/v1689377466/Asoebi%20Africa/WhatsApp_Image_2023-07-15_at_12.23.11_AM_1_ke6sjp.jpg',
+            'https://res.cloudinary.com/codennerd/image/upload/v1689377466/Asoebi%20Africa/WhatsApp_Image_2023-07-15_at_12.23.11_AM_ayzcab.jpg',
+            'https://res.cloudinary.com/codennerd/image/upload/v1689377462/Asoebi%20Africa/WhatsApp_Image_2023-07-15_at_12.23.02_AM_wuuypa.jpg',
+            'https://res.cloudinary.com/codennerd/image/upload/v1689377462/Asoebi%20Africa/WhatsApp_Image_2023-07-15_at_12.23.01_AM_guag4i.jpg',
+            'https://res.cloudinary.com/codennerd/image/upload/v1689377581/Asoebi%20Africa/WhatsApp_Image_2023-07-15_at_12.23.38_AM_2_y2rd0d.jpg',
         ]
     },
 
@@ -65,13 +69,13 @@ const StorefrontLayout: FC<ILayout> = ({children}) => {
     const [activeTab, setActiveTab] = useState(tabs[0]);
     return (
         <div>
-            <div className="pb-500">
+            <div className="pb-100">
                 <div className="relative pb-100">
                     {children}
                 </div>
 
                 <div className="app-width">
-                    <div className="flex gap-70 text-24">
+                    <div className="flex gap-70 text-20">
                         {tabs.map((tab) => (
                             <div
                                 onClick={() => setActiveTab(tab)}
