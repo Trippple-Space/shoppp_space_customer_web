@@ -7,5 +7,4 @@ export const paths = {
     checkout: '/checkout',
     homepage: '/homepage',
     asoebi_wears: '/homepage/asoebiwears'
-
 }

@@ -58,13 +58,13 @@ const StorefrontAbout = () => {
                         <div className='grid-col-span-2
                                         radius-t-l-0 radius-30 bg-cover 
                                         g|background-repeat:no-repeat; 
-                                        g|background-image:url(https://res.cloudinary.com/codennerd/image/upload/v1689377575/WhatsApp_Image_2023-07-15_at_12.23.11_AM_sniizk.jpg);
+                                        g|background-image:url(https://res.cloudinary.com/codennerd/image/upload/v1689377575/Asoebi%20Africa/WhatsApp_Image_2023-07-15_at_12.23.11_AM_sniizk.jpg);
                         '>
                         </div>
                         <div className='grid-col-span-1 
                                         radius-t-r-0 radius-30 bg-cover
                                         g|background-repeat:no-repeat; 
-                                        g|background-image:url(https://res.cloudinary.com/codennerd/image/upload/v1689377575/WhatsApp_Image_2023-07-15_at_12.23.11_AM_sniizk.jpg);
+                                        g|background-image:url(https://res.cloudinary.com/codennerd/image/upload/v1689377575/Asoebi%20Africa/WhatsApp_Image_2023-07-15_at_12.23.11_AM_sniizk.jpg);
 
                         '>
                         </div>
@@ -72,13 +72,13 @@ const StorefrontAbout = () => {
                       <div className="grid-col-span-1 grid-row-span-3
                                       radius-t-r-0 radius-b-l-0 radius-30 bg-cover
                                       g|background-repeat:no-repeat; 
-                                      g|background-image:url(https://res.cloudinary.com/codennerd/image/upload/v1689377575/WhatsApp_Image_2023-07-15_at_12.23.11_AM_sniizk.jpg);
+                                      g|background-image:url(https://res.cloudinary.com/codennerd/image/upload/v1689377575/Asoebi%20Africa/WhatsApp_Image_2023-07-15_at_12.23.11_AM_sniizk.jpg);
                       ">
                       </div>
                       <div className="h-full grid-row-span-2 grid-col-span-2
                                       radius-30 bg-cover
                                       g|background-repeat:no-repeat; 
-                                      g|background-image:url(https://res.cloudinary.com/codennerd/image/upload/v1689377575/WhatsApp_Image_2023-07-15_at_12.23.11_AM_sniizk.jpg);
+                                      g|background-image:url(https://res.cloudinary.com/codennerd/image/upload/v1689377575/Asoebi%20Africa/WhatsApp_Image_2023-07-15_at_12.23.11_AM_sniizk.jpg);
                       ">
                       </div>
                     </div> 
