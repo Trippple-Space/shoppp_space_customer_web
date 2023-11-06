@@ -37,8 +37,8 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en" className={`${inter.variable} ${roboto.variable} ${lora.variable} bg-white`}>
-      <Toaster />
-      <body className='font-inter weight-300 text-dimgrey'>{children}</body>
+      <Toaster position='top-right' />
+      <body className='font-inter @lo:weight-300 @lo:text-dimgrey'>{children}</body>
     </html>
   )
 }

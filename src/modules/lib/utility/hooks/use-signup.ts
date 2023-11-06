@@ -23,14 +23,15 @@ export const SignUpValidationSchema = Yup.object().shape({
                 return true;
             }).required('Required'),
     password: Yup.string().min(8, "Minimum password length is 8 characters").max(20, "Max password length is 20 characters").required("Required"),
+    acceptTerms: Yup.boolean().oneOf([true], 'Kindly accept our terms of service to proceed.').required('Kindly accept our terms of service to proceed.')
 });
-
 
 const formikSignUpConfig = (router: AppRouterInstance): FormikConfig<IRegistrationDetails> => ({
     initialValues: {
         fullname: '',
         email: '',
-        password: ''
+        password: '',
+        acceptTerms: false
     },
     onSubmit: (values: IRegistrationDetails) => {
         authService.signUp(values)

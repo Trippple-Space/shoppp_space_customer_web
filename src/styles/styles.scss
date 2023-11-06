@@ -4,183 +4,195 @@
 @import url('./index.css');
 @import '../modules/lib/components/product-tile/ProductTile.module.scss';
 
-* {
-  box-sizing: border-box;
-  padding: 0;
-  margin: 0;
-}
-
-html,
-body {
-  max-width: 100vw;
-  overflow-x: hidden;
-}
-
-a {
-  text-decoration: none;
-  color: currentColor;
-}
+@layer base {
+  * {
+    box-sizing: border-box;
+    padding: 0;
+    margin: 0;
+  }
 
 
-img, svg {
-  width: 100%;
-}
 
-ul {
-  list-style-type: none;
-  padding-left: 0;
-}
+  html,
+  body {
+    max-width: 100vw;
+    overflow-x: hidden;
+  }
 
-::-webkit-scrollbar {
-  width: 5px;
-  background: whitesmoke;
-}
+  a {
+    text-decoration: none;
+    color: currentColor;
+  }
 
-::-webkit-scrollbar-thumb {
-  background: lightgrey;
-  border-radius: 7px;
-}
 
-.font-roboto {
-  font-family: var(--font-roboto);
-}
+  img,
+  svg {
+    width: 100%;
+  }
 
-.font-inter {
-  font-family: var(--font-inter);
-}
+  ul {
+    list-style-type: none;
+    padding-left: 0;
+  }
 
-.font-lora {
-  font-family: var(--font-lora);
-}
+  ::-webkit-scrollbar {
+    width: 5px;
+    background: whitesmoke;
+  }
 
-.custom-progress {
-  background-color: #EAEAEA;
-  border-radius: 10px;
-}
+  ::-webkit-scrollbar-thumb {
+    background: lightgrey;
+    border-radius: 7px;
+  }
 
-.custom-progress::-webkit-progress-value {
-  background-color: #333333;
-  border-radius: 10px;
-}
+  .font-roboto {
+    font-family: var(--font-roboto);
+  }
 
-.custom-progress::-moz-progress-bar {
-  background-color: #333333;
-  border-radius: 10px;
+  .font-inter {
+    font-family: var(--font-inter);
+  }
 
-}
+  .font-lora {
+    font-family: var(--font-lora);
+  }
 
-.custom-progress::-ms-fill {
-  background-color: #333333;
-  border-radius: 10px;
+  .custom-progress {
+    background-color: #EAEAEA;
+    border-radius: 10px;
+  }
 
-}
+  .custom-progress::-webkit-progress-value {
+    background-color: #333333;
+    border-radius: 10px;
+  }
 
-.tilt {
-  transform: skewY(-3deg);
-}
+  .custom-progress::-moz-progress-bar {
+    background-color: #333333;
+    border-radius: 10px;
 
-.notilt {
-  transform: skewY(2deg);
-}
+  }
 
-.notification-btn{
+  .custom-progress::-ms-fill {
+    background-color: #333333;
+    border-radius: 10px;
 
-  .switch {
+  }
+
+  .tilt {
+    transform: skewY(-3deg);
+  }
+
+  .notilt {
+    transform: skewY(2deg);
+  }
+
+  .notification-btn {
+
+    .switch {
       position: relative;
       display: inline-block;
       width: 40px;
       height: 24px;
 
       input {
-          opacity: 0;
-          width: 0;
-          height: 0;
+        opacity: 0;
+        width: 0;
+        height: 0;
       }
+
       .slider {
-          position: absolute;
-          cursor: pointer;
-          top: 0;
-          left: 0;
-          right: 0;
-          bottom: 0;
-          background-color: #ccc;
-          -webkit-transition: .4s;
-          transition: .4s;
+        position: absolute;
+        cursor: pointer;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background-color: #ccc;
+        -webkit-transition: .4s;
+        transition: .4s;
       }
+
       .slider:before {
-          position: absolute;
-          content: "";
-          height: 20px;
-          width: 20px;
-          right: 28px;
-          bottom: 2px;
-          background: #FFFFFF;
-          -webkit-transition: .4s;
-          transition: .4s;
+        position: absolute;
+        content: "";
+        height: 20px;
+        width: 20px;
+        right: 28px;
+        bottom: 2px;
+        background: #FFFFFF;
+        -webkit-transition: .4s;
+        transition: .4s;
       }
-      input:checked + .slider {
-          background: #FACE33;
+
+      input:checked+.slider {
+        background: #FACE33;
       }
-      input:focus + .slider {
-          box-shadow: 0 0 1px #FACE33;
+
+      input:focus+.slider {
+        box-shadow: 0 0 1px #FACE33;
       }
-      input:checked + .slider:before {
-          -webkit-transform: translateX(26px);
-          -ms-transform: translateX(26px);
-          transform: translateX(26px);
+
+      input:checked+.slider:before {
+        -webkit-transform: translateX(26px);
+        -ms-transform: translateX(26px);
+        transform: translateX(26px);
       }
+
       .slider.round {
-          border-radius: 34px;
+        border-radius: 34px;
       }
+
       .slider.round:before {
-          border-radius: 50%;
+        border-radius: 50%;
       }
-  }
-}
-
-/* SCSS for the underline animation */
-.underline-on-hover {
-  position: relative;
-  // display: inline-block;
-  width: fit-content;
-  cursor: pointer;
-  color: #333;
-  font-weight: 400;
-  text-decoration: none;
-
-  transition: all 0.3s ease;
-
-  &::before {
-    content: "";
-    position: absolute;
-    bottom: -2px; 
-    left: 0;
-    width: 0;
-    height: 2px; 
-    background-color: #333;
-    transition: width 0.3s ease; 
+    }
   }
 
-  &:hover::before {
-    width: 100%;
+  /* SCSS for the underline animation */
+  .underline-on-hover {
+    position: relative;
+    // display: inline-block;
+    width: fit-content;
+    cursor: pointer;
+    color: #333;
+    font-weight: 400;
+    text-decoration: none;
+
+    transition: all 0.3s ease;
+
+    &::before {
+      content: "";
+      position: absolute;
+      bottom: -2px;
+      left: 0;
+      width: 0;
+      height: 2px;
+      background-color: #333;
+      transition: width 0.3s ease;
+    }
+
+    &:hover::before {
+      width: 100%;
+    }
+  }
+
+  .container {
+    max-height: 0;
+    overflow: hidden;
+    opacity: 0;
+    transition: max-height 0.5s ease-in-out, opacity 0.5s ease-in-out;
+  }
+
+  .container.open {
+    max-height: 1000px;
+    opacity: 1;
+    transition: max-height 0.5s ease-in-out, opacity 0.5s ease-in-out;
+  }
+
+  @media only screen and (max-width: 768px) {
+    .review-tiles {
+      overflow-x: auto;
+    }
   }
 }
-
-.container {
-  max-height: 0;
-  overflow: hidden;
-  opacity: 0;
-  transition: max-height 0.5s ease-in-out, opacity 0.5s ease-in-out;
-}
-
-.container.open {
-  max-height: 1000px;
-  opacity: 1;
-  transition: max-height 0.5s ease-in-out, opacity 0.5s ease-in-out;
-}
-
-@media only screen and (max-width: 768px) { 
-  .review-tiles {
-    overflow-x: auto;
-  }
-} 

@@ -6,5 +6,6 @@ export interface ILoginCredentials {
 export interface IRegistrationDetails {
     fullname: string,
     email: string,
-    password: string
+    password: string,
+    acceptTerms: boolean
 }
