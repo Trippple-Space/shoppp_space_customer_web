@@ -8,6 +8,8 @@ import { AiOutlineClose } from 'react-icons/ai'
 import { BiHomeAlt2 } from 'react-icons/bi';
 import { BsArrowLeftShort, BsArrowRightShort } from 'react-icons/bs';
 import OrdersModal from './profile-modal/OrdersModal';
+import { useRouter } from 'next/navigation';
+import { paths } from '../../utility/paths';
 
 
 interface ModalProps {
@@ -18,6 +20,8 @@ interface ModalProps {
 }
 
 const HomepageModal: React.FC<ModalProps> = ({modalOpen, handleCloseModal, data, setUserOrderDropdown}) => {
+
+  const router = useRouter()
   
   return (
     <div>
@@ -52,7 +56,7 @@ const HomepageModal: React.FC<ModalProps> = ({modalOpen, handleCloseModal, data,
           </div>
 
           <div className="pt-16 px-24 weight-400 text-natural-700 border-t border-1 border-natural-300 pb-16">
-            <div className='text-center py-20 text-danger pointer'>Logout</div>
+            <div className='text-center py-20 text-danger pointer' onClick={() => router.push(paths.login)} >Logout</div>
           </div>
         </div>
       </Modal>

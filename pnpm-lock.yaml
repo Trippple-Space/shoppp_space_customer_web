@@ -55,8 +55,8 @@ devDependencies:
     specifier: ^7.0.3
     version: 7.0.3
   cxcss:
-    specifier: ^0.0.44
-    version: 0.0.44
+    specifier: ^0.0.46
+    version: 0.0.46
 
 packages:
 
@@ -317,8 +317,8 @@ packages:
     resolution: {integrity: sha512-I7K1Uu0MBPzaFKg4nI5Q7Vs2t+3gWWW648spaF+Rg7pI9ds18Ugn+lvg4SHczUdKlHI5LWBXyqfS8+DufyBsgQ==}
     dev: false
 
-  /cxcss@0.0.44:
-    resolution: {integrity: sha512-BL6WzAYgggASqIbgEKNxjRRqBWJzLWKHvZRFiQx9Zt9yQuFKVIP+9ZmtXC9EHQ34QOx1l9nxFaz6qicZ15XcOw==}
+  /cxcss@0.0.46:
+    resolution: {integrity: sha512-o+wxeQgnsOX06oDRhnDQqrHdpHPwkCIFoK/0gCJuEFMnP72wRLdlCR7U+Tj2o9j6rDa794RhervNNj6jfSJycA==}
     hasBin: true
     dependencies:
       chokidar: 3.5.3

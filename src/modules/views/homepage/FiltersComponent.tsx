@@ -68,10 +68,10 @@ const Filters = () => {
                         <HomepageCategoryNav isRoute={isRoute} />
                     </div>
                 ) : (
-                    <div className='w-50p h-70 hidden l:flex'>
-                        <div className=" w-100p pl-30 pr-7 flex overflow-hidden space-between items-center h-fit py-8 border border-natural-300 radius-45 g|box-shadow:0px|_|2px|_|10px|_|0px|_|#00000014; ">
-                            <input type="text" placeholder='Search Product' className='border-none w-90p text-16 text-light-grey outline-none'/>
-                            <div className='w-50 flex items-center bg-green round h-50 text-white'>
+                    <div className='w-50p hidden l:flex'>
+                        <div className=" w-full max-w-600 mx-auto py-7 pl-30 pr-7 flex overflow-hidden space-between items-center h-fit  border border-natural-300 radius-45 g|box-shadow:0px|_|2px|_|10px|_|0px|_|#00000014; ">
+                            <input type="text" placeholder='Search Product' className='border-none w-90p text-16 text-light-grey h-full outline-none'/>
+                            <div className='w-35 h-35 flex items-center bg-green round text-white'>
                                 <BsSearch />
                             </div>
                         </div>

@@ -1,5 +1,5 @@
 import { authService } from "@/modules/lib/utility/services/auth.service";
-import { ILoginCredentials } from "@/modules/lib/utility/types/auth";
+import { LoginCredentials } from "@/modules/lib/utility/types/auth";
 import { paths } from "@/modules/lib/utility/paths";
 import { FormikConfig, useFormik } from "formik";
 import { AppRouterInstance } from "next/dist/shared/lib/app-router-context";
@@ -24,14 +24,14 @@ const LoginValidationSchema = Yup.object().shape({
 })
 
 
-const formikLoginConfig = (router: AppRouterInstance): FormikConfig<ILoginCredentials> => ({
+const formikLoginConfig = (router: AppRouterInstance): FormikConfig<LoginCredentials> => ({
     initialValues: {
         email: '',
         password: ''
     },
-    onSubmit: (values: ILoginCredentials) => {
+    onSubmit: (values: LoginCredentials) => {
         authService.signIn(values)
-            .then((token) => {
+            .then(({ token, user }) => {
                 toast.success(`Welcome back!`)
                 router.push(paths.homepage)
             })

@@ -1,9 +1,9 @@
-export interface ILoginCredentials {
+export interface LoginCredentials {
     email: string,
     password: string
 }
 
-export interface IRegistrationDetails {
+export interface RegistrationDetails {
     fullname: string,
     email: string,
     password: string,

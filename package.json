@@ -29,6 +29,6 @@
   },
   "devDependencies": {
     "cross-env": "^7.0.3",
-    "cxcss": "^0.0.44"
+    "cxcss": "^0.0.46"
   }
 }

@@ -15,7 +15,7 @@ const BaseNavBar: FC<IBaseNavBar> = ({links}) => {
     const [userOrderDropdown, setUserOrderDropdown] = useState<boolean>(false)
     return (
         <div className=''>
-            <div className='flex app-width space-between items-center py-25 '>
+            <div className='flex app-width space-between items-center py-15 '>
                 <div className='w-fit'>
                     <Image
                         className='w-90 l:w-120'

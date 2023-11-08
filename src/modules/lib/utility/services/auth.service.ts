@@ -1,12 +1,12 @@
 import { AxiosResponse } from "axios";
-import { ILoginCredentials, IRegistrationDetails } from "../types/auth";
-import { IUser } from "../types/user";
+import { LoginCredentials, RegistrationDetails } from "../types/auth";
+import { User } from "../types/user";
 import endpoints from "../endpoints";
 import http from "../http"
 
 class AuthService {
 
-    signIn(credentials: ILoginCredentials): Promise<{ token: string }> {
+    signIn(credentials: LoginCredentials): Promise<{ token: string; user: User }> {
         return new Promise((resolve, reject) => {
             http.post(endpoints.SIGN_IN, credentials)
                 .then((response: AxiosResponse) => {
@@ -20,7 +20,7 @@ class AuthService {
         localStorage.setItem('token', token)
     }
 
-    signUp(registrationDetails: IRegistrationDetails): Promise<IUser> {
+    signUp(registrationDetails: RegistrationDetails): Promise<User> {
         return new Promise((resolve) => {
             http.post(endpoints.SIGN_UP, registrationDetails)
                 .then((response: AxiosResponse) => {

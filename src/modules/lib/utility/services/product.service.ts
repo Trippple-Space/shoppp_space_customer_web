@@ -1,12 +1,12 @@
 import { AxiosResponse } from "axios"
-import { IProduct, IProductCategory } from "../types/product"
+import { Product, ProductCategory } from "../types/product"
 import endpoints from "../endpoints"
 import http from "../http"
 import { IProductFilters, IQueryParams } from "../hooks/use-products"
 
 class ProductService {
 
-    fetchProductCategories(): Promise<IProductCategory[]> {
+    fetchProductCategories(): Promise<ProductCategory[]> {
         return new Promise((resolve) => {
             http.get(endpoints.PRODUCT_CATEGORIES)
                 .then((response: AxiosResponse) => {
@@ -17,14 +17,14 @@ class ProductService {
 
     }
 
-    fetchProducts(query: IQueryParams): Promise<IProduct[]> {
+    fetchProducts(query: IQueryParams): Promise<Product[]> {
         return new Promise((resolve) => {
             http.get(endpoints.PRODUCTS, {
                 params: query
             })
-            .then((response: AxiosResponse) => {
-                resolve(response.data)
-            })
+                .then((response: AxiosResponse) => {
+                    resolve(response.data)
+                })
         })
     }
 }

@@ -1,6 +1,6 @@
 import { authService } from "@/modules/lib/utility/services/auth.service"
-import { IRegistrationDetails } from "@/modules/lib/utility/types/auth"
-import {paths} from "@/modules/lib/utility/paths";
+import { RegistrationDetails } from "@/modules/lib/utility/types/auth"
+import { paths } from "@/modules/lib/utility/paths";
 import { FormikConfig, useFormik } from "formik"
 import { AppRouterInstance } from "next/dist/shared/lib/app-router-context";
 import { useRouter } from "next/navigation";
@@ -26,14 +26,14 @@ export const SignUpValidationSchema = Yup.object().shape({
     acceptTerms: Yup.boolean().oneOf([true], 'Kindly accept our terms of service to proceed.').required('Kindly accept our terms of service to proceed.')
 });
 
-const formikSignUpConfig = (router: AppRouterInstance): FormikConfig<IRegistrationDetails> => ({
+const formikSignUpConfig = (router: AppRouterInstance): FormikConfig<RegistrationDetails> => ({
     initialValues: {
         fullname: '',
         email: '',
         password: '',
         acceptTerms: false
     },
-    onSubmit: (values: IRegistrationDetails) => {
+    onSubmit: (values: RegistrationDetails) => {
         authService.signUp(values)
             .then((user) => {
                 toast.success(`Hey ${user.username}. Welcome to Asoebi Africa! Login here.`)

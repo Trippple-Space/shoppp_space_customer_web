@@ -8,12 +8,16 @@ import OrderModal from './orders';
 import RecentSearchModal from './recently-search';
 import RecentViewModal from './recently-view';
 import SavedItemModal from './saved-item';
+import { useRouter } from 'next/navigation';
+import { paths } from '@/modules/lib/utility/paths';
 
 const ProfilePage = () => {
   const [modalOpen, setModalOpen] = useState(false);
 
   const [open, setOpen] = useState(false);
   const [activeModal, setActiveModal] = useState('');
+
+  const router = useRouter()
 
   const handleOpenModal = () => {
     setModalOpen(!modalOpen);
@@ -60,7 +64,7 @@ const ProfilePage = () => {
           <p>Close account</p>
         </div>
         <div className='grid mx-auto mt-10 py-10'>
-          <button className='bg-none border-none text-16 text-danger pointer'>Logout</button>
+          <button className='bg-none border-none text-16 text-danger pointer' onClick={() => router.push(paths.login)} >Logout</button>
         </div>
        </div>
       </Modal>

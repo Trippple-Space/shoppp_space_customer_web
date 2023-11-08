@@ -1,12 +1,15 @@
+"use client"
+
 import Icon from '@/modules/lib/components/icon/Icon'
 import Image from '@/modules/lib/components/image/Image'
 import Input from '@/modules/lib/components/input/Input'
+import { useLoginView } from '@/modules/lib/utility/hooks/use-login'
 import { paths } from '@/modules/lib/utility/paths'
 import Link from 'next/link'
 import React from 'react'
 
 const Login = () => {
-  
+  const {formHandler: loginFormHandler} = useLoginView()
   return (
     <div className="flex h-100vh w-100p">
       <div className="l:w-50p hidden l:block m-15">
@@ -46,13 +49,15 @@ const Login = () => {
               <p className="text-center text-16 l:text-16 text-natural-700">Please enter your details.</p>
             </div>
 
-            <form className="form block w-100p mt-36 l:mt-50 ">
+            <form onSubmit={loginFormHandler.handleSubmit} className="form block w-100p mt-36 l:mt-50 ">
               <Input
                 label='Email'
                 id='email'
                 name='email'
                 type='email'
                 placeholder='Enter your email'
+                handleBlur={loginFormHandler.handleBlur}
+                handleChange={loginFormHandler.handleChange}
               />
 
               <Input
@@ -62,6 +67,8 @@ const Login = () => {
                 type='password'
                 placeholder='********'
                 className='mt-30'
+                handleBlur={loginFormHandler.handleBlur}
+                handleChange={loginFormHandler.handleChange}
                 after={
                   <div className="notice text-14 flex gap-10 mt-9 text-danger">
                     {/* <Icon name='alert-circle' className='w-18 a-self-center' />
