@@ -17,12 +17,14 @@ interface ModalProps {
   handleCloseModal: () => void | any;
   data: any;
   setUserOrderDropdown?:any
+  setUserSavedItemsDropdown?:any
+  setUserRecentlyViewedDropdown?:any
+  setUserRecentSearchDropdown?:any
+  setUserAddressDropdown?:any
 }
 
-const HomepageModal: React.FC<ModalProps> = ({modalOpen, handleCloseModal, data, setUserOrderDropdown}) => {
-
+const HomepageModal: React.FC<ModalProps> = ({modalOpen, handleCloseModal, data, setUserOrderDropdown, setUserSavedItemsDropdown, setUserRecentlyViewedDropdown, setUserRecentSearchDropdown, setUserAddressDropdown}) => {
   const router = useRouter()
-  
   return (
     <div>
       <Modal isOpen={modalOpen} onClose={handleCloseModal} extraClass={{ top: '70px', right: '100px', overflow: 'hidden' }}>
@@ -45,13 +47,25 @@ const HomepageModal: React.FC<ModalProps> = ({modalOpen, handleCloseModal, data,
               setUserOrderDropdown(true);
               data(false)
             }}>Orders</div>
-            <div className='mt-16 pointer hover:text-green'>Saved items</div>
-            <div className='mt-16 pointer hover:text-green'>Recently viewed</div>
-            <div className='mt-16 pointer hover:text-green'>Recent searched</div>
+            <div className='mt-16 pointer hover:text-green' onClick={() => {
+              setUserSavedItemsDropdown(true);
+              data(false);
+            }}>Saved items</div>
+            <div className='mt-16 pointer hover:text-green' onClick={() => {
+              setUserRecentlyViewedDropdown(true);
+              data(false);
+            }}>Recently viewed</div>
+            <div className='mt-16 pointer hover:text-green' onClick={() => {
+              setUserRecentSearchDropdown(true);
+              data(false);
+            }}>Recent searched</div>
           </div>
 
           <div className="pt-16 px-24 weight-400 text-natural-700 border-t border-1 border-natural-300 pb-30">
-            <div className='pointer hover:text-green'>Address book</div>
+            <div className='pointer hover:text-green' onClick={() => {
+              setUserAddressDropdown(true);
+              data(false);
+            }}>Address book</div>
             <div className='mt-16 pointer hover:text-green'>Close account</div>
           </div>
 
