@@ -16,7 +16,7 @@ http.interceptors.request.use((config: any) => {
 http.interceptors.response.use((response: any) => {
     return response;
 }, (error) => {
-
+    
     if (error?.response?.status.toString().indexOf('4') == 0) {
         toast.error(error.response.data.message)
     }

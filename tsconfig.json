@@ -20,7 +20,8 @@
       }
     ],
     "paths": {
-      "@/*": ["./src/*"]
+      "@/*": ["./src/*"],
+      "@/store/*": ["./src/modules/lib/utility/store/*"]
     },
     "baseUrl": ".",
   },

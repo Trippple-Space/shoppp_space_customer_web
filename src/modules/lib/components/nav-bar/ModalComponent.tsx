@@ -10,6 +10,7 @@ import { BsArrowLeftShort, BsArrowRightShort } from 'react-icons/bs';
 import OrdersModal from './profile-modal/OrdersModal';
 import { useRouter } from 'next/navigation';
 import { paths } from '../../utility/paths';
+import { useNavbarView } from '../../utility/hooks/views/use-navbar-view';
 
 
 interface ModalProps {
@@ -25,6 +26,7 @@ interface ModalProps {
 
 const HomepageModal: React.FC<ModalProps> = ({modalOpen, handleCloseModal, data, setUserOrderDropdown, setUserSavedItemsDropdown, setUserRecentlyViewedDropdown, setUserRecentSearchDropdown, setUserAddressDropdown}) => {
   const router = useRouter()
+  const {user} = useNavbarView()
   return (
     <div>
       <Modal isOpen={modalOpen} onClose={handleCloseModal} extraClass={{ top: '70px', right: '100px', overflow: 'hidden' }}>
@@ -38,8 +40,8 @@ const HomepageModal: React.FC<ModalProps> = ({modalOpen, handleCloseModal, data,
           </div>
 
           <div className="text-center border-b border-1 border-natural-300 pb-30">
-            <div className="text-18 weight-500 mt-8">Abdulhameed Ibrahim</div>
-            <div className="text-12 mt-4">abdulhammedibrahim@gmail.com</div>
+            <div className="text-18 weight-500 mt-8">{user?.profile.firstName} {user?.profile.lastName}</div>
+            <div className="text-12 mt-4">{user?.email}</div>
           </div>
 
           <div className="py-16 px-24 weight-400 text-natural-700">

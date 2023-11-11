@@ -1,5 +1,5 @@
-import { productService } from "@/lib/utility/services/product.service"
-import { IProductCategory } from "@/lib/utility/types/product"
+import { productService } from "../services/product.service"
+import { ProductCategory } from "../types/product"
 import { use, cache, useEffect, useState } from "react"
 
 const categoryPlaceholders = Array.from({ length: 6 }).map(category => ({
@@ -10,11 +10,11 @@ const categoryPlaceholders = Array.from({ length: 6 }).map(category => ({
 }))
 
 export const useCategories = () => {
-    const [categories, setCategories] = useState<IProductCategory[]>(categoryPlaceholders)
+    const [categories, setCategories] = useState<ProductCategory[]>(categoryPlaceholders)
 
     useEffect(() => {
         productService.fetchProductCategories()
-            .then((categories: IProductCategory[]) => {
+            .then((categories: ProductCategory[]) => {
                 setCategories(categories)
             })
     }, [])

@@ -1,3 +1,4 @@
+"use client"
 import React, { FC, ReactNode, useState } from 'react'
 import Image from '../image/Image'
 import Button from '../button/Button'
@@ -9,6 +10,7 @@ import SavedItemsModal from './profile-modal/SavedItems';
 import RecentlyViewedItems from './profile-modal/RecentlyViewedItems ';
 import RecentlySearchItems from './profile-modal/RecentlySearchItems ';
 import AddressModal from './profile-modal/AddressModal';
+import { useAuthGuard } from '../../utility/hooks/use-auth-guard';
 
 interface IBaseNavBar {
     links: ReactNode
@@ -21,8 +23,10 @@ const BaseNavBar: FC<IBaseNavBar> = ({links}) => {
     const [userRecentlyViewedDropdown, setUserRecentlyViewedDropdown] = useState<boolean>(false);
     const [userRecentSearchDropdown, setUserRecentSearchDropdown] = useState<boolean>(false);
     const [userAddressDropdown, setUserAddressDropdown] = useState<boolean>(false);
+
+    useAuthGuard()
     return (
-        <div className='border-1 border-b border-natural-300'>
+        <div className=''>
             <div className='flex app-width space-between items-center py-25 '>
                 <div className='w-fit'>
                     <Image

@@ -3,9 +3,12 @@ import { LoginCredentials } from "@/modules/lib/utility/types/auth";
 import { paths } from "@/modules/lib/utility/paths";
 import { FormikConfig, useFormik } from "formik";
 import { AppRouterInstance } from "next/dist/shared/lib/app-router-context";
-import { useRouter } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import { toast } from "sonner";
 import * as Yup from 'yup'
+import useUserStore from "@/store/user.store";
+import { User } from "../types/user";
+import { useRouteGuard } from "./use-route-guard";
 
 const LoginValidationSchema = Yup.object().shape({
     email: Yup.string().trim()
@@ -24,26 +27,28 @@ const LoginValidationSchema = Yup.object().shape({
 })
 
 
-const formikLoginConfig = (router: AppRouterInstance): FormikConfig<LoginCredentials> => ({
+const formikLoginConfig = (router: AppRouterInstance, callback?: (user: User) => void): FormikConfig<LoginCredentials> => ({
     initialValues: {
         email: '',
         password: ''
     },
     onSubmit: (values: LoginCredentials) => {
         authService.signIn(values)
-            .then(({ token, user }) => {
-                toast.success(`Welcome back!`)
-                router.push(paths.homepage)
+            .then(({ user }) => {
+                toast.success(`Welcome ${user.profile.firstName}`)
+                callback?.(user)
             })
     },
     validationSchema: LoginValidationSchema
 })
 
-
-
 export const useLoginView = () => {
     const router = useRouter()
-    const formHandler = useFormik(formikLoginConfig(router))
+    const {isAuthenticated, authenticateUser} = useUserStore()
+    const formHandler = useFormik(formikLoginConfig(router, (user) => { authenticateUser(user) }))
+
+    useRouteGuard(isAuthenticated, paths.homepage)
+
     return { formHandler }
 }
 
