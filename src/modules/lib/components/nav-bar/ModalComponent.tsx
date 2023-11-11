@@ -26,7 +26,8 @@ interface ModalProps {
 
 const HomepageModal: React.FC<ModalProps> = ({modalOpen, handleCloseModal, data, setUserOrderDropdown, setUserSavedItemsDropdown, setUserRecentlyViewedDropdown, setUserRecentSearchDropdown, setUserAddressDropdown}) => {
   const router = useRouter()
-  const {user} = useNavbarView()
+  const {user, signOut} = useNavbarView()
+
   return (
     <div>
       <Modal isOpen={modalOpen} onClose={handleCloseModal} extraClass={{ top: '70px', right: '100px', overflow: 'hidden' }}>
@@ -72,7 +73,7 @@ const HomepageModal: React.FC<ModalProps> = ({modalOpen, handleCloseModal, data,
           </div>
 
           <div className="pt-16 px-24 weight-400 text-natural-700 border-t border-1 border-natural-300 pb-16">
-            <div className='text-center py-20 text-danger pointer' onClick={() => router.push(paths.login)} >Logout</div>
+            <div className='text-center py-20 text-danger pointer' onClick={() => signOut()} >Logout</div>
           </div>
         </div>
       </Modal>

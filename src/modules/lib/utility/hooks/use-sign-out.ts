@@ -8,8 +8,8 @@ export const useSignOut = () => {
   const { deAuthenticateUser } = useUserStore();
 
   const signOut = () => {
-    authService.signOut()
     deAuthenticateUser();
+    authService.signOut()
     router.push(paths.login);
   };
 
