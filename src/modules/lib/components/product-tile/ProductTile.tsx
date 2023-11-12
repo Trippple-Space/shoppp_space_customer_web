@@ -28,7 +28,7 @@ const ProductTile: FC<IProductTile> = ({product}) => {
           id="add to cart button"
           className="absolute b-0 r-0 mr-10 mb-10 l:mr-15 l:mb-15"
         >
-          <button className="bg-green pointer font-roboto text-white border-hidden px-10 py-10 radius-5 l:px-22 l:py-12 l:radius-10 outline outline-grey ">
+          <button className="bg-yellow pointer font-roboto text-grey-900 border-hidden px-10 py-10 radius-5 l:px-22 l:py-12 l:radius-10  ">
             <span className="hidden l:block weight-500">Add to cart</span>
             <div className="l:hidden">
               <AiOutlinePlus size={24} />
