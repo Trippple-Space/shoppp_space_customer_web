@@ -1,4 +1,4 @@
-app-width: w-90p mx-auto max-w-1440
+app-width: w-90p mx-auto
 btn: text-white radius-8 border text-18 l:text-16 mt-40 hover:pointer g|transition:0.5s disabled:bg-grey active:bg-deep-grey
 btn-primary: bg-green hover:bg-darkgreen
 btn-lg: py-15 l:py-18 w-full

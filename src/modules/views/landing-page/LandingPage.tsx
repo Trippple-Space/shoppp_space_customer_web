@@ -51,7 +51,7 @@ const Landingpage = () => {
                         <h3 className="text-18 l:text-24 weight-600 text-grey-900 ">TOP SELLING ANKARA</h3>
                         <div className="text-14 l:text-16 weight-500 underline text-grey-900 pointer">View All</div>
                     </div>
-                    <div className="grid grid-2-cols-1fr l:grid-4-cols-1fr gap-10 l:gap-30 w-full">
+                    <div className="grid grid-2-cols-1fr l:grid-5-cols-1fr gap-10 l:gap-30 w-full">
                         {
                             [...products, ...products, ...products, ...products].map(product => (
                                 <ProductTile product={product} /> 

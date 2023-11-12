@@ -8,3 +8,8 @@ export const paths = {
     homepage: '/',
     asoebi_wears: '/homepage/asoebiwears'
 }
+
+export const protectedPaths = [
+    paths.checkout,
+    paths.asoebi_wears
+]

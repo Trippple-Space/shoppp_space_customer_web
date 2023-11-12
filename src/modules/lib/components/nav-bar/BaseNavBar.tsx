@@ -24,7 +24,6 @@ const BaseNavBar: FC<IBaseNavBar> = ({links}) => {
     const [userRecentSearchDropdown, setUserRecentSearchDropdown] = useState<boolean>(false);
     const [userAddressDropdown, setUserAddressDropdown] = useState<boolean>(false);
 
-    // useAuthGuard()
     return (
         <div className=''>
             <div className='flex app-width space-between items-center py-25 '>

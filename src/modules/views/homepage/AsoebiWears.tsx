@@ -33,7 +33,7 @@ const AsoebiWears = () => {
                 <h3 className="text-22 l:text-30 weight-700">Top selling ankara</h3>
                 <p className="text-18 l:text-20 weight-600 underline text-black">View All</p>
                 </div>
-                <div className="grid grid-4-cols-1fr gap-10 l:gap-30 w-full">
+                <div className="grid grid-5-cols-1fr gap-10 l:gap-30 w-full">
                     {
                         [...products, ...products, ...products, ...products].map(product => (
                             <ProductTile product={product} /> 
@@ -47,7 +47,7 @@ const AsoebiWears = () => {
                 <h3 className="text-22 l:text-30 weight-700">Top selling ankara</h3>
                 <p className="text-18 l:text-20 weight-600 underline text-black">View All</p>
                 </div>
-                <div className="grid grid-4-cols-1fr gap-10 l:gap-30 w-full">
+                <div className="grid grid-5-cols-1fr gap-10 l:gap-30 w-full">
                     {
                         [...products, ...products, ...products, ...products].map(product => (
                             <ProductTile product={product} /> 

@@ -1,6 +1,9 @@
+"use client"
+
 import { Toaster } from 'sonner';
 import '../styles/styles.scss';
 import { Inter, Roboto, Lora } from 'next/font/google'
+import { useAuthGuard } from '@/modules/lib/utility/hooks/use-auth-guard';
 
 const inter = Inter({
   subsets: ['latin'],
@@ -35,6 +38,9 @@ export default function RootLayout({
 }: {
   children: React.ReactNode
 }) {
+
+  useAuthGuard()
+
   return (
     <html lang="en" className={`${inter.variable} ${roboto.variable} ${lora.variable} bg-white`}>
       <Toaster position='top-center' />

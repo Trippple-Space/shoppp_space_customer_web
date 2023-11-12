@@ -100,7 +100,7 @@ const StorefrontLayout: FC<ILayout> = ({children}) => {
                     </div>
                     <section className="mt-55">
                         <h3 className="text-20 weight-300 uppercase">New Arrivals</h3>
-                        <div className="grid grid-4-cols-1fr gap-30 w-full">
+                        <div className="grid grid-5-cols-1fr gap-30 w-full">
                             {
                                 [...products, ...products, ...products, ...products].map(product => (
                                     <ProductTile product={product} /> 
@@ -109,8 +109,6 @@ const StorefrontLayout: FC<ILayout> = ({children}) => {
                         </div>
                     </section>
                 </div>
-
-
             </div>   
             <Footer />         
         </div>
