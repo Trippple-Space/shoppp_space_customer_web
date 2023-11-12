@@ -20,17 +20,17 @@ const OrdersModal: React.FC<ModalProps> = ({modalOpen, handleCloseModal, data}) 
     switch (option) {
       case 'open-orders':
         return (
-          <div className='text-16 weight-400 text-natural-700'>
+          <div className='text-16 weight-400 text-grey-700'>
             <OrderCard />
           </div>
         )
 
       case 'closed-orders':
         return (
-          <div className='text-16 weight-400 text-natural-700'>
+          <div className='text-16 weight-400 text-grey-700'>
             {
               ['', '', '', ''].map(() => (
-                <div className="pb-20 mb-20 border-b border-1 border-natural-300">
+                <div className="pb-20 mb-20 border-b border-1 border-grey-300">
                   <OrderCard />
                 </div>
               ))
@@ -45,10 +45,10 @@ const OrdersModal: React.FC<ModalProps> = ({modalOpen, handleCloseModal, data}) 
         <div className='w-330 l:w-1000 l:h-600'>
           <div className=''>
             <div className=''>
-              <div className='grid g|grid-template-columns:auto|_|1fr|_|auto items-center gap-52 px-48  border-solid border-b border-1 border-natural-300 text-18 weight-400 text-natural-700'>
+              <div className='grid g|grid-template-columns:auto|_|1fr|_|auto items-center gap-52 px-48  border-solid border-b border-1 border-grey-300 text-18 weight-400 text-grey-700'>
                 <div className={`py-20 pointer ${action == 'open-orders' && 'text-green border-b border-2 border-green'}`} onClick={() => setAction('open-orders') }> Open orders</div>
                 <div className={`py-20 pointer w-fit ${action == 'closed-orders' && 'text-green border-b border-2  border-green'}`} onClick={() => setAction('closed-orders') }> Closed orders</div>
-                <div className="text-natural-700 weight-600 pointer" onClick={handleCloseModal}><AiOutlineClose /></div>
+                <div className="text-grey-700 weight-600 pointer" onClick={handleCloseModal}><AiOutlineClose /></div>
               </div>
             </div>
             <div className="p-20">

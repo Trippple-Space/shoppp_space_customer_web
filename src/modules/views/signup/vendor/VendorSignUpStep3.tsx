@@ -11,8 +11,8 @@ const VendorSignUpStep3: FC<IVendorSignUpStep> = ({ setCurrentStep }) => {
     return (
         <div>
             <div className='mt-33'>
-                <h3 className='text-20 weight-500 text-natural-900' >You are almost done.</h3>
-                <p className='text-14 mt-10 text-natural-700'>Give us some information about your store. This is what your customers will see.</p>
+                <h3 className='text-20 weight-500 text-grey-900' >You are almost done.</h3>
+                <p className='text-14 mt-10 text-grey-700'>Give us some information about your store. This is what your customers will see.</p>
             </div>
 
             <div className='mt-33 space-between gap-23'>

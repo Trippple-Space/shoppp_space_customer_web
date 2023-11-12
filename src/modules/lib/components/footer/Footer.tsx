@@ -67,16 +67,16 @@ const Footer = () => {
                         <div className='text-dimgrey w-27p py-25'>
                             <h2 className='text-20 weight-600'>JOIN THE FAM</h2>
                             <div className='text-18 weight-400 pt-15'>
-                                <p className='text-natural-600 text-16'>Sign up to get the latest on sales, new release and more...</p>
+                                <p className='text-grey-600 text-16'>Sign up to get the latest on sales, new release and more...</p>
 
                                 <div className='flex w-100p gap-20 pt-20'>
-                                    <input type="text" placeholder='First name' className='w-50p bg-lightest-grey border radius-10 border-1 text-grey text-14 weight-400 opacity-60 border-lighter-grey py-15 px-15 outline-natural-400' />
-                                    <input type="text" placeholder='Last name' className='w-50p bg-lightest-grey border radius-10 border-1 text-grey text-14 weight-400 opacity-60 border-lighter-grey py-15 px-20 outline-natural-400' />
+                                    <input type="text" placeholder='First name' className='w-50p bg-lightest-grey border radius-10 border-1 text-grey text-14 weight-400 opacity-60 border-lighter-grey py-15 px-15 outline-grey-400' />
+                                    <input type="text" placeholder='Last name' className='w-50p bg-lightest-grey border radius-10 border-1 text-grey text-14 weight-400 opacity-60 border-lighter-grey py-15 px-20 outline-grey-400' />
 
                                 </div>
 
                                 <div className='w-100p py-20'>
-                                    <input type="text" placeholder='Enter your email address...' className='w-100p bg-lightest-grey border radius-10 border-1 text-grey text-14 weight-400 opacity-60 border-lighter-grey py-15 px-20 outline-natural-400' />
+                                    <input type="text" placeholder='Enter your email address...' className='w-100p bg-lightest-grey border radius-10 border-1 text-grey text-14 weight-400 opacity-60 border-lighter-grey py-15 px-20 outline-grey-400' />
                                 </div>
                                 <button className='border-none bg-green text-white text-14 py-12 px-20 radius-5 weight-400 pointer'>Join Now</button>
                             </div>

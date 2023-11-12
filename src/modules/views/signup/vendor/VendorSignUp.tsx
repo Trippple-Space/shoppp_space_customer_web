@@ -39,7 +39,7 @@ const VendorSignUp = () => {
     <div className='h-full'>
       <div className="text-right w-full l:w-80p mt-53 mx-25 hidden l:block">
         <span>Not a vendor? </span>
-        <Link href={paths.signup} className='text-primary-700 pointer'>Sign up here instead</Link>
+        <Link href={paths.signup} className='text-green-700 pointer'>Sign up here instead</Link>
       </div>
       <div className='flex content-center h-full'>
         <div className='a-self-center w-80p mx-auto'>

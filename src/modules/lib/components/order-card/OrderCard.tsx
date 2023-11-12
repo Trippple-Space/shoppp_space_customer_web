@@ -15,16 +15,16 @@ const OrderCard = () => {
       </div>
 
       <div className="">
-        <div className="text-natural-700 weight-400 text-14">Order: #45621</div>
-        <div className="text-natural-900 text-16 weight-500 my-7">24 Karat Gold Plated Ring</div>
-        <div className="text-natural-700 text-14">
-          <span className="text-natural-700 weight-400 text-14 mr-10">Unit: 1</span>
+        <div className="text-grey-700 weight-400 text-14">Order: #45621</div>
+        <div className="text-grey-900 text-16 weight-500 my-7">24 Karat Gold Plated Ring</div>
+        <div className="text-grey-700 text-14">
+          <span className="text-grey-700 weight-400 text-14 mr-10">Unit: 1</span>
           <span>Variation: Plated ring</span>
         </div>
-        <div className="text-natural-900 text-16 weight-500 my-7">NGN 26,000</div>
+        <div className="text-grey-900 text-16 weight-500 my-7">NGN 26,000</div>
         <div className="flex items-center gap-10">
-          <div className="bg-yellow text-natural-900 text-14 weight-400 w-fit px-16 py-7 radius-8">Out for delivery</div>
-          <div className="text-natural-700 weight-400 text-14">January 15th, 2023</div>
+          <div className="bg-yellow text-grey-900 text-14 weight-400 w-fit px-16 py-7 radius-8">Out for delivery</div>
+          <div className="text-grey-700 weight-400 text-14">January 15th, 2023</div>
         </div>
       </div>
 

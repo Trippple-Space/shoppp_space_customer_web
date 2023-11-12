@@ -22,7 +22,7 @@ const BaseNavBar: FC<IBaseNavBar> = ({links}) => {
     const [userRecentSearchDropdown, setUserRecentSearchDropdown] = useState<boolean>(false);
     const [userAddressDropdown, setUserAddressDropdown] = useState<boolean>(false);
     return (
-        <div className='border-1 border-b border-natural-300'>
+        <div className='border-1 border-b border-grey-300'>
             <div className='flex app-width space-between items-center py-25 '>
                 <div className='w-fit'>
                     <Image
@@ -37,7 +37,7 @@ const BaseNavBar: FC<IBaseNavBar> = ({links}) => {
                 </div>
                 <div className='w-fit relative'>
                     {/* <Button >Login</Button> */}
-                    <div className="flex gap-7 border-solid border-1 border-natural-300 pt-6 pb-2 px-8 w-fit m-auto radius-50 text-natural-700 pointer relative" onClick={() => setUserProfileDropdown(true)}>
+                    <div className="flex gap-7 border-solid border-1 border-grey-300 pt-6 pb-2 px-8 w-fit m-auto radius-50 text-grey-700 pointer relative" onClick={() => setUserProfileDropdown(true)}>
                         <div><LuAlignJustify className="w-24 h-24" /></div>
                         <div><FaRegCircleUser className="w-24 h-24" /></div>
                     </div>

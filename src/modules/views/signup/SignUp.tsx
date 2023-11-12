@@ -16,7 +16,7 @@ const SignUp = () => {
     <>
       <div className="text-right w-full l:w-80p mt-53 mx-25 hidden l:block">
         <span>Do you want to sell? </span>
-        <Link href={paths.vendor_signup} className="text-primary-700 pointer">
+        <Link href={paths.vendor_signup} className="text-green-700 pointer">
           Join now
         </Link>
       </div>
@@ -33,10 +33,10 @@ const SignUp = () => {
         <div className="signup w-full l:w-80p mx-auto mb-50 h-100p l:h-fit flex flex-col">
           <div className="w-full">
             <div className="font-inter">
-              <h3 className="text-center text-30 l:text-32 weight-500 mb-10 text-natural-900">
+              <h3 className="text-center text-30 l:text-32 weight-500 mb-10 text-grey-900">
                 Create your account
               </h3>
-              <p className="text-center text-16 l:text-16 text-natural-700">
+              <p className="text-center text-16 l:text-16 text-grey-700">
                 Please enter your details.
               </p>
             </div>
@@ -141,7 +141,7 @@ const SignUp = () => {
                 }
               />
 
-              <div className={cx("flex space-between w-full mt-18 @lo:text-natural-700 text-14 l:text-14", {
+              <div className={cx("flex space-between w-full mt-18 @lo:text-grey-700 text-14 l:text-14", {
                 'text-red': formHandler.touched.acceptTerms && formHandler.errors.acceptTerms
               })}>
                 <label className="pointer content-center flex">
@@ -162,9 +162,9 @@ const SignUp = () => {
                 Sign up
               </button>
 
-              <div className="text-14 text-natural-800 mt-30 mx-auto w-fit">
+              <div className="text-14 text-grey-800 mt-30 mx-auto w-fit">
                 <span>Already have an account? </span>
-                <Link href={paths.login} className="text-primary-800">
+                <Link href={paths.login} className="text-green-800">
                   Sign In
                 </Link>
               </div>

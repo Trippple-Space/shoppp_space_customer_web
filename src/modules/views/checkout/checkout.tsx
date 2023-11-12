@@ -47,7 +47,7 @@ const CheckoutPage = () => {
               </div>
             </div>
 
-            <div className='text-14 line-height-30 ml-70 pt-10 weight-400 mt-10 text-dimgrey border-t border-natural-300'>
+            <div className='text-14 line-height-30 ml-70 pt-10 weight-400 mt-10 text-dimgrey border-t border-grey-300'>
                   <h1 className='text-16 weight-400 text-black'>Abdulhammed Ibraheem</h1>
                   <div className='opacity-70'>
                   <p>7, Anthony village road, Anthony Lagos.</p>
@@ -85,7 +85,7 @@ const CheckoutPage = () => {
 
                   <div className='flex gap-20 w-100p py-10 text-18'>
                     <div className='grid m:flex w-100p  items-center'>
-                      <div className='flex items-center gap-10 border-r border-natural-300 pr-20 mr-10'>
+                      <div className='flex items-center gap-10 border-r border-grey-300 pr-20 mr-10'>
                         <p className='text-16'>Unit:</p>
                         <div className='flex items-center '>
                           <Icon name='decr' className='w-20 h-20 pointer' onClick={() => setUnitCounter(prev => prev <= 1 ? 1 : prev- 1)} />
