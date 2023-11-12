@@ -8,7 +8,7 @@ const VendorSignUpStep1: FC<IVendorSignUpStep> = ({ setCurrentStep }) => {
     return (
         <div>
             <div className='mt-33'>
-                <h3 className='text-20 weight-500 text-natural-900' >Let’s get started. Which of these best describe you?</h3>
+                <h3 className='text-20 weight-500 text-grey-900' >Let’s get started. Which of these best describe you?</h3>
                 <p className='text-14 mt-10'>We'll assist you in setting up your store tailored to its unique needs.</p>
             </div>
 

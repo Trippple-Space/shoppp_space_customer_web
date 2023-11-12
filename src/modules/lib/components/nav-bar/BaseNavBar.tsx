@@ -41,7 +41,7 @@ const BaseNavBar: FC<IBaseNavBar> = ({links}) => {
                 </div>
                 <div className='w-fit relative'>
                     {/* <Button >Login</Button> */}
-                    <div className="flex gap-7 border-solid border-1 border-natural-300 pt-6 pb-2 px-8 w-fit m-auto radius-50 text-natural-700 pointer relative" onClick={() => setUserProfileDropdown(true)}>
+                    <div className="flex gap-7 border-solid border-1 border-grey-300 pt-6 pb-2 px-8 w-fit m-auto radius-50 text-grey-700 pointer relative" onClick={() => setUserProfileDropdown(true)}>
                         <div><LuAlignJustify className="w-24 h-24" /></div>
                         <div><FaRegCircleUser className="w-24 h-24" /></div>
                     </div>

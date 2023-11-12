@@ -1,14 +1,7 @@
 "use client";
-
-import BaseNavBar from "@/modules/lib/components/nav-bar/BaseNavBar";
 import StorefrontNavBar from "@/modules/lib/components/nav-bar/StorefrontNavBar";
-import { BsBasket3 } from "react-icons/bs";
-import { LiaCommentsDollarSolid } from "react-icons/lia";
-import React, { useState } from "react";
-import cx from "classnames";
-import FabricsCategoryNav from "@/modules/lib/components/category-nav/FabricsCategoryNav";
-import ProductTile from "@/modules/lib/components/product-tile/ProductTile";
-import Footer from "@/modules/lib/components/footer/Footer";
+import React from "react";
+
 
 const Storefront = () => {
     return (
@@ -18,10 +11,10 @@ const Storefront = () => {
 
                 <div className="app-width mt-80 pb-100">
                     <div className="">
-                        <h2 className="weight-500 text-60 letter-spacing-3 line-height-80 max-w-840">
+                        <h2 className="weight-500 text-58 letter-spacing-3 line-height-80 max-w-840">
                             Discover, style, and own Aso Ebi
                         </h2>
-                        <p className="text-24 weight-300 g|letter-spacing:1.2px; line-height-38 max-w-700 ">
+                        <p className="text-22 weight-300 g|letter-spacing:1.2px; line-height-38 max-w-700 ">
                             Get your occasional wear with our Aso Ebi collection wherever
                             you are.
                         </p>
@@ -34,7 +27,7 @@ const Storefront = () => {
                                     <div
                                         className="
                                             w-90 h-90 bg-white round 
-                                            g|background:url(https://res.cloudinary.com/codennerd/image/upload/v1680366943/Asoebi%20Africa/WhatsApp_Image_2023-04-01_at_5.29.15_PM_3_jiskuj.jpg);
+                                            g|background:url(https://res.cloudinary.com/codennerd/image/upload/v1689377463/Asoebi%20Africa/WhatsApp_Image_2023-07-15_at_12.23.05_AM_hnms5f.jpg);
                                             bg-cover
                                             "
                                     ></div>

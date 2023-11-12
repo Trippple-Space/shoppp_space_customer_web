@@ -17,8 +17,8 @@ const SavedItemsCard: React.FC<any> = ({data, showRemove=true}: {data: any, show
         />
         </div>
         <div className='line-height-28'>
-          <h2 className='text-16 l:text-18 weight-400 text-natural-900'>{data?.name}</h2>
-          <h1 className='text-16 weight-400 text-natural-900'>NGN 26,000</h1>
+          <h2 className='text-16 l:text-18 weight-400 text-grey-900'>{data?.name}</h2>
+          <h1 className='text-16 weight-400 text-grey-900'>NGN 26,000</h1>
           <p className='text-12'>January 15th, 2023</p>
           {
             showRemove ? 

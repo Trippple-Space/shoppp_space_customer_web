@@ -34,18 +34,18 @@ const HomepageModal: React.FC<ModalProps> = ({modalOpen, handleCloseModal, data,
         <div className='w-350'>
           <div className="w-fit pt-30 px-20 g|margin:auto">
             <Image
-              className="w-80 h-80 border-solid border-2 border-natural-300 radius-50p"
+              className="w-80 h-80 border-solid border-2 border-grey-300 radius-50p"
               src={'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcS-ctGHY9yW1D9St2AZwQwX5mkZhvnSimJMb0flHqTei1GX0UEqfUD-cdVEVkFz0GIrwAY&usqp=CAU'}
               alt="product-image"
             />
           </div>
 
-          <div className="text-center border-b border-1 border-natural-300 pb-30">
+          <div className="text-center border-b border-1 border-grey-300 pb-30">
             <div className="text-18 weight-500 mt-8">{user?.profile.firstName} {user?.profile.lastName}</div>
             <div className="text-12 mt-4">{user?.email}</div>
           </div>
 
-          <div className="py-16 px-24 weight-400 text-natural-700">
+          <div className="py-16 px-24 weight-400 text-grey-700">
             <div className='pointer hover:text-green' onClick={() => {
               setUserOrderDropdown(true);
               data(false)
@@ -64,7 +64,7 @@ const HomepageModal: React.FC<ModalProps> = ({modalOpen, handleCloseModal, data,
             }}>Recent searched</div>
           </div>
 
-          <div className="pt-16 px-24 weight-400 text-natural-700 border-t border-1 border-natural-300 pb-30">
+          <div className="pt-16 px-24 weight-400 text-grey-700 border-t border-1 border-grey-300 pb-30">
             <div className='pointer hover:text-green' onClick={() => {
               setUserAddressDropdown(true);
               data(false);
@@ -72,7 +72,7 @@ const HomepageModal: React.FC<ModalProps> = ({modalOpen, handleCloseModal, data,
             <div className='mt-16 pointer hover:text-green'>Close account</div>
           </div>
 
-          <div className="pt-16 px-24 weight-400 text-natural-700 border-t border-1 border-natural-300 pb-16">
+          <div className="pt-16 px-24 weight-400 text-grey-700 border-t border-1 border-grey-300 pb-16">
             <div className='text-center py-20 text-danger pointer' onClick={() => signOut()} >Logout</div>
           </div>
         </div>

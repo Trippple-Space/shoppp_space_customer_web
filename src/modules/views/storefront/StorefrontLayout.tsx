@@ -65,13 +65,13 @@ const StorefrontLayout: FC<ILayout> = ({children}) => {
     const [activeTab, setActiveTab] = useState(tabs[0]);
     return (
         <div>
-            <div className="pb-500">
+            <div className="pb-100">
                 <div className="relative pb-100">
                     {children}
                 </div>
 
                 <div className="app-width">
-                    <div className="flex gap-70 text-24">
+                    <div className="flex gap-70 text-20">
                         {tabs.map((tab) => (
                             <div
                                 onClick={() => setActiveTab(tab)}

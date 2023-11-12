@@ -41,8 +41,8 @@ const AsoebiHomepage = () => {
         <>
             <section className="mt-40 w-100p l:mt-50">
                 <div className="flex space-between items-center">
-                    <h3 className="text-18 l:text-24 weight-600 text-natural-900 ">TOP SELLING ANKARA</h3>
-                    <div className="text-14 l:text-16 weight-500 underline text-natural-900 pointer">View All</div>
+                    <h3 className="text-18 l:text-24 weight-600 text-grey-900 ">TOP SELLING ANKARA</h3>
+                    <div className="text-14 l:text-16 weight-500 underline text-grey-900 pointer">View All</div>
                 </div>
                 <div className="grid grid-2-cols-1fr l:grid-4-cols-1fr gap-10 l:gap-30 w-full">
                     {
@@ -55,8 +55,8 @@ const AsoebiHomepage = () => {
 
             <section className="mt-40 w-100p l:mt-90">
                 <div className="flex space-between items-center">
-                    <h3 className="text-18 l:text-24 weight-600 text-natural-900 uppercase">Popular linen</h3>
-                    <div className="text-14 l:text-16 weight-500 underline text-natural-900 pointer">View All</div>
+                    <h3 className="text-18 l:text-24 weight-600 text-grey-900 uppercase">Popular linen</h3>
+                    <div className="text-14 l:text-16 weight-500 underline text-grey-900 pointer">View All</div>
                 </div>
                 <div className="grid grid-2-cols-1fr l:grid-4-cols-1fr gap-10 l:gap-30 w-full">
                     {
@@ -70,8 +70,8 @@ const AsoebiHomepage = () => {
 
             <section className="mt-40 mb-150 w-100p l:mt-90 l:mb-200">
                 <div className="flex space-between items-center">
-                    <h3 className="text-18 l:text-24 weight-600 text-natural-900 uppercase">Senators</h3>
-                    <div className="text-14 l:text-16 weight-500 underline text-natural-900 pointer">View All</div>
+                    <h3 className="text-18 l:text-24 weight-600 text-grey-900 uppercase">Senators</h3>
+                    <div className="text-14 l:text-16 weight-500 underline text-grey-900 pointer">View All</div>
                 </div>
                 <div className="grid grid-2-cols-1fr l:grid-4-cols-1fr gap-10 l:gap-30 w-full">
                     {

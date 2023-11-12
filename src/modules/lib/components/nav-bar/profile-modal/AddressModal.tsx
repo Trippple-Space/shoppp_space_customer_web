@@ -22,14 +22,14 @@ const AddressModal: React.FC<ModalProps> = ({modalOpen, handleCloseModal, data})
     switch (option) {
       case 'address-book':
         return (
-          <div className='text-16 weight-400 text-natural-700'>
+          <div className='text-16 weight-400 text-grey-700'>
             <AddressCard />
           </div>
         )
 
       case 'new-address':
         return (
-          <div className='text-16 weight-400 text-natural-700'>
+          <div className='text-16 weight-400 text-grey-700'>
             <form className="form px-20 l:px-35">
               <div className='grid l:grid-2-cols-auto gap-20 py-20 w-100p'>
                 <Input
@@ -100,10 +100,10 @@ const AddressModal: React.FC<ModalProps> = ({modalOpen, handleCloseModal, data})
         <div className='w-330 l:w-1000 l:h-600'>
           <div className=''>
             <div className=''>
-              <div className='grid g|grid-template-columns:auto|_|1fr|_|auto items-center gap-52 px-48  border-solid border-b border-1 border-natural-300 text-18 weight-400 text-natural-700'>
+              <div className='grid g|grid-template-columns:auto|_|1fr|_|auto items-center gap-52 px-48  border-solid border-b border-1 border-grey-300 text-18 weight-400 text-grey-700'>
                 <div className={`py-20 pointer ${action == 'address-book' && 'text-green border-b border-2 border-green'}`} onClick={() => setAction('address-book') }> Address book </div>
                 <div className={`py-20 pointer w-fit ${action == 'new-address' && 'text-green border-b border-2  border-green'}`} onClick={() => setAction('new-address') }> New address</div>
-                <div className="text-natural-700 weight-600 pointer" onClick={handleCloseModal}><AiOutlineClose /></div>
+                <div className="text-grey-700 weight-600 pointer" onClick={handleCloseModal}><AiOutlineClose /></div>
               </div>
             </div>
             <div className="p-20">

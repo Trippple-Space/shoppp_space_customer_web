@@ -45,8 +45,8 @@ const Login = () => {
 
           <div className="login w-full l:w-80p mx-auto mb-50 h-full l:h-fit">
             <div className="font-inter">
-              <h3 className="text-center text-30 l:text-32 weight-500 mb-10 text-natural-900">Welcome back</h3>
-              <p className="text-center text-16 l:text-16 text-natural-700">Please enter your details.</p>
+              <h3 className="text-center text-30 l:text-32 weight-500 mb-10 text-grey-900">Welcome back</h3>
+              <p className="text-center text-16 l:text-16 text-grey-700">Please enter your details.</p>
             </div>
 
             <form onSubmit={loginFormHandler.handleSubmit} className="form block w-100p mt-36 l:mt-50 ">
@@ -77,7 +77,7 @@ const Login = () => {
                 }
               />
 
-              <div className="flex space-between w-full mt-18 text-natural-700 text-14 l:text-14">
+              <div className="flex space-between w-full mt-18 text-grey-700 text-14 l:text-14">
                 <label className='pointer content-center flex'>
                   <input type="checkbox" name="" className='accent-#0B9378 w-14 l:w-20 h-14 l:h-20 mr-5 l:mr-10' />
                   <span>Remember me for 20 days</span>
@@ -93,9 +93,9 @@ const Login = () => {
                 Sign In
               </button>
 
-              <div className="text-14 text-natural-800 mt-30 mx-auto w-fit">
+              <div className="text-14 text-grey-800 mt-30 mx-auto w-fit">
                 <span>Don’t have an account?</span>
-                <Link href={paths.signup} className='text-primary-800'> Sign Up</Link>
+                <Link href={paths.signup} className='text-green-500'> Sign Up</Link>
               </div>
 
             </form>
