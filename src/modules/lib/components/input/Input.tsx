@@ -1,8 +1,8 @@
-import React, { FC } from 'react'
+import React, { FC, ReactNode } from 'react'
 import cx from 'classnames'
 
 interface IInput {
-  label?: string
+  label?: string | ReactNode
   id?: string
   name: string
   type?: 'text' | 'password' | 'email' | 'textarea' | 'date' | 'checkbox'
