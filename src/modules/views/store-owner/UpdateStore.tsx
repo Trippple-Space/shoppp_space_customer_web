@@ -1,6 +1,7 @@
+"use client"
 import Image from '@/modules/lib/components/image/Image'
 import StorefrontNavBar from '@/modules/lib/components/nav-bar/StorefrontNavBar'
-import React from 'react'
+import React, { useState } from 'react'
 import { GrStar } from 'react-icons/gr'
 import { FaPlus } from "react-icons/fa6";
 import { FaBasketShopping } from "react-icons/fa6";
@@ -10,8 +11,27 @@ import { RiMenuAddLine } from "react-icons/ri";
 import { CiCircleQuestion } from "react-icons/ci";
 import Input from '@/modules/lib/components/input/Input';
 import Button from '@/modules/lib/components/button/Button';
+import { AiOutlineExclamationCircle } from 'react-icons/ai';
+import OrderCard from '@/modules/lib/components/order-card/OrderCard';
+import AddProduct from './AddProduct';
+import AddCategory from './AddCategory'
+import AddSection from './AddSection'
 
 const UpdateStore = () => {
+    const [action, setAction] = useState('add-products');
+
+    const selected = (option: any) => {
+        switch (option) {
+        case 'add-products':
+            return (<AddProduct />)
+
+        case 'add-category':
+            return (<AddCategory />)
+
+        case 'add-section':
+            return (<AddSection />)
+        }
+    }
   return (
     <>
         <div className="bg-light-yellow w-full ">
@@ -19,7 +39,7 @@ const UpdateStore = () => {
             <div className="bg-red text-center text-white flex items-center gap-10 space-between weight-400 text-14 py-10 px-20">
                <div></div>
                 <div className="flex items-center gap-10">
-                    <div className=""><GrStar className='' /></div>
+                    <div className=""><AiOutlineExclamationCircle /></div>
                     <div className="">Please complete the store setup to ensure your customers have an exceptional experience.</div>
                 </div>
                 <div className="bg-grey-400 weight-500 radius-4 w-fit text-right text-white px-10 py-5 text-10 items-end pointer">Dismiss</div>
@@ -101,174 +121,25 @@ const UpdateStore = () => {
                     <div>Products</div>
                 </div>
 
-                <div className="flex items-center gap-10 pointer">
+                <div className={`flex items-center gap-10 pointer ${action == 'add-products' && 'text-green'}`} onClick={() => setAction('add-products') }>
                     <div><BsBasket3 /></div>
                     <div>Add new product</div>
                 </div>
 
-                <div className="flex items-center gap-10 pointer">
+                <div className={`flex items-center gap-10 pointer ${action == 'add-category' && 'text-green'}`} onClick={() => setAction('add-category') }>
                     <div><BiSolidCategory /></div>
                     <div>Add new category</div>
                 </div>
 
-                <div className="flex items-center gap-10 pointer">
+                <div className={`flex items-center gap-10 pointer ${action == 'add-section' && 'text-green'}`} onClick={() => setAction('add-section') }>
                     <div><RiMenuAddLine /></div>
                     <div>Add new section</div>
                 </div>
             </header>
 
             <div className="app-width mt-48">
-                <div className="flex gap-5">
-                    <h2>Edit Product</h2>
-                    <div><CiCircleQuestion /></div>
-                </div>
-                <div className="mt-22 text-16 text-grey-700 w-70p">
-                    The most important feature in store editing section is the product adding part.
-                    when adding product here, do not ignore to fill all the required fields completely 
-                    and follow the products adding rules.
-                </div>
-
-                <div className="grid g|grid-template-columns:40%|_|60% gap-102">
-                    <div className="">
-                        <Input
-                            label={<>Product Name <span className="text-red">*</span></>}
-                            id='phoneNUmber'
-                            name='text'
-                            type='text'
-                            placeholder='Enter product name'
-                            className='l:my-40'
-                            after="Maximum of 5 characters"
-                        />
-
-                        <Input
-                            label={<>Product category <span className="text-red">*</span></>}
-                            id='address'
-                            name='address'
-                            type='text'
-                            placeholder='Enter your house address'
-                            className='l:my-40'
-                        />
-
-                        <Input
-                            label={<>Product Description <span className="text-red">*</span></>}
-                            id='state'
-                            name='state'
-                            type='textarea'
-                            placeholder='Select from dropdowns'
-                            className='l:my-40'
-                        />
-                    </div>
-
-                    <div className="mt-42">
-                        <div className="text-16 text-grey-700">Product images <span className="text-red">*</span></div>
-                        <div className="grid g|grid-template-columns:auto|_|auto|_|auto mt-20">
-                            <div className="text-center w-fit border-dashed border-1 border-grey-500 radius-8 w-250 relative">
-                                <div className="take-to-center">
-                                    <Image
-                                        className='w-100 h-100 l:w-100 l:h-100 p-20'
-                                        src='upload.svg'
-                                        alt='product'
-                                        type='icon'
-                                    />
-                                    <div className="weight-500 text-grey-800 text-14">
-                                        <div className="">Drop your image here or</div>
-                                        <div className="text-green-500 underline mt-5 text-14 pointer">Click to browse</div>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <div className="text-center w-fit border-dashed border-1 border-grey-500 radius-8 w-250 relative">
-                                <div className="take-to-center">
-                                    <Image
-                                        className='w-100 h-100 l:w-100 l:h-100 p-20'
-                                        src='upload.svg'
-                                        alt='product'
-                                        type='icon'
-                                    />
-                                    <div className="weight-500 text-grey-800 text-14">
-                                        <div className="">Drop your image here or</div>
-                                        <div className="text-green-500 underline mt-5 text-14 pointer">Click to browse</div>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <div className="grid gap-10">
-                                <div className="text-center border-dashed border-1 border-grey-500 p-20 radius-8">
-                                    <Image
-                                        className='w-58 h-58 l:w-58 l:h-58 p-20'
-                                        src='upload.svg'
-                                        alt='product'
-                                        type='icon'
-                                    />
-                                    <div className="weight-500 text-grey-800 text-16">
-                                        <div className="">
-                                            Drop your image here or
-                                            <span className="text-green-500 underline mt-5 text-14 pointer"> Click to browse</span>
-                                        </div>
-                                    </div>
-                                </div>
-
-                                <div className="text-center border-dashed border-1 border-grey-500 p-20 radius-8">
-                                    <Image
-                                        className='w-58 h-58 l:w-58 l:h-58 p-20'
-                                        src='upload.svg'
-                                        alt='product'
-                                        type='icon'
-                                    />
-                                    <div className="weight-500 text-grey-800 text-16">
-                                        <div className="">
-                                            Drop your image here or
-                                            <span className="text-green-500 underline mt-5 text-14 pointer"> Click to browse</span>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div className="text-grey-700 mt-40 text-16">
-                            You need to add at least four images. Pay attention to the quality of the pictures you add, 
-                            comply with the background color standards. pictures must be in certain dimensions.
-                        </div>
-
-                        <div className="grid gap-30">
-                            <div className="flex items-center space-between">
-                                <div className="">
-                                    <div className="weight-600">Featured In</div>
-                                    <div className="weight-400 text-grey-700 text-14">add popular event where this product is featured in.</div>
-                                </div>
-                                <Input
-                                    id='state'
-                                    name='state'
-                                    type='text'
-                                    placeholder='e.g 2017 popular event'
-                                    className='l:my-40'
-                                />
-                            </div>
-                            <div className="flex items-center space-between">
-                                <div className="">
-                                    <div className="weight-600">Made In</div>
-                                    <div className="weight-400 text-grey-700 text-14">add where this product is made from</div>
-                                </div>
-                                <Input
-                                    id='state'
-                                    name='state'
-                                    type='text'
-                                    placeholder='e.g china'
-                                    className='l:my-40'
-                                />
-                            </div>
-                        </div>
-
-                        <div className="text-right mt-40 mb-40 flex gap-20 j-content-end">
-                            {/* <Button theme='neutral' children="Discard" /> */}
-                            <button className='bg-transparent text-grey-900 py-10 l:py-15 px-20 w-fit radius-5 border-none
-                                               hover:pointer text-13 l:text-14 font-inter 
-                                               g|transition:0.5s disabled:bg-grey'>
-                                Discard
-                            </button>
-                            <Button theme='primary' children="Save Product" />
-                        </div>
-                    </div>
+                <div className="">
+                    {selected(action)}
                 </div>
             </div>
 
