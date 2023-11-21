@@ -10,7 +10,6 @@ class ProductService {
         return new Promise((resolve) => {
             http.get(endpoints.PRODUCT_CATEGORIES)
                 .then((response: AxiosResponse) => {
-                    console.log({ response })
                     resolve(response.data)
                 })
         })

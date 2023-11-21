@@ -18,8 +18,6 @@ import { usePathname } from "next/navigation";
 import AsoebiWears from "./AsoebiWears";
 import NoResultMessage from "@/modules/lib/components/error-messages/no-result-found";
 
-
-
 const Homepage = () => {
     const [open, setOpen] = useState(false);
     const pathname = usePathname()
@@ -60,7 +58,6 @@ const Homepage = () => {
                     </div>
                 </div>
                 <Footer />        
-
             </div>
         </>
 

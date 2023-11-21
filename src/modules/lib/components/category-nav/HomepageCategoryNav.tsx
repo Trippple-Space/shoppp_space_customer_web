@@ -107,7 +107,7 @@ const HomepageCategoryNav: FC<IBaseNavBar> = ({ isRoute }) => {
 
     
     return (
-        <div className=''>
+        <div className='mt-100 bg-red'>
             <BaseCategoryNav options={options} displayFilter={false} isRoute={isRoute} />
         </div>
     )

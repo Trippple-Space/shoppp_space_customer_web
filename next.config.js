@@ -8,7 +8,7 @@ const nextConfig = {
             // allows overriding page files
             {
               source: '/',
-              destination: '/homepage',
+              destination: '/home',
             },
           ],
           afterFiles: [
@@ -24,7 +24,7 @@ const nextConfig = {
     async redirects() {
         return [
             {
-                source: '/homepage',
+                source: '/home',
                 destination: '/',
                 permanent: true
             }

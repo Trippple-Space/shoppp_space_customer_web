@@ -10,13 +10,13 @@ import SavedItemsModal from './profile-modal/SavedItems';
 import RecentlyViewedItems from './profile-modal/RecentlyViewedItems ';
 import RecentlySearchItems from './profile-modal/RecentlySearchItems ';
 import AddressModal from './profile-modal/AddressModal';
-import { useAuthGuard } from '../../utility/hooks/use-auth-guard';
+import { useAuth } from '../../utility/hooks/use-auth';
 
 interface IBaseNavBar {
     links: ReactNode
 }
 
-const BaseNavBar: FC<IBaseNavBar> = ({links}) => {
+const BaseNavBar: FC<IBaseNavBar> = ({ links }) => {
     const [userProfileDropdown, setUserProfileDropdown] = useState<boolean>(false);
     const [userOrderDropdown, setUserOrderDropdown] = useState<boolean>(false);
     const [userSavedItemsDropdown, setUserSavedItemsDropdown] = useState<boolean>(false);
@@ -25,11 +25,11 @@ const BaseNavBar: FC<IBaseNavBar> = ({links}) => {
     const [userAddressDropdown, setUserAddressDropdown] = useState<boolean>(false);
 
     return (
-        <div className=''>
-            <div className='flex app-width space-between items-center py-25 '>
+        <div className='fixed w-full t-0 l-0 bg-white border-b border-whitesmoke z-5'>
+            <div className='flex app-width space-between items-center py-15 '>
                 <div className='w-fit'>
                     <Image
-                        className='w-90 l:w-120'
+                        className='w-90 l:w-100'
                         src='asoebi-logo-colored.png'
                         alt='logo'
                         type='logo'
@@ -47,9 +47,9 @@ const BaseNavBar: FC<IBaseNavBar> = ({links}) => {
 
                     {
                         userProfileDropdown &&
-                        <ModalComponent 
-                            modalOpen={userProfileDropdown} 
-                            handleCloseModal={() => setUserProfileDropdown(false)} 
+                        <ModalComponent
+                            modalOpen={userProfileDropdown}
+                            handleCloseModal={() => setUserProfileDropdown(false)}
                             data={setUserProfileDropdown}
                             setUserOrderDropdown={setUserOrderDropdown}
                             setUserSavedItemsDropdown={setUserSavedItemsDropdown}
@@ -61,46 +61,46 @@ const BaseNavBar: FC<IBaseNavBar> = ({links}) => {
 
                     {
                         userOrderDropdown &&
-                        <OrdersModal 
-                            modalOpen={userOrderDropdown} 
-                            handleCloseModal={() => setUserOrderDropdown(false)} 
-                            data={undefined} 
+                        <OrdersModal
+                            modalOpen={userOrderDropdown}
+                            handleCloseModal={() => setUserOrderDropdown(false)}
+                            data={undefined}
                         />
                     }
 
                     {
                         userSavedItemsDropdown &&
-                        <SavedItemsModal 
-                            modalOpen={userSavedItemsDropdown} 
-                            handleCloseModal={() => setUserSavedItemsDropdown(false)} 
-                            data={undefined} 
+                        <SavedItemsModal
+                            modalOpen={userSavedItemsDropdown}
+                            handleCloseModal={() => setUserSavedItemsDropdown(false)}
+                            data={undefined}
                         />
                     }
 
                     {
                         userRecentlyViewedDropdown &&
-                        <RecentlyViewedItems 
-                            modalOpen={userRecentlyViewedDropdown} 
-                            handleCloseModal={() => setUserRecentlyViewedDropdown(false)} 
-                            data={undefined} 
+                        <RecentlyViewedItems
+                            modalOpen={userRecentlyViewedDropdown}
+                            handleCloseModal={() => setUserRecentlyViewedDropdown(false)}
+                            data={undefined}
                         />
                     }
 
                     {
                         userRecentSearchDropdown &&
-                        <RecentlySearchItems 
-                            modalOpen={userRecentSearchDropdown} 
-                            handleCloseModal={() => setUserRecentSearchDropdown(false)} 
-                            data={undefined} 
+                        <RecentlySearchItems
+                            modalOpen={userRecentSearchDropdown}
+                            handleCloseModal={() => setUserRecentSearchDropdown(false)}
+                            data={undefined}
                         />
                     }
 
-{
+                    {
                         userAddressDropdown &&
-                        <AddressModal 
-                            modalOpen={userAddressDropdown} 
-                            handleCloseModal={() => setUserAddressDropdown(false)} 
-                            data={undefined} 
+                        <AddressModal
+                            modalOpen={userAddressDropdown}
+                            handleCloseModal={() => setUserAddressDropdown(false)}
+                            data={undefined}
                         />
                     }
                 </div>

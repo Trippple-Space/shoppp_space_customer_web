@@ -6,7 +6,7 @@ export const paths = {
     product_details: '/product-details',
     checkout: '/checkout',
     homepage: '/',
-    asoebi_wears: '/homepage/asoebiwears'
+    asoebi_wears: '/wears'
 }
 
 export const protectedPaths = [

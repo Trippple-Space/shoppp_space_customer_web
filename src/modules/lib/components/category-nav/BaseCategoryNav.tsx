@@ -19,7 +19,7 @@ interface IBaseCategoryNav {
 const BaseCategoryNav: FC<IBaseCategoryNav> = ({ options, displayFilter, isRoute }) => {
     const [activeOption, setActiveOption] = useState(0)
     return (
-        <div className="flex">
+        <div className="flex hidden">
             <div className='scroll-x no-scrollbar w-full'>
                 <div className='flex gap-30 h-fit '>
                     {

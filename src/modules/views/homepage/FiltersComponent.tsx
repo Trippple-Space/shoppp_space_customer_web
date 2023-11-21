@@ -19,7 +19,7 @@ const Filters = () => {
 
 
     const pathname = usePathname()
-    const isRoute = pathname.includes('asoebiwears')
+    const isRoute = pathname.includes('wears')
     
 
 
@@ -44,13 +44,11 @@ const Filters = () => {
     setDisplaySearch(!displaySearch);
   }
     return (
-    <div>
-
-
-        <div className='w-100p border-t border-lightgrey py-15 g|box-shadow:0px|_|2px|_|4px|_|0px|_|#0000000D;'>
+    <div className='mt-69'>
+        <div className='w-100p border- border-lightgrey py-15 g|box-shadow:0px|_|2px|_|4px|_|0px|_|#0000000D;'>
             <div className="app-width flex space-between items-center">
                 {!isRoute && (
-                    <div className='w-50p h-45 l:w-fit l:h-fit weight-400 text-16 l:px-16 l:py-10 text-green border border-green radius-10'>
+                    <div className='w-50p h-45 l:w-fit l:h-fit weight-400 text-16 l:px-16 l:py-10 text-grey border border-lightgrey radius-10'>
                         <div className='flex h-100p items-center w-fit gap-10 mx-auto pointer relative' onClick={handleOpenModal}>
                             <HomepageModal modalOpen={open} handleCloseModal={handleCloseModal} data='data' />
                             <span>All categories</span> 
@@ -69,9 +67,9 @@ const Filters = () => {
                     </div>
                 ) : (
                     <div className='w-50p hidden l:flex'>
-                        <div className=" w-full max-w-600 mx-auto py-7 pl-30 pr-7 flex overflow-hidden space-between items-center h-fit  border border-grey-300 radius-45 g|box-shadow:0px|_|2px|_|10px|_|0px|_|#00000014; ">
+                        <div className=" w-full max-w-600 mx-auto py-7 pl-30 pr-7 flex overflow-hidden space-between items-center h-fit  border border-grey-300 radius-10 g|box-shadow:0px|_|2px|_|10px|_|0px|_|#00000014; ">
                             <input type="text" placeholder='Search Product' className='border-none w-90p text-16 text-light-grey h-full outline-none'/>
-                            <div className='w-35 h-35 flex items-center bg-green round text-white'>
+                            <div className='w-35 h-35 flex items-center bg-green radius-7 text-white'>
                                 <BsSearch />
                             </div>
                         </div>

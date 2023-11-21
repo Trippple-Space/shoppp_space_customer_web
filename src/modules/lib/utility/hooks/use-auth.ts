@@ -1,4 +1,4 @@
-import { useEffect } from 'react';
+import { useEffect, useLayoutEffect } from 'react';
 import { paths, protectedPaths } from '../paths';
 import { authService } from '../services/auth.service';
 import useUserStore from '../store/user.store';
@@ -6,11 +6,11 @@ import { useRouteGuard } from './use-route-guard';
 import { useSignOut } from './use-sign-out';
 import { usePathname } from 'next/navigation';
 
-export const useAuthGuard = () => {
+export const useAuth = () => {
     const { user, isAuthenticated, authenticateUser } = useUserStore();
     const signOut = useSignOut()
     const pathname = usePathname()
-    useEffect(() => {
+    useLayoutEffect(() => {
         const checkAuth = async () => {
             if (!user || !isAuthenticated) {
                 const authToken = authService.getAuthCredentials();
@@ -20,8 +20,7 @@ export const useAuthGuard = () => {
                         return authenticateUser(authUser)
                     }
                 }
-                console.log({protectedPaths, pathname})
-                if (!authToken && protectedPaths.includes(pathname) ) {
+                if (!authToken && protectedPaths.includes(pathname)) {
                     signOut();
                 }
             }

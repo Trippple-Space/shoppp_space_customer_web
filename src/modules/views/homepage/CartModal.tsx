@@ -3,6 +3,7 @@
 import Icon from '@/modules/lib/components/icon/Icon';
 import Image from '@/modules/lib/components/image/Image';
 import Modal from '@/modules/lib/components/modal/modal';
+import { useCart } from '@/modules/lib/utility/hooks/use-cart';
 import React, { useState } from 'react';
 import { AiOutlineClose } from 'react-icons/ai'
 import { MdOutlineLocalShipping } from 'react-icons/md'
@@ -14,11 +15,15 @@ interface ModalProps {
 }
 
 const CarttemModal: React.FC<ModalProps> = ({modalOpen, handleCloseModal, data}) => {
-  const cartData = [
-    {id: 45621, name: '24 Karat Gold Plated Ring', unit: 2, variation: 'Plated ring', price: '26,000', status: 'out'},
-    {id: 45621, name: '24 Karat Gold Plated Ring', unit: 2, variation: 'Plated ring', price: '26,000', status: 'Delivered'},
-    {id: 45621, name: '24 Karat Gold Plated Ring', unit: 2, variation: 'Plated ring', price: '26,000', status: 'Delivered'}
-  ];
+  // const cartItems = [
+  //   {id: 45621, name: '24 Karat Gold Plated Ring', unit: 2, variation: 'Plated ring', price: '26,000', status: 'out'},
+  //   {id: 45621, name: '24 Karat Gold Plated Ring', unit: 2, variation: 'Plated ring', price: '26,000', status: 'Delivered'},
+  //   {id: 45621, name: '24 Karat Gold Plated Ring', unit: 2, variation: 'Plated ring', price: '26,000', status: 'Delivered'}
+  // ];
+
+  const {cart} = useCart()
+
+
 
 
   return (
@@ -36,7 +41,7 @@ const CarttemModal: React.FC<ModalProps> = ({modalOpen, handleCloseModal, data})
         </div>
         ) : (
          <div className='px-20 pb-20'>
-          {cartData.map((data: any) => (
+          {cart.cartItems.map((data: any) => (
             <div className='space-between items-center py-10' style={{ borderBottom: '1px solid #D9D9D9'}}>
               <div className='flex w-100p gap-10 l:gap-30 items-center'>
                 <div className='w-90 h-90'>
@@ -78,7 +83,6 @@ const CarttemModal: React.FC<ModalProps> = ({modalOpen, handleCloseModal, data})
                     <input type="number" className='border-none w-55 text-16 text-center' placeholder='1' />
                     <Icon name='incr' className='w-25 h-25' />
                   </div>
-
                   
                 </div>
               </div>

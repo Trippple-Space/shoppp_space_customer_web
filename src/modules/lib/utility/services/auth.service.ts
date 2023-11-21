@@ -34,7 +34,6 @@ class AuthService {
     }
 
     getAuthCredentials() {
-        console.log({ localStorage })
         return localStorage.getItem('token')
     }
 

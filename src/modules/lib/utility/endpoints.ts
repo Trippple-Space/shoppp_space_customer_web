@@ -3,7 +3,8 @@ const endpoints = {
     SIGN_UP: '/auth/register',
     VALIDATE_TOKEN: '/auth/validate',
     PRODUCT_CATEGORIES: 'product/categories',
-    PRODUCTS: 'products'
+    PRODUCTS: 'products',
+    CART: '/cart'
 }
 
 export default endpoints;

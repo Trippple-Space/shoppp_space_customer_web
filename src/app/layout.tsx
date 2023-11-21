@@ -3,14 +3,14 @@
 import { Toaster } from 'sonner';
 import '../styles/styles.scss';
 import { Inter, Roboto, Lora } from 'next/font/google'
-import { useAuthGuard } from '@/modules/lib/utility/hooks/use-auth-guard';
+import { useAuth } from '@/modules/lib/utility/hooks/use-auth';
 
 const inter = Inter({
   subsets: ['latin'],
   variable: '--font-inter',
   display: 'swap',
 });
- 
+
 const roboto = Roboto({
   subsets: ['latin'],
   variable: '--font-roboto',
@@ -39,7 +39,7 @@ export default function RootLayout({
   children: React.ReactNode
 }) {
 
-  useAuthGuard()
+  useAuth()
 
   return (
     <html lang="en" className={`${inter.variable} ${roboto.variable} ${lora.variable} bg-white`}>
