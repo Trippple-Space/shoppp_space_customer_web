@@ -288,6 +288,9 @@
 .w-0 { width: 0px; } 
 .bg-deep-yellow { background-color: #FACE33; } 
 .bg-dimgrey { background-color: #333333; } 
+.border-pink { border-color: pink; } 
+.border-blue { border-color: blue; } 
+.border-lightgreen { border-color: #E2FFFA; } 
 .pt-42 { padding-top: 42px; } 
 .text-28 { font-size: 28px; } 
 .gap-5 { gap: 5px; } 
@@ -543,6 +546,9 @@
 .pl-50 { padding-left: 50px; } 
 .gap-12 { gap: 12px; } 
 .mt-25 { margin-top: 25px; } 
+.h-500 { height: 500px; } 
+.min-w-500 { min-width: 500px; } 
+.min-w-400 { min-width: 400px; } 
 
 
 

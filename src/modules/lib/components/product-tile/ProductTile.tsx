@@ -34,7 +34,7 @@ const ProductTile: FC<IProductTile> = ({product}) => {
           id="add to cart button"
           className="absolute b-0 r-0 mr-10 mb-10 l:mr-15 l:mb-15"
         >
-          <button onClick={() => addToCart(selectedVariant.id, 1)} className="bg-yellow pointer font-roboto text-grey-900 border-hidden px-10 py-10 radius-5 l:px-22 l:py-12 l:radius-10  ">
+          <button onClick={() => addToCart(selectedVariant.id, selectedVariant.minPurchaseQuantity || 1)} className="bg-yellow pointer font-roboto text-grey-900 border-hidden px-10 py-10 radius-5 l:px-22 l:py-12 l:radius-10  ">
             <span className="hidden l:block weight-500">Add to cart</span>
             <div className="l:hidden">
               <AiOutlinePlus size={24} />
@@ -58,7 +58,8 @@ const ProductTile: FC<IProductTile> = ({product}) => {
             variant?.media?.map((mediaItem, i) => (
               <Image
                 className={classNames("w-32 h-32 pointer radius-5 l:radius-8 a-self-center g|object-fit:cover", {
-                  'border border-green border-2': selectedImage == mediaItem?.url
+                  'border border-2': selectedImage == mediaItem?.url,
+                  [`border-${mediaItem.description?.toLocaleLowerCase()}`]: selectedImage == mediaItem?.url
                 })}
                 src={mediaItem?.url}
                 onClick={() => { setSelectedVariant(variant); setSelectedImage(mediaItem?.url)}}
@@ -86,7 +87,7 @@ const ProductTile: FC<IProductTile> = ({product}) => {
             <span>4.5</span>
           </div>
         </div>
-        <div className="mt-6 text-18 l:text-15 weight-700">{formatNumberAsPrice(product.price)} <span className="weight-300">per {selectedVariant?.stockUnit}</span></div>
+        <div className="mt-6 text-18 l:text-15 weight-700">{formatNumberAsPrice(selectedVariant?.price)} <span className="weight-300">per {selectedVariant?.stockUnit}</span></div>
       </div>
     </div>
   );

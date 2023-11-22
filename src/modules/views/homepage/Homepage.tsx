@@ -12,24 +12,18 @@ import Footer from "@/modules/lib/components/footer/Footer";
 import HomepageNavBar from "@/modules/lib/components/nav-bar/HomepageNavBar";
 import Filters from "./FiltersComponent";
 import { TbShoppingBag } from "react-icons/tb"
-import CarttemModal from "./CartModal";
+import MiniCart from "./CartModal";
 import AsoebiHomepage from "./AsoebiPage";
 import { usePathname } from "next/navigation";
 import AsoebiWears from "./AsoebiWears";
 import NoResultMessage from "@/modules/lib/components/error-messages/no-result-found";
 
 const Homepage = () => {
-    const [open, setOpen] = useState(false);
     const pathname = usePathname()
     const isRoute = pathname.includes('homepage')
-    
 
-    const handleOpenModal = () => {
-        setOpen(!open);
-      };
-      const handleCloseModal = () => {
-        setOpen(false);
-      };
+
+
     return (
         <>
             <div className="">
@@ -43,21 +37,10 @@ const Homepage = () => {
                     ) : (
                         <AsoebiWears />
                     )}
-                    
 
-                    <div className="w-100p fixed b-70 r-10">
-                        <CarttemModal modalOpen={open} handleCloseModal={handleCloseModal} data='data' />
-                        <div onClick={handleOpenModal} className="mx-auto pointer flex w-140 h-50  bg-green p-4 text-white radius-10">
-                            <div className="w-40p radius-10 radius-t-r-0 radius-b-r-0 flex items-center j-content-center bg-darkgreen text-white">
-                                <TbShoppingBag className="w-25 h-25" />
-                            </div>
-                            <div className="w-60p text-18 flex text-center items-center j-content-center">
-                                0 items
-                            </div>
-                        </div>
-                    </div>
+                    <MiniCart />
                 </div>
-                <Footer />        
+                <Footer />
             </div>
         </>
 

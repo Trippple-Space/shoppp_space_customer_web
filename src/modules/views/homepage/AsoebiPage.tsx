@@ -12,7 +12,7 @@ import Footer from "@/modules/lib/components/footer/Footer";
 import HomepageNavBar from "@/modules/lib/components/nav-bar/HomepageNavBar";
 import Filters from "./FiltersComponent";
 import { TbShoppingBag } from "react-icons/tb"
-import CarttemModal from "./CartModal";
+import MiniCart from "./CartModal";
 
 const products = [
     {
@@ -23,7 +23,7 @@ const products = [
             'https://res.cloudinary.com/codennerd/image/upload/v1689377581/Asoebi%20Africa/WhatsApp_Image_2023-07-15_at_12.23.38_AM_1_samhx5.jpg',
             'https://res.cloudinary.com/codennerd/image/upload/v1689377577/Asoebi%20Africa/WhatsApp_Image_2023-07-15_at_12.23.25_AM_mghle5.jpg',
         ]
-    }, 
+    },
     {
         images: [
             'https://res.cloudinary.com/codennerd/image/upload/v1689377577/Asoebi%20Africa/WhatsApp_Image_2023-07-15_at_12.23.25_AM_1_kxeykx.jpg',
@@ -47,7 +47,7 @@ const AsoebiHomepage = () => {
                 <div className="grid grid-2-cols-1fr l:grid-5-cols-1fr gap-10 l:gap-30 w-full">
                     {
                         [...products, ...products, ...products, ...products].map(product => (
-                            <ProductTile product={product} /> 
+                            <ProductTile product={product} />
                         ))
                     }
                 </div>
@@ -61,7 +61,7 @@ const AsoebiHomepage = () => {
                 <div className="grid grid-2-cols-1fr l:grid-5-cols-1fr gap-10 l:gap-30 w-full">
                     {
                         [...products, ...products, ...products, ...products].map(product => (
-                            <ProductTile product={product} /> 
+                            <ProductTile product={product} />
                         ))
                     }
                 </div>
@@ -76,7 +76,7 @@ const AsoebiHomepage = () => {
                 <div className="grid grid-2-cols-1fr l:grid-5-cols-1fr gap-10 l:gap-30 w-full">
                     {
                         [...products, ...products, ...products, ...products].map(product => (
-                            <ProductTile product={product} /> 
+                            <ProductTile product={product} />
                         ))
                     }
                 </div>
