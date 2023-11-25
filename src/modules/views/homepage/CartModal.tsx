@@ -40,12 +40,12 @@ const CarttemModal: React.FC<ModalProps> = ({modalOpen, handleCloseModal, data})
             <div className='space-between items-center py-10' style={{ borderBottom: '1px solid #D9D9D9'}}>
               <div className='flex w-100p gap-10 l:gap-30 items-center'>
                 <div className='w-90 h-90'>
-                <Image
-                  className='w-fit h-100p radius-5 l:radius-10'
-                  src='order-product.png'
-                  alt='product'
-                  type='image'
-                />
+                  <Image
+                    className='w-fit h-100p radius-5 l:radius-10'
+                    src='order-product.png'
+                    alt='product'
+                    type='image'
+                  />
                 </div>
                 <div className='line-height-20'>
                   <h2 className='text-12 l:text-14 weight-400'>{data.name}</h2>

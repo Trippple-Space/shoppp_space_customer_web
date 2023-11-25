@@ -14,7 +14,7 @@ const ProductTile: FC<IProductTile> = ({product}) => {
   const [selectedImage, setSelectedImage] = useState(product.images[0])
   const [isFavourite, setIsFavorite] = useState(false)
   return (
-    <div className="mt-30 l:mt-60">
+    <div className="mt-30 l:mt-20">
       <div
         id="image"
         className="relative ratio-1 radius-10 g|overflow:hidden l:radius-15"

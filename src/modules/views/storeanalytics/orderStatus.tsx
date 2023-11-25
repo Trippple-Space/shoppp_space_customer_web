@@ -12,8 +12,8 @@ const tabs = [
 const OrderStatus = () => {
     const [activeTab, setActiveTab] = useState(tabs[0]);
     return (
-        <div className="border border-1 border-lighter-grey radius-20 py-20">
-            <div className="text-20 text-dimgrey px-20 border-b border-1 border-lighter-grey weight-400 opacity-70 flex space-between">
+        <div className="border border-1 border-lighter-grey radius-20 py-20 mb-100">
+            <div className="text-16 text-dimgrey px-10 border-b border-1 border-lighter-grey weight-400 opacity-70 flex space-between">
     
                 {tabs.map((tab) => (
                     <div
@@ -31,7 +31,7 @@ const OrderStatus = () => {
             </div>
             <div className="w-100p px-30 py-10">
             <table className="w-100p" style={{borderCollapse: 'collapse'}}>
-                <tr className="w-100p h-60 text-left py-5 border-b border-1 border-lighter-grey">
+                <tr className="w-100p text-14 h-60 text-left py-5 border-b border-1 border-lighter-grey">
                     <th className="w-27p border-b border-1 border-lighter-grey pl-20 ">Item</th>
                     <th className="w-27p border-b border-1 border-lighter-grey">Unit/Qty</th>
                     <th className="w-27p border-b border-1 border-lighter-grey">Promotion</th>

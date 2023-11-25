@@ -6,6 +6,7 @@ import Modal from '@/modules/lib/components/modal/modal';
 import React, { useState } from 'react';
 import { AiOutlineClose } from 'react-icons/ai'
 import { BsSearch } from 'react-icons/bs';
+import { FaRegCheckCircle } from 'react-icons/fa';
 
 
 interface ModalProps {
@@ -29,39 +30,33 @@ const PromoProductModal: React.FC<ModalProps> = ({modalOpen, handleCloseModal, d
         <div className='w-100p h-50 px-20 my-20 flex'>
             <div className=" w-100p pl-30 pr-7 flex overflow-hidden text-22 space-between h-100p py-5 border border-lightgrey radius-45 g|box-shadow:0px|_|2px|_|10px|_|0px|_|#00000014; ">
                 <input type="text" placeholder='Search Product' className='border-none w-90p text-14 text-light-grey'/>
-                <div className='w-9p flex items-center bg-green round h-100p text-white'>
+                <div className='w-35 h-35 flex items-center bg-green round h-100p text-white mt-2'>
                     <BsSearch className='w-15 mx-auto' />
                 </div>
             </div>
         </div>
 
         <div className='px-20'>
-          <p>Recently added products</p>
+          <p className='text-14'>Recently added products</p>
           <div className='flex gap-10 py-15'>
             {[0,0].map(() => (
-              <div className='flex w-50p p-5 border border-deep-yellow radius-5 relative'>
-                <div className='flex gap-10 items-center'>
-                  <div className='w-45 h-45'>
-                  <Image
-                    className='w-fit h-100p radius-5'
-                    src='order-product.png'
-                    alt='product'
-                    type='image'
-                  />
-                  </div>
-                  <div className='line-height-15'>
-                      <p className='text-12 text-dimgrey'>Quality Ankara Ga...</p>
-                      <h1 className='text-12 text-black weight-500'>NGN 26,000</h1>
-                  </div>
+              <div className="border-solid border-1 border-yellow w-200 radius-8 flex space-between p-8 mt-15 mb-25">
+                <div className="flex items-center gap-10">
+                    <div className='w-50 h-50'>
+                        <Image
+                            className='w-fit h-100p radius-5 l:radius-10'
+                            src={'order-product.png'}
+                            alt='product'
+                            type='image'
+                        />
+                    </div>
+                    <div className="text-14 weight-500">
+                        <div className="">Ankara g....</div>
+                        <div className="mt-4">NGN 28,000</div>
+                    </div>
                 </div>
-                <div className='radius-50p absolute r-5'>
-                  <Input
-                      name='promotionProduct'
-                      type='checkbox'
-                      className='w-20 radius-50p'
-                  />
-                </div>
-            </div>
+                <div ><FaRegCheckCircle className="text-yellow border-solid border-1 border-grey-300 radius-50p w-20 h-20 text-20" /></div>
+              </div>
             ))}
           </div>
         </div>
@@ -78,8 +73,8 @@ const PromoProductModal: React.FC<ModalProps> = ({modalOpen, handleCloseModal, d
         </div>
           <div className='px-20'>
             <div className='flex space-between py-15'>
-              <p>Selected (15)</p>
-              <p className='flex items-center'>All
+              <p className='text-12'>Selected (15)</p>
+              <p className='flex items-center text-12'>All
               <Input
                       name='promotionProduct'
                       type='checkbox'
@@ -89,29 +84,27 @@ const PromoProductModal: React.FC<ModalProps> = ({modalOpen, handleCloseModal, d
             </div>
             <div className='grid gap-10 grid-3-cols-auto'>
             {[0,0,0,0,0,0].map((data: any) => (
-              <div className='p-7 border border-deep-yellow relative radius-8'>
-                  <div className='w-100p h-100 relative'>
-                      <Image
-                        className='w-100p h-100p radius-5'
-                        src='order-product.png'
-                        alt='product'
-                        type='image'
-                      />
-                      <div className='radius-50p absolute r-5 t-5'>
-                      <Input
-                          name='promotionProduct'
-                          type='checkbox'
-                          className='w-20 radius-50p  r-5'
-                      />
-                    </div>
+              <div className="border-solid border-1 border-yellow w-130 radius-8 p-8">
+                <div className="relative">
+                  <div className="absolute r-5 t-5 ">
+                      <FaRegCheckCircle className="text-yellow border-solid border-1 border-grey-300 radius-50p w-20 h-20 text-20 bg-white radius-50p w-fit" />
                   </div>
-                  <div className='line-height-20'>
-                      <p className='text-12 text-dimgrey'>Quality Ankara Ga...</p>
-                      <h1 className='text-12 text-black weight-500'>NGN 26,000</h1>
-                      <p className='text-8 p-0 m-0 text-dimgrey opacity-70'>Ankara</p>
+                  <div className='w-full h-100'>
+                      <Image
+                          className='w-full h-100p radius-5 l:radius-10'
+                          src={'order-product.png'}
+                          alt='product'
+                          type='image'
+                      />
+                  </div>
+                  <div className="text-14 weight-500">
+                      <div className="text-12 mt-10 weight-500">Ankara grade II</div>
+                      <div className="mt-4 text-12 weight-500">NGN 28,000</div>
                   </div>
 
-            </div>
+                  <div className='text-8 weight-500 my-10'>Ankara</div>
+                </div>
+              </div>
             ))}
             </div>
           </div>

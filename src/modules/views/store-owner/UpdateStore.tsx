@@ -6,7 +6,7 @@ import { GrStar } from 'react-icons/gr'
 import { FaPlus } from "react-icons/fa6";
 import { FaBasketShopping } from "react-icons/fa6";
 import { BiSolidCategory } from "react-icons/bi";
-import { BsBasket3 } from "react-icons/bs";
+import { BsBasket3, BsSearch } from "react-icons/bs";
 import { RiMenuAddLine } from "react-icons/ri";
 import { CiCircleQuestion } from "react-icons/ci";
 import Input from '@/modules/lib/components/input/Input';
@@ -16,12 +16,33 @@ import OrderCard from '@/modules/lib/components/order-card/OrderCard';
 import AddProduct from './AddProduct';
 import AddCategory from './AddCategory'
 import AddSection from './AddSection'
+import Modal from '@/modules/lib/components/modal/modal'
+import { IoMdClose } from 'react-icons/io'
+import classNames from 'classnames'
+import { FaRegCheckCircle } from 'react-icons/fa'
+import Products from './Products'
+import AddProductModal from './AddProductModal'
+import Footer from '@/modules/lib/components/footer/Footer'
 
 const UpdateStore = () => {
     const [action, setAction] = useState('add-products');
+    const [taglineModal, setTagLineModal] = useState(false)
+    const [margettingMessageModal, setMargettingMessageModal] = useState(false);
+    const [selectedImage, setSelectedImage] = useState(false);
+
+    const products = [
+        'https://res.cloudinary.com/codennerd/image/upload/v1689377577/Asoebi%20Africa/WhatsApp_Image_2023-07-15_at_12.23.25_AM_mghle5.jpg',
+        'https://res.cloudinary.com/codennerd/image/upload/v1689377577/Asoebi%20Africa/WhatsApp_Image_2023-07-15_at_12.23.25_AM_1_kxeykx.jpg',
+        'https://res.cloudinary.com/codennerd/image/upload/v1689377581/Asoebi%20Africa/WhatsApp_Image_2023-07-15_at_12.23.38_AM_2_y2rd0d.jpg',
+        'https://res.cloudinary.com/codennerd/image/upload/v1689377581/Asoebi%20Africa/WhatsApp_Image_2023-07-15_at_12.23.38_AM_1_samhx5.jpg',
+        'https://res.cloudinary.com/codennerd/image/upload/v1689377577/Asoebi%20Africa/WhatsApp_Image_2023-07-15_at_12.23.25_AM_mghle5.jpg',
+    ]
 
     const selected = (option: any) => {
         switch (option) {
+        case 'products':
+            return (<Products />)
+
         case 'add-products':
             return (<AddProduct />)
 
@@ -49,7 +70,7 @@ const UpdateStore = () => {
                 <div className="">
                     <h2 className="weight-500 text-48 letter-spacing-3 line-height-70 max-w-840 text-grey-700">
                         Please add a tag line or your store slogan. 
-                        <button className='bg-red text-white py-10 l:py-8 px-10 w-fit radius-5 border-none
+                        <button onClick={() => setTagLineModal(prev => !prev)} className='bg-red text-white py-10 l:py-8 px-10 w-fit radius-5 border-none
                                            hover:pointer text-13 l:text-14 font-inter 
                                            hover:bg-darkred g|transition:0.5s disabled:bg-grey ml-80'>
                             Edit tagline
@@ -57,7 +78,7 @@ const UpdateStore = () => {
                     </h2>
                     <p className="text-18 weight-300 g|letter-spacing:1.2px; line-height-38 max-w-700 mt-30">
                         Please provide a concise marketing message that effectively promotes your business. 
-                        <button className='text-right bg-red text-white py-10 l:py-8 px-10 w-fit radius-5 border-none
+                        <button onClick={() => setMargettingMessageModal(prev => !prev)} className='text-right bg-red text-white py-10 l:py-8 px-10 w-fit radius-5 border-none
                                            hover:pointer text-13 l:text-14 font-inter 
                                            hover:bg-darkred g|transition:0.5s disabled:bg-grey ml-100'>
                             Edit marketing message
@@ -66,7 +87,8 @@ const UpdateStore = () => {
                 </div>
 
                 <div className="mt-55 max-w-600 flex items-center gap-27">
-                    <div className="flex space-between">
+
+                    <div className="flex space-between relative">
                         {[0].map(() => (
                             <div className="bg-white w-fit round  border border-2 border-green p-1 relative">
                                 {/* <div
@@ -82,11 +104,27 @@ const UpdateStore = () => {
                                     alt='product'
                                     type='icon'
                                 />
-                                <div className='absolute bg-red py-7 b-0 r-0 z-index-2 radius-50p w-30 h-30 text-white'><FaPlus /></div>
+                                <div className='absolute bg-red py-7 b-0 r-0 z-index-2 radius-50p w-30 h-30 text-white pointer' onClick={() => setSelectedImage(true)}><FaPlus /></div>
                             </div>
                         ))}
+
+                        {
+                            selectedImage &&
+                            <AddProductModal 
+                                className="t-120"
+                                products={products}
+                                setSelectedImage={setSelectedImage}
+                            />
+                        }
                     </div>
-                    <div className="text-14  line-height-30 text-grey-900 weight-400">Showcase your five best finished products by adding captivating images and linking them to the corresponding product listings. This will ensure your products are prominently displayed in the <span className='text-green-500 pointer'>Explore</span> section, gaining visibility among potential customers.</div>
+
+                    <div className="text-14  line-height-30 text-grey-900 weight-400">
+                        Showcase your five best finished products by adding captivating images and linking 
+                        them to the corresponding product listings. This will ensure your products
+                        are prominently displayed in the 
+                        <span className='text-green-500 pointer'> Explore </span> 
+                        section, gaining visibility among potential customers.
+                    </div>
                 </div>
             </div>
         </div>
@@ -114,9 +152,9 @@ const UpdateStore = () => {
             </div>
         </div>
 
-        <main className="">
+        <main className="mb-100">
             <header className="flex items-center gap-74 text-18 text-grey-900 weight-500 mt-80 pb-38 border-b border-grey-300 px-350">
-                <div className="flex items-center gap-10 pointer">
+                <div className={`flex items-center gap-10 pointer ${action == 'products' && 'text-green'}`} onClick={() => setAction('products') }>
                     <div><FaBasketShopping /></div>
                     <div>Products</div>
                 </div>
@@ -143,8 +181,85 @@ const UpdateStore = () => {
                 </div>
             </div>
 
+            <Modal isOpen={taglineModal} onClose={() => setTagLineModal(false)} extraClass={{ overflow: 'hidden', width: "1000px" }}>
+                <div className="">
+                    <header className='flex space-between border-b border-1 border-grey-300 items-center px-35'>
+                        <div className='text-16 weight-500 text-green-500 border-b border-3 border-green-500 w-fit p-15'>Edit tagline</div>
+                        <div className='pointer' onClick={() => setTagLineModal(prev => !prev)}><IoMdClose /></div>
+                    </header>
+
+                    <main className="p-35">
+                        <div className="flex items-center gap-10 bg-light-yellow p-20 radius-8">
+                            <div className="text-24"><AiOutlineExclamationCircle /></div>
+                            <div className="text-grey-800">
+                                Add your tagline or store slogan to make a memorable first impression! A catchy and 
+                                distinctive tagline helps communicate your brand identity, captivates customers' attention, and sets you apart from the competition.
+                            </div>
+                        </div>
+                        <Input
+                            id='state'
+                            name='state'
+                            type='textarea'
+                            placeholder='Please add a tag line or your store slogan.'
+                            rows={5}
+                            after="Maximum of 8 words allowed."
+                            className='w-100p mt-30 text-12'
+                        />
+
+                        <div className="text-right mt-40 flex gap-20 j-content-end">
+                            <button className='bg-transparent text-grey-900 py-10 l:py-15 px-10 w-fit radius-5 border-none
+                                            hover:pointer text-13 l:text-14 font-inter 
+                                            g|transition:0.5s disabled:bg-grey'>
+                                Discard
+                            </button>
+                            <Button theme='primary' children="Save" />
+                        </div>
+                    </main>
+                </div>
+            </Modal>
+
+            <Modal isOpen={margettingMessageModal} onClose={() => setMargettingMessageModal(false)} extraClass={{ overflow: 'hidden', width: "1000px" }}>
+                <div className="">
+                    <header className='flex space-between border-b border-1 border-grey-300 items-center px-35'>
+                        <div className='text-16 weight-500 text-green-500 border-b border-3 border-green-500 w-fit p-15'>Edit marketing message</div>
+                        <div className='pointer' onClick={() => setMargettingMessageModal(prev => !prev)}><IoMdClose /></div>
+                    </header>
+
+                    <main className="p-35">
+                        <div className="flex items-center gap-10 bg-light-yellow p-20 radius-8">
+                            <div className="text-24"><AiOutlineExclamationCircle /></div>
+                            <div className="text-grey-800">
+                                Craft and add your unique marketing message to create an impactful first impression! A well-crafted marketing message 
+                                effectively conveys your brand identity, captures customers' attention, and differentiates you from competitors. 
+                            </div>
+                        </div>
+                        <Input
+                            id='state'
+                            name='state'
+                            type='textarea'
+                            placeholder='Please provide a concise marketing message that effectively promotes your business.'
+                            rows={5}
+                            after="Maximum of 8 words allowed."
+                            className='w-100p mt-30 text-12'
+                        />
+
+                        <div className="text-right mt-40 flex gap-20 j-content-end">
+                            <button className='bg-transparent text-grey-900 py-10 l:py-15 px-10 w-fit radius-5 border-none
+                                            hover:pointer text-13 l:text-14 font-inter 
+                                            g|transition:0.5s disabled:bg-grey'>
+                                Discard
+                            </button>
+                            <Button theme='primary' children="Save" />
+                        </div>
+                    </main>
+                </div>
+            </Modal>
+
+            <></>
             
         </main>
+
+        <Footer />
     </>
   )
 }
