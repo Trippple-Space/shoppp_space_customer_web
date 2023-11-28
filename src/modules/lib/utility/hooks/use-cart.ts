@@ -2,13 +2,13 @@ import { useEffect } from 'react';
 import { useCartStore } from '../store/cart.store';
 
 export const useCart = () => {
-    const { cart, fetchCart, addToCart } = useCartStore();
+    const { cart, fetchCart, addToCart, removeFromCart } = useCartStore();
 
     useEffect(() => {
-        if (!cart.cartItems.length) {
+        if (!cart.id) {
             fetchCart();
         }
     }, []);
 
-    return { cart, addToCart };
+    return { cart, addToCart, removeFromCart };
 };

@@ -1,5 +1,5 @@
 import { productService } from "../services/product.service"
-import { ProductCategory } from "../types/product"
+import { ProductCategory } from "../types/product.interface"
 import { use, cache, useEffect, useState } from "react"
 
 const categoryPlaceholders = Array.from({ length: 6 }).map(category => ({

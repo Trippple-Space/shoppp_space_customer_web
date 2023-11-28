@@ -1,6 +1,6 @@
 import { AxiosResponse } from "axios";
-import { LoginCredentials, RegistrationDetails } from "../types/auth";
-import { User } from "../types/user";
+import { LoginCredentials, RegistrationDetails } from "../types/auth.interface";
+import { User } from "../types/user.interface";
 import endpoints from "../endpoints";
 import http from "../http"
 

@@ -2,20 +2,22 @@
 
 import React, { FC, useState } from "react";
 import Image from "../image/Image";
-import {AiFillStar, AiOutlinePlus, AiFillHeart} from 'react-icons/ai'
+import { AiFillStar, AiOutlinePlus, AiFillHeart } from 'react-icons/ai'
 import classNames from "classnames";
-import { Product } from "../../utility/types/product";
+import { Product } from "../../utility/types/product.interface";
 import { formatNumberAsPrice } from "../../utility/utility";
 import { useCart } from "../../utility/hooks/use-cart";
 
 interface IProductTile {
   product: Product
 }
-const ProductTile: FC<IProductTile> = ({product}) => {
+const ProductTile: FC<IProductTile> = ({ product }) => {
   const [selectedImage, setSelectedImage] = useState(product?.variants?.[0]?.media?.[0]?.url)
   const [selectedVariant, setSelectedVariant] = useState(product?.variants?.[0])
   const [isFavourite, setIsFavorite] = useState(false)
-  const {addToCart} = useCart()
+  const { addToCart } = useCart()
+
+
   return (
     <div className="mt-30 l:mt-60">
       <div
@@ -46,7 +48,7 @@ const ProductTile: FC<IProductTile> = ({product}) => {
           className="absolute t-0 r-0 mr-10 mt-10 l:mr-15 l:mt-15 text-24 l:text-34"
           onClick={() => setIsFavorite((fav) => !fav)}
         >
-          <AiFillHeart color={ isFavourite ? "#ffffffee": "#000000aa"} className="shadow" />
+          <AiFillHeart color={isFavourite ? "#ffffffee" : "#000000aa"} className="shadow" />
         </div>
       </div>
       <div
@@ -62,11 +64,11 @@ const ProductTile: FC<IProductTile> = ({product}) => {
                   [`border-${mediaItem.description?.toLocaleLowerCase()}`]: selectedImage == mediaItem?.url
                 })}
                 src={mediaItem?.url}
-                onClick={() => { setSelectedVariant(variant); setSelectedImage(mediaItem?.url)}}
+                onClick={() => { setSelectedVariant(variant); setSelectedImage(mediaItem?.url) }}
                 alt="product-image"
               />
               // <div className="skelly-rectangle" data-width="180px" data-radius="100px"></div>
-            ))            
+            ))
           ))
         }
       </div>
@@ -80,7 +82,7 @@ const ProductTile: FC<IProductTile> = ({product}) => {
         <div className="flex a-items-center gap-10 l:gap-18 mt-5 text-dimgrey">
           <p>{product?.store?.name}</p>
           <div className="flex gap-3 items-center">
-            <AiFillStar 
+            <AiFillStar
               // color="#0C7661" 
               className="w-12"
             />

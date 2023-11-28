@@ -1,5 +1,5 @@
 import { AxiosResponse } from "axios"
-import { Product, ProductCategory } from "../types/product"
+import { Product, ProductCategory } from "../types/product.interface"
 import endpoints from "../endpoints"
 import http from "../http"
 import { IProductFilters, IQueryParams } from "../hooks/use-products"

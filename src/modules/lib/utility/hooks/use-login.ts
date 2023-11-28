@@ -1,5 +1,5 @@
 import { authService } from "@/modules/lib/utility/services/auth.service";
-import { LoginCredentials } from "@/modules/lib/utility/types/auth";
+import { LoginCredentials } from "@/modules/lib/utility/types/auth.interface";
 import { paths } from "@/modules/lib/utility/paths";
 import { FormikConfig, useFormik } from "formik";
 import { AppRouterInstance } from "next/dist/shared/lib/app-router-context";
@@ -7,7 +7,7 @@ import { usePathname, useRouter } from "next/navigation";
 import { toast } from "sonner";
 import * as Yup from 'yup'
 import useUserStore from "@/store/user.store";
-import { User } from "../types/user";
+import { User } from "../types/user.interface";
 import { useRouteGuard } from "./use-route-guard";
 
 const LoginValidationSchema = Yup.object().shape({
@@ -44,7 +44,7 @@ const formikLoginConfig = (router: AppRouterInstance, callback?: (user: User) =>
 
 export const useLoginView = () => {
     const router = useRouter()
-    const {isAuthenticated, authenticateUser} = useUserStore()
+    const { isAuthenticated, authenticateUser } = useUserStore()
     const formHandler = useFormik(formikLoginConfig(router, (user) => { authenticateUser(user) }))
 
     useRouteGuard(isAuthenticated, paths.homepage)

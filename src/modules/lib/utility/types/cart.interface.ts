@@ -1,4 +1,8 @@
 export interface Cart {
+    id: number;
+    userId: number;
+    subTotal: number;
+    total: number;
     cartItems: CartItem[]
 }
 

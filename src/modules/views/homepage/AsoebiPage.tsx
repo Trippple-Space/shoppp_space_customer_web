@@ -12,7 +12,7 @@ import Footer from "@/modules/lib/components/footer/Footer";
 import HomepageNavBar from "@/modules/lib/components/nav-bar/HomepageNavBar";
 import Filters from "./FiltersComponent";
 import { TbShoppingBag } from "react-icons/tb"
-import MiniCart from "./CartModal";
+import MiniCart from "../../lib/components/minicart/MiniCart";
 
 const products = [
     {

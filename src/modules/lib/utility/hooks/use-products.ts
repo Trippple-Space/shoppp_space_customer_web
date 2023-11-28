@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react"
 import { productService } from "../services/product.service"
-import { Product } from "../types/product"
+import { Product } from "../types/product.interface"
 
 export interface IProductFilters {
   page?: string,

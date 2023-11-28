@@ -43,7 +43,7 @@ const Modal: React.FC<ModalProps> = ({ isOpen, onClose, children, extraModalClas
     left: 0,
     width: '100%',
     height: '100%',
-    backgroundColor: 'rgba(0, 0, 0, 0.3)',
+    backgroundColor: 'rgba(0, 0, 0, 0.1)',
     zIndex: 9999,
     ...extraModalClass
   };
@@ -52,7 +52,8 @@ const Modal: React.FC<ModalProps> = ({ isOpen, onClose, children, extraModalClas
     backgroundColor: '#fff',
     borderRadius: '8px',
     overflowY: 'scroll',
-    maxHeight: '90vh',
+    // maxHeight: '90vh',
+    height: '100%',
     position: 'absolute',
     ...extraClass
   };
@@ -60,7 +61,7 @@ const Modal: React.FC<ModalProps> = ({ isOpen, onClose, children, extraModalClas
   return (
     <div style={modalStyle}>
       <div ref={modalRef} style={modalContentStyle}>
-        <div>{children}</div>
+        <div className='h-full'>{children}</div>
       </div>
     </div>
   );

@@ -12,7 +12,7 @@ import Footer from "@/modules/lib/components/footer/Footer";
 import HomepageNavBar from "@/modules/lib/components/nav-bar/HomepageNavBar";
 import Filters from "./FiltersComponent";
 import { TbShoppingBag } from "react-icons/tb"
-import MiniCart from "./CartModal";
+import MiniCart from "../../lib/components/minicart/MiniCart";
 import AsoebiHomepage from "./AsoebiPage";
 import { usePathname } from "next/navigation";
 import AsoebiWears from "./AsoebiWears";
@@ -38,7 +38,7 @@ const Homepage = () => {
                         <AsoebiWears />
                     )}
 
-                    <MiniCart />
+
                 </div>
                 <Footer />
             </div>

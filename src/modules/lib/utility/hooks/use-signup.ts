@@ -1,5 +1,5 @@
 import { authService } from "@/modules/lib/utility/services/auth.service"
-import { RegistrationDetails } from "@/modules/lib/utility/types/auth"
+import { RegistrationDetails } from "@/modules/lib/utility/types/auth.interface"
 import { paths } from "@/modules/lib/utility/paths";
 import { FormikConfig, useFormik } from "formik"
 import { AppRouterInstance } from "next/dist/shared/lib/app-router-context";

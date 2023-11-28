@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { ProductCategory } from "../../types/product";
+import { ProductCategory } from "../../types/product.interface";
 import { useProducts } from "../use-products";
 
 export const useTopSalesView = () => {

@@ -1,4 +1,4 @@
-import { Store } from "./store";
+import { Store } from "./store.interface";
 
 export interface ProductCategory {
     id: number;
