@@ -34,7 +34,7 @@ const Charts = () => {
     const data = {
     labels: labels,
     datasets: [{
-        data: [65, 59, 80, 81, 56, 55, 40],
+        data: [20, 50, 20, 11, 26, 15, 40],
         backgroundColor: [
             'rgba(11, 147, 120, 0.49)'
         ],
@@ -54,7 +54,7 @@ const Charts = () => {
                   return value + " K  ";
                 },
                 font: {
-                  size: 24,
+                  size: 16,
                 },
                 color: 'rgba(51, 51, 51, 0.70)',
               },
@@ -67,7 +67,7 @@ const Charts = () => {
                 grid: { display: false },
                 ticks: {
                   font: {
-                    size: 20,
+                    size: 16,
                   },
                   color: 'rgba(51, 51, 51, 0.70)',
                 },
@@ -79,34 +79,34 @@ const Charts = () => {
       };
     
     return (
-        <div className="">
-            <div className="flex text-20 weight-400 text-dimgrey opacity-70 border-b border-1 border-lighter-grey">
-                {tabs.map((tab) => (
-                    <div
-                        onClick={() => setActiveTab(tab)}
-                        className={cx(
-                          "py-8 px-25 pointer",
-                            {
-                                "text-black border-b border-3 border-black": tab == activeTab,
-                            }
-                        )}
-                    >
-                        {tab}
-                    </div>
-                ))}
-            </div>
-            <div className="py-25">
-                <div className="flex space-between py-5 text-16 weight-400 text-dimgrey opacity-70">
-                    <div>May 15th, 2023</div>
-                    <div>Products sold</div>
-                </div>
-                <div className="flex space-between py-7 text-30 weight-700 text-black">
-                    <div>NGN 58,720</div>
-                    <div>78</div>
-                </div>
-            </div>
-           <Bar data={data} options={option} />
-        </div>
+      <div className="">
+          <div className="flex text-16 weight-400 text-dimgrey opacity-70 border-b border-1 border-lighter-grey">
+              {tabs.map((tab) => (
+                  <div
+                      onClick={() => setActiveTab(tab)}
+                      className={cx(
+                        "py-8 px-16 pointer",
+                          {
+                              "text-black border-b border-3 border-black": tab == activeTab,
+                          }
+                      )}
+                  >
+                      {tab}
+                  </div>
+              ))}
+          </div>
+          <div className="py-25">
+              <div className="flex space-between py-5 text-14 weight-400 text-dimgrey opacity-70">
+                  <div>May 15th, 2023</div>
+                  <div>Products sold</div>
+              </div>
+              <div className="flex space-between py-7 text-18 weight-700 text-black">
+                  <div>NGN 58,720</div>
+                  <div>78</div>
+              </div>
+          </div>
+          <Bar data={data} options={option} />
+      </div>
 
     );
 };
