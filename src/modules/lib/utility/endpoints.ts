@@ -4,7 +4,8 @@ const endpoints = {
     VALIDATE_TOKEN: '/auth/validate',
     PRODUCT_CATEGORIES: 'product/categories',
     PRODUCTS: 'products',
-    CART: '/cart'
+    CART: '/cart',
+    USER_ADDRESSES: '/:userId/addresses'
 }
 
 export default endpoints;

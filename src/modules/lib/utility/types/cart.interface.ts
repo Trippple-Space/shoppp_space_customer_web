@@ -1,3 +1,5 @@
+import { ProductVariant } from "./product.interface";
+
 export interface Cart {
     id: number;
     userId: number;
@@ -9,5 +11,6 @@ export interface Cart {
 export interface CartItem {
     id: string,
     productId: string,
-    quantity: number
+    quantity: number,
+    variant: ProductVariant
 }

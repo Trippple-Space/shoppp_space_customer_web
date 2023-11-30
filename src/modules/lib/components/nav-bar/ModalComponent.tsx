@@ -26,7 +26,7 @@ interface ModalProps {
 
 const HomepageModal: React.FC<ModalProps> = ({modalOpen, handleCloseModal, data, setUserOrderDropdown, setUserSavedItemsDropdown, setUserRecentlyViewedDropdown, setUserRecentSearchDropdown, setUserAddressDropdown}) => {
   const router = useRouter()
-  const {user, signOut} = useNavbarView()
+  const {user, signOut, openAddressModal} = useNavbarView()
 
   return (
     <div>
@@ -50,25 +50,10 @@ const HomepageModal: React.FC<ModalProps> = ({modalOpen, handleCloseModal, data,
               setUserOrderDropdown(true);
               data(false)
             }}>Orders</div>
-            <div className='mt-16 pointer hover:text-green' onClick={() => {
-              setUserSavedItemsDropdown(true);
-              data(false);
-            }}>Saved items</div>
-            <div className='mt-16 pointer hover:text-green' onClick={() => {
-              setUserRecentlyViewedDropdown(true);
-              data(false);
-            }}>Recently viewed</div>
-            <div className='mt-16 pointer hover:text-green' onClick={() => {
-              setUserRecentSearchDropdown(true);
-              data(false);
-            }}>Recent searched</div>
           </div>
 
           <div className="pt-16 px-24 weight-400 text-grey-700 border-t border-1 border-grey-300 pb-30">
-            <div className='pointer hover:text-green' onClick={() => {
-              setUserAddressDropdown(true);
-              data(false);
-            }}>Address book</div>
+            <div className='pointer hover:text-green' onClick={openAddressModal}>Address book</div>
             <div className='mt-16 pointer hover:text-green'>Close account</div>
           </div>
 

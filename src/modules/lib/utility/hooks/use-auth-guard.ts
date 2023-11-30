@@ -6,7 +6,7 @@ import { useRouteGuard } from './use-route-guard';
 import { useSignOut } from './use-sign-out';
 import { usePathname } from 'next/navigation';
 
-export const useAuth = () => {
+export const useAuthGuard = () => {
     const { user, isAuthenticated, authenticateUser } = useUserStore();
     const signOut = useSignOut()
     const pathname = usePathname()

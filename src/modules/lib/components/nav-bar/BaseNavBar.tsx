@@ -9,8 +9,8 @@ import OrdersModal from './profile-modal/OrdersModal';
 import SavedItemsModal from './profile-modal/SavedItems';
 import RecentlyViewedItems from './profile-modal/RecentlyViewedItems ';
 import RecentlySearchItems from './profile-modal/RecentlySearchItems ';
-import AddressModal from './profile-modal/AddressModal';
-import { useAuth } from '../../utility/hooks/use-auth';
+import AddressModal from '../address-modal/AddressModal';
+import { useAuthGuard } from '../../utility/hooks/use-auth-guard';
 
 interface IBaseNavBar {
     links: ReactNode
@@ -22,7 +22,6 @@ const BaseNavBar: FC<IBaseNavBar> = ({ links }) => {
     const [userSavedItemsDropdown, setUserSavedItemsDropdown] = useState<boolean>(false);
     const [userRecentlyViewedDropdown, setUserRecentlyViewedDropdown] = useState<boolean>(false);
     const [userRecentSearchDropdown, setUserRecentSearchDropdown] = useState<boolean>(false);
-    const [userAddressDropdown, setUserAddressDropdown] = useState<boolean>(false);
 
     return (
         <div className='fixed w-full t-0 l-0 bg-white border-b border-whitesmoke z-5'>
@@ -55,7 +54,6 @@ const BaseNavBar: FC<IBaseNavBar> = ({ links }) => {
                             setUserSavedItemsDropdown={setUserSavedItemsDropdown}
                             setUserRecentlyViewedDropdown={setUserRecentlyViewedDropdown}
                             setUserRecentSearchDropdown={setUserRecentSearchDropdown}
-                            setUserAddressDropdown={setUserAddressDropdown}
                         />
                     }
 
@@ -95,14 +93,6 @@ const BaseNavBar: FC<IBaseNavBar> = ({ links }) => {
                         />
                     }
 
-                    {
-                        userAddressDropdown &&
-                        <AddressModal
-                            modalOpen={userAddressDropdown}
-                            handleCloseModal={() => setUserAddressDropdown(false)}
-                            data={undefined}
-                        />
-                    }
                 </div>
             </div>
         </div>

@@ -23,5 +23,7 @@ export const formatNumberAsPrice = (number: number, currency: string = 'NGN') =>
     })
   
     return formatted.replace('.00', '').replace('NGN', '₦')
-  }
+}
+
+
   

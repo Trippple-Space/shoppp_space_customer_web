@@ -3,7 +3,8 @@
 import { Toaster } from 'sonner';
 import '../styles/styles.scss';
 import { Inter, Roboto, Lora } from 'next/font/google'
-import { useAuth } from '@/modules/lib/utility/hooks/use-auth';
+import { useAuthGuard } from '@/modules/lib/utility/hooks/use-auth-guard';
+import GlobalArena from '@/modules/lib/components/global-arena/GlobalArena';
 
 const inter = Inter({
   subsets: ['latin'],
@@ -39,11 +40,11 @@ export default function RootLayout({
   children: React.ReactNode
 }) {
 
-  useAuth()
+  useAuthGuard()
 
   return (
     <html lang="en" className={`${inter.variable} ${roboto.variable} ${lora.variable} bg-white`}>
-      <Toaster position='top-center' />
+      <GlobalArena />
       <body className='font-inter @lo:weight-300 @lo:text-dimgrey'>{children}</body>
     </html>
   )

@@ -53,7 +53,7 @@ const Modal: React.FC<ModalProps> = ({ isOpen, onClose, children, extraModalClas
     borderRadius: '8px',
     overflowY: 'scroll',
     // maxHeight: '90vh',
-    height: '100%',
+    // height: '100%',
     position: 'absolute',
     ...extraClass
   };

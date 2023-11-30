@@ -6,6 +6,7 @@ import Modal from '@/modules/lib/components/modal/modal';
 import OrderSummary from '@/modules/lib/components/order-summary/OrderSummary';
 import { useCart } from '@/modules/lib/utility/hooks/use-cart';
 import { cx, formatNumberAsPrice } from '@/modules/lib/utility/utility';
+import { useRouter } from 'next/navigation';
 import React, { useState } from 'react';
 import { AiOutlineClose } from 'react-icons/ai'
 import { BiArrowBack } from 'react-icons/bi';
@@ -15,6 +16,8 @@ import { IoClose } from 'react-icons/io5';
 import { MdOutlineLocalShipping } from 'react-icons/md'
 import { PiNyTimesLogoThin } from 'react-icons/pi';
 import { TbShoppingBag } from 'react-icons/tb';
+import { paths } from '../../utility/paths';
+import { getCartItemVariantPropertiesAsJsx } from './minicart.helper';
 
 interface ModalProps {
 
@@ -24,6 +27,7 @@ const MiniCart: React.FC<ModalProps> = () => {
   const [open, setOpen] = useState(false);
 
   const { cart, removeFromCart } = useCart()
+  const router = useRouter()
 
 
   return (
@@ -117,13 +121,11 @@ const MiniCart: React.FC<ModalProps> = () => {
                           </div>
 
                           <div className="w-full h-20">
-                            <div className={cx("w-100 h-8 radius-3 flex gap-3", {
+                            <div className={cx("w-100 h-8 radius-3 flex gap-3 text-13", {
                               // 'bg-white': (i % 2),
                               // 'bg-grey-100': !(i % 2),
                             })}>
-                              {Object.entries(cartItem.variant.properties).reduce((cumm, [key, value]: any, i) => (
-                                  <>{cumm}<span className='flex gap-3 text-12'>{!!i && <span>|</span>}<span className='capitalize'>{key}:</span><span>{value}</span></span></>
-                              ), <></>)}
+                                {getCartItemVariantPropertiesAsJsx(cartItem)}
                             </div>
                           </div>
 
@@ -165,7 +167,7 @@ const MiniCart: React.FC<ModalProps> = () => {
                   />
               </div>
               <div className='w-fit mx-auto mt-30'>
-                  <button className='bg-green border-none radius-3 text-white py-14 px-30 weight-600 text-16 pointer' onClick={() => {}}>Proceed to checkout | {formatNumberAsPrice(cart.total)}</button>
+                  <button className='bg-green border-none radius-3 text-white py-14 px-30 weight-600 text-16 pointer' onClick={() => router.push(paths.checkout)}>Proceed to checkout | {formatNumberAsPrice(cart.total)}</button>
               </div>
 
               <div className='text-13 mt-5 w-fit mx-auto'>
