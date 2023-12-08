@@ -3,6 +3,7 @@
 import Icon from "@/modules/lib/components/icon/Icon";
 import Image from "@/modules/lib/components/image/Image";
 import Input from "@/modules/lib/components/input/Input";
+import InputAlert from "@/modules/lib/components/input/input-alert/InputAlert";
 import { useSignUpView } from "@/modules/lib/utility/hooks/use-signup";
 import { paths } from "@/modules/lib/utility/paths";
 import { cx } from "@/modules/lib/utility/utility";
@@ -57,22 +58,10 @@ const SignUp = () => {
                     formHandler.touched.fullname && formHandler.errors.fullname,
                 })}
                 after={
-                  <div
-                    className={cx(
-                      "notice text-12 h-0 flex gap-5 j-content-end w-full mt-12 text-danger",
-                      {
-                        "hidden!": !(
-                          formHandler.touched.fullname &&
-                          formHandler.errors.fullname
-                        ),
-                      }
-                    )}
-                  >
-                    <Icon name="alert-circle" className="w-14 a-self-center" />
-                    <span className="a-self-center">
-                      {formHandler.errors.fullname}
-                    </span>
-                  </div>
+                  <InputAlert 
+                    hasError={!!(formHandler.touched.fullname && formHandler.errors.fullname)} 
+                    errorMessage={formHandler.errors.fullname}
+                  />
                 }
               />
 

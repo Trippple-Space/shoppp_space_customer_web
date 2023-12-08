@@ -2,11 +2,12 @@ import { AxiosResponse } from 'axios';
 import endpoints from '../endpoints';
 import http from '../http';
 import { Address } from '../types/address.interface';
+import { buildEndpoint } from '../utility';
 
 class AddressService {
   fetchAddresses(userId: number): Promise<Address[]> {
     return new Promise((resolve, reject) => {
-      http.get(`${endpoints.USER_ADDRESSES}/${userId}`)
+      http.get(buildEndpoint(endpoints.USER_ADDRESSES, {userId}))
         .then((response: AxiosResponse) => {
           resolve(response.data);
         })
@@ -17,9 +18,9 @@ class AddressService {
     });
   }
 
-  getAddressById(addressId: number): Promise<Address> {
+  getAddressById(userId: number, addressId: number): Promise<Address> {
     return new Promise((resolve, reject) => {
-      http.get(`${endpoints.USER_ADDRESSES}/${addressId}`)
+      http.get(buildEndpoint(endpoints.USER_ADDRESSES, {userId}, `/${addressId}`))
         .then((response: AxiosResponse) => {
           resolve(response.data);
         })
@@ -32,7 +33,7 @@ class AddressService {
 
   createAddress(userId: number, newAddress: Address): Promise<Address> {
     return new Promise((resolve, reject) => {
-      http.post(`${endpoints.USER_ADDRESSES}/${userId}`, newAddress)
+      http.post(buildEndpoint(endpoints.USER_ADDRESSES, {userId}), newAddress)
         .then((response) => {
           resolve(response.data);
         })
@@ -43,9 +44,9 @@ class AddressService {
     });
   }
 
-  updateAddress(addressId: number, updatedData: Partial<Address>): Promise<Address[]> {
+  updateAddress(userId: number, addressId: number, updatedData: Partial<Address>): Promise<Address> {
     return new Promise((resolve, reject) => {
-      http.patch(`${endpoints.USER_ADDRESSES}/${addressId}`, updatedData)
+      http.patch(buildEndpoint(endpoints.USER_ADDRESSES, {userId}, `/${addressId}`), updatedData)
         .then((response) => {
           resolve(response.data);
         })
@@ -56,11 +57,11 @@ class AddressService {
     });
   }
 
-  deleteAddress(addressId: number): Promise<void> {
+  deleteAddress(userId: number, addressId: number): Promise<void> {
     return new Promise((resolve, reject) => {
-      http.delete(`${endpoints.USER_ADDRESSES}/${addressId}`)
-        .then(() => {
-          resolve();
+      http.delete(buildEndpoint(endpoints.USER_ADDRESSES, {userId}, `/${addressId}`))
+        .then((response) => {
+          resolve(response.data);
         })
         .catch((error) => {
           console.error('Error deleting address:', error);

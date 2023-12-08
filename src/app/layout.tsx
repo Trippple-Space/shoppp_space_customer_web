@@ -43,9 +43,9 @@ export default function RootLayout({
   useAuthGuard()
 
   return (
-    <html lang="en" className={`${inter.variable} ${roboto.variable} ${lora.variable} bg-white`}>
+    <html lang="en" className={`${inter.variable} ${roboto.variable} ${lora.variable} bg-white font-inter`}>
       <GlobalArena />
-      <body className='font-inter @lo:weight-300 @lo:text-dimgrey'>{children}</body>
+      <body className=' @lo:weight-300 @lo:text-dimgrey'>{children}</body>
     </html>
   )
 }

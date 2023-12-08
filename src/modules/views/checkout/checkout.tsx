@@ -53,7 +53,7 @@ const CheckoutPage = () => {
                 <h1 className='text-16 m:text-16 text-light-grey m:text-black weight-500 m:weight-600'>SHIPPING ADDRESS</h1>
               </div>
               <div className='w-35p m:w-25p'>
-                <button className='border-none radius-5 text-12 m:text-14 weight-400 bg-whitesmoke px-16 py-10 bg-yellow pointer' onClick={openAddressModal}>CHANGE</button>
+                <button className='border-none radius-5 text-12 m:text-14 weight-400 px-16 py-10 bg-yellow pointer' onClick={openAddressModal}>CHANGE</button>
               </div>
             </div>
 

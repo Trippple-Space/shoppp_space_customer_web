@@ -26,4 +26,13 @@ export const formatNumberAsPrice = (number: number, currency: string = 'NGN') =>
 }
 
 
-  
+export const buildEndpoint = (endpoint: string, routeParams: { [key: string]: string | number } = {}, extendBy: string = '') => {
+    let builtEndpoint = endpoint;
+    for (const param in routeParams) {
+      builtEndpoint = builtEndpoint.replace(
+        `:${param}`,
+        `${routeParams[param]}`
+      );
+    }
+    return builtEndpoint + extendBy;
+}

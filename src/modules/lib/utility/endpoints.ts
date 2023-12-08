@@ -5,7 +5,7 @@ const endpoints = {
     PRODUCT_CATEGORIES: 'product/categories',
     PRODUCTS: 'products',
     CART: '/cart',
-    USER_ADDRESSES: '/:userId/addresses'
+    USER_ADDRESSES: 'users/:userId/addresses',
 }
 
 export default endpoints;

@@ -1,7 +1,39 @@
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import useAddressStore from '../store/address.store';
 import useUserStore from '../store/user.store';
 import { Address } from '../types/address.interface';
+import { FormikConfig, useFormik } from 'formik';
+import * as Yup from 'yup';
+
+export const AddressValidationSchema = Yup.object().shape({
+  label: Yup.string().trim().required('Label is required'),
+  address: Yup.string().trim().required('Address is required'),
+  city: Yup.string().trim().required('City is required'),
+  state: Yup.string().trim().required('State is required'),
+  contactNo: Yup.string()
+    .matches(/^\+?\d{7,}$/, 'Invalid phone number')
+    .required('Contact number is required'),
+  isDefault: Yup.boolean(),
+});
+
+
+const formikAddressConfig = (initialValues: Address | undefined, handleSubmit: Function): FormikConfig<any> => ({
+  initialValues: initialValues || {
+    label: '',
+    address: '',
+    city: '',
+    state: '',
+    contactNo: '',
+    notes: '',
+    isDefault: false
+  },
+  onSubmit: (values) => {
+    handleSubmit(values)
+  },
+  validationSchema: AddressValidationSchema,
+  enableReinitialize: true
+})
+
 
 const useAddress = () => {
   const {
@@ -12,10 +44,38 @@ const useAddress = () => {
     closeAddressModal,
     fetchAddresses,
     selectAddress,
+    setAddressToUpdateId,
+    addressToUpdateId,
     updateAddress,
     createAddress,
+    deleteAddress
   } = useAddressStore();
+
   const {isAuthenticated, user} = useUserStore()
+  const addressToUpdate = addresses?.find(address => address.id === addressToUpdateId);
+  console.log({addressToUpdate})
+
+  const handleCreateAddress = (newAddress: Address) => {
+    if (user?.id) {
+        createAddress(user.id, newAddress)
+    }
+  }
+
+  const handleUpdateAddress = (addressId: number, newAddress: Address) => {
+    if (user?.id && selectedAddressId !== null) {
+        console.log({addressId, newAddress})
+        updateAddress(user.id, addressId, newAddress)
+    }
+  }
+
+  const handleDeleteAddress = (addressId: number) => {
+    if (user?.id) {
+        deleteAddress(user.id, addressId)
+    }
+  }
+
+  const formHandler = useFormik<Address>(formikAddressConfig(undefined, handleCreateAddress))
+  const updateFormHandler = useFormik<Address>(formikAddressConfig(addressToUpdate, (address: Address) => {console.log({ll: address});handleUpdateAddress(address.id, address)}))
 
   useEffect(() => {
     if (
@@ -26,19 +86,8 @@ const useAddress = () => {
     ) {
         fetchAddresses(user.id);
     }
-  }, []);
+  }, [isAddressModalOpen, isAuthenticated]);
 
-  const handleCreateAddress = (newAddress: Address) => {
-    if (user?.id) {
-        createAddress(user.id, newAddress)
-    }
-  }
-
-  const handleUpdateAddress = (newAddress: Address) => {
-    if (user?.id) {
-        updateAddress(user.id, newAddress)
-    }
-  }
 
   return {
     isAddressModalOpen,
@@ -49,6 +98,11 @@ const useAddress = () => {
     selectAddress,
     handleUpdateAddress,
     handleCreateAddress,
+    handleDeleteAddress,
+    formHandler,
+    addressToUpdateId,
+    setAddressToUpdateId,
+    updateFormHandler
   };
 };
 

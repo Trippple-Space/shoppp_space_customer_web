@@ -1,24 +1,26 @@
-import React, { FC, ReactNode } from 'react'
+import React, { FC, HTMLInputTypeAttribute, ReactNode } from 'react'
 import cx from 'classnames'
 
 interface IInput {
   label?: string | ReactNode
   id?: string
   name: string
-  type?: 'text' | 'password' | 'email' | 'textarea' | 'date' | 'checkbox'
+  type?: HTMLInputTypeAttribute
   placeholder?: string
   className?: string
   after?: any
   inputClass?: any
   rows?: number
   value?: any
+  checked?: boolean
   handleChange?: Function,
   handleBlur?: Function
 }
-const Input: FC<IInput> = ({ label, id, name, type, placeholder, className, after, rows, inputClass: inputClassNames, value, handleChange, handleBlur }) => {
+const Input: FC<IInput> = ({ label, id, name, type, placeholder, className, after, rows, inputClass: inputClassNames, value, checked, handleChange, handleBlur }) => {
   const Component = type === 'textarea' ? 'textarea' : 'input';
   const controlProps = {
     [value ? 'value' : '']: value,
+    [checked !== undefined ? 'checked' : '']: checked,
     [handleChange ? 'onChange' : '']: handleChange,
     [handleBlur ? 'onBlur': '']: handleBlur
   }
@@ -28,11 +30,11 @@ const Input: FC<IInput> = ({ label, id, name, type, placeholder, className, afte
       <Component
         type={type}
         className={`
-            block font-inter w-full bg-white
-            border-solid border-1 @lo:border-grey-300 py-17 px-20  
-            radius-8 text-16 weight-400 outline-none
-            placeholder:text-grey-700 text-grey-700
-            focus:border-green placeholder:l:text-14 ${inputClassNames}`
+            block font-inter @lo:w-full @lo:bg-white
+            @lo:border-solid @lo:border-1 @lo:border-grey-300 @lo:py-17 @lo:px-20  
+            @lo:radius-8 @lo:text-16 @lo:weight-400 @lo:outline-none
+            @lo:placeholder:text-grey-400 @lo:text-grey-700
+            @lo:focus:border-green @lo:placeholder:l:text-14 ${inputClassNames}`
         }
         placeholder={placeholder}
         rows={rows}

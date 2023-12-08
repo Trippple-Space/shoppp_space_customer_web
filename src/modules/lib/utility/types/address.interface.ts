@@ -7,6 +7,7 @@ export interface Address {
     state: string;
     contactNo: string;
     isDefault: boolean;
+    notes: string;
     meta: JSON;
     dateCreated: Date;
     lastUpdated: Date;

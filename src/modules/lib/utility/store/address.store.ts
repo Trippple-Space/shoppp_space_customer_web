@@ -7,18 +7,23 @@ interface AddressStore {
   isAddressModalOpen: boolean;
   addresses: Address[] | null;
   selectedAddressId: Address['id'] | null;
+  addressToUpdateId: Address['id'] | null;
+  setAddressToUpdateId: (id: Address['id'] | null) => void,
   openAddressModal: () => void;
   closeAddressModal: () => void;
   fetchAddresses: (userId: User['id']) => Promise<void>;
   selectAddress: (id: number) => void;
-  updateAddress: (id: number, updatedData: Partial<Address>) => Promise<void>;
+  updateAddress: (userId: User['id'], addressId: number, updatedData: Partial<Address>) => Promise<void>;
   createAddress: (userId: number, newAddress: Address) => Promise<void>;
+  deleteAddress: (userId: number, addressId: Address['id']) => Promise<void>;
 }
 
 const useAddressStore = create<AddressStore>((set) => ({
   isAddressModalOpen: false,
   addresses: null,
   selectedAddressId: null,
+  addressToUpdateId: null,
+  setAddressToUpdateId: (id: number | null) => set({ addressToUpdateId: id }),
 
   openAddressModal: () => set({ isAddressModalOpen: true }),
   closeAddressModal: () => set({ isAddressModalOpen: false }),
@@ -33,12 +38,15 @@ const useAddressStore = create<AddressStore>((set) => ({
     }
   },
 
-  selectAddress: (id: number) => set({ selectedAddressId: id }),
+  selectAddress: (id: number) => { 
+    console.log({id})
+    set({ selectedAddressId: id })
+  },
 
-  updateAddress: async (id: number, updatedData: Partial<Address>) => {
+  updateAddress: async (userId: number, addressId: number, updatedData: Partial<Address>) => {
     try {
-      const updatedAddresses = await addressService.updateAddress(id, updatedData);
-      set({ addresses: updatedAddresses})
+      const updatedAddress = await addressService.updateAddress(userId, addressId, updatedData);
+      set((state) => ({ addresses: state.addresses?.map(address => address.id === addressId ? updatedAddress : address), addressToUpdateId: null}))
     } catch (error) {
       console.error('Error updating address:', error);
     }
@@ -52,6 +60,15 @@ const useAddressStore = create<AddressStore>((set) => ({
       console.error('Error creating address:', error);
     }
   },
+
+  deleteAddress: async (userId: number, addressId: number) => {
+    try {
+      await addressService.deleteAddress(userId, addressId);
+      set((state) => ({ addresses: (state.addresses || [])?.filter(address => address.id !== addressId) }));
+    } catch (error) {
+      console.error('Error creating address:', error);
+    }
+  }
 }));
 
 export default useAddressStore;
