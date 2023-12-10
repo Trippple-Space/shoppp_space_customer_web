@@ -5,8 +5,10 @@ import AddressCard from './address-card/AddressCard';
 import AddressForm from './address-form/AddressForm';
 import useAddressStore from '@/modules/lib/utility/store/address.store';
 import useAddress from '../../utility/hooks/use-address';
+import { BiPlus } from 'react-icons/bi';
+import { FaPlus } from 'react-icons/fa';
 
-interface ModalProps {}
+interface ModalProps { }
 
 const AddressModal: React.FC<ModalProps> = () => {
   const { isAddressModalOpen, closeAddressModal, addresses } = useAddress();
@@ -31,17 +33,29 @@ const AddressModal: React.FC<ModalProps> = () => {
             </div>
             <div className='p-20 bg-faint-green grid grid-2-cols-1fr gap-20'>
               {/* <div className=''>{modalDisplayOptions[action]}</div> */}
-              
+
               {
                 addresses?.map(address => (
                   <AddressCard address={address} />
                 ))
               }
 
+              {
+                showAddressForm ?
+                  <div className='bg-white w-full h-fit p-15'>
+                    <AddressForm closeAddressForm={() => setShowAddressForm(false)} />
+                  </div>
+                  :
+                  <button onClick={() => setShowAddressForm(true)} className="btn bg-green hover:bg-green-500 w-full h-200 radius-5 text-white flex pointer">
+                    <div className="flex flex-col h-fit w-fit a-self-center mx-auto">
+                      <FaPlus className='text-50 ' />
+                      <div className='mt-10'>Add new address</div>
+                    </div>
+                  </button>
+              }
 
-            </div>              
-            {!showAddressForm && <button onClick={() => setShowAddressForm(true)} className="btn btn-sm border-none text-black bg-yellow">Add new address</button>}
-              {showAddressForm && <AddressForm />}
+
+            </div>
           </div>
         </div>
       </Modal>

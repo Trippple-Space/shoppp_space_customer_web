@@ -7,7 +7,6 @@ import Input from '../../input/Input'
 import { cx } from '@/modules/lib/utility/utility'
 import InputAlert from '../../input/input-alert/InputAlert'
 import AddressField from '../address-form/address-field/AddressField'
-import AddressEditField from './address-edit-field/AddressEditField'
 import Checkbox from '../../checkbox/Checkbox'
 import { CiTrash } from 'react-icons/ci'
 import { BiCheck, BiCloset, BiTrash } from 'react-icons/bi'
@@ -38,13 +37,16 @@ const AddressCard: FC<AddressCardProps> = ({ address }) => {
         <Checkbox name='address' className={cx('a-self-start mt-4', {
           'border-black bg-yellow': isAddressSelected
         })} checked={isAddressSelected} />
-        <div className="flex-col">
+
+        <div className="flex-col w-full">
           <form className='line-height-25 text-13 text-dimgrey opacity-70' onSubmit={updateFormHandler.handleSubmit}>
             <h2 className='text-16 l:text-16 weight-500 text-black mb-5 '>
               {
                 editMode ?
-                  <AddressEditField
+                  <AddressField
                     field='label'
+                    label='Label'
+                    handler={updateFormHandler}
                   /> : address.label
               }
             </h2>
@@ -52,19 +54,25 @@ const AddressCard: FC<AddressCardProps> = ({ address }) => {
 
               {
                 editMode ?
-                  <AddressEditField
+                  <AddressField
                     field='address'
+                    label='Address'
+                    handler={updateFormHandler}
                   /> :
                   address.address
               }</p>
             <p>
               {
                 editMode ? <div className="flex gap-5">
-                  <AddressEditField
+                  <AddressField
                     field='city'
+                    label='City'
+                    handler={updateFormHandler}
                   />
-                  <AddressEditField
+                  <AddressField
                     field='state'
+                    label='State'
+                    handler={updateFormHandler}
                   />
                 </div>
                   : <span>
@@ -76,8 +84,10 @@ const AddressCard: FC<AddressCardProps> = ({ address }) => {
             </p>
             <p>
               {
-                editMode ? <AddressEditField
+                editMode ? <AddressField
                   field='contactNo'
+                  label='Contact Number'
+                  handler={updateFormHandler}
                 /> :
                   address.contactNo
               }
@@ -85,13 +95,15 @@ const AddressCard: FC<AddressCardProps> = ({ address }) => {
             </p>
             {
               (address.notes || editMode) &&
-              <p className="font-italic text-12">Notes: {' '}
+              <p className="font-italic text-12">
                 {
-                  editMode ? <AddressEditField
+                  editMode ? <AddressField
                     field='notes'
                     type='textarea'
+                    label='Notes'
+                    handler={updateFormHandler}
                   /> :
-                    address.notes
+                  <span>Notes: {' '} {address.notes}</span>
                 }
               </p>
             }
@@ -106,8 +118,8 @@ const AddressCard: FC<AddressCardProps> = ({ address }) => {
           </form>
           {!editMode && <div className='flex flex-col a-items-end a-self-end'>
             <div className='flex gap-8 l:gap-10 w-fit space-between a-self-end mt-10'>
-              <button className='w-50p border-danger border-1 l:border-none bg-none text-danger text-15 p-5 bg-grey-100 radius-5 weight-400' onClick={() => handleDeleteAddress(address.id)} > <BiTrash className='w-20' /> </button>
-              <button className='w-50p l:w-100p border-none bg-yellow text-white text-15 p-5 radius-7 weight-400 pointer' onClick={(e) => {e.stopPropagation(); setAddressToUpdateId(address.id)}} ><PiPencil className='w-20 text-black' /></button>
+              <button className='w-50p border-danger border-1 @lo:border-none bg-none text-danger text-15 p-5 round bg-grey-100 hover:bg-red-100 hover:border-red pointer radius-5 weight-400' onClick={() => handleDeleteAddress(address.id)} > <BiTrash className='w-20' /> </button>
+              <button className='w-50p l:w-100p border-none round bg-faint-cream hover:bg-light-yellow text-white text-15 p-5 radius-7 weight-400 pointer' onClick={(e) => {e.stopPropagation(); setAddressToUpdateId(address.id)}} ><PiPencil className='w-20 text-black' /></button>
             </div>
           </div>
           }          

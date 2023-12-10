@@ -4,23 +4,25 @@ import Input from "../../../input/Input";
 import { cx } from "@/modules/lib/utility/utility";
 import InputAlert from "../../../input/input-alert/InputAlert";
 import { Address } from "@/modules/lib/utility/types/address.interface";
+import { FormikHandlers } from "formik";
 
 interface AddressFieldProps {
     field: keyof Address,
-    label?: string,
+    label?: React.ReactNode,
     type?: HTMLInputTypeAttribute,
     placeholder?: string,
     className?: string,
     inputClassName?: string,
-    isEdit?: boolean
+    isEdit?: boolean,
+    handler: any
 }
 
-const AddressField: FC<AddressFieldProps> = ({field, label, type, className, inputClassName, isEdit = false, placeholder }) => {
-    const {formHandler: createFormHandler, updateFormHandler} = useAddress();
-  const formHandler = isEdit ? updateFormHandler : createFormHandler
+const AddressField: FC<AddressFieldProps> = ({field, label, type, className, inputClassName, placeholder, handler: formHandler }) => {
+  const input_className=`${field == 'label' ? 'text-16 weight-400 text-black opacity-100' : 'line-height-25 text-13 text-black opacity-70'}`
+
   return (
     <Input
-      label={label}
+      label={<span className='uppercase text-12 '>{label}</span>}
       id={field}
       name={field}
       type={type || 'text'}
@@ -28,10 +30,10 @@ const AddressField: FC<AddressFieldProps> = ({field, label, type, className, inp
       handleChange={formHandler.handleChange}
       handleBlur={formHandler.handleBlur}
       value={formHandler.values[field]}
-      className={cx("l:my-10", className)}
-      inputClass={cx({
+      className={cx("my-5 w-full", className)}
+      inputClass={cx('py-5! radius-3! mt--10 px-10 w-full border-grey-400', {
         "border-red": formHandler.touched[field] && formHandler.errors[field],
-      }, inputClassName)}
+      }, inputClassName, input_className)}
       after={
         <InputAlert
           hasError={!!(formHandler.touched[field] && formHandler.errors[field])}

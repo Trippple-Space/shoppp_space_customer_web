@@ -1,178 +1,72 @@
-import React from 'react'
-import Input from '../../input/Input'
+import React, { FC } from 'react'
 import useAddress from '@/modules/lib/utility/hooks/use-address';
-import { cx } from '@/modules/lib/utility/utility';
-import InputAlert from '../../input/input-alert/InputAlert';
+import { BiCheck } from 'react-icons/bi';
+import { IoCloseCircle } from 'react-icons/io5';
+import AddressField from './address-field/AddressField';
 
-const AddressForm = () => {
-    const { formHandler } = useAddress();
+interface AddressFormProps {
+  closeAddressForm: () => void
+}
+const AddressForm: FC<AddressFormProps> = ({ closeAddressForm }) => {
+  const { formHandler } = useAddress();
+
   return (
-    <div className='text-16 weight-400 text-grey-700'>
-    <form className="form px-20 l:px-35" onSubmit={formHandler.handleSubmit}>
-      <div className='grid l:grid-2-cols-auto gap-20 py-20 w-100p'>
-        <Input
-          label='Address label'
-          id='label'
-          name='label'
-          type='text'
-          placeholder='My home address'
-          handleChange={formHandler.handleChange}
-          handleBlur={formHandler.handleBlur}
-          value={formHandler.values.label}
-          className='l:my-10'
-          inputClass={cx({
-            "border-red":
-              formHandler.touched.label && formHandler.errors.label,
-          })}
-          after={
-            <InputAlert 
-              hasError={!!(formHandler.touched.label && formHandler.errors.label)} 
-              errorMessage={formHandler.errors.label?.toString()}
+
+    <div className="flex-col w-full">
+      <h2 className='text-16 weight-600 mb-10'>NEW ADDRESS</h2>
+      <form className='line-height-25 text-13 text-dimgrey opacity-70' onSubmit={formHandler.handleSubmit}>
+        <h3 className='text-16 l:text-16 weight-500 text-black mb-5 '>
+          <AddressField
+            field='label'
+            label='Label'
+            handler={formHandler}
+          />
+        </h3>
+        <p>
+          <AddressField
+            field='address'
+            label='Address'
+            handler={formHandler}
+          />
+        </p>
+        <p>
+          <div className="flex gap-5">
+            <AddressField
+              field='city'
+              label='City'
+              handler={formHandler}
             />
-          }
-        />
-
-        <Input
-          label='Contact number'
-          id='contactNo'
-          name='contactNo'
-          type='text'
-          placeholder='080****'
-          handleChange={formHandler.handleChange}
-          handleBlur={formHandler.handleBlur}
-          value={formHandler.values.contactNo}
-          className='l:my-10'
-          inputClass={cx({
-            "border-red":
-              formHandler.touched.contactNo && formHandler.errors.contactNo,
-          })}
-          after={
-            <InputAlert 
-              hasError={!!(formHandler.touched.contactNo && formHandler.errors.contactNo)} 
-              errorMessage={formHandler.errors.contactNo?.toString()}
+            <AddressField
+              field='state'
+              label='State'
+              handler={formHandler}
             />
-          }
-        />
+          </div>
+        </p>
+        <p>
+          <AddressField
+            field='contactNo'
+            label='Contact Number'
+            handler={formHandler}
+          />
 
-        <Input
-          label='Address'
-          id='address'
-          name='address'
-          type='text'
-          placeholder='Enter your house address'
-          handleChange={formHandler.handleChange}
-          handleBlur={formHandler.handleBlur}
-          value={formHandler.values.label}
-          className='l:my-10'
-          inputClass={cx({
-            "border-red":
-              formHandler.touched.address && formHandler.errors.address,
-          })}
-          after={
-            <InputAlert 
-              hasError={!!(formHandler.touched.address && formHandler.errors.address)} 
-              errorMessage={formHandler.errors.address?.toString()}
-            />
-          }
-        />
-
-        <Input
-          label='LGA'
-          id='city'
-          name='city'
-          type='text'
-          placeholder='Select from dropdowns'
-          handleChange={formHandler.handleChange}
-          handleBlur={formHandler.handleBlur}
-          value={formHandler.values.label}
-          className='l:my-10'
-          inputClass={cx({
-            "border-red":
-              formHandler.touched.city && formHandler.errors.city,
-          })}
-          after={
-            <InputAlert 
-              hasError={!!(formHandler.touched.city && formHandler.errors.city)} 
-              errorMessage={formHandler.errors.city?.toString()}
-            />
-          }
-        />
-
-        <Input
-          label='State'
-          id='state'
-          name='state'
-          type='text'
-          placeholder='Select from dropdowns'
-          handleChange={formHandler.handleChange}
-          handleBlur={formHandler.handleBlur}
-          value={formHandler.values.label}
-          className='l:my-10'
-          inputClass={cx({
-            "border-red":
-              formHandler.touched.state && formHandler.errors.state,
-          })}
-          after={
-            <InputAlert 
-              hasError={!!(formHandler.touched.state && formHandler.errors.state)} 
-              errorMessage={formHandler.errors.state?.toString()}
-            />
-          }
-        />
-
-        <Input
-          label='Description & Notes'
-          id='notes'
-          name='notes'
-          type='textarea'
-          placeholder=''
-          handleChange={formHandler.handleChange}
-          handleBlur={formHandler.handleBlur}
-          value={formHandler.values.notes}
-          className='l:my-10'
-          inputClass={cx({
-            "border-red":
-              formHandler.touched.notes && formHandler.errors.notes,
-          })}
-          after={
-            <InputAlert 
-              hasError={!!(formHandler.touched.notes && formHandler.errors.notes)} 
-              errorMessage={formHandler.errors.notes?.toString()}
-            />
-          }
-        />
-
-        <Input
-          label='Set as default address'
-          id='isDefault'
-          name='isDefault'
-          type='checkbox'
-          placeholder=''
-          handleChange={formHandler.handleChange}
-          handleBlur={formHandler.handleBlur}
-          checked={formHandler.values.isDefault}
-          className='l:my-10' 
-        />
-      </div>
-
-      <div className="w-100p gap-30 pt-10 flex j-content-end text-16">
-          <button
-            type="button"
-            onClick={formHandler.handleReset}
-            className="bg-none border-none text-dimgrey pointer"
-          >
-            Discard
-          </button>
-          <button
-            type="submit"
-            className="bg-green border-none radius-5 text-white px-50 l:px-20 py-10 pointer"
-            // disabled={!formHandler.isValid || formHandler.isSubmitting}
-          >
-            {'Save'}
-          </button>
+        </p>
+        <p className="font-italic text-12">
+          <AddressField
+            field='notes'
+            type='textarea'
+            label='Notes'
+            handler={formHandler}
+          />
+        </p>
+        <div className='flex flex-col a-items-end a-self-end'>
+          <div className='flex gap-8 l:gap-10 w-fit space-between a-self-end mt-10'>
+            <button type='reset' className='btn w-50p a-items-center j-items-center l:w-100p border-none bg-grey-100 text-grey-500 hover:bg-red-100 hover:text-red text-13 pr-8 pl-2 py-5 radius-20 weight-400 pointer flex' onClick={() => closeAddressForm()} > <IoCloseCircle className='w-20  mr-3 p-0 ' /> <span>Cancel</span> </button>
+            <button type='submit' className='btn w-50p l:w-100p border-none bg-green text-white text-13 pr-8 pl-2 py-5 radius-20 weight-400 pointer flex hover:bg-darkgreen' ><BiCheck className='w-20 text-white' /> <span className=''>Save</span> </button>
+          </div>
         </div>
-    </form>
-  </div>
+      </form>
+    </div>
   )
 }
 

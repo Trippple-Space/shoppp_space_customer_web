@@ -21,7 +21,7 @@ const Checkbox: FC<CheckboxProps> = ({ name = '', checked: checkedFromProp, clas
   const checked = checkedFromProp === undefined ? isChecked : checkedFromProp
 
   return (
-    <label className={cx('border @lo:border-grey-500 @lo:w-20 @lo:h-20 radius-50p @lo:bg-whitesmoke @lo:pointer', className)}>
+    <label className={cx('border @lo:border-grey-500 @lo:w-24 @lo:h-20 round @lo:bg-whitesmoke @lo:pointer', className)}>
       {checked && <BiCheck className='text-black' />}
       <Input type='checkbox' className='opacity-0 pointer-none' name={name} checked={checked} handleChange={handleChange} />
     </label>
