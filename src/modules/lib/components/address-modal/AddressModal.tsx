@@ -32,8 +32,6 @@ const AddressModal: React.FC<ModalProps> = () => {
               </div>
             </div>
             <div className='p-20 bg-faint-green grid grid-2-cols-1fr gap-20'>
-              {/* <div className=''>{modalDisplayOptions[action]}</div> */}
-
               {
                 addresses?.map(address => (
                   <AddressCard address={address} />
@@ -53,8 +51,6 @@ const AddressModal: React.FC<ModalProps> = () => {
                     </div>
                   </button>
               }
-
-
             </div>
           </div>
         </div>

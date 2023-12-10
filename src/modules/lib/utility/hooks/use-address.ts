@@ -88,11 +88,14 @@ const useAddress = () => {
     }
   }, [isAddressModalOpen, isAuthenticated]);
 
+  const selectedAddress = addresses?.find(address => address.id === selectedAddressId)
+
 
   return {
     isAddressModalOpen,
     addresses,
     selectedAddressId,
+    selectedAddress,
     openAddressModal,
     closeAddressModal,
     selectAddress,

@@ -31,7 +31,7 @@ const AddressField: FC<AddressFieldProps> = ({field, label, type, className, inp
       handleBlur={formHandler.handleBlur}
       value={formHandler.values[field]}
       className={cx("my-5 w-full", className)}
-      inputClass={cx('py-5! radius-3! mt--10 px-10 w-full border-grey-400', {
+      inputClass={cx('radius-3! py-7 px-10 w-full border-grey-400', {
         "border-red": formHandler.touched[field] && formHandler.errors[field],
       }, inputClassName, input_className)}
       after={

@@ -10,122 +10,127 @@ import { useCart } from '@/modules/lib/utility/hooks/use-cart';
 import { getCartItemVariantPropertiesAsJsx } from '@/modules/lib/components/minicart/minicart.helper';
 import { useSignOut } from '@/modules/lib/utility/hooks/use-sign-out';
 import useAddressStore from '@/modules/lib/utility/store/address.store';
+import useAddress from '@/modules/lib/utility/hooks/use-address';
 
 const CheckoutPage = () => {
   const [unitCounter, setUnitCounter] = useState<number>(1);
   const router = useRouter()
-  const {user} = useUserStore()
+  const { user } = useUserStore()
   const { cart, removeFromCart } = useCart()
   const signOut = useSignOut()
-  const { openAddressModal } = useAddressStore()
+  const { openAddressModal, selectedAddress } = useAddress()
 
   return (
     <>
       <HomepageNavBar />
       <div className="app-width pt-42">
         <h1 className='text-18 m:py-30 weight-300 uppercase text-dimgrey mt-50'>Checkout</h1>
-        
-        <div className='l:flex pt-10 gap-10 m:gap-60'>
-        <div className='w-100p l:w-50p m:pr-30 gap-10 m:gap-30'>
 
-          <div className='grid items-center gap-20 radius-10 px-10 py-20 m:px-20 py-20 border border-faint-grey g|grid-template-columns:auto|_|1fr|_|auto'>
-            <div>
-              <Icon name='profilea' className='w-25 m:w-55 h-100p' />
-            </div>
-            <div className=''>
-              <h1 className='text-14 m:text-16 text-light-grey'>You're logged in as:</h1>
-              <div className='text-14 m:text-16 pt-5 m:pt-10 gap-5 m:gap-20 weight-400 text-black'>
-                <p>{user?.profile.firstName} {user?.profile?.lastName}</p>
-                <p className='text-12 text-grey-600'>{user?.email}</p>
-              </div>
-            </div>
-            <div className=''>
-            <button className='border-none radius-5 text-12 m:text-14 weight-400 bg-yellow px-16 py-10' onClick={signOut}>CHANGE</button>
-            </div>
-          </div>
-          
-          <div className='radius-10 px-20 py-20 my-40 border border-faint-grey'>
-            <div className='grid g|grid-template-columns:auto|_|1fr|_|auto gap-10 m:gap-20 items-center'>
+        <div className='l:flex pt-10 gap-10 m:gap-60'>
+          <div className='w-100p l:w-50p m:pr-30 gap-10 m:gap-30'>
+
+            <div className='grid items-center gap-20 radius-10 px-10 py-20 m:px-20 py-20 border border-faint-grey g|grid-template-columns:auto|_|1fr|_|auto'>
               <div>
-                <Icon name='car' className='w-25 m:w-55 h-100p' />
+                <Icon name='profilea' className='w-25 m:w-55 h-100p' />
               </div>
               <div className=''>
-                <h1 className='text-16 m:text-16 text-light-grey m:text-black weight-500 m:weight-600'>SHIPPING ADDRESS</h1>
+                <h1 className='text-14 m:text-16 text-light-grey'>You're logged in as:</h1>
+                <div className='text-14 m:text-16 pt-5 m:pt-10 gap-5 m:gap-20 weight-400 text-black'>
+                  <p>{user?.profile.firstName} {user?.profile?.lastName}</p>
+                  <p className='text-12 text-grey-600'>{user?.email}</p>
+                </div>
               </div>
-              <div className='w-35p m:w-25p'>
-                <button className='border-none radius-5 text-12 m:text-14 weight-400 px-16 py-10 bg-yellow pointer' onClick={openAddressModal}>CHANGE</button>
+              <div className=''>
+                <button className='border-none radius-5 text-12 m:text-14 weight-400 bg-yellow px-16 py-10' onClick={signOut}>CHANGE</button>
               </div>
             </div>
 
-            <div className='text-14 line-height-30 ml-70 pt-10 weight-400 mt-10 text-dimgrey border-t border-grey-300'>
-                  <h1 className='text-16 weight-400 text-black'>Abdulhammed Ibraheem</h1>
-                  <div className='opacity-70'>
-                    <p>7, Anthony village road, Anthony Lagos.</p>
-                    <p>Lagos Nigeria</p>
-                    <p>Anthony Lagos</p>
-                    <p>08080803332</p>
+            <div className='radius-10 px-20 py-20 my-40 border border-faint-grey'>
+              <div className='grid g|grid-template-columns:auto|_|1fr|_|auto gap-10 m:gap-20 items-center'>
+                <div>
+                  <Icon name='car' className='w-25 m:w-55 h-100p' />
+                </div>
+                <div className=''>
+                  <h1 className='text-16 m:text-16 text-light-grey m:text-black weight-500 m:weight-600'>SHIPPING ADDRESS</h1>
+                </div>
+                <div className='w-35p m:w-25p'>
+                 {selectedAddress && <button className='border-none radius-5 text-12 m:text-14 weight-400 px-16 py-10 bg-yellow pointer' onClick={openAddressModal}>CHANGE</button>}
+                </div>
+              </div>
+              {
+                selectedAddress ?
+                  <div className='text-14 line-height-30 ml-70 pt-10 weight-400 text-dimgrey border-t border-grey-300 mt-10 '>
+                    <h1 className='text-16 weight-400 text-black'> {selectedAddress?.label} </h1>
+                    <div className='opacity-70'>
+                      <p>{selectedAddress?.address}</p>
+                      <p>{selectedAddress?.city} {selectedAddress?.state}</p>
+                      <p>{selectedAddress?.contactNo}</p>
+                    </div>
+                  </div> :
+                  <div>
+                    <button className=' radius-5 text-12 m:text-14 weight-400 px-16 py-10 bg-yellow hover:bg-yellow-600 border border-black pointer w-fit mx-auto block mt-20' onClick={openAddressModal}>Select an address</button>
                   </div>
-                </div>
+              }
+            </div>
+
+
+            <button className='border-none bg-green hidden m:flex text-white text-14 px-16 py-16 radius-8 pointer' onClick={() => router.push('/checkout/success')}>
+              Proceed to payment
+            </button>
+
           </div>
-          
 
-          <button className='border-none bg-green hidden m:flex text-white text-14 px-16 py-16 radius-8 pointer' onClick={() => router.push('/checkout/success')}>
-            Proceed to payment
-          </button>
-          
-        </div>
+          <div className='l:w-50p'>
+            <div className='px-10 m:px-40 radius-20 px-15 py-25 border border-faint-grey shadow-0-2-20-0- l:gap-30'>
+              <h2 className='text-18 py-20 weight-500 border-b border-lighter-grey'>Your Order</h2>
+              <div className='px-10'>
+                {cart.cartItems.map((cartItem: any, idx: number) => (
+                  <div key={idx} className='l:flex space-between items-center border-b border-lighter-grey py-20'>
+                    <div className='flex w-100p gap-10 l:gap-30 items-center'>
+                      <div className='w-80 h-80'>
+                        <Image
+                          className='w-100p h-100p radius-5 l:radius-10'
+                          src='order-product.png'
+                          alt='product'
+                          type='image'
+                        />
+                      </div>
+                      <div className='line-height-27 w-70p'>
+                        <h1 className='text-16 weight-400 text-black'> {cartItem.variant.product.name} </h1>
+                        <div className='text-15'> {getCartItemVariantPropertiesAsJsx(cartItem)} </div>
 
-        <div className='l:w-50p'>
-          <div className='px-10 m:px-40 radius-20 px-15 py-25 border border-faint-grey shadow-0-2-20-0- l:gap-30'>
-            <h2 className='text-18 py-20 weight-500 border-b border-lighter-grey'>Your Order</h2>
-            <div className='px-10'>
-            {cart.cartItems.map((cartItem: any, idx: number) => (
-              <div key={idx} className='l:flex space-between items-center border-b border-lighter-grey py-20'>
-              <div className='flex w-100p gap-10 l:gap-30 items-center'>
-                <div className='w-80 h-80'>
-                  <Image
-                    className='w-100p h-100p radius-5 l:radius-10'
-                    src='order-product.png'
-                    alt='product'
-                    type='image'
-                  />
-                </div>
-                <div className='line-height-27 w-70p'>
-                  <h1 className='text-16 weight-400 text-black'> {cartItem.variant.product.name} </h1>
-                  <div className='text-15'> {getCartItemVariantPropertiesAsJsx(cartItem)} </div>
-
-                  <div className='flex gap-20 w-100p py-10 text-18'>
-                    <div className='grid m:flex w-100p  items-center'>
-                      <div className='flex items-center gap-10 border-r border-grey-300 pr-20 mr-10'>
-                        <p className='text-16'>Unit:</p>
-                        <div className='flex items-center '>
-                          <Icon name='decr' className='w-20 h-20 pointer' onClick={() => setUnitCounter(prev => prev <= 1 ? 1 : prev- 1)} />
-                          <div className="px-16 text-16">{unitCounter}</div>
-                          <Icon name='incr' className='w-20 h-20 pointer' onClick={() => setUnitCounter(prev => prev + 1)} />
+                        <div className='flex gap-20 w-100p py-10 text-18'>
+                          <div className='grid m:flex w-100p  items-center'>
+                            <div className='flex items-center gap-10 border-r border-grey-300 pr-20 mr-10'>
+                              <p className='text-16'>Unit:</p>
+                              <div className='flex items-center '>
+                                <Icon name='decr' className='w-20 h-20 pointer' onClick={() => setUnitCounter(prev => prev <= 1 ? 1 : prev - 1)} />
+                                <div className="px-16 text-16">{unitCounter}</div>
+                                <Icon name='incr' className='w-20 h-20 pointer' onClick={() => setUnitCounter(prev => prev + 1)} />
+                              </div>
+                            </div>
+                          </div>
                         </div>
+
+                        <h3 className='text-14 m:text-14 weight-500'>$15.25</h3>
+
+
                       </div>
                     </div>
+
                   </div>
-
-                  <h3 className='text-14 m:text-14 weight-500'>$15.25</h3>
-
-
+                ))}
+                <div className='flex items-center space-between py-20'>
+                  <h2 className='weight-500 text-18 text-dimgrey'>Delivery</h2>
+                  <h2 className='weight-500 text-18'>$35.00 <span className='text-16 text-light-grey'>(Express)</span></h2>
                 </div>
               </div>
-
-          </div>
-            ))}
-            <div className='flex items-center space-between py-20'>
-              <h2 className='weight-500 text-18 text-dimgrey'>Delivery</h2>
-              <h2 className='weight-500 text-18'>$35.00 <span className='text-16 text-light-grey'>(Express)</span></h2>
             </div>
           </div>
-          </div>
-        </div>
 
-        <button className='border-none bg-green mt-20 mx-auto m:hidden text-white text-16 px-35 py-20 radius-10 pointer' onClick={() => router.push('/checkout/success')}>
-          Proceed to payment
-        </button>
+          <button className='border-none bg-green mt-20 mx-auto m:hidden text-white text-16 px-35 py-20 radius-10 pointer' onClick={() => router.push('/checkout/success')}>
+            Proceed to payment
+          </button>
         </div>
       </div>
 
