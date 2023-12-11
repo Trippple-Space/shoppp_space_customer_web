@@ -74,7 +74,7 @@ const CheckoutPage = () => {
             </div>
 
 
-            <button className='border-none bg-green hidden m:flex text-white text-14 px-16 py-16 radius-8 pointer' onClick={() => router.push('/checkout/success')}>
+            <button className='border-none bg-green hidden m:flex text-white text-14 px-16 py-16 radius-8 pointer'>
               Proceed to payment
             </button>
 
