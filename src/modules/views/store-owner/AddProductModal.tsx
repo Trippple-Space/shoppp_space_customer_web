@@ -38,7 +38,7 @@ const AddProductModal = ({ products, setSelectedImage, className }: any) => {
                 <div className="text-12 text-grey-700 px-14">Recently added products</div>
 
                 {
-                    <div className={`grid grid-${products?.length}-cols-1fr gap-10 overflow-auto scroll-x no-scrollbar px-14`}>
+                    <div className={`grid grid-5-cols-1fr flex gap-10 overflow-auto scroll-x no-scrollbar px-14`}>
                         {
                             products.map((product: any) => (
                                 <div className="border-solid border-1 border-yellow w-200 radius-8 flex space-between p-8 mt-15 mb-25">
@@ -63,7 +63,7 @@ const AddProductModal = ({ products, setSelectedImage, className }: any) => {
                     </div>
                 }
 
-                <div className="border-b border-grey-300 flex gap-20 j-content-center px-14">
+                <div className="border-b border-grey-300 flex gap-20 j-content-center px-14 text-14">
                     <div className="py-8 px-4">Ankara</div>
                     <div className="py-8 px-4">Aso oke</div>
                     <div className="py-8 px-4">Linen</div>

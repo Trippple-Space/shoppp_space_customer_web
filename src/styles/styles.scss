@@ -237,3 +237,34 @@
   left: 50%;
   transform: translate(-50%, -50%);
 }
+
+.photo-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(450px, 1fr));
+  gap: 16px;
+  padding: 16px;
+
+  .photo-item {
+    position: relative;
+    overflow: hidden;
+    border-radius: 8px;
+    height: fit-content;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+
+    img {
+      width: 100%;
+      height: auto;
+      display: block;
+      border-radius: 8px;
+    }
+  }
+  
+  .caption {
+    text-align: center;
+    padding: 8px;
+    background-color: #fff;
+  }
+}
+
+
+

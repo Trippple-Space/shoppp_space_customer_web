@@ -51,13 +51,13 @@ const OrderStatus = () => {
                              </div>
                              <div className='line-height-25'>
                                  <p className='text-10 weight-500 text-black'>24 Karat Gold Plated...</p>
-                                 <h1 className='text-18 text-black weight-500'>NGN 26,000</h1>
+                                 <h1 className='text-16 text-black weight-500'>NGN 26,000</h1>
                              </div>
                          </div>
                      </td>
-                     <td className="text-16 text-dimgrey weight-500 opacity-70 border-b border-2 border-lighter-grey ">1/Bundle</td>
-                     <td className="text-16 text-dimgrey weight-500 opacity-70 border-b border-2 border-lighter-grey">none</td>
-                     <td className="text-16 text-dimgrey weight-500 opacity-70 border-b border-2 border-lighter-grey">21, May 2023</td>
+                     <td className="text-14 text-dimgrey weight-500 opacity-70 border-b border-2 border-lighter-grey ">1/Bundle</td>
+                     <td className="text-14 text-dimgrey weight-500 opacity-70 border-b border-2 border-lighter-grey">none</td>
+                     <td className="text-14 text-dimgrey weight-500 opacity-70 border-b border-2 border-lighter-grey">21, May 2023</td>
                  </tr>
                 ))}
                
