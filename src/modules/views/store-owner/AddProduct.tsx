@@ -12,13 +12,13 @@ const AddProduct = () => {
             <div><CiCircleQuestion /></div>
         </div>
         
-        <div className="mt-22 text-16 text-grey-700 w-70p">
+        <div className="mt-22 text-14 l:text-16 text-grey-700 l:w-70p">
             The most important feature in store editing section is the product adding part.
             when adding product here, do not ignore to fill all the required fields completely 
             and follow the products adding rules.
         </div>
-        <div className="grid g|grid-template-columns:40%|_|60% gap-102">
-            <div className="">
+        <div className="grid l:g|grid-template-columns:auto|_|55% gap-20 l:gap-102 mt-30 l:mt-0!">
+            <div className="grid l:block gap-20">
                 <Input
                     label={<>Product Name <span className="text-red">*</span></>}
                     id='phoneNUmber'
@@ -26,7 +26,7 @@ const AddProduct = () => {
                     type='text'
                     placeholder='Enter product name'
                     className='l:my-40'
-                    after="Maximum of 5 characters"
+                    after={<div className="text-12">Maximum of 5 characters</div>}
                 />
 
                 <Input
@@ -50,9 +50,9 @@ const AddProduct = () => {
 
             <div className="mt-42">
                 <div className="text-16 text-grey-700">Product images <span className="text-red">*</span></div>
-                <div className="grid g|grid-template-columns:auto|_|auto|_|auto mt-20">
-                    <div className="text-center w-fit border-dashed border-1 border-grey-500 radius-8 w-250 relative">
-                        <div className="take-to-center">
+                <div className="grid l:g|grid-template-columns:auto|_|auto|_|auto gap-20 l:gap-0 mt-20">
+                    <div className="text-center l:w-fit border-dashed border-1 border-grey-500 radius-8 w-100p l:w-250 relative pb-20 l:pb-0!">
+                        <div className="l:take-to-center">
                             <Image
                                 className='w-100 h-100 l:w-100 l:h-100 p-20'
                                 src='upload.svg'
@@ -66,8 +66,8 @@ const AddProduct = () => {
                         </div>
                     </div>
 
-                    <div className="text-center w-fit border-dashed border-1 border-grey-500 radius-8 w-250 relative">
-                        <div className="take-to-center">
+                    <div className="text-center l:w-fit border-dashed border-1 border-grey-500 radius-8 w-100p l:w-250 relative pb-20 l:pb-0!">
+                        <div className="l:take-to-center">
                             <Image
                                 className='w-100 h-100 l:w-100 l:h-100 p-20'
                                 src='upload.svg'
@@ -114,14 +114,14 @@ const AddProduct = () => {
                     </div>
                 </div>
 
-                <div className="text-grey-700 mt-40 text-16">
+                <div className="text-grey-700 mt-40 text-14 l:text-16">
                     You need to add at least four images. Pay attention to the quality of the pictures you add, 
                     comply with the background color standards. pictures must be in certain dimensions.
                 </div>
 
-                <div className="grid">
-                    <div className="flex items-center space-between">
-                        <div className="">
+                <div className="l:grid">
+                    <div className="l:flex mt-40 l:mt-0 items-center space-between">
+                        <div className="mb-10 l:mb-0">
                             <div className="weight-600">Featured In</div>
                             <div className="weight-400 text-grey-700 text-14">add popular event where this product is featured in.</div>
                         </div>
@@ -133,8 +133,8 @@ const AddProduct = () => {
                             className='l:my-40'
                         />
                     </div>
-                    <div className="flex items-center space-between">
-                        <div className="">
+                    <div className="l:flex mt-40 l:mt-0 items-center space-between">
+                        <div className="mb-10 l:mb-0">
                             <div className="weight-600">Made In</div>
                             <div className="weight-400 text-grey-700 text-14">add where this product is made from</div>
                         </div>
@@ -148,7 +148,7 @@ const AddProduct = () => {
                     </div>
                 </div>
 
-                <div className="text-right mt-40 mb-40 flex gap-20 j-content-end">
+                <div className="l:text-right mt-40 mb-40 flex gap-20 l:j-content-end">
                     <button className='bg-transparent text-grey-900 py-10 l:py-15 px-20 w-fit radius-5 border-none
                                     hover:pointer text-13 l:text-14 font-inter 
                                     g|transition:0.5s disabled:bg-grey'>

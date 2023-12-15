@@ -8,7 +8,7 @@ import { IoMdClose } from 'react-icons/io'
 const AddProductModal = ({ products, setSelectedImage, className }: any) => {
   return (
     <div className="z-index-2 z-2">
-        <div className={`bg-white absolute ${className} l-10 w-450 radius-8 g|box-shadow:0px|_|2px|_|10px|_|0px|_|#00000014; overflow-hidden h-600  overflow-auto`}>
+        <div className={`bg-white absolute ${className} l-10 w-100p l:w-450 radius-8 g|box-shadow:0px|_|2px|_|10px|_|0px|_|#00000014; overflow-hidden h-600  overflow-auto`}>
             <header className='flex space-between border-b border-1 border-grey-300 items-center p-14'>
                 <div className='text-12'>Add explore image (0/5)</div>
                 <div className='pointer' onClick={() => setSelectedImage((prev: any) => !prev)}><IoMdClose /></div>
@@ -63,18 +63,17 @@ const AddProductModal = ({ products, setSelectedImage, className }: any) => {
                     </div>
                 }
 
-                <div className="border-b border-grey-300 flex gap-20 j-content-center px-14 text-14">
+                <div className="border-b border-grey-300 flex gap-20 j-content-center px-14 text-14 ">
                     <div className="py-8 px-4">Ankara</div>
                     <div className="py-8 px-4">Aso oke</div>
                     <div className="py-8 px-4">Linen</div>
                     <div className="py-8 px-4">Senator</div>
                     <div className="py-8 px-4">Lace</div>
-                    <div className="py-8 px-4">Guinea</div>
                 </div>
 
                 <div className="mb-40">
                     {
-                        <div className={`grid grid-3-cols-1fr gap-10 overflow-auto scroll-x no-scrollbar px-14 j-content-center mt-30`}>
+                        <div className={`grid grid-2-cols-auto l:grid-3-cols-1fr gap-20 l:gap-10 overflow-auto scroll-x no-scrollbar px-14 j-content-center mt-30`}>
                             {
                                 products.map((product: any) => (
                                     <div className="border-solid border-1 border-yellow w-130 radius-8 p-8">
@@ -103,7 +102,7 @@ const AddProductModal = ({ products, setSelectedImage, className }: any) => {
                 </div>
 
                 <div className="flex p-20 items-center j-content-center g|box-shadow:0px|_|2px|_|10px|_|0px|_|#00000014; ">
-                    <div className="border-r border-grey-300 pr-40 mr-40">
+                    <div className="text-12 l:text-16 border-r border-grey-300 pr-40 mr-40">
                         <div className="">Image name: <span className="text-grey-600"> Ankara53.png</span></div>
                         <div className="mt-4">Image size: <span className="text-grey-600"> 2MB</span></div>
                         <div className="mt-4">Linked product:<span className="text-grey-600"> Ankara Grade II</span></div>

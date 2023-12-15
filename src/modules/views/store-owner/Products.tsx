@@ -56,7 +56,7 @@ const Products = () => {
     ]
   return (
     <>
-        <div className="border-b border-t border-whitesmoke mt-68 mb-50">
+        <div className=" border-whitesmoke l:mt-68 l:mb-50">
             <div className="">
                 <FabricsCategoryNav />
             </div>                
@@ -66,8 +66,8 @@ const Products = () => {
             {/* <div>
                 {activeTab.component}
             </div> */}
-            <section className="mt-55  border-b border-grey-300 pb-40">
-                <div className='flex space-between items-center'>
+            <section className="l:mt-55  border-b border-grey-300 pb-40">
+                <div className='l:flex space-between items-center'>
                     <div className="text-20 weight-700 uppercase flex gap-20 items-center pointer" onClick={() => setToggleSectionProducts((prev: any) => !prev)}> 
                         <div className="" >New Arrival (24)</div>
                         <div className="text-grey-900 text-30 mt-4">
@@ -92,7 +92,7 @@ const Products = () => {
                 </div>
                 {
                     toggleSectionProducts &&
-                    <div className="grid grid-4-cols-1fr gap-30 w-full">
+                    <div className="l:grid l:grid-4-cols-1fr l:gap-30 w-full">
                         {
                             [...products, ...products].map(product => (
                                 <UpdateProductTile product={product} /> 
@@ -103,7 +103,7 @@ const Products = () => {
             </section>
 
             <section className="mt-40">
-                <div className='flex space-between items-center'>
+                <div className='l:flex space-between items-center'>
                     <div className="text-20 weight-700 uppercase flex gap-20 items-center pointer"> 
                         <div className="">New Arrival (24)</div>
                         <div className="text-grey-900 text-30 mt-4">
@@ -126,7 +126,7 @@ const Products = () => {
                         }
                     </div>
                 </div>
-                <div className="grid grid-4-cols-1fr gap-30 w-full">
+                <div className="l:grid l:grid-4-cols-1fr l:gap-30 w-full">
                     {
                         [...products, ...products, ...products, ...products].map(product => (
                             <UpdateProductTile product={product} /> 
