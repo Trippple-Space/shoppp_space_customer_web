@@ -37,8 +37,6 @@ const Homepage = () => {
                     ) : (
                         <AsoebiWears />
                     )}
-
-
                 </div>
                 <Footer />
             </div>

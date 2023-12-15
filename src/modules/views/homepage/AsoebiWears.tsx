@@ -33,10 +33,10 @@ const AsoebiWears = () => {
         <>
             <section className="mt-20 w-100p l:mt-50">
                 <div className="flex space-between text-20 weight-300 uppercase">
-                    <h3 className="text-20 weight-300 uppercase">Top selling fabrics</h3>
-                    <p className="text-16 sentence-case">View All</p>
+                    <h3 className="text-14 l:text-20 weight-300 uppercase">Top selling fabrics</h3>
+                    <p className="text-14 l:text-16 sentence-case">View All</p>
                 </div>
-                <div className="grid grid-5-cols-1fr gap-10 l:gap-30 w-full">
+                <div className="l:grid grid-5-cols-1fr gap-10 l:gap-30 w-full">
                     {
                         products.map(product => (
                             <ProductTile product={product} />

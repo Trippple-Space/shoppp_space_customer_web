@@ -18,8 +18,8 @@ const HomepageModal: React.FC<ModalProps> = ({modalOpen, handleCloseModal, data}
 
   return (
     <div>
-      <Modal isOpen={modalOpen} onClose={() => ''} extraClass={{ top: '210px', left: '115px', overflow: 'hidden' }}>
-        <div className='w-330 l:w-700'>
+      <Modal isOpen={modalOpen} onClose={() => ''} extraClass={{  }} className="w-100p l:t-150 l:l-100 overflow-hidden">
+        <div className='w-100p l:w-700 '>
             <div className='w-100p grid grid-2-cols-auto gap-30 py-5 l:py-25 px-35'>
               <div className='flex gap-10 l:gap-20 items-center'>
                 <div className='w-45 h-45 flex items-center border border-green radius-5'>
@@ -28,7 +28,6 @@ const HomepageModal: React.FC<ModalProps> = ({modalOpen, handleCloseModal, data}
                 <div className='line-height-20 weight-400 text-dimgrey'>
                   <p className='text-16 '>Asoebi Home</p>
                   <p className='text-12 opacity-70'>Explore all Asoebi Fabrics</p>
-
                 </div>
               </div>
               {[0, 0, 0, 0, 0].map(() => (

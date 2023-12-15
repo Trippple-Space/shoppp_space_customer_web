@@ -32,7 +32,7 @@ const MiniCart: React.FC<ModalProps> = () => {
 
   return (
     <div>
-      <Modal isOpen={open} onClose={() => setOpen(false)} extraClass={{ top: '0px', bottom: '0px', height: '100vh', right: '0px', overflow: 'hidden' }}>
+      <Modal isOpen={open} onClose={() => setOpen(false)} extraClass={{ top: '0px', bottom: '0px', height: '100vh', right: '0px', overflow: 'hidden' }} className="l:t-0 l:b-0 l:h-100vh l:r-0 overflow-hidden">
         <div className='relative h-full'>
           <div className='py-15 bg-grey-200 pointer' onClick={() => setOpen(false)}>
             <div className="flex px-15 gap-10 j-content-center ">
@@ -179,11 +179,11 @@ const MiniCart: React.FC<ModalProps> = () => {
       </Modal>
 
       <div className="w-100p b-70 r-10">
-        <div onClick={() => setOpen(true)} className="mx-auto pointer flex w-140 h-50  bg-green p-4 text-white radius-10">
+        <div onClick={() => setOpen(true)} className="mx-auto pointer flex w-100 l:w-140 h-40 l:h-50 bg-green p-4 text-white radius-10">
           <div className="w-40p radius-10 radius-t-r-0 radius-b-r-0 flex items-center j-content-center bg-darkgreen text-white">
-            <TbShoppingBag className="w-25 h-25" />
+            <TbShoppingBag className="w-18 h-18 l:w-25 l:h-25" />
           </div>
-          <div className="w-60p text-18 flex text-center items-center j-content-center">
+          <div className="w-60p text-12 l:text-18 flex text-center items-center j-content-center">
             {cart.cartItems.length} items
           </div>
         </div>

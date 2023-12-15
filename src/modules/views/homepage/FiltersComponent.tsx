@@ -49,8 +49,8 @@ const Filters = () => {
             <div className='w-100p border- border-lightgrey py-15 g|box-shadow:0px|_|2px|_|4px|_|0px|_|#0000000D;'>
                 <div className="app-width flex space-between items-center">
                     {!isRoute && (
-                        <div className='w-50p h-45 l:w-fit l:h-fit weight-400 text-16 l:px-16 l:py-10 text-grey border border-lightgrey radius-10'>
-                            <div className='flex h-100p items-center w-fit gap-10 mx-auto pointer relative' onClick={handleOpenModal}>
+                        <div className='h-45 l:h-fit weight-400 text-14 w-fit l:text-16 l:px-16 l:py-10 text-grey border border-lightgrey radius-10'>
+                            <div className='flex h-100p items-center gap-10 mx-auto pointer w-fit relative' onClick={handleOpenModal}>
                                 <HomepageModal modalOpen={open} handleCloseModal={handleCloseModal} data='data' />
                                 <span>All categories</span>
                                 <span><RxCaretDown className='w-20 h-20' /></span>

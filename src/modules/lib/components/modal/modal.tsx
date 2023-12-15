@@ -6,9 +6,10 @@ interface ModalProps {
   children: React.ReactNode;
   extraModalClass?: React.CSSProperties
   extraClass?: any
+  className?: any
 }
 
-const Modal: React.FC<ModalProps> = ({ isOpen, onClose, children, extraModalClass, extraClass }) => {
+const Modal: React.FC<ModalProps> = ({ isOpen, onClose, children, extraModalClass, extraClass, className }) => {
   const modalRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -60,7 +61,7 @@ const Modal: React.FC<ModalProps> = ({ isOpen, onClose, children, extraModalClas
 
   return (
     <div style={modalStyle}>
-      <div ref={modalRef} style={modalContentStyle}>
+      <div ref={modalRef} className={className} style={modalContentStyle}>
         <div className='h-full'>{children}</div>
       </div>
     </div>
