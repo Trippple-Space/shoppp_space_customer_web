@@ -11,6 +11,8 @@ import { getCartItemVariantPropertiesAsJsx } from '@/modules/lib/components/mini
 import { useSignOut } from '@/modules/lib/utility/hooks/use-sign-out';
 import useAddressStore from '@/modules/lib/utility/store/address.store';
 import useAddress from '@/modules/lib/utility/hooks/use-address';
+import usePayment from '@/modules/lib/utility/hooks/use-payment';
+import PuffLoader from '@/modules/lib/components/puff-loader/PuffLoader';
 
 const CheckoutPage = () => {
   const [unitCounter, setUnitCounter] = useState<number>(1);
@@ -19,6 +21,8 @@ const CheckoutPage = () => {
   const { cart, removeFromCart } = useCart()
   const signOut = useSignOut()
   const { openAddressModal, selectedAddress } = useAddress()
+  const {loading: isPaymentLoading, payWithPaystack} = usePayment()
+  const canProceedToPayment = !(!isPaymentLoading && selectedAddress && user)
 
   return (
     <>
@@ -68,14 +72,14 @@ const CheckoutPage = () => {
                     </div>
                   </div> :
                   <div>
-                    <button className=' radius-5 text-12 m:text-14 weight-400 px-16 py-10 bg-yellow hover:bg-yellow-600 border border-black pointer w-fit mx-auto block mt-20' onClick={openAddressModal}>Select an address</button>
+                    <button className=' radius-5 text-12 m:text-14 weight-400 px-16 py-10 bg-yellow hover:bg-yellow-600 border-none pointer w-fit mx-auto block mt-20' onClick={openAddressModal}>Select an address</button>
                   </div>
               }
             </div>
 
-
-            <button className='border-none bg-green hidden m:flex text-white text-14 px-16 py-16 radius-8 pointer'>
-              Proceed to payment
+            <button onClick={() => payWithPaystack({addressId: selectedAddress?.id})} disabled={canProceedToPayment} className='border-none bg-green disabled:bg-green-300 hidden m:flex text-white text-14 px-16 py-16 radius-8 pointer'>
+              <span className=''>Proceed to payment</span>              
+              <PuffLoader size={15} loading={isPaymentLoading} className='ml-10'  />
             </button>
 
           </div>

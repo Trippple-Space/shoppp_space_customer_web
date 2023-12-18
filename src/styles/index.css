@@ -153,7 +153,7 @@
 .j-items-center { justify-items: center; } 
 .bg-grey-100 { background-color: #F7F6F5; } 
 .text-grey-500 { color: #A39F9C; } 
-.hover\:bg-red-100:hover { background-color: #DE383809; } 
+.hover\:bg-red-100:hover { background-color: rgba(221, 75, 75, 0.2); } 
 .hover\:text-red:hover { color: #DE3838; } 
 .pr-8 { padding-right: 8px; } 
 .pl-2 { padding-left: 2px; } 
@@ -301,6 +301,7 @@
 .w-33p { width: 33%; } 
 @layer base {.radius-3 { border-radius: 3px; } } 
 .h-400 { height: 400px; } 
+.bg-yellow-50 { background-color: rgba(250, 206, 51, 0.1); } 
 .mt-15 { margin-top: 15px; } 
 .mb-15 { margin-bottom: 15px; } 
 .py-14 { padding-top: 14px; padding-bottom: 14px; } 
@@ -383,8 +384,8 @@
 .my-40 { margin-top: 40px; margin-bottom: 40px; } 
 .w-35p { width: 35%; } 
 .ml-70 { margin-left: 70px; } 
-.bg-light-yellow { background-color: #FFE68BB2; } 
-.hover\:bg-red:hover { background-color: #DE3838; } 
+.hover\:bg-yellow-600:hover { background-color:  #E0B12E; } 
+.disabled\:bg-green-300:disabled { background-color: rgba(11, 147, 120, 0.6); } 
 .w-70p { width: 70%; } 
 @layer base {    .border-r {       border-right: 1px solid;     }  } 
 .pr-20 { padding-right: 20px; } 
@@ -496,7 +497,7 @@
 .py-30 { padding-top: 30px; padding-bottom: 30px; } 
 .text-right {    text-align: right;  } 
 .mt-53 { margin-top: 53px; } 
-.text-green-700 { color:  #047857; } 
+.text-green-700 { color:  #056A54; } 
 
 @layer base {
 .btn-primary { background-color: #0B9378; background-color: #0C7661;  } 
@@ -508,7 +509,7 @@
 @media only screen and (min-width: 992px) { .btn-lg { padding-top: 18px; padding-bottom: 18px;  } } 
 }
  
-.text-green-800 { color:  #065F46; } 
+.text-green-800 { color:  #025541; } 
 .\@one\:flex {    display: flex;  } 
 .mt-12 { margin-top: 12px; } 
 .mb-43 { margin-bottom: 43px; } 
@@ -562,6 +563,7 @@
 .mt-55 { margin-top: 55px; } 
 .t-20 { top: 20px; } 
 .grid-4-cols-1fr { grid-template-columns: repeat(4, 1fr); } 
+.bg-light-yellow { background-color: #FFE68BB2; } 
 .bg-grey-400 { background-color: #C8C6C3; } 
 .mt-80 { margin-top: 80px; } 
 .pb-100 { padding-bottom: 100px; } 
@@ -643,7 +645,6 @@
 .pl-50 { padding-left: 50px; } 
 .gap-12 { gap: 12px; } 
 .mt-25 { margin-top: 25px; } 
-.hover\:bg-yellow:hover { background-color: #FACE33; } 
 
 
 
