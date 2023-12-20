@@ -2,9 +2,11 @@ import { useState } from 'react';
 import { paymentService } from '../services/payment.service';
 import { Address } from '../types/address.interface';
 import { toast } from 'sonner';
+import { deliveryOptions } from '../constants';
 
 interface PaymentDetails {
     addressId?: Address['id'],
+    deliveryOption: keyof typeof deliveryOptions
 }
 
 const usePayment = () => {
@@ -12,7 +14,6 @@ const usePayment = () => {
   const [error, setError] = useState<string | null>(null);
 
   const payWithPaystack = async (paymentDetails: PaymentDetails): Promise<void> => {
-      console.log('Here')
     if (!paymentDetails.addressId) {
       toast.error('Please select an address to proceed')
       return;

@@ -10,8 +10,9 @@ import VendorSignUpStep4 from './VendorSignUpStep4';
 import Link from 'next/link';
 import { paths } from '@/modules/lib/utility/paths';
 
+type StepNumber = 1 | 2 | 3 | 4;
 export interface IVendorSignUpStep {
-  setCurrentStep: (step: number) => void;
+  setCurrentStep: (step: StepNumber) => void;
 }
 
 const vendorSignUpSteps: { [x: number]: React.ComponentType<IVendorSignUpStep> } = {
@@ -21,19 +22,22 @@ const vendorSignUpSteps: { [x: number]: React.ComponentType<IVendorSignUpStep> }
   4: VendorSignUpStep4,
 };
 
+
+const percentageProgress: (currentStep: StepNumber ) => number = (currentStep) => {
+  const progressMap: Record<StepNumber, number> = {
+    1: 30,
+    2: 50,
+    3: 70,
+    4: 100,
+  };
+
+  return progressMap[currentStep] || 0;
+};
+
 const VendorSignUp = () => {
-  const [currentStep, setCurrentStep] = useState<number>(1);
+  const [currentStep, setCurrentStep] = useState<StepNumber>(1);
 
   const VendorSignUpStep = vendorSignUpSteps[currentStep];
-
-  const vendorSignUpPercProgress: any = (currentStep: number) => {
-    switch (currentStep) {
-      case 1: return 30
-      case 2: return 50
-      case 3: return 70
-      case 4: return 100
-    }
-  }
 
   return (
     <div className='h-full'>
@@ -50,7 +54,7 @@ const VendorSignUp = () => {
               alt='logo'
               type='logo'
             />
-            <ProgressBar percentage={vendorSignUpPercProgress(currentStep)} />
+            <ProgressBar percentage={percentageProgress(currentStep)} />
           </div>
           {VendorSignUpStep && <VendorSignUpStep setCurrentStep={setCurrentStep} />}
         </div>
