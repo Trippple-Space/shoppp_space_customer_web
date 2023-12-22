@@ -6,6 +6,8 @@ type CartStore = {
     cart: Cart;
     fetchCart: () => void;
     addToCart: (variantId: number, quantity: number) => void;
+    incrementCartItem: (variantId: number, quantity: number) => void;
+    decrementCartItem: (variantId: number, quantity: number) => void;
     removeFromCart: (variantId: number) => void;
 };
 
@@ -31,6 +33,18 @@ export const useCartStore = create<CartStore>((set) => ({
         set({ cart: updatedCart });
 
         console.log(`Adding ${quantity} of product ${variantId} to the cart`);
+    },
+    incrementCartItem: async (variantId: number, quantity: number = 1) => {
+
+        const updatedCart = await cartService.addToCart(variantId, quantity);
+        set({ cart: updatedCart });
+
+        console.log(`Adding ${quantity} of product ${variantId} to the cart`);
+    },
+    decrementCartItem: async (variantId: number, quantity: number = 1) => {
+        const updatedCart = await cartService.addToCart(variantId, -quantity);
+        set({ cart: updatedCart });
+        console.log(`Removing ${quantity} of product ${variantId} from the cart`);
     },
     removeFromCart: async (cartItemId: number) => {
         const updatedCart = await cartService.removeFromCart(cartItemId);

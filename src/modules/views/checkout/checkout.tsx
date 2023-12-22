@@ -32,6 +32,7 @@ const CheckoutPage = () => {
   const { loading: isPaymentLoading, payWithPaystack } = usePayment()
   const canProceedToPayment = !(!isPaymentLoading && selectedAddress && user)
   const [isCartCollapsed, setIsCartCollapsed] = useState(true)
+  const selectedDeliveryOptionDetails = deliveryOptions[selectedDeliveryOption]
 
   return (
     <>
@@ -165,8 +166,8 @@ const CheckoutPage = () => {
                   <OrderSummary
                     subTotal={cart.subTotal}
                     extraSavings={cart.total - cart.subTotal}
-                    shippingFee={1500}
-                    total={cart.total}
+                    shippingFee={selectedDeliveryOptionDetails.price}
+                    total={cart.total + selectedDeliveryOptionDetails.price}
                   />
                 </div>
 

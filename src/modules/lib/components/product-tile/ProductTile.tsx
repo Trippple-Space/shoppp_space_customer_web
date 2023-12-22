@@ -7,6 +7,7 @@ import classNames from "classnames";
 import { Product } from "../../utility/types/product.interface";
 import { formatNumberAsPrice } from "../../utility/utility";
 import { useCart } from "../../utility/hooks/use-cart";
+import QuantitySelector from "../quantity-selector/QuantitySelector";
 
 interface IProductTile {
   product: Product
@@ -15,8 +16,8 @@ const ProductTile: FC<IProductTile> = ({ product }) => {
   const [selectedImage, setSelectedImage] = useState(product?.variants?.[0]?.media?.[0]?.url)
   const [selectedVariant, setSelectedVariant] = useState(product?.variants?.[0])
   const [isFavourite, setIsFavorite] = useState(false)
-  const { addToCart } = useCart()
-
+  const { addToCart, cart, increment, decrement } = useCart()
+  const selectedVariantItemInCart = cart.cartItems.find(item => item.variant.id === selectedVariant.id)
 
   return (
     <div className="mt-30 l:mt-20">
@@ -36,12 +37,16 @@ const ProductTile: FC<IProductTile> = ({ product }) => {
           id="add to cart button"
           className="absolute b-0 r-0 mr-10 mb-10 l:mr-15 l:mb-15"
         >
-          <button onClick={() => addToCart(selectedVariant.id, selectedVariant.minPurchaseQuantity || 1)} className="bg-yellow pointer font-roboto text-grey-900 border-hidden px-10 py-10 radius-5 l:px-22 l:py-12 l:radius-10  ">
-            <span className="hidden l:block weight-500">Add to cart</span>
-            <div className="l:hidden">
-              <AiOutlinePlus size={24} />
-            </div>
-          </button>
+          {
+            selectedVariantItemInCart ?
+              <QuantitySelector decrement={() => decrement(selectedVariantItemInCart)} increment={() => increment(selectedVariantItemInCart)} cartItem={selectedVariantItemInCart} /> :
+              <button onClick={() => addToCart(selectedVariant.id, selectedVariant.minPurchaseQuantity || 1)} className="bg-yellow pointer font-roboto text-grey-900 border-hidden px-10 py-10 radius-5 l:px-22 l:py-12 l:radius-10  ">
+                <span className="hidden l:block weight-500">Add to cart</span>
+                <div className="l:hidden">
+                  <AiOutlinePlus size={24} />
+                </div>
+              </button>
+          }
         </div>
         <div
           id="favorite icon"
