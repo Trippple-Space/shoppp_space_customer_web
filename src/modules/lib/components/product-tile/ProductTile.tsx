@@ -17,7 +17,7 @@ const ProductTile: FC<IProductTile> = ({ product }) => {
   const [selectedVariant, setSelectedVariant] = useState(product?.variants?.[0])
   const [isFavourite, setIsFavorite] = useState(false)
   const { addToCart, cart, increment, decrement } = useCart()
-  const selectedVariantItemInCart = cart.cartItems.find(item => item.variant.id === selectedVariant.id)
+  const selectedVariantItemInCart = cart.cartItems.find(item => item.variant.id === selectedVariant?.id)
 
   return (
     <div className="mt-30 l:mt-20">
