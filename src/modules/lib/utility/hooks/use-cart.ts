@@ -1,9 +1,12 @@
 import { useEffect } from 'react';
 import { useCartStore } from '../store/cart.store';
 import { CartItem } from '../types/cart.interface';
+import { useAuthGuard } from './use-auth-guard';
+import useUserStore from '../store/user.store';
 
 export const useCart = () => {
-    const { cart, fetchCart, addToCart, removeFromCart, incrementCartItem, decrementCartItem } = useCartStore();
+    const { cart, fetchCart, addToCart, fetching, removeFromCart, incrementCartItem, decrementCartItem } = useCartStore();
+    const { isAuthenticated } = useUserStore()
 
     const increment = (cartItem: CartItem) => {
         if (cartItem.quantity >= cartItem.variant.stock) return;
@@ -15,7 +18,8 @@ export const useCart = () => {
     }
 
     useEffect(() => {
-        if (!cart.id) {
+        if (!cart.id && isAuthenticated && !fetching) {
+            console.log({cart, isAuthenticated, fetching})
             fetchCart();
         }
     }, []);

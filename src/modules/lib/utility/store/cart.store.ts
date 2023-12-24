@@ -4,6 +4,7 @@ import { Cart } from '../types/cart.interface';
 
 type CartStore = {
     cart: Cart;
+    fetching: boolean;
     fetchCart: () => void;
     addToCart: (variantId: number, quantity: number) => void;
     incrementCartItem: (variantId: number, quantity: number) => void;
@@ -17,13 +18,16 @@ export const useCartStore = create<CartStore>((set) => ({
         id: 0,
         userId: 0,
         subTotal: 0,
-        total: 0
-    },
+        total: 0,
+    },        
+    fetching: false,
     fetchCart: async () => {
         try {
+            set({ fetching: true })
             const cartData = await cartService.fetchCart();
-            set({ cart: cartData });
+            set({ cart: cartData, fetching: false });
         } catch (error) {
+            set({ fetching: false })
             console.error('Error fetching cart:', error);
         }
     },
