@@ -40,11 +40,11 @@ const StoreAnalytics = () => {
     return (
         <>
            <StorefrontNavBar />
-            <div className="app-width mb-100">
+            <div className="app-width mb-100 mt-90">
                 <div className="text-28 weight-700 text-black mt-46">Store Overview</div>
 
-                <div className="flex w-100p gap-60 py-20 ">
-                    <div className="w-70p pr-20 ">
+                <div className="l:flex w-100p l:gap-60 py-20 ">
+                    <div className="l:w-70p l:pr-20 ">
                         <div>
                             <Charts />
                         </div>
@@ -52,7 +52,7 @@ const StoreAnalytics = () => {
                             <OrderStatus />
                         </div>
                     </div>
-                    <div className="w-40p border border-1 border-lighter-grey radius-20 py-20 px-10">
+                    <div className="l:w-40p border border-1 border-lighter-grey radius-20 py-20 px-10">
                         <div className="px-10">
                         <div className="text-20 weight-700 text-black">Promotions</div>
                         
@@ -162,7 +162,7 @@ const StoreAnalytics = () => {
                                 {dropDown ? (
                                 <div className="px-20">
                                 {[0,0].map((data: any) => (
-                                    <div className='l:flex space-between items-center py-10 border-t border-lighter-grey'>
+                                    <div className='grid gap-10 l:gap-0 l:flex space-between items-center py-10 border-t border-lighter-grey'>
                                         <div className='flex gap-15 items-center'>
                                             <div className='w-80 h-80'>
                                                 <Image
@@ -179,7 +179,7 @@ const StoreAnalytics = () => {
                                         </div>
 
                                         <div className='w-100p w-20p'>
-                                            <button className='w-100p border border-lighter-grey bg-none text-red weight-400 text-12 py-8 px-20 radius-5 weight-400'>Remove</button>
+                                            <button className='l:w-100p border border-lighter-grey bg-none text-red weight-400 text-12 py-8 px-20 radius-5 weight-400'>Remove</button>
                                         </div>
                                     </div>
                                 ))}

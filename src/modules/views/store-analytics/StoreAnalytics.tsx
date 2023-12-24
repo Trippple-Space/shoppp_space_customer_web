@@ -14,7 +14,7 @@ import OrderStatus from "../storeanalytics/orderStatus";
 import PromoProductModal from "../storeanalytics/promoModal";
 
 
-// import PromoProduct const StoreAnalytics = () => {
+const StoreAnalytics = () => {
     const [open, setOpen] = useState(false)
     const [createPromo, setCretaePromo] = useState(false);
     const [dropDown, setDropDown] =  useState(false);

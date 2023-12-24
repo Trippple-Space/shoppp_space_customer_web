@@ -27,12 +27,17 @@ const formikAddressConfig = (initialValues: Address | undefined, handleSubmit: F
     notes: '',
     isDefault: false
   },
-  onSubmit: (values) => {
-    handleSubmit(values)
+  onSubmit: (values, { resetForm }) => {
+    handleSubmit(values);
+    resetForm();
   },
+  
   validationSchema: AddressValidationSchema,
   enableReinitialize: true
 })
+
+
+
 
 
 const useAddress = () => {

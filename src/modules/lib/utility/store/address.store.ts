@@ -2,6 +2,7 @@ import { create } from 'zustand';
 import { Address } from '../types/address.interface';
 import { addressService } from '../services/address.service';
 import { User } from '../types/user.interface';
+import { toast } from 'sonner';
 
 interface AddressStore {
   isAddressModalOpen: boolean;
@@ -38,7 +39,7 @@ const useAddressStore = create<AddressStore>((set) => ({
     }
   },
 
-  selectAddress: (id: number) => { 
+  selectAddress: (id: number) => {
     console.log({id})
     set({ selectedAddressId: id })
   },
@@ -56,8 +57,8 @@ const useAddressStore = create<AddressStore>((set) => ({
     try {
       const address = await addressService.createAddress(userId, newAddress);
       set((state) => ({ addresses: [...(state.addresses || []), address] }));
-    } catch (error) {
-      console.error('Error creating address:', error);
+    } catch (error: any) {
+      toast.error(error.response.data.detail.message?.[0])
     }
   },
 

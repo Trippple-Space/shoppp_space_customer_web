@@ -32,7 +32,7 @@ const MiniCart: React.FC<ModalProps> = () => {
 
   return (
     <div>
-      <Modal isOpen={open} onClose={() => setOpen(false)} extraClass={{ top: '0px', bottom: '0px', height: '100vh', right: '0px', overflow: 'hidden' }} className="l:t-0 l:b-0 l:h-100vh l:r-0 overflow-hidden">
+      <Modal isOpen={open} onClose={() => setOpen(false)} extraClass={{height: '100vh'}} className="t-0 l:t-0 l:b-0 100vh l:h-100vh l:r-0 overflow-hidden">
         <div className='relative h-full'>
           <div className='py-15 bg-grey-200 pointer' onClick={() => setOpen(false)}>
             <div className="flex px-15 gap-10 j-content-center ">

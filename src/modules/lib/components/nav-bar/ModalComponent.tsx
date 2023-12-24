@@ -30,7 +30,7 @@ const HomepageModal: React.FC<ModalProps> = ({modalOpen, handleCloseModal, data,
 
   return (
     <div>
-      <Modal isOpen={modalOpen} onClose={handleCloseModal} extraClass={{ top: '70px', right: '100px', overflow: 'hidden' }}>
+      <Modal isOpen={modalOpen} onClose={handleCloseModal} extraClass={{}} className="t-57 l:t-70 l:r-100 overflow-hidden ">
         <div className='w-350'>
           <div className="w-fit pt-30 px-20 g|margin:auto">
             <Image

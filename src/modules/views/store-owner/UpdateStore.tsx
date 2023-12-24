@@ -183,17 +183,17 @@ const UpdateStore = () => {
                 </div>
             </div>
 
-            <Modal isOpen={taglineModal} onClose={() => setTagLineModal(false)} extraClass={{ overflow: 'hidden', width: "1000px" }}>
+            <Modal isOpen={taglineModal} onClose={() => setTagLineModal(false)} extraClass={{}} className="l:w-1000">
                 <div className="">
                     <header className='flex space-between border-b border-1 border-grey-300 items-center px-35'>
                         <div className='text-16 weight-500 text-green-500 border-b border-3 border-green-500 w-fit p-15'>Edit tagline</div>
                         <div className='pointer' onClick={() => setTagLineModal(prev => !prev)}><IoMdClose /></div>
                     </header>
 
-                    <main className="p-35">
-                        <div className="flex items-center gap-10 bg-light-yellow p-20 radius-8">
+                    <main className="p-20 l:p-35">
+                        <div className="l:flex items-center gap-10 bg-light-yellow p-20 radius-8">
                             <div className="text-24"><AiOutlineExclamationCircle /></div>
-                            <div className="text-grey-800">
+                            <div className="text-14 l:text-16 text-grey-800">
                                 Add your tagline or store slogan to make a memorable first impression! A catchy and 
                                 distinctive tagline helps communicate your brand identity, captivates customers' attention, and sets you apart from the competition.
                             </div>
@@ -204,7 +204,7 @@ const UpdateStore = () => {
                             type='textarea'
                             placeholder='Please add a tag line or your store slogan.'
                             rows={5}
-                            after="Maximum of 8 words allowed."
+                            after={<div className="mt-10">"Maximum of 8 words allowed.</div>}
                             className='w-100p mt-30 text-12'
                         />
 
@@ -220,17 +220,17 @@ const UpdateStore = () => {
                 </div>
             </Modal>
 
-            <Modal isOpen={margettingMessageModal} onClose={() => setMargettingMessageModal(false)} extraClass={{ overflow: 'hidden', width: "1000px" }}>
+            <Modal isOpen={margettingMessageModal} onClose={() => setMargettingMessageModal(false)} extraClass={{ }} className="l:w-1000">
                 <div className="">
                     <header className='flex space-between border-b border-1 border-grey-300 items-center px-35'>
-                        <div className='text-16 weight-500 text-green-500 border-b border-3 border-green-500 w-fit p-15'>Edit marketing message</div>
+                        <div className='text-14 l:text-16 weight-500 text-green-500 border-b border-3 border-green-500 w-fit p-15'>Edit marketing message</div>
                         <div className='pointer' onClick={() => setMargettingMessageModal(prev => !prev)}><IoMdClose /></div>
                     </header>
 
-                    <main className="p-35">
-                        <div className="flex items-center gap-10 bg-light-yellow p-20 radius-8">
-                            <div className="text-24"><AiOutlineExclamationCircle /></div>
-                            <div className="text-grey-800">
+                    <main className="p-20 l:p-35">
+                        <div className="l:flex items-center gap-10 bg-light-yellow p-20 radius-8">
+                            <div className="l:text-24"><AiOutlineExclamationCircle /></div>
+                            <div className="text-14 l:text-24 text-grey-800">
                                 Craft and add your unique marketing message to create an impactful first impression! A well-crafted marketing message 
                                 effectively conveys your brand identity, captures customers' attention, and differentiates you from competitors. 
                             </div>
@@ -241,7 +241,7 @@ const UpdateStore = () => {
                             type='textarea'
                             placeholder='Please provide a concise marketing message that effectively promotes your business.'
                             rows={5}
-                            after="Maximum of 8 words allowed."
+                            after={<div className="mt-10">"Maximum of 8 words allowed.</div>}
                             className='w-100p mt-30 text-12'
                         />
 
