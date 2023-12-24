@@ -157,24 +157,24 @@ const MiniCart: React.FC<ModalProps> = () => {
             )}
 
           </div>
-          { !!cart.cartItems.length && <div className='bg-faint-cream pb-30 absolute b-0 left-0 w-full '>
+          { !!cart.cartItems.length && 
+            <div className='bg-yellow-50 pb-30 absolute b-0 left-0 w-full '>
               <div className='px-20 mt-15 mb-15'>
                   <OrderSummary
                     subTotal={cart.subTotal}
                     extraSavings={cart.total - cart.subTotal}
-                    shippingFee={1500}
                     total={cart.total}
                   />
               </div>
               <div className='w-fit mx-auto mt-30'>
-                  <button className='bg-green border-none radius-3 text-white py-14 px-30 weight-600 text-16 pointer' onClick={() => router.push(paths.checkout)}>Proceed to checkout | {formatNumberAsPrice(cart.total)}</button>
+                  <button className='bg-green border-none radius-5 text-white py-14 px-30 weight-600 text-16 pointer' onClick={() => router.push(paths.checkout)}>Proceed to checkout</button>
               </div>
-
               <div className='text-13 mt-5 w-fit mx-auto'>
                   For Returns Policy,
                   <span className='text-green text-13'> click here</span>
               </div>
-          </div>}
+            </div>
+          }
         </div>
       </Modal>
 

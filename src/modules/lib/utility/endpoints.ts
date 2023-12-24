@@ -6,6 +6,7 @@ const endpoints = {
     PRODUCTS: 'products',
     CART: '/cart',
     USER_ADDRESSES: 'users/:userId/addresses',
+    PAY_WITH_PAYSTACK: 'payment/initialize/paystack',
 }
 
 export default endpoints;

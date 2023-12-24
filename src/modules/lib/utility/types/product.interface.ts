@@ -33,6 +33,7 @@ export interface ProductCategory {
     stock: number;
     price: number;
     minPurchaseQuantity: number;
+    incrementBy: number;
     product: Product;
     meta: null | any;
     properties: null | any;
