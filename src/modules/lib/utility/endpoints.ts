@@ -4,6 +4,7 @@ const endpoints = {
     VALIDATE_TOKEN: '/auth/validate',
     PRODUCT_CATEGORIES: 'product/categories',
     PRODUCTS: 'products',
+    PRODUCT: 'products/:slug',
     CART: '/cart',
     USER_ADDRESSES: 'users/:userId/addresses',
     PAY_WITH_PAYSTACK: 'payment/initialize/paystack',

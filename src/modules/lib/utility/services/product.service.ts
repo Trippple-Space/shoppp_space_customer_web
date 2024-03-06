@@ -3,6 +3,8 @@ import { Product, ProductCategory } from "../types/product.interface"
 import endpoints from "../endpoints"
 import http from "../http"
 import { IProductFilters, IQueryParams } from "../hooks/use-products"
+import { buildEndpoint } from "../utility"
+import config from "env"
 
 class ProductService {
 
@@ -23,6 +25,16 @@ class ProductService {
             })
                 .then((response: AxiosResponse) => {
                     resolve(response.data)
+                })
+        })
+    }
+
+    fetchProductBySlug(slug: string, query: IQueryParams): Promise<Product> {
+        return new Promise((resolve) => {
+            fetch(config.API_HOST + '/' + buildEndpoint(endpoints.PRODUCT, { slug }))
+                .then(res => res.json())
+                .then((response: any) => {
+                    resolve(response)
                 })
         })
     }

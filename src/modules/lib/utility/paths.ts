@@ -6,10 +6,10 @@ export const paths = {
     product_details: '/product-details',
     checkout: '/checkout',
     homepage: '/',
-    asoebi_wears: '/wears'
+    asoebi_wears: '/wears',
+    explore: '/explore',
 }
 
 export const protectedPaths = [
     paths.checkout,
-    paths.asoebi_wears
 ]

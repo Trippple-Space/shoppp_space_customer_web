@@ -1,3 +1,5 @@
+"use client"
+
 import React, { FC, useState } from 'react';
 import { BiCheck } from 'react-icons/bi';
 import Input from '../input/Input';

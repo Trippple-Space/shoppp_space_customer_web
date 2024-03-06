@@ -6,7 +6,7 @@ import { BsBasket3 } from "react-icons/bs";
 import { LiaCommentsDollarSolid } from "react-icons/lia";
 import React, { FC, useState } from "react";
 import cx from "classnames";
-import FabricsCategoryNav from "@/modules/lib/components/category-nav/FabricsCategoryNav";
+import FabricsCategoryNav from "@/modules/lib/components/nav-bar/category-nav/FabricsCategoryNav";
 import ProductTile from "@/modules/lib/components/product-tile/ProductTile";
 import Footer from "@/modules/lib/components/footer/Footer";
 import { ILayout } from "@/app/layout";
@@ -34,7 +34,7 @@ const products = [
             'https://res.cloudinary.com/codennerd/image/upload/v1689377581/Asoebi%20Africa/WhatsApp_Image_2023-07-15_at_12.23.38_AM_1_samhx5.jpg',
             'https://res.cloudinary.com/codennerd/image/upload/v1689377577/Asoebi%20Africa/WhatsApp_Image_2023-07-15_at_12.23.25_AM_mghle5.jpg',
         ]
-    }, 
+    },
     {
         media: [
             'https://res.cloudinary.com/codennerd/image/upload/v1689377463/Asoebi%20Africa/WhatsApp_Image_2023-07-15_at_12.23.07_AM_2_tdqxwf.jpg',
@@ -49,7 +49,7 @@ const products = [
             'https://res.cloudinary.com/codennerd/image/upload/v1689377465/Asoebi%20Africa/WhatsApp_Image_2023-07-15_at_12.23.09_AM_ynbrho.jpg',
             'https://res.cloudinary.com/codennerd/image/upload/v1689377465/Asoebi%20Africa/WhatsApp_Image_2023-07-15_at_12.23.09_AM_1_cyknhk.jpg',
         ]
-    }, 
+    },
     {
         media: [
             'https://res.cloudinary.com/codennerd/image/upload/v1689377466/Asoebi%20Africa/WhatsApp_Image_2023-07-15_at_12.23.11_AM_1_ke6sjp.jpg',
@@ -61,7 +61,7 @@ const products = [
 
 ]
 
-const StorefrontLayout: FC<ILayout> = ({children}) => {
+const StorefrontLayout: FC<ILayout> = ({ children }) => {
     const [activeTab, setActiveTab] = useState(tabs[0]);
     return (
         <div>
@@ -91,7 +91,7 @@ const StorefrontLayout: FC<ILayout> = ({children}) => {
                 <div className="border-b border-t border-whitesmoke pt-20 mt-68 mb-50">
                     <div className="app-width">
                         <FabricsCategoryNav />
-                    </div>                
+                    </div>
                 </div>
 
                 <div className="app-width">
@@ -102,15 +102,15 @@ const StorefrontLayout: FC<ILayout> = ({children}) => {
                         <h3 className="text-20 weight-300 uppercase">New Arrivals</h3>
                         <div className="grid grid-5-cols-1fr gap-30 w-full">
                             {
-                                [...products, ...products, ...products, ...products].map(product => (
-                                    <ProductTile product={product} /> 
-                                ))
+                                // [...products, ...products, ...products, ...products].map(product => (
+                                //     <ProductTile product={product} /> 
+                                // ))
                             }
                         </div>
                     </section>
                 </div>
-            </div>   
-            <Footer />         
+            </div>
+            <Footer />
         </div>
 
     );

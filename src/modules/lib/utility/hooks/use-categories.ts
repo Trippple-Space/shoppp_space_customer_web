@@ -15,7 +15,12 @@ export const useCategories = () => {
     useEffect(() => {
         productService.fetchProductCategories()
             .then((categories: ProductCategory[]) => {
-                setCategories(categories)
+                setCategories([{
+                    id: 0,
+                    description: 'All categories',
+                    images: ['home.svg'],
+                    name: 'All',
+                }, ...categories])
             })
     }, [])
 

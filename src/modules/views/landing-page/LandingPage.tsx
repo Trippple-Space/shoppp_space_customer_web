@@ -6,7 +6,7 @@ import { BsBasket3 } from "react-icons/bs";
 import { LiaCommentsDollarSolid } from "react-icons/lia";
 import React, { useState } from "react";
 import cx from "classnames";
-import FabricsCategoryNav from "@/modules/lib/components/category-nav/FabricsCategoryNav";
+import FabricsCategoryNav from "@/modules/lib/components/nav-bar/category-nav/FabricsCategoryNav";
 import ProductTile from "@/modules/lib/components/product-tile/ProductTile";
 import Footer from "@/modules/lib/components/footer/Footer";
 import HomepageNavBar from "@/modules/lib/components/nav-bar/HomepageNavBar";
@@ -43,8 +43,8 @@ const Landingpage = () => {
     };
     return (
         <>
-           <HomepageNavBar />
-            <Hero /> 
+            <HomepageNavBar />
+            <Hero />
             <div className="app-width">
                 <section className="mt-40 w-100p l:mt-90">
                     <div className="flex space-between items-center">
@@ -54,7 +54,7 @@ const Landingpage = () => {
                     <div className="grid grid-2-cols-1fr l:grid-5-cols-1fr gap-10 l:gap-30 w-full">
                         {
                             [...products, ...products, ...products, ...products].map(product => (
-                                <ProductTile product={product} /> 
+                                <ProductTile product={product} />
                             ))
                         }
                     </div>
@@ -68,20 +68,20 @@ const Landingpage = () => {
                     <div className="grid grid-2-cols-1fr l:grid-4-cols-1fr gap-10 l:gap-30 w-full">
                         {
                             [...products, ...products, ...products, ...products, ...products, ...products, ...products, ...products].map(product => (
-                                <ProductTile product={product} /> 
+                                <ProductTile product={product} />
                             ))
                         }
                     </div>
                 </section>
 
                 <section className="mt-70 w-100p l:mt-70">
-                  <div className="flex space-between">
-                    <h3 className="text-18 l:text-24 weight-600 text-grey-900">FROM THE CUSTOMER'S PERSPECTIVE</h3>
+                    <div className="flex space-between">
+                        <h3 className="text-18 l:text-24 weight-600 text-grey-900">FROM THE CUSTOMER'S PERSPECTIVE</h3>
                     </div>
                     <div className="flex l:w-100p space-between gap-10 l:gap-20 w-full review-tiles">
                         {
                             [...products, ...products, ...products, ...products, ...products].map(product => (
-                                <ReviewTile product={product} /> 
+                                <ReviewTile product={product} />
                             ))
                         }
                     </div>
@@ -90,9 +90,9 @@ const Landingpage = () => {
             </div>
             <div className="bg-yellow py-40 l:py-60 w-100p mt-50 mb-50">
                 <p className="w-100p flex j-content-center text-24 text-center l:text-26 weight-600 text-grey-900">Join Our Asoebi Marketplace and Amplify Your Sales</p>
-               <div className="w-100p flex j-content-center pt-30"> <button className='border-none bg-black text-white text-14 py-12 px-20 radius-5 weight-400'>Join Now</button></div>
+                <div className="w-100p flex j-content-center pt-30"> <button className='border-none bg-black text-white text-14 py-12 px-20 radius-5 weight-400'>Join Now</button></div>
             </div>
-            <Footer />        
+            <Footer />
 
         </>
 

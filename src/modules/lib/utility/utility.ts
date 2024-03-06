@@ -36,3 +36,16 @@ export const buildEndpoint = (endpoint: string, routeParams: { [key: string]: st
     }
     return builtEndpoint + extendBy;
 }
+
+
+export const chunkArray = <T>(arr: T[], noOfChunks: number): T[][] => {
+  const result: T[][] = [];
+  for (const i in arr) {
+    const pos = +i % noOfChunks;
+    if (!result[pos]) {
+      result[pos] = []
+    }
+    result[pos].push(arr[i]);
+  }
+  return result;
+};

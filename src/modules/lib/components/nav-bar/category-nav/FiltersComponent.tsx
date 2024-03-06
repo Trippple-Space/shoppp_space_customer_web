@@ -5,12 +5,11 @@ import { RxCaretDown } from 'react-icons/rx'
 import { BsSearch } from 'react-icons/bs'
 import { AiOutlineClose } from 'react-icons/ai'
 import cx from 'classnames'
-import HomepageModal from './ModalComponent'
-import HomepageCategoryNav from '@/modules/lib/components/category-nav/HomepageCategoryNav'
+import HomepageModal from '../../../../views/homepage/ModalComponent'
 import { usePathname } from 'next/navigation'
 import FilterModal from './FilterModal'
 import MobileFilterModal from './MobileFilter'
-import MiniCart from '../../lib/components/minicart/MiniCart'
+import MiniCart from '../../minicart/MiniCart'
 
 const Filters = () => {
     const [displaySearch, setDisplaySearch] = useState(false)
@@ -44,59 +43,24 @@ const Filters = () => {
     const toggleSearch = () => {
         setDisplaySearch(!displaySearch);
     }
+
     return (
         <div className='mt-69'>
             <div className='w-100p border- border-lightgrey py-15 g|box-shadow:0px|_|2px|_|4px|_|0px|_|#0000000D;'>
                 <div className="app-width flex space-between items-center">
-                    {!isRoute && (
-                        <div className='h-45 l:h-fit weight-400 text-14 w-fit l:text-16 l:px-16 l:py-10 text-grey border border-lightgrey radius-10'>
-                            <div className='flex h-100p items-center gap-10 mx-auto pointer w-fit relative' onClick={handleOpenModal}>
-                                <HomepageModal modalOpen={open} handleCloseModal={handleCloseModal} data='data' />
-                                <span>All categories</span>
-                                <span><RxCaretDown className='w-20 h-20' /></span>
-                            </div>
-                        </div>
-                    )}
-
-                    {(displaySearch && isRoute) && (
-                        <div className='w-20p'></div>
-                    )}
-
-                    {(!displaySearch && isRoute) ? (
-                        <div className='w-86p h-fit mt-10 hidden l:block'>
-                            <HomepageCategoryNav isRoute={isRoute} />
-                        </div>
-                    ) : (
-                        <div className='w-50p hidden l:flex'>
-                            <div className=" w-full max-w-600 mx-auto py-7 pl-30 pr-7 flex overflow-hidden space-between items-center h-fit  border border-grey-300 radius-10 g|box-shadow:0px|_|2px|_|10px|_|0px|_|#00000014; ">
-                                <input type="text" placeholder='Search Product' className='border-none w-90p text-16 text-light-grey h-full outline-none' />
-                                <div className='w-35 h-35 flex items-center bg-green radius-7 text-white'>
-                                    <BsSearch />
-                                </div>
-                            </div>
-                        </div>
-                    )}
-
                     <div className='flex items-center gap-10'>
-                        {isRoute && (
-                            <div onClick={toggleSearch} className='w-fit h-fit px-16 py-10 flex items-center radius-7 border border-lightgrey'>
-                                {!displaySearch ? (
-                                    <BsSearch className='w-16' />
-                                ) : (<AiOutlineClose />)}
+                        <button className='w-35 h-40 l:w-fit l:h-fit l:py-10 l:px-16 pointer ml-7 bg-white text-16 text-grey weight-300 radius-10 border border-lightgrey'>
+                            <MobileFilterModal modalOpen={openMobileFilter} handleCloseModal={handleCloseMobilrModal} data='data' />
+                            <div className='hidden l:flex w-fit gap-10 mx-auto'>
+                                <span> <LuSettings2 /> </span>
+                                <span className='hidden l:flex'>Filter</span>
                             </div>
-                        )}
-                        {/* <button className='w-35 h-40 l:w-fit l:h-fit l:py-10 l:px-16 pointer ml-7 bg-white text-16 text-grey weight-300 radius-10 border border-lightgrey'>
-                        <MobileFilterModal modalOpen={openMobileFilter} handleCloseModal={handleCloseMobilrModal} data='data' />
-                        <div className='hidden l:flex w-fit gap-10 mx-auto'>
-                            <span> <LuSettings2 /> </span>
-                            <span className='hidden l:flex'>Filter</span>                    
-                        </div>
 
-                        <div className='flex l:hidden w-fit gap-10 mx-auto'>
-                            <span onClick={handleOpenMobileModal}> <LuSettings2 /> </span>
-                        </div>
-                    </button>               */}
-                        <MiniCart />
+                            <div className='flex l:hidden w-fit gap-10 mx-auto'>
+                                <span onClick={handleOpenMobileModal}> <LuSettings2 /> </span>
+                            </div>
+                        </button>
+
                     </div>
 
                 </div>

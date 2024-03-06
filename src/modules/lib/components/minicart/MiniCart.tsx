@@ -178,13 +178,13 @@ const MiniCart: React.FC<ModalProps> = () => {
         </div>
       </Modal>
 
-      <div className="w-100p b-70 r-10">
-        <div onClick={() => setOpen(true)} className="mx-auto pointer flex w-100 l:w-140 h-40 l:h-50 bg-green p-4 text-white radius-10">
-          <div className="w-40p radius-10 radius-t-r-0 radius-b-r-0 flex items-center j-content-center bg-darkgreen text-white">
+      <div className="w-100p">
+        <div onClick={() => setOpen(true)} className="mx-auto pointer flex bg-green p-4 text-white radius-10">
+          <div className="px-10 py-2 radius-10 radius-t-r-0 radius-b-r-0 flex items-center j-content-center bg-darkgreen text-white">
             <TbShoppingBag className="w-18 h-18 l:w-25 l:h-25" />
           </div>
-          <div className="w-60p text-12 l:text-18 flex text-center items-center j-content-center">
-            {cart.cartItems.length} items
+          <div className="w-fit text-12 pl-5 bold flex text-center items-center j-content-center">
+            {cart.cartItems.length}
           </div>
         </div>
       </div>

@@ -1,9 +1,9 @@
-"use client"
+// "use client"
 
 import { Toaster } from 'sonner';
 import '../styles/styles.scss';
 import { Inter, Roboto, Lora } from 'next/font/google'
-import { useAuthGuard } from '@/modules/lib/utility/hooks/use-auth-guard';
+// import { useAuthGuard } from '@/modules/lib/utility/hooks/use-auth-guard';
 import GlobalArena from '@/modules/lib/components/global-arena/GlobalArena';
 
 const inter = Inter({
@@ -40,12 +40,12 @@ export default function RootLayout({
   children: React.ReactNode
 }) {
 
-  useAuthGuard()
+  // useAuthGuard()
 
   return (
     <html lang="en" className={`${inter.variable} ${roboto.variable} ${lora.variable} bg-white font-inter`}>
       <GlobalArena />
-      <body className=' @lo:weight-300 @lo:text-dimgrey'>{children}</body>
+      <body className='@lo:weight-300 @lo:text-dimgrey'>{children}</body>
     </html>
   )
 }

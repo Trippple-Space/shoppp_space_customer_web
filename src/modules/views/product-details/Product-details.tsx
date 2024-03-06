@@ -6,27 +6,179 @@ import Input from '@/modules/lib/components/input/Input'
 import { paths } from '@/modules/lib/utility/paths'
 import Link from 'next/link'
 import React, { useState } from 'react'
-import { AiOutlineShareAlt } from 'react-icons/ai';
+import { AiOutlineHeart, AiOutlineShareAlt } from 'react-icons/ai';
 import { BsArrowLeftShort, BsArrowRightShort } from 'react-icons/bs';
-import { PiHeartStraightThin } from 'react-icons/pi';
-import { GrStar } from 'react-icons/gr';
-import { IoIosArrowBack, IoIosArrowForward } from 'react-icons/io';
+import { PiHeartStraightThin, PiStarBold } from 'react-icons/pi';
+import { GrShareOption, GrStar } from 'react-icons/gr';
+import { IoIosArrowBack, IoIosArrowForward, IoMdHeartEmpty } from 'react-icons/io';
 import ProfilePage from '@/app/profile/page'
 import HomepageNavBar from '@/modules/lib/components/nav-bar/HomepageNavBar'
 import Footer from '@/modules/lib/components/footer/Footer'
+import { Product } from '@/modules/lib/utility/types/product.interface'
+import ProductMedia from './product-media/ProductMedia'
+import BuyBox from './buy-box/BuyBox'
+import './ProductDetails.scss';
+import { TfiAngleLeft, TfiAngleRight } from 'react-icons/tfi'
+import { cx } from '@/modules/lib/utility/utility'
+import Breadcrumb from './breadcrumb/Breadcrumb'
+import { FaRegBookmark, FaRegStar } from 'react-icons/fa'
+import { FaCheck } from 'react-icons/fa6'
+import { TiStarOutline } from "react-icons/ti";
+import { HiOutlineChatBubbleLeftEllipsis, HiOutlineShoppingBag } from "react-icons/hi2";
+import { IoCheckmarkOutline } from 'react-icons/io5'
+import Checkbox from '@/modules/lib/components/checkbox/Checkbox'
+import QuantitySelector2 from '@/modules/lib/components/quantity-selector/QuantitySelector2'
 
 
-const ProductDetails = () => {
+const ProductDetails = ({ product }: { product: Product }) => {
   const [unitCounter, setUnitCounter] = useState<number>(1)
   return (
     <>
       <HomepageNavBar />
-      <div className="app-width mt-60">
-        <div className='hidden l:block'>
-          <h1 className='l:t-24 l:text-24 weight-500'>Kutonu High Grade Fabric Kutonu High Grade Fabric</h1>
+      <div className={`product-details-page max-w-1400 w-full mx-auto mt-60`}>
+
+        <div className='flex w-full gap-25 pt-20 mt-100'>
+          <div className="w-50p">
+            <Breadcrumb />
+            <Image src={'fashionhubimage1.png'} className='w-580 mt-25' alt={''} />
+          </div>
+          <div className="w-50p">
+            <div>
+              <div className="flex space-between">
+                <div className='text-28 weight-600'>Embrace Sideboard</div>
+                <div className='flex gap-13'>
+                  <div className="bg-#FFF0F0 text-red px-12 py-7 text-16 radius-10 flex content-center gap-7">
+                    <AiOutlineHeart className='a-self-center' />
+                    <span>109</span>
+                  </div>
+                  <div className="bg-#EDF0F8 color-#3A4980 px-12 py-7 text-16 radius-10 flex content-center gap-7 w-fit">
+                    <FaRegBookmark className='a-self-center' />
+                  </div>
+                  <div className="bg-#EDF0F8 color-#3A4980 px-12 py-7 text-16 radius-10 flex content-center gap-7 w-fit">
+                    <GrShareOption className='a-self-center' />
+                  </div>
+                </div>
+              </div>
+              <div className='mt-11'>
+                <div className='color-#B9BBBF text-16'>
+                  Teixeira Design Studio
+                </div>
+              </div>
+            </div>
+            <hr className='mt-30 @lo:border-none @hi:border-t @hi:border-#E4E4E4' />
+
+            <div className='flex mt-30 gap-40'>
+              <div>
+                <div className='color-#3A4980 text-34 bold'>
+                  $71.56
+                </div>                
+                <div className='text-grey-500 line-through text-21 weight-400 mt-6'>
+                  $71.56
+                </div>              
+              </div>
+              <div>
+                <div className="flex gap-12 max-w-500">
+                    <div className="bg-#FBF3EA color-#D48D3B weight-600 px-10 py-7 h-fit text-16 radius-27 flex content-center gap-7">
+                      <PiStarBold className='a-self-center ' />
+                      <span className='a-self-center'>4.8</span>
+                    </div>
+
+                    <div className="bg-#EDF0F8 color-#3A4980 weight-600 px-10 py-7 h-fit text-16 radius-27 flex content-center gap-7">
+                      <HiOutlineChatBubbleLeftEllipsis className='a-self-center' />
+                      <span className='whitespace-nowrap a-self-center'>67 Reviews</span>
+                    </div>
+                </div>
+
+                <div className="text-grey-400 mt-14 flex a-content-center">
+                  <div className='h-fit text-14'>
+                    <span className='text-green bold'>93%</span> of buyers have recommended this.
+                  </div>
+                </div>                
+              </div>
+
+            </div>
+
+            <div className='flex items-center gap-10 mt-30 ml--35'>
+              <div className=''>
+                <TfiAngleLeft className='h-24 a-self-center color-black' />
+              </div>
+              <div className='flex gap-20'>
+                  {
+                    [1,2,3,4].map((i) => (
+                      <div className={cx('w-115 h-115 overflow-hidden radius-14', {
+                        'border border-#3A4980 border-2': i === 1
+                      })}>
+                        <Image
+                          src={`fashionhubimage${i}.png`} 
+                          alt=''       
+                          className=''           
+                        />                  
+                      </div>                      
+                    ))
+                  }                
+              </div>
+              <div><TfiAngleRight className='h-24 a-self-center color-black' /></div>
+            </div>
+
+            <div className='mt-40'>
+              <div className='text-grey-500'>Choose a color</div>
+              <div className='mt-20 flex gap-12'>
+                <div className='w-50 h-50 bg-#ECDECC round m-7 outline g|outline-color:#ECDECC outline-offset-5 outline-3 flex'>
+                  <FaCheck className='color-white h-24 a-self-center' />
+                </div>
+                <div className='w-50 h-50 m-7 round bg-#BBD278'></div>
+                <div className='w-50 h-50 m-7 bg-#BBC1F8 round'></div>
+                <div className='w-50 h-50 m-7 bg-#FFD3F8 round'></div>
+                <div className='w-50 h-50 m-7 bg-#FFD3F8 round' style={{background: 'linear-gradient(to bottom, #FFB6B6 30%, #98C185 70%)'}}></div>
+              </div>
+            </div>
+
+            <hr className='mt-30 @lo:border-none @hi:border-t @hi:border-#E4E4E4' />
+
+            <div className='mt-40'>
+              <div className='text-grey-500'>Choose a size</div>
+              <div className='mt-20 flex gap-12'>
+                {
+                  ['Small', 'Medium', 'Large', 'Extra Large', 'XXL'].map((text) => (
+                    <label className={cx('flex gap-8 text-14 bg-#F3F3F3 color-#726C6C px-10 py-7 radius-8', {
+                      'bg-#EDF0F8! color-#3A4980!': text === 'Small'
+                    })}>
+                      <input type='radio' className={cx('accent-#3A4980')} />
+                      <span>{text}</span>
+                    </label>                    
+                  ))
+                }
+
+              </div>
+            </div>
+
+            <hr className='mt-30 @lo:border-none @hi:border-t @hi:border-#E4E4E4' />
+              
+            <div className='mt-30 flex gap-20'>
+              <QuantitySelector2 
+                increment={() => {}} 
+                decrement={() => {}} 
+                cartItem={{quantity: 5}} 
+              />
+              <button className='bg-#3A4980 text-white border-none px-90 py-20 radius-30'> 
+                <div className="flex gap-10 items-center">
+                  <HiOutlineShoppingBag className='h-21' />
+                  <span className='whitespace-nowrap text-16'>Add To Cart</span>
+                </div>
+              </button>
+            </div>
+
+          </div>
         </div>
 
-        <div className='hidden l:flex w-100p space-between l:py-10 l:pl-15 text-19 weight-500 text-dimgrey'>
+        <div className="mt-100"></div>
+        {/* <div className='hidden l:block'>
+          <h1 className='l:t-24 l:text-24 weight-500 mt-100'>
+            {product?.name}
+          </h1>
+        </div> */}
+
+        {/* <div className='hidden l:flex w-100p space-between l:py-10 l:pl-15 text-19 weight-500 text-dimgrey'>
           <div className='w-26p flex space-between items-center'>
             <div className='flex align-items text-14'>
               <div><GrStar className='w-18 pr-5' /></div>
@@ -36,7 +188,7 @@ const ProductDetails = () => {
               <Icon name='dot' className='w-5' />
               <div className="">56 reviews</div>
             </div>
-            
+
             <div className="flex items-center gap-8">
               <Icon name='badge' className='w-16 h-16' />
               <p className="text-14">SuperStore</p>
@@ -51,189 +203,124 @@ const ProductDetails = () => {
               <div className='underline px-15 text-14'>Add to Wishlist</div>
             </div>
             <div>
-            <button className="flex items-center gap-10 bg-none px-20 py-10 text-16 weight-500 text-dimgrey border-1 radius-10">
-              <AiOutlineShareAlt className='w-20 h-20' />
-              Share
-            </button>
+              <button className="flex items-center gap-10 bg-none px-20 py-10 text-16 weight-500 text-dimgrey border-1 radius-10">
+                <AiOutlineShareAlt className='w-20 h-20' />
+                Share
+              </button>
             </div>
           </div>
-        </div>
+        </div> */}
 
-        <div className='l:flex w-100p gap-20 l:h-400 py-10'>
-          <div className='w-100p l:w-50p relative'>
-            <p className='text-green w-fit bg-light-green py-5 px-7 radius-5 absolute t-15 l-15'>Ankara</p>
-            <Image
-              className='w-100p h-200 m:h-400 radius-20'
-              src='Ankara.jpeg'
-              alt='product'
-              type='image'
-            />
+        {/* <div className='flex gap-5 mt-20'>
+          <ProductMedia product={product} activeVariant={null} />
+          <div className='w-full'>
+            <BuyBox product={product} />
           </div>
-          <div className='w-100p mt-20 l:mt-0 l:w-50p l:h-400'>
-            <div className='w-100p flex space-between gap-10 l:flex-wrap relative radius-30'>
-            <button disabled className="hidden l:flex items-center j-content-center bg-white px-12 py-7 text-15 weight-500 text-dimgrey border-1 radius-7 absolute b-10 l-20">
-              <BsArrowLeftShort className='w-24 h-22' />
-              Previous
-            </button>
-            <div className='w-50 h-50 l:w-49p l:h-195'>
-              <Image
-                className='w-contain h-100p radius-t-l-20 border border-green pointer border-5'
-                src='Ankara.jpeg'
-                alt='product'
-                type='image'
-              />
-            </div>
-            <div className='w-50 h-50 l:w-49p l:h-195 border-green pointer border-20'>
-              <Image
-                className='w-100p h-100p radius-t-r-20'
-                src='Ankara.jpeg'
-                alt='product'
-                type='image'
-              />
-            </div>
-            <div className='w-50 h-50 l:w-49p l:h-195 border-green pointer border-20'>
-              <Image
-                className='w-100p h-100p radius-b-l-20'
-                src='Ankara.jpeg'
-                alt='product'
-                type='image'
-              />
-            </div>
-            <div className='w-50 h-50 l:w-49p l:h-195 border-green pointer border-20'>
-              <Image
-                className='w-100p h-100p radius-b-r-20'
-                src='Ankara.jpeg'
-                alt='product'
-                type='image'
-              />
-            </div>
-            <div className='w-50 h-50 l:hidden l:w-49p l:h-195 border-green pointer border-20'>
-              <Image
-                className='w-100p h-100p'
-                src='ankara.png'
-                alt='product'
-                type='image'
-              />
-            </div>
-            <div className='w-50 h-50 l:hidden l:w-49p l:h-195 border-green pointer border-20'>
-              <Image
-                className='w-100p h-100p'
-                src='ankara.png'
-                alt='product'
-                type='image'
-              />
-            </div>
-            <button disabled className="hidden l:flex bg-white items-center j-content-center px-12 py-7 text-15 weight-500 text-dimgrey border-1 radius-7 absolute b-10 r-20">
-              Next
-              <BsArrowRightShort className='w-24 h-22' />
-            </button>
-            </div>
-          </div>
-        </div>
-        
+        </div> */}
+
         <div className='l:flex pt-10 l:pt-60 gap-60'>
-        <div className='w-100p l:w-55p pr-30'>
-          <div className='l:flex space-between items-center'>
-            <div>
-              <h1 className='text-18 l:text-30 weight-500 py-3 m:py-15 line-height-40'>Ankara from Billgram Store</h1>
-              <div className='flex text-grey'>
-                <p className='flex text-14 m:text-16'>86% positive reviews 
-                <span>
-                  <Icon name='dot' className='w-3 l:w-5 mx-15' />
-                </span>
-                <GrStar fill='#FDC81C' className='w-14 h-14 l:w-18 l:h-18 mr-5 l:mr-5' /> 3.8/5 rating</p>
+          <div className='w-100p l:w-55p pr-30'>
+            <div className='l:flex space-between items-center'>
+              <div>
+                <h1 className='text-18 l:text-30 weight-500 py-3 m:py-15 line-height-40'>Ankara from Billgram Store</h1>
+                <div className='flex text-grey'>
+                  <p className='flex text-14 m:text-16'>86% positive reviews
+                    <span>
+                      <Icon name='dot' className='w-3 l:w-5 mx-15' />
+                    </span>
+                    <GrStar fill='#FDC81C' className='w-14 h-14 l:w-18 l:h-18 mr-5 l:mr-5' /> 3.8/5 rating</p>
+                </div>
+                <p className='text-danger underline text-14 m:text-16 py-5 l:py-15'>Visit Store home</p>
+
               </div>
-              <p className='text-danger underline text-14 m:text-16 py-5 l:py-15'>Visit Store home</p>
 
+              <div className='hidden l:flex radius-50p relative'>
+                <Image
+                  className='w-85 h-85'
+                  src='ankara-round.png'
+                  alt='product'
+                  type='image'
+                />
+                <Icon name='badge' className='w-35 h-35 absolute r-0 b-10' />
+              </div>
             </div>
 
-            <div className='hidden l:flex radius-50p relative'>
-              <Image
-                className='w-85 h-85'
-                src='ankara-round.png'
-                alt='product'
-                type='image'
-              />
-              <Icon name='badge' className='w-35 h-35 absolute r-0 b-10' />
+            <div className='border-t border-b line-height-25 l:line-height-32 border-lighter-grey pt-30 pb-20 l:pt-50 l:pb-30 mt-15'>
+              <div className='flex gap-30 pb-20 l:pb-25'>
+                <Icon name='verified' className='w-20 h-20 l:w-28 l:h-28' />
+                <div>
+                  <h2 className='text-18 l:text-20 weight-500'>Featured in</h2>
+                  <p className='tet-14 m:text-16 text-light-grey'>Sirbalo’s wedding, 2022</p>
+                </div>
+
+              </div>
+
+              <div className='flex gap-30 pb-20 l:pb-25'>
+                <Icon name='cut' className='w-20 h-20 l:w-28 l:h-28' />
+                <div>
+                  <h2 className='text-18 l:text-20 weight-500'>Made in</h2>
+                  <p className='text-14 m:text-16 text-light-grey m-0 p-0'>Calabar, Nigeria,</p>
+                  <p className='text-14 m:text-16 text-light-grey m-0 p-0'>Redesigned in Ekiti Nigeria.</p>
+                </div>
+
+              </div>
+
+              <div className='flex items-center gap-30 pb-20 l:pb-25'>
+                <Icon name='calendar' className='w-20 h-20 l:w-28 l:h-28' />
+                <div>
+                  <h2 className='text-18 l:text-20 weight-500'>Free return before May 20th.</h2>
+                </div>
+
+              </div>
             </div>
+
           </div>
 
-          <div className='border-t border-b line-height-25 l:line-height-32 border-lighter-grey pt-30 pb-20 l:pt-50 l:pb-30 mt-15'>
-            <div className='flex gap-30 pb-20 l:pb-25'>
-              <Icon name='verified' className='w-20 h-20 l:w-28 l:h-28' />
-              <div>
-                <h2 className='text-18 l:text-20 weight-500'>Featured in</h2>
-                <p className='tet-14 m:text-16 text-light-grey'>Sirbalo’s wedding, 2022</p>
+          <div className='l:w-40p mt-60'>
+            <div className='border border-faint-grey radius-20 px-15 py-25 l:p-30 shadow-0-2-20-0-shadow-grey l:gap-30'>
+              <div className='flex space-between items-center'>
+                <div className='line-height-30 l:line-height-35'>
+                  <h3 className='text-16 l:text-25 l:py-10 weight-500 font-inter'>NGN 20,000</h3>
+                  <p className='text-14 m:text-16 text-grey font-inter'>Total price before shipping</p>
+                </div>
+                <div>
+                  <p className='text-14 m:text-16 line-height-40 text-grey flex items-center'><GrStar fill='#FDC81C' className='w-20 mr-5' /> 3.8/5 rating</p>
+                </div>
               </div>
 
-            </div>
-
-            <div className='flex gap-30 pb-20 l:pb-25'>
-              <Icon name='cut' className='w-20 h-20 l:w-28 l:h-28' />
-              <div>
-                <h2 className='text-18 l:text-20 weight-500'>Made in</h2>
-                <p className='text-14 m:text-16 text-light-grey m-0 p-0'>Calabar, Nigeria,</p>
-                <p className='text-14 m:text-16 text-light-grey m-0 p-0'>Redesigned in Ekiti Nigeria.</p>
+              <div className='flex space-between my-20 py-15 px-20 text-15 m:text-18 radius-5 border border-deep-grey'>
+                <span className='text-dimgrey opacity-70'>unit</span>
+                <div className='flex'>
+                  <Icon name='decr' className='w-20 h-20 pointer' onClick={() => setUnitCounter(prev => prev <= 1 ? 1 : prev - 1)} />
+                  <div className="px-16 text-16">{unitCounter}</div>
+                  <Icon name='incr' className='w-20 h-20 pointer' onClick={() => setUnitCounter(prev => prev + 1)} />
+                </div>
               </div>
+              <div className='flex space-between my-20 py-15 px-20 text-15 m:text-18 radius-5  border border-deep-grey'>
+                <span className='text-dimgrey opacity-70'>Quantity:</span>
+                <select name="" id="" className='border-none text-15 m:text-20 text-grey opacity-100 weight-400 bg-transparent outline-none'>
+                  <option value="">Bundle</option>
+                  <option value="">Bale</option>
 
-            </div>
-
-            <div className='flex items-center gap-30 pb-20 l:pb-25'>
-            <Icon name='calendar' className='w-20 h-20 l:w-28 l:h-28' />
-            <div>
-              <h2 className='text-18 l:text-20 weight-500'>Free return before May 20th.</h2>
-            </div>
-
+                </select></div>
+              <button className='w-100p py-16 bg-green border-none radius-8 text-white text-16 l:text-16'>Add to cart (NGN 20, 000)</button>
             </div>
           </div>
-
-        </div>
-
-        <div className='l:w-40p mt-60'>
-          <div className='border border-faint-grey radius-20 px-15 py-25 l:p-30 shadow-0-2-20-0-shadow-grey l:gap-30'>
-            <div className='flex space-between items-center'>
-              <div className='line-height-30 l:line-height-35'>
-                <h3 className='text-16 l:text-25 l:py-10 weight-500 font-inter'>NGN 20,000</h3>
-                <p className='text-14 m:text-16 text-grey font-inter'>Total price before shipping</p>
-              </div>
-              <div>
-                <p className='text-14 m:text-16 line-height-40 text-grey flex items-center'><GrStar fill='#FDC81C' className='w-20 mr-5' /> 3.8/5 rating</p>
-              </div>
-            </div>
-
-            <div className='flex space-between my-20 py-15 px-20 text-15 m:text-18 radius-5 border border-deep-grey'>
-              <span className='text-dimgrey opacity-70'>unit</span>
-              <div className='flex'>
-                <Icon name='decr' className='w-20 h-20 pointer' onClick={() => setUnitCounter(prev => prev <= 1 ? 1 : prev- 1)} />
-                <div className="px-16 text-16">{unitCounter}</div>
-                <Icon name='incr' className='w-20 h-20 pointer' onClick={() => setUnitCounter(prev => prev + 1)} />
-              </div>
-            </div>
-            <div className='flex space-between my-20 py-15 px-20 text-15 m:text-18 radius-5  border border-deep-grey'>
-              <span className='text-dimgrey opacity-70'>Quantity:</span>
-              <select name="" id="" className='border-none text-15 m:text-20 text-grey opacity-100 weight-400 bg-transparent outline-none'>
-                <option value="">Bundle</option>
-                <option value="">Bale</option>
-
-              </select></div>
-            <button className='w-100p py-16 bg-green border-none radius-8 text-white text-16 l:text-16'>Add to cart (NGN 20, 000)</button>
-          </div>
-        </div>
         </div>
         <div className='w-100p mt-30 m:hidden'>
-            <div className='flex gap-20 px-10 l:px-40 py-20 radius-20 border border-faint-grey'>
-              <div><Icon name='flash' className='w-36 h-36 l:w-40 l:h-40' /></div>
-              <div>
-                <p className='line-height-25 text-14 m:line-height-38 l:text-16'><span className='weight-500 text-16 l:text-18'>Flash Sales.</span> Get a 20% discount when you purchase before May 30th. Don't wait, this deal won't last forever. Shop now and save big!</p>
-              </div>
+          <div className='flex gap-20 px-10 l:px-40 py-20 radius-20 border border-faint-grey'>
+            <div><Icon name='flash' className='w-36 h-36 l:w-40 l:h-40' /></div>
+            <div>
+              <p className='line-height-25 text-14 m:line-height-38 l:text-16'><span className='weight-500 text-16 l:text-18'>Flash Sales.</span> Get a 20% discount when you purchase before May 30th. Don't wait, this deal won't last forever. Shop now and save big!</p>
             </div>
-            <div className='flex j-content-center items-center py-20'>
-              <Icon name='flag' className='w-16' />
-              <p className='px-10 text-grey underline text-16'>Report Item</p>
-            </div>
+          </div>
+          <div className='flex j-content-center items-center py-20'>
+            <Icon name='flag' className='w-16' />
+            <p className='px-10 text-grey underline text-16'>Report Item</p>
+          </div>
         </div>
         <div className='w-100p l:w-55p border-b border-lighter-grey'>
-        <div className='flex gap-20 l:gap-30 pb-20 l:pb-25 mt-40 line-height-25 text-14 m:line-height-38'>
+          <div className='flex gap-20 l:gap-30 pb-20 l:pb-25 mt-40 line-height-25 text-14 m:line-height-38'>
             <Icon name='info' className='w-20 h-20 l:w-30 l:h-30' />
             <div>
               <h2 className='text-20 m:text-20 weight-500'>About this product</h2>
@@ -269,9 +356,9 @@ const ProductDetails = () => {
                 />
                 <p className='text-14 l:text-16 weight-500 py-5'>Ankara</p>
                 <p className='text-14'>6 yards</p>
-                </div>
+              </div>
 
-                <div className='w-50p'>
+              <div className='w-50p'>
                 <Image
                   className='w-100p h-110 l:h-220 radius-20'
                   src='Ankara.jpeg'
@@ -348,7 +435,7 @@ const ProductDetails = () => {
             </div>
 
             <div className='l:w-50p'>
-            <div className='flex w-100p space-between items-center py-10'>
+              <div className='flex w-100p space-between items-center py-10'>
                 <p className='text-14 l:text-18'>5</p>
                 <GrStar className='w-20 h-20 l:w-20 l:h-20' />
                 <p className='text-14 l:text-18 w-10p'>(30)</p>
@@ -375,81 +462,81 @@ const ProductDetails = () => {
         </div>
 
         <div className='grid l:grid-2-cols-auto l:gap-40'>
-        <div className='mb-20 l:mb-0'>
-          <div className='flex gap-10 l:gap-20 items-center'>
-            <Image
-              className='w-60 h-60 l:w-90 radius-50p l:h-90'
-              src='Ankara.jpeg'
-              alt='product'
-              type='image'
-            />
-            <div className='line-height-32'>
-              <p className='text-16 l:text-20 weight-500'>Bolu Johnson</p>
-              <p className='text-14 m:text-16 weight-300'>February 2023</p>
+          <div className='mb-20 l:mb-0'>
+            <div className='flex gap-10 l:gap-20 items-center'>
+              <Image
+                className='w-60 h-60 l:w-90 radius-50p l:h-90'
+                src='Ankara.jpeg'
+                alt='product'
+                type='image'
+              />
+              <div className='line-height-32'>
+                <p className='text-16 l:text-20 weight-500'>Bolu Johnson</p>
+                <p className='text-14 m:text-16 weight-300'>February 2023</p>
+              </div>
+            </div>
+            <div className='py-10'>
+              <p className='line-height-30 text-14 pr-0 l:line-height-40 l:text-16 l:pr-30 text-grey'>I just received my Ankara fabric and I am blown away by the quality! The colors are so vibrant and the patterns are absolutely stunning. I can't wait to start creating some beautiful garments with this fabric.</p>
+              <button className='bg-none border-none flex text-16 l:text-18 mt-10'><p className='underline pr-5'>See more</p> {'>'}</button>
             </div>
           </div>
-          <div className='py-10'>
-            <p className='line-height-30 text-14 pr-0 l:line-height-40 l:text-16 l:pr-30 text-grey'>I just received my Ankara fabric and I am blown away by the quality! The colors are so vibrant and the patterns are absolutely stunning. I can't wait to start creating some beautiful garments with this fabric.</p>
-            <button className='bg-none border-none flex text-16 l:text-18 mt-10'><p className='underline pr-5'>See more</p> {'>'}</button>
-          </div>
-        </div>
 
-        <div className='mb-20 l:mb-0'>
-          <div className='flex gap-10 l:gap-20 items-center'>
-            <Image
-              className='w-60 h-60 l:w-90 radius-50p l:h-90'
-              src='Ankara.jpeg'
-              alt='product'
-              type='image'
-            />
-            <div className='line-height-32'>
-              <p className='text-16 l:text-20 weight-500'>Bolu Johnson</p>
-              <p className='text-14 m:text-16 weight-300'>February 2023</p>
+          <div className='mb-20 l:mb-0'>
+            <div className='flex gap-10 l:gap-20 items-center'>
+              <Image
+                className='w-60 h-60 l:w-90 radius-50p l:h-90'
+                src='Ankara.jpeg'
+                alt='product'
+                type='image'
+              />
+              <div className='line-height-32'>
+                <p className='text-16 l:text-20 weight-500'>Bolu Johnson</p>
+                <p className='text-14 m:text-16 weight-300'>February 2023</p>
+              </div>
+            </div>
+            <div className='py-10'>
+              <p className='line-height-30 text-14 pr-0 l:line-height-40 l:text-16 l:pr-30 text-grey'>I just received my Ankara fabric and I am blown away by the quality! The colors are so vibrant and the patterns are absolutely stunning. I can't wait to start creating some beautiful garments with this fabric.</p>
+              <button className='bg-none border-none flex text-16 l:text-18 mt-10'><p className='underline pr-5'>See more</p> {'>'}</button>
             </div>
           </div>
-          <div className='py-10'>
-            <p className='line-height-30 text-14 pr-0 l:line-height-40 l:text-16 l:pr-30 text-grey'>I just received my Ankara fabric and I am blown away by the quality! The colors are so vibrant and the patterns are absolutely stunning. I can't wait to start creating some beautiful garments with this fabric.</p>
-            <button className='bg-none border-none flex text-16 l:text-18 mt-10'><p className='underline pr-5'>See more</p> {'>'}</button>
-          </div>
-        </div>
 
-        <div className='mb-20 l:mb-0'>
-          <div className='flex gap-10 l:gap-20 items-center'>
-            <Image
-              className='w-60 h-60 l:w-90 radius-50p l:h-90'
-              src='Ankara.jpeg'
-              alt='product'
-              type='image'
-            />
-            <div className='line-height-32'>
-              <p className='text-16 l:text-20 weight-500'>Bolu Johnson</p>
-              <p className='text-14 m:text-16 weight-300'>February 2023</p>
+          <div className='mb-20 l:mb-0'>
+            <div className='flex gap-10 l:gap-20 items-center'>
+              <Image
+                className='w-60 h-60 l:w-90 radius-50p l:h-90'
+                src='Ankara.jpeg'
+                alt='product'
+                type='image'
+              />
+              <div className='line-height-32'>
+                <p className='text-16 l:text-20 weight-500'>Bolu Johnson</p>
+                <p className='text-14 m:text-16 weight-300'>February 2023</p>
+              </div>
+            </div>
+            <div className='py-10'>
+              <p className='line-height-30 text-14 pr-0 l:line-height-40 l:text-16 l:pr-30 text-grey'>I just received my Ankara fabric and I am blown away by the quality! The colors are so vibrant and the patterns are absolutely stunning. I can't wait to start creating some beautiful garments with this fabric.</p>
+              <button className='bg-none border-none flex text-16 l:text-18 mt-10'><p className='underline pr-5'>See more</p> {'>'}</button>
             </div>
           </div>
-          <div className='py-10'>
-            <p className='line-height-30 text-14 pr-0 l:line-height-40 l:text-16 l:pr-30 text-grey'>I just received my Ankara fabric and I am blown away by the quality! The colors are so vibrant and the patterns are absolutely stunning. I can't wait to start creating some beautiful garments with this fabric.</p>
-            <button className='bg-none border-none flex text-16 l:text-18 mt-10'><p className='underline pr-5'>See more</p> {'>'}</button>
-          </div>
-        </div>
 
-        <div className='mb-20 l:mb-0'>
-          <div className='flex gap-10 l:gap-20 items-center'>
-            <Image
-              className='w-60 h-60 l:w-90 radius-50p l:h-90'
-              src='Ankara.jpeg'
-              alt='product'
-              type='image'
-            />
-            <div className='line-height-32'>
-              <p className='text-16 l:text-20 weight-500'>Bolu Johnson</p>
-              <p className='text-14 m:text-16 weight-300'>February 2023</p>
+          <div className='mb-20 l:mb-0'>
+            <div className='flex gap-10 l:gap-20 items-center'>
+              <Image
+                className='w-60 h-60 l:w-90 radius-50p l:h-90'
+                src='Ankara.jpeg'
+                alt='product'
+                type='image'
+              />
+              <div className='line-height-32'>
+                <p className='text-16 l:text-20 weight-500'>Bolu Johnson</p>
+                <p className='text-14 m:text-16 weight-300'>February 2023</p>
+              </div>
+            </div>
+            <div className='py-10'>
+              <p className='line-height-30 text-14 pr-0 l:line-height-40 l:text-16 l:pr-30 text-grey'>I just received my Ankara fabric and I am blown away by the quality! The colors are so vibrant and the patterns are absolutely stunning. I can't wait to start creating some beautiful garments with this fabric.</p>
+              <button className='bg-none border-none flex text-16 l:text-18 mt-10'><p className='underline pr-5'>See more</p> {'>'}</button>
             </div>
           </div>
-          <div className='py-10'>
-            <p className='line-height-30 text-14 pr-0 l:line-height-40 l:text-16 l:pr-30 text-grey'>I just received my Ankara fabric and I am blown away by the quality! The colors are so vibrant and the patterns are absolutely stunning. I can't wait to start creating some beautiful garments with this fabric.</p>
-            <button className='bg-none border-none flex text-16 l:text-18 mt-10'><p className='underline pr-5'>See more</p> {'>'}</button>
-          </div>
-        </div>
         </div>
 
         <div className='py-30 hidden l:flex'>
@@ -461,7 +548,7 @@ const ProductDetails = () => {
         </div>
       </div>
 
-      <Footer />        
+      <Footer />
     </>
   )
 }

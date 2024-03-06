@@ -1,3 +1,5 @@
+"use client"
+
 import { useEffect, useState } from 'react';
 import useAddressStore from '../store/address.store';
 import useUserStore from '../store/user.store';

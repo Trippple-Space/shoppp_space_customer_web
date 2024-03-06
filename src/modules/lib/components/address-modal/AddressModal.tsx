@@ -1,3 +1,5 @@
+"use client"
+
 import React, { useState } from 'react';
 import { AiOutlineClose } from 'react-icons/ai';
 import Modal from '@/modules/lib/components/modal/modal';

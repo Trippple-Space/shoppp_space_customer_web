@@ -6,11 +6,11 @@ import { BsBasket3 } from "react-icons/bs";
 import { LiaCommentsDollarSolid } from "react-icons/lia";
 import React, { useState } from "react";
 import cx from "classnames";
-import FabricsCategoryNav from "@/modules/lib/components/category-nav/FabricsCategoryNav";
+import FabricsCategoryNav from "@/modules/lib/components/nav-bar/category-nav/FabricsCategoryNav";
 import ProductTile from "@/modules/lib/components/product-tile/ProductTile";
 import Footer from "@/modules/lib/components/footer/Footer";
 import HomepageNavBar from "@/modules/lib/components/nav-bar/HomepageNavBar";
-import Filters from "./FiltersComponent";
+import Filters from "../../lib/components/nav-bar/category-nav/FiltersComponent";
 import { TbShoppingBag } from "react-icons/tb"
 import MiniCart from "../../lib/components/minicart/MiniCart";
 

@@ -8,7 +8,9 @@ export interface ProductCategory {
   }
   
   export interface Product {
+    keywords: string[];
     id: number;
+    slug: string;
     category: ProductCategory;
     price: number;
     name: string;

@@ -8,6 +8,7 @@ import { Product } from "../../utility/types/product.interface";
 import { formatNumberAsPrice } from "../../utility/utility";
 import { useCart } from "../../utility/hooks/use-cart";
 import QuantitySelector from "../quantity-selector/QuantitySelector";
+import Link from "next/link";
 
 interface IProductTile {
   product: Product
@@ -82,7 +83,9 @@ const ProductTile: FC<IProductTile> = ({ product }) => {
         className="mt-15 overflow-hidden white-space-nowrap text-overflow-ellipsis"
       >
         <h3 className="text-16 l:text-15 weight-500">
-          {product.name}
+          <Link href={`/products/${product.slug}`}>
+            {product.name}
+          </Link>
         </h3>
         <div className="flex a-items-center gap-10 l:gap-18 mt-5 text-dimgrey">
           <p>{product?.store?.name}</p>
