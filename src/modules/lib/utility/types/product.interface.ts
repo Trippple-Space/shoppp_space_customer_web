@@ -1,6 +1,7 @@
 import { Store } from "./store.interface";
 
 export interface ProductCategory {
+    type: string;
     id: number;
     name: string;
     images: string[];
@@ -8,6 +9,7 @@ export interface ProductCategory {
   }
   
   export interface Product {
+    longDescription: string;
     keywords: string[];
     id: number;
     slug: string;
@@ -18,6 +20,9 @@ export interface ProductCategory {
     status: number;
     dateCreated: string;
     lastUpdated: string;
+    reviewRating: number;
+    reviews: any,
+    comments: any,
     variants: ProductVariant[];
     store: Store
   }

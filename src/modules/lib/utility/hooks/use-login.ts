@@ -2,7 +2,6 @@ import { authService } from "@/modules/lib/utility/services/auth.service";
 import { LoginCredentials } from "@/modules/lib/utility/types/auth.interface";
 import { paths } from "@/modules/lib/utility/paths";
 import { FormikConfig, useFormik } from "formik";
-import { AppRouterInstance } from "next/dist/shared/lib/app-router-context";
 import { usePathname, useRouter } from "next/navigation";
 import { toast } from "sonner";
 import * as Yup from 'yup'
@@ -27,7 +26,7 @@ const LoginValidationSchema = Yup.object().shape({
 })
 
 
-const formikLoginConfig = (router: AppRouterInstance, callback?: (user: User) => void): FormikConfig<LoginCredentials> => ({
+const formikLoginConfig = (router: any, callback?: (user: User) => void): FormikConfig<LoginCredentials> => ({
     initialValues: {
         email: '',
         password: ''

@@ -18,6 +18,7 @@ import { PiNyTimesLogoThin } from 'react-icons/pi';
 import { TbShoppingBag } from 'react-icons/tb';
 import { paths } from '../../utility/paths';
 import { getCartItemVariantPropertiesAsJsx } from './minicart.helper';
+import { HiOutlineShoppingBag } from 'react-icons/hi2';
 
 interface ModalProps {
 
@@ -32,7 +33,7 @@ const MiniCart: React.FC<ModalProps> = () => {
 
   return (
     <div>
-      <Modal isOpen={open} onClose={() => setOpen(false)} extraClass={{height: '100vh'}} className="t-0 l:t-0 l:b-0 100vh l:h-100vh l:r-0 overflow-hidden">
+      <Modal isOpen={open} onClose={() => setOpen(false)} extraClass={{ height: '100vh' }} className="t-0 l:t-0 l:b-0 100vh l:h-100vh l:r-0 overflow-hidden">
         <div className='relative h-full'>
           <div className='py-15 bg-grey-200 pointer' onClick={() => setOpen(false)}>
             <div className="flex px-15 gap-10 j-content-center ">
@@ -99,57 +100,57 @@ const MiniCart: React.FC<ModalProps> = () => {
                     </div> */}
 
 
-                      <div className="flex gap-10">
-                        <div className={cx('w-50 h-50', {
-                          'bg-white': (i % 2),
-                          'bg-grey-100': !(i % 2),
-                        })}>
-                          <Image
-                            className='w-full h-full radius-3'
-                            src={cartItem.variant.media[0].url}
-                            alt='product'
-                            type='image'
-                          />
-                        </div>
-
-                        <div className='w-full h-full flex flex-col'>
-                          <div className="w-full h-20">
-                            <div className={cx("w-150 h-12 radius-3 text-13 weight-500", {
-                              // 'bg-white': (i % 2),
-                              // 'bg-grey-100': !(i % 2),
-                            })}> {cartItem.variant.product.name} </div>
-                          </div>
-
-                          <div className="w-full h-20">
-                            <div className={cx("w-100 h-8 radius-3 flex gap-3 text-13", {
-                              // 'bg-white': (i % 2),
-                              // 'bg-grey-100': !(i % 2),
-                            })}>
-                                {getCartItemVariantPropertiesAsJsx(cartItem)}
-                            </div>
-                          </div>
-
-                          <div className="w-full h-20">
-                            <div className={cx("w-100 h-8 radius-3 flex text-12", {
-                              // 'bg-white': (i % 2),
-                              // 'bg-grey-100': !(i % 2),
-                            })}>
-                              {cartItem.variant.stock} {cartItem.variant.stockUnit}(s) left
-                            </div>
-                          </div>
-
-                          <div className="w-full h-20 flex space-between">
-                            <div></div>
-                            <div className={cx('w-50 radius-3 text-12 bold', {
-                              // 'bg-white': (i % 2),
-                              // 'bg-grey-100': !(i % 2),
-                            })}>
-                              {formatNumberAsPrice(cartItem.totalPrice)}
-                            </div>
-                          </div>
-                        </div>
-
+                    <div className="flex gap-10">
+                      <div className={cx('w-50 h-50', {
+                        'bg-white': (i % 2),
+                        'bg-grey-100': !(i % 2),
+                      })}>
+                        <Image
+                          className='w-full h-full radius-3'
+                          src={cartItem.variant.media[0].url}
+                          alt='product'
+                          type='image'
+                        />
                       </div>
+
+                      <div className='w-full h-full flex flex-col'>
+                        <div className="w-full h-20">
+                          <div className={cx("w-150 h-12 radius-3 text-13 weight-500", {
+                            // 'bg-white': (i % 2),
+                            // 'bg-grey-100': !(i % 2),
+                          })}> {cartItem.variant.product.name} </div>
+                        </div>
+
+                        <div className="w-full h-20">
+                          <div className={cx("w-100 h-8 radius-3 flex gap-3 text-13", {
+                            // 'bg-white': (i % 2),
+                            // 'bg-grey-100': !(i % 2),
+                          })}>
+                            {getCartItemVariantPropertiesAsJsx(cartItem)}
+                          </div>
+                        </div>
+
+                        <div className="w-full h-20">
+                          <div className={cx("w-100 h-8 radius-3 flex text-12", {
+                            // 'bg-white': (i % 2),
+                            // 'bg-grey-100': !(i % 2),
+                          })}>
+                            {cartItem.variant.stock} {cartItem.variant.stockUnit}(s) left
+                          </div>
+                        </div>
+
+                        <div className="w-full h-20 flex space-between">
+                          <div></div>
+                          <div className={cx('w-50 radius-3 text-12 bold', {
+                            // 'bg-white': (i % 2),
+                            // 'bg-grey-100': !(i % 2),
+                          })}>
+                            {formatNumberAsPrice(cartItem.totalPrice)}
+                          </div>
+                        </div>
+                      </div>
+
+                    </div>
                   </div>
                 ))}
                 <div className="offset h-400 w-full"></div>
@@ -157,21 +158,21 @@ const MiniCart: React.FC<ModalProps> = () => {
             )}
 
           </div>
-          { !!cart.cartItems.length && 
+          {!!cart.cartItems.length &&
             <div className='bg-yellow-50 pb-30 absolute b-0 left-0 w-full '>
               <div className='px-20 mt-15 mb-15'>
-                  <OrderSummary
-                    subTotal={cart.subTotal}
-                    extraSavings={cart.total - cart.subTotal}
-                    total={cart.total}
-                  />
+                <OrderSummary
+                  subTotal={cart.subTotal}
+                  extraSavings={cart.total - cart.subTotal}
+                  total={cart.total}
+                />
               </div>
               <div className='w-fit mx-auto mt-30'>
-                  <button className='bg-green border-none radius-5 text-white py-14 px-30 weight-600 text-16 pointer' onClick={() => router.push(paths.checkout)}>Proceed to checkout</button>
+                <button className='bg-green border-none radius-5 text-white py-14 px-30 weight-600 text-16 pointer' onClick={() => router.push(paths.checkout)}>Proceed to checkout</button>
               </div>
               <div className='text-13 mt-5 w-fit mx-auto'>
-                  For Returns Policy,
-                  <span className='text-green text-13'> click here</span>
+                For Returns Policy,
+                <span className='text-green text-13'> click here</span>
               </div>
             </div>
           }
@@ -179,12 +180,18 @@ const MiniCart: React.FC<ModalProps> = () => {
       </Modal>
 
       <div className="w-100p">
-        <div onClick={() => setOpen(true)} className="mx-auto pointer flex bg-green p-4 text-white radius-10">
+        {/* <div onClick={() => setOpen(true)} className="mx-auto pointer flex bg-green p-4 text-white radius-10">
           <div className="px-10 py-2 radius-10 radius-t-r-0 radius-b-r-0 flex items-center j-content-center bg-darkgreen text-white">
             <TbShoppingBag className="w-18 h-18 l:w-25 l:h-25" />
           </div>
           <div className="w-fit text-12 pl-5 bold flex text-center items-center j-content-center">
             {cart.cartItems.length}
+          </div>
+        </div> */}
+        <div onClick={() => setOpen(true)} className='relative pointer bg-yellow-50 w-40 h-40 round flex j-content-center items-center border border-yellow-900'>
+          <HiOutlineShoppingBag className='w-18 text-yellow-900' />
+          <div className='absolute bg-yellow flex w-fit min-w-15 ratio-1/1 items-center j-content-center round t--5 r--5 outline outline-white outline-3'>
+            <span className='text-12 m-1'>{cart.cartItems.length}</span>
           </div>
         </div>
       </div>

@@ -13,6 +13,9 @@ import AddressModal from '../address-modal/AddressModal';
 import { useAuthGuard } from '../../utility/hooks/use-auth-guard';
 import { BsSearch } from 'react-icons/bs';
 import MiniCart from '../minicart/MiniCart';
+import { cx } from '../../utility/utility';
+import { usePathname, useRouter } from 'next/navigation';
+import { useNavbarView } from '../../utility/hooks/views/use-navbar-view';
 
 interface IBaseNavBar {
     links: ReactNode
@@ -21,21 +24,29 @@ interface IBaseNavBar {
 const BaseNavBar: FC<IBaseNavBar> = ({ links }) => {
     const [userProfileDropdown, setUserProfileDropdown] = useState<boolean>(false);
     const [userOrderDropdown, setUserOrderDropdown] = useState<boolean>(false);
+    const pathname = usePathname();
+    const {user, signOut, openAddressModal} = useNavbarView()
 
+    console.log({ pathname })
     return (
         <div className='fixed w-full t-0 l-0 bg-white border-b border-whitesmoke z-5'>
-            <div className='grid grid-3-cols-1fr app-width space-between items-center py-15 '>
-                <div className='w-fit'>
-                    <Image
-                        className='w-90 l:w-100'
-                        src='asoebi-logo-colored.png'
-                        alt='logo'
-                        type='logo'
-                    />
+            <div className={cx('flex app-width space-between items-center py-15', {
+                'max-w-1400!': pathname.startsWith('/products/')
+            })}>
+                <div className='flex items-center gap-100'>
+                    <div className='w-fit'>
+                        <Image
+                            className='w-90 l:w-100'
+                            src='asoebi-logo-colored.png'
+                            alt='logo'
+                            type='logo'
+                        />
+                    </div>
+                    <div className='w-fit text-center'>
+                        {links}
+                    </div>
                 </div>
-                <div className='w-100p text-center'>
-                    {links}
-                </div>
+
                 <div className='w-fit relative j-self-end'>
                     <div className="flex gap-20 items-center">
                         <div className='w-full'>
@@ -46,11 +57,20 @@ const BaseNavBar: FC<IBaseNavBar> = ({ links }) => {
                                 </div>
                             </div>
                         </div>
-                        <div className="flex gap-7 border-solid border-1 border-grey-300 pt-6 pb-2 px-8 w-fit h-fit m-auto radius-50 text-grey-700 pointer relative" onClick={() => setUserProfileDropdown(true)}>
-                            <div><LuAlignJustify className="w-24 h-24" /></div>
-                            <div><FaRegCircleUser className="w-24 h-24" /></div>
-                        </div>  
-                        <MiniCart />             
+                        <MiniCart />
+                        <div className="flex gap-7 items-center w-fit h-fit m-auto radius-50 text-grey-700 pointer relative" onClick={() => setUserProfileDropdown(true)}>
+                            <div className='h-fit'>
+                                <Image
+                                    className="w-40 h-40 border-solid border-2 border-grey-300 radius-50p"
+                                    src={`https://api.dicebear.com/7.x/thumbs/svg?seed=${user?.username}`}
+                                    alt="user"
+                                />
+                            </div>
+                            <div className='h-fit'>
+                                <div className='text-grey-500 whitespace-nowrap text-12'>Good morning!</div>
+                                <div className='whitespace-nowrap text-green weight-500 text-16'>Guest User</div>
+                            </div>
+                        </div>
                     </div>
 
                     {

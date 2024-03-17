@@ -6,6 +6,7 @@ const categoryPlaceholders = Array.from({ length: 6 }).map(category => ({
     name: '',
     images: [''],
     description: '',
+    type: '',
     id: 0
 }))
 
@@ -20,6 +21,7 @@ export const useCategories = () => {
                     description: 'All categories',
                     images: ['home.svg'],
                     name: 'All',
+                    type: 'fabrics'
                 }, ...categories])
             })
     }, [])
