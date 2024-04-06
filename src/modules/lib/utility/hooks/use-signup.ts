@@ -2,7 +2,6 @@ import { authService } from "@/modules/lib/utility/services/auth.service"
 import { RegistrationDetails } from "@/modules/lib/utility/types/auth.interface"
 import { paths } from "@/modules/lib/utility/paths";
 import { FormikConfig, useFormik } from "formik"
-import { AppRouterInstance } from "next/dist/shared/lib/app-router-context";
 import { useRouter } from "next/navigation";
 import { toast } from "sonner";
 import * as Yup from 'yup';
@@ -26,7 +25,7 @@ export const SignUpValidationSchema = Yup.object().shape({
     acceptTerms: Yup.boolean().oneOf([true], 'Kindly accept our terms of service to proceed.').required('Kindly accept our terms of service to proceed.')
 });
 
-const formikSignUpConfig = (router: AppRouterInstance): FormikConfig<RegistrationDetails> => ({
+const formikSignUpConfig = (router: any): FormikConfig<RegistrationDetails> => ({
     initialValues: {
         fullname: '',
         email: '',
