@@ -1,0 +1,252 @@
+[
+    {
+        "name": "Hugo boss",
+        "shortDescription": "This is a short description",
+        "longDescription": "This is a longer description that provides more details about the product. Lorem ipsum from the database",
+        "price": 52000.00,
+        "store": {
+          "id": 3
+        },
+        "category": {
+          "id": 2
+        },
+        "stock": "100",
+        "stockUnit": "size",
+        "type": "shoe",
+        "tags": ["top_in_sales", "super_deals", "holiday"],
+        "keywords": ["elegant", "smart"],
+        "variants": [
+          {
+              "media": [
+                  {
+                      "url": "https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Ftse3.mm.bing.net%2Fth%3Fid%3DOIP.oy3-WaS-FTT-YQ4QVpuRxAHaHu%26pid%3DApi&f=1&ipt=8b8bc48c4b6240c2e9fd66f16455e0abb922e84b52df476f3e3d51c6b52242dc&ipo=images",
+                      "type": "image",
+                      "description": "Black",
+                      "caption": "Black"
+                  },
+      
+                  {
+                      "url": "https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Ftse4.mm.bing.net%2Fth%3Fid%3DOIP.6fTLKQUSfYgSbWeUTXug5gHaD4%26pid%3DApi&f=1&ipt=a624042de70f77702d6213d99dd6eeeb033277258dcc62898facdb575b351bc2&ipo=images",
+                      "type": "image",
+                      "description": "White",
+                      "caption": "White"
+                  }
+              ],
+              "stock": 50,
+              "price": 49999.99,
+              "properties": {
+                      "color": "black",
+                      "origin": "Germany"
+                  },
+              "minPurchaseQuantity": 5
+          },
+          {
+              "media": [
+                  {
+                      "url": "https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Ftse3.mm.bing.net%2Fth%3Fid%3DOIP.r3KVE9yXcIjVer75QQ62QwHaLO%26pid%3DApi&f=1&ipt=f0257726e837dcd0ec8a6dcc6ac36e14e1dab7fdf152af6797aeedd4945a6ebb&ipo=images",
+                      "type": "image",
+                      "description": "Brown",
+                      "caption": "Brown"
+                  }
+              ],
+              "stock": 75,
+              "price": 43200.80,
+              "properties": {
+                  "color": "brown",
+                  "origin": "Swiss"
+              },
+              "minPurchaseQuantity": 10
+          },
+          {
+            "media": [
+                  {
+                      "url": "https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Ftse3.mm.bing.net%2Fth%3Fid%3DOIP.QpJTeZ7pBry4qgDpwTnnRgHaHa%26pid%3DApi&f=1&ipt=bc90ef8b95c85a274c1fa12b362c19d0525714cb466a57ffebc0d894e20cd84b&ipo=images",
+                      "type": "image",
+                      "description": "Blue",
+                      "caption": "Blue"
+                  },
+                  {
+                      "url": "https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Ftse4.mm.bing.net%2Fth%3Fid%3DOIP.QLGje2QXcBhlOOefSxkkQAHaEJ%26pid%3DApi&f=1&ipt=d977c9c0de492ca5778535822c958915a139c6890bf5f86f4945d92f83478840&ipo=images",
+                      "type": "image",
+                      "description": "Green",
+                      "caption": "Green"
+                  }
+              ],
+            "stock": 75,
+            "price": 59000.99,
+            "properties": {
+                  "color": "red",
+                  "origin": "Swiss"
+              },
+            "minPurchaseQuantity": 10
+          }
+        ]
+    },
+
+    {
+        "name": "Diamond Ring",
+        "shortDescription": "This is a short description",
+        "longDescription": "This is a longer description that provides more details about the product. Lorem ipsum from the database",
+        "price": 2952000.00,
+        "store": {
+          "id": 4
+        },
+        "category": {
+          "id": 3
+        },
+        "stock": "100",
+        "stockUnit": "size",
+        "type": "jewries",
+        "tags": ["top_in_sales", "super_deals", "holiday"],
+        "keywords": ["elegant", "smart"],
+        "variants": [
+          {
+              "media": [
+                  {
+                      "url": "https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Ftse1.mm.bing.net%2Fth%3Fid%3DOIP.2yGiHBf0QASq-WP5j5mDKAAAAA%26pid%3DApi&f=1&ipt=3986e3f548011e43eb425a74fe7ab97208bc5e9af0253f30e73bc7339b914517&ipo=images",
+                      "type": "image",
+                      "description": "silver",
+                      "caption": "diamond"
+                  },
+      
+                  {
+                      "url": "https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Ftse4.mm.bing.net%2Fth%3Fid%3DOIP.LXlXpy7e3tqH5zZh4G1AowHaHa%26pid%3DApi&f=1&ipt=6ecc5278e55b04246e3a871d18366465575bcb6bccda17df6c986c2611c8c948&ipo=images",
+                      "type": "image",
+                      "description": "Diamond 24karat",
+                      "caption": "White"
+                  }
+              ],
+              "stock": 50,
+              "price": 1749999.99,
+              "properties": {
+                      "color": "black",
+                      "origin": "Germany"
+                  },
+              "minPurchaseQuantity": 5
+          },
+          {
+              "media": [
+                  {
+                      "url": "https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Ftse1.mm.bing.net%2Fth%3Fid%3DOIP.854pJCKVlQGmBszk3Db75AHaHa%26pid%3DApi&f=1&ipt=578780bf6e919888418e6f36a87cbbb1558168f22beeb9ecc0992f93bcc01ab9&ipo=images",
+                      "type": "image",
+                      "description": "Brown",
+                      "caption": "Brown"
+                  }
+              ],
+              "stock": 75,
+              "price": 1843200.80,
+              "properties": {
+                  "color": "brown",
+                  "origin": "Swiss"
+              },
+              "minPurchaseQuantity": 10
+          },
+          {
+            "media": [
+                  {
+                      "url": "https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Ftse4.mm.bing.net%2Fth%3Fid%3DOIP.6FVX51TMKj8yStStNG6RDwHaHa%26pid%3DApi&f=1&ipt=6d02efaadcdd8a648b5f0bcc15ec553bff11681f43b086cbede20e354a8e5751&ipo=images",
+                      "type": "image",
+                      "description": "Blue",
+                      "caption": "Blue"
+                  },
+                  {
+                      "url": "https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Ftse4.mm.bing.net%2Fth%3Fid%3DOIP.v7q5Wl525lp68E00teMGtwHaJW%26pid%3DApi&f=1&ipt=4a2fee81ccc858d2c809eca02b36ebe3af5a34ac056d206300ffee0f010c8de4&ipo=images",
+                      "type": "image",
+                      "description": "Green",
+                      "caption": "Green"
+                  }
+              ],
+            "stock": 75,
+            "price": 1559000.99,
+            "properties": {
+                  "color": "red",
+                  "origin": "Swiss"
+              },
+            "minPurchaseQuantity": 10
+          }
+        ]
+    },
+
+    {
+        "name": "Geng Fila yoruba",
+        "shortDescription": "This is a short description",
+        "longDescription": "This is a longer description that provides more details about the product. Lorem ipsum from the database",
+        "price": 52000.00,
+        "store": {
+            "id": 2
+        },
+        "category": {
+            "id": 6
+        },
+        "stock": "100",
+        "stockUnit": "size",
+        "type": "Ethnic and Cultural Wear",
+        "keywords": ["elegant", "smart"],
+        "variants": [
+            {
+                "media": [
+                    {
+                        "url": "https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Ftse2.mm.bing.net%2Fth%3Fid%3DOIP.gJ3AiQHs86yzlUNTsjrpmQHaJQ%26pid%3DApi&f=1&ipt=ad5733226d1c051a07b65f209b87726e798125c7e09eb1fdfb33d3f5a2a3945b&ipo=images",
+                        "type": "image",
+                        "description": "Green",
+                        "caption": "Green"
+                    },
+        
+                    {
+                        "url": "https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Ftse1.explicit.bing.net%2Fth%3Fid%3DOIP.M9s7Eekm_Gvr44J93wgmFQHaJQ%26pid%3DApi&f=1&ipt=30f8233ba4e0ed253e543c7f7f44f9f98d6184cb636bc650eabc0cafbc55afac&ipo=images",
+                        "type": "image",
+                        "description": "Blue",
+                        "caption": "Blue"
+                    }
+                ],
+                "stock": 50,
+                "price": 149999.99,
+                "properties": {
+                        "color": "blue",
+                        "origin": "Niger"
+                    },
+                "minPurchaseQuantity": 5
+            },
+            {
+                "media": [
+                    {
+                        "url": "https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Ftse3.mm.bing.net%2Fth%3Fid%3DOIP.w5jwgMvCWPINjRu0dYYYNwHaFT%26pid%3DApi&f=1&ipt=0a5b4b5c8e706b9be9df187dd56d82b053460b94b1acd04f3de2082b186b0972&ipo=images",
+                        "type": "image",
+                        "description": "Black",
+                        "caption": "Black"
+                    }
+                ],
+                "stock": 75,
+                "price": 2343200.80,
+                "properties": {
+                    "color": "Black",
+                    "origin": "Swiss"
+                },
+                "minPurchaseQuantity": 10
+            },
+            {
+            "media": [
+                    {
+                        "url": "https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Ftse2.mm.bing.net%2Fth%3Fid%3DOIP.VM7j-MKxxxx2yQDsmD4EDQAAAA%26pid%3DApi&f=1&ipt=7f47f7cf349b3313a8fda7aa782c7bde950962b3cd368f50ae967ae40fa74278&ipo=images",
+                        "type": "image",
+                        "description": "Red",
+                        "caption": "Red"
+                    },
+                    {
+                        "url": "https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Ftse3.mm.bing.net%2Fth%3Fid%3DOIP.W3U1-DF3NbDMFhhwK0oGTAHaJQ%26pid%3DApi&f=1&ipt=1d53295307f6ffc8f4d1cb8c3af8fe0c1e82df097fd8ba2e9c98a80a3236d778&ipo=images",
+                        "type": "image",
+                        "description": "White",
+                        "caption": "White"
+                    }
+                ],
+            "stock": 75,
+            "price": 59000.99,
+            "properties": {
+                    "color": "red",
+                    "origin": "Swiss"
+                },
+            "minPurchaseQuantity": 10
+            }
+        ]
+    }
+]

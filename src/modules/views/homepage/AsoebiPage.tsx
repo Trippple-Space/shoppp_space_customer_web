@@ -46,7 +46,7 @@ const AsoebiHomepage = () => {
                 </div>
                 <div className="grid grid-2-cols-1fr l:grid-5-cols-1fr gap-10 l:gap-30 w-full">
                     {
-                        [...products, ...products, ...products, ...products].map(product => (
+                        [...products, ...products, ...products, ...products].map((product: any) => (
                             <ProductTile product={product} />
                         ))
                     }
@@ -60,7 +60,7 @@ const AsoebiHomepage = () => {
                 </div>
                 <div className="grid grid-2-cols-1fr l:grid-5-cols-1fr gap-10 l:gap-30 w-full">
                     {
-                        [...products, ...products, ...products, ...products].map(product => (
+                        [...products, ...products, ...products, ...products].map((product: any) => (
                             <ProductTile product={product} />
                         ))
                     }
@@ -75,7 +75,7 @@ const AsoebiHomepage = () => {
                 </div>
                 <div className="grid grid-2-cols-1fr l:grid-5-cols-1fr gap-10 l:gap-30 w-full">
                     {
-                        [...products, ...products, ...products, ...products].map(product => (
+                        [...products, ...products, ...products, ...products].map((product: any) => (
                             <ProductTile product={product} />
                         ))
                     }

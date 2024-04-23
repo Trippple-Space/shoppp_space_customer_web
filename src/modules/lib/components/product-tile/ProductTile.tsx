@@ -1,6 +1,6 @@
 'use client'
 
-import React, { FC, useState } from "react";
+import React, { FC, useEffect, useState } from "react";
 import Image from "../image/Image";
 import { AiFillStar, AiOutlinePlus, AiFillHeart } from 'react-icons/ai'
 import classNames from "classnames";
@@ -9,16 +9,18 @@ import { formatNumberAsPrice } from "../../utility/utility";
 import { useCart } from "../../utility/hooks/use-cart";
 import QuantitySelector from "../quantity-selector/QuantitySelector";
 import Link from "next/link";
-
 interface IProductTile {
   product: Product
 }
-const ProductTile: FC<IProductTile> = ({ product }) => {
+const ProductTile: FC<IProductTile> = ({ product }: any) => {
   const [selectedImage, setSelectedImage] = useState(product?.variants?.[0]?.media?.[0]?.url)
   const [selectedVariant, setSelectedVariant] = useState(product?.variants?.[0])
   const [isFavourite, setIsFavorite] = useState(false)
   const { addToCart, cart, increment, decrement } = useCart()
   const selectedVariantItemInCart = cart.cartItems.find(item => item.variant.id === selectedVariant?.id)
+  useEffect(() => {
+    setSelectedImage(product?.variants?.[0]?.media?.[0]?.url)
+  }, [product])
 
   return (
     <div className="mt-30 l:mt-20">
@@ -44,7 +46,7 @@ const ProductTile: FC<IProductTile> = ({ product }) => {
               <button onClick={() => addToCart(selectedVariant.id, selectedVariant.minPurchaseQuantity || 1)} className="bg-yellow pointer font-roboto text-grey-900 border-hidden px-10 py-10 radius-5 l:px-22 l:py-12 l:radius-10  ">
                 <span className="hidden l:block weight-500">Add to cart</span>
                 <div className="l:hidden">
-                  <AiOutlinePlus size={24} />
+                  <AiOutlinePlus className="l:w-24 l:h-24 w-14 h-14" />
                 </div>
               </button>
           }
@@ -59,13 +61,13 @@ const ProductTile: FC<IProductTile> = ({ product }) => {
       </div>
       <div
         id="product varients"
-        className="mt-15 flex a-items-center gap-13 "
+        className="mt-15 flex a-items-center l:gap-13 gap-8"
       >
         {
-          product.variants.map(variant => (
-            variant?.media?.map((mediaItem, i) => (
+          product.variants.map((variant: any) => (
+            variant?.media?.map((mediaItem: any) => (
               <Image
-                className={classNames("w-32 h-32 pointer radius-5 l:radius-8 a-self-center g|object-fit:cover", {
+                className={classNames("l:w-32 l:h-32 w-24 h-24 pointer radius-5 l:radius-8 a-self-center g|object-fit:cover", {
                   'border border-2': selectedImage == mediaItem?.url,
                   [`border-${mediaItem.description?.toLocaleLowerCase()}`]: selectedImage == mediaItem?.url
                 })}
@@ -73,7 +75,6 @@ const ProductTile: FC<IProductTile> = ({ product }) => {
                 onClick={() => { setSelectedVariant(variant); setSelectedImage(mediaItem?.url) }}
                 alt="product-image"
               />
-              // <div className="skelly-rectangle" data-width="180px" data-radius="100px"></div>
             ))
           ))
         }
@@ -82,22 +83,21 @@ const ProductTile: FC<IProductTile> = ({ product }) => {
         id="product details"
         className="mt-15 overflow-hidden white-space-nowrap text-overflow-ellipsis"
       >
-        <h3 className="text-16 l:text-15 weight-500">
+        <h3 className="l:text-15 text-14 weight-500">
           <Link href={`/products/${product.slug}`}>
             {product.name}
           </Link>
         </h3>
         <div className="flex a-items-center gap-10 l:gap-18 mt-5 text-dimgrey">
-          <p>{product?.store?.name}</p>
+          <p className="l:text-16 text-12">{product?.store?.name}</p>
           <div className="flex gap-3 items-center">
             <AiFillStar
-              // color="#0C7661" 
               className="w-12"
             />
-            <span>4.5</span>
+            <span className="l:text-16 text-12">4.5</span>
           </div>
         </div>
-        <div className="mt-6 text-18 l:text-15 weight-700">{formatNumberAsPrice(selectedVariant?.price)} <span className="weight-300">per {selectedVariant?.stockUnit}</span></div>
+        <div className="mt-6 l:text-15 text-12 weight-700">{formatNumberAsPrice(selectedVariant?.price)} <span className="weight-300 l:text-15 text-10">per {selectedVariant?.stockUnit}</span></div>
       </div>
     </div>
   );

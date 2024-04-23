@@ -1,6 +1,6 @@
 import { Store } from "./store.interface";
 
-export interface ProductCategory {
+  export interface ProductCategory {
     type: string;
     id: number;
     name: string;
