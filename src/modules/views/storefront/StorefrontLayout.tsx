@@ -4,13 +4,15 @@ import BaseNavBar from "@/modules/lib/components/nav-bar/BaseNavBar";
 import StorefrontNavBar from "@/modules/lib/components/nav-bar/StorefrontNavBar";
 import { BsBasket3 } from "react-icons/bs";
 import { LiaCommentsDollarSolid } from "react-icons/lia";
-import React, { FC, useState } from "react";
+import React, { FC, useEffect, useState } from "react";
 import cx from "classnames";
 import FabricsCategoryNav from "@/modules/lib/components/nav-bar/category-nav/FabricsCategoryNav";
 import ProductTile from "@/modules/lib/components/product-tile/ProductTile";
 import Footer from "@/modules/lib/components/footer/Footer";
 import { ILayout } from "@/app/layout";
 import StorefrontReviews from "./StorefrontReviews";
+import { useStoreProductsView } from "@/modules/lib/utility/hooks/views/use-store-products-view";
+import { useCategoryNavView } from "@/modules/lib/utility/hooks/views/use-category-nav-view";
 
 const tabs = [
     {
@@ -25,44 +27,12 @@ const tabs = [
     },
 ];
 
-const products = [
-    {
-        media: [
-            'https://res.cloudinary.com/codennerd/image/upload/v1689377577/Asoebi%20Africa/WhatsApp_Image_2023-07-15_at_12.23.25_AM_mghle5.jpg',
-            'https://res.cloudinary.com/codennerd/image/upload/v1689377577/Asoebi%20Africa/WhatsApp_Image_2023-07-15_at_12.23.25_AM_1_kxeykx.jpg',
-            'https://res.cloudinary.com/codennerd/image/upload/v1689377581/Asoebi%20Africa/WhatsApp_Image_2023-07-15_at_12.23.38_AM_2_y2rd0d.jpg',
-            'https://res.cloudinary.com/codennerd/image/upload/v1689377581/Asoebi%20Africa/WhatsApp_Image_2023-07-15_at_12.23.38_AM_1_samhx5.jpg',
-            'https://res.cloudinary.com/codennerd/image/upload/v1689377577/Asoebi%20Africa/WhatsApp_Image_2023-07-15_at_12.23.25_AM_mghle5.jpg',
-        ]
-    },
-    {
-        media: [
-            'https://res.cloudinary.com/codennerd/image/upload/v1689377463/Asoebi%20Africa/WhatsApp_Image_2023-07-15_at_12.23.07_AM_2_tdqxwf.jpg',
-            'https://res.cloudinary.com/codennerd/image/upload/v1689377462/Asoebi%20Africa/WhatsApp_Image_2023-07-15_at_12.23.04_AM_2_pbukkn.jpg',
-            'https://res.cloudinary.com/codennerd/image/upload/v1689377463/Asoebi%20Africa/WhatsApp_Image_2023-07-15_at_12.23.05_AM_hnms5f.jpg'
-        ]
-    },
-    {
-        media: [
-            'https://res.cloudinary.com/codennerd/image/upload/v1689377465/Asoebi%20Africa/WhatsApp_Image_2023-07-15_at_12.23.10_AM_1_lagmdm.jpg',
-            'https://res.cloudinary.com/codennerd/image/upload/v1689377465/Asoebi%20Africa/WhatsApp_Image_2023-07-15_at_12.23.10_AM_ogr4wj.jpg',
-            'https://res.cloudinary.com/codennerd/image/upload/v1689377465/Asoebi%20Africa/WhatsApp_Image_2023-07-15_at_12.23.09_AM_ynbrho.jpg',
-            'https://res.cloudinary.com/codennerd/image/upload/v1689377465/Asoebi%20Africa/WhatsApp_Image_2023-07-15_at_12.23.09_AM_1_cyknhk.jpg',
-        ]
-    },
-    {
-        media: [
-            'https://res.cloudinary.com/codennerd/image/upload/v1689377466/Asoebi%20Africa/WhatsApp_Image_2023-07-15_at_12.23.11_AM_1_ke6sjp.jpg',
-            'https://res.cloudinary.com/codennerd/image/upload/v1689377466/Asoebi%20Africa/WhatsApp_Image_2023-07-15_at_12.23.11_AM_ayzcab.jpg',
-            'https://res.cloudinary.com/codennerd/image/upload/v1689377462/Asoebi%20Africa/WhatsApp_Image_2023-07-15_at_12.23.02_AM_wuuypa.jpg',
-            'https://res.cloudinary.com/codennerd/image/upload/v1689377462/Asoebi%20Africa/WhatsApp_Image_2023-07-15_at_12.23.01_AM_guag4i.jpg'
-        ]
-    },
-
-]
-
 const StorefrontLayout: FC<ILayout> = ({ children }) => {
     const [activeTab, setActiveTab] = useState(tabs[0]);
+    const [selectedCategory, setSelectedCategory] = useState();
+    const {  products } = useStoreProductsView(selectedCategory);
+    const { categories } = useCategoryNavView();
+
     return (
         <div>
             <div className="pb-100">
@@ -89,8 +59,8 @@ const StorefrontLayout: FC<ILayout> = ({ children }) => {
                 </div>
 
                 <div className="border-b border-t border-whitesmoke pt-20 mt-68 mb-50">
-                    <div className="app-width">
-                        <FabricsCategoryNav />
+                    <div className="">
+                        <FabricsCategoryNav categories={categories} setSelectedCategory={setSelectedCategory} />
                     </div>
                 </div>
 
@@ -100,11 +70,11 @@ const StorefrontLayout: FC<ILayout> = ({ children }) => {
                     </div>
                     <section className="mt-55">
                         <h3 className="text-20 weight-300 uppercase">New Arrivals</h3>
-                        <div className="grid grid-5-cols-1fr gap-30 w-full">
+                        <div className="l:grid grid-5-cols-1fr gap-10 l:gap-30 w-full">
                             {
-                                // [...products, ...products, ...products, ...products].map(product => (
-                                //     <ProductTile product={product} /> 
-                                // ))
+                                products.map(product => (
+                                    <ProductTile product={product} />
+                                ))
                             }
                         </div>
                     </section>

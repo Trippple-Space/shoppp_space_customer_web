@@ -188,7 +188,7 @@ const MiniCart: React.FC<ModalProps> = () => {
             {cart.cartItems.length}
           </div>
         </div> */}
-        <div onClick={() => setOpen(true)} className='relative pointer bg-yellow-50 w-40 h-40 round flex j-content-center items-center border border-yellow-900'>
+        <div onClick={() => setOpen(true)} className='relative pointer bg-yellow-50 l:w-40 l:h-40 w-30 h-30 round flex j-content-center items-center border border-yellow-100'>
           <HiOutlineShoppingBag className='w-18 text-yellow-900' />
           <div className='absolute bg-yellow flex w-fit min-w-15 ratio-1/1 items-center j-content-center round t--5 r--5 outline outline-white outline-3'>
             <span className='text-12 m-1'>{cart.cartItems.length}</span>

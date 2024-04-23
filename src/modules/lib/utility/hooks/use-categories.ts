@@ -20,7 +20,7 @@ export const useCategories = () => {
                     id: 0,
                     description: 'All categories',
                     images: ['home.svg'],
-                    name: 'All',
+                    name: 'All Categories',
                     type: 'fabrics'
                 }, ...categories])
             })

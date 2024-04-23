@@ -25,6 +25,18 @@ export const formatNumberAsPrice = (number: number, currency: string = 'NGN') =>
     return formatted.replace('.00', '').replace('NGN', '₦')
 }
 
+export const getGreeting = () => {
+  const currentTime = new Date().getHours();
+
+  if (currentTime >= 5 && currentTime < 12) {
+    return 'Good morning!';
+  } else if (currentTime >= 12 && currentTime < 18) {
+    return 'Good afternoon!';
+  } else {
+    return 'Good evening!';
+  }
+};
+
 
 export const buildEndpoint = (endpoint: string, routeParams: { [key: string]: string | number } = {}, extendBy: string = '') => {
     let builtEndpoint = endpoint;

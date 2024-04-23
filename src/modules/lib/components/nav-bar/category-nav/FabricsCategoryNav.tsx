@@ -1,14 +1,10 @@
 import React from 'react'
-import { BiHomeAlt2 } from 'react-icons/bi'
 import BaseCategoryNav from './BaseCategoryNav'
-import { useCategoryNavView } from '@/modules/lib/utility/hooks/views/use-category-nav-view'
 
-const FabricsCategoryNav = () => {
-    const {categories} = useCategoryNavView()
-
+const FabricsCategoryNav = ({categories, setSelectedCategory}: any) => {
     return (
-        <div className='mt-100 app-width sticky t-34 bg-white z-1 test-header'>
-            <BaseCategoryNav categories={categories} />
+        <div className='l:mt-100 mt-75 app-width sticky t-34 bg-white z-1 test-header'>
+            <BaseCategoryNav categories={categories} setSelectedCategory={setSelectedCategory} />
         </div>
     )
 }

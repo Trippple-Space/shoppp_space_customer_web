@@ -15,10 +15,10 @@ export interface IImage {
 const Image: FC<IImage> = ({className, src, alt, type = 'image', onClick}) => {
   return (
     <img
-        className={className}
-        src={getImageDir((type + 's' as ImageSrcFolder), src)}
-        alt={alt}
-        onClick={() => onClick?.()}
+      className={className}
+      src={getImageDir((type + 's' as ImageSrcFolder), src)}
+      alt={alt}
+      onClick={() => onClick?.()}
     />
   )
 }

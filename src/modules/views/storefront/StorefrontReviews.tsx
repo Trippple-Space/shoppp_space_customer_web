@@ -9,7 +9,6 @@ const StorefrontReviews = () => {
     const rating = '3.4'
   return (
     <div>
-
         <div>
             <div className='max-w-1000'>
                 <div className='flex space-between'>

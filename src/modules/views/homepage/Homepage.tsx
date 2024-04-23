@@ -17,19 +17,20 @@ import AsoebiHomepage from "./AsoebiPage";
 import { usePathname } from "next/navigation";
 import AsoebiWears from "./AsoebiWears";
 import NoResultMessage from "@/modules/lib/components/error-messages/no-result-found";
+import { useCategoryNavView } from "@/modules/lib/utility/hooks/views/use-category-nav-view";
 
 const Homepage = () => {
+    const { categories } = useCategoryNavView();
+    const [selectedCategory, setSelectedCategory] = useState();
+
     return (
         <>
-            {/* <div className="mb-200"> */}
-                <HomepageNavBar />
-                <FabricsCategoryNav />
-                <div className="app-width">
-                    {/* <NoResultMessage /> */}
-                    <AsoebiWears />
-                </div>
-                <Footer />
-            {/* </div> */}
+            <HomepageNavBar />
+            <FabricsCategoryNav categories={categories} setSelectedCategory={setSelectedCategory} />
+            <div className="app-width">
+                <AsoebiWears selectedCategory={selectedCategory} />
+            </div>
+            <Footer />
         </>
 
     );
