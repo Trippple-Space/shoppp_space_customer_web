@@ -1,12 +1,19 @@
+"use client"
 import Image from '@/modules/lib/components/image/Image'
 import StorefrontNavBar from '@/modules/lib/components/nav-bar/StorefrontNavBar'
-import React from 'react'
+import React, { useEffect } from 'react'
 import {RxCalendar} from 'react-icons/rx'
 import {FaRegUserCircle} from 'react-icons/fa'
 import {IoBagCheckOutline} from 'react-icons/io5'
 import Icon from '@/modules/lib/components/icon/Icon'
+import { useStoreProductsView } from '@/modules/lib/utility/hooks/views/use-store-products-view'
 
-const StorefrontAbout = () => {
+const StorefrontAbout = ({ store }: { store: any }) => { 
+  const { products } = useStoreProductsView()
+  useEffect(() => {
+    console.log(products)
+  }, [products])
+  // console.log(products?.[0].variants?.[0].media?.[0].url)
   return (
     <>
     <div className="bg-white w-full ">
@@ -17,15 +24,20 @@ const StorefrontAbout = () => {
               <div className="relative flex z-1 gap-50">
                 <div className='w-60p'>
                   <div className="flex gap-15">
-                    <Image src='billgram.png' className='w-80 h-80' alt='' />
+                    <Image src={store.thumbnail} className='w-80 h-80 radius-8' alt='' />
                     <div className='a-self-center'>
-                      <h3 className='text-35'>Bill<span className='text-green'>Gram</span></h3>
-                      <p>Online store in your wardrobe</p>
+                      <h3 className='text-35'>
+                        {store.name}
+                        {/* <span className='text-green'>Gram</span> */}
+                      </h3>
+                      <p>{store.byline || 'Online store in your wardrobe'}</p>
                     </div>
                   </div>
                   <div className='mt-48'>
-                    <h1 className='text-48 weight-600'>About BillGram</h1>
-                    <p className='max-w-550 mt-20 text-20 line-height-38 letter-spacing-1 weight-300'>Launched in 2021, Billgram is the leading Asoebi fashion store for global wholesale trade. We serve millions of Buyers and suppliers around Nigeria.  </p>
+                    <h1 className='text-48 weight-600'>About {store.name}</h1>
+                    <p className='max-w-550 mt-20 text-20 line-height-38 letter-spacing-1 weight-300'>
+                      {store.description}
+                    </p>
                   </div>
 
                   <div className='flex mt-44 gap-30'>
@@ -56,30 +68,45 @@ const StorefrontAbout = () => {
                     <div className="pr-70 w-full grid grid-3-cols-1fr grid-3-rows-1fr w-full max-w-700 absolute r-0 h-430 gap-27 mt-70">
                       <div className=" grid-row-span-1 grid-col-span-2 grid grid-3-cols-1fr gap-17">
                         <div className='grid-col-span-2
-                                        radius-t-l-0 radius-30 bg-cover 
-                                        g|background-repeat:no-repeat; 
-                                        g|background-image:url(https://res.cloudinary.com/codennerd/image/upload/v1689377575/Asoebi%20Africa/WhatsApp_Image_2023-07-15_at_12.23.11_AM_sniizk.jpg);
-                        '>
+                          radius-t-l-0 radius-30' 
+                          style={{
+                            backgroundImage: `url(${products?.[0]?.variants?.[0]?.media?.[0].url})`,  
+                            backgroundRepeat: 'no-repeat',
+                            backgroundPosition: 'center',
+                            backgroundSize: 'cover'
+                          }
+                        }>
                         </div>
                         <div className='grid-col-span-1 
-                                        radius-t-r-0 radius-30 bg-cover
-                                        g|background-repeat:no-repeat; 
-                                        g|background-image:url(https://res.cloudinary.com/codennerd/image/upload/v1689377575/Asoebi%20Africa/WhatsApp_Image_2023-07-15_at_12.23.11_AM_sniizk.jpg);
-
-                        '>
+                          radius-t-r-0 radius-30'
+                          style={{
+                            backgroundImage: `url(${products?.[0]?.variants?.[1]?.media?.[0].url})`,
+                            backgroundRepeat: 'no-repeat',
+                            backgroundPosition: 'center',
+                            backgroundSize: 'cover'
+                          }}
+                        >
                         </div>
                       </div>
                       <div className="grid-col-span-1 grid-row-span-3
-                                      radius-t-r-0 radius-b-l-0 radius-30 bg-cover
-                                      g|background-repeat:no-repeat; 
-                                      g|background-image:url(https://res.cloudinary.com/codennerd/image/upload/v1689377575/Asoebi%20Africa/WhatsApp_Image_2023-07-15_at_12.23.11_AM_sniizk.jpg);
-                      ">
+                        radius-t-r-0 radius-b-l-0 radius-30"
+                        style={{
+                          backgroundImage: `url(${products?.[0]?.variants?.[2]?.media?.[0].url})`,
+                          backgroundRepeat: 'no-repeat',
+                          backgroundPosition: 'center',
+                          backgroundSize: 'cover'
+                        }
+                      }>
                       </div>
                       <div className="h-full grid-row-span-2 grid-col-span-2
-                                      radius-30 bg-cover
-                                      g|background-repeat:no-repeat; 
-                                      g|background-image:url(https://res.cloudinary.com/codennerd/image/upload/v1689377575/Asoebi%20Africa/WhatsApp_Image_2023-07-15_at_12.23.11_AM_sniizk.jpg);
-                      ">
+                        radius-30"
+                        style={{
+                          backgroundImage: `url(${products?.[1]?.variants?.[0]?.media?.[0].url})`,
+                          backgroundRepeat: 'no-repeat',
+                          backgroundPosition: 'center',
+                          backgroundSize: 'cover'
+                        }
+                      }>
                       </div>
                     </div> 
                 </div>

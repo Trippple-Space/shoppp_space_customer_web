@@ -1,6 +1,5 @@
 "use client";
 import StorefrontNavBar from "@/modules/lib/components/nav-bar/StorefrontNavBar";
-import { useStoreProductsView } from "@/modules/lib/utility/hooks/views/use-store-products-view";
 import React from "react";
 
 

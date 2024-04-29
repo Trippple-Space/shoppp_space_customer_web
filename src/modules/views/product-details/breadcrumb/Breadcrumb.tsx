@@ -20,8 +20,8 @@ interface IBreadcrumb {
 
 const Breadcrumb: FC<IBreadcrumb> = ({ crumbs }) => {
     return (
-        crumbs.length ? <div className="breadcrumb">
-            <div className="flex a-content-center j-content-center w-fit bg-green-50 px-12 py-8 gap-14 radius-8">
+        crumbs.length ? <div className="breadcrumb l:block hidden">
+            <div className="flex a-content-center j-content-center w-fit bg-green-50 px-12 py-8 gap-14 radius-8 whitespace-nowrap">
                 {crumbs.map((crumb, i) => (
                     <span className='flex a-content-center j-content-center gap-14 first-letter:uppercase!'>
                         <Link href={crumb.route.toLowerCase()} className={cx('text-14 @lo:text-green-300 first-letter:uppercase!', {
