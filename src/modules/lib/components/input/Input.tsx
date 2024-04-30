@@ -26,15 +26,15 @@ const Input: FC<IInput> = ({ label, id, name, type, placeholder, className, afte
   }
   return (
     <div className={`input-group ${className}`}>
-      {label && <label htmlFor={id} className='block w-fit mb-8 weight-400 text-14 text-grey-800'>{label}</label>}
+      {label && <label htmlFor={id} className='block w-fit mb-8 l:weight-400 weight-500 l:text-14 text-12 text-grey-800'>{label}</label>}
       <Component
         type={type}
         className={`
             block font-inter @lo:w-full @lo:bg-white
-            @lo:border-solid @lo:border-1 @lo:border-grey-300 @lo:py-17 @lo:px-20  
-            @lo:radius-8 @lo:text-16 @lo:weight-400 @lo:outline-none
+            @lo:border-solid @lo:border-1 @lo:border-grey-300 l:@lo:py-17 @lo:py-12 @lo:px-20  
+            @lo:radius-8 @lo:l:text-16 @lo:weight-400 @lo:outline-none
             @lo:placeholder:text-grey-400 @lo:text-grey-700
-            @lo:focus:border-green @lo:placeholder:l:text-14 ${inputClassNames}`
+            @lo:focus:border-green @lo:placeholder:l:text-14 @lo:placeholder:text-12 ${inputClassNames}`
         }
         placeholder={placeholder}
         rows={rows}

@@ -21,21 +21,21 @@ const StorefrontAbout = ({ store }: { store: any }) => {
 
         <div className="app-width mt-80">
           <div className="relative">
-              <div className="relative flex z-1 gap-50">
-                <div className='w-60p'>
-                  <div className="flex gap-15">
+              <div className="relative l:flex z-1 gap-50">
+                <div className='l:w-60p'>
+                  <div className="l:flex gap-15">
                     <Image src={store.thumbnail} className='w-80 h-80 radius-8' alt='' />
-                    <div className='a-self-center'>
-                      <h3 className='text-35'>
+                    <div className='l:a-self-center'>
+                      <h3 className='l:text-35 text-20 l:mt-0 mt-10'>
                         {store.name}
                         {/* <span className='text-green'>Gram</span> */}
                       </h3>
-                      <p>{store.byline || 'Online store in your wardrobe'}</p>
+                      <p className='l:text-16 text-14'>{store.byline || 'Online store in your wardrobe'}</p>
                     </div>
                   </div>
-                  <div className='mt-48'>
-                    <h1 className='text-48 weight-600'>About {store.name}</h1>
-                    <p className='max-w-550 mt-20 text-20 line-height-38 letter-spacing-1 weight-300'>
+                  <div className='l:mt-48 mt-30'>
+                    <h1 className='l:text-48 text-20 weight-600'>About {store.name}</h1>
+                    <p className='l:max-w-550 w-100p l:mt-20 mt-12 l:text-20 text-14 l:line-height-38 line-height-28 letter-spacing-1 weight-300'>
                       {store.description}
                     </p>
                   </div>
@@ -43,27 +43,27 @@ const StorefrontAbout = ({ store }: { store: any }) => {
                   <div className='flex mt-44 gap-30'>
 
                     <div className='w-fit text-left border-r border-lightest-grey w-200 '>
-                      <RxCalendar className='inline-block w-40 h-40 m-15 ' />
-                      <div className="text-16">Monthly unique visit</div>
-                      <div className='text-24 weight-700 mt-15' >20,254</div>
+                      <RxCalendar className='inline-block l:w-40 l:h-40 l:m-15 :w-20 :h-20 :m-10 ' />
+                      <div className="l:text-16 text-12">Monthly unique visit</div>
+                      <div className='l:text-24 text-16 weight-700 mt-15' >20,254</div>
                     </div>
 
                     <div className='w-fit text-left border-r border-lightest-grey w-200'>
-                      <FaRegUserCircle className='inline-block w-40 h-40 m-15 ' />
-                      <div className="text-16">Active Customers</div>
-                      <div className='text-24 weight-700 mt-15' >12,000</div>
+                      <FaRegUserCircle className='inline-block l:w-40 l:h-40 l:m-15 :w-20 :h-20 :m-10 ' />
+                      <div className="l:text-16 text-12">Active Customers</div>
+                      <div className='l:text-24 text-16 weight-700 mt-15' >12,000</div>
                     </div>
 
                     <div className='w-fit text-left w-200'>
-                      <IoBagCheckOutline className='inline-block w-40 h-40 m-15 ' />
-                      <div className="text-16">Product Sold</div>
-                      <div className='text-24 weight-700 mt-15' >96,000</div>
+                      <IoBagCheckOutline className='inline-block l:w-40 l:h-40 l:m-15 :w-20 :h-20 :m-10 ' />
+                      <div className="l:text-16 text-12">Product Sold</div>
+                      <div className='l:text-24 text-16 weight-700 mt-15' >96,000</div>
                     </div>
 
                   </div>
 
                 </div>
-                <div className="relative w-full">
+                <div className="relative hidden l:block w-full">
                     <Icon className='absolute z-0 inline w-fit t--10 r-0 h-full' name='store-about-dots-bg' />
                     <div className="pr-70 w-full grid grid-3-cols-1fr grid-3-rows-1fr w-full max-w-700 absolute r-0 h-430 gap-27 mt-70">
                       <div className=" grid-row-span-1 grid-col-span-2 grid grid-3-cols-1fr gap-17">

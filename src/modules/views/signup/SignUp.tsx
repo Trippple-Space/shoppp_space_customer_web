@@ -24,7 +24,7 @@ const SignUp = () => {
       <div className=" mx-25 flex-col flex h-full items-center j-content-center">
         <div className="l:hidden w-full">
           <Image
-            className="w-79 h-21 mt-20 mb-50 a-self-left"
+            className="w-79 h-21 l:mt-20 mt-40 l:mb-50 mb-30 a-self-left"
             src="asoebi-logo-colored.png"
             alt="logo"
             type="logo"
@@ -34,10 +34,10 @@ const SignUp = () => {
         <div className="signup w-full l:w-80p mx-auto mb-50 h-100p l:h-fit flex flex-col">
           <div className="w-full">
             <div className="font-inter">
-              <h3 className="text-center text-30 l:text-32 weight-500 mb-10 text-grey-900">
+              <h3 className="text-center text-24 l:text-32 weight-500 mb-10 text-grey-900">
                 Create your account
               </h3>
-              <p className="text-center text-16 l:text-16 text-grey-700">
+              <p className="text-center text-14 l:text-16 text-grey-700">
                 Please enter your details.
               </p>
             </div>
@@ -70,7 +70,7 @@ const SignUp = () => {
                 id="email"
                 name="email"
                 type="email"
-                className="mt-30"
+                className="l:mt-30 mt-18"
                 placeholder="Enter your email"
                 handleChange={formHandler.handleChange}
                 handleBlur={formHandler.handleBlur}
@@ -103,7 +103,7 @@ const SignUp = () => {
                 name="password"
                 type="password"
                 placeholder="********"
-                className="mt-30"
+                className="l:mt-30 mt-18"
                 handleChange={formHandler.handleChange}
                 handleBlur={formHandler.handleBlur}
                 inputClass={cx({
@@ -143,17 +143,17 @@ const SignUp = () => {
                     handleChange={formHandler.handleChange}
                     handleBlur={formHandler.handleBlur}
                   />
-                  <span>{ (formHandler.touched.acceptTerms && formHandler.errors.acceptTerms) || 'I agree to all Terms, Privacy policy and Fees'}</span>
+                  <span className="l:text-16 text-12">{ (formHandler.touched.acceptTerms && formHandler.errors.acceptTerms) || 'I agree to all Terms, Privacy policy and Fees'}</span>
                 </label>
               </div>
 
-              <button className="btn btn-primary btn-lg font-inter">
+              <button className="btn btn-primary l:btn-lg btn-lg font-inter mt-30">
                 Sign up
               </button>
 
-              <div className="text-14 text-grey-800 mt-30 mx-auto w-fit">
+              <div className="l:text-14 text-12 text-grey-800 mt-30 mx-auto w-fit">
                 <span>Already have an account? </span>
-                <Link href={paths.login} className="text-green-800">
+                <Link href={paths.login} className="text-green-800 mt-30">
                   Sign In
                 </Link>
               </div>
