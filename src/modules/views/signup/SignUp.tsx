@@ -24,7 +24,7 @@ const SignUp = () => {
       <div className=" mx-25 flex-col flex h-full items-center j-content-center">
         <div className="l:hidden w-full">
           <Image
-            className="w-79 h-21 l:mt-20 mt-40 l:mb-50 mb-30 a-self-left"
+            className="w-79 h-21 l:mt-20 mt-20 l:mb-50 mb-30 a-self-left"
             src="asoebi-logo-colored.png"
             alt="logo"
             type="logo"
@@ -147,7 +147,7 @@ const SignUp = () => {
                 </label>
               </div>
 
-              <button className="btn btn-primary l:btn-lg btn-lg font-inter mt-30">
+              <button className="btn btn-primary l:btn-lg btn-lg font-inter mt-30 text-14">
                 Sign up
               </button>
 
