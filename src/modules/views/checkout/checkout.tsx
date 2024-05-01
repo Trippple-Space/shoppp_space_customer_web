@@ -20,6 +20,7 @@ import { BsCaretDown } from 'react-icons/bs';
 import { FaCaretDown } from 'react-icons/fa';
 import { deliveryOptions } from '@/modules/lib/utility/constants';
 import OrderSummary from '@/modules/lib/components/order-summary/OrderSummary';
+import ImageAlt from '@/modules/lib/components/image-alt/ImageAlt';
 
 const CheckoutPage = () => {
   const [unitCounter, setUnitCounter] = useState<number>(1);
@@ -31,7 +32,7 @@ const CheckoutPage = () => {
   const { openAddressModal, selectedAddress } = useAddress()
   const { loading: isPaymentLoading, payWithPaystack } = usePayment()
   const canProceedToPayment = !(!isPaymentLoading && selectedAddress && user)
-  const [isCartCollapsed, setIsCartCollapsed] = useState(true)
+  const [isCartCollapsed, setIsCartCollapsed] = useState(false)
   const selectedDeliveryOptionDetails = deliveryOptions[selectedDeliveryOption]
 
   return (
@@ -59,7 +60,7 @@ const CheckoutPage = () => {
               </div>
             </div>
 
-            <div className='px-10 m:px-40 radius-10 px-15 py-25 border border-faint-grey l:gap-30 mt-30'>
+            <div className='px-10 m:px-40 radius-10 px-15 py-25 border border-faint-grey l:gap-30 my-20'>
               <div
                 onClick={() => setIsCartCollapsed((collapsed) => !collapsed)}
                 className='text-18 pb-20 weight-500 border-b border-grey-100 pointer flex space-between w-full'>
@@ -70,23 +71,23 @@ const CheckoutPage = () => {
                 'hidden': isCartCollapsed
               })}>
                 {cart.cartItems.map((cartItem, idx: number) => (
-                  <div key={idx} className='l:flex space-between items-center border-b border-grey-100 py-20'>
-                    <div className='flex w-100p gap-10 l:gap-30 items-center'>
+                  console.log(cartItem),
+                  <div key={idx} className='l:flex space-between items-center border-b border-grey-100 py-30'>
+                    <div className='flex w-100p gap-10 l:gap-20 items-center'>
                       <div className='w-80 h-80'>
-                        <Image
-                          className='w-100p h-100p radius-5 l:radius-10'
-                          src='order-product.png'
-                          alt='product'
+                        <ImageAlt
+                          className='w-full h-full radius-3'
+                          src={cartItem.variant.media?.[0].url}
                           type='image'
                         />
                       </div>
                       <div className='line-height-27 w-70p'>
-                        <h1 className='text-16 weight-400 text-black'> {cartItem.variant.product.name} </h1>
-                        <div className='text-15'> {getCartItemVariantPropertiesAsJsx(cartItem)} </div>
+                        <h1 className='l:text-16 text-14 weight-400 text-black'> {cartItem.variant.product.name} </h1>
+                        <div className='l:text-15 text-12 l:py-5'> {getCartItemVariantPropertiesAsJsx(cartItem)} </div>
 
-                        <div className='flex gap-20 w-100p py-10 text-18'>
+                        {/* <div className='flex gap-20 w-100p py-5 l:text-18'>
                           <div className='grid m:flex w-100p  items-center'>
-                            <div className='flex items-center gap-10 border-r border-grey-300 pr-20 mr-10'>
+                            <div className='flex items-center gap-10 border-grey-300 pr-20 mr-10'>
                               <p className='text-16'>Unit:</p>
                               <div className='flex items-center '>
                                 <Icon name='decr' className='w-20 h-20 pointer' onClick={() => setUnitCounter(prev => prev <= 1 ? 1 : prev - 1)} />
@@ -95,9 +96,9 @@ const CheckoutPage = () => {
                               </div>
                             </div>
                           </div>
-                        </div>
+                        </div> */}
 
-                        <h3 className='text-14 m:text-14 weight-500'>{formatNumberAsPrice(cartItem.variant.price)}</h3>
+                        <h3 className='text-14 m:text-14 weight-600'>{formatNumberAsPrice(cartItem.variant.price)}</h3>
                       </div>
                     </div>
 
@@ -161,8 +162,8 @@ const CheckoutPage = () => {
             </div>
 
             <div className='radius-10 l:gap-30 mt-30'>
-              <div className='flex content-end '>
-                <div className="w-60p">
+              <div className='flex l:content-end '>
+                <div className="l:w-60p w-100p">
                   <OrderSummary
                     subTotal={cart.subTotal}
                     extraSavings={cart.total - cart.subTotal}
@@ -170,16 +171,16 @@ const CheckoutPage = () => {
                     total={cart.total + selectedDeliveryOptionDetails.price}
                   />
                 </div>
-
               </div>
             </div>
-            <button onClick={() => payWithPaystack({ addressId: selectedAddress?.id, deliveryOption: selectedDeliveryOption })} disabled={canProceedToPayment} className='border-none bg-green disabled:bg-green-300 hidden m:flex text-white text-14 px-16 py-16 radius-8 pointer mt-30 float-right'>
+
+            <button onClick={() => payWithPaystack({ addressId: selectedAddress?.id, deliveryOption: selectedDeliveryOption })} disabled={canProceedToPayment} className='border-none bg-green disabled:bg-green-300 hidden m:flex text-white text-14 px-16 py-16 radius-8 pointer mt-30 l:float-right'>
               <span className=''>Proceed to payment</span>
               <PuffLoader size={15} loading={isPaymentLoading} className='ml-10' />
             </button>
           </div>
 
-          <button className='border-none bg-green mt-20 mx-auto m:hidden text-white text-16 px-35 py-20 radius-10 pointer' onClick={() => router.push('/checkout/success')}>
+          <button className='border-none mt-40 w-100p bg-green mt-20 mx-auto m:hidden text-white text-16 l:px-35 l:py-20 px-20 py-15 radius-10 pointer' onClick={() => router.push('/checkout/success')}>
             Proceed to payment
           </button>
         </div>

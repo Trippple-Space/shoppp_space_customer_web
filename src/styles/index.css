@@ -709,6 +709,8 @@
 .mt-25 { margin-top: 25px; } 
 .t-50 { top: 50px; } 
 .text-1 { font-size: 1px; } 
+.h-120 { height: 120px; } 
+.w-120 { width: 120px; } 
 
 
 
@@ -976,3 +978,8 @@
 @media only screen and (min-width: 992px) { .l\:mt--60 { margin-top: -60px; } } 
 @media only screen and (min-width: 992px) { .l\:t-60 { top: 60px; } } 
 @media only screen and (min-width: 992px) { .l\:p-40 { padding: 40px; } } 
+@media only screen and (min-width: 992px) { .l\:w-120 { width: 120px; } } 
+@media only screen and (min-width: 992px) { .l\:h-120 { height: 120px; } } 
+@media only screen and (min-width: 992px) { .l\:py-5 { padding-top: 5px; padding-bottom: 5px; } } 
+@media only screen and (min-width: 992px) { .l\:content-end {    justify-content: flex-end;    align-content: flex-end;  } } 
+@media only screen and (min-width: 992px) { .l\:float-right {    float: right;  } } 
