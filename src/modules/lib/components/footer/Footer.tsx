@@ -11,7 +11,7 @@ const Footer = () => {
 
   const [isFooterOpen, setIsFooterOpen] = useState(false)
   return (
-    <div className='fixed b-0 l-0 w-full z-index-5'>
+    <div className='fixed b-0 l-0 w-full z-index-1'>
         <div className={`flex g|transition:0.5s bg-white relative pointer w-full g|box-shadow:0px|_|-2px|_|10px|_|rgba(0,0,0,0.10); py-13`}>
             <div className='app-width'>
                 {

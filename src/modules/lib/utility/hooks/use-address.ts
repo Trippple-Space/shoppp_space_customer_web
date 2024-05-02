@@ -38,10 +38,6 @@ const formikAddressConfig = (initialValues: Address | undefined, handleSubmit: F
   enableReinitialize: true
 })
 
-
-
-
-
 const useAddress = () => {
   const {
     isAddressModalOpen,
@@ -60,7 +56,6 @@ const useAddress = () => {
 
   const {isAuthenticated, user} = useUserStore()
   const addressToUpdate = addresses?.find(address => address.id === addressToUpdateId);
-  console.log({addressToUpdate})
 
   const handleCreateAddress = (newAddress: Address) => {
     if (user?.id) {

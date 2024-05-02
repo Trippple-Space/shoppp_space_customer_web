@@ -61,3 +61,10 @@ export const chunkArray = <T>(arr: T[], noOfChunks: number): T[][] => {
   }
   return result;
 };
+
+export const scrollToTop = () => {
+  window.scrollTo({
+      top: 0,
+      behavior: 'smooth'
+  });
+}

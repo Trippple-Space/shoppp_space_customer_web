@@ -19,6 +19,7 @@ import { TbShoppingBag } from 'react-icons/tb';
 import { paths } from '../../utility/paths';
 import { getCartItemVariantPropertiesAsJsx } from './minicart.helper';
 import { HiOutlineShoppingBag } from 'react-icons/hi2';
+import ImageAlt from '../image-alt/ImageAlt';
 
 interface ModalProps {
 
@@ -33,15 +34,15 @@ const MiniCart: React.FC<ModalProps> = () => {
 
   return (
     <div>
-      <Modal isOpen={open} onClose={() => setOpen(false)} extraClass={{ height: '100vh' }} className="t-0 l:t-0 l:b-0 100vh l:h-100vh l:r-0 overflow-hidden">
-        <div className='relative h-full'>
+      <Modal isOpen={open} onClose={() => setOpen(false)} extraClass={{ height: '100vh' }} className="t-0 l:t-0 l:b-0 100vh l:h-100vh l:r-0 overflow-hidden l:w-520 w-full">
+        <div className='relative h-full g|overflow-y:hidden;'>
           <div className='py-15 bg-grey-200 pointer' onClick={() => setOpen(false)}>
             <div className="flex px-15 gap-10 j-content-center ">
               <div className='h-fit self-center block'><FaArrowLeftLong className='text-green h-fit mt-2' /></div>
               <div className="text-green block"> Continue shopping </div>
             </div>
           </div>
-          <div className='min-w-500 h-full py-10 scroll-y'>
+          <div className='l:min-w-500 h-full w-full py-10 scroll-y'>
 
             {!cart.cartItems.length ? (
               <div className='mx-auto h-250 text-center items-center j-content-center mt-50'>
@@ -53,12 +54,12 @@ const MiniCart: React.FC<ModalProps> = () => {
               </div>
             ) : (
               <div className='px-20 pb-20'>
-                <div className='uppercase mb-30'>Your cart</div>
+                <div className='uppercase mb-30 text-14 l:text-16 weight-500'>Your cart</div>
                 {cart.cartItems.map((cartItem: any, i) => (
                   <div className={cx('space-between items-center radius-5 py-10 mb-20 px-15 g|box-shadow:1px|_|0px|_|2px|_|0px|_|rgba(0,0,0,0.10);', {
                     'bg-whitesmoke border border-whitesmoke': i % 2,
                     'border border-whitesmoke': !(i % 2),
-                  })} >
+                  })} key={i}>
                     <span className='float-right pointer' onClick={() => removeFromCart(cartItem.id)}> <IoClose /> </span>
                     {/* <div className='flex w-100p gap-10 l:gap-30 items-center'>
                       <div className='w-80 h-80 border border-lightgrey radius-5 l:radius-10 '>
@@ -105,10 +106,9 @@ const MiniCart: React.FC<ModalProps> = () => {
                         'bg-white': (i % 2),
                         'bg-grey-100': !(i % 2),
                       })}>
-                        <Image
+                        <ImageAlt
                           className='w-full h-full radius-3'
                           src={cartItem.variant.media[0].url}
-                          alt='product'
                           type='image'
                         />
                       </div>
@@ -141,7 +141,7 @@ const MiniCart: React.FC<ModalProps> = () => {
 
                         <div className="w-full h-20 flex space-between">
                           <div></div>
-                          <div className={cx('w-50 radius-3 text-12 bold', {
+                          <div className={cx('radius-3 text-12 bold', {
                             // 'bg-white': (i % 2),
                             // 'bg-grey-100': !(i % 2),
                           })}>
@@ -168,9 +168,9 @@ const MiniCart: React.FC<ModalProps> = () => {
                 />
               </div>
               <div className='w-fit mx-auto mt-30'>
-                <button className='bg-green border-none radius-5 text-white py-14 px-30 weight-600 text-16 pointer' onClick={() => router.push(paths.checkout)}>Proceed to checkout</button>
+                <button className='bg-green border-none radius-5 text-white py-14 px-30 weight-600 l:text-16 text-12 pointer' onClick={() => router.push(paths.checkout)}>Proceed to checkout</button>
               </div>
-              <div className='text-13 mt-5 w-fit mx-auto'>
+              <div className='text-13 mt-8 w-fit mx-auto'>
                 For Returns Policy,
                 <span className='text-green text-13'> click here</span>
               </div>

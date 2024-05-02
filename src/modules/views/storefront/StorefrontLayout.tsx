@@ -20,11 +20,11 @@ const tabs = [
         text: "Products",
         component: <></>
     },
-    {
-        icon: LiaCommentsDollarSolid,
-        text: "Customer reviews (12,000)",
-        component: <StorefrontReviews />
-    },
+    // {
+    //     icon: LiaCommentsDollarSolid,
+    //     text: "Customer reviews (12,000)",
+    //     component: <StorefrontReviews />
+    // },
 ];
 
 const StorefrontLayout: FC<ILayout> = ({ children }) => {
@@ -36,12 +36,12 @@ const StorefrontLayout: FC<ILayout> = ({ children }) => {
     return (
         <div>
             <div className="pb-100">
-                <div className="relative pb-100">
+                <div className="relative l:pb-100 pb-50">
                     {children}
                 </div>
 
                 <div className="app-width">
-                    <div className="flex gap-70 text-20">
+                    <div className="flex gap-70 l:text-20 text-14">
                         {tabs.map((tab) => (
                             <div
                                 onClick={() => setActiveTab(tab)}
@@ -58,8 +58,8 @@ const StorefrontLayout: FC<ILayout> = ({ children }) => {
                     </div>
                 </div>
 
-                <div className="border-b border-t border-whitesmoke pt-20 mt-68 mb-50">
-                    <div className="">
+                <div className="border-b border-t border-whitesmoke pt-20 l:mt-68 mt-30 mb-50">
+                    <div className="l:mt--60 mt--70">
                         <FabricsCategoryNav categories={categories} setSelectedCategory={setSelectedCategory} />
                     </div>
                 </div>
@@ -68,9 +68,9 @@ const StorefrontLayout: FC<ILayout> = ({ children }) => {
                     <div>
                         {activeTab.component}
                     </div>
-                    <section className="mt-55">
-                        <h3 className="text-20 weight-300 uppercase">New Arrivals</h3>
-                        <div className="l:grid grid-5-cols-1fr gap-10 l:gap-30 w-full">
+                    <section className="l:mt-55 ">
+                        <h3 className="l:text-20 text-16 weight-300 uppercase">New Arrivals</h3>
+                        <div className="grid l:grid-5-cols-1fr grid-2-cols-1fr gap-10 gap-30 w-full">
                             {
                                 products.map(product => (
                                     <ProductTile product={product} />

@@ -22,7 +22,7 @@ const HomepageNavBar = () => {
                     <TbShoppingBag className='w-15 a-self-center mt--2' />
                   </div>
                 </Link>
-                <Link href={paths.explore} className={`hover:text-green pointer pointer relative ${paths.explore == pathname && 'text-green bold'}`}>Explore</Link>
+                {/* <Link href={paths.explore} className={`hover:text-green pointer pointer relative ${paths.explore == pathname && 'text-green bold'}`}>Explore</Link> */}
             </ul>
         }
     />

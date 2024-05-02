@@ -5,7 +5,7 @@ import { useRouter } from "next/router";
 import { useParams } from "next/navigation";
 import { useCategoryFilter } from "../use-category-filter";
 
-export const useStoreProductsView = (selectedCategory: any) => {
+export const useStoreProductsView = (selectedCategory?: any) => {
   const { slug } = useParams();
   const { products, updateFilters } = useProducts({
     filters: { price: { Not: { MoreThan: 500000 } }, tags: [{ label: 'top_in_sales' }], store: { id: slug }},

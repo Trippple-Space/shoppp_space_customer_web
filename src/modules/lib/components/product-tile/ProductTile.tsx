@@ -89,7 +89,7 @@ const ProductTile: FC<IProductTile> = ({ product }: any) => {
           </Link>
         </h3>
         <div className="flex a-items-center gap-10 l:gap-18 mt-5 text-dimgrey">
-          <p className="l:text-16 text-12">{product?.store?.name}</p>
+        <Link href={`/storefront/${product.store.id}`}><p className="l:text-16 text-12">{product?.store?.name}</p></Link>
           <div className="flex gap-3 items-center">
             <AiFillStar
               className="w-12"
