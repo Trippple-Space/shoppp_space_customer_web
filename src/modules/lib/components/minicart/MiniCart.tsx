@@ -19,6 +19,7 @@ import { TbShoppingBag } from 'react-icons/tb';
 import { paths } from '../../utility/paths';
 import { getCartItemVariantPropertiesAsJsx } from './minicart.helper';
 import { HiOutlineShoppingBag } from 'react-icons/hi2';
+import ImageAlt from '../image-alt/ImageAlt';
 
 interface ModalProps {
 
@@ -58,7 +59,7 @@ const MiniCart: React.FC<ModalProps> = () => {
                   <div className={cx('space-between items-center radius-5 py-10 mb-20 px-15 g|box-shadow:1px|_|0px|_|2px|_|0px|_|rgba(0,0,0,0.10);', {
                     'bg-whitesmoke border border-whitesmoke': i % 2,
                     'border border-whitesmoke': !(i % 2),
-                  })} >
+                  })} key={i}>
                     <span className='float-right pointer' onClick={() => removeFromCart(cartItem.id)}> <IoClose /> </span>
                     {/* <div className='flex w-100p gap-10 l:gap-30 items-center'>
                       <div className='w-80 h-80 border border-lightgrey radius-5 l:radius-10 '>
@@ -105,10 +106,9 @@ const MiniCart: React.FC<ModalProps> = () => {
                         'bg-white': (i % 2),
                         'bg-grey-100': !(i % 2),
                       })}>
-                        <Image
+                        <ImageAlt
                           className='w-full h-full radius-3'
                           src={cartItem.variant.media[0].url}
-                          alt='product'
                           type='image'
                         />
                       </div>

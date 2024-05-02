@@ -66,7 +66,7 @@ const BaseNavBar: FC<IBaseNavBar> = ({ links }) => {
                             </div>
                             <div className='h-fit'>
                                 <div className='text-grey-500 whitespace-nowrap l:text-12 text-10'>{getGreeting()}</div>
-                                <div className='whitespace-nowrap text-green weight-600 l:text-14 text-12'>{`${user?.profile.firstName} ${user?.profile.lastName}`}</div>
+                                <div className='whitespace-nowrap text-green weight-600 l:text-14 text-12'>{`${user?.profile?.firstName || 'Guest'} ${user?.profile?.lastName || 'User'}`}</div>
                             </div>
                         </div>
                     </div>
@@ -91,7 +91,7 @@ const BaseNavBar: FC<IBaseNavBar> = ({ links }) => {
 
                                 <div className=''>
                                     <div className='weight-500 l:text-20 text-16 whitespace-nowrap flex items-center gap-20'>
-                                        <div className='capitalize'>{user?.profile.firstName} {user?.profile.lastName}</div>
+                                        <div className='capitalize'>{user?.profile.firstName  || 'Guest'} {user?.profile.lastName || 'User'}</div>
                                         <div className='bg-green text-white p-4 radius-4 text-8 weight-700'>New</div>
                                     </div>
                                     <div className='l:text-12 text-10 text-green weight-600'>{user?.email}</div>

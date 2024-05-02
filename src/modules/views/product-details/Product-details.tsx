@@ -82,7 +82,7 @@ const ProductDetails = ({ product }: { product: Product }) => {
                 </div>
               </div>
 
-              <Link href={`/storefront/${product.store.id}`}>
+              <Link href={`/storefront/${product.store.id}`} as="" >
                 <div className='mt-11'>
                   <div className='text-grey-500 l:text-16 text-14 weight-500'>
                     {product.store.name} Store

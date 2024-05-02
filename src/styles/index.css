@@ -332,14 +332,15 @@
 .gap-7 { gap: 7px; } 
 @layer base {.radius-50 { border-radius: 50px; } } 
 .r-0 { right: 0px; } 
-.t-60 { top: 60px; } 
+.t-50 { top: 50px; } 
+.w-40 { width: 40px; } 
+.h-40 { height: 40px; } 
 @layer base {.radius-4 { border-radius: 4px; } } 
 .text-8 { font-size: 8px; } 
 @layer base {    .border-t {       border-top: 1px solid;     }  } 
-.border-6 { border-width: 6px; } 
+.border-5 { border-width: 5px; } 
 .border-grey-200 { border-color: #F5F3F1; } 
 .hover\:bg-grey-100:hover { background-color: #F7F6F5; } 
-.p-40 { padding: 40px; } 
 .max-w-1400\! { max-width: 1400px !important; } 
 .gap-50 { gap: 50px; } 
 .weight-200 { font-weight: 200; } 
@@ -384,7 +385,6 @@
 .px-25 { padding-left: 25px; padding-right: 25px; } 
 .mt-69 { margin-top: 69px; } 
 [class~='g|box-shadow:0px|_|2px|_|4px|_|0px|_|#0000000D;']{box-shadow:0px 2px 4px 0px #0000000D;} 
-.h-40 { height: 40px; } 
 .w-35p { width: 35%; } 
 .pb-10 { padding-bottom: 10px; } 
 .text-22 { font-size: 22px; } 
@@ -421,7 +421,6 @@
 .weight-900 { font-weight: 900; } 
 .focus\:outline-none:focus {    outline: none;  } 
 .w-32 { width: 32px; } 
-.w-40 { width: 40px; } 
 .bg-yellow-400 { background-color: rgba(250, 206, 51, 0.8); } 
 @layer hi { @layer base {    .\@hi\:border-l {       border-left: 1px solid;     }  } } 
 @layer hi { @layer base {    .\@hi\:border-r {       border-right: 1px solid;     }  } } 
@@ -450,7 +449,7 @@
 .pt-42 { padding-top: 42px; } 
 .mb-150 { margin-bottom: 150px; } 
 .border-grey-100 { border-color: #F7F6F5; } 
-@layer base {    .border-r {       border-right: 1px solid;     }  } 
+.py-30 { padding-top: 30px; padding-bottom: 30px; } 
 .pr-20 { padding-right: 20px; } 
 .ml-70 { margin-left: 70px; } 
 .gap-0 { gap: 0px; } 
@@ -459,17 +458,16 @@
 .text-right {    text-align: right;  } 
 .bg-green-50 { background-color: rgba(11, 147, 120, 0.1); } 
 .px-5 { padding-left: 5px; padding-right: 5px; } 
-.content-end {    justify-content: flex-end;    align-content: flex-end;  } 
 .disabled\:bg-green-300:disabled { background-color: rgba(11, 147, 120, 0.6); } 
-.px-35 { padding-left: 35px; padding-right: 35px; } 
+.mt-40 { margin-top: 40px; } 
 .my-100 { margin-top: 100px; margin-bottom: 100px; } 
 .grid-7-cols-1fr { grid-template-columns: repeat(7, 1fr); } 
 .my-12 { margin-top: 12px; margin-bottom: 12px; } 
-.mt-40 { margin-top: 40px; } 
 .underline { text-decoration: underline; } 
 .mb-2000 { margin-bottom: 2000px; } 
 .sentence-case {    text-transform: lowercase;  }  .sentence-case:first-letter {    text-transform: uppercase;  } 
 .grid-2-cols-auto { grid-template-columns: repeat(2, auto); } 
+.px-35 { padding-left: 35px; padding-right: 35px; } 
 .w-45 { width: 45px; } 
 .h-45 { height: 45px; } 
 .w-125 { width: 125px; } 
@@ -544,7 +542,6 @@
 .h-60 { height: 60px; } 
 .line-height-32 { line-height: 32px; } 
 .pr-0 { padding-right: 0px; } 
-.py-30 { padding-top: 30px; padding-bottom: 30px; } 
 .my-60 { margin-top: 60px; margin-bottom: 60px; } 
 @layer base {.radius-14 { border-radius: 14px; } } 
 .bg-\#F3F3F3 { background-color: #F3F3F3; } 
@@ -627,6 +624,7 @@
 .w-130 { width: 130px; } 
 .r-5 { right: 5px; } 
 .t-5 { top: 5px; } 
+@layer base {    .border-r {       border-right: 1px solid;     }  } 
 .pr-40 { padding-right: 40px; } 
 .mr-40 { margin-right: 40px; } 
 .l-10 { left: 10px; } 
@@ -655,7 +653,6 @@
 .radius-t-l-40 { border-top-left-radius: 40px;  } 
 .radius-b-l-40 { border-bottom-left-radius: 40px;  } 
 .bg-contain { background-size: contain; } 
-.border-5 { border-width: 5px; } 
 [class~='g|border-color:rgba(217,217,217,0.70);']{border-color:rgba(217,217,217,0.70);} 
 .border-r-0 { border-right-width: 0px; } 
 .w-101 { width: 101px; } 
@@ -707,10 +704,6 @@
 .bg-lightgreen { background-color: #E2FFFA; } 
 .pl-50 { padding-left: 50px; } 
 .mt-25 { margin-top: 25px; } 
-.t-50 { top: 50px; } 
-.text-1 { font-size: 1px; } 
-.h-120 { height: 120px; } 
-.w-120 { width: 120px; } 
 
 
 
@@ -828,10 +821,12 @@
 @media only screen and (min-width: 992px) { .l\:w-520 { width: 520px; } } 
 @media only screen and (min-width: 992px) { .l\:min-w-500 { min-width: 500px; } } 
 @media only screen and (min-width: 992px) { .l\:w-100 { width: 100px; } } 
+@media only screen and (min-width: 992px) { .l\:t-60 { top: 60px; } } 
 @media only screen and (min-width: 992px) { .l\:w-60 { width: 60px; } } 
 @media only screen and (min-width: 992px) { .l\:h-60 { height: 60px; } } 
 @media only screen and (min-width: 992px) { .l\:w-20 { width: 20px; } } 
 @media only screen and (min-width: 992px) { .l\:h-20 { height: 20px; } } 
+@media only screen and (min-width: 992px) { .l\:p-40 { padding: 40px; } } 
 @media only screen and (min-width: 992px) { .l\:t-70 { top: 70px; } } 
 @media only screen and (min-width: 992px) { .l\:r-100 { right: 100px; } } 
 @media only screen and (min-width: 992px) { .l\:w-35 { width: 35px; } } 
@@ -866,6 +861,10 @@
 @media only screen and (min-width: 992px) { .l\:h-32 { height: 32px; } } 
 @media only screen and (min-width: 992px) { @layer base {.l\:radius-8 { border-radius: 8px; } } } 
 @media only screen and (min-width: 992px) { .l\:text-22 { font-size: 22px; } } 
+@media only screen and (min-width: 992px) { .l\:py-5 { padding-top: 5px; padding-bottom: 5px; } } 
+@media only screen and (min-width: 992px) { .l\:content-end {    justify-content: flex-end;    align-content: flex-end;  } } 
+@media only screen and (min-width: 992px) { .l\:w-60p { width: 60%; } } 
+@media only screen and (min-width: 992px) { .l\:float-right {    float: right;  } } 
 @media only screen and (min-width: 992px) { .l\:text-24 { font-size: 24px; } } 
 @media only screen and (min-width: 992px) { .l\:grid-5-cols-1fr { grid-template-columns: repeat(5, 1fr); } } 
 @media only screen and (min-width: 992px) { .l\:mt-90 { margin-top: 90px; } } 
@@ -968,7 +967,6 @@
 @media only screen and (min-width: 992px) { .l\:pl-20 { padding-left: 20px; } } 
 @media only screen and (min-width: 992px) { .l\:w-19p { width: 19%; } } 
 @media only screen and (min-width: 992px) { .l\:line-height-25 { line-height: 25px; } } 
-@media only screen and (min-width: 992px) { .l\:w-60p { width: 60%; } } 
 @media only screen and (min-width: 992px) { .l\:a-self-center { align-self: center; } } 
 @media only screen and (min-width: 992px) { .l\:text-35 { font-size: 35px; } } 
 @media only screen and (min-width: 992px) { .l\:mt-48 { margin-top: 48px; } } 
@@ -976,10 +974,3 @@
 @media only screen and (min-width: 992px) { .l\:m-15 { margin: 15px; } } 
 @media only screen and (min-width: 992px) { .l\:pb-100 { padding-bottom: 100px; } } 
 @media only screen and (min-width: 992px) { .l\:mt--60 { margin-top: -60px; } } 
-@media only screen and (min-width: 992px) { .l\:t-60 { top: 60px; } } 
-@media only screen and (min-width: 992px) { .l\:p-40 { padding: 40px; } } 
-@media only screen and (min-width: 992px) { .l\:w-120 { width: 120px; } } 
-@media only screen and (min-width: 992px) { .l\:h-120 { height: 120px; } } 
-@media only screen and (min-width: 992px) { .l\:py-5 { padding-top: 5px; padding-bottom: 5px; } } 
-@media only screen and (min-width: 992px) { .l\:content-end {    justify-content: flex-end;    align-content: flex-end;  } } 
-@media only screen and (min-width: 992px) { .l\:float-right {    float: right;  } } 

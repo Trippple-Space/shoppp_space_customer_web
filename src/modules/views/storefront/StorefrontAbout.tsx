@@ -11,13 +11,13 @@ import { useStoreProductsView } from '@/modules/lib/utility/hooks/views/use-stor
 const StorefrontAbout = ({ store }: { store: any }) => { 
   const { products } = useStoreProductsView()
   useEffect(() => {
-    console.log(products)
+    
   }, [products])
   // console.log(products?.[0].variants?.[0].media?.[0].url)
   return (
     <>
     <div className="bg-white w-full ">
-        <StorefrontNavBar />
+        <StorefrontNavBar store={store} />
 
         <div className="app-width mt-80">
           <div className="relative">
