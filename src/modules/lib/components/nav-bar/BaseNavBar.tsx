@@ -11,6 +11,7 @@ import { BiUserCircle } from 'react-icons/bi';
 import { FaAddressBook, FaShoppingBasket } from 'react-icons/fa';
 import { RiFoldersFill } from "react-icons/ri";
 import { FiLogOut } from 'react-icons/fi';
+import { useAuthGuard } from '../../utility/hooks/use-auth-guard';
 
 
 interface IBaseNavBar {
@@ -18,14 +19,17 @@ interface IBaseNavBar {
 }
 
 const BaseNavBar: FC<IBaseNavBar> = ({ links }) => {
+    useAuthGuard(); // TODO: refactor to rely on Next 13 auth middleware
     const [userProfileDropdown, setUserProfileDropdown] = useState<boolean>(false);
     const [userOrderDropdown, setUserOrderDropdown] = useState<boolean>(false);
     const pathname = usePathname();
     const {user, signOut, openAddressModal} = useNavbarView()
 
+
     const handleUserProfileDropdown = () => {
         setUserProfileDropdown(prev => !prev)
     }
+
     return (
         <div className='fixed w-full t-0 l-0 bg-white border-b border-whitesmoke z-5'>
             <div className={cx('flex app-width space-between items-center py-15', {

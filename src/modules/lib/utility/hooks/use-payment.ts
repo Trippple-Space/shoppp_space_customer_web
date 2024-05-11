@@ -4,7 +4,7 @@ import { Address } from '../types/address.interface';
 import { toast } from 'sonner';
 import { deliveryOptions } from '../constants';
 
-interface PaymentDetails {
+export interface PaymentDetails {
     addressId?: Address['id'],
     deliveryOption: keyof typeof deliveryOptions
 }

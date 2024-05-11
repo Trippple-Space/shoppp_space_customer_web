@@ -5,9 +5,10 @@ import endpoints from '../endpoints';
 import http from '../http';
 import { PaymentResult } from '../types/payment.interface';
 import { buildEndpoint } from '../utility';
+import { PaymentDetails } from '../hooks/use-payment';
 
 class PaymentService {
-    payWithPaystack(paymentDetails: any): Promise<PaymentResult> {
+    payWithPaystack(paymentDetails: PaymentDetails): Promise<PaymentResult> {
         return new Promise((resolve, reject) => {
             http.post(endpoints.PAY_WITH_PAYSTACK, paymentDetails)
                 .then((response: AxiosResponse) => {

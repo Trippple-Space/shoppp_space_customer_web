@@ -56,9 +56,9 @@ const ProductDetails = ({ product }: { product: Product }) => {
         <div className='l:flex w-full gap-25 l:pt-20 l:mt-100'>
           <div className="l:w-50p">
             <Breadcrumb crumbs={[
-              { label: product.store.name, route: `/storefront/${product.store.id}` },
+              { label: product.store?.name, route: `/storefront/${product.store?.id}` },
               { label: product.category.type, route: `/${product.category.type}` },
-              { label: product.category.name, route: `/?q=${product.category.name}` },
+              { label: product.category?.name, route: `/?q=${product.category?.name}` },
               { label: product.name, route: `/products/${product.slug}` },
             ]}
             />
