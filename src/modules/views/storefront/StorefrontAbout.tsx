@@ -10,9 +10,7 @@ import { useStoreProductsView } from '@/modules/lib/utility/hooks/views/use-stor
 
 const StorefrontAbout = ({ store }: { store: any }) => { 
   const { products } = useStoreProductsView()
-  useEffect(() => {
-    
-  }, [products])
+
   // console.log(products?.[0].variants?.[0].media?.[0].url)
   return (
     <>
