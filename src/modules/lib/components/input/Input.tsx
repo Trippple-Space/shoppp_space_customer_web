@@ -34,7 +34,7 @@ const Input: FC<IInput> = ({ label, id, name, type, placeholder, className, afte
             @lo:border-solid @lo:border-1 @lo:border-grey-300 l:@lo:py-17 @lo:py-12 @lo:px-20  
             @lo:radius-8 @lo:l:text-16 @lo:weight-400 @lo:outline-none
             @lo:placeholder:text-grey-400 @lo:text-grey-700
-            @lo:focus:border-green @lo:placeholder:l:text-14 @lo:placeholder:text-12 ${inputClassNames}`
+            @lo:focus:border-green @lo:placeholder:l:text-12 @lo:placeholder:text-12 ${inputClassNames}`
         }
         placeholder={placeholder}
         rows={rows}

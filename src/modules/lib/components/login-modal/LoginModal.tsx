@@ -12,7 +12,7 @@ import { paths } from '../../utility/paths';
 
 const LoginModal = () => {
   const { showLoginModal, isLoginModal } = useCartStore();
-  const {formHandler: loginFormHandler} = useLoginView()
+  const {formHandler: loginFormHandler} = useLoginView(isLoginModal)
   console.log(showLoginModal)
   return (
     <>
@@ -47,7 +47,6 @@ const LoginModal = () => {
                                 />
 
                                 <Input 
-                                    label='Password'
                                     id='password'
                                     name='password'
                                     type='password'
@@ -65,7 +64,7 @@ const LoginModal = () => {
                                     text-10 l:text-12 mt-20 hover:pointer font-inter
                                     hover:bg-darkgreen g|transition:0.5s disabled:bg-grey weight-600
                                 "
-                                onClick={isLoginModal}
+                                // onClick={isLoginModal}
                                 >
                                     Sign In
                                 </button>
@@ -73,7 +72,7 @@ const LoginModal = () => {
                         </form>
                         
                         <div className='border-t border-2 border-grey-200'></div>
-                        <div className='weight-500 text-10 whitespace-nowrap p-16 text-center'>Alredy have an account? <Link href={paths.signup} className='text-green-700'> Sign Up</Link></div>
+                        <div className='weight-500 text-10 whitespace-nowrap p-16 text-center'>Alredy have an account? <Link href={paths.signup} className='text-green-700' onClick={isLoginModal}> Sign Up</Link></div>
                     </motion.div>
                 </div>
                 : ''

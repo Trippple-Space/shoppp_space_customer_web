@@ -37,7 +37,7 @@ const ProductDetails = ({ product }: { product: Product }) => {
   const [unitCounter, setUnitCounter] = useState<number>(1);
   const [selectedImage, setSelectedImage] = useState(product?.variants?.[0]?.media?.[0]?.url);
   const [selectedVariant, setSelectedVariant] = useState(product?.variants?.[0]);
-  const { addToCart, cart, increment, decrement } = useCart()
+  const { addToCart, cart, increment, decrement, isLoginModal, isAuthenticated } = useCart()
   const [selectedSize, setSelectedSize] = useState('')
   const selectedVariantItemInCart = cart.cartItems.find(item => item.variant.id === selectedVariant?.id);
   scrollToTop()
@@ -200,7 +200,11 @@ const ProductDetails = ({ product }: { product: Product }) => {
               
               {
                 !selectedVariantItemInCart ?
-                <button className='bg-green text-white border-none l:px-90 l:py-20 py-15 w-100p radius-30 pointer' onClick={() => addToCart(selectedVariant.id, selectedVariant.minPurchaseQuantity || 1)}>
+                <button className='bg-green text-white border-none l:px-90 l:py-20 py-15 w-100p radius-30 pointer' onClick={() => {
+                  isAuthenticated ?
+                  addToCart(selectedVariant.id, selectedVariant.minPurchaseQuantity || 1)
+                  : isLoginModal()
+                }} >
                   <div className="l:flex grid grid-2-cols-auto gap-10 items-center w-fit mx-auto">
                     <HiOutlineShoppingBag className='h-21' />
                     <div className='whitespace-nowrap text-16'>Add To Cart</div>

@@ -26,7 +26,7 @@ const LoginValidationSchema = Yup.object().shape({
 })
 
 
-const formikLoginConfig = (router: any, callback?: (user: User) => void): FormikConfig<LoginCredentials> => ({
+const formikLoginConfig = (router: any, callback?: (user: User) => void, isLoginModal?: any): FormikConfig<LoginCredentials> => ({
     initialValues: {
         email: '',
         password: ''
@@ -36,15 +36,16 @@ const formikLoginConfig = (router: any, callback?: (user: User) => void): Formik
             .then(({ user }) => {
                 toast.success(`Welcome ${user.profile.firstName}`)
                 callback?.(user)
+                isLoginModal?.()
             })
     },
     validationSchema: LoginValidationSchema
 })
 
-export const useLoginView = () => {
+export const useLoginView = (isLoginModal?: any) => {
     const router = useRouter()
     const { isAuthenticated, authenticateUser } = useUserStore()
-    const formHandler = useFormik(formikLoginConfig(router, (user) => { authenticateUser(user) }))
+    const formHandler = useFormik(formikLoginConfig(router, (user) => { authenticateUser(user) }, isLoginModal))
 
     useRouteGuard(isAuthenticated, paths.homepage)
 

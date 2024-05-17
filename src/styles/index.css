@@ -988,3 +988,4 @@
 @media only screen and (min-width: 992px) { .l\:m-15 { margin: 15px; } } 
 @media only screen and (min-width: 992px) { .l\:pb-100 { padding-bottom: 100px; } } 
 @media only screen and (min-width: 992px) { .l\:mt--60 { margin-top: -60px; } } 
+@layer lo {  @media only screen and (min-width: 992px) { .\@lo\:placeholder\:l\:text-12::placeholder { font-size: 12px; } }  } 
