@@ -40,7 +40,6 @@ const ProductTile: FC<IProductTile> = ({ product }: any) => {
             <QuantitySelector decrement={() => decrement(selectedVariantItemInCart)} increment={() => increment(selectedVariantItemInCart)} cartItem={selectedVariantItemInCart} /> :
             <button 
               onClick={() => {
-                // console.log(showLoginModal)
                 isAuthenticated ?
                 addToCart(selectedVariant.id, selectedVariant.minPurchaseQuantity || 1)
                 : isLoginModal()
