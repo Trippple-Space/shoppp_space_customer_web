@@ -9,6 +9,7 @@ import { formatNumberAsPrice } from "../../utility/utility";
 import { useCart } from "../../utility/hooks/use-cart";
 import QuantitySelector from "../quantity-selector/QuantitySelector";
 import Link from "next/link";
+import LoginModal from "../login-modal/LoginModal";
 interface IProductTile {
   product: Product
 }
@@ -16,7 +17,7 @@ const ProductTile: FC<IProductTile> = ({ product }: any) => {
   const [selectedImage, setSelectedImage] = useState(product?.variants?.[0]?.media?.[0]?.url)
   const [selectedVariant, setSelectedVariant] = useState(product?.variants?.[0])
   const [isFavourite, setIsFavorite] = useState(false)
-  const { addToCart, cart, increment, decrement } = useCart()
+  const { addToCart, cart, increment, decrement, isAuthenticated, isLoginModal, showLoginModal } = useCart()
   const selectedVariantItemInCart = cart.cartItems.find(item => item.variant.id === selectedVariant?.id)
   useEffect(() => {
     setSelectedImage(product?.variants?.[0]?.media?.[0]?.url)
@@ -24,31 +25,32 @@ const ProductTile: FC<IProductTile> = ({ product }: any) => {
 
   return (
     <div className="mt-30 l:mt-20">
-      <div
-        id="image"
-        className="relative ratio-1 radius-10 g|overflow:hidden l:radius-15"
-      >
+      <div id="image" className="relative ratio-1 radius-10 g|overflow:hidden l:radius-15">
         <Image
           className="absolute w-full h-full a-self-center g|object-fit:cover pointer"
           src={selectedImage}
           alt="product-image"
         />
         <div className="skelly-rectangle w-full h-full bg-#dee1ec text-white flex" data-width="100%" data-radius="100%">
-          <span className="a-self-center w-fit mx-auto"> Error loading image</span>
+          <span className="a-self-center w-fit mx-auto">Error loading image</span>
         </div>
-        <div
-          id="add to cart button"
-          className="absolute b-0 r-0 mr-10 mb-10 l:mr-15 l:mb-15"
-        >
+        <div id="add to cart button" className="absolute b-0 r-0 mr-10 mb-10 l:mr-15 l:mb-15" >
           {
             selectedVariantItemInCart ?
-              <QuantitySelector decrement={() => decrement(selectedVariantItemInCart)} increment={() => increment(selectedVariantItemInCart)} cartItem={selectedVariantItemInCart} /> :
-              <button onClick={() => addToCart(selectedVariant.id, selectedVariant.minPurchaseQuantity || 1)} className="bg-yellow pointer font-roboto text-grey-900 border-hidden px-10 py-10 radius-5 l:px-22 l:py-12 l:radius-10  ">
-                <span className="hidden l:block weight-500">Add to cart</span>
-                <div className="l:hidden">
-                  <AiOutlinePlus className="l:w-24 l:h-24 w-14 h-14" />
-                </div>
-              </button>
+            <QuantitySelector decrement={() => decrement(selectedVariantItemInCart)} increment={() => increment(selectedVariantItemInCart)} cartItem={selectedVariantItemInCart} /> :
+            <button 
+              onClick={() => {
+                // console.log(showLoginModal)
+                isAuthenticated ?
+                addToCart(selectedVariant.id, selectedVariant.minPurchaseQuantity || 1)
+                : isLoginModal()
+              }} 
+              className="bg-yellow pointer font-roboto text-grey-900 border-hidden px-10 py-10 radius-5 l:px-22 l:py-12 l:radius-10 ">
+              <span className="hidden l:block weight-500">Add to cart</span>
+              <div className="l:hidden">
+                <AiOutlinePlus className="l:w-24 l:h-24 w-14 h-14" />
+              </div>
+            </button>
           }
         </div>
         <div

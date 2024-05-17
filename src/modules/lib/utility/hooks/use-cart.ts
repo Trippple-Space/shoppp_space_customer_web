@@ -5,13 +5,14 @@ import { useAuthGuard } from './use-auth-guard';
 import useUserStore from '../store/user.store';
 
 export const useCart = () => {
-    const { cart, fetchCart, addToCart, fetching, removeFromCart, incrementCartItem, decrementCartItem } = useCartStore();
+    const { cart, fetchCart, addToCart, fetching, removeFromCart, incrementCartItem, decrementCartItem, isLoginModal, showLoginModal } = useCartStore();
     const { isAuthenticated } = useUserStore()
 
     const increment = (cartItem: CartItem) => {
         if (cartItem.quantity >= cartItem.variant.stock) return;
         incrementCartItem(cartItem.variant.id, cartItem.variant.incrementBy)
     }
+
     const decrement = (cartItem: CartItem) => {
         if (cartItem.quantity <= cartItem.variant.minPurchaseQuantity) return;
         decrementCartItem(cartItem.variant.id, cartItem.variant.incrementBy)
@@ -24,5 +25,5 @@ export const useCart = () => {
         }
     }, []);
 
-    return { cart, addToCart, removeFromCart, increment, decrement };
+    return { cart, addToCart, removeFromCart, increment, decrement, isAuthenticated, isLoginModal, showLoginModal };
 };

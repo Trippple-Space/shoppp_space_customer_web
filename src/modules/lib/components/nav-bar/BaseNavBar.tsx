@@ -12,6 +12,7 @@ import { FaAddressBook, FaShoppingBasket } from 'react-icons/fa';
 import { RiFoldersFill } from "react-icons/ri";
 import { FiLogOut } from 'react-icons/fi';
 import { useAuthGuard } from '../../utility/hooks/use-auth-guard';
+import useUserStore from '../../utility/store/user.store';
 
 
 interface IBaseNavBar {
@@ -24,6 +25,7 @@ const BaseNavBar: FC<IBaseNavBar> = ({ links }) => {
     const [userOrderDropdown, setUserOrderDropdown] = useState<boolean>(false);
     const pathname = usePathname();
     const {user, signOut, openAddressModal} = useNavbarView()
+    const { isAuthenticated } = useUserStore()
 
 
     const handleUserProfileDropdown = () => {
@@ -84,7 +86,7 @@ const BaseNavBar: FC<IBaseNavBar> = ({ links }) => {
                         //     setUserOrderDropdown={setUserOrderDropdown}
                         // />
                         <div className='absolute r-0 l:t-60 t-50 bg-white g|box-shadow:0px|_|-2px|_|10px|_|rgba(0,0,0,0.10); radius-8'>
-                            <div className="flex items-center gap-20 p-20">
+                            <div className="flex items-center gap-10 p-20">
                                 <div className=''>
                                     <Image
                                         className="l:w-60 l:h-60 w-40 h-40 border-solid border-2 border-grey-300 radius-50p"
@@ -94,35 +96,35 @@ const BaseNavBar: FC<IBaseNavBar> = ({ links }) => {
                                 </div>
 
                                 <div className=''>
-                                    <div className='weight-500 l:text-20 text-16 whitespace-nowrap flex items-center gap-20'>
+                                    <div className='weight-500 l:text-18 text-14 whitespace-nowrap flex items-center gap-20'>
                                         <div className='capitalize'>{user?.profile.firstName  || 'Guest'} {user?.profile.lastName || 'User'}</div>
-                                        <div className='bg-green text-white p-4 radius-4 text-8 weight-700'>New</div>
+                                        {!isAuthenticated && <div className='bg-green text-white p-4 radius-4 text-6 weight-700'>New</div>}
                                     </div>
-                                    <div className='l:text-12 text-10 text-green weight-600'>{user?.email}</div>
+                                    <div className='l:text-10 text-8 text-green weight-600'>{user?.email}</div>
                                 </div>
                             </div>
 
                             <div className='border-t border-5 border-grey-200'>
                                 <div className='p-15 hover:bg-grey-100 pointer flex items-center gap-10 text-grey-700' onClick={() => {setUserOrderDropdown(true)}}>
-                                    <FaShoppingBasket className='l:w-20 l:h-20 w-16 h-16' />
-                                    <div className="l:text-16 text-14">Orders</div>
+                                    {/* <FaShoppingBasket className='l:w-20 l:h-20 w-16 h-16' /> */}
+                                    <div className="text-12 weight-500">Orders</div>
                                 </div>
 
                                 <div className='p-15 hover:bg-grey-100 pointer flex items-center gap-10 text-grey-700' onClick={openAddressModal}>
-                                    <FaAddressBook className='l:w-20 l:h-20 w-16 h-16' />
-                                    <div className="l:text-16 text-14">Address book</div>
+                                    {/* <FaAddressBook className='l:w-20 l:h-20 w-16 h-16' /> */}
+                                    <div className="text-12 weight-500">Address book</div>
                                 </div>
 
                                 <div className='p-15 hover:bg-grey-100 pointer flex items-center gap-10 text-grey-700'>
-                                    <RiFoldersFill className='l:w-20 l:h-20 w-16 h-16' />
-                                    <div className="l:text-16 text-14">Close account</div>
+                                    {/* <RiFoldersFill className='l:w-20 l:h-20 w-16 h-16' /> */}
+                                    <div className="text-12 weight-500">Close account</div>
                                 </div>
                             </div>
 
                             <div className='border-t border-5 border-grey-200 pointer'>
-                                <div className='l:p-40 p-20 text-center flex items-center text-danger justify-center gap-10 w-fit mx-auto weight-500' onClick={() => signOut()}>
-                                    <FiLogOut className='l:w-20 l:h-20 w-16 h-16' />
-                                    <div className="">Logout</div> 
+                                <div className='l:p-20 p-10 text-center text-12 flex items-center justify-center gap-10 w-fit mx-auto weight-500' style={{color: isAuthenticated ? 'red' : 'green'}} onClick={() => signOut()}>
+                                    {/* <FiLogOut className='l:w-20 l:h-20 w-16 h-16' /> */}
+                                    <div className="">{isAuthenticated ? 'Logout' : 'Login'}</div> 
                                 </div>
                             </div>
                         </div>

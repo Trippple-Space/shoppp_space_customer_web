@@ -5,9 +5,7 @@ import { AiOutlineClose } from 'react-icons/ai';
 import Modal from '@/modules/lib/components/modal/modal';
 import AddressCard from './address-card/AddressCard';
 import AddressForm from './address-form/AddressForm';
-import useAddressStore from '@/modules/lib/utility/store/address.store';
 import useAddress from '../../utility/hooks/use-address';
-import { BiPlus } from 'react-icons/bi';
 import { FaPlus } from 'react-icons/fa';
 
 interface ModalProps { }
