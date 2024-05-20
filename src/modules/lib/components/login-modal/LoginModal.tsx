@@ -26,12 +26,12 @@ const LoginModal = () => {
                         animate={{ scale: 1 }}
                         exit={{ scale: 0 }}
                         transition={{ duration: 0.3 }}
-                        className='absolute l-40p t-40p g|transform:translate(-50%) bg-white z-7 fixed radius-8 w-400'
+                        className='absolute l:l-40p l:t-35p mt-150 l:mt-0 mx-45 l:mx-0 l:ml-0 g|transform:translate(-50%) bg-white z-7 fixed radius-8 l:w-400 w-80p'
                     >
-                        <header className=' flex space-between items-center p-16'>
-                            <div className='weight-500 text-14 whitespace-nowrap text-green-700'>Log in</div>
+                        <header className='flex space-between items-center p-16'>
+                            <div className='weight-500 text-16 whitespace-nowrap text-green-700'>Log in</div>
                             {/* <div className='weight-500 text-14 whitespace-nowrap'>Log in</div> */}
-                            <IoMdCloseCircle className='w-fit text-danger pointer'  onClick={isLoginModal} />
+                            <IoMdCloseCircle className='w-fit text-grey-400 pointer w-20 h-20'  onClick={isLoginModal} />
                         </header>
                         <div className='border-t border-2 border-grey-200'></div>
                         <form onSubmit={loginFormHandler.handleSubmit}>
@@ -60,11 +60,10 @@ const LoginModal = () => {
                             <div className="text-center text-10 text-green-500 pointer">Forget Your Password?</div>
 
                             <div className="px-16 mb-20">
-                                <button className="bg-green text-white py-8 l:py-8 radius-8 w-full border 
+                                <button className="bg-green text-white py-8 l:py-10 radius-8 w-full border 
                                     text-10 l:text-12 mt-20 hover:pointer font-inter
                                     hover:bg-darkgreen g|transition:0.5s disabled:bg-grey weight-600
                                 "
-                                // onClick={isLoginModal}
                                 >
                                     Sign In
                                 </button>

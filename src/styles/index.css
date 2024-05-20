@@ -270,12 +270,13 @@
 .z-index-6, .z-6 { z-index: 6; } 
 .t-0 { top: 0px; } 
 .opacity-40 { opacity: 40%; } 
-.t-40p { top: 40%; } 
+.mt-150 { margin-top: 150px; } 
+.mx-45 { margin-left: 45px; margin-right: 45px; } 
 [class~='g|transform:translate(-50%)']{transform:translate(-50%)} 
 .z-index-7, .z-7 { z-index: 7; } 
-.w-400 { width: 400px; } 
 .p-16 { padding: 16px; } 
 .text-green-700 { color:  #056A54; } 
+.text-grey-400 { color: #C8C6C3; } 
 @layer base {    .border-t {       border-top: 1px solid;     }  } 
 .border-grey-200 { border-color: #F5F3F1; } 
 .mt-16 { margin-top: 16px; } 
@@ -476,6 +477,9 @@
 .underline { text-decoration: underline; } 
 .mb-2000 { margin-bottom: 2000px; } 
 .sentence-case {    text-transform: lowercase;  }  .sentence-case:first-letter {    text-transform: uppercase;  } 
+.mt-60 { margin-top: 60px; } 
+.t-50p { top: 50%; } 
+.w-313 { width: 313px; } 
 .grid-2-cols-auto { grid-template-columns: repeat(2, auto); } 
 .px-35 { padding-left: 35px; padding-right: 35px; } 
 .w-45 { width: 45px; } 
@@ -515,7 +519,6 @@
 .color-\#D48D3B { color: #D48D3B; } 
 @layer base {.radius-27 { border-radius: 27px; } } 
 .bg-green-100 { background-color: rgba(11, 147, 120, 0.2); } 
-.text-grey-400 { color: #C8C6C3; } 
 .mt-14 { margin-top: 14px; } 
 .a-content-center { align-content: center; } 
 .color-black { color: black; } 
@@ -593,7 +596,6 @@
 .w-117 { width: 117px; } 
 .mb-3 { margin-bottom: 3px; } 
 .max-w-60 { max-width: 60px; } 
-.mt-150 { margin-top: 150px; } 
 .mb-100 { margin-bottom: 100px; } 
 .mt-120 { margin-top: 120px; } 
 .text-28 { font-size: 28px; } 
@@ -712,11 +714,6 @@
 .bg-lightgreen { background-color: #E2FFFA; } 
 .pl-50 { padding-left: 50px; } 
 .mt-25 { margin-top: 25px; } 
-[class~='g|transform:translate(-50%)!']{transform:translate(-50%)!important} 
-.l-30p { left: 30%; } 
-.l-40p { left: 40%; } 
-.t-50p { top: 50%; } 
-.l-0p { left: 0%; } 
 
 
 
@@ -827,8 +824,13 @@
 @media only screen and (min-width: 992px) { .l\:weight-400 { font-weight: 400; } } 
 @media only screen and (min-width: 992px) {  @layer lo { .l\:\@lo\:py-17 { padding-top: 17px; padding-bottom: 17px; } }  } 
 @layer lo {  @media only screen and (min-width: 992px) { .\@lo\:l\:text-16 { font-size: 16px; } }  } 
-@layer lo {  @media only screen and (min-width: 992px) { .\@lo\:placeholder\:l\:text-14::placeholder { font-size: 14px; } }  } 
-@media only screen and (min-width: 992px) { .l\:py-8 { padding-top: 8px; padding-bottom: 8px; } } 
+@layer lo {  @media only screen and (min-width: 992px) { .\@lo\:placeholder\:l\:text-12::placeholder { font-size: 12px; } }  } 
+@media only screen and (min-width: 992px) { .l\:l-40p { left: 40%; } } 
+@media only screen and (min-width: 992px) { .l\:t-35p { top: 35%; } } 
+@media only screen and (min-width: 992px) { .l\:mt-0 { margin-top: 0px; } } 
+@media only screen and (min-width: 992px) { .l\:mx-0 { margin-left: 0px; margin-right: 0px; } } 
+@media only screen and (min-width: 992px) { .l\:ml-0 { margin-left: 0px; } } 
+@media only screen and (min-width: 992px) { .l\:w-400 { width: 400px; } } 
 @media only screen and (min-width: 992px) { .l\:b-0 { bottom: 0px; } } 
 @media only screen and (min-width: 992px) { .l\:h-100vh { height: 100vh; } } 
 @media only screen and (min-width: 992px) { .l\:r-0 { right: 0px; } } 
@@ -884,6 +886,7 @@
 @media only screen and (min-width: 992px) { .l\:grid-5-cols-1fr { grid-template-columns: repeat(5, 1fr); } } 
 @media only screen and (min-width: 992px) { .l\:mt-90 { margin-top: 90px; } } 
 @media only screen and (min-width: 992px) { .l\:mb-200 { margin-bottom: 200px; } } 
+@media only screen and (min-width: 992px) { .l\:h-500 { height: 500px; } } 
 @media only screen and (min-width: 992px) { .l\:t-150 { top: 150px; } } 
 @media only screen and (min-width: 992px) { .l\:l-100 { left: 100px; } } 
 @media only screen and (min-width: 992px) { .l\:w-700 { width: 700px; } } 
@@ -909,7 +912,6 @@
 @media only screen and (min-width: 992px) { .l\:text-28 { font-size: 28px; } } 
 @media only screen and (min-width: 992px) { .l\:mt-30 { margin-top: 30px; } } 
 @media only screen and (min-width: 992px) { .l\:text-21 { font-size: 21px; } } 
-@media only screen and (min-width: 992px) { .l\:mt-0 { margin-top: 0px; } } 
 @media only screen and (min-width: 992px) { .l\:ml--35 { margin-left: -35px; } } 
 @media only screen and (min-width: 992px) { .l\:w-50 { width: 50px; } } 
 @media only screen and (min-width: 992px) { .l\:h-50 { height: 50px; } } 
@@ -970,6 +972,7 @@
 @media only screen and (min-width: 992px) { .l\:text-48 { font-size: 48px; } } 
 @media only screen and (min-width: 992px) { .l\:letter-spacing-3 { letter-spacing: 3px; } } 
 @media only screen and (min-width: 992px) { .l\:line-height-70 { line-height: 70px; } } 
+@media only screen and (min-width: 992px) { .l\:py-8 { padding-top: 8px; padding-bottom: 8px; } } 
 @media only screen and (min-width: 992px) { .l\:line-height-38 { line-height: 38px; } } 
 @media only screen and (min-width: 992px) { .l\:ml-100 { margin-left: 100px; } } 
 @media only screen and (min-width: 992px) { .l\:line-height-30 { line-height: 30px; } } 
@@ -988,4 +991,3 @@
 @media only screen and (min-width: 992px) { .l\:m-15 { margin: 15px; } } 
 @media only screen and (min-width: 992px) { .l\:pb-100 { padding-bottom: 100px; } } 
 @media only screen and (min-width: 992px) { .l\:mt--60 { margin-top: -60px; } } 
-@layer lo {  @media only screen and (min-width: 992px) { .\@lo\:placeholder\:l\:text-12::placeholder { font-size: 12px; } }  } 

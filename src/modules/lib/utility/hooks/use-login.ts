@@ -36,7 +36,7 @@ const formikLoginConfig = (router: any, callback?: (user: User) => void, isLogin
             .then(({ user }) => {
                 toast.success(`Welcome ${user.profile.firstName}`)
                 callback?.(user)
-                isLoginModal?.()
+                isLoginModal?.()    
             })
     },
     validationSchema: LoginValidationSchema
