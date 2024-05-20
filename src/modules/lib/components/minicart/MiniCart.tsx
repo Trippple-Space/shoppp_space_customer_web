@@ -20,6 +20,7 @@ import { paths } from '../../utility/paths';
 import { getCartItemVariantPropertiesAsJsx } from './minicart.helper';
 import { HiOutlineShoppingBag } from 'react-icons/hi2';
 import ImageAlt from '../image-alt/ImageAlt';
+import { CartItem } from '../../utility/types/cart.interface';
 
 interface ModalProps {
 
@@ -55,7 +56,7 @@ const MiniCart: React.FC<ModalProps> = () => {
             ) : (
               <div className='px-20 pb-20'>
                 <div className='uppercase mb-30 text-14 l:text-16 weight-500'>Your cart</div>
-                {cart.cartItems.map((cartItem: any, i) => (
+                {cart.cartItems.map((cartItem: CartItem, i) => (
                   <div className={cx('space-between items-center radius-5 py-10 mb-20 px-15 g|box-shadow:1px|_|0px|_|2px|_|0px|_|rgba(0,0,0,0.10);', {
                     'bg-whitesmoke border border-whitesmoke': i % 2,
                     'border border-whitesmoke': !(i % 2),

@@ -14,7 +14,10 @@ export const useCart = () => {
     }
 
     const decrement = (cartItem: CartItem) => {
-        if (cartItem.quantity <= cartItem.variant.minPurchaseQuantity) return;
+        if (cartItem.quantity <= cartItem.variant.minPurchaseQuantity) {
+            return removeFromCart(cartItem.id)
+        };
+
         decrementCartItem(cartItem.variant.id, cartItem.variant.incrementBy)
     }
 
@@ -23,7 +26,7 @@ export const useCart = () => {
             console.log({cart, isAuthenticated, fetching})
             fetchCart();
         }
-    }, []);
+    });
 
     return { cart, addToCart, removeFromCart, increment, decrement, isAuthenticated, isLoginModal, showLoginModal };
 };
