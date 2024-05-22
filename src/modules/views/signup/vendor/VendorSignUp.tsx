@@ -10,8 +10,9 @@ import VendorSignUpStep4 from './VendorSignUpStep4';
 import Link from 'next/link';
 import { paths } from '@/modules/lib/utility/paths';
 
+type StepNumber = 1 | 2 | 3 | 4;
 export interface IVendorSignUpStep {
-  setCurrentStep: (step: number) => void;
+  setCurrentStep: (step: StepNumber) => void;
 }
 
 const vendorSignUpSteps: { [x: number]: React.ComponentType<IVendorSignUpStep> } = {
@@ -21,8 +22,20 @@ const vendorSignUpSteps: { [x: number]: React.ComponentType<IVendorSignUpStep> }
   4: VendorSignUpStep4,
 };
 
+
+const percentageProgress: (currentStep: StepNumber ) => number = (currentStep) => {
+  const progressMap: Record<StepNumber, number> = {
+    1: 30,
+    2: 50,
+    3: 70,
+    4: 100,
+  };
+
+  return progressMap[currentStep] || 0;
+};
+
 const VendorSignUp = () => {
-  const [currentStep, setCurrentStep] = useState<number>(1);
+  const [currentStep, setCurrentStep] = useState<StepNumber>(1);
 
   const VendorSignUpStep = vendorSignUpSteps[currentStep];
 
@@ -30,7 +43,7 @@ const VendorSignUp = () => {
     <div className='h-full'>
       <div className="text-right w-full l:w-80p mt-53 mx-25 hidden l:block">
         <span>Not a vendor? </span>
-        <Link href={paths.signup} className='text-green pointer'>Sign up here instead</Link>
+        <Link href={paths.signup} className='text-green-700 pointer'>Sign up here instead</Link>
       </div>
       <div className='flex content-center h-full'>
         <div className='a-self-center w-80p mx-auto'>
@@ -41,7 +54,7 @@ const VendorSignUp = () => {
               alt='logo'
               type='logo'
             />
-            <ProgressBar percentage={30} />
+            <ProgressBar percentage={percentageProgress(currentStep)} />
           </div>
           {VendorSignUpStep && <VendorSignUpStep setCurrentStep={setCurrentStep} />}
         </div>

@@ -1,31 +1,48 @@
-import React, { FC } from 'react'
+import React, { FC, HTMLInputTypeAttribute, ReactNode } from 'react'
 import cx from 'classnames'
 
 interface IInput {
-    label?: string,
-    id?: string,
-    name: string,
-    type?: 'text'|'password'|'email'|'textarea',
-    placeholder?: string,
-    className?:string
-    after?: any
+  label?: string | ReactNode
+  id?: string
+  name: string
+  type?: HTMLInputTypeAttribute
+  placeholder?: string
+  className?: string
+  after?: any
+  inputClass?: any
+  rows?: number
+  value?: any
+  checked?: boolean
+  handleChange?: Function,
+  handleBlur?: Function
 }
-const Input: FC<IInput> = ({label, id, name, type, placeholder, className, after}) => {
+const Input: FC<IInput> = ({ label, id, name, type, placeholder, className, after, rows, inputClass: inputClassNames, value, checked, handleChange, handleBlur }) => {
   const Component = type === 'textarea' ? 'textarea' : 'input';
+  const controlProps = {
+    [value ? 'value' : '']: value,
+    [checked !== undefined ? 'checked' : '']: checked,
+    [handleChange ? 'onChange' : '']: handleChange,
+    [handleBlur ? 'onBlur': '']: handleBlur
+  }
   return (
     <div className={`input-group ${className}`}>
-        {label && <label htmlFor={id} className='block w-fit mb-14 weight-400 text-14 text-grey'>{label}</label>}
-        <Component 
-          type={type} 
-          className='block font-roboto w-full bg-white border-1 
-                      border-lighter-grey py-17 px-20 
-                      radius-8 text-16 weight-400 outline-none
-                      placeholder:text-faint-grey text-grey
-                      focus:border-green'
-          placeholder={placeholder}
-          id={id} name={name} 
-        />
-        {after}
+      {label && <label htmlFor={id} className='block w-fit mb-8 l:weight-400 weight-500 l:text-14 text-12 text-grey-800'>{label}</label>}
+      <Component
+        type={type}
+        className={`
+            block font-inter @lo:w-full @lo:bg-white
+            @lo:border-solid @lo:border-1 @lo:border-grey-300 l:@lo:py-17 @lo:py-12 @lo:px-20  
+            @lo:radius-8 @lo:l:text-16 @lo:weight-400 @lo:outline-none
+            @lo:placeholder:text-grey-400 @lo:text-grey-700
+            @lo:focus:border-green @lo:placeholder:l:text-12 @lo:placeholder:text-12 ${inputClassNames}`
+        }
+        placeholder={placeholder}
+        rows={rows}
+        id={id}
+        name={name}
+        {...controlProps}
+      />
+      {after}
     </div>
   )
 }

@@ -1,17 +1,28 @@
+// "use client"
+
+import { Toaster } from 'sonner';
 import '../styles/styles.scss';
-import { Inter, Roboto } from 'next/font/google'
+import { Inter, Roboto, Lora } from 'next/font/google'
+// import { useAuthGuard } from '@/modules/lib/utility/hooks/use-auth-guard';
+import GlobalArena from '@/modules/lib/components/global-arena/GlobalArena';
 
 const inter = Inter({
   subsets: ['latin'],
   variable: '--font-inter',
   display: 'swap',
 });
- 
+
 const roboto = Roboto({
   subsets: ['latin'],
   variable: '--font-roboto',
   display: 'swap',
   weight: ['100', '300', '400', '500', '700', '900']
+});
+
+const lora = Lora({
+  subsets: ['latin'],
+  variable: '--font-lora',
+  display: 'swap',
 });
 
 export const metadata = {
@@ -28,9 +39,13 @@ export default function RootLayout({
 }: {
   children: React.ReactNode
 }) {
+
+  // useAuthGuard()
+
   return (
-    <html lang="en" className={`${inter.variable} ${roboto.variable} bg-white`}>
-      <body className='font-roboto weight-300 text-dimgrey'>{children}</body>
+    <html lang="en" className={`${inter.variable} ${roboto.variable} ${lora.variable} bg-white font-inter`}>
+      <GlobalArena />
+      <body className='@lo:weight-300 @lo:text-dimgrey'>{children}</body>
     </html>
   )
 }

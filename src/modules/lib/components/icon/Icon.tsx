@@ -4,20 +4,23 @@ import { getImageDir } from '../../utility/utility'
 
 interface IIcon {
     name: string,
+    ext?: string,
     width?: number,
     height?: number,
     alt?: string,
     className?: string
+    onClick?: any
 }
-const Icon: FC<IIcon> = ({name, width = 18, height = 18, alt= 'icon', className = ''}) => {
+const Icon: React.FC<IIcon> = ({name, ext ='.svg', width = 18, height = 18, alt= 'icon', className = '', onClick}) => {
   
   return (
     <img
-        className={'inline-block ' + className}
-        src={getImageDir('icons', `${name}.svg`)}
-        width={width}
-        height={height}
-        alt={alt}
+      className={'inline-block ' + className}
+      src={getImageDir('icons', `${name}${ext}`)}
+      width={width}
+      height={height}
+      alt={alt}
+      onClick={onClick}
     />
   )
 }
