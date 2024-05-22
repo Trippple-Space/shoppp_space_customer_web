@@ -26,11 +26,13 @@ const ProductTile: FC<IProductTile> = ({ product }: any) => {
   return (
     <div className="mt-30 l:mt-20">
       <div id="image" className="relative ratio-1 radius-10 g|overflow:hidden l:radius-15">
-        <Image
-          className="absolute w-full h-full a-self-center g|object-fit:cover pointer"
-          src={selectedImage}
-          alt="product-image"
-        />
+        <Link href={`/products/${product.slug}`}>
+          <Image
+            className="absolute w-full h-full a-self-center g|object-fit:cover pointer"
+            src={selectedImage}
+            alt="product-image"
+          />
+        </Link>
         <div className="skelly-rectangle w-full h-full bg-#dee1ec text-white flex" data-width="100%" data-radius="100%">
           <span className="a-self-center w-fit mx-auto">Error loading image</span>
         </div>
