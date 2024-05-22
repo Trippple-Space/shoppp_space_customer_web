@@ -83,7 +83,7 @@ const Footer = () => {
                     </div>
                 }  
 
-                <div className='flex whitespace-nowrap weight-400 text-14 a-self-center'>
+                <div className='flex whitespace-nowrap weight-400 text-14 a-self-center' onClick={() => setIsFooterOpen((prev) => !prev)} >
                     <div className="w-full flex">
                         <div className="w-fit flex gap-30 mx-0 l:mx-auto a-self-center ">
                             <span>@ 2023 asoebi all reserved.</span>
