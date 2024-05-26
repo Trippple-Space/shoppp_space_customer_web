@@ -5,7 +5,7 @@ interface UserStore {
     user: User | null,
     isAuthenticated: boolean,
     authenticateUser: (user: User) => void,
-    deAuthenticateUser?: () => void
+    deAuthenticateUser: () => void
 }
 
 const useUserStore = create<UserStore>((set) => ({

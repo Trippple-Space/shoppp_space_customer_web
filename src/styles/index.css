@@ -475,7 +475,6 @@
 .grid-7-cols-1fr { grid-template-columns: repeat(7, 1fr); } 
 .my-12 { margin-top: 12px; margin-bottom: 12px; } 
 .underline { text-decoration: underline; } 
-.mb-2000 { margin-bottom: 2000px; } 
 .sentence-case {    text-transform: lowercase;  }  .sentence-case:first-letter {    text-transform: uppercase;  } 
 .mt-60 { margin-top: 60px; } 
 .t-50p { top: 50%; } 
@@ -487,11 +486,6 @@
 .w-125 { width: 125px; } 
 .border-whisper { border-color: #EAEAEA; } 
 .h-22 { height: 22px; } 
-.mt-70 { margin-top: 70px; } 
-.w-220 { width: 220px; } 
-[class~='g|white-space:nowrap']{white-space:nowrap} 
-.py-40 { padding-top: 40px; padding-bottom: 40px; } 
-.mb-50 { margin-bottom: 50px; } 
 .bg-offwhitegrey { background-color: #F0F0F0; } 
 .pt-40 { padding-top: 40px; } 
 .text-38 { font-size: 38px; } 
@@ -504,6 +498,7 @@
 .mx-25 { margin-left: 25px; margin-right: 25px; } 
 .w-79 { width: 79px; } 
 .h-21 { height: 21px; } 
+.mb-50 { margin-bottom: 50px; } 
 .mt-36 { margin-top: 36px; } 
 .mt-9 { margin-top: 9px; } 
 .mt-18 { margin-top: 18px; } 
@@ -639,6 +634,7 @@
 .mr-40 { margin-right: 40px; } 
 .l-10 { left: 10px; } 
 .grid-5-cols-1fr { grid-template-columns: repeat(5, 1fr); } 
+.mt-70 { margin-top: 70px; } 
 .t-20 { top: 20px; } 
 .bg-light-yellow { background-color: #FFE68BB2; } 
 .bg-grey-400 { background-color: #C8C6C3; } 
@@ -714,8 +710,6 @@
 .bg-lightgreen { background-color: #E2FFFA; } 
 .pl-50 { padding-left: 50px; } 
 .mt-25 { margin-top: 25px; } 
-.mb-500 { margin-bottom: 500px; } 
-.mb-200 { margin-bottom: 200px; } 
 
 
 
@@ -893,10 +887,6 @@
 @media only screen and (min-width: 992px) { .l\:l-100 { left: 100px; } } 
 @media only screen and (min-width: 992px) { .l\:w-700 { width: 700px; } } 
 @media only screen and (min-width: 992px) { @layer base {.l\:radius-5 { border-radius: 5px; } } } 
-@media only screen and (min-width: 992px) { .l\:mt-70 { margin-top: 70px; } } 
-@media only screen and (min-width: 992px) { .l\:grid-4-cols-1fr { grid-template-columns: repeat(4, 1fr); } } 
-@media only screen and (min-width: 992px) { .l\:py-60 { padding-top: 60px; padding-bottom: 60px; } } 
-@media only screen and (min-width: 992px) { .l\:text-26 { font-size: 26px; } } 
 @media only screen and (min-width: 992px) { .l\:pb-75 { padding-bottom: 75px; } } 
 @media only screen and (min-width: 992px) { .l\:pt-80 { padding-top: 80px; } } 
 @media only screen and (min-width: 992px) { .l\:ml-50 { margin-left: 50px; } } 
@@ -951,6 +941,7 @@
 }
  } 
 @media only screen and (min-width: 992px) { .l\:w-70p { width: 70%; } } 
+@media only screen and (min-width: 992px) { .l\:mt-70 { margin-top: 70px; } } 
 @media only screen and (min-width: 992px) { .l\:items-center {    align-items: center;  } } 
 @media only screen and (min-width: 992px) { .l\:space-between {    justify-content: space-between;  } } 
 @media only screen and (min-width: 992px) { .l\:my-40 { margin-top: 40px; margin-bottom: 40px; } } 
@@ -970,6 +961,7 @@
 @media only screen and (min-width: 992px) { .l\:grid-3-cols-1fr { grid-template-columns: repeat(3, 1fr); } } 
 @media only screen and (min-width: 992px) { .l\:mt-68 { margin-top: 68px; } } 
 @media only screen and (min-width: 992px) { .l\:mt-55 { margin-top: 55px; } } 
+@media only screen and (min-width: 992px) { .l\:grid-4-cols-1fr { grid-template-columns: repeat(4, 1fr); } } 
 @media only screen and (min-width: 992px) { .l\:mt-80 { margin-top: 80px; } } 
 @media only screen and (min-width: 992px) { .l\:text-48 { font-size: 48px; } } 
 @media only screen and (min-width: 992px) { .l\:letter-spacing-3 { letter-spacing: 3px; } } 

@@ -12,5 +12,6 @@ export interface CartItem {
     id: number,
     productId: string,
     quantity: number,
-    variant: ProductVariant
+    variant: ProductVariant,
+    totalPrice: number
 }
