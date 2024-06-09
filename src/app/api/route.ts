@@ -8,7 +8,6 @@ const lambda = new AWS.Lambda({
 });
 
 async function handler(req: NextRequest) {
-    console.log('In API', {req});
 
     if (!process.env.LAMBDA_FUNCTION_NAME) {
         return NextResponse.json({ error: 'LAMBDA_FUNCTION_NAME environment variable is not set' }, { status: 500 });
@@ -43,11 +42,8 @@ async function handler(req: NextRequest) {
         }),
     };
 
-    console.log({params})
-
     try {
         const data = await lambda.invoke(params).promise();
-        console.log({data})
         const responsePayload = JSON.parse(data.Payload as string);
 
         return NextResponse.json(responsePayload.body ? JSON.parse(responsePayload.body) : {}, {

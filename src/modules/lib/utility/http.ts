@@ -1,15 +1,19 @@
 import axios from "axios";
-import config from "env";
+import envConfig from "env";
+import stagingConfig from "env/staging";
 import { toast } from "sonner";
 
 
 const http = axios.create({
-    baseURL: config.API_HOST
+    baseURL: envConfig.API_HOST
 })
 
 http.interceptors.request.use((config: any) => {
-    const originalUrl = config.url;
-    config.url = `?route=${encodeURIComponent(originalUrl)}`;
+   
+    if (envConfig.API_HOST === stagingConfig.API_HOST) {
+        const originalUrl = config.url;
+        config.url = `?route=${encodeURIComponent(originalUrl)}`;        
+    }
     config.headers['Content-Type'] = 'application/json'
     config.headers['Authorization'] = `Bearer ${localStorage.getItem('token')}`;
     return config
