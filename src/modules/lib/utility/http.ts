@@ -9,11 +9,6 @@ const http = axios.create({
 })
 
 http.interceptors.request.use((config: any) => {
-   
-    if (envConfig.API_HOST === stagingConfig.API_HOST) {
-        const originalUrl = config.url;
-        config.url = `?route=${encodeURIComponent(originalUrl)}`;        
-    }
     config.headers['Content-Type'] = 'application/json'
     config.headers['Authorization'] = `Bearer ${localStorage.getItem('token')}`;
     return config

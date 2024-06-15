@@ -14,7 +14,7 @@ async function handler(req: NextRequest) {
     }
 
     const url = new URL(req.url);
-    const route = url.searchParams.get('route');
+    const route = url.pathname.replace('/api', '');
     const headers = Object.fromEntries(req.headers.entries());
 
     let body;
