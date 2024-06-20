@@ -8,7 +8,7 @@ import config from "env"
 
 class ProductService {
 
-    fetchProductCategories(type: 'fabrics' | 'wears'): Promise<ProductCategory[]> {
+    fetchProductCategories(type?: 'fabrics' | 'wears'): Promise<ProductCategory[]> {
         return new Promise((resolve) => {
             http.get(endpoints.PRODUCT_CATEGORIES, {
                 params: {
