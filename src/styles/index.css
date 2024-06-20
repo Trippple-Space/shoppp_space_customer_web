@@ -443,6 +443,7 @@
 .py-17 { padding-top: 17px; padding-bottom: 17px; } 
 @layer base {.radius-30 { border-radius: 30px; } } 
 .gap-40 { gap: 40px; } 
+.bg-grey-300 { background-color: #E4E1DF; } 
 .h-340 { height: 340px; } 
 .text-30 { font-size: 30px; } 
 .mr-4 { margin-right: 4px; } 
@@ -710,6 +711,10 @@
 .bg-lightgreen { background-color: #E2FFFA; } 
 .pl-50 { padding-left: 50px; } 
 .mt-25 { margin-top: 25px; } 
+.block\! {    display: block !important;  } 
+.h-20\! { height: 20px !important; } 
+.w-50\! { width: 50px !important; } 
+.h-10\! { height: 10px !important; } 
 
 
 

@@ -8,14 +8,17 @@ import config from "env"
 
 class ProductService {
 
-    fetchProductCategories(): Promise<ProductCategory[]> {
+    fetchProductCategories(type: 'fabrics' | 'wears'): Promise<ProductCategory[]> {
         return new Promise((resolve) => {
-            http.get(endpoints.PRODUCT_CATEGORIES)
+            http.get(endpoints.PRODUCT_CATEGORIES, {
+                params: {
+                    filters: { type }
+                }
+            })
                 .then((response: AxiosResponse) => {
                     resolve(response.data)
                 })
         })
-
     }
 
     fetchProducts(query: IQueryParams): Promise<Product[]> {
