@@ -21,7 +21,7 @@ class StoreService {
 
     fetchStoreBySlug(slug: string, query: IQueryParams): Promise<Product> {
         return new Promise((resolve) => {
-            fetch(config.API_HOST + '/' + buildEndpoint(endpoints.STORE, { slug }))
+            fetch(config.API_HOST + '/' + buildEndpoint(endpoints.STORE, { slug: slug.toLocaleLowerCase() }))
                 .then(res => res.json())
                 .then((response: any) => {
                     resolve(response)

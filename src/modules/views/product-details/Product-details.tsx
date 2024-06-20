@@ -11,7 +11,6 @@ import { BsArrowLeftShort, BsArrowRightShort, BsInfo } from 'react-icons/bs';
 import { PiHeartStraightThin, PiStarBold } from 'react-icons/pi';
 import { GrLocation, GrShareOption, GrStar } from 'react-icons/gr';
 import { IoIosArrowBack, IoIosArrowForward, IoMdHeartEmpty } from 'react-icons/io';
-import ProfilePage from '@/app/profile/page'
 import HomepageNavBar from '@/modules/lib/components/nav-bar/HomepageNavBar'
 import Footer from '@/modules/lib/components/footer/Footer'
 import { Product } from '@/modules/lib/utility/types/product.interface'
@@ -135,13 +134,13 @@ const ProductDetails = ({ product }: { product: Product }) => {
                       <div className={cx('l:w-115 l:h-115 w-85 h-85 overflow-hidden radius-14', {
                         'border border-green border-2': selectedImage == mediaItem?.url,
                         [`border-${mediaItem.description?.toLocaleLowerCase()}`]: selectedImage == mediaItem?.url
-                        })}>
+                      })}>
                         <Image
                           src={mediaItem?.url}
                           alt="product-image"
                           className=''
-                          onClick={() => { 
-                            setSelectedVariant(variant); setSelectedImage(mediaItem?.url) ;
+                          onClick={() => {
+                            setSelectedVariant(variant); setSelectedImage(mediaItem?.url);
                             scrollToTop()
                           }}
                         />
@@ -186,31 +185,31 @@ const ProductDetails = ({ product }: { product: Product }) => {
             </div>
 
             <hr className='l:mt-30 mt-20 @lo:border-none @hi:border-t @hi:border-green-100' />
-              
-            
+
+
             <div className='mt-30 flex gap-20'>
               {
                 selectedVariantItemInCart ?
-                <QuantitySelector2 
-                  decrement={() => decrement(selectedVariantItemInCart)} 
-                  increment={() => increment(selectedVariantItemInCart)} 
-                  cartItem={selectedVariantItemInCart} 
-                /> : <></>
+                  <QuantitySelector2
+                    decrement={() => decrement(selectedVariantItemInCart)}
+                    increment={() => increment(selectedVariantItemInCart)}
+                    cartItem={selectedVariantItemInCart}
+                  /> : <></>
               }
-              
+
               {
                 !selectedVariantItemInCart ?
-                <button className='bg-green text-white border-none l:px-90 l:py-20 py-15 w-100p radius-30 pointer' onClick={() => {
-                  isAuthenticated ?
-                  addToCart(selectedVariant.id, selectedVariant.minPurchaseQuantity || 1)
-                  : isLoginModal()
-                }} >
-                  <div className="l:flex grid grid-2-cols-auto gap-10 items-center w-fit mx-auto">
-                    <HiOutlineShoppingBag className='h-21' />
-                    <div className='whitespace-nowrap text-16'>Add To Cart</div>
-                  </div>
-                </button>
-                : <></>
+                  <button className='bg-green text-white border-none l:px-90 l:py-20 py-15 w-100p radius-30 pointer' onClick={() => {
+                    isAuthenticated ?
+                      addToCart(selectedVariant.id, selectedVariant.minPurchaseQuantity || 1)
+                      : isLoginModal()
+                  }} >
+                    <div className="l:flex grid grid-2-cols-auto gap-10 items-center w-fit mx-auto">
+                      <HiOutlineShoppingBag className='h-21' />
+                      <div className='whitespace-nowrap text-16'>Add To Cart</div>
+                    </div>
+                  </button>
+                  : <></>
               }
             </div>
           </div>

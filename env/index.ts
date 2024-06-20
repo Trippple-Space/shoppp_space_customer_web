@@ -13,7 +13,7 @@ if (!process.env.ENV) {
     currentEnv = process.env.ENV || 'development'
 }
 
-// currentEnv = 'staging';
+currentEnv = 'staging';
 
 const resolvedConfigs = allConfigs[currentEnv]
 
