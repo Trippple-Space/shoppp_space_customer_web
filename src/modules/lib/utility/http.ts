@@ -41,9 +41,9 @@ http.interceptors.request.use((config: any) => {
     config.headers['Content-Type'] = 'application/json'
     config.headers['Authorization'] = `Bearer ${localStorage.getItem('token')}`;
     console.log({ config });
-    if (config.method === 'get') {
-        config.timeout = 3000
-    }
+    // if (config.method === 'get') {
+    //     config.timeout = 3000
+    // }
 
     return config
 })
@@ -61,7 +61,7 @@ http.interceptors.response.use((response: any) => {
 
         const retryCount = retryCountCache[fullUrl] || 0;
 
-        error.config.timeout = 2000
+        error.config.timeout = 4000
         if (retryCount < 5) {
             retryCountCache[fullUrl] = retryCount + 1;
             return new Promise((resolve, reject) => {

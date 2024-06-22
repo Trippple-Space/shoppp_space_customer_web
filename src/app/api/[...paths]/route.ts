@@ -47,6 +47,12 @@ const handler = async (req: NextRequest) => {
     }
 
     const url = new URL(req.url);
+    const cacheBust = url.searchParams.get('cacheBust');
+
+    if (cacheBust) {
+        cache.clear()
+    }
+
     const route = url.pathname.replace('/api', '');
     const cacheDuration = cacheableRoutes[route];
     let fullUrl;
