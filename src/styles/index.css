@@ -712,6 +712,11 @@
 .bg-lightgreen { background-color: #E2FFFA; } 
 .pl-50 { padding-left: 50px; } 
 .mt-25 { margin-top: 25px; } 
+.w-98p { width: 98%; } 
+.w-120p { width: 120%; } 
+.h-120p { height: 120%; } 
+.text-ellipsis { text-overflow: ellipsis; } 
+.h-1 { height: 1px; } 
 
 
 

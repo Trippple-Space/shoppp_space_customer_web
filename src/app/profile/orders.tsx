@@ -91,7 +91,7 @@ const OrderModal: React.FC<ModalProps> = ({modalOpen, handleCloseModal, data}) =
                   <p>Unit: {data.unit}</p>
                   <p>Variation: {data.variation}</p>
                 </div>
-                <h1 className='text-16 weight-400'>NGN 26,000</h1>
+                {/* <h1 className='text-16 weight-400'>NGN 26,000</h1> */}
                 <div className='hidden l:flex gap-20 text-13 py-10'>
                   {getStatus(data.status)}
                   <p>January 15th, 2023</p>
