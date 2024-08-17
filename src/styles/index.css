@@ -326,7 +326,7 @@
 .w-50 { width: 50px; } 
 .h-50 { height: 50px; } 
 .w-150 { width: 150px; } 
-.h-12 { height: 12px; } 
+.text-ellipsis { text-overflow: ellipsis; } 
 .h-8 { height: 8px; } 
 .gap-3 { gap: 3px; } 
 .capitalize {    text-transform: capitalize;  } 
@@ -414,8 +414,8 @@
 [class~='g|grid-template-columns:auto|_|1fr|_|auto']{grid-template-columns:auto 1fr auto} 
 [class~='g|grid-template-columns:1fr|_|auto']{grid-template-columns:1fr auto} 
 .text-grey-900 { color: #1F1B17; } 
-.w-88p { width: 88%; } 
-.h-150p { height: 150%; } 
+.w-120p { width: 120%; } 
+.h-120p { height: 120%; } 
 .my-7 { margin-top: 7px; margin-bottom: 7px; } 
 .mr-10 { margin-right: 10px; } 
 .bg-\#dee1ec { background-color: #dee1ec; } 
@@ -712,11 +712,6 @@
 .bg-lightgreen { background-color: #E2FFFA; } 
 .pl-50 { padding-left: 50px; } 
 .mt-25 { margin-top: 25px; } 
-.w-98p { width: 98%; } 
-.w-120p { width: 120%; } 
-.h-120p { height: 120%; } 
-.text-ellipsis { text-overflow: ellipsis; } 
-.h-1 { height: 1px; } 
 
 
 
@@ -867,6 +862,7 @@
 @media only screen and (min-width: 992px) { .l\:gap-52 { gap: 52px; } } 
 @media only screen and (min-width: 992px) { .l\:px-48 { padding-left: 48px; padding-right: 48px; } } 
 @media only screen and (min-width: 992px) { [class~='l:g|grid-template-columns:auto|_|1fr|_|auto']{grid-template-columns:auto 1fr auto} } 
+@media only screen and (min-width: 992px) { .l\:gap-40 { gap: 40px; } } 
 @media only screen and (min-width: 992px) { .l\:mt-20 { margin-top: 20px; } } 
 @media only screen and (min-width: 992px) { .l\:mr-15 { margin-right: 15px; } } 
 @media only screen and (min-width: 992px) { .l\:px-22 { padding-left: 22px; padding-right: 22px; } } 
@@ -931,7 +927,6 @@
 @media only screen and (min-width: 992px) { .l\:w-22p { width: 22%; } } 
 @media only screen and (min-width: 992px) { .l\:gap-120 { gap: 120px; } } 
 @media only screen and (min-width: 992px) { .l\:w-90p { width: 90%; } } 
-@media only screen and (min-width: 992px) { .l\:gap-40 { gap: 40px; } } 
 @media only screen and (min-width: 992px) { .l\:mb-0 { margin-bottom: 0px; } } 
 @media only screen and (min-width: 992px) { .l\:w-90 { width: 90px; } } 
 @media only screen and (min-width: 992px) { .l\:h-90 { height: 90px; } } 

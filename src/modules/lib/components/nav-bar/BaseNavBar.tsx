@@ -122,7 +122,7 @@ const BaseNavBar: FC<IBaseNavBar> = ({ links }) => {
                             </div>
 
                             <div className='border-t border-5 border-grey-200 pointer'>
-                                <div className='l:p-20 p-10 text-center text-12 flex items-center justify-center gap-10 w-fit mx-auto weight-500' style={{color: isAuthenticated ? 'red' : 'green'}} onClick={() => signOut()}>
+                                <div className='l:p-20 p-10 text-center text-12 flex items-center justify-center gap-10 w-fit mx-auto weight-500 text-green' style={{color: isAuthenticated ? 'red' : ''}} onClick={() => signOut()}>
                                     {/* <FiLogOut className='l:w-20 l:h-20 w-16 h-16' /> */}
                                     <div className="">{isAuthenticated ? 'Logout' : 'Login'}</div> 
                                 </div>
