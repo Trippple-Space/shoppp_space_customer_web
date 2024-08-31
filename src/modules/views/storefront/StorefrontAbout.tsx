@@ -9,9 +9,8 @@ import Icon from '@/modules/lib/components/icon/Icon'
 import { useStoreProductsView } from '@/modules/lib/utility/hooks/views/use-store-products-view'
 
 const StorefrontAbout = ({ store }: { store: any }) => { 
+  console.log({store})
   const { products } = useStoreProductsView()
-
-  // console.log(products?.[0].variants?.[0].media?.[0].url)
   return (
     <>
     <div className="bg-white w-full ">
@@ -43,19 +42,19 @@ const StorefrontAbout = ({ store }: { store: any }) => {
                     <div className='w-fit text-left border-r border-lightest-grey w-200 '>
                       <RxCalendar className='inline-block l:w-40 l:h-40 l:m-15 :w-20 :h-20 :m-10 ' />
                       <div className="l:text-16 text-12">Monthly unique visit</div>
-                      <div className='l:text-24 text-16 weight-700 mt-15' >20,254</div>
+                      <div className='l:text-24 text-16 weight-700 mt-15' >##,###</div>
                     </div>
 
                     <div className='w-fit text-left border-r border-lightest-grey w-200'>
                       <FaRegUserCircle className='inline-block l:w-40 l:h-40 l:m-15 :w-20 :h-20 :m-10 ' />
                       <div className="l:text-16 text-12">Active Customers</div>
-                      <div className='l:text-24 text-16 weight-700 mt-15' >12,000</div>
+                      <div className='l:text-24 text-16 weight-700 mt-15' >##,###</div>
                     </div>
 
                     <div className='w-fit text-left w-200'>
                       <IoBagCheckOutline className='inline-block l:w-40 l:h-40 l:m-15 :w-20 :h-20 :m-10 ' />
                       <div className="l:text-16 text-12">Product Sold</div>
-                      <div className='l:text-24 text-16 weight-700 mt-15' >96,000</div>
+                      <div className='l:text-24 text-16 weight-700 mt-15' >##,###</div>
                     </div>
 
                   </div>
@@ -99,7 +98,7 @@ const StorefrontAbout = ({ store }: { store: any }) => {
                       <div className="h-full grid-row-span-2 grid-col-span-2
                         radius-30"
                         style={{
-                          backgroundImage: `url(${products?.[1]?.variants?.[0]?.media?.[0].url})`,
+                          backgroundImage: `url(${products?.[0]?.variants?.[3]?.media?.[0].url})`,
                           backgroundRepeat: 'no-repeat',
                           backgroundPosition: 'center',
                           backgroundSize: 'cover'

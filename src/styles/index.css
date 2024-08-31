@@ -335,18 +335,14 @@
 .w-70 { width: 70px; } 
 .j-self-end { justify-self: flex-end; } 
 .gap-12 { gap: 12px; } 
-.max-w-600 { max-width: 600px; } 
-.hover\:bg-green-100:hover { background-color: rgba(11, 147, 120, 0.2); } 
-.w-0 { width: 0px; } 
-.placeholder\:weight-100::placeholder { font-weight: 100; } 
-.placeholder\:text-grey-400::placeholder { color: #C8C6C3; } 
-.outline-none {    outline: none;  } 
-.w-35 { width: 35px; } 
-.h-35 { height: 35px; } 
 .gap-7 { gap: 7px; } 
 @layer base {.radius-50 { border-radius: 50px; } } 
+.inset-0 { inset: 0px; } 
+.opacity-10 { opacity: 10%; } 
+.z-index-10, .z-10 { z-index: 10; } 
 .r-0 { right: 0px; } 
 .t-50 { top: 50px; } 
+.z-index-20, .z-20 { z-index: 20; } 
 .w-40 { width: 40px; } 
 .h-40 { height: 40px; } 
 @layer base {.radius-4 { border-radius: 4px; } } 
@@ -400,6 +396,7 @@
 .px-25 { padding-left: 25px; padding-right: 25px; } 
 .mt-69 { margin-top: 69px; } 
 [class~='g|box-shadow:0px|_|2px|_|4px|_|0px|_|#0000000D;']{box-shadow:0px 2px 4px 0px #0000000D;} 
+.w-35 { width: 35px; } 
 .w-35p { width: 35%; } 
 .pb-10 { padding-bottom: 10px; } 
 .text-22 { font-size: 22px; } 
@@ -426,6 +423,7 @@
 .w-24 { width: 24px; } 
 .h-24 { height: 24px; } 
 .bg-lighter-grey { background-color: #D9D9D9; } 
+.w-0 { width: 0px; } 
 .bg-yellow-600 { background-color:  #E0B12E; } 
 .border-yellow-900 { border-color:  #916A1F; } 
 .font-oblique {font-style: oblique; } 
@@ -445,6 +443,7 @@
 .py-17 { padding-top: 17px; padding-bottom: 17px; } 
 @layer base {.radius-30 { border-radius: 30px; } } 
 .gap-40 { gap: 40px; } 
+.outline-none {    outline: none;  } 
 .bg-grey-300 { background-color: #E4E1DF; } 
 .h-340 { height: 340px; } 
 .text-30 { font-size: 30px; } 
@@ -540,6 +539,7 @@
 .mx-15 { margin-left: 15px; margin-right: 15px; } 
 .w-85 { width: 85px; } 
 .h-85 { height: 85px; } 
+.h-35 { height: 35px; } 
 .b-10 { bottom: 10px; } 
 .px-40 { padding-left: 40px; padding-right: 40px; } 
 .line-height-38 { line-height: 38px; } 
@@ -649,6 +649,7 @@
 [class~='g|letter-spacing:1.2px;']{letter-spacing:1.2px;} 
 .max-w-700 { max-width: 700px; } 
 .mt-55 { margin-top: 55px; } 
+.max-w-600 { max-width: 600px; } 
 .gap-27 { gap: 27px; } 
 .p-1 { padding: 1px; } 
 [class~='g|background:url(https://res.cloudinary.com/codennerd/image/upload/v1689377463/Asoebi%20Africa/WhatsApp_Image_2023-07-15_at_12.23.05_AM_hnms5f.jpg);']{background:url(https://res.cloudinary.com/codennerd/image/upload/v1689377463/Asoebi%20Africa/WhatsApp_Image_2023-07-15_at_12.23.05_AM_hnms5f.jpg);} 
@@ -712,12 +713,6 @@
 .bg-lightgreen { background-color: #E2FFFA; } 
 .pl-50 { padding-left: 50px; } 
 .mt-25 { margin-top: 25px; } 
-.inset-0 { inset: 0px; } 
-.opacity-50 { opacity: 50%; } 
-.z-index-10, .z-10 { z-index: 10; } 
-.z-index-20, .z-20 { z-index: 20; } 
-.opacity-20 { opacity: 20%; } 
-.opacity-10 { opacity: 10%; } 
 
 
 
@@ -845,8 +840,6 @@
 @media only screen and (min-width: 992px) { .l\:w-60 { width: 60px; } } 
 @media only screen and (min-width: 992px) { .l\:h-60 { height: 60px; } } 
 @media only screen and (min-width: 992px) { .l\:text-10 { font-size: 10px; } } 
-@media only screen and (min-width: 992px) { .l\:w-20 { width: 20px; } } 
-@media only screen and (min-width: 992px) { .l\:h-20 { height: 20px; } } 
 @media only screen and (min-width: 992px) { .l\:p-20 { padding: 20px; } } 
 @media only screen and (min-width: 992px) { .l\:t-70 { top: 70px; } } 
 @media only screen and (min-width: 992px) { .l\:r-100 { right: 100px; } } 
@@ -902,6 +895,8 @@
 @media only screen and (min-width: 992px) { .l\:h-75 { height: 75px; } } 
 @media only screen and (min-width: 992px) { .l\:flex-row {    flex-direction: row;  } } 
 @media only screen and (min-width: 992px) { .l\:text-32 { font-size: 32px; } } 
+@media only screen and (min-width: 992px) { .l\:w-20 { width: 20px; } } 
+@media only screen and (min-width: 992px) { .l\:h-20 { height: 20px; } } 
 @media only screen and (min-width: 992px) { .l\:mr-10 { margin-right: 10px; } } 
 @media only screen and (min-width: 992px) { .l\:py-18 { padding-top: 18px; padding-bottom: 18px; } } 
 @media only screen and (min-width: 992px) { .l\:pt-20 { padding-top: 20px; } } 

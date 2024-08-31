@@ -3,11 +3,7 @@ import { ProductCategory } from "../../types/product.interface";
 import { useProducts } from "../use-products";
 
 export const useTopSalesView = () => {
-  const { products, updateFilters } = useProducts({
-    filters: { price: { Not: { MoreThan: 500000 } }, tags: [{ label: 'top_in_sales' }] },
-    order: { id: 'desc' },
-    pagination: { limit: 100, page: 1 },
-  });
+  const { products, updateFilters } = useProducts({});
   const [categories, setCategories] = useState<ProductCategory[]>([]);
   const [selectedCategory, setSelectedCategory] = useState<ProductCategory | null>(null);
   const [categoryCount, setCategoryCount] = useState<{ [key: number]: number }>({})

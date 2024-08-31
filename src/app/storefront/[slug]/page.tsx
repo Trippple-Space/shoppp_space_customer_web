@@ -5,8 +5,10 @@ import StorefrontAbout from '@/modules/views/storefront/StorefrontAbout'
 import React from 'react'
 
 
-export default async function storeFront({ params }: { params: { slug: string, id: number } }) {
+export default async function storeFront({ params }: { params: { slug: string } }) {
+  console.log(params, 'slug params');
+  
   const store = await storeService.fetchStoreBySlug(params.slug, {});
-  console.log({ store, params})
+  console.log({ store, params })
   return <StorefrontAbout store={store} />
 }

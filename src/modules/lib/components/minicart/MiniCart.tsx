@@ -119,7 +119,7 @@ const MiniCart: React.FC<ModalProps> = () => {
                           <div className={cx("w-150 radius-3 text-13 weight-500 overflow-hidden whitespace-nowrap text-ellipsis", {
                             // 'bg-white': (i % 2),
                             // 'bg-grey-100': !(i % 2),
-                          })}> {cartItem.variant.product.name} </div>
+                          })}> {cartItem?.variant?.product?.name} </div>
                         </div>
 
                         <div className="w-full h-20">
