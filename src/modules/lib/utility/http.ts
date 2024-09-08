@@ -5,7 +5,8 @@ import { toast } from "sonner";
 
 
 const http = axios.create({
-    baseURL: envConfig.API_HOST
+    baseURL: stagingConfig.API_HOST
+    // baseURL: envConfig.API_HOST
 })
 
 const isAxiosTimeout = (error: AxiosError) => {

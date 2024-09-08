@@ -1,21 +1,12 @@
 "use client"
-
-import Icon from '@/modules/lib/components/icon/Icon';
-import Image from '@/modules/lib/components/image/Image';
 import Modal from '@/modules/lib/components/modal/modal';
 import OrderSummary from '@/modules/lib/components/order-summary/OrderSummary';
 import { useCart } from '@/modules/lib/utility/hooks/use-cart';
 import { cx, formatNumberAsPrice } from '@/modules/lib/utility/utility';
 import { useRouter } from 'next/navigation';
 import React, { useState } from 'react';
-import { AiOutlineClose } from 'react-icons/ai'
-import { BiArrowBack } from 'react-icons/bi';
-import { FaTimes } from 'react-icons/fa';
 import { FaArrowLeftLong } from 'react-icons/fa6';
 import { IoClose } from 'react-icons/io5';
-import { MdOutlineLocalShipping } from 'react-icons/md'
-import { PiNyTimesLogoThin } from 'react-icons/pi';
-import { TbShoppingBag } from 'react-icons/tb';
 import { paths } from '../../utility/paths';
 import { getCartItemVariantPropertiesAsJsx } from './minicart.helper';
 import { HiOutlineShoppingBag } from 'react-icons/hi2';
@@ -112,6 +103,8 @@ const MiniCart: React.FC<ModalProps> = () => {
                           src={cartItem.variant.media[0].url}
                           type='image'
                         />
+
+                        <div className="text-14 whitespace-nowrap mt-14 bold">{formatNumberAsPrice(cartItem.variant.price)} x {cartItem.quantity}</div>
                       </div>
 
                       <div className='w-full h-full flex flex-col'>
@@ -141,16 +134,15 @@ const MiniCart: React.FC<ModalProps> = () => {
                         </div>
 
                         <div className="w-full h-20 flex space-between">
-                          <div></div>
                           <div className={cx('radius-3 text-12 bold', {
                             // 'bg-white': (i % 2),
                             // 'bg-grey-100': !(i % 2),
                           })}>
-                            {formatNumberAsPrice(cartItem.totalPrice)}
                           </div>
+                            {/* <div className=""></div> */}
+                            <div className="bold">{formatNumberAsPrice(cartItem.totalPrice)}</div>
                         </div>
                       </div>
-
                     </div>
                   </div>
                 ))}
