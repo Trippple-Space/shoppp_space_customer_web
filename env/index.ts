@@ -1,5 +1,21 @@
-const config = {
-    API_HOST: 'http://localhost:80'
+import development from './local'
+import staging from './staging';
+
+const allConfigs: { [x: string]: any } = {
+    development,
+    staging
 }
 
-export default config;
+let currentEnv;
+if (!process.env.ENV) {
+    currentEnv = window.location.href.includes('localhost') ? 'development' : 'staging';
+} else {
+    currentEnv = process.env.ENV || 'development'
+}
+
+// currentEnv = 'staging';
+
+const resolvedConfigs = allConfigs[currentEnv]
+
+export default resolvedConfigs;
+

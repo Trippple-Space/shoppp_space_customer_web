@@ -6,6 +6,7 @@ import cx from 'classnames'
 import { ProductCategory } from '@/modules/lib/utility/types/product.interface'
 import useIntersectionObserver from '@/modules/lib/utility/hooks/use-intersection-observer'
 import ImageAlt from '../../image-alt/ImageAlt'
+import SkeletonLoader from '../../skeleton-loader/Skeleton'
 // This one is gueressing Su's head :)
 interface IBaseCategoryNav {
     categories: ProductCategory[]
@@ -20,7 +21,7 @@ const BaseCategoryNav: FC<IBaseCategoryNav> = ({ categories, displayFilter, isRo
         threshold: 0,
     });
 
-    console.log({categories})
+    console.log({ categories }, 'here')
 
     return (
         <div className="flex">
@@ -33,17 +34,22 @@ const BaseCategoryNav: FC<IBaseCategoryNav> = ({ categories, displayFilter, isRo
                                 setSelectedCategory(category)
                             }} className="inline-flex pointer flex-col w-fit h-fit text-center">
                                 <div className={cx("l:w-35 l:h-35 mx-auto radius-5 overflow-hidden")}>
-                                    <ImageAlt 
-                                        className='l:w-35 l:h-35 w-25 h-25' 
-                                        type={category?.type} 
-                                        src={category.images[0]}
-                                        iconClassName='l:w-35 l:h-35 w-25 h-25'
-                                    />
+                                    {
+                                        !!(category.images?.[0]) ?
+                                            <ImageAlt
+                                                className='l:w-35 l:h-35 w-25 h-25'
+                                                type={category?.type}
+                                                src={category.images[0]}
+                                                iconClassName='l:w-35 l:h-35 w-25 h-25'
+                                            />
+                                            :
+                                            <SkeletonLoader />
+                                    }
                                 </div>
 
-                                <div className={cx("l:text-14 text-12 l:mt-10 l:mb-10 l:w-80 w-72 mt-6 mb-6  overflow-hidden g|text-overflow:ellipsis", {'text-green': i == activeOption})}>{category.name}</div>
+                                <div className={cx("l:text-14 text-12 l:mt-10 l:mb-10 l:w-80 w-72 mt-6 mb-6  overflow-hidden g|text-overflow:ellipsis", { 'text-green': i == activeOption })}>{category.name || <SkeletonLoader className='block! h-10!' />}</div>
 
-                                <div className={cx("w-full h-2 radius-4", {'bg-green': i == activeOption})}></div>
+                                <div className={cx("w-full h-2 radius-4", { 'bg-green': i == activeOption })}></div>
                             </div>
                         ))
                     }

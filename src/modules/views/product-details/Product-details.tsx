@@ -11,7 +11,6 @@ import { BsArrowLeftShort, BsArrowRightShort, BsInfo } from 'react-icons/bs';
 import { PiHeartStraightThin, PiStarBold } from 'react-icons/pi';
 import { GrLocation, GrShareOption, GrStar } from 'react-icons/gr';
 import { IoIosArrowBack, IoIosArrowForward, IoMdHeartEmpty } from 'react-icons/io';
-import ProfilePage from '@/app/profile/page'
 import HomepageNavBar from '@/modules/lib/components/nav-bar/HomepageNavBar'
 import Footer from '@/modules/lib/components/footer/Footer'
 import { Product } from '@/modules/lib/utility/types/product.interface'
@@ -47,7 +46,7 @@ const ProductDetails = ({ product }: { product: Product }) => {
   }, [product])
 
 
-  const strikeOutPrice = (product.price + (product.price * 0.05)).toFixed(2) // TODO: implement proper strikeout price
+  const strikeOutPrice = (product?.price + (product?.price * 0.05)).toFixed(2) // TODO: implement proper strikeout price
   return (
     <>
       <HomepageNavBar />
@@ -56,10 +55,8 @@ const ProductDetails = ({ product }: { product: Product }) => {
         <div className='l:flex w-full gap-25 l:pt-20 l:mt-100'>
           <div className="l:w-50p">
             <Breadcrumb crumbs={[
-              { label: product.store?.name, route: `/storefront/${product.store?.slug}` },
-              { label: product.category.type, route: `/${product.category.type}` },
-              { label: product.category?.name, route: `/?q=${product.category?.name}` },
-              { label: product.name, route: `/products/${product.slug}` },
+              { label: product?.store?.name, route: `/storefront/${product.store?.slug}` },
+              { label: product?.name, route: `/products/${product?.slug}` },
             ]}
             />
             <Image src={selectedImage} className='l:w-600 w-100p l:mt-25 l:radius-15 border border-grey-100' alt={''} />
@@ -82,10 +79,10 @@ const ProductDetails = ({ product }: { product: Product }) => {
                 </div>
               </div>
 
-              <Link href={`/storefront/${product.store.slug}`} as="" >
+              <Link href={`/storefront/${product?.store?.slug}`} as="" >
                 <div className='mt-11'>
                   <div className='text-grey-500 l:text-16 text-14 weight-500'>
-                    {product.store.name} Store
+                    {product?.store?.name} Store
                   </div>
                 </div>
               </Link>
@@ -96,7 +93,7 @@ const ProductDetails = ({ product }: { product: Product }) => {
             <div className='l:flex l:mt-30 mt-20 gap-40'>
               <div>
                 <div className='text-green l:text-34 text-24 bold'>
-                  ${product.price}
+                  ${product?.price}
                 </div>
                 <div className='text-grey-500 line-through l:text-21 text-14 weight-400 mt-6'>
                   ${strikeOutPrice}
@@ -106,7 +103,7 @@ const ProductDetails = ({ product }: { product: Product }) => {
                 <div className="flex gap-12 max-w-500">
                   <div className="bg-yellow-100 color-#D48D3B weight-600 px-10 py-7 l:mt-0 mt-20 h-fit l:text-16 text-14 radius-27 flex content-center gap-7">
                     <PiStarBold className='a-self-center ' />
-                    <span className='a-self-center'>{product.reviewRating}</span>
+                    <span className='a-self-center'>{product?.reviewRating}</span>
                   </div>
 
                   <div className="bg-green-100 text-green weight-600 px-10 py-7 l:mt-0 mt-20 h-fit l:text-16 text-14 radius-27 flex content-center gap-7">
@@ -130,18 +127,18 @@ const ProductDetails = ({ product }: { product: Product }) => {
               </div>
               <div className='flex gap-20'>
                 {
-                  product.variants.map((variant, idx) => (
+                  product?.variants?.map((variant, idx) => (
                     variant?.media?.map((mediaItem: any) => (
                       <div className={cx('l:w-115 l:h-115 w-85 h-85 overflow-hidden radius-14', {
                         'border border-green border-2': selectedImage == mediaItem?.url,
-                        [`border-${mediaItem.description?.toLocaleLowerCase()}`]: selectedImage == mediaItem?.url
-                        })}>
+                        [`border-${mediaItem?.description?.toLocaleLowerCase()}`]: selectedImage == mediaItem?.url
+                      })}>
                         <Image
                           src={mediaItem?.url}
                           alt="product-image"
                           className=''
-                          onClick={() => { 
-                            setSelectedVariant(variant); setSelectedImage(mediaItem?.url) ;
+                          onClick={() => {
+                            setSelectedVariant(variant); setSelectedImage(mediaItem?.url);
                             scrollToTop()
                           }}
                         />
@@ -186,31 +183,31 @@ const ProductDetails = ({ product }: { product: Product }) => {
             </div>
 
             <hr className='l:mt-30 mt-20 @lo:border-none @hi:border-t @hi:border-green-100' />
-              
-            
+
+
             <div className='mt-30 flex gap-20'>
               {
                 selectedVariantItemInCart ?
-                <QuantitySelector2 
-                  decrement={() => decrement(selectedVariantItemInCart)} 
-                  increment={() => increment(selectedVariantItemInCart)} 
-                  cartItem={selectedVariantItemInCart} 
-                /> : <></>
+                  <QuantitySelector2
+                    decrement={() => decrement(selectedVariantItemInCart)}
+                    increment={() => increment(selectedVariantItemInCart)}
+                    cartItem={selectedVariantItemInCart}
+                  /> : <></>
               }
-              
+
               {
                 !selectedVariantItemInCart ?
-                <button className='bg-green text-white border-none l:px-90 l:py-20 py-15 w-100p radius-30 pointer' onClick={() => {
-                  isAuthenticated ?
-                  addToCart(selectedVariant.id, selectedVariant.minPurchaseQuantity || 1)
-                  : isLoginModal()
-                }} >
-                  <div className="l:flex grid grid-2-cols-auto gap-10 items-center w-fit mx-auto">
-                    <HiOutlineShoppingBag className='h-21' />
-                    <div className='whitespace-nowrap text-16'>Add To Cart</div>
-                  </div>
-                </button>
-                : <></>
+                  <button className='bg-green text-white border-none l:px-90 l:py-20 py-15 w-100p radius-30 pointer' onClick={() => {
+                    isAuthenticated ?
+                      addToCart(selectedVariant?.id, selectedVariant?.minPurchaseQuantity || 1)
+                      : isLoginModal()
+                  }} >
+                    <div className="l:flex grid grid-2-cols-auto gap-10 items-center w-fit mx-auto">
+                      <HiOutlineShoppingBag className='h-21' />
+                      <div className='whitespace-nowrap text-16'>Add To Cart</div>
+                    </div>
+                  </button>
+                  : <></>
               }
             </div>
           </div>
@@ -266,7 +263,7 @@ const ProductDetails = ({ product }: { product: Product }) => {
           <div className='w-100p l:w-55p l:pr-30'>
             <div className='l:flex space-between items-center'>
               <div>
-                <h1 className='text-16 l:text-20 weight-500 py-3 m:py-10'>{product.name} from {product.store.name} Store</h1>
+                <h1 className='text-16 l:text-20 weight-500 py-3 m:py-10'>{product?.name} from {product?.store?.name} Store</h1>
                 <div className='flex items-center text-grey'>
                   <p className='flex items-center text-14 m:text-14'>86% positive reviews
                     <span>
@@ -275,7 +272,7 @@ const ProductDetails = ({ product }: { product: Product }) => {
                     <AiFillStar className='w-14 h-14 l:w-18 l:h-18 mr-5 l:mr-5' /> 3.8/5 rating</p>
                 </div>
 
-                <Link href={`/storefront/${product.store.slug}`}>
+                <Link href={`/storefront/${product?.store?.slug}`}>
                   <p className='text-danger underline text-14 m:text-16 py-5 l:py-15'>Visit Store home</p>
                 </Link>
 
@@ -325,7 +322,7 @@ const ProductDetails = ({ product }: { product: Product }) => {
             <div>
               <h2 className='text-14 l:text-16 weight-500'>About this product</h2>
               <div className='l:text-14 text-12 text-light-grey mt-15'>
-                {product.longDescription}
+                {product?.longDescription}
                 <button className='bg-none border-none flex text-14 weight-500 mt-10'><span className='underline pr-5'>Show more</span></button>
               </div>
             </div>

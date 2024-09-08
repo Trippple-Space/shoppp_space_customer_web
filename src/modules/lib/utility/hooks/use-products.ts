@@ -25,6 +25,7 @@ export interface IQueryParams {
   filters?: IProductFilters,
   order?: IOrderBy,
   pagination?: IPagination
+  // key: any
 }
 
 export const useProducts = (initialQuery: IQueryParams) => {

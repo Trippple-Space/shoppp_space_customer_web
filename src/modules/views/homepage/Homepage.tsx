@@ -15,7 +15,7 @@ import { TbShoppingBag } from "react-icons/tb"
 import MiniCart from "../../lib/components/minicart/MiniCart";
 import AsoebiHomepage from "./AsoebiPage";
 import { usePathname } from "next/navigation";
-import AsoebiWears from "./AsoebiWears";
+import CentralArena from "./CentralArena";
 import NoResultMessage from "@/modules/lib/components/error-messages/no-result-found";
 import { useCategoryNavView } from "@/modules/lib/utility/hooks/views/use-category-nav-view";
 
@@ -28,7 +28,7 @@ const Homepage = () => {
             <HomepageNavBar />
             <FabricsCategoryNav categories={categories} setSelectedCategory={setSelectedCategory} />
             <div className="app-width">
-                <AsoebiWears selectedCategory={selectedCategory} />
+                <CentralArena selectedCategory={selectedCategory} />
             </div>
             <Footer />
         </>

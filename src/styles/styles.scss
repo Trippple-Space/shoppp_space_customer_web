@@ -300,6 +300,40 @@ input[type="number"].no-arrows {
   padding-left: 10px;
 }
 
+/* Define keyframes for pulse animation */
+@keyframes pulse {
+  0% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.5;
+  }
+  100% {
+    opacity: 1;
+  }
+}
+
+/* Define keyframes for skeleton animation */
+@keyframes skeleton {
+  0% {
+    background-position: -200px 0;
+  }
+  100% {
+    background-position: calc(200px + 100%) 0;
+  }
+}
+
+/* Define animate-pulse class */
+.animate-pulse {
+  animation: pulse 1.5s infinite ease-in-out;
+}
+
+/* Define animate-skeleton class */
+.animate-skeleton {
+  background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%);
+  background-size: 200% 100%;
+  animation: skeleton 15s infinite;
+}
 
 
 /**

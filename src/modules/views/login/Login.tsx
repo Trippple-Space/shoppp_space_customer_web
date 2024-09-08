@@ -17,7 +17,7 @@ const Login = () => {
           <div>
             <Image
               className='w-115 h-31 ml-40 mt-20'
-              src='asoebi-logo-white.png'
+              src='new-asoebi-logo-white.svg'
               alt='logo'
               type='logo'
             />

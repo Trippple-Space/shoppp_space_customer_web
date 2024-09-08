@@ -82,7 +82,7 @@ const CheckoutPage = () => {
                         />
                       </div>
                       <div className='line-height-27 w-70p'>
-                        <h1 className='l:text-16 text-14 weight-400 text-black'> {cartItem.variant.product.name} </h1>
+                        <h1 className='l:text-16 text-14 weight-400 text-black'> {cartItem?.variant?.product?.name} </h1>
                         <div className='l:text-15 text-12 l:py-5'> {getCartItemVariantPropertiesAsJsx(cartItem)} </div>
 
                         {/* <div className='flex gap-20 w-100p py-5 l:text-18'>
@@ -98,7 +98,7 @@ const CheckoutPage = () => {
                           </div>
                         </div> */}
 
-                        <h3 className='text-14 m:text-14 weight-600'>{formatNumberAsPrice(cartItem.variant.price)}</h3>
+                        <h3 className='text-14 m:text-14 weight-600'>{formatNumberAsPrice(cartItem?.variant?.price)}</h3>
                       </div>
                     </div>
 

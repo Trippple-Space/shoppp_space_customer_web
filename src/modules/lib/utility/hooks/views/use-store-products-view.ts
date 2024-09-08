@@ -7,11 +7,7 @@ import { useCategoryFilter } from "../use-category-filter";
 
 export const useStoreProductsView = (selectedCategory?: any) => {
   const { slug } = useParams();
-  const { products, updateFilters } = useProducts({
-    filters: { price: { Not: { MoreThan: 500000 } }, tags: [{ label: 'top_in_sales' }], store: { slug }},
-    order: { id: 'desc' },
-    pagination: { limit: 100, page: 1 },
-  });
+  const { products, updateFilters } = useProducts({filters: { store: { slug }}});
 
   const { categories, categoryCount, handleCategoryChange } = useCategoryFilter(products, updateFilters);
 
