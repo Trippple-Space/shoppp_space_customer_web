@@ -5,7 +5,7 @@
  */
 
 const stagingConfig = {
-    API_HOST: 'https://api-staging.asoebi.africa/',
+    API_HOST: 'https://api-staging.asoebi.africa',
     API_LOCAL: 'http://localhost:3000/api'
 }
 

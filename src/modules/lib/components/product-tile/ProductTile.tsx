@@ -33,8 +33,8 @@ const ProductTile: FC<IProductTile> = ({ product }: any) => {
             alt="product-image"
           />
         </Link>
-        <div className="skelly-rectangle w-full h-full bg-#dee1ec text-white flex" data-width="100%" data-radius="100%">
-          <span className="a-self-center w-fit mx-auto">Error loading image</span>
+        <div className="skelly-rectangle w-full h-full pulsing-multi-color-bg text-white flex" data-width="100%" data-radius="100%">
+          {/* <span className="a-self-center w-fit mx-auto">Error loading image</span> */}
         </div>
         <div id="add to cart button" className="absolute b-0 r-0 mr-10 mb-10 l:mr-15 l:mb-15" >
           {
