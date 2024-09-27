@@ -19,7 +19,7 @@ const Image: FC<IImage> = ({className, src, alt, type = 'image', onClick}) => {
       className={className}
       src={getImageDir((type + 's' as ImageSrcFolder), src)}
       alt={alt}
-      hidden={hidden}
+      // hidden={hidden}
       onClick={() => onClick?.()}
       loading="lazy"
       onLoad={() => setHidden(false)}
