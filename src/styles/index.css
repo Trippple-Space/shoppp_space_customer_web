@@ -24,14 +24,21 @@
 .h-full {    height: 100%;  } 
 @layer lo { .\@lo\:weight-300 { font-weight: 300; } } 
 @layer lo { .\@lo\:text-dimgrey { color: #333333; } } 
+.fixed {    position: fixed;  } 
 .w-full {    width: 100%;  } 
+.b-60 { bottom: 60px; } 
+.z-index-3, .z-3 { z-index: 3; } 
+.max-w-1000 { max-width: 1000px; } 
+.mx-auto {    margin-left: auto;    margin-right: auto;  } 
+.text-14 { font-size: 14px; } 
 .bg-yellow-50 { background-color: #fff9e8; } 
 .text-green { color: #0B9378; } 
 .p-10 { padding: 10px; } 
-.b-50 { bottom: 50px; } 
-.z-index-50, .z-50 { z-index: 50; } 
-.max-w-1000 { max-width: 1000px; } 
-.mx-auto {    margin-left: auto;    margin-right: auto;  } 
+.max-w-1100 { max-width: 1100px; } 
+.inline-block {    display: inline-block;  } 
+.text-26 { font-size: 26px; } 
+.mr-10 { margin-right: 10px; } 
+.mt--2 { margin-top: -2px; } 
 .bold {    font-weight: bold;  } 
 .underline { text-decoration: underline; } 
 .bg-white { background-color: #FFFFFF; } 
@@ -82,7 +89,6 @@
 .opacity-100 { opacity: 100%; } 
 .a-items-end { align-items: flex-end; } 
 .gap-15 { gap: 15px; } 
-.text-14 { font-size: 14px; } 
 .gap-8 { gap: 8px; } 
 .w-50p { width: 50%; } 
 .border-danger { border-color: #DD4B4B; } 
@@ -217,7 +223,6 @@
 .my-20 { margin-top: 20px; margin-bottom: 20px; } 
 .my-15 { margin-top: 15px; margin-bottom: 15px; } 
 @layer base {.radius-10 { border-radius: 10px; } } 
-.fixed {    position: fixed;  } 
 .l-0 { left: 0px; } 
 .z-index-1, .z-1 { z-index: 1; } 
 
@@ -253,7 +258,6 @@
 .w-14 { width: 14px; } 
 .h-14 { height: 14px; } 
 .rotate-z-180 { transform: rotateZ(180deg); } 
-.inline-block {    display: inline-block;  } 
 .mb-8 { margin-bottom: 8px; } 
 .text-grey-800 { color: #59534E; } 
 @layer lo { .\@lo\:w-full {    width: 100%;  } } 
@@ -360,7 +364,6 @@
 .p-3 { padding: 3px; } 
 .r--12 { right: -12px; } 
 .t--14 { top: -14px; } 
-.mt--2 { margin-top: -2px; } 
 .hover\:text-green:hover { color: #0B9378; } 
 .t-57 { top: 57px; } 
 .pt-30 { padding-top: 30px; } 
@@ -418,7 +421,6 @@
 .w-120p { width: 120%; } 
 .h-120p { height: 120%; } 
 .my-7 { margin-top: 7px; margin-bottom: 7px; } 
-.mr-10 { margin-right: 10px; } 
 .disabled\:bg-yellow-200:disabled { background-color: #ffdc9e; } 
 .disabled\:cursor-not-allowed:disabled { cursor: not-allowed; } 
 .border-hidden { border-style: hidden; } 
@@ -521,7 +523,6 @@
 .bg-green-100 { background-color: rgba(11, 147, 120, 0.2); } 
 .a-content-center { align-content: center; } 
 .color-black { color: black; } 
-.bg-\#ECDECC { background-color: #ECDECC; } 
 .m-7 { margin: 7px; } 
 [class~='g|outline-color:#ECDECC']{outline-color:#ECDECC} 
 .outline-offset-5 { outline-offset: 5px; } 
@@ -645,7 +646,6 @@
 .bg-light-yellow { background-color: #FFE68BB2; } 
 .bg-grey-400 { background-color: #C8C6C3; } 
 .pb-100 { padding-bottom: 100px; } 
-.text-26 { font-size: 26px; } 
 .letter-spacing-1 { letter-spacing: 1px; } 
 .max-w-840 { max-width: 840px; } 
 .hover\:bg-darkred:hover { background-color: darkred; } 
@@ -716,6 +716,8 @@
 .bg-lightgreen { background-color: #E2FFFA; } 
 .pl-50 { padding-left: 50px; } 
 .mt-25 { margin-top: 25px; } 
+.w-120 { width: 120px; } 
+.h-120 { height: 120px; } 
 
 
 
@@ -748,6 +750,7 @@
 
 @media only screen and (min-width: 992px) { .l\:w-50p { width: 50%; } } 
 @media only screen and (min-width: 992px) { .l\:block {    display: block;  } } 
+@media only screen and (min-width: 992px) { .l\:text-16 { font-size: 16px; } } 
 @media only screen and (min-width: 992px) { .l\:w-1000 { width: 1000px; } } 
 @media only screen and (min-width: 992px) { .l\:py-20 { padding-top: 20px; padding-bottom: 20px; } } 
 @media only screen and (min-width: 992px) { .l\:w-3p { width: 3%; } } 
@@ -788,7 +791,6 @@
 @media only screen and (min-width: 992px) { .l\:r-40 { right: 40px; } } 
 @media only screen and (min-width: 992px) { .l\:w-22 { width: 22px; } } 
 @media only screen and (min-width: 992px) { .l\:h-22 { height: 22px; } } 
-@media only screen and (min-width: 992px) { .l\:text-16 { font-size: 16px; } } 
 @media only screen and (min-width: 992px) { .l\:px-25 { padding-left: 25px; padding-right: 25px; } } 
 @media only screen and (min-width: 992px) { @layer base {.l\:radius-10 { border-radius: 10px; } } } 
 @media only screen and (min-width: 992px) { .l\:text-17 { font-size: 17px; } } 

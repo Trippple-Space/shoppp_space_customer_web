@@ -2,7 +2,8 @@
 
 import Image from '@/modules/lib/components/image/Image';
 import Modal from '@/modules/lib/components/modal/modal';
-import React, { useState } from 'react';
+import { useOrders } from '@/modules/lib/utility/hooks/use-orders';
+import React, { useEffect, useState } from 'react';
 import { AiOutlineClose } from 'react-icons/ai'
 
 
@@ -14,6 +15,7 @@ interface ModalProps {
 
 const OrderModal: React.FC<ModalProps> = ({modalOpen, handleCloseModal, data}) => {
   const [tabVal, setTabVal] = useState('open');
+  const {orders, fetchOrders} = useOrders()
 
   const handleTabChange = (val: string) => {
     setTabVal(val);
@@ -36,6 +38,13 @@ const OrderModal: React.FC<ModalProps> = ({modalOpen, handleCloseModal, data}) =
         return getStatusGrid('white', 'green', 'Delivered');
     }
   };
+
+  console.log({orders})
+
+  useEffect(() => {
+    fetchOrders()
+  }, [])
+
   const openOrderData = [
     {id: 45621, name: '24 Karat Gold Plated Ring', unit: 2, variation: 'Plated ring', price: '26,000', status: 'out'},
     {id: 45621, name: '24 Karat Gold Plated Ring', unit: 2, variation: 'Plated ring', price: '26,000', status: 'Delivered'},
