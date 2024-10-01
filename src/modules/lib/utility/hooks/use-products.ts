@@ -28,9 +28,41 @@ export interface IQueryParams {
   // key: any
 }
 
+const placeholderProduct: Product = {
+  longDescription: "",
+  keywords: [],
+  id: 0,
+  slug: "",
+  category: {
+    type: "",
+    id: 0,
+    name: "",
+    images: [],
+    description: null
+  },
+  price: 0,
+  name: "",
+  stockUnit: "",
+  status: 0,
+  dateCreated: "",
+  lastUpdated: "",
+  reviewRating: 0,
+  reviews: undefined,
+  comments: undefined,
+  variants: [],
+  store: {
+    name: 'Loading...',
+    slug: "",
+    id: 0,
+    description: "",
+    status: false,
+    type: ""
+  }
+}
+
 export const useProducts = (initialQuery: IQueryParams) => {
   const [query, setQuery] = useState<IQueryParams>(initialQuery);
-  const [products, setProducts] = useState<Product[]>([]);
+  const [products, setProducts] = useState<Product[]>(Array.from({length: 10}).map(() => placeholderProduct));
   const [cachedProducts, setCachedProducts] = useState<{ [key: string]: Product[] }>({});
 
   const setFilters = (filters: IProductFilters) => {

@@ -67,7 +67,7 @@
   
     "yellow-50": "#fff9e8",
     "yellow-100": "rgba(250, 206, 51, 0.2)",
-    "yellow-200": "rgba(250, 206, 51, 0.4)",
+    "yellow-200": "#ffdc9e",
     "yellow-300": "rgba(250, 206, 51, 0.6)",
     "yellow-400": "rgba(250, 206, 51, 0.8)",
     "yellow-500": "#FACE33",
