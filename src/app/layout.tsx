@@ -45,7 +45,16 @@ export default function RootLayout({
   return (
     <html lang="en" className={`${inter.variable} ${roboto.variable} ${lora.variable} bg-white font-inter`}>
       <GlobalArena />
-      <body className='@lo:weight-300 @lo:text-dimgrey'>{children}</body>
+      <body className='@lo:weight-300 @lo:text-dimgrey'>
+        <div className='fixed w-full bg-yellow-50 text-green p-10 b-50 z-50'>
+          <div className='max-w-1000 mx-auto text-14 l:text-16'>
+          This site is currently in test mode. No real purchases can be made yet.
+          However, we would appreciate your efforts to make this product better. 
+          Missing a feature you would like? Or noticed something not working? Kindly shoot us a mail at <a className='bold underline' href="mailto:support@asoebi.africa">support@asoebi.africa</a>
+          </div>
+        </div>
+        {children}
+      </body>
     </html>
   )
 }

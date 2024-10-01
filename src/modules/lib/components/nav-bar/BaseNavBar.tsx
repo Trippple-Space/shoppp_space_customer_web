@@ -34,7 +34,7 @@ const BaseNavBar: FC<IBaseNavBar> = ({ links }) => {
             <div className={cx('flex app-width space-between items-center py-15', {
                 'max-w-1400!': pathname.startsWith('/products/')
             })}>
-                <div className='flex items-center gap-100'>
+                <div className='flex items-center gap-10 s:gap-50 l:gap-100'>
                     <div className='w-fit'>
                         <Image
                             className='w-70 l:w-100'

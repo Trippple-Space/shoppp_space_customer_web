@@ -335,6 +335,24 @@ input[type="number"].no-arrows {
   animation: skeleton 15s infinite;
 }
 
+.pulsing-multi-color-bg {
+  background: linear-gradient(-45deg, #dcc6bf, #f0d1dd, #9fc2cf, #b3d5cd);
+	background-size: 400% 400%;
+	animation: pulsing-multi-color-bg-animation 15s ease infinite;
+}
+
+@keyframes pulsing-multi-color-bg-animation {
+	0% {
+		background-position: 0% 50%;
+	}
+	50% {
+		background-position: 100% 50%;
+	}
+	100% {
+		background-position: 0% 50%;
+	}
+}
+
 
 /**
 TODO:

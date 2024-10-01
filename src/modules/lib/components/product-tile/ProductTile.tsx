@@ -33,20 +33,22 @@ const ProductTile: FC<IProductTile> = ({ product }: any) => {
             alt="product-image"
           />
         </Link>
-        <div className="skelly-rectangle w-full h-full bg-#dee1ec text-white flex" data-width="100%" data-radius="100%">
-          <span className="a-self-center w-fit mx-auto">Error loading image</span>
+        <div className="skelly-rectangle w-full h-full pulsing-multi-color-bg text-white flex" data-width="100%" data-radius="100%">
+          {/* <span className="a-self-center w-fit mx-auto">Error loading image</span> */}
         </div>
         <div id="add to cart button" className="absolute b-0 r-0 mr-10 mb-10 l:mr-15 l:mb-15" >
           {
             selectedVariantItemInCart ?
-            <QuantitySelector decrement={() => decrement(selectedVariantItemInCart)} increment={() => increment(selectedVariantItemInCart)} cartItem={selectedVariantItemInCart} /> :
+            <QuantitySelector decrement={() => decrement(selectedVariantItemInCart)} increment={() => increment(selectedVariantItemInCart)} cartItem={selectedVariantItemInCart} /> 
+            :
             <button 
               onClick={() => {
                 isAuthenticated ?
                 addToCart(selectedVariant.id, selectedVariant.minPurchaseQuantity || 1)
                 : isLoginModal()
               }} 
-              className="bg-yellow pointer font-roboto text-grey-900 border-hidden px-10 py-10 radius-5 l:px-22 l:py-12 l:radius-10 ">
+              disabled={!selectedImage}
+              className="bg-yellow disabled:bg-yellow-200 disabled:cursor-not-allowed pointer font-roboto text-grey-900 border-hidden px-10 py-10 radius-5 l:px-22 l:py-12 l:radius-10 ">
               <span className="hidden l:block weight-500">Add to cart</span>
               <div className="l:hidden">
                 <AiOutlinePlus className="l:w-24 l:h-24 w-14 h-14" />
@@ -92,15 +94,15 @@ const ProductTile: FC<IProductTile> = ({ product }: any) => {
           </Link>
         </h3>
         <div className="flex a-items-center gap-10 l:gap-18 mt-5 text-dimgrey">
-        <Link href={`/storefront/${product.store.slug}`}><p className="l:text-16 text-12">{product?.store?.name}</p></Link>
-          <div className="flex gap-3 items-center">
+        <Link href={`/${product.store.slug}`}><p className="l:text-16 text-12">{product?.store?.name}</p></Link>
+          {!!product.reviewRating && <div className="flex gap-3 items-center">
             <AiFillStar
               className="w-12"
             />
-            <span className="l:text-16 text-12">4.5</span>
-          </div>
+            <span className="l:text-16 text-12">{product.reviewRating}</span>
+          </div>}
         </div>
-        <div className="mt-6 l:text-15 text-12 weight-700">{formatNumberAsPrice(selectedVariant?.price)} <span className="weight-300 l:text-15 text-10">per {selectedVariant?.stockUnit}</span></div>
+        <div className="mt-6 l:text-15 text-12 weight-700">{formatNumberAsPrice(selectedVariant?.price)} <span className="weight-300 l:text-15 text-10">{!!selectedVariant?.stockUnit && 'per'} {selectedVariant?.stockUnit}</span></div>
       </div>
     </div>
   );

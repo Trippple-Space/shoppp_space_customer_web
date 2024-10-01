@@ -93,10 +93,10 @@ const ProductDetails = ({ product }: { product: Product }) => {
             <div className='l:flex l:mt-30 mt-20 gap-40'>
               <div>
                 <div className='text-green l:text-34 text-24 bold'>
-                  ${product?.price}
+                  ₦{product?.price}
                 </div>
                 <div className='text-grey-500 line-through l:text-21 text-14 weight-400 mt-6'>
-                  ${strikeOutPrice}
+                  ₦{strikeOutPrice}
                 </div>
               </div>
               <div>
@@ -153,13 +153,20 @@ const ProductDetails = ({ product }: { product: Product }) => {
             <div className='mt-40'>
               <div className='text-grey-500 l:text-16 text-14 weight-500'>Choose a color</div>
               <div className='mt-20 flex gap-12'>
-                <div className='l:w-50 l:h-50 w-40 h-40 bg-#ECDECC round m-7 outline g|outline-color:#ECDECC outline-offset-5 outline-3 flex'>
-                  <FaCheck className='color-white l:h-24 a-self-center' />
-                </div>
-                <div className='l:w-50 l:h-50 w-40 h-40 m-7 round bg-#BBD278'></div>
+                {
+                  product.variants.map(variant => (
+                    <div onClick={() => {
+                      setSelectedVariant(variant)
+                      setSelectedImage(variant?.media?.[0]?.url)
+                      }} style={{background: variant.properties?.['color'], outlineColor: variant.properties?.['color']}} className='l:w-50 l:h-50 w-40 h-40 round m-7 outline g|outline-color:#ECDECC outline-offset-5 outline-3 flex pointer'>
+                      {variant.id === selectedVariant.id && <FaCheck className='color-white l:h-24 a-self-center' />}
+                    </div>
+                  ))
+                }
+                {/* <div className='l:w-50 l:h-50 w-40 h-40 m-7 round bg-#BBD278'></div>
                 <div className='l:w-50 l:h-50 w-40 h-40 m-7 bg-#BBC1F8 round'></div>
                 <div className='l:w-50 l:h-50 w-40 h-40 m-7 bg-#FFD3F8 round'></div>
-                <div className='l:w-50 l:h-50 w-40 h-40 m-7 bg-#FFD3F8 round' style={{ background: 'linear-gradient(to bottom, #FFB6B6 30%, #98C185 70%)' }}></div>
+                <div className='l:w-50 l:h-50 w-40 h-40 m-7 bg-#FFD3F8 round' style={{ background: 'linear-gradient(to bottom, #FFB6B6 30%, #98C185 70%)' }}></div> */}
               </div>
             </div>
 
