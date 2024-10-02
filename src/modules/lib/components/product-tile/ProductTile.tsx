@@ -19,8 +19,10 @@ const ProductTile: FC<IProductTile> = ({ product }: any) => {
   const [isFavourite, setIsFavorite] = useState(false)
   const { addToCart, cart, increment, decrement, isAuthenticated, isLoginModal, showLoginModal } = useCart()
   const selectedVariantItemInCart = cart.cartItems.find(item => item.variant.id === selectedVariant?.id)
+
   useEffect(() => {
     setSelectedImage(product?.variants?.[0]?.media?.[0]?.url)
+    setSelectedVariant(product?.variants?.[0])
   }, [product])
 
   return (
