@@ -16,8 +16,8 @@ jobs:
 
       - name: Set Git Config
         run: |
-          git config --global user.email "deploy@asoebi.africa" 
-          git config --global user.name "Automated Deployment"
+          git config --global user.email "aatanda.dammy@gmail.com" 
+          git config --global user.name "CodenNerd"
 
       - name: Set up SSH
         uses: webfactory/ssh-agent@v0.5.0
@@ -46,14 +46,14 @@ jobs:
       - name: Push to RepoB - Add Remote
         run: |
           cd repoB
-          git remote add repoA git@github.com:CodenNerd/asoebi-client.git
+          git remote add repoA git@github.com:Asoebi-Africa/asoebi-client.git
           git remote -v
 
       - name: Push to RepoB - Pull from RepoA
         run: |
           cd repoB
-          git config --global user.email "deploy@asoebi.africa" 
-          git config --global user.name "Automated Deployment"
+          git config --global user.email "aatanda.dammy@gmail.com" 
+          git config --global user.name "CodenNerd"
           git pull repoA ${{ github.ref_name }} --no-rebase --no-edit
 
       - name: Push to RepoB - Checkout and Push
