@@ -1,0 +1,67 @@
+name: Deploy to Vercel Repo
+
+on:
+  push:
+    branches-ignore: 
+      - master
+
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v3
+
+      - name: Set Git Config
+        run: |
+          git config --global user.email "deploy@asoebi.africa" 
+          git config --global user.name "Automated Deployment"
+
+      - name: Set up SSH
+        uses: webfactory/ssh-agent@v0.5.0
+        with:
+          ssh-private-key: |
+            ${{ secrets.VERCEL_DEPLOY_SSH_FE }}
+            ${{ secrets.VERCEL_DEPLOY_SSH_FE_REPO_A }}
+
+      - name: Add an empty commit
+        id: add_empty_commit
+        run: |
+          LAST_COMMIT_MSG=$(git log -1 --pretty=%B)
+          git commit --allow-empty -m "$(git log -1 --pretty=format:'%an') // $LAST_COMMIT_MSG"
+          EMPTY_COMMIT_HASH=$(git rev-parse HEAD)
+          echo $EMPTY_COMMIT_HASH
+          echo "::set-output name=empty_commit_hash::$EMPTY_COMMIT_HASH"
+          git push origin ${{ github.ref_name }}
+
+      - name: Clone RepoB
+        run: |
+          git clone git@github.com:CodenNerd/asoebi-client-deploy.git repoB
+          cd repoB
+          git fetch
+          git pull origin ${{ github.ref_name }} --no-rebase --no-edit || true
+
+      - name: Push to RepoB - Add Remote
+        run: |
+          cd repoB
+          git remote add repoA git@github.com:CodenNerd/asoebi-client.git
+          git remote -v
+
+      - name: Push to RepoB - Pull from RepoA
+        run: |
+          cd repoB
+          git config --global user.email "deploy@asoebi.africa" 
+          git config --global user.name "Automated Deployment"
+          git pull repoA ${{ github.ref_name }} --no-rebase --no-edit
+
+      - name: Push to RepoB - Checkout and Push
+        run: |
+          cd repoB
+          git config checkout.defaultRemote repoA
+          git checkout ${{ github.ref_name }} || true
+          git config checkout.defaultRemote origin
+          git push origin ${{ github.ref_name }}:${{ github.ref_name }}
+      # - name: Trigger vercel deploy hook
+      #   run: curl -X POST ${{ github.ref_name == 'main' && 'https://api.vercel.com/v1/integrations/deploy/prj_nQnZqiZ6lpHouZwcRezMrY0I5ABZ/xM7SNVBexY' || 'https://api.vercel.com/v1/integrations/deploy/prj_nQnZqiZ6lpHouZwcRezMrY0I5ABZ/09LtoF6XPQ' }}

@@ -23,7 +23,7 @@ const ProductTile: FC<IProductTile> = ({ product }: any) => {
   useEffect(() => {
     setSelectedImage(product?.variants?.[0]?.media?.[0]?.url)
     setSelectedVariant(product?.variants?.[0])
-  }, [product])
+  }, [product?.id])
 
   return (
     <div className="mt-30 l:mt-20">
