@@ -111,7 +111,7 @@ const CheckoutPage = () => {
 
           <div className='l:w-50p'>
             <div className='radius-10 px-20 py-20 border border-faint-grey'>
-              <div className='grid g|grid-template-columns:auto|_|1fr|_|auto gap-10 m:gap-20 items-center'>
+              <div className='grid g|grid-template-columns:auto|_|1fr|_|auto gap-10 m:gap-20 items-center l:pb-0 pb-10'>
                 <div>
                   <Icon name='car' className='w-25 m:w-55 h-100p' />
                 </div>
@@ -174,15 +174,15 @@ const CheckoutPage = () => {
               </div>
             </div>
 
-            <button onClick={() => payWithPaystack({ addressId: selectedAddress?.id, deliveryOption: selectedDeliveryOption })} disabled={canProceedToPayment} className='border-none bg-green disabled:bg-green-300 hidden m:flex text-white text-14 px-16 py-16 radius-8 pointer mt-30 l:float-right'>
+            <button onClick={() => payWithPaystack({ addressId: selectedAddress?.id, deliveryOption: selectedDeliveryOption })} disabled={canProceedToPayment} className='w-full l:w-fit border-none bg-green disabled:bg-green-300 m:flex text-white text-14 px-16 py-16 radius-8 pointer mt-30 l:float-right'>
               <span className=''>Proceed to payment</span>
               <PuffLoader size={15} loading={isPaymentLoading} className='ml-10' />
             </button>
           </div>
 
-          <button className='border-none mt-40 w-100p bg-green mt-20 mx-auto m:hidden text-white text-16 l:px-35 l:py-20 px-20 py-15 radius-10 pointer' onClick={() => router.push('/checkout/success')}>
+          {/* <button className='border-none mt-40 w-100p bg-green mt-20 mx-auto m:hidden text-white text-16 l:px-35 l:py-20 px-20 py-15 radius-10 pointer' onClick={() => router.push('/checkout/success')}>
             Proceed to payment
-          </button>
+          </button> */}
         </div>
       </div>
 

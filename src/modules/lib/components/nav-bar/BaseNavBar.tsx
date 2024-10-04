@@ -95,7 +95,10 @@ const BaseNavBar: FC<IBaseNavBar> = ({ links }) => {
                                 </div>
 
                                 <div className='border-t border-5 border-grey-200'>
-                                    <div className='p-15 hover:bg-grey-100 pointer flex items-center gap-10 text-grey-700' onClick={() => {setUserOrderDropdown(true)}}>
+                                    <div className='p-15 hover:bg-grey-100 pointer flex items-center gap-10 text-grey-700' onClick={() => {
+                                        setUserOrderDropdown(true);
+                                        handleCloseDropdown();
+                                    }}>
                                         <div className="text-12 weight-500">Orders</div>
                                     </div>
 
