@@ -61,7 +61,7 @@ const BaseNavBar: FC<IBaseNavBar> = ({ links }) => {
                             </div>
                             <div className='h-fit'>
                                 <div className='text-grey-500 whitespace-nowrap l:text-12 text-10'>{getGreeting()}</div>
-                                <div className='whitespace-nowrap text-green weight-600 l:text-14 text-12'>{`${user?.profile?.firstName || 'Guest'} ${user?.profile?.lastName || 'User'}`}</div>
+                                <div className='whitespace-nowrap text-green weight-600 l:text-14 text-12'>{`${user?.profile?.firstName || 'Guest User'}`}</div>
                             </div>
                         </div>
                     </div>

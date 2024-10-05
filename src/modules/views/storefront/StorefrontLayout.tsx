@@ -15,11 +15,11 @@ import { useStoreProductsView } from "@/modules/lib/utility/hooks/views/use-stor
 import { useCategoryNavView } from "@/modules/lib/utility/hooks/views/use-category-nav-view";
 
 const tabs = [
-    {
-        icon: BsBasket3,
-        text: "Products",
-        component: <></>
-    },
+    // {
+    //     icon: BsBasket3,
+    //     text: "Products",
+    //     component: <></>
+    // },
     // {
     //     icon: LiaCommentsDollarSolid,
     //     text: "Customer reviews (12,000)",
@@ -28,7 +28,7 @@ const tabs = [
 ];
 
 const StorefrontLayout: FC<ILayout> = ({ children }) => {
-    const [activeTab, setActiveTab] = useState(tabs[0]);
+    // const [activeTab, setActiveTab] = useState(tabs[0]);
     const [selectedCategory, setSelectedCategory] = useState();
     const {  products } = useStoreProductsView(selectedCategory);
     const { categories } = useCategoryNavView();
@@ -42,7 +42,7 @@ const StorefrontLayout: FC<ILayout> = ({ children }) => {
 
                 <div className="app-width">
                     <div className="flex gap-70 l:text-20 text-14">
-                        {tabs.map((tab) => (
+                        {/* {tabs.map((tab) => (
                             <div
                                 onClick={() => setActiveTab(tab)}
                                 className={cx(
@@ -54,7 +54,7 @@ const StorefrontLayout: FC<ILayout> = ({ children }) => {
                             >
                                 <tab.icon /> <span>{tab.text}</span>
                             </div>
-                        ))}
+                        ))} */}
                     </div>
                 </div>
 
@@ -65,9 +65,9 @@ const StorefrontLayout: FC<ILayout> = ({ children }) => {
                 </div>
 
                 <div className="app-width">
-                    <div>
+                    {/* <div>
                         {activeTab.component}
-                    </div>
+                    </div> */}
                     <section className="l:mt-55 ">
                         <h3 className="l:text-20 text-16 weight-300 uppercase">New Arrivals</h3>
                         <div className="grid l:grid-5-cols-1fr grid-2-cols-1fr gap-10 gap-30 w-full">

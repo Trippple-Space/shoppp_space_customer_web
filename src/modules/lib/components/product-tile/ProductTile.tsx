@@ -26,7 +26,7 @@ const ProductTile: FC<IProductTile> = ({ product }: any) => {
   }, [product?.id])
 
   return (
-    <div className="mt-30 l:mt-20">
+    <div className="mt-30 l:mt-20 w-full max-w-300">
       <div id="image" className="relative ratio-1 radius-10 g|overflow:hidden l:radius-15">
         <Link href={`/products/${product.slug}`}>
           <Image
@@ -68,7 +68,7 @@ const ProductTile: FC<IProductTile> = ({ product }: any) => {
       </div>
       <div
         id="product varients"
-        className="mt-15 flex a-items-center l:gap-13 gap-8"
+        className="mt-15 flex a-items-center l:gap-13 gap-8 scroll-x no-scrollbar"
       >
         {
           product.variants.map((variant: any) => (

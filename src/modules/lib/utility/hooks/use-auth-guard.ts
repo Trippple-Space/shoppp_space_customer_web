@@ -25,7 +25,6 @@ export const useAuthGuard = () => {
                 }
             }
         };
-
         checkAuth();
     }, [user, isAuthenticated, pathname]);
 
