@@ -137,15 +137,14 @@
 .w-17 { width: 17px; } 
 .h-17 { height: 17px; } 
 .border-red { border-color: #DE3838; } 
+.mt-60 { margin-top: 60px; } 
 .gap-52 { gap: 52px; } 
-.px-48 { padding-left: 48px; padding-right: 48px; } 
 .border-solid { border-style: solid; } 
 .border-grey-300 { border-color: #E4E1DF; } 
 .text-grey-700 { color: #6B6662; } 
 .weight-600 { font-weight: 600; } 
 .p-20 { padding: 20px; } 
 .bg-faint-green { background-color: #0C766110; } 
-.grid-2-cols-1fr { grid-template-columns: repeat(2, 1fr); } 
 .h-fit {    height: fit-content;  } 
 
 @layer base {
@@ -415,8 +414,9 @@
 .w-20p { width: 20%; } 
 .w-70p { width: 70%; } 
 .text-left {    text-align: left;  } 
-[class~='g|grid-template-columns:auto|_|1fr|_|auto']{grid-template-columns:auto 1fr auto} 
+.mt-12 { margin-top: 12px; } 
 [class~='g|grid-template-columns:1fr|_|auto']{grid-template-columns:1fr auto} 
+.px-48 { padding-left: 48px; padding-right: 48px; } 
 .text-grey-900 { color: #1F1B17; } 
 .w-60 { width: 60px; } 
 .h-60 { height: 60px; } 
@@ -468,6 +468,7 @@
 .border-lightgreen { border-color: #E2FFFA; } 
 .pt-42 { padding-top: 42px; } 
 .mb-150 { margin-bottom: 150px; } 
+[class~='g|grid-template-columns:auto|_|1fr|_|auto']{grid-template-columns:auto 1fr auto} 
 .border-grey-100 { border-color: #F7F6F5; } 
 .py-30 { padding-top: 30px; padding-bottom: 30px; } 
 .pr-20 { padding-right: 20px; } 
@@ -483,8 +484,8 @@
 .my-100 { margin-top: 100px; margin-bottom: 100px; } 
 .grid-7-cols-1fr { grid-template-columns: repeat(7, 1fr); } 
 .my-12 { margin-top: 12px; margin-bottom: 12px; } 
+.grid-2-cols-1fr { grid-template-columns: repeat(2, 1fr); } 
 .sentence-case {    text-transform: lowercase;  }  .sentence-case:first-letter {    text-transform: uppercase;  } 
-.mt-60 { margin-top: 60px; } 
 .t-50p { top: 50%; } 
 .grid-2-cols-auto { grid-template-columns: repeat(2, auto); } 
 .px-35 { padding-left: 35px; padding-right: 35px; } 
@@ -586,7 +587,6 @@
  
 .text-green-800 { color:  #025541; } 
 .\@one\:flex {    display: flex;  } 
-.mt-12 { margin-top: 12px; } 
 .mb-43 { margin-bottom: 43px; } 
 .h-27 { height: 27px; } 
 .mb-16 { margin-bottom: 16px; } 
@@ -801,7 +801,8 @@
 @media only screen and (min-width: 992px) { .l\:w-fit {    width: fit-content;  } } 
 @media only screen and (min-width: 992px) { .l\:w-800 { width: 800px; } } 
 @media only screen and (min-width: 992px) { .l\:h-600 { height: 600px; } } 
-@media only screen and (min-width: 992px) { .l\:grid {    display: grid;  } } 
+@media only screen and (min-width: 992px) { .l\:mt-0 { margin-top: 0px; } } 
+@media only screen and (min-width: 992px) { .l\:grid-2-cols-1fr { grid-template-columns: repeat(2, 1fr); } } 
 @media only screen and (min-width: 992px) { .l\:gap-10 { gap: 10px; } } 
 @media only screen and (min-width: 992px) { .l\:gap-15 { gap: 15px; } } 
 @media only screen and (min-width: 992px) { .l\:py-15 { padding-top: 15px; padding-bottom: 15px; } } 
@@ -833,7 +834,6 @@
 @layer lo {  @media only screen and (min-width: 992px) { .\@lo\:placeholder\:l\:text-12::placeholder { font-size: 12px; } }  } 
 @media only screen and (min-width: 992px) { .l\:l-40p { left: 40%; } } 
 @media only screen and (min-width: 992px) { .l\:t-35p { top: 35%; } } 
-@media only screen and (min-width: 992px) { .l\:mt-0 { margin-top: 0px; } } 
 @media only screen and (min-width: 992px) { .l\:mx-0 { margin-left: 0px; margin-right: 0px; } } 
 @media only screen and (min-width: 992px) { .l\:ml-0 { margin-left: 0px; } } 
 @media only screen and (min-width: 992px) { .l\:w-400 { width: 400px; } } 
@@ -933,6 +933,7 @@
 @media only screen and (min-width: 992px) { .l\:pb-25 { padding-bottom: 25px; } } 
 @media only screen and (min-width: 992px) { .l\:text-25 { font-size: 25px; } } 
 @media only screen and (min-width: 992px) { .l\:gap-25 { gap: 25px; } } 
+@media only screen and (min-width: 992px) { .l\:grid {    display: grid;  } } 
 @media only screen and (min-width: 992px) { .l\:my-70 { margin-top: 70px; margin-bottom: 70px; } } 
 @media only screen and (min-width: 992px) { .l\:w-22p { width: 22%; } } 
 @media only screen and (min-width: 992px) { .l\:gap-120 { gap: 120px; } } 
