@@ -55,7 +55,7 @@ const ProductDetails = ({ product }: { product: Product }) => {
         <div className='l:flex w-full gap-25 l:pt-20 l:mt-100'>
           <div className="l:w-50p">
             <Breadcrumb crumbs={[
-              { label: product?.store?.name, route: `/storefront/${product.store?.slug}` },
+              { label: product?.store?.name, route: `/${product.store?.slug}` },
               { label: product?.name, route: `/products/${product?.slug}` },
             ]}
             />
@@ -79,7 +79,7 @@ const ProductDetails = ({ product }: { product: Product }) => {
                 </div>
               </div>
 
-              <Link href={`/storefront/${product?.store?.slug}`} as="" >
+              <Link href={`/${product?.store?.slug}`} as="" >
                 <div className='mt-11'>
                   <div className='text-grey-500 l:text-16 text-14 weight-500'>
                     {product?.store?.name} Store
@@ -279,7 +279,7 @@ const ProductDetails = ({ product }: { product: Product }) => {
                     <AiFillStar className='w-14 h-14 l:w-18 l:h-18 mr-5 l:mr-5' /> 3.8/5 rating</p>
                 </div>
 
-                <Link href={`/storefront/${product?.store?.slug}`}>
+                <Link href={`/${product?.store?.slug}`}>
                   <p className='text-danger underline text-14 m:text-16 py-5 l:py-15'>Visit Store home</p>
                 </Link>
 
