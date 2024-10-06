@@ -49,9 +49,55 @@ const placeholderProduct: Product = {
   reviewRating: 0,
   reviews: undefined,
   comments: undefined,
-  variants: [],
+  variants: [{
+    id: 0,
+    media: [{
+      url: "",
+      type: "image"
+    }],
+    stock: 0,
+    price: 0,
+    minPurchaseQuantity: 0,
+    incrementBy: 0,
+    product: {
+      longDescription: "",
+      keywords: [],
+      id: 0,
+      slug: "",
+      category: {
+        type: "",
+        id: 0,
+        name: "",
+        images: [],
+        description: null
+      },
+      price: 0,
+      name: "",
+      stockUnit: "",
+      status: 0,
+      dateCreated: "",
+      lastUpdated: "",
+      reviewRating: 0,
+      reviews: undefined,
+      comments: undefined,
+      variants: [],
+      store: {
+        name: '',
+        slug: "",
+        id: 0,
+        description: "",
+        status: false,
+        type: ""
+      }
+    },
+    meta: undefined,
+    properties: undefined,
+    stockUnit: "",
+    dateCreated: "",
+    lastUpdated: ""
+  }],
   store: {
-    name: 'Loading...',
+    name: '',
     slug: "",
     id: 0,
     description: "",

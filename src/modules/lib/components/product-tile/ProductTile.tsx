@@ -50,7 +50,7 @@ const ProductTile: FC<IProductTile> = ({ product }: any) => {
                 : isLoginModal()
               }} 
               disabled={!selectedImage}
-              className="bg-yellow disabled:bg-yellow-200 disabled:cursor-not-allowed pointer font-roboto text-grey-900 border-hidden px-10 py-10 radius-5 l:px-22 l:py-12 l:radius-10 ">
+              className="bg-yellow disabled:bg-yellow-200 disabled:cursor-not-allowed hover:scale-1.05 g|transition:0.5s pointer font-roboto text-grey-900 border-hidden px-10 py-10 radius-5 l:px-22 l:py-12 l:radius-10 ">
               <span className="hidden l:block weight-500">Add to cart</span>
               <div className="l:hidden">
                 <AiOutlinePlus className="l:w-24 l:h-24 w-14 h-14" />

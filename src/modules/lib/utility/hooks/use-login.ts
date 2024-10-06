@@ -47,7 +47,7 @@ export const useLoginView = (isLoginModal?: any) => {
     const { isAuthenticated, authenticateUser } = useUserStore()
     const formHandler = useFormik(formikLoginConfig(router, (user) => { authenticateUser(user) }, isLoginModal))
 
-    useRouteGuard(isAuthenticated, paths.homepage)
+    useRouteGuard(!isLoginModal && isAuthenticated, paths.homepage)
 
     return { formHandler }
 }

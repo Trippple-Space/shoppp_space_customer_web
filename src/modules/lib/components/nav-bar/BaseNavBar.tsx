@@ -88,7 +88,6 @@ const BaseNavBar: FC<IBaseNavBar> = ({ links }) => {
                                     <div className=''>
                                         <div className='weight-500 l:text-18 text-14 whitespace-nowrap flex items-center gap-20'>
                                             <div className='capitalize'>{user?.profile.firstName  || 'Guest'} {user?.profile.lastName || 'User'}</div>
-                                            {!isAuthenticated && <div className='bg-green text-white p-4 radius-4 text-6 weight-700'>New</div>}
                                         </div>
                                         <div className='l:text-10 text-8 text-green weight-600'>{user?.email}</div>
                                     </div>

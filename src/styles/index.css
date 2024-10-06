@@ -715,6 +715,13 @@
 .bg-lightgreen { background-color: #E2FFFA; } 
 .pl-50 { padding-left: 50px; } 
 .mt-25 { margin-top: 25px; } 
+.hover\:scale-2:hover { scale: 2; } 
+.hover\:scale-1\.1:hover { scale: 1.1; } 
+.hover\:scale-1\.01:hover { scale: 1.01; } 
+[class~='g|transition:all_1s']{transition:all_1s} 
+[class~='g|transition:all\_1s']{transition:all\_1s} 
+[class~='g|transition:1s']{transition:1s} 
+.hover\:scale-1\.05:hover { scale: 1.05; } 
 
 
 
