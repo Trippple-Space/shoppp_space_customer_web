@@ -26,8 +26,8 @@ const ProductTile: FC<IProductTile> = ({ product }: any) => {
   }, [product?.id])
 
   return (
-    <div className="mt-30 l:mt-20 w-full max-w-300">
-      <div id="image" className="relative ratio-1 radius-10 g|overflow:hidden l:radius-15">
+    <div className="mt-30 l:mt-20 w-full">
+      <div id="image" className="relative ratio-1 radius-10 g|overflow:hidden l:radius-15 w-full">
         <Link href={`/products/${product.slug}`}>
           <Image
             className="absolute w-full h-full a-self-center g|object-fit:cover pointer"
@@ -66,31 +66,33 @@ const ProductTile: FC<IProductTile> = ({ product }: any) => {
           <AiFillHeart color={isFavourite ? "#ffffffee" : "#000000aa"} className="shadow" />
         </div>
       </div>
-      <div
-        id="product varients"
-        className="mt-15 flex a-items-center l:gap-13 gap-8 scroll-x no-scrollbar"
-      >
-        {
-          product.variants.map((variant: any) => (
-            variant?.media?.map((mediaItem: any) => (
-              <Image
-                className={classNames("l:w-32 l:h-32 w-24 h-24 pointer radius-5 l:radius-8 a-self-center g|object-fit:cover", {
-                  'border border-2': selectedImage == mediaItem?.url,
-                  [`border-${mediaItem.description?.toLocaleLowerCase()}`]: selectedImage == mediaItem?.url
-                })}
-                src={mediaItem?.url}
-                onClick={() => { setSelectedVariant(variant); setSelectedImage(mediaItem?.url) }}
-                alt="product-image"
-              />
+      <div className="scroll-x no-scrollbar">
+        <div
+          id="product varients"
+          className="mt-15 flex a-items-center l:gap-13 gap-8 w-100"
+        >
+          {
+            product.variants.map((variant: any) => (
+              variant?.media?.map((mediaItem: any) => (
+                <Image
+                  className={classNames("l:w-32 l:h-32 w-24 h-24 pointer radius-5 l:radius-8 a-self-center g|object-fit:cover", {
+                    'border border-2': selectedImage == mediaItem?.url,
+                    [`border-${mediaItem.description?.toLocaleLowerCase()}`]: selectedImage == mediaItem?.url
+                  })}
+                  src={mediaItem?.url}
+                  onClick={() => { setSelectedVariant(variant); setSelectedImage(mediaItem?.url) }}
+                  alt="product-image"
+                />
+              ))
             ))
-          ))
-        }
+          }
+        </div>
       </div>
       <div
         id="product details"
         className="mt-15 overflow-hidden white-space-nowrap text-overflow-ellipsis"
       >
-        <h3 className="l:text-15 text-14 weight-500">
+        <h3 title={product.name} className="l:text-15 text-14 weight-500 w-100 white-space-nowrap text-overflow-ellipsis">
           <Link href={`/products/${product.slug}`}>
             {product.name}
           </Link>

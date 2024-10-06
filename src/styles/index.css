@@ -486,6 +486,7 @@
 .my-12 { margin-top: 12px; margin-bottom: 12px; } 
 .grid-2-cols-1fr { grid-template-columns: repeat(2, 1fr); } 
 .sentence-case {    text-transform: lowercase;  }  .sentence-case:first-letter {    text-transform: uppercase;  } 
+.flex-wrap { flex-wrap: wrap; } 
 .t-50p { top: 50%; } 
 .grid-2-cols-auto { grid-template-columns: repeat(2, auto); } 
 .px-35 { padding-left: 35px; padding-right: 35px; } 
@@ -714,17 +715,13 @@
 .bg-lightgreen { background-color: #E2FFFA; } 
 .pl-50 { padding-left: 50px; } 
 .mt-25 { margin-top: 25px; } 
-.flex-wrap { flex-wrap: wrap; } 
-.w-500 { width: 500px; } 
-.h-500 { height: 500px; } 
-.w-300 { width: 300px; } 
-.max-w-300 { max-width: 300px; } 
 
 
 
 
 
 @media only screen and (min-width: 576px) { .s\:gap-50 { gap: 50px; } } 
+@media only screen and (min-width: 576px) { .s\:grid-3-cols-1fr { grid-template-columns: repeat(3, 1fr); } } 
 
 @media only screen and (min-width: 768px) { .m\:py-30 { padding-top: 30px; padding-bottom: 30px; } } 
 @media only screen and (min-width: 768px) { .m\:gap-60 { gap: 60px; } } 

@@ -19,7 +19,7 @@ const CentralArena = ({ selectedCategory }: any) => {
                     <h3 className="text-14 l:text-20 weight-300 ">Top selling fabrics</h3>
                     {/* <p className="text-14 l:text-16 sentence-case">View All</p> */}
                 </div>
-                <div className="flex flex-wrap gap-10 l:gap-30 w-full relative">
+                <div className="grid l:grid-5-cols-1fr s:grid-3-cols-1fr grid-2-cols-1fr flex-wrap gap-15 l:gap-10 w-full relative">
                     {
                         products.length ?
                             products.map(product => (
