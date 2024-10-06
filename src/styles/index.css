@@ -486,6 +486,7 @@
 .my-12 { margin-top: 12px; margin-bottom: 12px; } 
 .grid-2-cols-1fr { grid-template-columns: repeat(2, 1fr); } 
 .sentence-case {    text-transform: lowercase;  }  .sentence-case:first-letter {    text-transform: uppercase;  } 
+.flex-wrap { flex-wrap: wrap; } 
 .t-50p { top: 50%; } 
 .grid-2-cols-auto { grid-template-columns: repeat(2, auto); } 
 .px-35 { padding-left: 35px; padding-right: 35px; } 
@@ -720,6 +721,7 @@
 
 
 @media only screen and (min-width: 576px) { .s\:gap-50 { gap: 50px; } } 
+@media only screen and (min-width: 576px) { .s\:grid-3-cols-1fr { grid-template-columns: repeat(3, 1fr); } } 
 
 @media only screen and (min-width: 768px) { .m\:py-30 { padding-top: 30px; padding-bottom: 30px; } } 
 @media only screen and (min-width: 768px) { .m\:gap-60 { gap: 60px; } } 

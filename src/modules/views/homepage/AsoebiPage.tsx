@@ -41,7 +41,7 @@ const AsoebiHomepage = () => {
         <>
             <section className="mt-40 w-100p l:mt-50">
                 <div className="flex space-between items-center">
-                    <h3 className="text-18 l:text-24 weight-600 text-grey-900 ">TOP SELLING ANKARA</h3>
+                    <h3 className="text-18 l:text-24 weight-400 text-grey-900 ">TOP SELLING ANKARA</h3>
                     <div className="text-14 l:text-16 weight-500 underline text-grey-900 pointer">View All</div>
                 </div>
                 <div className="grid grid-2-cols-1fr l:grid-5-cols-1fr gap-10 l:gap-30 w-full">
