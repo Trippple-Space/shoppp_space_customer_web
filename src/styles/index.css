@@ -428,7 +428,7 @@
 .mt-5 { margin-top: 5px; } 
 .w-12 { width: 12px; } 
 .flex-wrap { flex-wrap: wrap; } 
-.px-4 { padding-left: 4px; padding-right: 4px; } 
+.gap-4 { gap: 4px; } 
 .mx-2 { margin-left: 2px; margin-right: 2px; } 
 .my-1 { margin-top: 1px; margin-bottom: 1px; } 
 .w-24 { width: 24px; } 
@@ -634,6 +634,7 @@
 .w-200 { width: 200px; } 
 .p-8 { padding: 8px; } 
 .mb-25 { margin-bottom: 25px; } 
+.px-4 { padding-left: 4px; padding-right: 4px; } 
 .w-130 { width: 130px; } 
 .r-5 { right: 5px; } 
 .t-5 { top: 5px; } 
@@ -717,6 +718,7 @@
 .bg-lightgreen { background-color: #E2FFFA; } 
 .pl-50 { padding-left: 50px; } 
 .mt-25 { margin-top: 25px; } 
+.hover\:underline:hover { text-decoration: underline; } 
 
 
 
