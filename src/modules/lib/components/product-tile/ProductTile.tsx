@@ -106,7 +106,12 @@ const ProductTile: FC<IProductTile> = ({ product }: any) => {
             <span className="l:text-16 text-12">{product.reviewRating}</span>
           </div>}
         </div>
-        <div className="mt-6 l:text-15 text-12 weight-700">{formatNumberAsPrice(selectedVariant?.price)} <span className="weight-300 l:text-15 text-10">{!!selectedVariant?.stockUnit && 'per'} {selectedVariant?.stockUnit}</span></div>
+        <div className="mt-6 l:text-15 text-12 weight-700">{formatNumberAsPrice(selectedVariant?.price || product.price)} 
+          {/* <span className="weight-300 l:text-15 text-10">{!!selectedVariant?.stockUnit && 'per'} {selectedVariant?.stockUnit}</span> */}
+        </div>
+        <div className="flex flex-wrap">{product?.tags?.map((tag: any) => (<span className="text-green text-12 inline-block radius-5 px-4 mx-2 my-1">
+          #{tag.label}
+        </span>))}</div>
       </div>
     </div>
   );

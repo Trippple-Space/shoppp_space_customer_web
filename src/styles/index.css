@@ -353,8 +353,6 @@
 .z-index-20, .z-20 { z-index: 20; } 
 .w-40 { width: 40px; } 
 .h-40 { height: 40px; } 
-@layer base {.radius-4 { border-radius: 4px; } } 
-.text-6 { font-size: 6px; } 
 .text-8 { font-size: 8px; } 
 .border-5 { border-width: 5px; } 
 .hover\:bg-grey-100:hover { background-color: #F7F6F5; } 
@@ -391,6 +389,7 @@
 .mb-6 { margin-bottom: 6px; } 
 [class~='g|text-overflow:ellipsis']{text-overflow:ellipsis} 
 .h-2 { height: 2px; } 
+@layer base {.radius-4 { border-radius: 4px; } } 
 .p-9 { padding: 9px; } 
 .w-28 { width: 28px; } 
 .h-28 { height: 28px; } 
@@ -423,10 +422,15 @@
 .my-7 { margin-top: 7px; margin-bottom: 7px; } 
 .disabled\:bg-yellow-200:disabled { background-color: #ffdc9e; } 
 .disabled\:cursor-not-allowed:disabled { cursor: not-allowed; } 
+.hover\:scale-1\.05:hover { scale: 1.05; } 
 .border-hidden { border-style: hidden; } 
 .white-space-nowrap { white-space: nowrap; } 
 .mt-5 { margin-top: 5px; } 
 .w-12 { width: 12px; } 
+.flex-wrap { flex-wrap: wrap; } 
+.px-4 { padding-left: 4px; padding-right: 4px; } 
+.mx-2 { margin-left: 2px; margin-right: 2px; } 
+.my-1 { margin-top: 1px; margin-bottom: 1px; } 
 .w-24 { width: 24px; } 
 .h-24 { height: 24px; } 
 .bg-lighter-grey { background-color: #D9D9D9; } 
@@ -486,7 +490,6 @@
 .my-12 { margin-top: 12px; margin-bottom: 12px; } 
 .grid-2-cols-1fr { grid-template-columns: repeat(2, 1fr); } 
 .sentence-case {    text-transform: lowercase;  }  .sentence-case:first-letter {    text-transform: uppercase;  } 
-.flex-wrap { flex-wrap: wrap; } 
 .t-50p { top: 50%; } 
 .grid-2-cols-auto { grid-template-columns: repeat(2, auto); } 
 .px-35 { padding-left: 35px; padding-right: 35px; } 
@@ -631,7 +634,6 @@
 .w-200 { width: 200px; } 
 .p-8 { padding: 8px; } 
 .mb-25 { margin-bottom: 25px; } 
-.px-4 { padding-left: 4px; padding-right: 4px; } 
 .w-130 { width: 130px; } 
 .r-5 { right: 5px; } 
 .t-5 { top: 5px; } 
@@ -715,13 +717,6 @@
 .bg-lightgreen { background-color: #E2FFFA; } 
 .pl-50 { padding-left: 50px; } 
 .mt-25 { margin-top: 25px; } 
-.hover\:scale-2:hover { scale: 2; } 
-.hover\:scale-1\.1:hover { scale: 1.1; } 
-.hover\:scale-1\.01:hover { scale: 1.01; } 
-[class~='g|transition:all_1s']{transition:all_1s} 
-[class~='g|transition:all\_1s']{transition:all\_1s} 
-[class~='g|transition:1s']{transition:1s} 
-.hover\:scale-1\.05:hover { scale: 1.05; } 
 
 
 
