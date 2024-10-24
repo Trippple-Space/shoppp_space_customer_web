@@ -22,7 +22,7 @@ const BaseNavBar: FC<IBaseNavBar> = ({ links }) => {
   const { user, signOut, openAddressModal } = useNavbarView()
   const { isAuthenticated } = useUserStore()
 
-  const { orders, fetchOrders } = useOrders()
+  const { orders } = useOrders()
 
   const handleUserProfileDropdown = () => {
     setUserProfileDropdown(prev => !prev)
@@ -31,10 +31,6 @@ const BaseNavBar: FC<IBaseNavBar> = ({ links }) => {
   const handleCloseDropdown = () => {
     setUserProfileDropdown(false)
   }
-
-  useEffect(() => {
-    fetchOrders()
-  }, [])
 
   return (
     <div className='fixed w-full t-0 l-0 bg-white border-b border-whitesmoke z-5'>

@@ -3,7 +3,7 @@
 import Image from '@/modules/lib/components/image/Image'
 import Modal from '@/modules/lib/components/modal/modal'
 import classNames from 'classnames'
-import React, { useEffect, useState } from 'react'
+import React, { useState } from 'react'
 import { AiOutlineClose } from 'react-icons/ai'
 import { BiHomeAlt2 } from 'react-icons/bi'
 import { BsArrowLeftShort, BsArrowRightShort } from 'react-icons/bs'
@@ -11,7 +11,6 @@ import OrdersModal from './profile-modal/OrdersModal'
 import { useRouter } from 'next/navigation'
 import { paths } from '../../utility/paths'
 import { useNavbarView } from '../../utility/hooks/views/use-navbar-view'
-import { useOrders } from '../../utility/hooks/use-orders'
 
 interface ModalProps {
   modalOpen: boolean
@@ -36,13 +35,6 @@ const HomepageModal: React.FC<ModalProps> = ({
 }) => {
   const router = useRouter()
   const { user, signOut, openAddressModal } = useNavbarView()
-  const { orders, fetchOrders } = useOrders()
-
-
-  
-  useEffect(() => {
-    fetchOrders()
-  }, [])
 
   return (
     <div>
@@ -78,7 +70,7 @@ const HomepageModal: React.FC<ModalProps> = ({
                 data(false)
               }}
             >
-              Orders {orders.length > 0 && orders.length}
+              Orders
             </div>
           </div>
 
