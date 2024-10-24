@@ -105,9 +105,9 @@ const BaseNavBar: FC<IBaseNavBar> = ({ links }) => {
                                         <div className="text-12 weight-500">Address book</div>
                                     </div>
 
-                                    <div className='p-15 hover:bg-grey-100 pointer flex items-center gap-10 text-grey-700'>
+                                    {/* <div className='p-15 hover:bg-grey-100 pointer flex items-center gap-10 text-grey-700'>
                                         <div className="text-12 weight-500">Close account</div>
-                                    </div>
+                                    </div> */}
                                 </div>
 
                                 <div className='border-t border-5 border-grey-200 pointer'>
