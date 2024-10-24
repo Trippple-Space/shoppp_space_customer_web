@@ -117,7 +117,7 @@ const BaseNavBar: FC<IBaseNavBar> = ({ links }) => {
                     }}
                   >
                     <div className='text-12 weight-500'>
-                      Orders {orders.length > 0 && orders.length}
+                      Orders {`(${orders.length})`}
                     </div>
                   </div>
 
