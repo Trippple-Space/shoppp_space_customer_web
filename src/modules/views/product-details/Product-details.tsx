@@ -1,4 +1,4 @@
-"use client"
+'use client'
 
 import Icon from '@/modules/lib/components/icon/Icon'
 import Image from '@/modules/lib/components/image/Image'
@@ -6,80 +6,108 @@ import Input from '@/modules/lib/components/input/Input'
 import { paths } from '@/modules/lib/utility/paths'
 import Link from 'next/link'
 import React, { useEffect, useState } from 'react'
-import { AiFillStar, AiOutlineHeart, AiOutlineShareAlt } from 'react-icons/ai';
-import { BsArrowLeftShort, BsArrowRightShort, BsInfo } from 'react-icons/bs';
-import { PiHeartStraightThin, PiStarBold } from 'react-icons/pi';
-import { GrLocation, GrShareOption, GrStar } from 'react-icons/gr';
-import { IoIosArrowBack, IoIosArrowForward, IoMdHeartEmpty } from 'react-icons/io';
+import { AiFillStar, AiOutlineHeart, AiOutlineShareAlt } from 'react-icons/ai'
+import { BsArrowLeftShort, BsArrowRightShort, BsInfo } from 'react-icons/bs'
+import { PiHeartStraightThin, PiStarBold } from 'react-icons/pi'
+import { GrLocation, GrShareOption, GrStar } from 'react-icons/gr'
+import {
+  IoIosArrowBack,
+  IoIosArrowForward,
+  IoMdHeartEmpty
+} from 'react-icons/io'
 import HomepageNavBar from '@/modules/lib/components/nav-bar/HomepageNavBar'
 import Footer from '@/modules/lib/components/footer/Footer'
 import { Product } from '@/modules/lib/utility/types/product.interface'
 import ProductMedia from './product-media/ProductMedia'
 import BuyBox from './buy-box/BuyBox'
-import './ProductDetails.scss';
+import './ProductDetails.scss'
 import { TfiAngleLeft, TfiAngleRight } from 'react-icons/tfi'
 import { cx, scrollToTop } from '@/modules/lib/utility/utility'
 import Breadcrumb from './breadcrumb/Breadcrumb'
 import { FaRegBookmark, FaRegStar } from 'react-icons/fa'
 import { FaCheck, FaLocationPin } from 'react-icons/fa6'
-import { TiStarOutline } from "react-icons/ti";
-import { HiOutlineChatBubbleLeftEllipsis, HiOutlineShare, HiOutlineShoppingBag } from "react-icons/hi2";
+import { TiStarOutline } from 'react-icons/ti'
+import {
+  HiOutlineChatBubbleLeftEllipsis,
+  HiOutlineShare,
+  HiOutlineShoppingBag
+} from 'react-icons/hi2'
 import { IoCheckmarkOutline } from 'react-icons/io5'
 import Checkbox from '@/modules/lib/components/checkbox/Checkbox'
 import QuantitySelector2 from '@/modules/lib/components/quantity-selector/QuantitySelector2'
 import { BiShareAlt } from 'react-icons/bi'
 import { useCart } from '@/modules/lib/utility/hooks/use-cart'
 
-
 const ProductDetails = ({ product }: { product: Product }) => {
   console.log({ product })
-  const [unitCounter, setUnitCounter] = useState<number>(1);
-  const [selectedImage, setSelectedImage] = useState(product?.variants?.[0]?.media?.[0]?.url);
-  const [selectedVariant, setSelectedVariant] = useState(product?.variants?.[0]);
-  const { addToCart, cart, increment, decrement, isLoginModal, isAuthenticated } = useCart()
+  const [unitCounter, setUnitCounter] = useState<number>(1)
+  const [selectedImage, setSelectedImage] = useState(
+    product?.variants?.[0]?.media?.[0]?.url
+  )
+  const [selectedVariant, setSelectedVariant] = useState(product?.variants?.[0])
+  const {
+    addToCart,
+    cart,
+    increment,
+    decrement,
+    isLoginModal,
+    isAuthenticated
+  } = useCart()
   const [selectedSize, setSelectedSize] = useState('')
-  const selectedVariantItemInCart = cart.cartItems.find(item => item.variant.id === selectedVariant?.id);
+  const selectedVariantItemInCart = cart.cartItems.find(
+    item => item.variant.id === selectedVariant?.id
+  )
   scrollToTop()
 
   useEffect(() => {
     setSelectedImage(product?.variants?.[0]?.media?.[0]?.url)
   }, [product])
 
+  const strikeOutPrice = (product?.price + product?.price * 0.05).toFixed(2) // TODO: implement proper strikeout price
+  const displayPrice = selectedVariant?.price || product?.price
 
-  const strikeOutPrice = (product?.price + (product?.price * 0.05)).toFixed(2) // TODO: implement proper strikeout price
   return (
     <>
       <HomepageNavBar />
       <div className={'product-details-page l:max-w-1400 w-full mx-auto my-60'}>
-
         <div className='l:flex w-full gap-25 l:pt-20 l:mt-100'>
-          <div className="l:w-50p">
-            <Breadcrumb crumbs={[
-              { label: product?.store?.name, route: `/${product.store?.slug}` },
-              { label: product?.name, route: `/products/${product?.slug}` },
-            ]}
+          <div className='l:w-50p'>
+            <Breadcrumb
+              crumbs={[
+                {
+                  label: product?.store?.name,
+                  route: `/${product.store?.slug}`
+                },
+                { label: product?.name, route: `/products/${product?.slug}` }
+              ]}
             />
-            <Image src={selectedImage} className='l:w-600 w-100p l:mt-25 l:radius-15 border border-grey-100' alt={''} />
+            <Image
+              src={selectedImage}
+              className='l:w-600 w-100p l:mt-25 l:radius-15 border border-grey-100'
+              alt={''}
+            />
           </div>
-          <div className="l:w-50p l:px-0 px-10">
+          <div className='l:w-50p l:px-0 px-10'>
             <div>
-              <div className="l:flex grid l:gap-0 gap-20 space-between mt-10">
-                <div className='l:text-28 text-22 weight-600'>{product.name}</div>
-                <div className='flex gap-13'>
-                  <div className="bg-red-50 text-red px-12 py-7 l:text-16 text-12 radius-10 flex content-center gap-7">
+              <div className='l:flex grid l:gap-0 gap-20 space-between mt-10'>
+                <div className='l:text-28 text-22 weight-600'>
+                  {product.name}
+                </div>
+                {/* <div className='flex gap-13'>
+                  <div className='bg-red-50 text-red px-12 py-7 l:text-16 text-12 radius-10 flex content-center gap-7'>
                     <AiOutlineHeart className='a-self-center' />
                     <span>109</span>
                   </div>
-                  <div className="bg-grey-200 text-green px-12 py-7 l:text-16 text-12 radius-10 flex content-center gap-7 w-fit">
+                  <div className='bg-grey-200 text-green px-12 py-7 l:text-16 text-12 radius-10 flex content-center gap-7 w-fit'>
                     <FaRegBookmark className='a-self-center' />
                   </div>
-                  <div className="bg-grey-200 text-green px-12 py-7 l:text-16 text-12 radius-10 flex content-center gap-7 w-fit">
+                  <div className='bg-grey-200 text-green px-12 py-7 l:text-16 text-12 radius-10 flex content-center gap-7 w-fit'>
                     <BiShareAlt className='a-self-center text-green' />
                   </div>
-                </div>
+                </div> */}
               </div>
 
-              <Link href={`/${product?.store?.slug}`} as="" >
+              <Link href={`/${product?.store?.slug}`} as=''>
                 <div className='mt-11'>
                   <div className='text-grey-500 l:text-16 text-14 weight-500'>
                     {product?.store?.name} Store
@@ -93,32 +121,36 @@ const ProductDetails = ({ product }: { product: Product }) => {
             <div className='l:flex l:mt-30 mt-20 gap-40'>
               <div>
                 <div className='text-green l:text-34 text-24 bold'>
-                  ₦{product?.price}
+                  ₦{displayPrice}
                 </div>
                 <div className='text-grey-500 line-through l:text-21 text-14 weight-400 mt-6'>
                   ₦{strikeOutPrice}
                 </div>
               </div>
-              <div>
-                <div className="flex gap-12 max-w-500">
-                  <div className="bg-yellow-100 color-#D48D3B weight-600 px-10 py-7 l:mt-0 mt-20 h-fit l:text-16 text-14 radius-27 flex content-center gap-7">
+              {/* <div>
+                <div className='flex gap-12 max-w-500'>
+                  <div className='bg-yellow-100 color-#D48D3B weight-600 px-10 py-7 l:mt-0 mt-20 h-fit l:text-16 text-14 radius-27 flex content-center gap-7'>
                     <PiStarBold className='a-self-center ' />
-                    <span className='a-self-center'>{product?.reviewRating}</span>
+                    <span className='a-self-center'>
+                      {product?.reviewRating}
+                    </span>
                   </div>
 
-                  <div className="bg-green-100 text-green weight-600 px-10 py-7 l:mt-0 mt-20 h-fit l:text-16 text-14 radius-27 flex content-center gap-7">
+                  <div className='bg-green-100 text-green weight-600 px-10 py-7 l:mt-0 mt-20 h-fit l:text-16 text-14 radius-27 flex content-center gap-7'>
                     <HiOutlineChatBubbleLeftEllipsis className='a-self-center' />
-                    <span className='whitespace-nowrap a-self-center'>67 Reviews</span>
+                    <span className='whitespace-nowrap a-self-center'>
+                      67 Reviews
+                    </span>
                   </div>
                 </div>
 
-                <div className="text-grey-400 mt-14 flex a-content-center">
+                <div className='text-grey-400 mt-14 flex a-content-center'>
                   <div className='h-fit l:text-14 text-12'>
-                    <span className='text-green bold'>93%</span> of buyers have recommended this.
+                    <span className='text-green bold'>93%</span> of buyers have
+                    recommended this.
                   </div>
                 </div>
-              </div>
-
+              </div> */}
             </div>
 
             <div className='flex items-center l:gap-10 gap-5 mt-30 l:ml--35 overflow-auto no-scrollbar'>
@@ -126,43 +158,60 @@ const ProductDetails = ({ product }: { product: Product }) => {
                 <TfiAngleLeft className='h-24 a-self-center color-black' />
               </div>
               <div className='flex gap-20'>
-                {
-                  product?.variants?.map((variant, idx) => (
-                    variant?.media?.map((mediaItem: any) => (
-                      <div className={cx('l:w-115 l:h-115 w-85 h-85 overflow-hidden radius-14', {
-                        'border border-green border-2': selectedImage == mediaItem?.url,
-                        [`border-${mediaItem?.description?.toLocaleLowerCase()}`]: selectedImage == mediaItem?.url
-                      })}>
-                        <Image
-                          src={mediaItem?.url}
-                          alt="product-image"
-                          className=''
-                          onClick={() => {
-                            setSelectedVariant(variant); setSelectedImage(mediaItem?.url);
-                            scrollToTop()
-                          }}
-                        />
-                      </div>
-                    ))
+                {product?.variants?.map((variant, idx) =>
+                  variant?.media?.map((mediaItem: any) => (
+                    <div
+                      className={cx(
+                        'l:w-115 l:h-115 w-85 h-85 overflow-hidden radius-14',
+                        {
+                          'border border-green border-2':
+                            selectedImage == mediaItem?.url,
+                          [`border-${mediaItem?.description?.toLocaleLowerCase()}`]:
+                            selectedImage == mediaItem?.url
+                        }
+                      )}
+                    >
+                      <Image
+                        src={mediaItem?.url}
+                        alt='product-image'
+                        className=''
+                        onClick={() => {
+                          setSelectedVariant(variant)
+                          setSelectedImage(mediaItem?.url)
+                          scrollToTop()
+                        }}
+                      />
+                    </div>
                   ))
-                }
+                )}
               </div>
-              <div><TfiAngleRight className='h-24 a-self-center color-black' /></div>
+              <div>
+                <TfiAngleRight className='h-24 a-self-center color-black' />
+              </div>
             </div>
 
             <div className='mt-40'>
-              <div className='text-grey-500 l:text-16 text-14 weight-500'>Choose a color</div>
+              <div className='text-grey-500 l:text-16 text-14 weight-500'>
+                Choose a color
+              </div>
               <div className='mt-20 flex gap-12'>
-                {
-                  product.variants.map(variant => (
-                    <div onClick={() => {
+                {product.variants.map(variant => (
+                  <div
+                    onClick={() => {
                       setSelectedVariant(variant)
                       setSelectedImage(variant?.media?.[0]?.url)
-                      }} style={{background: variant.properties?.['color'], outlineColor: variant.properties?.['color']}} className='l:w-50 l:h-50 w-40 h-40 round m-7 outline g|outline-color:#ECDECC outline-offset-5 outline-3 flex pointer'>
-                      {variant.id === selectedVariant.id && <FaCheck className='color-white l:h-24 a-self-center' />}
-                    </div>
-                  ))
-                }
+                    }}
+                    style={{
+                      background: variant.properties?.['color'],
+                      outlineColor: variant.properties?.['color']
+                    }}
+                    className='l:w-50 l:h-50 w-40 h-40 round m-7 outline g|outline-color:#ECDECC outline-offset-5 outline-3 flex pointer'
+                  >
+                    {variant.id === selectedVariant.id && (
+                      <FaCheck className='color-white l:h-24 a-self-center' />
+                    )}
+                  </div>
+                ))}
                 {/* <div className='l:w-50 l:h-50 w-40 h-40 m-7 round bg-#BBD278'></div>
                 <div className='l:w-50 l:h-50 w-40 h-40 m-7 bg-#BBC1F8 round'></div>
                 <div className='l:w-50 l:h-50 w-40 h-40 m-7 bg-#FFD3F8 round'></div>
@@ -173,49 +222,66 @@ const ProductDetails = ({ product }: { product: Product }) => {
             <hr className='mt-30 @lo:border-none @hi:border-t @hi:border-green-100' />
 
             <div className='l:mt-40 mt-30'>
-              <div className='text-grey-500 l:text-16 text-14 weight-500'>Choose a size</div>
+              <div className='text-grey-500 l:text-16 text-14 weight-500'>
+                Choose a size
+              </div>
               <div className='mt-20 l:flex grid grid-3-cols-1fr gap-12'>
-                {
-                  ['Small', 'Medium', 'Large', 'Extra Large', 'XXL'].map((text, i) => (
-                    <label className={cx('flex gap-8 text-14 bg-#F3F3F3 color-#726C6C px-10 py-7 radius-8', {
-                      'bg-green-100! text-green!': text === selectedSize
-                    })}>
-                      <input type='radio' name="size" onClick={() => setSelectedSize(text)} className={cx('accent-green')} />
+                {['Small', 'Medium', 'Large', 'Extra Large', 'XXL'].map(
+                  (text, i) => (
+                    <label
+                      className={cx(
+                        'flex gap-8 text-14 bg-#F3F3F3 color-#726C6C px-10 py-7 radius-8',
+                        {
+                          'bg-green-100! text-green!': text === selectedSize
+                        }
+                      )}
+                    >
+                      <input
+                        type='radio'
+                        name='size'
+                        onClick={() => setSelectedSize(text)}
+                        className={cx('accent-green')}
+                      />
                       <span className='whitespace-nowrap'>{text}</span>
                     </label>
-                  ))
-                }
-
+                  )
+                )}
               </div>
             </div>
 
             <hr className='l:mt-30 mt-20 @lo:border-none @hi:border-t @hi:border-green-100' />
 
-
             <div className='mt-30 flex gap-20'>
-              {
-                selectedVariantItemInCart ?
-                  <QuantitySelector2
-                    decrement={() => decrement(selectedVariantItemInCart)}
-                    increment={() => increment(selectedVariantItemInCart)}
-                    cartItem={selectedVariantItemInCart}
-                  /> : <></>
-              }
+              {selectedVariantItemInCart ? (
+                <QuantitySelector2
+                  decrement={() => decrement(selectedVariantItemInCart)}
+                  increment={() => increment(selectedVariantItemInCart)}
+                  cartItem={selectedVariantItemInCart}
+                />
+              ) : (
+                <></>
+              )}
 
-              {
-                !selectedVariantItemInCart ?
-                  <button className='bg-green text-white border-none l:px-90 l:py-20 py-15 w-100p radius-30 pointer' onClick={() => {
-                    isAuthenticated ?
-                      addToCart(selectedVariant?.id, selectedVariant?.minPurchaseQuantity || 1)
+              {!selectedVariantItemInCart ? (
+                <button
+                  className='bg-green text-white border-none l:px-90 l:py-20 py-15 w-100p radius-30 pointer'
+                  onClick={() => {
+                    isAuthenticated
+                      ? addToCart(
+                          selectedVariant?.id,
+                          selectedVariant?.minPurchaseQuantity || 1
+                        )
                       : isLoginModal()
-                  }} >
-                    <div className="l:flex grid grid-2-cols-auto gap-10 items-center w-fit mx-auto">
-                      <HiOutlineShoppingBag className='h-21' />
-                      <div className='whitespace-nowrap text-16'>Add To Cart</div>
-                    </div>
-                  </button>
-                  : <></>
-              }
+                  }}
+                >
+                  <div className='l:flex grid grid-2-cols-auto gap-10 items-center w-fit mx-auto'>
+                    <HiOutlineShoppingBag className='h-21' />
+                    <div className='whitespace-nowrap text-16'>Add To Cart</div>
+                  </div>
+                </button>
+              ) : (
+                <></>
+              )}
             </div>
           </div>
         </div>
@@ -270,19 +336,25 @@ const ProductDetails = ({ product }: { product: Product }) => {
           <div className='w-100p l:w-55p l:pr-30'>
             <div className='l:flex space-between items-center'>
               <div>
-                <h1 className='text-16 l:text-20 weight-500 py-3 m:py-10'>{product?.name} from {product?.store?.name} Store</h1>
+                <h1 className='text-16 l:text-20 weight-500 py-3 m:py-10'>
+                  {product?.name} from {product?.store?.name} Store
+                </h1>
                 <div className='flex items-center text-grey'>
-                  <p className='flex items-center text-14 m:text-14'>86% positive reviews
+                  <p className='flex items-center text-14 m:text-14'>
+                    86% positive reviews
                     <span>
                       <Icon name='dot' className='w-3 l:w-5 mx-15' />
                     </span>
-                    <AiFillStar className='w-14 h-14 l:w-18 l:h-18 mr-5 l:mr-5' /> 3.8/5 rating</p>
+                    <AiFillStar className='w-14 h-14 l:w-18 l:h-18 mr-5 l:mr-5' />{' '}
+                    3.8/5 rating
+                  </p>
                 </div>
 
                 <Link href={`/${product?.store?.slug}`}>
-                  <p className='text-danger underline text-14 m:text-16 py-5 l:py-15'>Visit Store home</p>
+                  <p className='text-danger underline text-14 m:text-16 py-5 l:py-15'>
+                    Visit Store home
+                  </p>
                 </Link>
-
               </div>
 
               <div className='hidden l:flex radius-50p relative'>
@@ -301,7 +373,9 @@ const ProductDetails = ({ product }: { product: Product }) => {
                 <Icon name='verified' className='w-20 h-20 mt-6' />
                 <div>
                   <h2 className='text-14 l:text-16 weight-500'>Featured in</h2>
-                  <div className='l:text-14 text-12 text-light-grey'>Sirbalo’s wedding, 2022</div>
+                  <div className='l:text-14 text-12 text-light-grey'>
+                    Sirbalo’s wedding, 2022
+                  </div>
                 </div>
               </div>
 
@@ -317,7 +391,9 @@ const ProductDetails = ({ product }: { product: Product }) => {
                 <GrLocation className='w-20 h-20 mt-6' />
                 <div>
                   <h2 className='text-14 l:text-16 weight-500'>Currently in</h2>
-                  <div className='l:text-14 text-12 text-light-grey'>Lagos, Nigeria</div>
+                  <div className='l:text-14 text-12 text-light-grey'>
+                    Lagos, Nigeria
+                  </div>
                 </div>
               </div>
             </div>
@@ -327,10 +403,14 @@ const ProductDetails = ({ product }: { product: Product }) => {
           <div className='flex gap-10 pb-20 l:pb-25 l:px-0 px-10'>
             <Icon name='info' className='w-20 h-20 mt-2' />
             <div>
-              <h2 className='text-14 l:text-16 weight-500'>About this product</h2>
+              <h2 className='text-14 l:text-16 weight-500'>
+                About this product
+              </h2>
               <div className='l:text-14 text-12 text-light-grey mt-15'>
                 {product?.longDescription}
-                <button className='bg-none border-none flex text-14 weight-500 mt-10'><span className='underline pr-5'>Show more</span></button>
+                <button className='bg-none border-none flex text-14 weight-500 mt-10'>
+                  <span className='underline pr-5'>Show more</span>
+                </button>
               </div>
             </div>
           </div>
