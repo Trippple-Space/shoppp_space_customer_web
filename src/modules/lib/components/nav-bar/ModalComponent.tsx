@@ -42,7 +42,7 @@ const HomepageModal: React.FC<ModalProps> = ({
         isOpen={modalOpen}
         onClose={handleCloseModal}
         extraClass={{}}
-        className='t-57 l:t-70 l:r-100 overflow-hidden '
+        className='t-57 l:t-70 l:r-100 overflow-hidden'
       >
         <div className='w-350'>
           <div className='w-fit pt-30 px-20 g|margin:auto'>
