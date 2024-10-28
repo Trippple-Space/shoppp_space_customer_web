@@ -23,9 +23,6 @@ const Homepage = () => {
   const { categories } = useCategoryNavView();
   const [selectedCategory, setSelectedCategory] = useState();
   const pathname = usePathname();
-  const [type, setType] = useState(
-    pathname.indexOf("wears") > -1 ? "wear" : "fabric"
-  );
 
   return (
     <>
@@ -35,7 +32,7 @@ const Homepage = () => {
         setSelectedCategory={setSelectedCategory}
       />
       <div className="app-width">
-        <CentralArena selectedCategory={selectedCategory} type={type} />
+        <CentralArena selectedCategory={selectedCategory} />
       </div>
       <Footer />
     </>

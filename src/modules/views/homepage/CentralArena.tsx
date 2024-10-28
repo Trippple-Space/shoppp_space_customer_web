@@ -5,24 +5,18 @@ import ProductTile from "@/modules/lib/components/product-tile/ProductTile";
 import { useTopSalesView } from "@/modules/lib/utility/hooks/views/use-top-sales-view";
 import ImageAlt from "@/modules/lib/components/image-alt/ImageAlt";
 
-const CentralArena = ({
-  selectedCategory,
-  type,
-}: {
-  type: string;
-  selectedCategory: any;
-}) => {
-  const { products, handleCategoryChange } = useTopSalesView(type);
+const CentralArena = (selectedCategory: any) => {
+  const { products, type } = useTopSalesView();
 
-  useEffect(() => {
-    handleCategoryChange(selectedCategory);
-  }, [selectedCategory]);
+  // useEffect(() => {
+  //   handleCategoryChange(selectedCategory);
+  // }, [selectedCategory]);
   return (
     <>
       <section className="l:mt-20 mt-40 w-100p l:mt-50 mb-150">
         <div className="flex space-between text-20 weight-300 uppercase">
           <h3 className="text-14 l:text-20 weight-300 ">
-            Top selling {type}s ({products?.length})
+            Top selling {type ? type : "product"}s ({products?.length})
           </h3>
           {/* <p className="text-14 l:text-16 sentence-case">View All</p> */}
         </div>
