@@ -61,7 +61,7 @@ const ProfilePage = () => {
         </div>
         <div className='text-16 line-height-30 text-dimgrey px-20 pointer' style={{ borderBottom: '1px solid #DADADA'}}>
         <p onClick={() => handleOpen('address')}>Address book</p>
-          <p>Close account</p>
+          {/* <p>Close account</p> */}
         </div>
         <div className='grid mx-auto mt-10 py-10'>
           <button className='bg-none border-none text-16 text-danger pointer' onClick={() => router.push(paths.login)} >Logout</button>
