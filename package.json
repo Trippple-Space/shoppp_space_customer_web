@@ -4,7 +4,7 @@
   "private": true,
   "scripts": {
     "dev": "cross-env CMD_ENV=development npm run dev:start",
-    "dev:start": "cxcss & next dev --turbo",
+    "dev:start": "cxcss & next dev",
     "build": "next build",
     "start": "next start",
     "lint": "next lint"

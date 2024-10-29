@@ -36,7 +36,7 @@ const StorefrontLayout: FC<ILayout> = ({ children }) => {
     return (
         <div>
             <div className="pb-100">
-                <div className="relative l:pb-100 pb-50">
+                <div className="relative l:pb-20 pb-10">
                     {children}
                 </div>
 
@@ -58,7 +58,7 @@ const StorefrontLayout: FC<ILayout> = ({ children }) => {
                     </div>
                 </div>
 
-                <div className="border-b border-t border-whitesmoke pt-20 l:mt-68 mt-30 mb-50">
+                <div className="border-b border-t border-whitesmoke pt-20 l:mt-20 mt-10 mb-50">
                     <div className="l:mt--60 mt--70">
                         <FabricsCategoryNav categories={categories} setSelectedCategory={setSelectedCategory} />
                     </div>
