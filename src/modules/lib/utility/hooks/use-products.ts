@@ -1,30 +1,32 @@
-import { useEffect, useState } from "react"
-import { productService } from "../services/product.service"
-import { Product } from "../types/product.interface"
+import { useEffect, useState } from "react";
+import { productService } from "../services/product.service";
+import { Product } from "../types/product.interface";
 
 export interface IProductFilters {
-  page?: string,
-  index?: string,
-  type?: string[],
-  tags?: any[],
-  category?: { [key: (string | number)]: (string | number) } | { [key: (string | number)]: (string | number) }[],
-  keywords?: string[],
-  [key: string]: any
+  page?: string;
+  index?: string;
+  type?: string;
+  tags?: any[];
+  category?:
+    | { [key: string | number]: string | number }
+    | { [key: string | number]: string | number }[];
+  keywords?: string[];
+  [key: string]: any;
 }
 
 export interface IOrderBy {
-  [key: string]: 'asc' | 'desc'
+  [key: string]: "asc" | "desc";
 }
 
 export interface IPagination {
-  page: number,
-  limit: number
+  page: number;
+  limit: number;
 }
 
 export interface IQueryParams {
-  filters?: IProductFilters,
-  order?: IOrderBy,
-  pagination?: IPagination
+  filters?: IProductFilters;
+  order?: IOrderBy;
+  pagination?: IPagination;
   // key: any
 }
 
@@ -38,10 +40,11 @@ const placeholderProduct: Product = {
     id: 0,
     name: "",
     images: [],
-    description: null
+    description: null,
   },
   price: 0,
   name: "",
+  type: "",
   stockUnit: "",
   status: 0,
   dateCreated: "",
@@ -49,67 +52,76 @@ const placeholderProduct: Product = {
   reviewRating: 0,
   reviews: undefined,
   comments: undefined,
-  variants: [{
-    id: 0,
-    media: [{
-      url: "",
-      type: "image"
-    }],
-    stock: 0,
-    price: 0,
-    minPurchaseQuantity: 0,
-    incrementBy: 0,
-    product: {
-      longDescription: "",
-      keywords: [],
+  variants: [
+    {
       id: 0,
-      slug: "",
-      category: {
-        type: "",
-        id: 0,
-        name: "",
-        images: [],
-        description: null
-      },
+      media: [
+        {
+          url: "",
+          type: "image",
+        },
+      ],
+      stock: 0,
       price: 0,
-      name: "",
+      minPurchaseQuantity: 0,
+      incrementBy: 0,
+      product: {
+        longDescription: "",
+        keywords: [],
+        id: 0,
+        slug: "",
+        type: "",
+        category: {
+          type: "",
+          id: 0,
+          name: "",
+          images: [],
+          description: null,
+        },
+        price: 0,
+        name: "",
+        stockUnit: "",
+        status: 0,
+        dateCreated: "",
+        lastUpdated: "",
+        reviewRating: 0,
+        reviews: undefined,
+        comments: undefined,
+        variants: [],
+        store: {
+          name: "",
+          slug: "",
+          id: 0,
+          description: "",
+          status: false,
+          type: "",
+        },
+      },
+      meta: undefined,
+      properties: undefined,
       stockUnit: "",
-      status: 0,
       dateCreated: "",
       lastUpdated: "",
-      reviewRating: 0,
-      reviews: undefined,
-      comments: undefined,
-      variants: [],
-      store: {
-        name: '',
-        slug: "",
-        id: 0,
-        description: "",
-        status: false,
-        type: ""
-      }
     },
-    meta: undefined,
-    properties: undefined,
-    stockUnit: "",
-    dateCreated: "",
-    lastUpdated: ""
-  }],
+  ],
   store: {
-    name: '',
+    name: "",
     slug: "",
     id: 0,
     description: "",
     status: false,
-    type: ""
-  }
-}
+    type: "",
+  },
+};
 
 export const useProducts = (initialQuery: IQueryParams) => {
   const [query, setQuery] = useState<IQueryParams>(initialQuery);
-  const [products, setProducts] = useState<Product[]>(Array.from({length: 10}).map(() => placeholderProduct));
-  const [cachedProducts, setCachedProducts] = useState<{ [key: string]: Product[] }>({});
+  const [products, setProducts] = useState<Product[]>(
+    Array.from({ length: 10 }).map(() => placeholderProduct)
+  );
+  const [cachedProducts, setCachedProducts] = useState<{
+    [key: string]: Product[];
+  }>({});
 
   const setFilters = (filters: IProductFilters) => {
     setQuery((prevQuery) => ({
@@ -145,14 +157,13 @@ export const useProducts = (initialQuery: IQueryParams) => {
     if (cachedProducts[cacheKey]) {
       setProducts(cachedProducts[cacheKey]);
     } else {
-      productService.fetchProducts(query)
-        .then((fetchedProducts) => {
-          setProducts(fetchedProducts);
-          setCachedProducts((prevCachedProducts) => ({
-            ...prevCachedProducts,
-            [cacheKey]: fetchedProducts,
-          }));
-        });
+      productService.fetchProducts(query).then((fetchedProducts) => {
+        setProducts(fetchedProducts);
+        setCachedProducts((prevCachedProducts) => ({
+          ...prevCachedProducts,
+          [cacheKey]: fetchedProducts,
+        }));
+      });
     }
   }, [query, cachedProducts]);
 
