@@ -123,9 +123,9 @@ const ProductDetails = ({ product }: { product: Product }) => {
                 <div className='text-green l:text-34 text-24 bold'>
                   ₦{displayPrice}
                 </div>
-                <div className='text-grey-500 line-through l:text-21 text-14 weight-400 mt-6'>
+                {/*<div className='text-grey-500 line-through l:text-21 text-14 weight-400 mt-6'>
                   ₦{strikeOutPrice}
-                </div>
+                </div> */}
               </div>
               {/* <div>
                 <div className='flex gap-12 max-w-500'>
@@ -339,7 +339,7 @@ const ProductDetails = ({ product }: { product: Product }) => {
                 <h1 className='text-16 l:text-20 weight-500 py-3 m:py-10'>
                   {product?.name} from {product?.store?.name} Store
                 </h1>
-                <div className='flex items-center text-grey'>
+                {/*<div className='flex items-center text-grey'>
                   <p className='flex items-center text-14 m:text-14'>
                     86% positive reviews
                     <span>
@@ -348,7 +348,7 @@ const ProductDetails = ({ product }: { product: Product }) => {
                     <AiFillStar className='w-14 h-14 l:w-18 l:h-18 mr-5 l:mr-5' />{' '}
                     3.8/5 rating
                   </p>
-                </div>
+                </div> */}
 
                 <Link href={`/${product?.store?.slug}`}>
                   <p className='text-danger underline text-14 m:text-16 py-5 l:py-15'>
