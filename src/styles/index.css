@@ -26,7 +26,6 @@
 @layer lo { .\@lo\:text-dimgrey { color: #333333; } } 
 .fixed {    position: fixed;  } 
 .w-full {    width: 100%;  } 
-[class~='g|transform:translateX(-50%)']{transform:translateX(-50%)} 
 .b-60 { bottom: 60px; } 
 .z-index-3, .z-3 { z-index: 3; } 
 .max-w-1000 { max-width: 1000px; } 
@@ -584,6 +583,11 @@
 .text-11 { font-size: 11px; } 
 .bg-light-green { background-color: #E2FFFACC; } 
 .m-2 { margin: 2px; } 
+.border-\#eeeeee { border-color: #eeeeee; } 
+.bg-transparent { background-color: transparent; } 
+.text-larger {    font-size: 1.25rem;  } 
+.color-\#0E76A8 { color: #0E76A8; } 
+.color-\#3b5998 { color: #3b5998; } 
 .mt-53 { margin-top: 53px; } 
 
 @layer base {
@@ -603,7 +607,6 @@
 .mb-16 { margin-bottom: 16px; } 
 .mt-33 { margin-top: 33px; } 
 .mt-110 { margin-top: 110px; } 
-.bg-transparent { background-color: transparent; } 
 .w-117 { width: 117px; } 
 .mb-3 { margin-bottom: 3px; } 
 .max-w-60 { max-width: 60px; } 
@@ -724,12 +727,11 @@
 .bg-lightgreen { background-color: #E2FFFA; } 
 .pl-50 { padding-left: 50px; } 
 .mt-25 { margin-top: 25px; } 
+.overflow-y-auto { overflow-y: auto; } 
 
 
 
 
-@media only screen and (min-width: 1200px) { .xl\:w-60p { width: 60%; } } 
-@media only screen and (min-width: 1200px) { .xl\:w-50p { width: 50%; } } 
 
 @media only screen and (min-width: 576px) { .s\:gap-50 { gap: 50px; } } 
 @media only screen and (min-width: 576px) { .s\:grid-3-cols-1fr { grid-template-columns: repeat(3, 1fr); } } 
@@ -759,7 +761,6 @@
 
 @media only screen and (min-width: 992px) { .l\:w-50p { width: 50%; } } 
 @media only screen and (min-width: 992px) { .l\:block {    display: block;  } } 
-@media only screen and (min-width: 992px) { .l\:w-70p { width: 70%; } } 
 @media only screen and (min-width: 992px) { .l\:text-16 { font-size: 16px; } } 
 @media only screen and (min-width: 992px) { .l\:w-1000 { width: 1000px; } } 
 @media only screen and (min-width: 992px) { .l\:py-20 { padding-top: 20px; padding-bottom: 20px; } } 
@@ -963,6 +964,7 @@
 @media only screen and (min-width: 992px) { .btn-lg { padding-top: 18px; padding-bottom: 18px;  } } 
 }
  } 
+@media only screen and (min-width: 992px) { .l\:w-70p { width: 70%; } } 
 @media only screen and (min-width: 992px) { .l\:mt-70 { margin-top: 70px; } } 
 @media only screen and (min-width: 992px) { .l\:items-center {    align-items: center;  } } 
 @media only screen and (min-width: 992px) { .l\:space-between {    justify-content: space-between;  } } 
@@ -1008,3 +1010,4 @@
 @media only screen and (min-width: 992px) { .l\:pb-20 { padding-bottom: 20px; } } 
 @media only screen and (min-width: 992px) { .l\:pt-0 { padding-top: 0px; } } 
 @media only screen and (min-width: 992px) { .l\:mt--60 { margin-top: -60px; } } 
+@media only screen and (min-width: 992px) { .l\:l-50p { left: 50%; } } 
