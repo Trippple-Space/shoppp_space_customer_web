@@ -15,6 +15,20 @@ const ShareProductModal: React.FC<ModalProps> = ({
   modalOpen,
   handleCloseModal,
 }) => {
+  const shareOptions = [
+    { mediaLogo: <BsTwitterX />, mediaName: "Twitter" },
+    { mediaLogo: <AiOutlineMail />, mediaName: "Email" },
+    {
+      mediaLogo: <AiFillLinkedin className="color-#0E76A8" />,
+      mediaName: "Linkedin",
+    },
+    {
+      mediaLogo: <BsFacebook className="color-#3b5998" />,
+      mediaName: "Facebook",
+    },
+    { mediaLogo: <BsCopy />, mediaName: "Copy link" },
+  ];
+
   return (
     <AnimatePresence>
       {modalOpen && (
@@ -27,32 +41,34 @@ const ShareProductModal: React.FC<ModalProps> = ({
           <Modal
             isOpen={modalOpen}
             onClose={() => ""}
-            extraModalClass={{ zIndex: 10 }}
-            extraClass={{ overflowY: "hidden", transform: "translateX(-50%)" }}
-            className="w-50p l:t-150 l:l-50p bg-white p-20"
+            extraModalClass={{ zIndex: 10, overflowY: "auto" }}
+            extraClass={{
+              transform: "translate(-50%)",
+              overflowY: "hidden",
+              backgroundColor: "transparent",
+            }}
+            className="t-20 l-50p m:w-650 w-95p pb-30"
           >
-            <div className="flex space-between a-items-center w-full pt-10 mb-30">
-              <p className="text-larger weight-500">Share</p>
-              <button
-                type="button"
-                className="border-none outline-none bg-transparent text-24 cursor-pointer"
-                onClick={handleCloseModal}
-              >
-                <SlClose />
-              </button>
-            </div>
-            <div className="grid grid-2-cols-auto gap-20">
-              <ShareButton mediaLogo={<BsTwitterX />} mediaName={"Twitter"} />
-              <ShareButton mediaLogo={<AiOutlineMail />} mediaName={"Email"} />
-              <ShareButton
-                mediaLogo={<AiFillLinkedin className="color-#0E76A8" />}
-                mediaName={"Linkedin"}
-              />
-              <ShareButton
-                mediaLogo={<BsFacebook className="color-#3b5998" />}
-                mediaName={"Facebook"}
-              />
-              <ShareButton mediaLogo={<BsCopy />} mediaName={"Copy link"} />
+            <div className="bg-white s:p-20 p-15 radius-10">
+              <div className="flex space-between a-items-center w-full s:pt-10 pt-5 s:mb-30 mb-15">
+                <p className="s:text-larger text-large weight-500">Share</p>
+                <button
+                  type="button"
+                  className="border-none outline-none bg-transparent s:text-24 text-20 cursor-pointer"
+                  onClick={handleCloseModal}
+                >
+                  <SlClose />
+                </button>
+              </div>
+              <div className="grid grid-2-cols-auto s:gap-20 gap-10">
+                {shareOptions.map((option, i) => (
+                  <ShareButton
+                    key={i}
+                    mediaLogo={option.mediaLogo}
+                    mediaName={option.mediaName}
+                  />
+                ))}
+              </div>
             </div>
           </Modal>
         </motion.div>

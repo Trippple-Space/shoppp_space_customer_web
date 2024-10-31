@@ -295,10 +295,10 @@ const ProductDetails = ({ product }: { product: Product }) => {
           <h1 className='l:t-24 l:text-24 weight-500 mt-100'>
             {product?.name}
           </h1>
-        </div> */}
+        </div>
 
         <div className="hidden l:flex w-100p space-between l:py-10 l:pl-15 text-19 weight-500 text-dimgrey">
-          {/*<div className='w-26p flex space-between items-center'>
+          <div className='w-26p flex space-between items-center'>
             <div className='flex align-items text-14'>
               <div><GrStar className='w-18 pr-5' /></div>
               <div className="flex align-items">4.24</div>
@@ -312,15 +312,15 @@ const ProductDetails = ({ product }: { product: Product }) => {
               <Icon name='badge' className='w-16 h-16' />
               <p className="text-14">SuperStore</p>
             </div>
-          </div> */}
+          </div>
 
           <div className="flex w-30p space-between items-center">
-            {/*<div className='flex items-center '>
+            <div className='flex items-center '>
               <div>
                 <PiHeartStraightThin className='w-24 h-24' />
               </div>
               <div className='underline px-15 text-14'>Add to Wishlist</div>
-            </div> */}
+            </div>
             <div>
               <button
                 className="flex items-center gap-10 bg-none px-20 py-10 text-16 weight-500 text-dimgrey border-1 radius-10"
@@ -333,12 +333,19 @@ const ProductDetails = ({ product }: { product: Product }) => {
           </div>
         </div>
 
-        {/* <div className='flex gap-5 mt-20'>
+        <div className='flex gap-5 mt-20'>
           <ProductMedia product={product} activeVariant={null} />
           <div className='w-full'>
             <BuyBox product={product} />
           </div>
         </div> */}
+        <button
+          className="flex items-center gap-10 bg-none px-20 py-10 text-16 weight-500 text-dimgrey border-1 radius-10 cursor-pointer mt-10"
+          onClick={() => setShowShareModal(true)}
+        >
+          <AiOutlineShareAlt className="w-20 h-20" />
+          Share
+        </button>
 
         <div className="l:flex pt-20 l:pt-40 l:px-0 px-10 gap-60">
           <div className="w-100p l:w-55p l:pr-30">
