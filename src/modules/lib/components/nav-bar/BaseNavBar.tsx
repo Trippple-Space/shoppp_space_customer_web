@@ -87,7 +87,7 @@ const BaseNavBar: FC<IBaseNavBar> = ({ links }) => {
                 className='fixed inset-0 bg-black opacity-10 z-10'
                 onClick={handleAsoebiDropdown}
               />
-              <div className='l:absolute l:r-200 l:t-70 l:p-10 bg-white z-20 radius-8 w-150p'>
+              <div className='l:absolute r-0 t-70 l:p-10 bg-white z-20 radius-8 w-150p'>
                 <AsoebiLinksModal sellOnAsoebi={true} />
               </div>
             </>
@@ -119,7 +119,7 @@ const BaseNavBar: FC<IBaseNavBar> = ({ links }) => {
               <RxHamburgerMenu onClick={toogleHamburgerMenu} />
               {hamburgerMenu && (
                 <div
-                  className='l:hidden  fixed flex flex-col space-between
+                  className='l:hidden flex flex-col space-between
                   bg-#F5F5F5 r-0 w-100p t-60 p-20 h-70p'
                 >
                   <div className='flex flex-col gap-25'>
