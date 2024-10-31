@@ -68,7 +68,7 @@ const HomepageNavBar = () => {
                 className='fixed inset-0 bg-black opacity-70 z-1'
                 onClick={handleOpenSearchModal}
               />
-              <div className='fixed l-50p g|transform:translate(-50%) w-90p h-70 l:w-50p h-60p t-70 mt-30 bg-white  z-10 radius-8 pb-20 relative'>
+              <div className='fixed l-50p g|transform:translate(-50%) w-90p h-70 l:w-50p h-60p t-70 mt-30 bg-white z-10 radius-8 pb-20 relative'>
                 <div className='flex fixed w-100p j-content-center mt-20 border-b pb-20 border-b-#00000014 bg-white'>
                   <input
                     type='text'
@@ -90,7 +90,7 @@ const HomepageNavBar = () => {
                     <div className='overflow-auto w-100p flex flex-col gap-15'>
                       {searchResults.map(product => (
                         <>
-                          <Link href={`/products/${product.slug}`}className='flex j-content-start gap-20'>
+                          <Link href={`/products/${product.slug}`} className='flex j-content-start gap-20'>
                             <Image
                               src={product?.variants?.[0]?.media?.[0]?.url}
                               alt={product.name}
