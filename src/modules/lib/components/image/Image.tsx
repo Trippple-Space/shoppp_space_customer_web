@@ -5,27 +5,34 @@ import { FC, useState } from 'react'
 import { ImageSrcFolder, getImageDir } from '../../utility/utility'
 
 export interface IImage {
-    src: string,
-    alt: string,
-    className?: string,
-    type?: 'image' | 'logo' | 'icon',
-    onClick?: Function
+  src: string
+  alt: string
+  className?: string
+  type?: 'image' | 'logo' | 'icon'
+  onClick?: Function
 }
 
-const Image: FC<IImage> = ({className, src, alt, type = 'image', onClick}) => {
+const Image: FC<IImage> = ({
+  className,
+  src,
+  alt,
+  type = 'image',
+  onClick
+}) => {
   const [hidden, setHidden] = useState(true)
-  return (
-    src ? <img
+  return src ? (
+    <img
       className={className}
-      src={getImageDir((type + 's' as ImageSrcFolder), src)}
+      src={getImageDir((type + 's') as ImageSrcFolder, src)}
       alt={alt}
       // hidden={hidden}
       onClick={() => onClick?.()}
-      loading="lazy"
+      loading='lazy'
       onLoad={() => setHidden(false)}
-    /> : <></>
+    />
+  ) : (
+    <></>
   )
 }
-
 
 export default Image
