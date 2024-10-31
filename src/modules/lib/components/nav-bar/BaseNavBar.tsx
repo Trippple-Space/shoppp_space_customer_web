@@ -120,7 +120,7 @@ const BaseNavBar: FC<IBaseNavBar> = ({ links }) => {
               {hamburgerMenu && (
                 <div
                   className='l:hidden flex flex-col space-between
-                  bg-#F5F5F5 r-0 w-100p t-60 p-20 h-70p'
+                  bg-#F5F5F5 r-0 w-100p t-60 p-20 h-70p fixed'
                 >
                   <div className='flex flex-col gap-25'>
                     <div
