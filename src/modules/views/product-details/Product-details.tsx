@@ -93,12 +93,13 @@ const ProductDetails = ({ product }: { product: Product }) => {
             />
           </div>
           <div className="l:w-50p l:px-0 px-10">
-            <div>
-              <div className="l:flex grid l:gap-0 gap-20 space-between mt-10">
-                <div className="l:text-28 text-22 weight-600">
-                  {product.name}
-                </div>
-                {/* <div className='flex gap-13'>
+            <div className="flex flex-row space-between a-items-end">
+              <div>
+                <div className="l:flex grid l:gap-0 gap-20 space-between mt-10">
+                  <div className="l:text-28 text-22 weight-600">
+                    {product.name}
+                  </div>
+                  {/* <div className='flex gap-13'>
                   <div className='bg-red-50 text-red px-12 py-7 l:text-16 text-12 radius-10 flex content-center gap-7'>
                     <AiOutlineHeart className='a-self-center' />
                     <span>109</span>
@@ -110,15 +111,24 @@ const ProductDetails = ({ product }: { product: Product }) => {
                     <BiShareAlt className='a-self-center text-green' />
                   </div>
                 </div> */}
+                </div>
+
+                <Link href={`/${product?.store?.slug}`} as="">
+                  <div className="mt-11">
+                    <div className="text-grey-500 l:text-16 text-14 weight-500">
+                      {product?.store?.name} Store
+                    </div>
+                  </div>
+                </Link>
               </div>
 
-              <Link href={`/${product?.store?.slug}`} as="">
-                <div className="mt-11">
-                  <div className="text-grey-500 l:text-16 text-14 weight-500">
-                    {product?.store?.name} Store
-                  </div>
-                </div>
-              </Link>
+              <button
+                className="flex items-center gap-10 bg-none m:px-20 px-10 m:py-10 py-6 m:text-16 text-14 weight-500 text-dimgrey border-1 radius-10 cursor-pointer"
+                onClick={() => setShowShareModal(true)}
+              >
+                <AiOutlineShareAlt className="w-20 h-20" />
+                Share
+              </button>
             </div>
 
             <hr className="mt-30 @lo:border-none @hi:border-t @hi:border-green-100" />
@@ -339,13 +349,6 @@ const ProductDetails = ({ product }: { product: Product }) => {
             <BuyBox product={product} />
           </div>
         </div> */}
-        <button
-          className="flex items-center gap-10 bg-none px-20 py-10 text-16 weight-500 text-dimgrey border-1 radius-10 cursor-pointer mt-10"
-          onClick={() => setShowShareModal(true)}
-        >
-          <AiOutlineShareAlt className="w-20 h-20" />
-          Share
-        </button>
 
         <div className="l:flex pt-20 l:pt-40 l:px-0 px-10 gap-60">
           <div className="w-100p l:w-55p l:pr-30">

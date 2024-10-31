@@ -46,10 +46,10 @@ const ShareButton: React.FC<ShareProps> = ({ mediaName, mediaLogo }) => {
   return (
     <button
       type="button"
-      className="border border-#eeeeee radius-8 outline-none bg-transparent s:py-25 py-12 s:px-15 px-8 flex s:gap-30 gap-12 s:text-18 text-medium cursor-pointer hover:shadow-0-1-3-0-rgba(0,0,0,0.1) g|transition-property:all g|transition-duration:0.4s g|transition-timing-function:ease"
+      className="border border-#eeeeee radius-8 outline-none bg-transparent s:py-25 py-12 s:px-15 px-8 flex flex-row a-items-center s:gap-15 gap-8 s:text-18 text-medium cursor-pointer hover:shadow-0-1-3-0-rgba(0,0,0,0.1) g|transition-property:all g|transition-duration:0.4s g|transition-timing-function:ease"
       onClick={getShareUrl}
     >
-      <span className="">{mediaLogo}</span>
+      <span className="s:text-24 text-20">{mediaLogo}</span>
       <span className="capitalize">{mediaName}</span>
     </button>
   );

@@ -1,10 +1,10 @@
 import React, { useState } from "react";
 import Modal from "@/modules/lib/components/modal/modal";
 import { SlClose } from "react-icons/sl";
-import { BsCopy, BsFacebook, BsTwitterX } from "react-icons/bs";
+import { BsCopy, BsFacebook, BsLinkedin, BsTwitterX } from "react-icons/bs";
 import ShareButton from "@/modules/views/product-details/share-modal/shareButtion";
-import { AiFillLinkedin, AiOutlineMail } from "react-icons/ai";
 import { AnimatePresence, motion } from "framer-motion";
+import { IoMailOutline } from "react-icons/io5";
 
 interface ModalProps {
   modalOpen: boolean;
@@ -17,9 +17,12 @@ const ShareProductModal: React.FC<ModalProps> = ({
 }) => {
   const shareOptions = [
     { mediaLogo: <BsTwitterX />, mediaName: "Twitter" },
-    { mediaLogo: <AiOutlineMail />, mediaName: "Email" },
     {
-      mediaLogo: <AiFillLinkedin className="color-#0E76A8" />,
+      mediaLogo: <IoMailOutline className="mb--4 s:text-28 text-24" />,
+      mediaName: "Email",
+    },
+    {
+      mediaLogo: <BsLinkedin className="color-#0E76A8" />,
       mediaName: "Linkedin",
     },
     {
@@ -43,11 +46,12 @@ const ShareProductModal: React.FC<ModalProps> = ({
             onClose={() => ""}
             extraModalClass={{ zIndex: 10, overflowY: "auto" }}
             extraClass={{
-              transform: "translate(-50%)",
+              transform: "translate(50%)",
               overflowY: "hidden",
               backgroundColor: "transparent",
+              borderRadius: "0px",
             }}
-            className="t-20 l-50p m:w-650 w-95p pb-30"
+            className="t-30p r-50p m:w-650 w-95p pb-60 radius-0"
           >
             <div className="bg-white s:p-20 p-15 radius-10">
               <div className="flex space-between a-items-center w-full s:pt-10 pt-5 s:mb-30 mb-15">
