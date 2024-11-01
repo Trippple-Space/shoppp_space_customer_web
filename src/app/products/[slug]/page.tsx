@@ -10,8 +10,63 @@ export async function generateMetadata({
 }): Promise<Metadata> {
   try {
     const product = await productService.fetchProductBySlug(params.slug, {});
+    console.log(product)
 
     return {
+      title: `Asoebi Africa`,
+      description: `Check out this piece on Asoebi Africa`,
+      openGraph: {
+        title: "Asoebi Africa",
+        description: `Check out this piece on Asoebi Africa`,
+        type: "website",
+        url: `https://staging.asoebi.africa`,
+        siteName: "Asoebi Africa",
+        images: [
+          {
+            url: "new-asoebi-logo.svg",
+            alt: 'image',
+            height: "630",
+            width: "1200",
+          },
+        ],
+      },
+      twitter: {
+        card: "summary_large_image",
+        title: `Asoebi Africa`,
+        description: `Check out this piece on Asoebi Africa`,
+        images: ["new-asoebi-logo.svg"],
+      },
+    };
+  } catch (error) {
+    console.error("Error generating metadata:", error);
+    return {
+      title: "Product Not Found - Asoebi Africa",
+      description: "This product could not be found",
+    };
+  }
+}
+
+export default async function product_details({
+  params,
+}: {
+  params: { slug: string };
+}) {
+  try {
+    console.log(params.slug, "paramssss");
+    const product = await productService.fetchProductBySlug(params.slug, {});
+    console.log({ product });
+    return (
+      <div>
+        <ProductDetails product={product} />
+      </div>
+    );
+  } catch (error) {
+    console.error("Error fetching product details:", error);
+    return <div>Error fetching product details</div>;
+  }
+}
+
+/*return {
       title: `Asoebi Africa`,
       description:
         `${product?.name} - ${product?.longDescription}` ||
@@ -44,32 +99,4 @@ export async function generateMetadata({
           product?.variants?.[0]?.media?.[0]?.url || "new-asoebi-logo.svg",
         ],
       },
-    };
-  } catch (error) {
-    console.error("Error generating metadata:", error);
-    return {
-      title: "Product Not Found - Asoebi Africa",
-      description: "This product could not be found",
-    };
-  }
-}
-
-export default async function product_details({
-  params,
-}: {
-  params: { slug: string };
-}) {
-  try {
-    console.log(params.slug, "paramssss");
-    const product = await productService.fetchProductBySlug(params.slug, {});
-    console.log({ product });
-    return (
-      <div>
-        <ProductDetails product={product} />
-      </div>
-    );
-  } catch (error) {
-    console.error("Error fetching product details:", error);
-    return <div>Error fetching product details</div>;
-  }
-}
+    }; */
