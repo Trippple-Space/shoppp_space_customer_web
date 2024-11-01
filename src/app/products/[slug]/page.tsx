@@ -7,22 +7,17 @@ export async function generateMetadata({
   params,
 }: {
   params: { slug: string };
-}): Promise<Metadata> {
+}) {
   try {
     const product = await productService.fetchProductBySlug(params.slug, {});
     console.log(product);
 
     return {
       title: `${product?.name} - Asoebi Africa`,
-      description:
-        `${product?.longDescription}` ||
-        `${product?.name} - Check out this piece on Asoebi Africa`,
+      description: `${product?.longDescription}`,
       openGraph: {
         title: `${product?.name} - Asoebi Africa`,
-        description:
-          `${product?.longDescription}` ||
-          `${product?.name} - Check out this piece on Asoebi Africa`,
-        type: "website",
+        description: `${product?.longDescription}`,
         url: `https://staging.asoebi.africa/products/${params.slug}`,
         siteName: "Asoebi Africa",
         images: [
@@ -38,9 +33,7 @@ export async function generateMetadata({
       twitter: {
         card: "summary_large_image",
         title: `${product?.name} - Asoebi Africa`,
-        description:
-          `${product?.longDescription}` ||
-          `${product?.name} - Check out this piece on Asoebi Africa`,
+        description: `${product?.longDescription}`,
         images: [
           product?.variants?.[0]?.media?.[0]?.url || "new-asoebi-logo.svg",
         ],
@@ -65,20 +58,8 @@ export default async function product_details({
     const product = await productService.fetchProductBySlug(params.slug, {});
     console.log({ product });
 
-    const jsonLd = {
-      "@context": "https://schema.org",
-      "@type": "Website",
-      name: product?.name,
-      image: product?.variants?.[0]?.media?.[0]?.url,
-      description: product?.longDescription,
-    };
-
     return (
       <div>
-        <script
-          type="application/ld+json"
-          dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
-        />
         <ProductDetails product={product} />
       </div>
     );
@@ -87,3 +68,9 @@ export default async function product_details({
     return <div>Error fetching product details</div>;
   }
 }
+/*description:
+          `${product?.longDescription}` ||
+          `${product?.name} - Check out this piece on Asoebi Africa`,
+          
+          
+          */
