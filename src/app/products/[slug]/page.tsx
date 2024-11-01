@@ -1,7 +1,6 @@
 import { productService } from "@/modules/lib/utility/services/product.service";
 import ProductDetails from "@/modules/views/product-details/Product-details";
 import React from "react";
-import type { Metadata } from "next";
 
 export async function generateMetadata({
   params,
@@ -22,8 +21,7 @@ export async function generateMetadata({
         siteName: "Asoebi Africa",
         images: [
           {
-            url:
-              product?.variants?.[0]?.media?.[0]?.url || "new-asoebi-logo.svg",
+            url: product?.variants?.[0]?.media?.[0]?.url,
             alt: product?.name,
             height: 630,
             width: 1200,
@@ -34,9 +32,7 @@ export async function generateMetadata({
         card: "summary_large_image",
         title: `${product?.name} - Asoebi Africa`,
         description: `${product?.longDescription}`,
-        images: [
-          product?.variants?.[0]?.media?.[0]?.url || "new-asoebi-logo.svg",
-        ],
+        images: [product?.variants?.[0]?.media?.[0]?.url],
       },
     };
   } catch (error) {
