@@ -1,12 +1,10 @@
 import axios, { AxiosError } from "axios";
 import envConfig from "env";
-import stagingConfig from "env/staging";
 import { toast } from "sonner";
 
 
 const http = axios.create({
-    baseURL: stagingConfig.API_HOST
-    // baseURL: envConfig.API_HOST
+    baseURL: envConfig.API_HOST
 })
 
 const isAxiosTimeout = (error: AxiosError) => {
