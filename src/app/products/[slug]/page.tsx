@@ -3,8 +3,7 @@ import ProductDetails from "@/modules/views/product-details/Product-details";
 import React from "react";
 import type { Metadata } from "next";
 
-{
-  /*export async function generateMetadata({
+export async function generateMetadata({
   params,
 }: {
   params: { slug: string };
@@ -54,34 +53,7 @@ import type { Metadata } from "next";
       description: "This product could not be found",
     };
   }
-} */
 }
-
-export const metadata: Metadata = {
-  title: "Asoebi Africa",
-  description: "Check out this piece on Asoebi Africa",
-  openGraph: {
-    title: `Asoebi Africa`,
-    description: `Check out this piece on Asoebi Africa`,
-    type: "website",
-    url: `https://staging.asoebi.africa/`,
-    siteName: "Asoebi Africa",
-    images: [
-      {
-        url: "new-asoebi-logo.svg",
-        alt: "img",
-        height: 630,
-        width: 1200,
-      },
-    ],
-  },
-  twitter: {
-    card: "summary_large_image",
-    title: `Asoebi Africa`,
-    description: `Check out this piece on Asoebi Africa`,
-    images: ["new-asoebi-logo.svg"],
-  },
-};
 
 export default async function product_details({
   params,
@@ -92,8 +64,21 @@ export default async function product_details({
     console.log(params.slug, "paramssss");
     const product = await productService.fetchProductBySlug(params.slug, {});
     console.log({ product });
+
+    const jsonLd = {
+      "@context": "https://schema.org",
+      "@type": "Website",
+      name: product?.name,
+      image: product?.variants?.[0]?.media?.[0]?.url,
+      description: product?.longDescription,
+    };
+
     return (
       <div>
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+        />
         <ProductDetails product={product} />
       </div>
     );
