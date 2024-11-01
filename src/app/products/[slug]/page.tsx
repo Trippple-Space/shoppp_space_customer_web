@@ -3,38 +3,48 @@ import ProductDetails from "@/modules/views/product-details/Product-details";
 import React from "react";
 import type { Metadata } from "next";
 
-export async function generateMetadata({
+{
+  /*export async function generateMetadata({
   params,
 }: {
   params: { slug: string };
 }): Promise<Metadata> {
   try {
     const product = await productService.fetchProductBySlug(params.slug, {});
-    console.log(product)
+    console.log(product);
 
     return {
-      title: `Asoebi Africa`,
-      description: `Check out this piece on Asoebi Africa`,
+      title: `${product?.name} - Asoebi Africa`,
+      description:
+        `${product?.longDescription}` ||
+        `${product?.name} - Check out this piece on Asoebi Africa`,
       openGraph: {
-        title: "Asoebi Africa",
-        description: `Check out this piece on Asoebi Africa`,
+        title: `${product?.name} - Asoebi Africa`,
+        description:
+          `${product?.longDescription}` ||
+          `${product?.name} - Check out this piece on Asoebi Africa`,
         type: "website",
-        url: `https://staging.asoebi.africa`,
+        url: `https://staging.asoebi.africa/products/${params.slug}`,
         siteName: "Asoebi Africa",
         images: [
           {
-            url: "new-asoebi-logo.svg",
-            alt: 'image',
-            height: "630",
-            width: "1200",
+            url:
+              product?.variants?.[0]?.media?.[0]?.url || "new-asoebi-logo.svg",
+            alt: product?.name,
+            height: 630,
+            width: 1200,
           },
         ],
       },
       twitter: {
         card: "summary_large_image",
-        title: `Asoebi Africa`,
-        description: `Check out this piece on Asoebi Africa`,
-        images: ["new-asoebi-logo.svg"],
+        title: `${product?.name} - Asoebi Africa`,
+        description:
+          `${product?.longDescription}` ||
+          `${product?.name} - Check out this piece on Asoebi Africa`,
+        images: [
+          product?.variants?.[0]?.media?.[0]?.url || "new-asoebi-logo.svg",
+        ],
       },
     };
   } catch (error) {
@@ -44,7 +54,34 @@ export async function generateMetadata({
       description: "This product could not be found",
     };
   }
+} */
 }
+
+export const metadata: Metadata = {
+  title: "Asoebi Africa",
+  description: "Check out this piece on Asoebi Africa",
+  openGraph: {
+    title: `Asoebi Africa`,
+    description: `Check out this piece on Asoebi Africa`,
+    type: "website",
+    url: `https://staging.asoebi.africa/`,
+    siteName: "Asoebi Africa",
+    images: [
+      {
+        url: "new-asoebi-logo.svg",
+        alt: "img",
+        height: 630,
+        width: 1200,
+      },
+    ],
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: `Asoebi Africa`,
+    description: `Check out this piece on Asoebi Africa`,
+    images: ["new-asoebi-logo.svg"],
+  },
+};
 
 export default async function product_details({
   params,
@@ -65,38 +102,3 @@ export default async function product_details({
     return <div>Error fetching product details</div>;
   }
 }
-
-/*return {
-      title: `Asoebi Africa`,
-      description:
-        `${product?.name} - ${product?.longDescription}` ||
-        `${product?.name} - Check out this piece on Asoebi Africa`,
-      openGraph: {
-        title: "Asoebi Africa",
-        description:
-          `${product?.name} - ${product?.longDescription}` ||
-          `${product?.name} - Check out this piece on Asoebi Africa`,
-        type: "website",
-        url: `https://staging.asoebi.africa/products/${params.slug}`,
-        siteName: "Asoebi Africa",
-        images: [
-          {
-            url:
-              product?.variants?.[0]?.media?.[0]?.url || "new-asoebi-logo.svg",
-            alt: product?.name,
-            height: "630",
-            width: "1200",
-          },
-        ],
-      },
-      twitter: {
-        card: "summary_large_image",
-        title: `${product?.name} - Asoebi Africa`,
-        description:
-          `${product?.name} - ${product?.longDescription}` ||
-          `${product?.name} - Check out this piece on Asoebi Africa`,
-        images: [
-          product?.variants?.[0]?.media?.[0]?.url || "new-asoebi-logo.svg",
-        ],
-      },
-    }; */
