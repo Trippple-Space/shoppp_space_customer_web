@@ -378,7 +378,7 @@
 .hover\:bg-grey-100:hover { background-color: #F7F6F5; } 
 .max-w-1400\! { max-width: 1400px !important; } 
 .weight-200 { font-weight: 200; } 
-.l-40 { left: 40px; } 
+.l-30 { left: 30px; } 
 .color-black { color: black; } 
 .z-index-1, .z-1 { z-index: 1; } 
 .w-90p { width: 90%; } 
@@ -397,9 +397,6 @@
 .pr-4 { padding-right: 4px; } 
 .mr-4 { margin-right: 4px; } 
 .color-\#fff { color: #fff; } 
-.mt-5 { margin-top: 5px; } 
-.color-\#00000099 { color: #00000099; } 
-.text-left {    text-align: left;  } 
 .t-57 { top: 57px; } 
 .pt-30 { padding-top: 30px; } 
 [class~='g|margin:auto']{margin:auto} 
@@ -447,6 +444,7 @@
 .h-55 { height: 55px; } 
 .w-20p { width: 20%; } 
 .w-70p { width: 70%; } 
+.text-left {    text-align: left;  } 
 .mt-12 { margin-top: 12px; } 
 [class~='g|grid-template-columns:1fr|_|auto']{grid-template-columns:1fr auto} 
 .px-48 { padding-left: 48px; padding-right: 48px; } 
@@ -458,6 +456,7 @@
 .hover\:scale-1\.05:hover { scale: 1.05; } 
 .border-hidden { border-style: hidden; } 
 .white-space-nowrap { white-space: nowrap; } 
+.mt-5 { margin-top: 5px; } 
 .w-12 { width: 12px; } 
 .flex-wrap { flex-wrap: wrap; } 
 .gap-4 { gap: 4px; } 
@@ -487,6 +486,13 @@
 .py-17 { padding-top: 17px; padding-bottom: 17px; } 
 @layer base {.radius-30 { border-radius: 30px; } } 
 .gap-40 { gap: 40px; } 
+.mt-100 { margin-top: 100px; } 
+.a-items-start { align-items: flex-start; } 
+.h-80p { height: 80%; } 
+.color-\#00000099 { color: #00000099; } 
+.j-content-start { justify-content: flex-start; } 
+.object-fit-cover { object-fit: cover; } 
+.color-\#000000 { color: #000000; } 
 .bg-grey-300 { background-color: #E4E1DF; } 
 .h-340 { height: 340px; } 
 .text-30 { font-size: 30px; } 
@@ -564,7 +570,6 @@
 .bg-\#BBC1F8 { background-color: #BBC1F8; } 
 .bg-\#FFD3F8 { background-color: #FFD3F8; } 
 .grid-3-cols-1fr { grid-template-columns: repeat(3, 1fr); } 
-.mt-100 { margin-top: 100px; } 
 .text-19 { font-size: 19px; } 
 .w-26p { width: 26%; } 
 .pr-5 { padding-right: 5px; } 
@@ -743,46 +748,14 @@
 .bg-lightgreen { background-color: #E2FFFA; } 
 .pl-50 { padding-left: 50px; } 
 .mt-25 { margin-top: 25px; } 
-.z-index-100, .z-100 { z-index: 100; } 
-.bg-w { background-color: w; } 
-.bg-wh { background-color: wh; } 
-.bg-whi { background-color: whi; } 
-.bg-whit { background-color: whit; } 
-.mt-0 { margin-top: 0px; } 
-.mt-1 { margin-top: 1px; } 
-.bg-p { background-color: p; } 
-.bg-pi { background-color: pi; } 
-.bg-pink { background-color: pink; } 
-.bg-pin { background-color: pin; } 
-.h-1 { height: 1px; } 
-.h-10p { height: 10%; } 
+.bg-g { background-color: g; } 
+.bg-gt { background-color: gt; } 
+.bg-gr { background-color: gr; } 
+.bg-gre { background-color: gre; } 
+.bg-gree { background-color: gree; } 
 .h-0p { height: 0%; } 
-.w-0p { width: 0%; } 
-.h-1p { height: 1%; } 
-.h-7p { height: 7%; } 
-.h-50p { height: 50%; } 
-.h-30p { height: 30%; } 
-.h-20p { height: 20%; } 
-.h-210p { height: 210%; } 
-.h-150 { height: 150px; } 
-.h-00 { height: 00px; } 
-.h-300 { height: 300px; } 
-.h-300p { height: 300%; } 
-.h-350 { height: 350px; } 
-.a-items-start { align-items: flex-start; } 
-.w-1 { width: 1px; } 
-.h-90p { height: 90%; } 
-.h-80p { height: 80%; } 
-.gap-1 { gap: 1px; } 
-.j-content-start { justify-content: flex-start; } 
-.mb-1 { margin-bottom: 1px; } 
-.color-\#000000 { color: #000000; } 
-.object-fit {    object-fit: cover;  } 
-.object-fit-contain { object-fit: contain; } 
-.object-fit-cover { object-fit: cover; } 
-.object-fit-fill { object-fit: fill; } 
+.h-10p { height: 10%; } 
 .text-1 { font-size: 1px; } 
-.mt-3 { margin-top: 3px; } 
 
 
 
@@ -917,8 +890,9 @@
 @media only screen and (min-width: 992px) { .l\:text-10 { font-size: 10px; } } 
 @media only screen and (min-width: 992px) { .l\:p-20 { padding: 20px; } } 
 @media only screen and (min-width: 992px) { .l\:gap-50 { gap: 50px; } } 
-@media only screen and (min-width: 992px) { .l\:w-500 { width: 500px; } } 
-@media only screen and (min-width: 992px) { @layer base {.l\:radius-99 { border-radius: 99px; } } } 
+@media only screen and (min-width: 992px) { .l\:w-440 { width: 440px; } } 
+@media only screen and (min-width: 992px) { .l\:color-\#fff { color: #fff; } } 
+@media only screen and (min-width: 992px) { .l\:opacity-0 { opacity: 0%; } } 
 @media only screen and (min-width: 992px) { @layer base {    .l\:border {       border: 1px solid;     }  } } 
 @media only screen and (min-width: 992px) { .l\:bg-\#F3F3F3 { background-color: #F3F3F3; } } 
 @media only screen and (min-width: 992px) { .l\:pb-12 { padding-bottom: 12px; } } 
@@ -926,14 +900,19 @@
 @media only screen and (min-width: 992px) { .l\:pl-14 { padding-left: 14px; } } 
 @media only screen and (min-width: 992px) { .l\:pr-14 { padding-right: 14px; } } 
 @media only screen and (min-width: 992px) { .l\:outline-none {    outline: none;  } } 
+@media only screen and (min-width: 992px) { @layer base {.l\:radius-99 { border-radius: 99px; } } } 
+@media only screen and (min-width: 992px) { .l\:radius-t-r-9 { border-top-right-radius: 9px;  } } 
+@media only screen and (min-width: 992px) { .l\:radius-t-l-9 { border-top-left-radius: 9px;  } } 
 @media only screen and (min-width: 992px) { .l\:bg-\#0B9378 { background-color: #0B9378; } } 
 @media only screen and (min-width: 992px) { @layer base {.l\:radius-50 { border-radius: 50px; } } } 
 @media only screen and (min-width: 992px) { .l\:t-4 { top: 4px; } } 
 @media only screen and (min-width: 992px) { .l\:p-6 { padding: 6px; } } 
 @media only screen and (min-width: 992px) { .l\:pl-4 { padding-left: 4px; } } 
 @media only screen and (min-width: 992px) { .l\:pr-4 { padding-right: 4px; } } 
-@media only screen and (min-width: 992px) { .l\:color-\#fff { color: #fff; } } 
-@media only screen and (min-width: 992px) { .l\:bg-green { background-color: #0B9378; } } 
+@media only screen and (min-width: 992px) { .l\:bg-\#f3f3f3 { background-color: #f3f3f3; } } 
+@media only screen and (min-width: 992px) { .l\:t-40 { top: 40px; } } 
+@media only screen and (min-width: 992px) { .l\:radius-b-r-9 { border-bottom-right-radius: 9px;  } } 
+@media only screen and (min-width: 992px) { .l\:radius-b-l-9 { border-bottom-left-radius: 9px;  } } 
 @media only screen and (min-width: 992px) { .l\:t-70 { top: 70px; } } 
 @media only screen and (min-width: 992px) { .l\:r-100 { right: 100px; } } 
 @media only screen and (min-width: 992px) { .l\:w-35 { width: 35px; } } 
@@ -1081,3 +1060,26 @@
 @media only screen and (min-width: 992px) { .l\:m-15 { margin: 15px; } } 
 @media only screen and (min-width: 992px) { .l\:pb-100 { padding-bottom: 100px; } } 
 @media only screen and (min-width: 992px) { .l\:mt--60 { margin-top: -60px; } } 
+@media only screen and (min-width: 992px) { .l\:radius-t-r-8 { border-top-right-radius: 8px;  } } 
+@media only screen and (min-width: 992px) { .l\:radius-t-l-8 { border-top-left-radius: 8px;  } } 
+@media only screen and (min-width: 992px) { @layer base {.l\:radius--8 { border-radius: -8px; } } } 
+@media only screen and (min-width: 992px) { .l\:bg-g { background-color: g; } } 
+@media only screen and (min-width: 992px) { .l\:bg-gr { background-color: gr; } } 
+@media only screen and (min-width: 992px) { .l\:bg-gre { background-color: gre; } } 
+@media only screen and (min-width: 992px) { .l\:bg-green { background-color: #0B9378; } } 
+@media only screen and (min-width: 992px) { .l\:bg-gree { background-color: gree; } } 
+@media only screen and (min-width: 992px) { .l\:t-36 { top: 36px; } } 
+@media only screen and (min-width: 992px) { .l\:t-3 { top: 3px; } } 
+@media only screen and (min-width: 992px) { .l\:t-35 { top: 35px; } } 
+@media only screen and (min-width: 992px) { .l\:h-6 { height: 6px; } } 
+@media only screen and (min-width: 992px) { .l\:h-60p { height: 60%; } } 
+@media only screen and (min-width: 992px) { .l\:h-0p { height: 0%; } } 
+@media only screen and (min-width: 992px) { .l\:h-10p { height: 10%; } } 
+@media only screen and (min-width: 992px) { .l\:h-100p { height: 100%; } } 
+@media only screen and (min-width: 992px) { .l\:h-300 { height: 300px; } } 
+@media only screen and (min-width: 992px) { .l\:h-00 { height: 00px; } } 
+@media only screen and (min-width: 992px) { .l\:h-400 { height: 400px; } } 
+@media only screen and (min-width: 992px) { .l\:h-1 { height: 1px; } } 
+@media only screen and (min-width: 992px) { .l\:h-10 { height: 10px; } } 
+@media only screen and (min-width: 992px) { .l\:mr-3 { margin-right: 3px; } } 
+@media only screen and (min-width: 992px) { .z-index-20, .l\:z-20 { z-index: 20; } } 
