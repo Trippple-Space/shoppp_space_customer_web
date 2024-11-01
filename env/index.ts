@@ -1,9 +1,11 @@
 import development from './local'
+import prod from './prod';
 import staging from './staging';
 
 const allConfigs: { [x: string]: any } = {
     development,
-    staging
+    staging,
+    prod
 }
 
 let currentEnv;
