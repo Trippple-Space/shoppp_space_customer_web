@@ -32,14 +32,10 @@ const HomepageNavBar = () => {
         console.error(err)
       }
     }
-
     if (searchTerm) {
       fetchProducts()
     }
   }, [searchTerm])
-
-  console.log({ searchResults })
-  console.log(searchTerm)
 
   return (
     <BaseNavBar
@@ -52,10 +48,7 @@ const HomepageNavBar = () => {
               placeholder='Search asoebi.africa'
               onClick={handleOpenSearchModal}
             />
-            <div
-              className='flex l:bg-#0B9378 l:absolute l:r-0 l:radius-50 l:t-4 l:p-6 l:pl-4 l:pr-4 l: mr-3
- z-10'
-            >
+            <div className='flex l:bg-#0B9378 l:absolute l:r-0 l:radius-50 l:t-4 l:p-6 l:pl-4 l:pr-4 l: mr-3 z-0'>
               <IoIosSearch
                 className='w-25 h-20 color-black l:color-#fff l:cursor-pointer'
                 onClick={handleOpenSearchModal}
@@ -90,7 +83,10 @@ const HomepageNavBar = () => {
                     <div className='overflow-auto w-100p flex flex-col gap-15'>
                       {searchResults.map(product => (
                         <>
-                          <Link href={`/products/${product.slug}`} className='flex j-content-start gap-20'>
+                          <Link
+                            href={`/products/${product.slug}`}
+                            className='flex j-content-start gap-20'
+                          >
                             <Image
                               src={product?.variants?.[0]?.media?.[0]?.url}
                               alt={product.name}
@@ -104,7 +100,9 @@ const HomepageNavBar = () => {
                                 {formatNumberAsPrice(
                                   product?.variants?.[0]?.price
                                 )}
-                                <span className='color-#00000099 font-inter weight-400 text-10'>per yard</span>
+                                <span className='color-#00000099 font-inter weight-400 text-10'>
+                                  per yard
+                                </span>
                               </p>
                             </div>
                           </Link>

@@ -71,8 +71,7 @@ class ProductService {
      fetchProductBySearch(searchTerm: string): Promise<Product[]> {
           return new Promise((resolve, reject) => {
                const url = new URL(
-               
-                    "https://api-staging.asoebi.africa" +
+                    config.API_HOST +
                          "/" +
                          buildEndpoint(endpoints.SEARCH_PRODUCTS, {
                               searchTerm,
