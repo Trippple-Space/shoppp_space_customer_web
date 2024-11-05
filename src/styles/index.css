@@ -222,12 +222,11 @@
 .my-20 { margin-top: 20px; margin-bottom: 20px; } 
 .my-15 { margin-top: 15px; margin-bottom: 15px; } 
 @layer base {.radius-10 { border-radius: 10px; } } 
+.l-0 { left: 0px; } 
+.z-index-1, .z-1 { z-index: 1; } 
 .inset-0 { inset: 0px; } 
 .bg-black { background-color: #000000; } 
 .opacity-10 { opacity: 10%; } 
-.z-index-10, .z-10 { z-index: 10; } 
-.l-0 { left: 0px; } 
-.z-index-1, .z-1 { z-index: 1; } 
 
 @layer base {
 .app-width { width: 90%; margin-left: auto;    margin-right: auto;  } 
@@ -348,6 +347,7 @@
 .gap-12 { gap: 12px; } 
 .gap-7 { gap: 7px; } 
 @layer base {.radius-50 { border-radius: 50px; } } 
+.z-index-10, .z-10 { z-index: 10; } 
 .r-0 { right: 0px; } 
 .t-50 { top: 50px; } 
 .z-index-20, .z-20 { z-index: 20; } 
