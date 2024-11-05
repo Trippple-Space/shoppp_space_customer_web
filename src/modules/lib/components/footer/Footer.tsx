@@ -15,10 +15,10 @@ const Footer = () => {
   }
 
   return (
-    <div className='fixed b-0 l-0 w-full z-index-1'>
+    <div className='fixed b-0 l-0 w-full z-inde]x-1'>
       {isFooterOpen && (
         <div
-          className='fixed inset-0 bg-black opacity-10'
+          className='fixed inset-0'
           onClick={handleCloseFooter}
         />
       )}
