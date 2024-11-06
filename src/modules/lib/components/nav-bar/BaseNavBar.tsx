@@ -96,6 +96,7 @@ const BaseNavBar: FC<IBaseNavBar> = ({ links }) => {
           <div className='flex l:gap-20 gap-12 a-items-center'>
             <MiniCart />
             <div
+              
               className='flex gap-7 items-center w-fit h-fit m-auto radius-50 text-grey-700 pointer relative'
               onClick={handleUserProfileDropdown}
             >

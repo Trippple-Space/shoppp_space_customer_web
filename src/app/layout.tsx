@@ -49,7 +49,7 @@ export default function RootLayout({
     >
       <GlobalArena />
       <body className="@lo:weight-300 @lo:text-dimgrey">
-        <div className="fixed w-full b-60 z-3">
+        {/* <div className="fixed w-full b-60 z-3">
           <div className="max-w-1000 mx-auto flex text-14 l:text-16 bg-yellow-50 text-green p-10 max-w-1100 mx-auto ">
             <BsInfoCircle className="inline-block w-fit text-26 mr-10 mt--2" />
             <span>
@@ -62,7 +62,7 @@ export default function RootLayout({
               </a>
             </span>
           </div>
-        </div>
+        </div> */}
         {children}
       </body>
     </html>
