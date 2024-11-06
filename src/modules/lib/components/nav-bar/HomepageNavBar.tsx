@@ -10,6 +10,8 @@ import { productService } from '../../utility/services/product.service'
 import { Product } from '../../utility/types/product.interface'
 import { formatNumberAsPrice } from '../../utility/utility'
 import Link from 'next/link'
+import SearchModal from '../search-modal/SearchModal'
+import classNames from 'classnames'
 
 const HomepageNavBar = () => {
   const pathname = usePathname()
@@ -28,6 +30,7 @@ const HomepageNavBar = () => {
       try {
         const result = await productService.fetchProductBySearch(searchTerm)
         setSearchResults(result)
+        console.log({ result })
       } catch (err) {
         console.error(err)
       }
@@ -40,29 +43,58 @@ const HomepageNavBar = () => {
   return (
     <BaseNavBar
       links={
-        <div className='w-fit mx-auto flex a-items-end gap-30 l:gap-50 weight-200 text-14 l:text-16 l:w-500'>
-          <div className='flex relative w-100p l-40'>
+        <div className='w-fit mx-auto flex a-items-end gap-30 l:gap-50 weight-200 text-14 l:text-16 l:w-440'>
+          <div className='flex relative w-100p l-30'>
             <input
               type='text'
-              className='hidden flex l:block l:radius-99 l:border l:bg-#F3F3F3 l:border-none l:pb-12 l:pt-12 l:pl-14 l:pr-14 l:outline-none l:w-100p'
+              className={classNames(
+                'hidden flex l:block l:border l:bg-#F3F3F3 l:border-none l:pb-12 l:pt-12 l:pl-14 l:pr-14 l:outline-none l:w-100p',
+                {
+                  'l:radius-99': !openSearchModal,
+                  'l:radius-t-r-9': openSearchModal,
+                  'l:radius-t-l-9': openSearchModal
+                }
+              )}
               placeholder='Search asoebi.africa'
-              onClick={handleOpenSearchModal}
+              value={searchTerm}
+              onChange={e => setSearchTerm(e.target.value)}
+              onClick={() => setOpenSearchModal(true)}
             />
-            <div className='flex l:bg-#0B9378 l:absolute l:r-0 l:radius-50 l:t-4 l:p-6 l:pl-4 l:pr-4 l: mr-3 z-0'>
+            <div
+              className={classNames(
+                'flex l:bg-#0B9378 l:absolute l:r-0 l:radius-50 l:t-4 l:p-6 l:pl-4 l:pr-4 l: mr-3 l:cursor-pointer',
+                {
+                  'l:radius-8': openSearchModal
+                }
+              )}
+            >
               <IoIosSearch
-                className='w-25 h-20 color-black l:color-#fff l:cursor-pointer'
+                className='w-25 h-20 color-black l:color-#fff'
                 onClick={handleOpenSearchModal}
               />
             </div>
+            {openSearchModal && (
+              <div
+                className={classNames(
+                  'hidden l:block l:absolute l:bg-#f3f3f3 l:w-100p l:h-400 l:bg-#F3F3F3 l:t-35 z-10',
+                  {
+                    'l:radius-b-r-9': openSearchModal,
+                    'l:radius-b-l-9': openSearchModal
+                  }
+                )}
+              >
+                <SearchModal searchResults={searchResults} />
+              </div>
+            )}
           </div>
           {openSearchModal && (
             <>
               <div
-                className='fixed inset-0 bg-black opacity-70 z-1'
+                className='fixed inset-0 bg-black opacity-70 z-1 l:opacity-0'
                 onClick={handleOpenSearchModal}
               />
-              <div className='fixed l-50p g|transform:translate(-50%) w-90p h-70 l:w-50p h-60p t-70 mt-30 bg-white z-10 radius-8 pb-20 relative'>
-                <div className='flex fixed w-100p j-content-center mt-20 border-b pb-20 border-b-#00000014 bg-white'>
+              <div className='fixed l-50p g|transform:translate(-50%) w-90p h-70 l:w-50p h-60p t-70 mt-30 bg-white z-10 radius-8 pb-20 relative l:mt-0 l:t-60 l:hidden'>
+                <div className='flex fixed w-100p j-content-center mt-20 border-b pb-20 border-b-#00000014 l:hidden'>
                   <input
                     type='text'
                     value={searchTerm}
@@ -77,39 +109,8 @@ const HomepageNavBar = () => {
                     />
                   </div>
                 </div>
-                {searchResults && searchTerm && (
-                  <div className='mt-100 p-10 flex flex-col a-items-start w-100p h-80p gap-10'>
-                    <p className='color-#00000099 text-left'>Results</p>
-                    <div className='overflow-auto w-100p flex flex-col gap-15'>
-                      {searchResults.map(product => (
-                        <>
-                          <Link
-                            href={`/products/${product.slug}`}
-                            className='flex j-content-start gap-20'
-                          >
-                            <Image
-                              src={product?.variants?.[0]?.media?.[0]?.url}
-                              alt={product.name}
-                              className='w-50 h-50 radius-8 object-fit-cover'
-                            />
-                            <div className='flex flex-col a-items-start gap-10'>
-                              <p className='color-#000000 text-left text-15 weight-500'>
-                                {product.name}
-                              </p>
-                              <p className='weight-500 flex gap-10 a-items-center text-12'>
-                                {formatNumberAsPrice(
-                                  product?.variants?.[0]?.price
-                                )}
-                                <span className='color-#00000099 font-inter weight-400 text-10'>
-                                  per yard
-                                </span>
-                              </p>
-                            </div>
-                          </Link>
-                        </>
-                      ))}
-                    </div>
-                  </div>
+                {searchResults.length > 0 && (
+                  <SearchModal searchResults={searchResults} />
                 )}
               </div>
             </>

@@ -4,6 +4,7 @@ import { paths } from '../../utility/paths'
 import Image from '../image/Image'
 import { TbWorld } from 'react-icons/tb'
 import { SlArrowRight } from 'react-icons/sl'
+import classNames from 'classnames'
 
 const AsoebiLinksModal = ({ sellOnAsoebi }: { sellOnAsoebi: boolean }) => {
   return (
@@ -11,9 +12,11 @@ const AsoebiLinksModal = ({ sellOnAsoebi }: { sellOnAsoebi: boolean }) => {
       <div className='flex flex-col gap-10'>
         <Link
           href={paths.homepage}
-          className={`flex a-items-center gap-20 radius-8 hover:bg-#EDFCF7 ${
-            sellOnAsoebi ? 'p-20' : 'p-5'
-          }`}
+          className={classNames(
+            `flex a-items-center gap-20 radius-8 hover:bg-#EDFCF7 ${
+              sellOnAsoebi ? 'p-20' : 'p-5'
+            }`
+          )}
         >
           <div className='flex bg-#FCFCED p-12 radius-200'>
             <Image className='' src='asoebi-all.svg' alt='logo' type='icon' />
@@ -27,9 +30,11 @@ const AsoebiLinksModal = ({ sellOnAsoebi }: { sellOnAsoebi: boolean }) => {
         </Link>
         <Link
           href={paths.asoebi_wears}
-          className={`flex a-items-center gap-20 radius-8 hover:bg-#EDFCF7 ${
-            sellOnAsoebi ? 'p-20' : 'p-5'
-          }`}
+          className={classNames(
+            `flex a-items-center gap-20 radius-8 hover:bg-#EDFCF7 ${
+              sellOnAsoebi ? 'p-20' : 'p-5'
+            }`
+          )}
         >
           <div className='flex bg-#F0FCED p-12 radius-200'>
             <Image className='' src='asoebi-wears.svg' alt='logo' type='icon' />
@@ -43,9 +48,11 @@ const AsoebiLinksModal = ({ sellOnAsoebi }: { sellOnAsoebi: boolean }) => {
         </Link>
         <Link
           href={paths.asoebi_fabrics}
-          className={`flex a-items-center gap-20 radius-8 hover:bg-#EDFCF7 ${
-            sellOnAsoebi ? 'p-20' : 'p-5'
-          }`}
+          className={classNames(
+            `flex a-items-center gap-20 radius-8 hover:bg-#EDFCF7 ${
+              sellOnAsoebi ? 'p-20' : 'p-5'
+            }`
+          )}
         >
           <div className='flex bg-#EDF6FC p-12 radius-200'>
             {/* <Image className='' src='asoebi-wears.svg' alt='logo' type='icon' /> */}
