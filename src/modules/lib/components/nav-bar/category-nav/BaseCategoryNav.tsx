@@ -24,7 +24,7 @@ const BaseCategoryNav: FC<IBaseCategoryNav> = ({ categories, displayFilter, isRo
     console.log({ categories }, 'here')
 
     return (
-        <div className="flex">
+        <div className="flex a-items-center">
             <div className='scroll-x no-scrollbar w-full'>
                 <div className='flex l:gap-30 gap-8 h-fit whitespace-nowrap'>
                     {
@@ -62,7 +62,7 @@ const BaseCategoryNav: FC<IBaseCategoryNav> = ({ categories, displayFilter, isRo
                     </button>
                 </div> */}
 
-                <div className='relative pointer bg-white pointer border border-lightgrey l:w-40 l:h-40 w-30 h-30 round flex j-content-center items-center g|margin-top:-30px;margin-left:12px;'>
+                <div className='relative pointer bg-white pointer border border-lightgrey l:w-40 l:h-40 w-30 h-30 round flex j-content-center items-center l:mt--35 mt--30 margin-left:12px;'>
                     <TfiAngleRight className='l:w-18 l:h-18 w-10 h-10' />
                 </div>
                 {/* {(
