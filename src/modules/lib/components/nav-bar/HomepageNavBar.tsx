@@ -35,7 +35,6 @@ const HomepageNavBar = () => {
         console.error(err)
       }
     }
-
     if (searchTerm) {
       fetchProducts()
     }
