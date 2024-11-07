@@ -12,7 +12,7 @@ import { getCartItemVariantPropertiesAsJsx } from './minicart.helper'
 import { HiOutlineShoppingBag } from 'react-icons/hi2'
 import ImageAlt from '../image-alt/ImageAlt'
 import { CartItem } from '../../utility/types/cart.interface'
-import { PiShoppingCart } from 'react-icons/pi'
+import { PiShoppingCartBold } from 'react-icons/pi'
 
 interface ModalProps {}
 
@@ -230,10 +230,10 @@ const MiniCart: React.FC<ModalProps> = () => {
           onClick={() => setOpen(true)}
           className='relative pointer bg-#F3F3F3 flex a-items-center gap-8 w-70 radius-6 px-5 py-5'
         >
-          <p className='px-10 py-5 bg-#0B9378 radius-6 color-white weight-500'>
-            {cart.cartItems.length}
+          <p className='h-30 w-30 flex a-items-center j-content-center bg-#0B9378 radius-6 color-white weight-500'>
+            <span>{cart.cartItems.length}</span>
           </p>
-          <PiShoppingCart className='color-black  w-15 h-15 mr-' />
+          <PiShoppingCartBold className='color-black  w-18 h-18' />
         </div>
       </div>
     </div>
