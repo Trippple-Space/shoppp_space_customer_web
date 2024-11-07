@@ -1,114 +1,112 @@
-'use client'
+"use client";
 
-import React, { FC, useEffect, useRef, useState } from 'react'
-import BaseNavBar from './BaseNavBar'
-import { usePathname } from 'next/navigation'
-import { IoIosSearch } from 'react-icons/io'
+import React, { FC, useEffect, useRef, useState } from "react";
+import BaseNavBar from "./BaseNavBar";
+import { usePathname } from "next/navigation";
+import { IoIosSearch } from "react-icons/io";
 
-import Image from '../image/Image'
-import { productService } from '../../utility/services/product.service'
-import { Product } from '../../utility/types/product.interface'
-import { formatNumberAsPrice } from '../../utility/utility'
-import Link from 'next/link'
-import SearchModal from '../search-modal/SearchModal'
-import classNames from 'classnames'
+import Image from "../image/Image";
+import { productService } from "../../utility/services/product.service";
+import { Product } from "../../utility/types/product.interface";
+import { formatNumberAsPrice } from "../../utility/utility";
+import Link from "next/link";
+import SearchModal from "../search-modal/SearchModal";
+import classNames from "classnames";
+import SearchInput from "../search-input/SearchInput";
 
 const HomepageNavBar = () => {
-  const pathname = usePathname()
+  const pathname = usePathname();
 
-  const [searchTerm, setSearchTerm] = useState('')
-  const [searchResults, setSearchResults] = useState<Product[]>([])
+  const [searchTerm, setSearchTerm] = useState("");
+  const [searchResults, setSearchResults] = useState<Product[]>([]);
 
-  const [openSearchModal, setOpenSearchModal] = useState<boolean>(false)
+  const [openSearchModal, setOpenSearchModal] = useState<boolean>(false);
 
   const handleOpenSearchModal = () => {
-    setOpenSearchModal(prev => !prev)
-  }
+    setOpenSearchModal((prev) => !prev);
+  };
 
   useEffect(() => {
     const fetchProducts = async () => {
       try {
-        const result = await productService.fetchProductBySearch(searchTerm)
-        setSearchResults(result)
-        console.log({ result })
+        const result = await productService.fetchProductBySearch(searchTerm);
+        setSearchResults(result);
+        console.log({ result });
       } catch (err) {
-        console.error(err)
+        console.error(err);
       }
-    }
+    };
     if (searchTerm) {
-      fetchProducts()
+      fetchProducts();
     }
-  }, [searchTerm])
+  }, [searchTerm]);
 
   return (
     <BaseNavBar
       links={
-        <div className='w-fit mx-auto flex a-items-end gap-30 l:gap-50 weight-200 text-14 l:text-16 l:w-440'>
-          <div className='flex relative w-100p l-30'>
-            <input
-              type='text'
-              className={classNames(
-                'hidden flex l:block l:border l:bg-#F3F3F3 l:border-none l:pb-12 l:pt-12 l:pl-14 l:pr-14 l:outline-none l:w-100p',
-                {
-                  'l:radius-99': !openSearchModal,
-                  'l:radius-t-r-9': openSearchModal,
-                  'l:radius-t-l-9': openSearchModal
-                }
-              )}
-              placeholder='Search asoebi.africa'
-              value={searchTerm}
-              onChange={e => setSearchTerm(e.target.value)}
-              onClick={() => setOpenSearchModal(true)}
-            />
-            <div
-              className={classNames(
-                'flex l:bg-#0B9378 l:absolute l:r-0 l:radius-50 l:t-4 l:p-6 l:pl-4 l:pr-4 l: mr-3 l:cursor-pointer',
-                {
-                  'l:radius-8': openSearchModal
-                }
-              )}
-            >
-              <IoIosSearch
-                className='w-25 h-20 color-black l:color-#fff'
-                onClick={handleOpenSearchModal}
-              />
-            </div>
+        <div className="sm:mx-auto flex a-items-end gap-30 l:gap-50 sm:gap-40 weight-200 text-14 l:text-16 l:w-440 md:w-340 sm:w-260 w-full">
+          <SearchInput
+            mainSearchClass={
+              "flex relative w-100p sm:l-30 sm:j-content-start j-content-end mr-20"
+            }
+            inputClassname={classNames(
+              "hidden flex sm:block sm:border sm:bg-#F3F3F3 sm:border-none sm:pb-12 sm:pt-12 sm:pl-14 sm:pr-14 sm:outline-none sm:w-100p",
+              {
+                "sm:radius-99": !openSearchModal,
+                "sm:radius-t-r-9": openSearchModal,
+                "sm:radius-t-l-9": openSearchModal,
+              }
+            )}
+            searchTerm={searchTerm}
+            searchClassname={classNames(
+              "flex sm:bg-#0B9378 sm:absolute sm:r-0 sm:radius-50 sm:t-4 sm:p-6 sm:pl-4 sm:pr-4 sm:mr-3 sm:cursor-pointer color-black sm:color-#fff",
+              {
+                "sm:radius-8": openSearchModal,
+              }
+            )}
+            onChange={(e) => setSearchTerm(e.target.value)}
+            onClick={() => setOpenSearchModal(true)}
+            onSearchClick={handleOpenSearchModal}
+          >
             {openSearchModal && (
               <div
                 className={classNames(
-                  'hidden l:block l:absolute l:bg-#f3f3f3 l:w-100p l:h-400 l:bg-#F3F3F3 l:t-35 z-10',
+                  "hidden sm:block sm:absolute sm:bg-#f3f3f3 sm:w-100p sm:h-400 sm:bg-#F3F3F3 sm:t-35 z-10",
                   {
-                    'l:radius-b-r-9': openSearchModal,
-                    'l:radius-b-l-9': openSearchModal
+                    "sm:radius-b-r-9": openSearchModal,
+                    "sm:radius-b-l-9": openSearchModal,
                   }
                 )}
               >
                 <SearchModal searchResults={searchResults} />
               </div>
             )}
-          </div>
+          </SearchInput>
+
           {openSearchModal && (
             <>
               <div
-                className='fixed inset-0 bg-black opacity-70 z-1 l:opacity-0'
+                className="fixed inset-0 bg-black opacity-70 z-1 sm:opacity-0"
                 onClick={handleOpenSearchModal}
               />
-              <div className='fixed l-50p g|transform:translate(-50%) w-90p h-70 l:w-50p h-60p t-70 mt-30 bg-white z-10 radius-8 pb-20 relative l:mt-0 l:t-60 l:hidden'>
-                <div className='flex fixed w-100p j-content-center mt-20 border-b pb-20 border-b-#00000014 l:hidden'>
-                  <input
-                    type='text'
-                    value={searchTerm}
-                    onChange={e => setSearchTerm(e.target.value)}
-                    className='block radius-99 border bg-#F3F3F3 border-none pb-12 pt-12 pl-14 pr-14 outline-none w-80p'
-                    placeholder='Search asoebi.africa'
-                  />
-                  <div className='flex bg-#0B9378 absolute radius-50 r-10p t-4 p-6 pl-4 pr-4 mr-4'>
-                    <IoIosSearch
-                      className='w-25 h-20 color-#fff'
-                      onClick={handleOpenSearchModal}
-                    />
-                  </div>
-                </div>
+              <div className="fixed l-50p g|transform:translate(-50%) w-90p h-70 sm:w-50p h-60p t-70 mt-30 bg-white z-10 radius-8 pb-20 relative sm:mt-0 sm:t-60 sm:hidden">
+                <SearchInput
+                  inputClassname={
+                    "block radius-99 border bg-#F3F3F3 border-none pb-12 pt-12 pl-14 pr-14 outline-none w-80p"
+                  }
+                  mainSearchClass={
+                    "flex fixed w-100p j-content-center mt-20 border-b pb-20 border-b-#00000014 l:hidden"
+                  }
+                  searchClassname={
+                    "flex bg-#0B9378 absolute radius-50 r-10p t-4 p-6 mr-4 color-#fff"
+                  }
+                  searchTerm={searchTerm}
+                  onChange={(e) => setSearchTerm(e.target.value)}
+                  onSearchClick={handleOpenSearchModal}
+                  onClick={() => console.log("h")}
+                >
+                  {""}
+                </SearchInput>
                 {searchResults.length > 0 && (
                   <SearchModal searchResults={searchResults} />
                 )}
@@ -118,7 +116,7 @@ const HomepageNavBar = () => {
         </div>
       }
     />
-  )
-}
+  );
+};
 
-export default HomepageNavBar
+export default HomepageNavBar;
