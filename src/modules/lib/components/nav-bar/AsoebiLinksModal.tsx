@@ -54,8 +54,8 @@ const AsoebiLinksModal = ({ sellOnAsoebi }: { sellOnAsoebi: boolean }) => {
             }`
           )}
         >
-          <div className='flex bg-#EDF6FC p-12 radius-200'>
-            {/* <Image className='' src='asoebi-wears.svg' alt='logo' type='icon' /> */}
+          <div className='flex bg-#FCEDED p-12 radius-200'>
+            <Image className='asoebi-fabrics' src='asoebi-fabrics.svg' alt='logo' type='icon' />
           </div>
           <div className='flex flex-col gap-5 a-items-baseline cursor-pointer'>
             <p className='weight-500'>Asoebi Fabrics</p>

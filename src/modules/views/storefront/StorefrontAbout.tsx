@@ -10,23 +10,26 @@ import { useStoreProductsView } from '@/modules/lib/utility/hooks/views/use-stor
 
 const StorefrontAbout = ({ store }: { store: any }) => {
   const { products } = useStoreProductsView()
+  
   return (
     <>
       <div className='bg-white w-full '>
         <StorefrontNavBar store={store} />
+
         <div className='app-width mt-80'>
           <div className='relative'>
             <div className='relative l:flex z-1 gap-50'>
               <div className='l:w-60p'>
-                <div className='flex a-items-center gap-15'>
+                <div className='l:flex gap-15'>
                   <Image
                     src={store.thumbnail}
                     className='w-80 h-80 radius-8'
-                    alt='store-owner-logo'
+                    alt=''
                   />
                   <div className='l:a-self-center'>
                     <h3 className='l:text-35 text-20 l:mt-0 mt-10'>
                       {store.name}
+                      {/* <span className='text-green'>Gram</span> */}
                     </h3>
                     <p className='l:text-16 text-14'>
                       {store.byline || 'Online store in your wardrobe'}
@@ -81,7 +84,7 @@ const StorefrontAbout = ({ store }: { store: any }) => {
                       className='grid-col-span-2
                           radius-t-l-0 radius-30'
                       style={{
-                        backgroundImage: `url(${store.meta.heroImage1})`,
+                        backgroundImage: `url(${products?.[0]?.variants?.[0]?.media?.[0].url})`,
                         backgroundRepeat: 'no-repeat',
                         backgroundPosition: 'center',
                         backgroundSize: 'cover'
@@ -91,7 +94,7 @@ const StorefrontAbout = ({ store }: { store: any }) => {
                       className='grid-col-span-1 
                           radius-t-r-0 radius-30'
                       style={{
-                        backgroundImage: `url(${store.meta.heroImage2})`,
+                        backgroundImage: `url(${products?.[0]?.variants?.[1]?.media?.[0].url})`,
                         backgroundRepeat: 'no-repeat',
                         backgroundPosition: 'center',
                         backgroundSize: 'cover'
@@ -102,7 +105,7 @@ const StorefrontAbout = ({ store }: { store: any }) => {
                     className='grid-col-span-1 grid-row-span-3
                         radius-t-r-0 radius-b-l-0 radius-30'
                     style={{
-                      backgroundImage: `url(${store.meta.heroImage3})`,
+                      backgroundImage: `url(${products?.[0]?.variants?.[2]?.media?.[0].url})`,
                       backgroundRepeat: 'no-repeat',
                       backgroundPosition: 'center',
                       backgroundSize: 'cover'
@@ -112,7 +115,7 @@ const StorefrontAbout = ({ store }: { store: any }) => {
                     className='h-full grid-row-span-2 grid-col-span-2
                         radius-30'
                     style={{
-                      backgroundImage: `url(${store.meta.heroImage4})`,
+                      backgroundImage: `url(${products?.[0]?.variants?.[3]?.media?.[0].url})`,
                       backgroundRepeat: 'no-repeat',
                       backgroundPosition: 'center',
                       backgroundSize: 'cover'

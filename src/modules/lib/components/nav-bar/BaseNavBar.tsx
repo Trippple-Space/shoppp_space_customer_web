@@ -56,9 +56,12 @@ const BaseNavBar: FC<IBaseNavBar> = ({ links }) => {
   return (
     <div className='fixed w-full t-0 l-0 bg-white border-b border-whitesmoke z-5'>
       <div
-        className={cx('flex a-items-center app-width space-between py-15', {
-          'max-w-1400!': pathname.startsWith('/products/')
-        })}
+        className={cx(
+          'flex a-items-center relative app-width space-between py-15',
+          {
+            'max-w-1400!': pathname.startsWith('/products/')
+          }
+        )}
       >
         <div className='w-fit'>
           <Image
@@ -71,6 +74,19 @@ const BaseNavBar: FC<IBaseNavBar> = ({ links }) => {
 
         <div className='w-fit text-center'>{links}</div>
 
+        {asoebiModal && (
+          <>
+            <div
+              className='fixed inset-0 bg-black opacity-10 z-10'
+              onClick={handleAsoebiDropdown}
+            />
+
+            <div className='l:absolute r-250 t-70 l:p-10 bg-white z-20 radius-8'>
+              <AsoebiLinksModal sellOnAsoebi={true} />
+            </div>
+          </>
+        )}
+
         <div className='l:block l:flex l:a-items-center gap-30 w-fit relative j-self-end'>
           <div
             className='hidden l:block l:cursor-pointer'
@@ -81,22 +97,10 @@ const BaseNavBar: FC<IBaseNavBar> = ({ links }) => {
               Asoebi
             </p>
           </div>
-          {asoebiModal && (
-            <>
-              <div
-                className='fixed inset-0 bg-black opacity-10 z-10'
-                onClick={handleAsoebiDropdown}
-              />
-              <div className='l:absolute r-0 t-70 l:p-10 bg-white z-20 radius-8 w-150p'>
-                <AsoebiLinksModal sellOnAsoebi={true} />
-              </div>
-            </>
-          )}
 
           <div className='flex l:gap-20 gap-12 a-items-center'>
             <MiniCart />
             <div
-              
               className='flex gap-7 items-center w-fit h-fit m-auto radius-50 text-grey-700 pointer relative'
               onClick={handleUserProfileDropdown}
             >
