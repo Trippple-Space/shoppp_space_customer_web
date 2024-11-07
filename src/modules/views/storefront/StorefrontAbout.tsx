@@ -10,6 +10,8 @@ import { useStoreProductsView } from '@/modules/lib/utility/hooks/views/use-stor
 
 const StorefrontAbout = ({ store }: { store: any }) => {
   const { products } = useStoreProductsView()
+  console.log({ store })
+  
   return (
     <>
       <div className='bg-white w-full '>
