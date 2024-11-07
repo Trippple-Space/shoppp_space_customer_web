@@ -41,7 +41,6 @@ import CollapsibleDesc from './product-description/collapsibleDesc'
 import ShareProductModal from './share-modal/shareProductModal'
 
 const ProductDetails = ({ product }: { product: Product }) => {
-  console.log({ product })
   const [unitCounter, setUnitCounter] = useState<number>(1)
   const [selectedImage, setSelectedImage] = useState(
     product?.variants?.[0]?.media?.[0]?.url
