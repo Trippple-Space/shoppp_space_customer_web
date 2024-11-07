@@ -70,12 +70,12 @@ const StorefrontAbout = ({ store }: { store: any }) => {
                   </div>
                 </div>
               </div>
-              <div className='relative hidden l:block w-full'>
+              <div className='relative hidden l:block w-full g|min-height:430px'>
                 <Icon
                   className='absolute z-0 inline w-fit t--10 r-0 h-full'
                   name='store-about-dots-bg'
                 />
-                <div className='pr-70 w-full grid grid-3-cols-1fr grid-3-rows-1fr w-full max-w-700 absolute r-0 h-430 gap-27 mt-70'>
+                <div className='pr-70 w-full grid grid-3-cols-1fr grid-3-rows-1fr w-full max-w-700 absolute r-0 h-full gap-27 pt-70'>
                   <div className=' grid-row-span-1 grid-col-span-2 grid grid-3-cols-1fr gap-17'>
                     <div
                       className='grid-col-span-2
