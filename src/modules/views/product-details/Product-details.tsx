@@ -69,16 +69,17 @@ const ProductDetails = ({ product }: { product: Product }) => {
   const displayPrice = selectedVariant?.price || product?.price
 
   function getStockUnitLabel (stockType: string) {
-    switch (stockType
-) {
+    switch (stockType) {
       case 'fabric':
-        return 'size'
+        return 'Yards'
       case 'wears':
         return 'Unit'
       default:
-        return ''
+        return false
     }
   }
+
+  console.log({ product })
 
   return (
     <>
@@ -214,7 +215,7 @@ const ProductDetails = ({ product }: { product: Product }) => {
               </div>
             </div>
 
-            <div className='mt-40'>
+            <div className='mt-40 border-b @hi:border-green-100 pb-30'>
               <div className='text-grey-500 l:text-16 text-14 weight-500'>
                 Choose a color
               </div>
@@ -243,15 +244,13 @@ const ProductDetails = ({ product }: { product: Product }) => {
               </div>
             </div>
 
-            <hr className='mt-30 @lo:border-none @hi:border-t @hi:border-green-100' />
-
-            <div className='l:mt-40 mt-30'>
-              <div className='text-grey-500 l:text-16 text-14 weight-500'>
-                Select {getStockUnitLabel(product.type) || product.stockUnit}
-              </div>
-              <div className='mt-20 l:flex grid grid-3-cols-1fr gap-12'>
-                {['Small', 'Medium', 'Large', 'Extra Large', 'XXL'].map(
-                  (text, i) => (
+            {product.availableUnit && (
+              <div className='l:mt-40 mt-30 border-b border-green-100 pb-30'>
+                <div className='text-grey-500 l:text-16 text-14 weight-500'>
+                  Select {getStockUnitLabel(product.type) || product.stockUnit}
+                </div>
+                <div className='mt-20 l:flex grid grid-3-cols-1fr gap-12'>
+                  {product.availableUnit.map((text, i) => (
                     <label
                       className={cx(
                         'flex gap-8 text-14 bg-#F3F3F3 color-#726C6C px-10 py-7 radius-8',
@@ -268,12 +267,12 @@ const ProductDetails = ({ product }: { product: Product }) => {
                       />
                       <span className='whitespace-nowrap'>{text}</span>
                     </label>
-                  )
-                )}
+                  ))}
+                </div>
               </div>
-            </div>
+            )}
 
-            <hr className='l:mt-30 mt-20 @lo:border-none @hi:border-t @hi:border-green-100' />
+            {/* <hr className='l:mt-30 mt-20 @lo:border-none @hi:border-t @hi:border-green-100' /> */}
 
             <div className='mt-30 flex gap-20'>
               {selectedVariantItemInCart ? (
