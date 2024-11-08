@@ -9,7 +9,9 @@ import { useNavbarView } from '../../utility/hooks/views/use-navbar-view'
 import { useAuthGuard } from '../../utility/hooks/use-auth-guard'
 import useUserStore from '../../utility/store/user.store'
 import { useOrders } from '../../utility/hooks/use-orders'
-import { PiStorefront } from 'react-icons/pi'
+import { PiStorefrontBold } from 'react-icons/pi'
+import { RiArrowDownSLine } from 'react-icons/ri'
+
 import Link from 'next/link'
 import { paths } from '../../utility/paths'
 import { TbWorld } from 'react-icons/tb'
@@ -92,9 +94,10 @@ const BaseNavBar: FC<IBaseNavBar> = ({ links }) => {
             className='hidden l:block l:cursor-pointer'
             onClick={handleAsoebiDropdown}
           >
-            <p className='flex a-items-center gap-10 weight-500'>
-              <PiStorefront />
-              Asoebi
+            <p className='flex a-items-center  weight-500'>
+              <PiStorefrontBold className='w-30' />
+              <span>Asoebi</span>
+              <SlArrowDown className='w-10 ml-5' />
             </p>
           </div>
 
@@ -133,8 +136,8 @@ const BaseNavBar: FC<IBaseNavBar> = ({ links }) => {
                       onClick={handleAsoebiMobileDropdown}
                     >
                       <p className='flex a-items-center gap-10 weight-500'>
-                        <PiStorefront />
-                        Asoebi
+                        <PiStorefrontBold />
+                        <span>Asoebi</span>
                       </p>
                       <SlArrowDown className='w-20' />
                     </div>

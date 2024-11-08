@@ -17,10 +17,10 @@ const QuantitySelector: FC<QuantitySelectorProps> = ({
   }
   return (
     <div className='relative mb-10'>
-      <div className='text-10 bg-yellow-600 border border-yellow-900 weight-500 font-oblique w-fit px-10 py-3 radius-5 absolute r-0 b--16'>
+      <div className='text-10 bg-yellow-600 border border-yellow-900 weight-500 font-oblique w-fit px-10 py-3 radius-5 absolute l-0 b--16'>
         {cartItem.variant.stockUnit}(s)
       </div>
-      <div className='text-black border-yellow-900 border bg-white h-37 radius-5 flex a-items-center relative overflow-hidden'>
+      <div className='text-black border-yellow-900 border bg-white h-37 radius-5 flex a-items-center relative overflow-hidden w-fit'>
         <button
           onClick={() => decrement()}
           className='bg-yellow active:bg-yellow-600 border-none weight-900 text-16 h-full focus:outline-none p-0 pointer w-32'
