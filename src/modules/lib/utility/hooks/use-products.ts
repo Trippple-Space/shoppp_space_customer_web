@@ -96,6 +96,7 @@ const placeholderProduct: Product = {
           status: false,
           type: "",
         },
+        availableUnit: []
       },
       meta: undefined,
       properties: undefined,
@@ -112,6 +113,7 @@ const placeholderProduct: Product = {
     status: false,
     type: "",
   },
+  availableUnit: []
 };
 
 export const useProducts = (initialQuery: IQueryParams) => {
