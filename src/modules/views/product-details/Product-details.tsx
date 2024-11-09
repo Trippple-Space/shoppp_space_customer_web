@@ -41,7 +41,6 @@ import CollapsibleDesc from './product-description/collapsibleDesc'
 import ShareProductModal from './share-modal/shareProductModal'
 
 const ProductDetails = ({ product }: { product: Product }) => {
-  console.log({ product })
   const [unitCounter, setUnitCounter] = useState<number>(1)
   const [selectedImage, setSelectedImage] = useState(
     product?.variants?.[0]?.media?.[0]?.url
@@ -68,6 +67,18 @@ const ProductDetails = ({ product }: { product: Product }) => {
 
   const strikeOutPrice = (product?.price + product?.price * 0.05).toFixed(2) // TODO: implement proper strikeout price
   const displayPrice = selectedVariant?.price || product?.price
+
+  function getStockUnitLabel (stockType: string) {
+    switch (stockType) {
+      case 'fabric':
+        return 'Yards'
+      case 'wears':
+        return 'Unit'
+      default:
+        return false
+    }
+  }
+
 
   return (
     <>
@@ -203,7 +214,7 @@ const ProductDetails = ({ product }: { product: Product }) => {
               </div>
             </div>
 
-            <div className='mt-40'>
+            <div className='mt-40 border-b @hi:border-green-100 pb-30'>
               <div className='text-grey-500 l:text-16 text-14 weight-500'>
                 Choose a color
               </div>
@@ -232,15 +243,14 @@ const ProductDetails = ({ product }: { product: Product }) => {
               </div>
             </div>
 
-            <hr className='mt-30 @lo:border-none @hi:border-t @hi:border-green-100' />
+            {product.availableUnit && (
+              <div className='l:mt-40 mt-30 border-b border-green-100 pb-30'>
+                <div className='text-grey-500 l:text-16 text-14 weight-500'>
+                  Select {getStockUnitLabel(product.type) || product.stockUnit}
+                </div>
+                <div className='mt-20 l:flex grid grid-3-cols-1fr gap-12'>
+                  {product.availableUnit.map((text, i) => (
 
-            <div className='l:mt-40 mt-30'>
-              <div className='text-grey-500 l:text-16 text-14 weight-500'>
-                Choose a size
-              </div>
-              <div className='mt-20 l:flex grid grid-3-cols-1fr gap-12'>
-                {['Small', 'Medium', 'Large', 'Extra Large', 'XXL'].map(
-                  (text, i) => (
                     <label
                       className={cx(
                         'flex gap-8 text-14 bg-#F3F3F3 color-#726C6C px-10 py-7 radius-8',
@@ -257,13 +267,12 @@ const ProductDetails = ({ product }: { product: Product }) => {
                       />
                       <span className='whitespace-nowrap'>{text}</span>
                     </label>
-                  )
-                )}
+                  ))}
+                </div>
               </div>
-            </div>
+            )}
 
-            <hr className='l:mt-30 mt-20 @lo:border-none @hi:border-t @hi:border-green-100' />
-
+            {/* <hr className='l:mt-30 mt-20 @lo:border-none @hi:border-t @hi:border-green-100' /> */}
             <div className='mt-30 flex gap-20'>
               {selectedVariantItemInCart ? (
                 <QuantitySelector2

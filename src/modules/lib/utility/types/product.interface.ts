@@ -18,6 +18,7 @@ export interface Product {
      type: string;
      name: string;
      stockUnit: string;
+     availableUnit: string[];
      status: number;
      dateCreated: string;
      lastUpdated: string;
