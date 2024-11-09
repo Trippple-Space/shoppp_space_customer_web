@@ -58,7 +58,7 @@ const StorefrontLayout: FC<ILayout> = ({ children }) => {
                     </div>
                 </div>
 
-                <div className="border-b border-t border-whitesmoke l:pt-0 pt-20 l:mt-100 mt-30 mb-50">
+                <div className="border-b border-t border-whitesmoke l:pt-0 pt-20 mt-10 mb-50">
                     <div className="l:mt--60 mt--70">
                         <FabricsCategoryNav categories={categories} setSelectedCategory={setSelectedCategory} />
                     </div>
