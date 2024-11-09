@@ -96,13 +96,15 @@ const placeholderProduct: Product = {
           status: false,
           type: "",
         },
-        availableUnit: []
+        availableUnit: [],
+        finalPrice: 0
       },
       meta: undefined,
       properties: undefined,
       stockUnit: "",
       dateCreated: "",
       lastUpdated: "",
+      finalPrice: 0
     },
   ],
   store: {
@@ -113,7 +115,8 @@ const placeholderProduct: Product = {
     status: false,
     type: "",
   },
-  availableUnit: []
+  availableUnit: [],
+  finalPrice: 0
 };
 
 export const useProducts = (initialQuery: IQueryParams) => {
