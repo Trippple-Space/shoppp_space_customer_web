@@ -65,9 +65,6 @@ const ProductDetails = ({ product }: { product: Product }) => {
     setSelectedImage(product?.variants?.[0]?.media?.[0]?.url)
   }, [product])
 
-  const strikeOutPrice = (product?.price + product?.price * 0.05).toFixed(2) // TODO: implement proper strikeout price
-  const displayPrice = selectedVariant?.price || product?.price
-
   function getStockUnitLabel (stockType: string) {
     switch (stockType) {
       case 'fabric':
