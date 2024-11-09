@@ -79,6 +79,8 @@ const ProductDetails = ({ product }: { product: Product }) => {
     }
   }
 
+  const strikeOutPrice = (product?.finalPrice + product?.finalPrice * 0.05).toFixed(2) // TODO: implement proper strikeout price
+  const displayPrice = selectedVariant?.finalPrice || product?.finalPrice
 
   return (
     <>
