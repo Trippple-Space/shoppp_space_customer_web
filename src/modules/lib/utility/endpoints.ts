@@ -5,6 +5,7 @@ const endpoints = {
     PRODUCT_CATEGORIES: 'product/categories',
     PRODUCTS: 'products',
     PRODUCT: 'products/:slug',
+    SEARCH_PRODUCTS:'products',
     CART: '/cart',
     USER_ADDRESSES: 'users/:userId/addresses',
     PAY_WITH_PAYSTACK: 'payment/initialize/paystack',
