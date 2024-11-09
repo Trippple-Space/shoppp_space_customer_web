@@ -37,7 +37,7 @@ class ProductService {
      ): Promise<Product> {
           return new Promise((resolve, reject) => {
                const url = new URL(
-                    config.API_HOST +
+                    "https://api-staging.asoebi.africa" +
                          "/" +
                          buildEndpoint(endpoints.PRODUCT, { slug })
                );
@@ -46,6 +46,7 @@ class ProductService {
                Object.keys(query).forEach((key) =>
                     url.searchParams.append(key, query[key])
                );
+               console.log({ slug }, "from service");
 
                fetch(url.toString())
                     .then((res) => {
@@ -71,7 +72,7 @@ class ProductService {
      fetchProductBySearch(searchTerm: string): Promise<Product[]> {
           return new Promise((resolve, reject) => {
                const url = new URL(
-                    config.API_HOST +
+                    "https://api-staging.asoebi.africa" +
                          "/" +
                          buildEndpoint(endpoints.SEARCH_PRODUCTS, {
                               searchTerm,

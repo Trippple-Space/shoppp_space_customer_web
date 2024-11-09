@@ -43,8 +43,8 @@ const HomepageNavBar = () => {
   return (
     <BaseNavBar
       links={
-        <div className='w-fit mx-auto flex a-items-end gap-30 l:gap-50 weight-200 text-14 l:text-16 l:w-440'>
-          <div className='flex relative w-100p l-30'>
+        <div className='w-fit mx-auto flex a-items-end gap-30 l:gap-50 weight-200 text-14 l:text-16 l:w-440 w-90'>
+          <div className='flex w-100p relative'>
             <input
               type='text'
               className={classNames(
@@ -62,7 +62,7 @@ const HomepageNavBar = () => {
             />
             <div
               className={classNames(
-                'flex l:bg-#0B9378 l:absolute l:r-0 l:radius-50 l:t-4 l:p-6 l:pl-4 l:pr-4 l: mr-3 l:cursor-pointer',
+                'flex l:bg-#0B9378 l:absolute l:r-0 l:radius-50 l:t-4 l:p-6 l:px-4 l: mr-3 l:cursor-pointer l:w-33 w-100p flex j-content-end',
                 {
                   'l:radius-8': openSearchModal
                 }
@@ -76,7 +76,7 @@ const HomepageNavBar = () => {
             {openSearchModal && (
               <div
                 className={classNames(
-                  'hidden l:block l:absolute l:bg-#f3f3f3 l:w-100p l:h-400 l:bg-#F3F3F3 l:t-35 z-10',
+                  'hidden l:block l:absolute l:bg-#f3f3f3 l:w-100p l:h-200 l:bg-#F3F3F3 l:t-35 z-10',
                   {
                     'l:radius-b-r-9': openSearchModal,
                     'l:radius-b-l-9': openSearchModal
@@ -88,12 +88,14 @@ const HomepageNavBar = () => {
             )}
           </div>
           {openSearchModal && (
+
             <>
               <div
                 className='fixed inset-0 bg-black opacity-70 z-1 l:opacity-0'
                 onClick={handleOpenSearchModal}
               />
               <div className='fixed l-50p g|transform:translate(-50%) w-90p h-70 l:w-50p h-60p t-70 mt-30 bg-white z-10 radius-8 pb-20 relative l:mt-0 l:t-60 l:hidden'>
+
                 <div className='flex fixed w-100p j-content-center mt-20 border-b pb-20 border-b-#00000014 l:hidden'>
                   <input
                     type='text'
