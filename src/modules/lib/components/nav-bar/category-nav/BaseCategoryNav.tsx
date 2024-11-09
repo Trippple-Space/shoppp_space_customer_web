@@ -1,4 +1,4 @@
-import React, { ReactNode, FC, useState, useRef } from "react";
+import React, { ReactNode, FC, useState, useRef, useEffect } from "react";
 import { TfiAngleRight } from "react-icons/tfi";
 import { LuSettings2 } from "react-icons/lu";
 import Icon from "../../icon/Icon";
@@ -7,7 +7,7 @@ import { ProductCategory } from "@/modules/lib/utility/types/product.interface";
 import useIntersectionObserver from "@/modules/lib/utility/hooks/use-intersection-observer";
 import ImageAlt from "../../image-alt/ImageAlt";
 import SkeletonLoader from "../../skeleton-loader/Skeleton";
-import { HiOutlineChevronRight } from "react-icons/hi2";
+import { HiOutlineChevronLeft, HiOutlineChevronRight } from "react-icons/hi2";
 // This one is gueressing Su's head :)
 interface IBaseCategoryNav {
   categories: ProductCategory[];
@@ -28,24 +28,59 @@ const BaseCategoryNav: FC<IBaseCategoryNav> = ({
   });
 
   const scrollRef = useRef<HTMLDivElement>(null);
+  const [showScrollButtons, setShowScrollButtons] = useState(false);
+  const [showLeftButton, setShowLeftButton] = useState(false);
+  const [showRightButton, setShowRightButton] = useState(false);
 
-  const scrollCategories = () => {
-   if (scrollRef.current) {
-    scrollRef.current.scrollBy({
-      behavior: "smooth",
-      left: 90,  
-    });
-   }
+  const scrollCategories = (position: string) => {
+    if (scrollRef.current) {
+      scrollRef.current.scrollBy({
+        behavior: "smooth",
+        left: position === "left" ? -180 : 180,
+      });
+    }
   };
 
-  console.log({ categories }, "here");
+  const checkOverflowAndPosition = () => {
+    if (scrollRef.current) {
+      const hasOverflow =
+        scrollRef.current.scrollWidth > scrollRef.current.clientWidth;
+      setShowScrollButtons(hasOverflow);
+
+      const atStart = scrollRef.current.scrollLeft === 0;
+      const atEnd =
+        scrollRef.current.scrollLeft + scrollRef.current.clientWidth >=
+        scrollRef.current.scrollWidth;
+
+      setShowLeftButton(!atStart);
+      setShowRightButton(!atEnd);
+    }
+  };
+
+  useEffect(() => {
+    checkOverflowAndPosition();
+    window.addEventListener("resize", checkOverflowAndPosition);
+
+    return () => window.removeEventListener("resize", checkOverflowAndPosition);
+  }, []);
+
+  useEffect(() => {
+    if (scrollRef.current) {
+      scrollRef.current.addEventListener("scroll", checkOverflowAndPosition);
+      return () =>
+        scrollRef.current?.removeEventListener(
+          "scroll",
+          checkOverflowAndPosition
+        );
+    }
+  }, []);
 
   return (
     <div className="flex a-items-center j-content-center w-full relative">
       <div className="scroll-x no-scrollbar" ref={scrollRef}>
-        <div  className="flex h-fit w-fit whitespace-nowrap j-content-center">
+        <div className="flex h-fit w-fit whitespace-nowrap">
           {categories?.map((category, i) => (
-            <div className="w-90 flex j-content-center">
+            <div className="sm:w-90 w-71 flex j-content-center">
               <div
                 onClick={() => {
                   setActiveOption(i);
@@ -86,9 +121,27 @@ const BaseCategoryNav: FC<IBaseCategoryNav> = ({
         </div>
       </div>
 
-      <div onClick={scrollCategories} className="absolute hidden t-30p r-0 pointer bg-#F5F5F5 pointer px-6 py-6 round flex j-content-center items-center margin-left:12px;">
-        <HiOutlineChevronRight className="l:w-16 l:h-16 w-10 h-10" />
-      </div>
+      {showScrollButtons && (
+        <>
+          {showLeftButton && (
+            <div
+              onClick={() => scrollCategories("left")}
+              className="sm:flex hidden absolute t-10p l--15 l:border border-#00000014 pointer l:bg-white bg-#F5F5F5 pointer px-6 py-6 round j-content-center items-center margin-left:12px;"
+            >
+              <HiOutlineChevronLeft className="w-16 h-16" />
+            </div>
+          )}
+
+          {showRightButton && (
+            <div
+              onClick={() => scrollCategories("right")}
+              className="sm:flex hidden absolute t-10p r--15 l:border border-#00000014 pointer l:bg-white bg-#F5F5F5 pointer px-6 py-6 round j-content-center items-center margin-left:12px;"
+            >
+              <HiOutlineChevronRight className="w-16 h-16" />
+            </div>
+          )}
+        </>
+      )}
 
       <div className="flex items-center l:pr-20" ref={targetRef}>
         {/* <div className="l:p-13 round bg-white g|margin-top:-30px;margin-left:-7px; g|box-shadow:-27px|_|0px|_|40px|_|0px|_|rgb(275,275,275,0.95);">

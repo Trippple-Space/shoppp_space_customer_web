@@ -29,7 +29,7 @@ const tabs = [
 
 const StorefrontLayout: FC<ILayout> = ({ children }) => {
     // const [activeTab, setActiveTab] = useState(tabs[0]);
-    const [selectedCategory, setSelectedCategory] = useState();
+    const [selectedCategory, setSelectedCategory] = useState({});
     const {  products } = useStoreProductsView(selectedCategory);
     const { categories } = useCategoryNavView();
 

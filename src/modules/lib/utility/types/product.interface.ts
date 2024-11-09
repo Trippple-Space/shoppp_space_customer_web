@@ -26,6 +26,7 @@ export interface Product {
   comments: any;
   variants: ProductVariant[];
   store: Store;
+  tags: Tag[];
 }
 
 export interface ProductMedia {
@@ -48,4 +49,8 @@ export interface ProductVariant {
   stockUnit: string;
   dateCreated: string;
   lastUpdated: string;
+};
+
+export interface Tag {
+  label: string;
 }

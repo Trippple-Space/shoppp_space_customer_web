@@ -1,6 +1,13 @@
 [
     {
-        "name": "Casual Wear",
+        "name": "Trending Now",
+        "images": [
+            "https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Ftse1.mm.bing.net%2Fth%3Fid%3DOIP.KRQfVDmSjxigRUWNuuK0fAHaJQ%26pid%3DApi&f=1&ipt=12d9040289f2cd135c934dd001b5500ac9d6cbf1dc7f1b87c950490d3ba81d13&ipo=images"
+        ],
+        "description": "Casual wear refers to relaxed and informal clothing suitable for everyday activities and leisure time. This category includes comfortable and versatile pieces like jeans, t-shirts, sneakers, and sweatshirts, prioritizing comfort and ease of wear."
+    },
+    {
+        "name": "Casual",
         "images": [
             "https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Ftse1.mm.bing.net%2Fth%3Fid%3DOIP.KRQfVDmSjxigRUWNuuK0fAHaJQ%26pid%3DApi&f=1&ipt=12d9040289f2cd135c934dd001b5500ac9d6cbf1dc7f1b87c950490d3ba81d13&ipo=images"
         ],
@@ -16,7 +23,7 @@
     },
 
     {
-        "name": "Luxury Fashion",
+        "name": "Luxury",
         "images": [
             "https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Ftse1.mm.bing.net%2Fth%3Fid%3DOIP.TvQyijtnJpMLBbbbW9uA_wHaE8%26pid%3DApi&f=1&ipt=309181b1d1d60cb32c6ac925cf14721078abe082c380a8e9e7c96221569dcd5d&ipo=images"
         ],
@@ -40,7 +47,7 @@
     },
 
     {
-        "name": "Outdoor Gear",
+        "name": "Outdoor",
         "images": [
             "https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Ftse1.mm.bing.net%2Fth%3Fid%3DOIP.18LFREHeTQ1loQ9kKuHpewHaE7%26pid%3DApi&f=1&ipt=06c330ee6f64f79614d2db6f5d9a8d4967de5e16549b0ca8e3e78a3bcafa0a68&ipo=images"
         ],
@@ -72,7 +79,7 @@
     },
 
     {
-        "name": "Seasonal Wear",
+        "name": "Seasonal",
         "images": [
             "https://images.unsplash.com/photo-1485199692108-c3b5069de6a0?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Nnx8U2Vhc29uYWwlMjBXZWFyfGVufDB8fDB8fHww"
         ],
@@ -80,7 +87,7 @@
     },
 
     {
-        "name": "Specialty Wear",
+        "name": "Specialty",
         "images": [
             "https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Ftse2.mm.bing.net%2Fth%3Fid%3DOIP.gsQpvPRXKL4xEFeHsl_ThAHaE8%26pid%3DApi&f=1&ipt=31dc513292196fe8c879570d02c3b994d4eed4b9774770c0614fcbfccc811a7e&ipo=images"
         ],

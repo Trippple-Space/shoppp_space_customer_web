@@ -33,6 +33,9 @@ export interface IQueryParams {
 const placeholderProduct: Product = {
   longDescription: "",
   keywords: [],
+  tags: [
+    {label : ''}
+  ],
   id: 0,
   slug: "",
   category: {
@@ -68,6 +71,9 @@ const placeholderProduct: Product = {
       product: {
         longDescription: "",
         keywords: [],
+        tags: [
+          {label : ''}
+        ],
         id: 0,
         slug: "",
         type: "",
