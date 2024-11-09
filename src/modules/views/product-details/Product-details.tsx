@@ -76,8 +76,13 @@ const ProductDetails = ({ product }: { product: Product }) => {
     }
   }
 
-  const strikeOutPrice = (product?.finalPrice + product?.finalPrice * 0.05).toFixed(2) // TODO: implement proper strikeout price
-  const displayPrice = selectedVariant?.finalPrice || product?.finalPrice
+  const strikeOutPrice = (
+    product?.finalPrice +
+    product?.finalPrice * 0.05
+  ).toFixed(2) // TODO: implement proper strikeout price
+  const displayPrice = selectedVariant?.price || product?.price
+
+  console.log({ displayPrice })
 
   return (
     <>
@@ -249,7 +254,6 @@ const ProductDetails = ({ product }: { product: Product }) => {
                 </div>
                 <div className='mt-20 l:flex grid grid-3-cols-1fr gap-12'>
                   {product.availableUnit.map((text, i) => (
-
                     <label
                       className={cx(
                         'flex gap-8 text-14 bg-#F3F3F3 color-#726C6C px-10 py-7 radius-8',
