@@ -4,10 +4,8 @@
  * not sensitive keys that should rather live in the env files
  */
 
-const prodConfig = {
+const productionConfig = {
     API_HOST: 'https://api.asoebi.africa',
 }
 
-// stagingConfig.API_HOST = stagingConfig.API_HOST
-
-export default prodConfig;
+export default productionConfig;
