@@ -91,7 +91,7 @@ const MiniCart: React.FC<ModalProps> = () => {
                       <div className='line-height-20'>
                         <h2 className='text-12 l:text-14 weight-400'>{cartItem.variant.product.name} ({cartItem.variant.name})</h2>
                         <p className='text-12 text-light-grey'>{cartItem.variant.stock} {cartItem.variant.stockUnit}(s) left</p>
-                        <h1 className='text-14 weight-400'>{formatNumberAsPrice(cartItem.variant.price * cartItem.quantity)}</h1>
+                        <h1 className='text-14 weight-400'>{formatNumberAsPrice(cartItem.variant.finalPrice * cartItem.quantity)}</h1>
                         <div className='flex space-between gap-20 w-100p'>
                           <button className='w-100p flex l:w-100p border-1 border-green bg-white text-green text-10 py-5 px-10 radius-5 weight-500'><MdOutlineLocalShipping className='w-25' /> 10% Shipping discount</button>
                         </div>
@@ -132,7 +132,7 @@ const MiniCart: React.FC<ModalProps> = () => {
                         />
 
                         <div className='text-14 whitespace-nowrap mt-14 bold'>
-                          {formatNumberAsPrice(cartItem.variant.price)} x{' '}
+                          {formatNumberAsPrice(cartItem.variant.finalPrice)} x{' '}
                           {cartItem.quantity}
                         </div>
                       </div>
