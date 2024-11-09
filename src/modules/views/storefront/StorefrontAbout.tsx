@@ -9,8 +9,8 @@ import Icon from '@/modules/lib/components/icon/Icon'
 import { useStoreProductsView } from '@/modules/lib/utility/hooks/views/use-store-products-view'
 
 const StorefrontAbout = ({ store }: { store: any }) => {
-  console.log({ store })
   const { products } = useStoreProductsView()
+  
   return (
     <>
       <div className='bg-white w-full '>

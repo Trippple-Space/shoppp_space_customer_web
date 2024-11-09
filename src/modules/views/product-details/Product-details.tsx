@@ -37,6 +37,8 @@ import Checkbox from '@/modules/lib/components/checkbox/Checkbox'
 import QuantitySelector2 from '@/modules/lib/components/quantity-selector/QuantitySelector2'
 import { BiShareAlt } from 'react-icons/bi'
 import { useCart } from '@/modules/lib/utility/hooks/use-cart'
+import CollapsibleDesc from './product-description/collapsibleDesc'
+import ShareProductModal from './share-modal/shareProductModal'
 
 const ProductDetails = ({ product }: { product: Product }) => {
   console.log({ product })
@@ -54,6 +56,7 @@ const ProductDetails = ({ product }: { product: Product }) => {
     isAuthenticated
   } = useCart()
   const [selectedSize, setSelectedSize] = useState('')
+  const [showShareModal, setShowShareModal] = useState(false)
   const selectedVariantItemInCart = cart.cartItems.find(
     item => item.variant.id === selectedVariant?.id
   )
@@ -88,12 +91,13 @@ const ProductDetails = ({ product }: { product: Product }) => {
             />
           </div>
           <div className='l:w-50p l:px-0 px-10'>
-            <div>
-              <div className='l:flex grid l:gap-0 gap-20 space-between mt-10'>
-                <div className='l:text-28 text-22 weight-600'>
-                  {product.name}
-                </div>
-                {/* <div className='flex gap-13'>
+            <div className='flex flex-row space-between a-items-end'>
+              <div>
+                <div className='l:flex grid l:gap-0 gap-20 space-between mt-10'>
+                  <div className='l:text-28 text-22 weight-600'>
+                    {product.name}
+                  </div>
+                  {/* <div className='flex gap-13'>
                   <div className='bg-red-50 text-red px-12 py-7 l:text-16 text-12 radius-10 flex content-center gap-7'>
                     <AiOutlineHeart className='a-self-center' />
                     <span>109</span>
@@ -105,15 +109,24 @@ const ProductDetails = ({ product }: { product: Product }) => {
                     <BiShareAlt className='a-self-center text-green' />
                   </div>
                 </div> */}
+                </div>
+
+                <Link href={`/${product?.store?.slug}`} as=''>
+                  <div className='mt-11'>
+                    <div className='text-grey-500 l:text-16 text-14 weight-500'>
+                      {product?.store?.name} Store
+                    </div>
+                  </div>
+                </Link>
               </div>
 
-              <Link href={`/${product?.store?.slug}`} as=''>
-                <div className='mt-11'>
-                  <div className='text-grey-500 l:text-16 text-14 weight-500'>
-                    {product?.store?.name} Store
-                  </div>
-                </div>
-              </Link>
+              <button
+                className='flex items-center gap-10 bg-none m:px-20 px-10 m:py-10 py-6 m:text-16 text-14 weight-500 text-dimgrey border-1 radius-10 cursor-pointer'
+                onClick={() => setShowShareModal(true)}
+              >
+                <AiOutlineShareAlt className='w-20 h-20' />
+                Share
+              </button>
             </div>
 
             <hr className='mt-30 @lo:border-none @hi:border-t @hi:border-green-100' />
@@ -123,9 +136,9 @@ const ProductDetails = ({ product }: { product: Product }) => {
                 <div className='text-green l:text-34 text-24 bold'>
                   ₦{displayPrice}
                 </div>
-                <div className='text-grey-500 line-through l:text-21 text-14 weight-400 mt-6'>
+                {/*<div className='text-grey-500 line-through l:text-21 text-14 weight-400 mt-6'>
                   ₦{strikeOutPrice}
-                </div>
+                </div> */}
               </div>
               {/* <div>
                 <div className='flex gap-12 max-w-500'>
@@ -290,9 +303,9 @@ const ProductDetails = ({ product }: { product: Product }) => {
           <h1 className='l:t-24 l:text-24 weight-500 mt-100'>
             {product?.name}
           </h1>
-        </div> */}
+        </div>
 
-        {/* <div className='hidden l:flex w-100p space-between l:py-10 l:pl-15 text-19 weight-500 text-dimgrey'>
+        <div className="hidden l:flex w-100p space-between l:py-10 l:pl-15 text-19 weight-500 text-dimgrey">
           <div className='w-26p flex space-between items-center'>
             <div className='flex align-items text-14'>
               <div><GrStar className='w-18 pr-5' /></div>
@@ -309,7 +322,7 @@ const ProductDetails = ({ product }: { product: Product }) => {
             </div>
           </div>
 
-          <div className='flex w-30p space-between items-center'>
+          <div className="flex w-30p space-between items-center">
             <div className='flex items-center '>
               <div>
                 <PiHeartStraightThin className='w-24 h-24' />
@@ -317,15 +330,18 @@ const ProductDetails = ({ product }: { product: Product }) => {
               <div className='underline px-15 text-14'>Add to Wishlist</div>
             </div>
             <div>
-              <button className="flex items-center gap-10 bg-none px-20 py-10 text-16 weight-500 text-dimgrey border-1 radius-10">
-                <AiOutlineShareAlt className='w-20 h-20' />
+              <button
+                className="flex items-center gap-10 bg-none px-20 py-10 text-16 weight-500 text-dimgrey border-1 radius-10"
+                onClick={() => setShowShareModal(true)}
+              >
+                <AiOutlineShareAlt className="w-20 h-20" />
                 Share
               </button>
             </div>
           </div>
-        </div> */}
+        </div>
 
-        {/* <div className='flex gap-5 mt-20'>
+        <div className='flex gap-5 mt-20'>
           <ProductMedia product={product} activeVariant={null} />
           <div className='w-full'>
             <BuyBox product={product} />
@@ -339,7 +355,7 @@ const ProductDetails = ({ product }: { product: Product }) => {
                 <h1 className='text-16 l:text-20 weight-500 py-3 m:py-10'>
                   {product?.name} from {product?.store?.name} Store
                 </h1>
-                <div className='flex items-center text-grey'>
+                {/*<div className='flex items-center text-grey'>
                   <p className='flex items-center text-14 m:text-14'>
                     86% positive reviews
                     <span>
@@ -348,7 +364,7 @@ const ProductDetails = ({ product }: { product: Product }) => {
                     <AiFillStar className='w-14 h-14 l:w-18 l:h-18 mr-5 l:mr-5' />{' '}
                     3.8/5 rating
                   </p>
-                </div>
+                </div> */}
 
                 <Link href={`/${product?.store?.slug}`}>
                   <p className='text-danger underline text-14 m:text-16 py-5 l:py-15'>
@@ -402,16 +418,11 @@ const ProductDetails = ({ product }: { product: Product }) => {
         <div className='w-100p l:w-55p mt-20'>
           <div className='flex gap-10 pb-20 l:pb-25 l:px-0 px-10'>
             <Icon name='info' className='w-20 h-20 mt-2' />
-            <div>
+            <div className=''>
               <h2 className='text-14 l:text-16 weight-500'>
                 About this product
               </h2>
-              <div className='l:text-14 text-12 text-light-grey mt-15'>
-                {product?.longDescription}
-                <button className='bg-none border-none flex text-14 weight-500 mt-10'>
-                  <span className='underline pr-5'>Show more</span>
-                </button>
-              </div>
+              <CollapsibleDesc product={product} />
             </div>
           </div>
         </div>
@@ -612,6 +623,12 @@ const ProductDetails = ({ product }: { product: Product }) => {
         </div> */}
       </div>
 
+      <ShareProductModal
+        modalOpen={showShareModal}
+        handleCloseModal={() => {
+          setShowShareModal(false)
+        }}
+      />
       <Footer />
     </>
   )
