@@ -4,7 +4,7 @@ import { toast } from "sonner";
 
 
 const http = axios.create({
-    baseURL: envConfig.API_HOST
+    baseURL: 'https://api-staging.asoebi.africa'
 })
 
 const isAxiosTimeout = (error: AxiosError) => {
