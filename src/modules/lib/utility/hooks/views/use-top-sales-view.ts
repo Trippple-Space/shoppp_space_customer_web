@@ -15,20 +15,8 @@ export const useTopSalesView = (selectedCategory?: any) => {
     ? useProducts({ filters: { type } })
     : useProducts({});
 
-  const { categories, categoryCount, handleCategoryChange } = useCategoryFilter(
-    products,
-    updateFilters
-  );
-
-  useEffect(() => {
-    handleCategoryChange(selectedCategory as any);
-  }, [selectedCategory, products])
-
   return {
     type,
     products,
-    categories,
-    handleCategoryChange,
-    categoryCount
   };
 };
