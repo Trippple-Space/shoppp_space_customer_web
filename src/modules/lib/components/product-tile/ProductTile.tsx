@@ -147,8 +147,8 @@ const ProductTile: FC<IProductTile> = ({ product }: any) => {
             </div>
           )}
         </div>
-        <div className='mt-6 l:text-15 text-12 weight-700'>
-          {formatNumberAsPrice(selectedVariant?.price || product.price)}
+        <div className="mt-6 l:text-15 text-12 weight-700">
+          {formatNumberAsPrice(selectedVariant?.finalPrice || product.finalPrice)}
           {/* <span className="weight-300 l:text-15 text-10">{!!selectedVariant?.stockUnit && 'per'} {selectedVariant?.stockUnit}</span> */}
         </div>
         <div className='flex flex-wrap gap-4'>

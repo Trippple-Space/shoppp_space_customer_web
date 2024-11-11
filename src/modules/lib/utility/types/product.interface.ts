@@ -15,6 +15,7 @@ export interface Product {
   slug: string;
   category: ProductCategory;
   price: number;
+  finalPrice?: number;
   type: string;
   name: string;
   stockUnit: string;
@@ -26,6 +27,7 @@ export interface Product {
   comments: any;
   variants: ProductVariant[];
   store: Store;
+  availableUnit?: any[];
   tags: Tag[];
 }
 
@@ -41,9 +43,10 @@ export interface ProductVariant {
   media: ProductMedia[];
   stock: number;
   price: number;
+  finalPrice: number;
   minPurchaseQuantity: number;
   incrementBy: number;
-  product: Product;
+//   product: Product;
   meta: null | any;
   properties: null | any;
   stockUnit: string;
@@ -52,5 +55,5 @@ export interface ProductVariant {
 };
 
 export interface Tag {
-  label: string;
+  label?: string;
 }

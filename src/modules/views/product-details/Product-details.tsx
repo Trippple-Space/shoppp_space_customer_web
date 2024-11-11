@@ -2,40 +2,20 @@
 
 import Icon from '@/modules/lib/components/icon/Icon'
 import Image from '@/modules/lib/components/image/Image'
-import Input from '@/modules/lib/components/input/Input'
-import { paths } from '@/modules/lib/utility/paths'
 import Link from 'next/link'
 import React, { useEffect, useState } from 'react'
-import { AiFillStar, AiOutlineHeart, AiOutlineShareAlt } from 'react-icons/ai'
-import { BsArrowLeftShort, BsArrowRightShort, BsInfo } from 'react-icons/bs'
-import { PiHeartStraightThin, PiStarBold } from 'react-icons/pi'
-import { GrLocation, GrShareOption, GrStar } from 'react-icons/gr'
-import {
-  IoIosArrowBack,
-  IoIosArrowForward,
-  IoMdHeartEmpty
-} from 'react-icons/io'
+import { AiOutlineShareAlt } from 'react-icons/ai'
+import { GrLocation } from 'react-icons/gr'
 import HomepageNavBar from '@/modules/lib/components/nav-bar/HomepageNavBar'
 import Footer from '@/modules/lib/components/footer/Footer'
 import { Product } from '@/modules/lib/utility/types/product.interface'
-import ProductMedia from './product-media/ProductMedia'
-import BuyBox from './buy-box/BuyBox'
 import './ProductDetails.scss'
 import { TfiAngleLeft, TfiAngleRight } from 'react-icons/tfi'
 import { cx, scrollToTop } from '@/modules/lib/utility/utility'
 import Breadcrumb from './breadcrumb/Breadcrumb'
-import { FaRegBookmark, FaRegStar } from 'react-icons/fa'
-import { FaCheck, FaLocationPin } from 'react-icons/fa6'
-import { TiStarOutline } from 'react-icons/ti'
-import {
-  HiOutlineChatBubbleLeftEllipsis,
-  HiOutlineShare,
-  HiOutlineShoppingBag
-} from 'react-icons/hi2'
-import { IoCheckmarkOutline } from 'react-icons/io5'
-import Checkbox from '@/modules/lib/components/checkbox/Checkbox'
+import { FaCheck } from 'react-icons/fa6'
+import {HiOutlineShoppingBag} from 'react-icons/hi2'
 import QuantitySelector2 from '@/modules/lib/components/quantity-selector/QuantitySelector2'
-import { BiShareAlt } from 'react-icons/bi'
 import { useCart } from '@/modules/lib/utility/hooks/use-cart'
 import CollapsibleDesc from './product-description/collapsibleDesc'
 import ShareProductModal from './share-modal/shareProductModal'
@@ -65,8 +45,8 @@ const ProductDetails = ({ product }: { product: Product }) => {
     setSelectedImage(product?.variants?.[0]?.media?.[0]?.url)
   }, [product])
 
-  const strikeOutPrice = (product?.price + product?.price * 0.05).toFixed(2) // TODO: implement proper strikeout price
-  const displayPrice = selectedVariant?.price || product?.price
+  // const strikeOutPrice = (product?.finalPrice + product?.finalPrice * 0.05).toFixed(2) // TODO: implement proper strikeout price
+  const displayPrice = selectedVariant?.finalPrice || product?.finalPrice
 
   function getStockUnitLabel (stockType: string) {
     switch (stockType) {
@@ -250,7 +230,6 @@ const ProductDetails = ({ product }: { product: Product }) => {
                 </div>
                 <div className='mt-20 l:flex grid grid-3-cols-1fr gap-12'>
                   {product.availableUnit.map((text, i) => (
-
                     <label
                       className={cx(
                         'flex gap-8 text-14 bg-#F3F3F3 color-#726C6C px-10 py-7 radius-8',

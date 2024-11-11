@@ -66,43 +66,9 @@ const placeholderProduct: Product = {
       ],
       stock: 0,
       price: 0,
+      finalPrice: 0,
       minPurchaseQuantity: 0,
       incrementBy: 0,
-      product: {
-        longDescription: "",
-        keywords: [],
-        tags: [
-          {label : ''}
-        ],
-        id: 0,
-        slug: "",
-        type: "",
-        category: {
-          type: "",
-          id: 0,
-          name: "",
-          images: [],
-          description: null,
-        },
-        price: 0,
-        name: "",
-        stockUnit: "",
-        status: 0,
-        dateCreated: "",
-        lastUpdated: "",
-        reviewRating: 0,
-        reviews: undefined,
-        comments: undefined,
-        variants: [],
-        store: {
-          name: "",
-          slug: "",
-          id: 0,
-          description: "",
-          status: false,
-          type: "",
-        },
-      },
       meta: undefined,
       properties: undefined,
       stockUnit: "",
@@ -118,6 +84,8 @@ const placeholderProduct: Product = {
     status: false,
     type: "",
   },
+  availableUnit: [],
+  finalPrice: 0
 };
 
 export const useProducts = (initialQuery: IQueryParams) => {
