@@ -5,7 +5,7 @@
  */
 
 const localConfig = {
-    API_HOST: 'http://localhost:80',
+    API_HOST: 'https://api-staging.asoebi.africa',
 }
 
 export default localConfig;

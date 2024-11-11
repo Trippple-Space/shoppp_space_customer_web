@@ -42,7 +42,7 @@ const CollapsibleDesc: FC<ICollapsibleDesc> = ({ product }) => {
     <div className="l:text-14 text-12 text-light-grey mt-15">
       <p
         ref={descRef}
-        className={`overflow-hidden ${
+        className={`overflow-hidden white-space-pre-line ${
           isExpanded
             ? "g|max-height:1000px"
             : "l:g|max-height:67px g|max-height:58px"
