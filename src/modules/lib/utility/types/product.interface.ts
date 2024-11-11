@@ -46,7 +46,7 @@ export interface ProductVariant {
   finalPrice: number;
   minPurchaseQuantity: number;
   incrementBy: number;
-//   product: Product;
+  product?: Product;
   meta: null | any;
   properties: null | any;
   stockUnit: string;
@@ -55,5 +55,5 @@ export interface ProductVariant {
 };
 
 export interface Tag {
-  label?: string;
+  label: string;
 }
