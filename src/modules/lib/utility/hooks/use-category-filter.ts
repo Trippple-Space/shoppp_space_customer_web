@@ -50,7 +50,7 @@ export const useCategoryFilter = (
             }
           });
         });
-        console.log(filteredProducts);
+        //console.log(filteredProducts);
         updateFilters(filteredProducts);
       }
     }

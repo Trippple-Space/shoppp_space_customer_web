@@ -8,6 +8,8 @@ import useIntersectionObserver from "@/modules/lib/utility/hooks/use-intersectio
 import ImageAlt from "../../image-alt/ImageAlt";
 import SkeletonLoader from "../../skeleton-loader/Skeleton";
 import { HiOutlineChevronLeft, HiOutlineChevronRight } from "react-icons/hi2";
+import staticCategories from "@/modules/lib/utility/json-data/categories.json";
+
 // This one is gueressing Su's head :)
 interface IBaseCategoryNav {
   categories: ProductCategory[];
@@ -41,16 +43,20 @@ const BaseCategoryNav: FC<IBaseCategoryNav> = ({
     }
   };
 
+
   const checkOverflowAndPosition = () => {
+    const categoriesItems = document.querySelectorAll(".categoryItem");
+    const scrollContainerWidth =
+      categoriesItems[0].scrollWidth * (staticCategories.length + 1);
+
     if (scrollRef.current) {
-      const hasOverflow =
-        scrollRef.current.scrollWidth > scrollRef.current.clientWidth;
+      const hasOverflow = scrollContainerWidth > scrollRef.current.clientWidth;
       setShowScrollButtons(hasOverflow);
 
       const atStart = scrollRef.current.scrollLeft === 0;
       const atEnd =
         scrollRef.current.scrollLeft + scrollRef.current.clientWidth >=
-        scrollRef.current.scrollWidth;
+        scrollContainerWidth;
 
       setShowLeftButton(!atStart);
       setShowRightButton(!atEnd);
@@ -80,7 +86,10 @@ const BaseCategoryNav: FC<IBaseCategoryNav> = ({
       <div className="scroll-x no-scrollbar" ref={scrollRef}>
         <div className="flex h-fit w-fit whitespace-nowrap">
           {categories?.map((category, i) => (
-            <div className="sm:w-90 w-71 flex j-content-center">
+            <div
+              key={i}
+              className="sm:w-90 w-71 flex j-content-center categoryItem"
+            >
               <div
                 onClick={() => {
                   setActiveOption(i);
@@ -126,7 +135,7 @@ const BaseCategoryNav: FC<IBaseCategoryNav> = ({
           {showLeftButton && (
             <div
               onClick={() => scrollCategories("left")}
-              className="sm:flex hidden absolute t-10p l--15 l:border border-#00000014 pointer l:bg-white bg-#F5F5F5 pointer px-6 py-6 round j-content-center items-center margin-left:12px;"
+              className="sm:flex hidden absolute t-10p l--10 l:border border-#00000014 pointer l:bg-white bg-#F5F5F5 pointer px-6 py-6 round j-content-center items-center margin-left:12px;"
             >
               <HiOutlineChevronLeft className="w-16 h-16" />
             </div>
@@ -135,7 +144,7 @@ const BaseCategoryNav: FC<IBaseCategoryNav> = ({
           {showRightButton && (
             <div
               onClick={() => scrollCategories("right")}
-              className="sm:flex hidden absolute t-10p r--15 l:border border-#00000014 pointer l:bg-white bg-#F5F5F5 pointer px-6 py-6 round j-content-center items-center margin-left:12px;"
+              className="sm:flex hidden absolute t-10p r--10 l:border border-#00000014 pointer l:bg-white bg-#F5F5F5 pointer px-6 py-6 round j-content-center items-center margin-left:12px;"
             >
               <HiOutlineChevronRight className="w-16 h-16" />
             </div>
