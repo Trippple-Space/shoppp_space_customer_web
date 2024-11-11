@@ -230,7 +230,6 @@ const ProductDetails = ({ product }: { product: Product }) => {
                 </div>
                 <div className='mt-20 l:flex grid grid-3-cols-1fr gap-12'>
                   {product.availableUnit.map((text, i) => (
-
                     <label
                       className={cx(
                         'flex gap-8 text-14 bg-#F3F3F3 color-#726C6C px-10 py-7 radius-8',
