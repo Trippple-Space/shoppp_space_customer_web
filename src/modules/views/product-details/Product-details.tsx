@@ -65,8 +65,8 @@ const ProductDetails = ({ product }: { product: Product }) => {
     setSelectedImage(product?.variants?.[0]?.media?.[0]?.url)
   }, [product])
 
-  const strikeOutPrice = (product?.price + product?.price * 0.05).toFixed(2) // TODO: implement proper strikeout price
-  const displayPrice = selectedVariant?.price || product?.price
+  const strikeOutPrice = (product?.finalPrice + product?.finalPrice * 0.05).toFixed(2) // TODO: implement proper strikeout price
+  const displayPrice = selectedVariant?.finalPrice || product?.finalPrice
 
   function getStockUnitLabel (stockType: string) {
     switch (stockType) {
