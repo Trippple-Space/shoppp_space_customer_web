@@ -63,6 +63,7 @@ const placeholderProduct: Product = {
       ],
       stock: 0,
       price: 0,
+      finalPrice: 0,
       minPurchaseQuantity: 0,
       incrementBy: 0,
       product: {
@@ -79,6 +80,7 @@ const placeholderProduct: Product = {
           description: null,
         },
         price: 0,
+        finalPrice: 0,
         name: "",
         stockUnit: "",
         status: 0,
@@ -96,6 +98,7 @@ const placeholderProduct: Product = {
           status: false,
           type: "",
         },
+        availableUnit: []
       },
       meta: undefined,
       properties: undefined,
@@ -112,6 +115,8 @@ const placeholderProduct: Product = {
     status: false,
     type: "",
   },
+  availableUnit: [],
+  finalPrice: 0
 };
 
 export const useProducts = (initialQuery: IQueryParams) => {
