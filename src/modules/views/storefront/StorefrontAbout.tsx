@@ -10,9 +10,10 @@ import { useStoreProductsView } from '@/modules/lib/utility/hooks/views/use-stor
 
 const StorefrontAbout = ({ store }: { store: any }) => {
   const { products } = useStoreProductsView()
+
   return (
     <>
-      <div className='bg-white w-full '>
+      <div className='bg-white w-full'>
         <StorefrontNavBar store={store} />
 
         <div className='app-width mt-80'>
@@ -83,7 +84,7 @@ const StorefrontAbout = ({ store }: { store: any }) => {
                       className='grid-col-span-2
                           radius-t-l-0 radius-30'
                       style={{
-                        backgroundImage: `url(${products?.[0]?.variants?.[0]?.media?.[0].url})`,
+                        backgroundImage: `url(${store.meta.heroImage1})`,
                         backgroundRepeat: 'no-repeat',
                         backgroundPosition: 'center',
                         backgroundSize: 'cover'
@@ -93,7 +94,7 @@ const StorefrontAbout = ({ store }: { store: any }) => {
                       className='grid-col-span-1 
                           radius-t-r-0 radius-30'
                       style={{
-                        backgroundImage: `url(${products?.[0]?.variants?.[1]?.media?.[0].url})`,
+                        backgroundImage: `url(${store.meta.heroImage2})`,
                         backgroundRepeat: 'no-repeat',
                         backgroundPosition: 'center',
                         backgroundSize: 'cover'
@@ -104,7 +105,7 @@ const StorefrontAbout = ({ store }: { store: any }) => {
                     className='grid-col-span-1 grid-row-span-3
                         radius-t-r-0 radius-b-l-0 radius-30'
                     style={{
-                      backgroundImage: `url(${products?.[0]?.variants?.[2]?.media?.[0].url})`,
+                      backgroundImage: `url(${store.meta.heroImage3})`,
                       backgroundRepeat: 'no-repeat',
                       backgroundPosition: 'center',
                       backgroundSize: 'cover'
@@ -114,7 +115,7 @@ const StorefrontAbout = ({ store }: { store: any }) => {
                     className='h-full grid-row-span-2 grid-col-span-2
                         radius-30'
                     style={{
-                      backgroundImage: `url(${products?.[0]?.variants?.[3]?.media?.[0].url})`,
+                      backgroundImage: `url(${store.meta.heroImage4})`,
                       backgroundRepeat: 'no-repeat',
                       backgroundPosition: 'center',
                       backgroundSize: 'cover'
