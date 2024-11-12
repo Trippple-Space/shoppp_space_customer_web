@@ -10,12 +10,14 @@ import classNames from 'classnames'
 import QuantitySelector from '../quantity-selector/QuantitySelector'
 import { AiOutlinePlus } from 'react-icons/ai'
 import { IoMdClose } from 'react-icons/io'
+import ProductStockUnit from '../product-stock-unit/ProductStockUnit'
+import { useRouter } from 'next/navigation'
 
 const SearchModal = ({ searchResults }: { searchResults: Product[] }) => {
   const [openSingleProductModal, setOpenSingleProductModal] = useState(false)
   const [product, setProduct] = useState<Product | null>(null)
-  const [loading, setLoading] = useState(false)
   const [error, setError] = useState<string | null>(null)
+
   const {
     addToCart,
     cart,
@@ -24,6 +26,7 @@ const SearchModal = ({ searchResults }: { searchResults: Product[] }) => {
     isAuthenticated,
     isLoginModal
   } = useCart()
+  const router = useRouter()
 
   const [selectedImage, setSelectedImage] = useState(
     product?.variants?.[0]?.media?.[0]?.url
@@ -32,7 +35,6 @@ const SearchModal = ({ searchResults }: { searchResults: Product[] }) => {
   const selectedVariantItemInCart = cart.cartItems.find(
     item => item.variant.id === selectedVariant?.id
   )
-  const [selectedSize, setSelectedSize] = useState('')
 
   useEffect(() => {
     setSelectedImage(product?.variants?.[0]?.media?.[0]?.url)
@@ -45,19 +47,19 @@ const SearchModal = ({ searchResults }: { searchResults: Product[] }) => {
   }, [product])
 
   const handleFetchProduct = async (slug: string) => {
-    setOpenSingleProductModal(true)
-    setLoading(true)
-    setError(null)
-    try {
-      const singleSearchProduct = await productService.fetchProductBySlug(
-        slug,
-        {}
-      )
-      setProduct(singleSearchProduct)
-    } catch (err) {
-      setError('Failed to fetch product details')
-    } finally {
-      setLoading(false)
+    if (window.innerWidth >= 768) {
+      setOpenSingleProductModal(true)
+      try {
+        const singleSearchProduct = await productService.fetchProductBySlug(
+          slug,
+          {}
+        )
+        setProduct(singleSearchProduct)
+      } catch (err) {
+        setError('Failed to fetch product details')
+      }
+    } else {
+      router.push(`/products/${slug}`)
     }
   }
 
@@ -72,13 +74,13 @@ const SearchModal = ({ searchResults }: { searchResults: Product[] }) => {
     <>
       <div className='h-100p w-100p'>
         {searchResults && (
-          <div className='mt-100 l:mt-0 p-10 flex flex-col a-items-start w-100p h-80p l:h-100p gap-10'>
+          <div className='p-20 l:mt-0 p-10 flex flex-col a-items-start w-100p h-80p l:h-100p gap-10'>
             <p className='color-#00000099 text-left text-12'>Results</p>
-            <div className='overflow-auto w-100p flex flex-col gap-15'>
+            <div className='overflow-auto w-100p flex flex-col gap-15 no-scrollbar'>
               {searchResults.map(product => (
                 <div
                   key={product.slug}
-                  className='flex j-content-start gap-20 cursor-pointer'
+                  className='flex j-content-start gap-20 cursor-pointer '
                   onClick={() => handleFetchProduct(product.slug)}
                 >
                   <Image
@@ -114,7 +116,7 @@ const SearchModal = ({ searchResults }: { searchResults: Product[] }) => {
             <>
               <div
                 className='absolute bg-white z-10 t-0 
-            l-50p g|transform:translate(-50%) l:t-0 l:t-0 l:h-800 l:w-550 m:h-600 h-500 l:l-80p l:g|transform:translate(-50%)  radius-8 overflow-auto no-scrollbar'
+            l-50p g|transform:translate(-50%) l:h-600 l:w-550 h-500 l:l-80p radius-8 overflow-auto no-scrollbar'
               >
                 <div className=' w-100p bg-white border-b border-b-#00000014 p-10 l:p-20 flex a-items-center j-content-between'>
                   <p className='text-left  weight-600'>Price details</p>
@@ -189,32 +191,8 @@ const SearchModal = ({ searchResults }: { searchResults: Product[] }) => {
                     </div>
                   </div>
                   <div className=''>
-                    <p className='flex color-#000000B2  text-14 weight-400'>
-                      Select size:
-                    </p>
-                    <div className='mt-20 l:flex grid grid-3-cols-1fr gap-10 l:flex-wrap'>
-                      {['Small', 'Medium', 'Large', 'Extra Large', 'XXL'].map(
-                        (text, i) => (
-                          <label
-                            className={cx(
-                              'flex gap-8 text-14 bg-#F3F3F3 color-#726C6C px-10 py-7 radius-8',
-                              {
-                                'bg-green-100! text-green!':
-                                  text === selectedSize
-                              }
-                            )}
-                          >
-                            <input
-                              type='radio'
-                              name='size'
-                              onClick={() => setSelectedSize(text)}
-                              className={cx('accent-green')}
-                            />
-                            <span className='whitespace-nowrap'>{text}</span>
-                          </label>
-                        )
-                      )}
-                    </div>
+                    <ProductStockUnit product={product} />
+
                     <p className='text-left mt-20 weight-600 l:text-24 text-18'>
                       {formatNumberAsPrice(displayPrice || 0)}
                     </p>
