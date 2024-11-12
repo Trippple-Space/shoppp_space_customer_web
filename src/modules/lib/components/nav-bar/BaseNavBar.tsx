@@ -92,7 +92,7 @@ const BaseNavBar: FC<IBaseNavBar> = ({ links }) => {
         )}
 
         <div className='l:block flex l:flex a-items-center l:gap-30 gap-10 w-fit relative j-self-end'>
-          {/* <div
+          <div
             className='hidden l:block l:cursor-pointer'
             onClick={handleAsoebiDropdown}
           >
@@ -101,7 +101,7 @@ const BaseNavBar: FC<IBaseNavBar> = ({ links }) => {
               <span>Asoebi</span>
               <SlArrowDown className='w-10 ml-5' />
             </p>
-          </div> */}
+          </div>
           <div className='flex l:gap-20 gap-10 a-items-center'>
             <MiniCart />
 
