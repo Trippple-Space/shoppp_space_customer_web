@@ -294,6 +294,7 @@
 .mb-20 { margin-bottom: 20px; } 
 [class~='g|overflow-y:hidden;']{overflow-y:hidden;} 
 [class~='g|overflow-y:hidden']{overflow-y:hidden} 
+[class~='g|overflow-y:hidden;']{overflow-y:hidden;} 
 .bg-grey-200 { background-color: #F5F3F1; } 
 .mt-2 { margin-top: 2px; } 
 .scroll-y {    overflow-y: scroll;  } 
@@ -928,6 +929,15 @@
 @media only screen and (min-width: 992px) { @layer base {    .l\:border {       border: 1px solid;     }  } } 
 @media only screen and (min-width: 992px) { .l\:bg-\#F3F3F3 { background-color: #F3F3F3; } } 
 @media only screen and (min-width: 992px) { .l\:px-14 { padding-left: 14px; padding-right: 14px; } } 
+@media only screen and (min-width: 992px) { .l\:w-440 { width: 440px; } } 
+@media only screen and (min-width: 992px) { .l\:color-\#fff { color: #fff; } } 
+@media only screen and (min-width: 992px) { .l\:opacity-0 { opacity: 0%; } } 
+@media only screen and (min-width: 992px) { @layer base {    .l\:border {       border: 1px solid;     }  } } 
+@media only screen and (min-width: 992px) { .l\:bg-\#F3F3F3 { background-color: #F3F3F3; } } 
+@media only screen and (min-width: 992px) { .l\:pb-12 { padding-bottom: 12px; } } 
+@media only screen and (min-width: 992px) { .l\:pt-12 { padding-top: 12px; } } 
+@media only screen and (min-width: 992px) { .l\:pl-14 { padding-left: 14px; } } 
+@media only screen and (min-width: 992px) { .l\:pr-14 { padding-right: 14px; } } 
 @media only screen and (min-width: 992px) { .l\:outline-none {    outline: none;  } } 
 @media only screen and (min-width: 992px) { @layer base {.l\:radius-99 { border-radius: 99px; } } } 
 @media only screen and (min-width: 992px) { .l\:radius-t-r-9 { border-top-right-radius: 9px;  } } 
@@ -940,6 +950,10 @@
 @media only screen and (min-width: 992px) { .l\:w-33 { width: 33px; } } 
 @media only screen and (min-width: 992px) { .l\:m-5 { margin: 5px; } } 
 @media only screen and (min-width: 992px) { .l\:h-30 { height: 30px; } } 
+@media only screen and (min-width: 992px) { .l\:t-4 { top: 4px; } } 
+@media only screen and (min-width: 992px) { .l\:p-6 { padding: 6px; } } 
+@media only screen and (min-width: 992px) { .l\:px-4 { padding-left: 4px; padding-right: 4px; } } 
+@media only screen and (min-width: 992px) { .l\:w-33 { width: 33px; } } 
 @media only screen and (min-width: 992px) { @layer base {.l\:radius-8 { border-radius: 8px; } } } 
 @media only screen and (min-width: 992px) { .l\:bg-\#f3f3f3 { background-color: #f3f3f3; } } 
 @media only screen and (min-width: 992px) { .l\:h-200 { height: 200px; } } 
