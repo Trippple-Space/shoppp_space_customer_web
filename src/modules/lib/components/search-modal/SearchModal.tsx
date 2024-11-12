@@ -232,12 +232,14 @@ const SearchModal = ({ searchResults }: { searchResults: Product[] }) => {
                         </button>
                       )}
                     </div>
-                    <Link
-                      href={`/products/${product.slug}`}
-                      className='text-15 color-#1677FF border-b pb-5 cursor-pointer'
-                    >
-                      Show more details
-                    </Link>
+                    <div className='text-center'>
+                      <Link
+                        href={`/products/${product.slug}`}
+                        className='text-15 color-#1677FF border-b pb-5 cursor-pointer'
+                      >
+                        Show more details
+                      </Link>
+                    </div>
                   </div>
                 </div>
               </div>
