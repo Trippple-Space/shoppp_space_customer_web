@@ -68,3 +68,9 @@ export const scrollToTop = () => {
       behavior: 'smooth'
   });
 }
+
+  export function displayStockUnit(stockUnit: string): string {
+       if (stockUnit == "yard") return `per ${stockUnit}`;
+       else if (stockUnit == "unit") return stockUnit;
+       else return "piece";
+  }
