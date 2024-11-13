@@ -52,7 +52,7 @@ const CentralArena = ({ selectedCategory }: ICentralArena) => {
               </>
             ))
           ) : (
-            <div className="absolute l-50p mt-60 t-50p g|transform:translate(-50%) bg-white">
+            <div className="mt-60 bg-white grid-col-span-5 text-center">
               No products found for the selected filters
             </div>
           )}
