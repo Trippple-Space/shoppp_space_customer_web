@@ -8,10 +8,14 @@ import MiniCart from "../minicart/MiniCart";
 import { HiMenuAlt3 } from "react-icons/hi";
 import { productService } from "../../utility/services/product.service";
 import { Product } from "../../utility/types/product.interface";
+import { RxHamburgerMenu } from "react-icons/rx";
+import { useNavbarView } from "../../utility/hooks/views/use-navbar-view";
+import MobileNav from "./mobile-nav/MobileNav";
 
 const StorefrontNavBar = ({ store }: { store?: Store }) => {
   const [searchTerm, setSearchTerm] = useState("");
   const [searchResults, setSearchResults] = useState<Product[]>([]);
+  const { user } = useNavbarView();
 
   const [openSearchModal, setOpenSearchModal] = useState<boolean>(false);
 
@@ -35,20 +39,24 @@ const StorefrontNavBar = ({ store }: { store?: Store }) => {
   }, [searchTerm]);
 
   return (
-    <nav className="flex flex-row j-content-between a-items-center border border-0 border-b-1 border-b-#00000014 py-14 px-80">
-      <h1 className="font-robotoMono font-500 text-28 text-center">Amitex</h1>
+    <nav className="flex flex-row j-content-between a-items-center border border-0 border-b-1 border-b-#00000014 sm:py-14 py-12 l:px-80 md:px-60 sm:px-40 px-24">
+      <div className="md:flex-grow-0 flex-grow-1">
+        <h1 className="font-robotoMono font-500 md:text-28 sm:text-26 text-22 w-fit l:w-31.25p">
+          Amitex
+        </h1>
+      </div>
       <SearchInput
         inputClassname={
-          "hidden flex l:block border-none bg-none outline-none l:w-100p text-16 l:py-12"
+          "md:block hidden border-none bg-none outline-none md:w-100p text-16 md:py-11.2"
         }
-        searchClassname={""}
-        svgSize={"w-16 h-16"}
+        searchClassname={"md:pr-0 pr-20"}
+        svgSize={"md:w-16 w-24 md:h-16 h-24 md:mb-0 mb--5"}
         mainSearchClass={classNames(
-          "flex flex-row a-items-center border border-faint-grey l:px-14",
+          "flex flex-row a-items-center j-content-between md:border md:border-#D9D9D9 md:px-14 l:w-31.25p md:w-320",
           {
-            "l:radius-99": !openSearchModal,
-            "l:radius-t-r-9": openSearchModal,
-            "l:radius-t-l-9": openSearchModal,
+            "md:radius-99": !openSearchModal,
+            "md:radius-t-r-9": openSearchModal,
+            "md:radius-t-l-9": openSearchModal,
           }
         )}
         children={""}
@@ -58,15 +66,18 @@ const StorefrontNavBar = ({ store }: { store?: Store }) => {
         onClick={() => {}}
         onSearchClick={() => {}}
       />
-      <div className="flex flex-row gap-24 a-items-center">
+      <div className="flex flex-row md:gap-24 gap-20 a-items-center">
         <MiniCart />
-        <div className="flex flex-row a-items-center gap-8 p-4 pl-12 border border-#00000014 radius-999">
+        <div className="sm:flex hidden flex-row a-items-center gap-8 p-4 pl-12 border border-#00000014 radius-999">
           <HiMenuAlt3 className="w-24 h-24" />
           <img
-            src="https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Ftse2.mm.bing.net%2Fth%3Fid%3DOIP.50uZrI8ZshDl7RCBSo3vDwHaLH%26pid%3DApi&f=1&ipt=66bd43b9ebc1bff46a070e65bf39249b9fea914bd3766c1844a13dbebd14e6b7&ipo=images"
+            src={`https://api.dicebear.com/7.x/thumbs/svg?seed=${user?.username}`}
             alt="user"
             className="w-42 h-42 object-fit round border border-#00000014"
           />
+        </div>
+        <div className="sm:hidden block">
+          <MobileNav />
         </div>
       </div>
     </nav>

@@ -46,7 +46,6 @@ const HomepageNavBar = () => {
       links={
         <div className="flex gap-30 l:gap-50 weight-200 text-14 l:text-16 l:w-400">
           <SearchInput
-            mainSearchClass={"flex w-100p relative"}
             inputClassname={classNames(
               "hidden flex l:block l:border l:bg-#F3F3F3 l:border-none l:py-12 l:px-14 l:outline-none l:w-100p",
               {
@@ -55,18 +54,20 @@ const HomepageNavBar = () => {
                 "l:radius-t-l-9": openSearchModal,
               }
             )}
-            searchTerm={searchTerm}
-            placeholder={"Search asoebi.africa"}
             searchClassname={classNames(
-              "flex a-items-center j-content-center l:bg-#0B9378 color-black l:color-white l:absolute  l:radius-50 r-0 l:m-5 l:cursor-pointer l:w-30 l:h-30 w-100p",
+              "flex a-items-center j-content-center l:bg-#0B9378 l:absolute r-0 l:m-5 l:cursor-pointer l:w-30 l:h-30 w-100p",
               {
+                "l:radius-50": !openSearchModal,
                 "l:radius-8": openSearchModal,
               }
             )}
-            svgSize={"w-25 h-20"}
+            mainSearchClass={"flex w-100p relative"}
+            placeholder={"Search asoebi.africa"}
+            searchTerm={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
             onClick={() => setOpenSearchModal(true)}
             onSearchClick={handleOpenSearchModal}
+            svgSize={"w-25 h-20 color-black l:color-white"}
           >
             {openSearchModal && (
               <div
@@ -88,7 +89,7 @@ const HomepageNavBar = () => {
                 className="fixed inset-0 bg-black opacity-70 z-1 l:opacity-0"
                 onClick={handleOpenSearchModal}
               />
-              <div className="fixed l-50p g|transform:translate(-50%) w-90p h-70 l:w-50p h-60p t-70 mt-30 bg-white z-10 radius-8 pb-20 relative l:mt-0 l:t-60  l:hidden">
+              <div className="fixed l-50p g|transform:translate(-50%); w-90p h-70 l:w-50p h-60p t-70 mt-30 bg-white z-10 radius-8 pb-20 relative l:mt-0 l:t-60  l:hidden">
                 <div className=" w-100p flex j-content-center l:hidden border-b pb-20 border-b-#00000014">
                   <div className="flex  j-content-center relative a-items-center mt-20 w-80p">
                     <input
