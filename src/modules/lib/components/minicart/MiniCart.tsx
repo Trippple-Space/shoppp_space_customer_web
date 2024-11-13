@@ -2,7 +2,11 @@
 import Modal from '@/modules/lib/components/modal/modal'
 import OrderSummary from '@/modules/lib/components/order-summary/OrderSummary'
 import { useCart } from '@/modules/lib/utility/hooks/use-cart'
-import { cx, formatNumberAsPrice } from '@/modules/lib/utility/utility'
+import {
+  cx,
+  displayStockUnit,
+  formatNumberAsPrice
+} from '@/modules/lib/utility/utility'
 import { useRouter } from 'next/navigation'
 import React, { useState } from 'react'
 import { FaArrowLeftLong } from 'react-icons/fa6'
@@ -175,7 +179,8 @@ const MiniCart: React.FC<ModalProps> = () => {
                             })}
                           >
                             {cartItem.variant.stock}{' '}
-                            {cartItem.variant.stockUnit}(s) left
+                            {displayStockUnit(cartItem.variant.stockUnit)}(s)
+                            left
                           </div>
                         </div>
 
