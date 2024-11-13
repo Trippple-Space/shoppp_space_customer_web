@@ -2,7 +2,7 @@
 
 import { Toaster } from "sonner";
 import "../styles/styles.scss";
-import { Inter, Roboto, Lora } from "next/font/google";
+import { Inter, Roboto, Lora, Roboto_Mono } from "next/font/google";
 // import { useAuthGuard } from '@/modules/lib/utility/hooks/use-auth-guard';
 import GlobalArena from "@/modules/lib/components/global-arena/GlobalArena";
 import { BsInfo, BsInfoCircle } from "react-icons/bs";
@@ -26,6 +26,13 @@ const lora = Lora({
   display: "swap",
 });
 
+const robotoMono = Roboto_Mono({
+  subsets: ["latin"],
+  variable: "--font-robotoMono",
+  display: "swap",
+  weight: ["100", "300", "400", "500", "700"],
+})
+
 export const metadata = {
   title: "Asoebi Africa",
   description: "Fabrics touche",
@@ -45,7 +52,7 @@ export default function RootLayout({
   return (
     <html
       lang="en"
-      className={`${inter.variable} ${roboto.variable} ${lora.variable} bg-white font-inter`}
+      className={`${inter.variable} ${roboto.variable} ${lora.variable} ${robotoMono.variable} bg-white font-inter`}
     >
       <GlobalArena />
       <body className="@lo:weight-300 @lo:text-dimgrey">
