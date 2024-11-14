@@ -952,7 +952,7 @@
 @media only screen and (min-width: 992px) { .l\:h-32 { height: 32px; } } 
 @media only screen and (min-width: 992px) { .l\:text-22 { font-size: 22px; } } 
 @media only screen and (min-width: 992px) { .l\:h-100p { height: 100%; } } 
-@media only screen and (min-width: 992px) { .l\:h-80vh { height: 80vh; } } 
+@media only screen and (min-width: 992px) { .l\:w-500 { width: 500px; } } 
 @media only screen and (min-width: 992px) { .l\:l-80p { left: 80%; } } 
 @media only screen and (min-width: 992px) { .l\:text-24 { font-size: 24px; } } 
 @media only screen and (min-width: 992px) { .l\:h-45 { height: 45px; } } 
@@ -1072,7 +1072,3 @@
 @media only screen and (min-width: 992px) { .l\:pb-20 { padding-bottom: 20px; } } 
 @media only screen and (min-width: 992px) { .l\:pt-0 { padding-top: 0px; } } 
 @media only screen and (min-width: 992px) { .l\:mt--78 { margin-top: -78px; } } 
-@media only screen and (min-width: 992px) { .l\:w-55 { width: 55px; } } 
-@media only screen and (min-width: 992px) { .l\:w-550 { width: 550px; } } 
-@media only screen and (min-width: 992px) { .l\:w-5500 { width: 5500px; } } 
-@media only screen and (min-width: 992px) { .l\:w-500 { width: 500px; } } 
