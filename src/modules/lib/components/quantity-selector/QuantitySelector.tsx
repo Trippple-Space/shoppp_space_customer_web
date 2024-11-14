@@ -1,6 +1,7 @@
 import React, { FC, useEffect, useState } from 'react'
 import { ProductVariant } from '../../utility/types/product.interface'
 import { CartItem } from '../../utility/types/cart.interface'
+import { displayStockUnit } from '../../utility/utility'
 
 export interface QuantitySelectorProps {
   cartItem: CartItem
@@ -13,12 +14,10 @@ const QuantitySelector: FC<QuantitySelectorProps> = ({
   increment,
   decrement
 }) => {
-  {
-  }
   return (
     <div className='relative mb-10'>
       <div className='text-10 bg-yellow-600 border border-yellow-900 weight-500 font-oblique w-fit px-10 py-3 radius-5 absolute l-0 b--16'>
-        {cartItem.variant.stockUnit}(s)
+        {displayStockUnit(cartItem.variant.stockUnit)}(s)
       </div>
       <div className='text-black border-yellow-900 border bg-white h-37 radius-5 flex a-items-center relative overflow-hidden w-fit'>
         <button

@@ -128,11 +128,13 @@ const SearchModal = ({ searchResults }: { searchResults: Product[] }) => {
                 <div className='p-20 flex flex-col gap-10'>
                   <div className='mt-5'>
                     {selectedImage && (
-                      <Image
-                        src={selectedImage}
-                        alt={product?.name}
-                        className=' radius-8 object-fit'
-                      />
+                      <div className=' '>
+                        <Image
+                          src={selectedImage}
+                          alt={product?.name}
+                          className=' radius-8 object-fit h-100p'
+                        />
+                      </div>
                     )}
                   </div>
                   <div className='flex gap-20'>
