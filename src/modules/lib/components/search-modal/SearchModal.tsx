@@ -116,7 +116,7 @@ const SearchModal = ({ searchResults }: { searchResults: Product[] }) => {
             <>
               <div
                 className='absolute bg-white z-10 t-0 
-            l-50p g|transform:translate(-50%) h-60vh l:h-80vh l:w-500 l:l-80p radius-8 overflow-auto no-scrollbar'
+            l-50p g|transform:translate(-50%) h-60vh l:h-70vh l:w-500 l:l-80p radius-8 overflow-auto no-scrollbar'
               >
                 <div className=' w-100p bg-white border-b border-b-#00000014 p-10 l:p-20 flex a-items-center j-content-between'>
                   <p className='text-left  weight-600'>Price details</p>
