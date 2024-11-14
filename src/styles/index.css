@@ -480,6 +480,7 @@
 .object-fit-cover { object-fit: cover; } 
 .color-\#000000 { color: #000000; } 
 .opacity-50 { opacity: 50%; } 
+.h-60vh { height: 60vh; } 
 .h-500 { height: 500px; } 
 .j-content-between { justify-content: space-between; } 
 .color-\#000000B2 { color: #000000B2; } 
@@ -759,22 +760,6 @@
 .bg-lightgreen { background-color: #E2FFFA; } 
 .pl-50 { padding-left: 50px; } 
 .mt-25 { margin-top: 25px; } 
-.0l\:w-550 { width: 550px; } 
-.h-0l\:l-80p { left: 80%; } 
-.h-l\:l-80p { left: 80%; } 
-.h-8l\:l-80p { left: 80%; } 
-.h-80l\:l-80p { left: 80%; } 
-.h-80vl\:l-80p { left: 80%; } 
-.h-80vhl\:l-80p { left: 80%; } 
-.h-80vh { height: 80vh; } 
-.h-10p { height: 10%; } 
-.h-1 { height: 1px; } 
-.ml\:w-550 { width: 550px; } 
-.h-0vh { height: 0vh; } 
-.h-10vh { height: 10vh; } 
-.h-50vh { height: 50vh; } 
-.h-60vh { height: 60vh; } 
-.h-90vh { height: 90vh; } 
 
 @media only screen and (min-width: 576px) { .sm\:w-90 { width: 90px; } } 
 @media only screen and (min-width: 576px) { .sm\:flex {    display: flex;  } } 
@@ -794,11 +779,6 @@
 @media only screen and (min-width: 576px) { .s\:mb-30 { margin-bottom: 30px; } } 
 @media only screen and (min-width: 576px) { .s\:text-larger {    font-size: 1.25rem;  } } 
 @media only screen and (min-width: 576px) { .s\:gap-20 { gap: 20px; } } 
-@media only screen and (min-width: 576px) { .s\:h-5 { height: 5px; } } 
-@media only screen and (min-width: 576px) { .s\:h-50 { height: 50px; } } 
-@media only screen and (min-width: 576px) { .s\:h-50vh { height: 50vh; } } 
-@media only screen and (min-width: 576px) { .s\:h-0vh { height: 0vh; } } 
-@media only screen and (min-width: 576px) { .s\:h-60vh { height: 60vh; } } 
 
 @media only screen and (min-width: 768px) { .m\:py-30 { padding-top: 30px; padding-bottom: 30px; } } 
 @media only screen and (min-width: 768px) { .m\:gap-60 { gap: 60px; } } 
@@ -823,10 +803,6 @@
 @media only screen and (min-width: 768px) { .m\:text-18 { font-size: 18px; } } 
 @media only screen and (min-width: 768px) { .m\:w-650 { width: 650px; } } 
 @media only screen and (min-width: 768px) { .m\:text-20 { font-size: 20px; } } 
-@media only screen and (min-width: 768px) { .m\:5l\:w-550 { width: 550px; } } 
-@media only screen and (min-width: 768px) { .m\:50l\:w-550 { width: 550px; } } 
-@media only screen and (min-width: 768px) { .m\:50vl\:w-550 { width: 550px; } } 
-@media only screen and (min-width: 768px) { .m\:50vhl\:w-550 { width: 550px; } } 
 
 @media only screen and (min-width: 992px) { .l\:w-50p { width: 50%; } } 
 @media only screen and (min-width: 992px) { .l\:block {    display: block;  } } 
@@ -976,7 +952,7 @@
 @media only screen and (min-width: 992px) { .l\:h-32 { height: 32px; } } 
 @media only screen and (min-width: 992px) { .l\:text-22 { font-size: 22px; } } 
 @media only screen and (min-width: 992px) { .l\:h-100p { height: 100%; } } 
-@media only screen and (min-width: 992px) { .l\:w-550 { width: 550px; } } 
+@media only screen and (min-width: 992px) { .l\:h-80vh { height: 80vh; } } 
 @media only screen and (min-width: 992px) { .l\:l-80p { left: 80%; } } 
 @media only screen and (min-width: 992px) { .l\:text-24 { font-size: 24px; } } 
 @media only screen and (min-width: 992px) { .l\:h-45 { height: 45px; } } 
@@ -1096,12 +1072,7 @@
 @media only screen and (min-width: 992px) { .l\:pb-20 { padding-bottom: 20px; } } 
 @media only screen and (min-width: 992px) { .l\:pt-0 { padding-top: 0px; } } 
 @media only screen and (min-width: 992px) { .l\:mt--78 { margin-top: -78px; } } 
-@media only screen and (min-width: 992px) { .l\:h-6 { height: 6px; } } 
-@media only screen and (min-width: 992px) { .l\:h-10 { height: 10px; } } 
-@media only screen and (min-width: 992px) { .l\:h-1 { height: 1px; } } 
-@media only screen and (min-width: 992px) { .l\:h-9 { height: 9px; } } 
-@media only screen and (min-width: 992px) { .l\:h-90vh { height: 90vh; } } 
-@media only screen and (min-width: 992px) { .l\:h-0vh { height: 0vh; } } 
-@media only screen and (min-width: 992px) { .l\:h-10vh { height: 10vh; } } 
-@media only screen and (min-width: 992px) { .l\:h-80vh { height: 80vh; } } 
-@media only screen and (min-width: 768px) {  @media only screen and (min-width: 992px) { .m\:l\:w-550 { width: 550px; } }  } 
+@media only screen and (min-width: 992px) { .l\:w-55 { width: 55px; } } 
+@media only screen and (min-width: 992px) { .l\:w-550 { width: 550px; } } 
+@media only screen and (min-width: 992px) { .l\:w-5500 { width: 5500px; } } 
+@media only screen and (min-width: 992px) { .l\:w-500 { width: 500px; } } 
