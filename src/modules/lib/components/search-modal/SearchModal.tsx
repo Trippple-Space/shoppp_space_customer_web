@@ -80,7 +80,7 @@ const SearchModal = ({ searchResults }: { searchResults: Product[] }) => {
               {searchResults.map(product => (
                 <div
                   key={product.slug}
-                  className='flex j-content-start gap-20 cursor-pointer '
+                  className='flex j-content-start gap-20 cursor-pointer'
                   onClick={() => handleFetchProduct(product.slug)}
                 >
                   <Image
@@ -116,12 +116,12 @@ const SearchModal = ({ searchResults }: { searchResults: Product[] }) => {
             <>
               <div
                 className='absolute bg-white z-10 t-0 
-            l-50p g|transform:translate(-50%) l:h-600 l:w-550 h-500 l:l-80p radius-8 overflow-auto no-scrollbar'
+            l-50p g|transform:translate(-50%) h-60vh l:h-70vh l:w-500 l:l-80p radius-8 overflow-auto no-scrollbar'
               >
                 <div className=' w-100p bg-white border-b border-b-#00000014 p-10 l:p-20 flex a-items-center j-content-between'>
                   <p className='text-left  weight-600'>Price details</p>
                   <IoMdClose
-                    className='w-30 cursor-pointer '
+                    className='w-30 cursor-pointer'
                     onClick={handleCloseProductModal}
                   />
                 </div>
@@ -225,12 +225,9 @@ const SearchModal = ({ searchResults }: { searchResults: Product[] }) => {
                           disabled={!selectedImage}
                           className='bg-#0B9378 disabled:bg-yellow-200 disabled:cursor-not-allowed hover:scale-1.05 g|transition:0.5s pointer font-roboto text-grey-900 border-hidden px-10 py-10 radius-5 l:px-22 l:py-12 l:radius-10'
                         >
-                          <span className='hidden l:block weight-500 color-white'>
+                          <span className='l:block weight-500 color-white'>
                             Add to cart
                           </span>
-                          <div className='l:hidden'>
-                            <AiOutlinePlus className='l:w-24 l:h-24 w-14 h-14' />
-                          </div>
                         </button>
                       )}
                     </div>
