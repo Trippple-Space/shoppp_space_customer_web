@@ -12,6 +12,8 @@ import { useOrders } from "../../utility/hooks/use-orders";
 
 import AsoebiLinksModal from "./AsoebiLinksModal";
 import MobileNav from "./mobile-nav/MobileNav";
+import { PiStorefrontBold } from "react-icons/pi";
+import { SlArrowDown } from "react-icons/sl";
 
 interface IBaseNavBar {
   links: ReactNode;
@@ -86,13 +88,8 @@ const BaseNavBar: FC<IBaseNavBar> = ({ links }) => {
           </>
         )}
 
-<<<<<<< HEAD
-        <div className="l:block flex l:flex a-items-center l:gap-30 gap-10 w-fit relative j-self-end">
-          {/* <div
-=======
         <div className='l:block flex l:flex a-items-center l:gap-30 gap-10 w-fit relative j-self-end'>
           <div
->>>>>>> 98e87914bb09d2ab1f16b03aecf6520e8c6a52d1
             className='hidden l:block l:cursor-pointer'
             onClick={handleAsoebiDropdown}
           >
@@ -101,13 +98,8 @@ const BaseNavBar: FC<IBaseNavBar> = ({ links }) => {
               <span>Asoebi</span>
               <SlArrowDown className='w-10 ml-5' />
             </p>
-<<<<<<< HEAD
-          </div> */}
-          <div className="flex l:gap-20 gap-10 a-items-center">
-=======
           </div>
           <div className='flex l:gap-20 gap-10 a-items-center'>
->>>>>>> 98e87914bb09d2ab1f16b03aecf6520e8c6a52d1
             <MiniCart />
 
             <div
