@@ -14,11 +14,12 @@ import { TfiAngleLeft, TfiAngleRight } from 'react-icons/tfi'
 import { cx, scrollToTop } from '@/modules/lib/utility/utility'
 import Breadcrumb from './breadcrumb/Breadcrumb'
 import { FaCheck } from 'react-icons/fa6'
-import {HiOutlineShoppingBag} from 'react-icons/hi2'
+import { HiOutlineShoppingBag } from 'react-icons/hi2'
 import QuantitySelector2 from '@/modules/lib/components/quantity-selector/QuantitySelector2'
 import { useCart } from '@/modules/lib/utility/hooks/use-cart'
 import CollapsibleDesc from './product-description/collapsibleDesc'
 import ShareProductModal from './share-modal/shareProductModal'
+import ProductStockUnit from '@/modules/lib/components/product-stock-unit/ProductStockUnit'
 
 const ProductDetails = ({ product }: { product: Product }) => {
   const [unitCounter, setUnitCounter] = useState<number>(1)
@@ -58,7 +59,6 @@ const ProductDetails = ({ product }: { product: Product }) => {
         return false
     }
   }
-
 
   return (
     <>
@@ -222,34 +222,7 @@ const ProductDetails = ({ product }: { product: Product }) => {
                 <div className='l:w-50 l:h-50 w-40 h-40 m-7 bg-#FFD3F8 round' style={{ background: 'linear-gradient(to bottom, #FFB6B6 30%, #98C185 70%)' }}></div> */}
               </div>
             </div>
-
-            {product.availableUnit && (
-              <div className='l:mt-40 mt-30 border-b border-green-100 pb-30'>
-                <div className='text-grey-500 l:text-16 text-14 weight-500'>
-                  Select {getStockUnitLabel(product.type) || product.stockUnit}
-                </div>
-                <div className='mt-20 l:flex grid grid-3-cols-1fr gap-12'>
-                  {product.availableUnit.map((text, i) => (
-                    <label
-                      className={cx(
-                        'flex gap-8 text-14 bg-#F3F3F3 color-#726C6C px-10 py-7 radius-8',
-                        {
-                          'bg-green-100! text-green!': text === selectedSize
-                        }
-                      )}
-                    >
-                      <input
-                        type='radio'
-                        name='size'
-                        onClick={() => setSelectedSize(text)}
-                        className={cx('accent-green')}
-                      />
-                      <span className='whitespace-nowrap'>{text}</span>
-                    </label>
-                  ))}
-                </div>
-              </div>
-            )}
+            <ProductStockUnit product={product} />
 
             {/* <hr className='l:mt-30 mt-20 @lo:border-none @hi:border-t @hi:border-green-100' /> */}
             <div className='mt-30 flex gap-20'>

@@ -74,7 +74,9 @@ const BaseNavBar: FC<IBaseNavBar> = ({ links }) => {
           />
         </div>
 
-        <div className='w-fit text-center'>{links}</div>
+        <div className=' flex l:j-content-center w-100p j-content-end'>
+          {links}
+        </div>
 
         {asoebiModal && (
           <>
@@ -89,7 +91,7 @@ const BaseNavBar: FC<IBaseNavBar> = ({ links }) => {
           </>
         )}
 
-        <div className='l:block l:flex l:a-items-center gap-30 w-fit relative j-self-end'>
+        <div className='l:block flex l:flex a-items-center l:gap-30 gap-10 w-fit relative j-self-end'>
           <div
             className='hidden l:block l:cursor-pointer'
             onClick={handleAsoebiDropdown}
@@ -100,11 +102,11 @@ const BaseNavBar: FC<IBaseNavBar> = ({ links }) => {
               <SlArrowDown className='w-10 ml-5' />
             </p>
           </div>
-
-          <div className='flex l:gap-20 gap-12 a-items-center'>
+          <div className='flex l:gap-20 gap-10 a-items-center'>
             <MiniCart />
+
             <div
-              className='flex gap-7 items-center w-fit h-fit m-auto radius-50 text-grey-700 pointer relative'
+              className='flex gap-7 a-items-center   text-grey-700 cursor-pointer'
               onClick={handleUserProfileDropdown}
             >
               <div className='h-fit'>
@@ -118,13 +120,85 @@ const BaseNavBar: FC<IBaseNavBar> = ({ links }) => {
                 <div className='text-grey-500 whitespace-nowrap l:text-12 text-10'>
                   {getGreeting()}
                 </div>
-                <div className='whitespace-nowrap text-green weight-600 l:text-14 text-12'>{`${
-                  user?.profile?.firstName || 'Guest User'
-                }`}</div>
+                <div className='text-green weight-600 l:text-14 text-12'>
+                  {`${user?.profile?.firstName || 'Guest User'}`}
+                </div>
               </div>
             </div>
-            <div className='l:hidden relative'>
-              <RxHamburgerMenu onClick={toogleHamburgerMenu} />
+            {userProfileDropdown && (
+              <>
+                {/* Overlay */}
+                <div
+                  className='fixed inset-0 bg-black opacity-10 z-10'
+                  onClick={handleCloseDropdown}
+                />
+
+                {/* Dropdown */}
+                <div className='absolute r-0 l:t-60 t-50 bg-white g|box-shadow:0px|_|-2px|_|10px|_|rgba(0,0,0,0.10); radius-8 z-20'>
+                  <div className='flex items-center gap-10 p-20'>
+                    <div className=''>
+                      <Image
+                        className='l:w-60 l:h-60 w-40 h-40 border-solid border-2 border-grey-300 radius-50p'
+                        src={`https://api.dicebear.com/7.x/thumbs/svg?seed=${user?.username}`}
+                        alt='user'
+                      />
+                    </div>
+
+                    <div className=''>
+                      <div className='weight-500 l:text-18 text-14 whitespace-nowrap flex items-center gap-20'>
+                        <div className='capitalize'>
+                          {user?.profile.firstName || 'Guest'}{' '}
+                          {user?.profile.lastName || 'User'}
+                        </div>
+                      </div>
+                      <div className='l:text-10 text-8 text-green weight-600'>
+                        {user?.email}
+                      </div>
+                    </div>
+                  </div>
+
+                  <div className='border-t border-5 border-grey-200'>
+                    <div
+                      className='p-15 hover:bg-grey-100 pointer flex items-center gap-10 text-grey-700'
+                      onClick={() => {
+                        setUserOrderDropdown(true)
+                        handleCloseDropdown()
+                      }}
+                    >
+                      <div className='text-12 weight-500'>
+                        Orders ({orders.length})
+                      </div>
+                    </div>
+
+                    <div
+                      className='p-15 hover:bg-grey-100 pointer flex items-center gap-10 text-grey-700'
+                      onClick={openAddressModal}
+                    >
+                      <div className='text-12 weight-500'>Address book</div>
+                    </div>
+
+                    {/* <div className='p-15 hover:bg-grey-100 pointer flex items-center gap-10 text-grey-700'>
+                                        <div className="text-12 weight-500">Close account</div>
+                                    </div> */}
+                  </div>
+
+                  <div className='border-t border-5 border-grey-200 pointer'>
+                    <div
+                      className='l:p-20 p-10 text-center text-12 flex items-center justify-center gap-10 w-fit mx-auto weight-500 text-green'
+                      style={{ color: isAuthenticated ? 'red' : '' }}
+                      onClick={() => signOut()}
+                    >
+                      <div className=''>
+                        {isAuthenticated ? 'Logout' : 'Login'}
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </>
+            )}
+
+            <div className='l:hidden flex a-items-center'>
+              <RxHamburgerMenu onClick={toogleHamburgerMenu} className='w-30' />
               {hamburgerMenu && (
                 <div
                   className='l:hidden flex flex-col space-between
@@ -177,77 +251,6 @@ const BaseNavBar: FC<IBaseNavBar> = ({ links }) => {
               )}
             </div>
           </div>
-          {userProfileDropdown && (
-            <>
-              {/* Overlay */}
-              <div
-                className='fixed inset-0 bg-black opacity-10 z-10'
-                onClick={handleCloseDropdown}
-              />
-
-              {/* Dropdown */}
-              <div className='absolute r-0 l:t-60 t-50 bg-white g|box-shadow:0px|_|-2px|_|10px|_|rgba(0,0,0,0.10); radius-8 z-20'>
-                <div className='flex items-center gap-10 p-20'>
-                  <div className=''>
-                    <Image
-                      className='l:w-60 l:h-60 w-40 h-40 border-solid border-2 border-grey-300 radius-50p'
-                      src={`https://api.dicebear.com/7.x/thumbs/svg?seed=${user?.username}`}
-                      alt='user'
-                    />
-                  </div>
-
-                  <div className=''>
-                    <div className='weight-500 l:text-18 text-14 whitespace-nowrap flex items-center gap-20'>
-                      <div className='capitalize'>
-                        {user?.profile.firstName || 'Guest'}{' '}
-                        {user?.profile.lastName || 'User'}
-                      </div>
-                    </div>
-                    <div className='l:text-10 text-8 text-green weight-600'>
-                      {user?.email}
-                    </div>
-                  </div>
-                </div>
-
-                <div className='border-t border-5 border-grey-200'>
-                  <div
-                    className='p-15 hover:bg-grey-100 pointer flex items-center gap-10 text-grey-700'
-                    onClick={() => {
-                      setUserOrderDropdown(true)
-                      handleCloseDropdown()
-                    }}
-                  >
-                    <div className='text-12 weight-500'>
-                      Orders ({orders.length})
-                    </div>
-                  </div>
-
-                  <div
-                    className='p-15 hover:bg-grey-100 pointer flex items-center gap-10 text-grey-700'
-                    onClick={openAddressModal}
-                  >
-                    <div className='text-12 weight-500'>Address book</div>
-                  </div>
-
-                  {/* <div className='p-15 hover:bg-grey-100 pointer flex items-center gap-10 text-grey-700'>
-                                        <div className="text-12 weight-500">Close account</div>
-                                    </div> */}
-                </div>
-
-                <div className='border-t border-5 border-grey-200 pointer'>
-                  <div
-                    className='l:p-20 p-10 text-center text-12 flex items-center justify-center gap-10 w-fit mx-auto weight-500 text-green'
-                    style={{ color: isAuthenticated ? 'red' : '' }}
-                    onClick={() => signOut()}
-                  >
-                    <div className=''>
-                      {isAuthenticated ? 'Logout' : 'Login'}
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </>
-          )}
           {userOrderDropdown && (
             <OrdersModal
               modalOpen={userOrderDropdown}

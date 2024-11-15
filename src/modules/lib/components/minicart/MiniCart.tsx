@@ -2,7 +2,11 @@
 import Modal from '@/modules/lib/components/modal/modal'
 import OrderSummary from '@/modules/lib/components/order-summary/OrderSummary'
 import { useCart } from '@/modules/lib/utility/hooks/use-cart'
-import { cx, formatNumberAsPrice } from '@/modules/lib/utility/utility'
+import {
+  cx,
+  displayStockUnit,
+  formatNumberAsPrice
+} from '@/modules/lib/utility/utility'
 import { useRouter } from 'next/navigation'
 import React, { useState } from 'react'
 import { FaArrowLeftLong } from 'react-icons/fa6'
@@ -23,14 +27,14 @@ const MiniCart: React.FC<ModalProps> = () => {
   const router = useRouter()
 
   return (
-    <div>
+    <div className='w-fit'>
       <Modal
         isOpen={open}
         onClose={() => setOpen(false)}
         extraClass={{ height: '100vh' }}
         className='t-0 l:t-0 l:b-0 100vh l:h-100vh l:r-0 overflow-hidden l:w-520 w-full'
       >
-        <div className='relative h-full g|overflow-y:hidden;'>
+        <div className='relative h-full g|overflow-y:hidden'>
           <div
             className='py-15 bg-grey-200 pointer'
             onClick={() => setOpen(false)}
@@ -149,7 +153,7 @@ const MiniCart: React.FC<ModalProps> = () => {
                             )}
                           >
                             {' '}
-                            {cartItem?.variant?.product?.name}{' '}
+                            {/* {cartItem?.variant?.product?.name}{' '} */}
                           </div>
                         </div>
 
@@ -175,7 +179,8 @@ const MiniCart: React.FC<ModalProps> = () => {
                             })}
                           >
                             {cartItem.variant.stock}{' '}
-                            {cartItem.variant.product?.stockUnit}(s) left
+                            {displayStockUnit(cartItem.variant.stockUnit)}(s)
+                            left
                           </div>
                         </div>
 
@@ -225,7 +230,7 @@ const MiniCart: React.FC<ModalProps> = () => {
         </div>
       </Modal>
 
-      <div className='w-100p'>
+      <div className=''>
         <div
           onClick={() => setOpen(true)}
           className='relative pointer bg-#F3F3F3 flex a-items-center gap-8 w-70 radius-6 px-5 py-5'
