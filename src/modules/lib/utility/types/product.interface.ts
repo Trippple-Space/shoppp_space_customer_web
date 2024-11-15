@@ -52,6 +52,7 @@ export interface ProductVariant {
   stockUnit: string;
   dateCreated: string;
   lastUpdated: string;
+  preOrder?: boolean
 };
 
 export interface Tag {
