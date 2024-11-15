@@ -12,30 +12,7 @@ import { useNavbarView } from "../../utility/hooks/views/use-navbar-view";
 import MobileNav from "./mobile-nav/MobileNav";
 
 const StorefrontNavBar = ({ store }: { store?: Store }) => {
-  const [searchTerm, setSearchTerm] = useState("");
-  const [searchResults, setSearchResults] = useState<Product[]>([]);
   const { user } = useNavbarView();
-
-  const [openSearchModal, setOpenSearchModal] = useState<boolean>(false);
-
-  const handleOpenSearchModal = () => {
-    setOpenSearchModal((prev) => !prev);
-  };
-
-  useEffect(() => {
-    const fetchProducts = async () => {
-      try {
-        const result = await productService.fetchProductBySearch(searchTerm);
-        setSearchResults(result);
-        console.log({ result });
-      } catch (err) {
-        console.error(err);
-      }
-    };
-    if (searchTerm) {
-      fetchProducts();
-    }
-  }, [searchTerm]);
 
   return (
     <nav className="flex flex-row j-content-between a-items-center border border-0 border-b-1 border-b-#00000014 sm:py-14 py-12 l:px-80 md:px-60 sm:px-40 px-24">
@@ -46,29 +23,13 @@ const StorefrontNavBar = ({ store }: { store?: Store }) => {
       </div>
 
       <SearchInput
-        inputClassname={
-          "md:block hidden border-none bg-none outline-none md:w-100p text-16 md:py-11.2"
-        }
-        searchClassname={"md:pr-0 pr-20"}
-        svgSize={"md:w-16 w-24 md:h-16 h-24 md:mb-0 mb--5"}
-        mainSearchClass={classNames(
-          "flex flex-row a-items-center j-content-between md:border md:border-#D9D9D9 md:px-14 l:w-31.25p md:w-320",
-          {
-            "md:radius-99": !openSearchModal,
-            "md:radius-t-r-9": openSearchModal,
-            "md:radius-t-l-9": openSearchModal,
-          }
-        )}
-        children={""}
-        searchTerm={""}
+        svgSize={"md:w-16 w-24 md:h-16 h-24 md:mb-0 mb--5 md:mr-14"}
         placeholder={"Search"}
-        onChange={() => {}}
-        onClick={() => {}}
-        onSearchClick={() => {}}
+        component={"store"}
       />
       <div className="flex flex-row md:gap-24 gap-20 a-items-center">
         <MiniCart />
-        <div className="sm:flex hidden flex-row a-items-center gap-8 p-4 pl-12 border border-#00000014 radius-999">
+        <div className="sm:flex hidden flex-row a-items-center gap-8 p-4 pl-12 border border-#00000014 radius-999 pointer">
           <HiMenuAlt3 className="w-24 h-24" />
           <img
             src={`https://api.dicebear.com/7.x/thumbs/svg?seed=${user?.username}`}

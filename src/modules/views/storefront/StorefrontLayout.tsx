@@ -60,13 +60,14 @@ const StorefrontLayout: FC<ILayout> = ({ children }) => {
               <h3 className="sm:text-24 text-20 weight-600 color-#000000E0">
                 New arrivals
               </h3>
-              <Link
+
+              {/*<Link
                 href={"/"}
                 className="bg-black text-white sm:py-8 py-6 px-14 flex flex-row a-items-center gap-6 radius-6"
               >
                 <span className="sm:text-16 text-14 weight-600">View more</span>
                 <MdChevronRight className="w-16 h-16 sm:inline hidden" />
-              </Link>
+              </Link> */}
             </div>
             <div className="scroll-x no-scrollbar" ref={scrollRef1}>
               <div className="flex h-fit w-fit whitespace-nowrap gap-14">
@@ -93,7 +94,7 @@ const StorefrontLayout: FC<ILayout> = ({ children }) => {
             />
           </section>
 
-          <section className="bg-#FFF3F1 radius-16 sm:p-24 p-20 flex flex-col md:gap-24 sm:gap-20 gap-24 w-full relative">
+          {/*<section className="bg-#FFF3F1 radius-16 sm:p-24 p-20 flex flex-col md:gap-24 sm:gap-20 gap-24 w-full relative">
             <div className="flex flex-row j-content-between a-items-center">
               <h3 className="sm:text-24 text-20 weight-600 color-#000000E0">
                 Deals for you
@@ -129,17 +130,20 @@ const StorefrontLayout: FC<ILayout> = ({ children }) => {
               scrollLength={filteredProducts.length}
               component={"products"}
             />
-          </section>
+          </section> */}
         </div>
 
-        <section className="flex flex-col sm:gap-24 gap-20 mx-24 sm:mx-40 md:mx-60 l:mx-100 xl:mx-200">
+        {/*
+          <section className="flex flex-col sm:gap-24 gap-20 mx-24 sm:mx-40 md:mx-60 l:mx-100 xl:mx-200">
           <div className="flex flex-row j-content-between a-items-center">
             <h3 className="sm:text-24 text-16 weight-600">Featured products</h3>
             <Link
               href={"/"}
               className="text-16 flex flex-row a-items-center gap-3"
             >
-              <span className="sm:inline-block hidden">Browse all products</span>
+              <span className="sm:inline-block hidden">
+                Browse all products
+              </span>
               <GoArrowRight className="w-16 h-16 sm:mb--2" />
             </Link>
           </div>
@@ -158,7 +162,7 @@ const StorefrontLayout: FC<ILayout> = ({ children }) => {
               </div>
             )}
           </div>
-        </section>
+        </section> */}
       </div>
       <Footer />
     </div>

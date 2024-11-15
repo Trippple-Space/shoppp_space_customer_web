@@ -24,7 +24,7 @@ const StorefrontAbout = ({ store }: { store: any }) => {
                   <h2 className="sm:text-32 text-20 weight-500">{store?.name}'s shop</h2>
                   <p className="flex flex-row a-items-center gap-12">
                     <span className="text-14 weight-400">0 followers</span>
-                    <span className="text-12 weight-600 bg-black text-white py-4 px-16 radius-999">
+                    <span className="text-12 weight-600 bg-black text-white py-4 px-16 radius-999 pointer">
                       Follow
                     </span>
                   </p>
@@ -37,12 +37,12 @@ const StorefrontAbout = ({ store }: { store: any }) => {
                 <p className="sm:text-16 text-14 weight-400">{store?.subHeading}</p>
                 <div className="text-14 weight-400 flex flex-row sm:gap-23 gap-8">
                   <p className="flex flex-row a-items-center sm:gap-8 gap-5">
-                    <span className="sm:text-16 text-14 weight-600">4827</span>
+                    <span className="sm:text-16 text-14 weight-600">#,###</span>
                     <span>monthly visits</span>
                   </p>
                   <p className="h-24 w-1 bg-#00000014"></p>
                   <p className="flex flex-row a-items-center sm:gap-8 gap-5">
-                    <span className="sm:text-16 text-14 weight-600">101,256</span>
+                    <span className="sm:text-16 text-14 weight-600">#,###</span>
                     <span>product sold</span>
                   </p>
                 </div>
