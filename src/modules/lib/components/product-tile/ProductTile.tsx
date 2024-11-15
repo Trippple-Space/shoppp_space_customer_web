@@ -10,6 +10,7 @@ import { useCart } from '../../utility/hooks/use-cart'
 import QuantitySelector from '../quantity-selector/QuantitySelector'
 import Link from 'next/link'
 import LoginModal from '../login-modal/LoginModal'
+
 interface IProductTile {
   product: Product
 }
@@ -97,13 +98,12 @@ const ProductTile: FC<IProductTile> = ({ product }: any) => {
             className='shadow'
           />
         </div>
-        <div
-          id='favorite icon'
-          className='absolute t-0 l-0 mr-10 mt-10 l:ml-15 l:mt-15 whitespace-nowrap bg-#FFDBD6 w-fit h-20 radius-20 flex a-items-center j-content-center px-10 py-15'
-          onClick={() => setIsFavorite(fav => !fav)}
-        >
-          <p className='text-12 text-danger'>Pre-order</p>
-        </div>
+
+        {product?.variants?.preOrder && (
+          <div className='absolute t-0 l-0 mr-10 mt-10 l:ml-15 l:mt-15 whitespace-nowrap bg-#FFDBD6 w-fit h-20 radius-20 flex a-items-center j-content-center px-10 py-15'>
+            <p className='text-12 text-danger'>Pre-order</p>
+          </div>
+        )}
       </div>
       <div className='scroll-x no-scrollbar'>
         <div
