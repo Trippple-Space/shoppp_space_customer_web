@@ -43,12 +43,12 @@ const HomepageNavBar = () => {
   return (
     <BaseNavBar
       links={
-        <div className='w-fit mx-auto flex a-items-end gap-30 l:gap-50 weight-200 text-14 l:text-16 l:w-440 w-90'>
+        <div className='flex gap-30 l:gap-50 weight-200 text-14 l:text-16 l:w-400'>
           <div className='flex w-100p relative'>
             <input
               type='text'
               className={classNames(
-                'hidden flex l:block l:border l:bg-#F3F3F3 l:border-none l:pb-12 l:pt-12 l:pl-14 l:pr-14 l:outline-none l:w-100p',
+                'hidden flex l:block l:border l:bg-#F3F3F3 l:border-none l:py-12 l:px-14 l:outline-none l:w-100p',
                 {
                   'l:radius-99': !openSearchModal,
                   'l:radius-t-r-9': openSearchModal,
@@ -62,14 +62,14 @@ const HomepageNavBar = () => {
             />
             <div
               className={classNames(
-                'flex l:bg-#0B9378 l:absolute l:r-0 l:radius-50 l:t-4 l:p-6 l:px-4 l: mr-3 l:cursor-pointer l:w-33 w-100p flex j-content-end',
+                'flex a-items-center j-content-center l:bg-#0B9378 l:absolute  l:radius-50 r-0 l:m-5 l:cursor-pointer l:w-30 l:h-30 w-100p',
                 {
                   'l:radius-8': openSearchModal
                 }
               )}
             >
               <IoIosSearch
-                className='w-25 h-20 color-black l:color-#fff'
+                className='w-25 h-20 color-black l:color-white'
                 onClick={handleOpenSearchModal}
               />
             </div>
@@ -88,27 +88,27 @@ const HomepageNavBar = () => {
             )}
           </div>
           {openSearchModal && (
-
             <>
               <div
                 className='fixed inset-0 bg-black opacity-70 z-1 l:opacity-0'
                 onClick={handleOpenSearchModal}
               />
-              <div className='fixed l-50p g|transform:translate(-50%) w-90p h-70 l:w-50p h-60p t-70 mt-30 bg-white z-10 radius-8 pb-20 relative l:mt-0 l:t-60 l:hidden'>
-
-                <div className='flex fixed w-100p j-content-center mt-20 border-b pb-20 border-b-#00000014 l:hidden'>
-                  <input
-                    type='text'
-                    value={searchTerm}
-                    onChange={e => setSearchTerm(e.target.value)}
-                    className='block radius-99 border bg-#F3F3F3 border-none pb-12 pt-12 pl-14 pr-14 outline-none w-80p'
-                    placeholder='Search asoebi.africa'
-                  />
-                  <div className='flex bg-#0B9378 absolute radius-50 r-10p t-4 p-6 pl-4 pr-4 mr-4'>
-                    <IoIosSearch
-                      className='w-25 h-20 color-#fff'
-                      onClick={handleOpenSearchModal}
+              <div className='fixed l-50p g|transform:translate(-50%) w-90p h-70 l:w-50p h-60p t-70 mt-30 bg-white z-10 radius-8 pb-20 relative l:mt-0 l:t-60  l:hidden'>
+                <div className=' w-100p flex j-content-center l:hidden border-b pb-20 border-b-#00000014'>
+                  <div className='flex  j-content-center relative a-items-center mt-20 w-80p'>
+                    <input
+                      type='text'
+                      value={searchTerm}
+                      onChange={e => setSearchTerm(e.target.value)}
+                      className='block radius-99 border bg-#F3F3F3 border-none py-12 px-14  outline-none w-100p'
+                      placeholder='Search asoebi.africa'
                     />
+                    <div className='flex j-content-center a-items-center bg-#0B9378 absolute r-0 radius-50 m-5 w-30 h-30'>
+                      <IoIosSearch
+                        className='w-25 h-20 color-#fff'
+                        onClick={handleOpenSearchModal}
+                      />
+                    </div>
                   </div>
                 </div>
                 {searchResults.length > 0 && (
