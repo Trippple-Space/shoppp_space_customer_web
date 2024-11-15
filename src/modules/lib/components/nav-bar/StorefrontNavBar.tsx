@@ -8,7 +8,6 @@ import MiniCart from "../minicart/MiniCart";
 import { HiMenuAlt3 } from "react-icons/hi";
 import { productService } from "../../utility/services/product.service";
 import { Product } from "../../utility/types/product.interface";
-import { RxHamburgerMenu } from "react-icons/rx";
 import { useNavbarView } from "../../utility/hooks/views/use-navbar-view";
 import MobileNav from "./mobile-nav/MobileNav";
 

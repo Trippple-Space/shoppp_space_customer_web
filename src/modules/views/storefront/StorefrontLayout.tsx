@@ -69,7 +69,7 @@ const StorefrontLayout: FC<ILayout> = ({ children }) => {
               </Link>
             </div>
             <div className="scroll-x no-scrollbar" ref={scrollRef1}>
-              <div className="flex h-fit w-fit whitespace-nowrap gap-14 arrivals">
+              <div className="flex h-fit w-fit whitespace-nowrap gap-14">
                 {filteredProducts.length ? (
                   filteredProducts.map((product, i) => (
                     <>
@@ -147,7 +147,7 @@ const StorefrontLayout: FC<ILayout> = ({ children }) => {
             {filteredProducts.length ? (
               filteredProducts.map((product, i) => (
                 <>
-                  <div className="l:mt--20 mt--30">
+                  <div className="l:mt--20 mt--30 w-full overflow-hidden">
                     <ProductTile product={product} key={i} />
                   </div>
                 </>

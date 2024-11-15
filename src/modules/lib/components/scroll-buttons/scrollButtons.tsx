@@ -35,11 +35,6 @@ const ScrollButtons: FC<IScrollButtons> = ({
   }, []);
 
   const checkOverflowAndPosition = useCallback(() => {
-    const div = document.querySelectorAll('.arrivals')
-    console.log(div)
-    div.forEach((d) => {
-        console.log(d.scrollWidth, d.clientWidth)
-    })
     const categoriesWidth = screen.width >= 576 ? 90 : 71;
     const storeFrontCats = screen.width >= 576 ? 124 : 96;
     const scrollContainerWidth =
@@ -58,7 +53,6 @@ const ScrollButtons: FC<IScrollButtons> = ({
         scrollRef.current.scrollLeft + scrollRef.current.clientWidth >=
         scrollContainerWidth;
 
-        console.log(scrollRef.current.scrollWidth)
       setShowLeftButton(!atStart);
       setShowRightButton(!atEnd);
     }
