@@ -1,13 +1,10 @@
 "use client";
 
-import React, { useEffect, useState } from "react";
-import classNames from "classnames";
+import React from "react";
 import { Store } from "../../utility/types/store.interface";
 import SearchInput from "../search-input/SearchInput";
 import MiniCart from "../minicart/MiniCart";
 import { HiMenuAlt3 } from "react-icons/hi";
-import { productService } from "../../utility/services/product.service";
-import { Product } from "../../utility/types/product.interface";
 import { useNavbarView } from "../../utility/hooks/views/use-navbar-view";
 import MobileNav from "./mobile-nav/MobileNav";
 
