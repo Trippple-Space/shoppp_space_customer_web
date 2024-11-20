@@ -586,6 +586,10 @@
 .outline-offset-5 { outline-offset: 5px; } 
 .outline-3 { outline-width: 3px; } 
 
+[class~='g|outline-color:#ECDECC']{outline-color:#ECDECC} 
+.outline-offset-5 { outline-offset: 5px; } 
+.outline-3 { outline-width: 3px; } 
+
 .max-w-500 { max-width: 500px; } 
 .bg-yellow-100 { background-color: rgba(250, 206, 51, 0.2); } 
 .color-\#D48D3B { color: #D48D3B; } 
@@ -1194,3 +1198,4 @@
 @media only screen and (min-width: 992px) { .l\:pt-0 { padding-top: 0px; } } 
 @media only screen and (min-width: 992px) { .l\:mt--78 { margin-top: -78px; } } 
 @media only screen and (min-width: 992px) { .l\:line-height-40 { line-height: 40px; } } 
+@media only screen and (min-width: 992px) { .l\:white-space-nowrap { white-space: nowrap; } } 

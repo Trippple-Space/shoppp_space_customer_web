@@ -5,10 +5,12 @@ import Image from '../image/Image'
 import { AiFillStar, AiOutlinePlus, AiFillHeart } from 'react-icons/ai'
 import classNames from 'classnames'
 import { Product } from '../../utility/types/product.interface'
-import { formatNumberAsPrice } from '../../utility/utility'
+import { displayProductPill, formatNumberAsPrice } from '../../utility/utility'
 import { useCart } from '../../utility/hooks/use-cart'
 import QuantitySelector from '../quantity-selector/QuantitySelector'
 import Link from 'next/link'
+import LoginModal from '../login-modal/LoginModal'
+
 interface IProductTile {
   product: Product
 }
@@ -35,6 +37,12 @@ const ProductTile: FC<IProductTile> = ({ product }: any) => {
     setSelectedImage(product?.variants?.[0]?.media?.[0]?.url)
     setSelectedVariant(product?.variants?.[0])
   }, [product?.id])
+
+  const [topTwoPills, setTopTwoPills] = useState<any[]>([])
+  useEffect(() => {
+    const pills = displayProductPill()
+    setTopTwoPills(pills)
+  }, [])
 
   return (
     <div className='mt-30 l:mt-20 w-full overflow-hidden'>
@@ -96,12 +104,20 @@ const ProductTile: FC<IProductTile> = ({ product }: any) => {
             className='shadow'
           />
         </div>
-        <div
-          id='favorite icon'
-          className='absolute t-0 l-0 mr-10 mt-10 l:ml-15 l:mt-15 whitespace-nowrap bg-#FFDBD6 w-fit h-20 radius-20 flex a-items-center j-content-center px-10 py-15'
-          onClick={() => setIsFavorite(fav => !fav)}
-        >
-          <p className='text-12 text-danger'>Pre-order</p>
+
+        <div className='absolute w-fit h-fit t-0 l-0'>
+          {topTwoPills.map((pill, index) => (
+            <div
+              key={index}
+              className='mt-10 l:ml-15 l:mt-15 whitespace-nowrap w-fit h-20 radius-20 flex a-items-center j-content-center px-10 py-15 ml-5'
+              style={{
+                backgroundColor: pill.pillBackground,
+                color: pill.pillColor
+              }}
+            >
+              <p className='text-10 l:text-12'>{pill.text}</p>
+            </div>
+          ))}
         </div>
       </div>
       <div className='scroll-x no-scrollbar'>
@@ -135,12 +151,12 @@ const ProductTile: FC<IProductTile> = ({ product }: any) => {
         id='product details'
         className='mt-15 overflow-hidden white-space-nowrap text-overflow-ellipsis'
       >
-        <h3
+        <div
           title={product.name}
-          className='l:text-15 text-14 weight-500 w-100 white-space-nowrap text-overflow-ellipsis'
+          className='l:text-15 text-14 weight-500 w-100 l:white-space-nowrap text-overflow-ellipsis'
         >
           <Link href={`/products/${product.slug}`}>{product.name}</Link>
-        </h3>
+        </div>
         <div className='flex a-items-center gap-10 l:gap-18 mt-5 text-dimgrey'>
           <Link href={`/${product.store.slug}`}>
             <p className='l:text-16 text-12'>{product?.store?.name}</p>
