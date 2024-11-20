@@ -41,7 +41,6 @@ const ProductTile: FC<IProductTile> = ({ product }: any) => {
   const [topTwoPills, setTopTwoPills] = useState<any[]>([])
   useEffect(() => {
     const pills = displayProductPill()
-    console.log({ pills })
     setTopTwoPills(pills)
   }, [])
 
