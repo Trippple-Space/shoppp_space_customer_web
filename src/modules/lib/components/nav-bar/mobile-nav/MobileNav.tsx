@@ -32,7 +32,7 @@ function MobileNav() {
       <RxHamburgerMenu onClick={toogleHamburgerMenu} className="w-24 h-24" />
       {hamburgerMenu && (
         <div
-          className="l:hidden flex flex-col space-between z-50 bg-#F5F5F5 r-0 w-100p t-60 p-20 h-70p fixed"
+          className="l:hidden flex flex-col space-between z-5 bg-#F5F5F5 r-0 w-100p t-60 p-20 h-70p fixed"
         >
           <div className="flex flex-col gap-25">
             <div

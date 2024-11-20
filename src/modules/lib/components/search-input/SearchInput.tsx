@@ -109,7 +109,7 @@ const SearchInput: FC<ISearchInput> = ({
       {openSearchModal && (
         <>
           <div
-            className="fixed inset-0 bg-black opacity-70 z-1 l:opacity-0"
+            className="fixed inset-0 bg-black opacity-70 z-6 l:opacity-0"
             onClick={handleOpenSearchModal}
           />
           <div className={`fixed l-50p g|transform:translate(-50%); w-90p h-70 l:w-50p h-60p t-70 mt-30 bg-white z-10 radius-8 pb-20 relative l:mt-0 l:t-60  l:hidden`}>

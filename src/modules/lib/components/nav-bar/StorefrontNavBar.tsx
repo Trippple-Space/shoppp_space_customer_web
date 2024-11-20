@@ -53,7 +53,9 @@ const StorefrontNavBar = ({ store }: { store?: Store }) => {
               />
             </div>
           </div>
-          <MobileNav />
+          <div className="sm:hidden block">
+            <MobileNav />
+          </div>
         </div>
         <div className="l:px-80 md:px-60 sm:px-40 px-24 relative t--46 sm:block hidden">
           {userProfileDropdown && (

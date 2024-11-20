@@ -7,12 +7,12 @@ import React, { FC } from "react";
 
 interface IUserProfileDropdown {
   handleCloseDropdown: () => void;
-  setUserOrderDropdown?: any
+  setUserOrderDropdown?: any;
 }
 
 const UserProfileDropdown: FC<IUserProfileDropdown> = ({
   handleCloseDropdown,
-  setUserOrderDropdown
+  setUserOrderDropdown,
 }) => {
   const { user, signOut, openAddressModal } = useNavbarView();
   const { isAuthenticated } = useUserStore();
@@ -63,7 +63,10 @@ const UserProfileDropdown: FC<IUserProfileDropdown> = ({
 
           <div
             className="p-15 hover:bg-grey-100 pointer flex items-center gap-10 text-grey-700"
-            onClick={openAddressModal}
+            onClick={() => {
+              openAddressModal();
+              handleCloseDropdown();
+            }}
           >
             <div className="text-12 weight-500">Address book</div>
           </div>

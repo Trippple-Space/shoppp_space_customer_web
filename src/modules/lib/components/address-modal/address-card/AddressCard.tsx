@@ -151,11 +151,6 @@ const AddressCard: FC<AddressCardProps> = ({ address }) => {
                   <button
                     type="submit"
                     className="btn w-50p l:w-100p border-none bg-green text-white text-13 pr-8 pl-2 py-5 radius-20 weight-400 pointer flex hover:bg-darkgreen"
-                    onClick={() => {
-                      delay(() => {
-                        closeAddressModal();
-                      }, 500);
-                    }}
                   >
                     <BiCheck className="w-20 text-white" />{" "}
                     <span className="">Save</span>{" "}
