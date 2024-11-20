@@ -1,5 +1,4 @@
 import React, { FC, HTMLInputTypeAttribute, ReactNode } from 'react'
-import cx from 'classnames'
 
 interface IInput {
   label?: string | ReactNode
@@ -19,11 +18,12 @@ interface IInput {
 const Input: FC<IInput> = ({ label, id, name, type, placeholder, className, after, rows, inputClass: inputClassNames, value, checked, handleChange, handleBlur }) => {
   const Component = type === 'textarea' ? 'textarea' : 'input';
   const controlProps = {
-    [value ? 'value' : '']: value,
+    [value !== undefined ? 'value' : '']: value,
     [checked !== undefined ? 'checked' : '']: checked,
     [handleChange ? 'onChange' : '']: handleChange,
     [handleBlur ? 'onBlur': '']: handleBlur
   }
+  
   return (
     <div className={`input-group ${className}`}>
       {label && <label htmlFor={id} className='block w-fit mb-8 l:weight-400 weight-500 l:text-14 text-12 text-grey-800'>{label}</label>}

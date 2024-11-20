@@ -9,7 +9,6 @@ import { formatNumberAsPrice } from '../../utility/utility'
 import { useCart } from '../../utility/hooks/use-cart'
 import QuantitySelector from '../quantity-selector/QuantitySelector'
 import Link from 'next/link'
-import LoginModal from '../login-modal/LoginModal'
 interface IProductTile {
   product: Product
 }
@@ -38,7 +37,7 @@ const ProductTile: FC<IProductTile> = ({ product }: any) => {
   }, [product?.id])
 
   return (
-    <div className='mt-30 l:mt-20 w-full'>
+    <div className='mt-30 l:mt-20 w-full overflow-hidden'>
       <div
         id='image'
         className='relative ratio-1 radius-10 g|overflow:hidden l:radius-15 w-full'
@@ -108,7 +107,7 @@ const ProductTile: FC<IProductTile> = ({ product }: any) => {
       <div className='scroll-x no-scrollbar'>
         <div
           id='product varients'
-          className='mt-15 flex a-items-center l:gap-13 gap-8 w-100'
+          className='mt-15 flex a-items-center l:gap-13 gap-8 w-fit whitespace-nowrap'
         >
           {product.variants.map((variant: any) =>
             variant?.media?.map((mediaItem: any) => (

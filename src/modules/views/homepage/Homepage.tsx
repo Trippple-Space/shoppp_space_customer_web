@@ -30,6 +30,7 @@ const Homepage = () => {
       <FabricsCategoryNav
         categories={categories}
         setSelectedCategory={setSelectedCategory}
+        page={"home"}
       />
       <div className="app-width">
         <CentralArena selectedCategory={selectedCategory} />
