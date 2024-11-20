@@ -3,7 +3,7 @@ import BaseCategoryNav from './BaseCategoryNav'
 
 const FabricsCategoryNav = ({categories, setSelectedCategory}: any) => {
     return (
-        <div className='l:mt-100 mt-75 app-width sticky t-34 bg-white z-1 test-header'>
+        <div className='l:mt-100 mt-80 app-width t-75 bg-white z-1 test-header'>
             <BaseCategoryNav categories={categories} setSelectedCategory={setSelectedCategory} />
         </div>
     )
