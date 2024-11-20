@@ -74,6 +74,7 @@ const placeholderProduct: Product = {
       stockUnit: "",
       dateCreated: "",
       lastUpdated: "",
+      preOrder: false
     },
   ],
   store: {
