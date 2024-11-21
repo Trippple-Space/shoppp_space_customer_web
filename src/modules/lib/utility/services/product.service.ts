@@ -37,7 +37,9 @@ class ProductService {
      ): Promise<Product> {
           return new Promise((resolve, reject) => {
                const url = new URL(
-                    buildEndpoint(config.API_HOST + "/" + endpoints.PRODUCT, { slug })
+                    buildEndpoint(config.API_HOST + "/" + endpoints.PRODUCT, {
+                         slug,
+                    })
                );
                Object.keys(query).forEach((key) =>
                     url.searchParams.append(key, query[key])
@@ -68,9 +70,12 @@ class ProductService {
      fetchProductBySearch(searchTerm: string): Promise<Product[]> {
           return new Promise((resolve, reject) => {
                const url = new URL(
-                    buildEndpoint(config.API_HOST + "/" + endpoints.SEARCH_PRODUCTS, {
-                         searchTerm,
-                    })
+                    buildEndpoint(
+                         config.API_HOST + "/" + endpoints.SEARCH_PRODUCTS,
+                         {
+                              searchTerm,
+                         }
+                    )
                );
 
                url.searchParams.append("search", searchTerm);
