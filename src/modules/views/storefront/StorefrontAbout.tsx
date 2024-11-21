@@ -21,7 +21,7 @@ const StorefrontAbout = ({ store }: { store: any }) => {
                   className="sm:w-80 w-68 sm:h-80 h-68 round object-fit"
                 />
                 <div className="flex flex-col gap-8">
-                  <h2 className="sm:text-32 text-20 weight-500">{store?.name}'s shop</h2>
+                  <h2 className="sm:text-32 text-20 weight-500">{store?.name}</h2>
                   <p className="flex flex-row a-items-center gap-12">
                     <span className="text-14 weight-400">0 followers</span>
                     <span className="text-12 weight-600 bg-black text-white py-4 px-16 radius-999 pointer">
