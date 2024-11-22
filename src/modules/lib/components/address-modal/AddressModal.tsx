@@ -33,8 +33,8 @@ const AddressModal: React.FC<ModalProps> = () => {
             </div>
             <div className='p-20 bg-faint-green  grid l:grid-2-cols-1fr gap-20'>
               {
-                addresses?.map(address => (
-                  <AddressCard address={address} />
+                addresses?.map((address, i) => (
+                  <AddressCard address={address} key={i} />
                 ))
               }
 

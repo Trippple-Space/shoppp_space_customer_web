@@ -36,6 +36,14 @@
   },
   "devDependencies": {
     "cross-env": "^7.0.3",
-    "cxcss": "^0.0.46"
+    "cxcss": "^0.0.46",
+    "husky": "^9.1.7",
+    "lint-staged": "^15.2.10"
+  },
+  "husky": {
+    "hooks": {
+      "pre-commit": "npx cxcss",
+      "pre-push": "npx cxcss"
+    }
   }
 }

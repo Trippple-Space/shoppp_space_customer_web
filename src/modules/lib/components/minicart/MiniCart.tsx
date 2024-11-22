@@ -1,87 +1,87 @@
-'use client'
-import Modal from '@/modules/lib/components/modal/modal'
-import OrderSummary from '@/modules/lib/components/order-summary/OrderSummary'
-import { useCart } from '@/modules/lib/utility/hooks/use-cart'
+"use client";
+import Modal from "@/modules/lib/components/modal/modal";
+import OrderSummary from "@/modules/lib/components/order-summary/OrderSummary";
+import { useCart } from "@/modules/lib/utility/hooks/use-cart";
 import {
   cx,
   displayStockUnit,
-  formatNumberAsPrice
-} from '@/modules/lib/utility/utility'
-import { useRouter } from 'next/navigation'
-import React, { useState } from 'react'
-import { FaArrowLeftLong } from 'react-icons/fa6'
-import { IoClose } from 'react-icons/io5'
-import { paths } from '../../utility/paths'
-import { getCartItemVariantPropertiesAsJsx } from './minicart.helper'
-import { HiOutlineShoppingBag } from 'react-icons/hi2'
-import ImageAlt from '../image-alt/ImageAlt'
-import { CartItem } from '../../utility/types/cart.interface'
-import { PiShoppingCartBold } from 'react-icons/pi'
+  formatNumberAsPrice,
+} from "@/modules/lib/utility/utility";
+import { useRouter } from "next/navigation";
+import React, { useState } from "react";
+import { FaArrowLeftLong } from "react-icons/fa6";
+import { IoClose } from "react-icons/io5";
+import { paths } from "../../utility/paths";
+import { getCartItemVariantPropertiesAsJsx } from "./minicart.helper";
+import { HiOutlineShoppingBag } from "react-icons/hi2";
+import ImageAlt from "../image-alt/ImageAlt";
+import { CartItem } from "../../utility/types/cart.interface";
+import { PiShoppingCartBold } from "react-icons/pi";
 
 interface ModalProps {}
 
 const MiniCart: React.FC<ModalProps> = () => {
-  const [open, setOpen] = useState(false)
+  const [open, setOpen] = useState(false);
 
-  const { cart, removeFromCart } = useCart()
-  const router = useRouter()
+  const { cart, removeFromCart } = useCart();
+  const router = useRouter();
 
   return (
-    <div className='w-fit'>
+    <div className="w-fit">
       <Modal
         isOpen={open}
         onClose={() => setOpen(false)}
-        extraClass={{ height: '100vh' }}
-        className='t-0 l:t-0 l:b-0 100vh l:h-100vh l:r-0 overflow-hidden l:w-520 w-full'
+        extraClass={{ height: "100vh" }}
+        className="t-0 l:t-0 l:b-0 100vh l:h-100vh l:r-0 overflow-hidden l:w-520 w-full"
       >
-        <div className='relative h-full g|overflow-y:hidden'>
+        <div className="relative h-full g|overflow-y:hidden">
           <div
-            className='py-15 bg-grey-200 pointer'
+            className="py-15 bg-grey-200 pointer"
             onClick={() => setOpen(false)}
           >
-            <div className='flex px-15 gap-10 j-content-center '>
-              <div className='h-fit self-center block'>
-                <FaArrowLeftLong className='text-green h-fit mt-2' />
+            <div className="flex px-15 gap-10 j-content-center ">
+              <div className="h-fit self-center block">
+                <FaArrowLeftLong className="text-green h-fit mt-2" />
               </div>
-              <div className='text-green block'> Continue shopping </div>
+              <div className="text-green block"> Continue shopping </div>
             </div>
           </div>
-          <div className='l:min-w-500 h-full w-full py-10 scroll-y'>
+          <div className="l:min-w-500 h-full w-full py-10 scroll-y">
             {!cart.cartItems.length ? (
-              <div className='mx-auto h-250 text-center items-center j-content-center mt-50'>
-                <p className='text-16 text-grey-500'>Your cart is empty</p>
+              <div className="mx-auto h-250 text-center items-center j-content-center mt-50">
+                <p className="text-16 text-grey-500">Your cart is empty</p>
 
-                <div className='w-100p px-20 py-10'>
+                <div className="w-100p px-20 py-10">
                   <button
                     onClick={() => setOpen(false)}
-                    className='pointer mx-auto w-40p border-none bg-green text-white text-16 py-10 px-20 radius-5 weight-400'
+                    className="pointer mx-auto w-40p border-none bg-green text-white text-16 py-10 px-20 radius-5 weight-400"
                   >
                     Shop now
                   </button>
                 </div>
               </div>
             ) : (
-              <div className='px-20 pb-20'>
-                <div className='uppercase mb-30 text-14 l:text-16 weight-500'>
+              <div className="px-20 pb-20">
+                <div className="uppercase mb-30 text-14 l:text-16 weight-500">
                   Your cart
                 </div>
                 {cart.cartItems.map((cartItem: CartItem, i) => (
                   <div
                     className={cx(
-                      'space-between items-center radius-5 py-10 mb-20 px-15 g|box-shadow:1px|_|0px|_|2px|_|0px|_|rgba(0,0,0,0.10);',
+                      "space-between items-center radius-5 py-10 mb-20 px-15 g|box-shadow:1px|_|0px|_|2px|_|0px|_|rgba(0,0,0,0.10);",
                       {
-                        'bg-whitesmoke border border-whitesmoke': i % 2,
-                        'border border-whitesmoke': !(i % 2)
+                        "bg-whitesmoke border border-whitesmoke": i % 2,
+                        "border border-whitesmoke": !(i % 2),
                       }
                     )}
                     key={i}
                   >
                     <span
-                      className='float-right pointer'
+                      className="float-right pointer"
                       onClick={() => removeFromCart(cartItem.id)}
                     >
-                      {' '}
-                      <IoClose />{' '}
+                      {" "}
+                      <IoClose />{" "}
                     </span>
                     {/* <div className='flex w-100p gap-10 l:gap-30 items-center'>
                       <div className='w-80 h-80 border border-lightgrey radius-5 l:radius-10 '>
@@ -122,45 +122,44 @@ const MiniCart: React.FC<ModalProps> = () => {
                       </div>
                     </div> */}
 
-                    <div className='flex gap-10'>
+                    <div className="flex gap-10">
                       <div
-                        className={cx('w-50 h-50', {
-                          'bg-white': i % 2,
-                          'bg-grey-100': !(i % 2)
+                        className={cx("w-50 h-50", {
+                          "bg-white": i % 2,
+                          "bg-grey-100": !(i % 2),
                         })}
                       >
                         <ImageAlt
-                          className='w-full h-full radius-3'
+                          className="w-full h-full radius-3"
                           src={cartItem.variant.media[0].url}
-                          type='image'
+                          type="image"
                         />
 
-                        <div className='text-14 whitespace-nowrap mt-14 bold'>
-                          {formatNumberAsPrice(cartItem.variant.finalPrice)} x{' '}
+                        <div className="text-14 whitespace-nowrap mt-14 bold">
+                          {formatNumberAsPrice(cartItem.variant.finalPrice)} x{" "}
                           {cartItem.quantity}
                         </div>
                       </div>
 
-                      <div className='w-full h-full flex flex-col'>
-                        <div className='w-full h-20'>
+                      <div className="w-full h-full flex flex-col">
+                        <div className="w-full h-20">
                           <div
                             className={cx(
-                              'w-150 radius-3 text-13 weight-500 overflow-hidden whitespace-nowrap text-ellipsis',
+                              "w-150 radius-3 text-13 weight-500 overflow-hidden whitespace-nowrap text-ellipsis",
                               {
                                 // 'bg-white': (i % 2),
                                 // 'bg-grey-100': !(i % 2),
                               }
                             )}
                           >
-                            {' '}
-                            {/* {cartItem?.variant?.product?.name}{' '} */}
+                            {cartItem?.variant?.product?.name}{" "}
                           </div>
                         </div>
 
-                        <div className='w-full h-20'>
+                        <div className="w-full h-20">
                           <div
                             className={cx(
-                              'w-100 h-8 radius-3 flex gap-3 text-13',
+                              "w-100 h-8 radius-3 flex gap-3 text-13",
                               {
                                 // 'bg-white': (i % 2),
                                 // 'bg-grey-100': !(i % 2),
@@ -171,28 +170,28 @@ const MiniCart: React.FC<ModalProps> = () => {
                           </div>
                         </div>
 
-                        <div className='w-full h-20'>
+                        <div className="w-full h-20">
                           <div
-                            className={cx('w-100 h-8 radius-3 flex text-12', {
+                            className={cx("w-100 h-8 radius-3 flex text-12", {
                               // 'bg-white': (i % 2),
                               // 'bg-grey-100': !(i % 2),
                             })}
                           >
-                            {cartItem.variant.stock}{' '}
+                            {cartItem.variant.stock}{" "}
                             {displayStockUnit(cartItem.variant.stockUnit)}(s)
                             left
                           </div>
                         </div>
 
-                        <div className='w-full h-20 flex space-between'>
+                        <div className="w-full h-20 flex space-between">
                           <div
-                            className={cx('radius-3 text-12 bold', {
+                            className={cx("radius-3 text-12 bold", {
                               // 'bg-white': (i % 2),
                               // 'bg-grey-100': !(i % 2),
                             })}
                           ></div>
                           {/* <div className=""></div> */}
-                          <div className='bold'>
+                          <div className="bold">
                             {formatNumberAsPrice(cartItem.totalPrice)}
                           </div>
                         </div>
@@ -200,49 +199,49 @@ const MiniCart: React.FC<ModalProps> = () => {
                     </div>
                   </div>
                 ))}
-                <div className='offset h-400 w-full'></div>
+                <div className="offset h-400 w-full"></div>
               </div>
             )}
           </div>
           {!!cart.cartItems.length && (
-            <div className='bg-yellow-50 pb-30 absolute b-0 left-0 w-full '>
-              <div className='px-20 mt-15 mb-15'>
+            <div className="bg-yellow-50 pb-30 absolute b-0 left-0 w-full ">
+              <div className="px-20 mt-15 mb-15">
                 <OrderSummary
                   subTotal={cart.subTotal}
                   extraSavings={cart.total - cart.subTotal}
                   total={cart.total}
                 />
               </div>
-              <div className='w-fit mx-auto mt-30'>
+              <div className="w-fit mx-auto mt-30">
                 <button
-                  className='bg-green border-none radius-5 text-white py-14 px-30 weight-600 l:text-16 text-12 pointer'
+                  className="bg-green border-none radius-5 text-white py-14 px-30 weight-600 l:text-16 text-12 pointer"
                   onClick={() => router.push(paths.checkout)}
                 >
                   Proceed to checkout
                 </button>
               </div>
-              <div className='text-13 mt-8 w-fit mx-auto'>
+              <div className="text-13 mt-8 w-fit mx-auto">
                 For Returns Policy,
-                <span className='text-green text-13'> click here</span>
+                <span className="text-green text-13"> click here</span>
               </div>
             </div>
           )}
         </div>
       </Modal>
 
-      <div className=''>
+      <div className="">
         <div
           onClick={() => setOpen(true)}
-          className='relative pointer bg-#F3F3F3 flex a-items-center gap-8 w-70 radius-6 px-5 py-5'
+          className="relative pointer bg-#F3F3F3 flex a-items-center gap-8 w-70 radius-6 px-5 py-5"
         >
-          <p className='h-30 w-30 flex a-items-center j-content-center bg-#0B9378 radius-6 color-white weight-500'>
+          <p className="h-30 w-30 flex a-items-center j-content-center bg-#0B9378 radius-6 color-white weight-500">
             <span>{cart.cartItems.length}</span>
           </p>
-          <PiShoppingCartBold className='color-black  w-18 h-18' />
+          <PiShoppingCartBold className="color-black  w-18 h-18" />
         </div>
       </div>
     </div>
-  )
-}
+  );
+};
 
-export default MiniCart
+export default MiniCart;

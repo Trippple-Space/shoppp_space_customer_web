@@ -35,6 +35,9 @@ const CentralArena = ({ selectedCategory }: ICentralArena) => {
     }
   }, [selectedCategory, products, handleCategoryChange])
 
+  // useEffect(() => {
+  //   handleCategoryChange(selectedCategory);
+  // }, [selectedCategory]);
   return (
     <>
       <section className='l:mt-20 mt-40 w-100p l:mt-50 mb-150'>
@@ -46,7 +49,7 @@ const CentralArena = ({ selectedCategory }: ICentralArena) => {
         <div className='grid l:grid-5-cols-1fr s:grid-3-cols-1fr grid-2-cols-1fr flex-wrap gap-15 l:gap-10 w-full relative'>
           {filteredProducts.length ? (
             filteredProducts.map((product, i: number) => (
-              <ProductTile product={product} key={i} />
+              <ProductTile product={product} key={product.id} />
             ))
           ) : (
             <div className='mt-60 bg-white grid-col-span-5 text-center'>
