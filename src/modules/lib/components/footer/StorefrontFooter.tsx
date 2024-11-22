@@ -15,7 +15,12 @@ export default function StorefrontFooter() {
               <TbPhone className="w-24 h-24" />
               <span className="text-16">0801234567</span>
             </Link>
-            <Link href={""} className="flex flex-row gap-8 w-fit">
+            <Link
+              href="https://maps.app.goo.gl/ajQkV4cq99kZ9T86A"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="flex flex-row gap-8 w-fit"
+            >
               <HiOutlineLocationMarker className="w-24 min-w-24 h-24" />
               <span className="text-16">
                 Great challenge road, iyanaschool, Lagos, Ojo. Lagos Nigeria.

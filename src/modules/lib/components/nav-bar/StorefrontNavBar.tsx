@@ -33,7 +33,6 @@ const StorefrontNavBar = ({ store }: { store?: Store }) => {
       </div>
 
       <SearchInput
-        svgSize={"md:w-16 w-24 md:h-16 h-24 md:mb-0 mb--5 md:mr-14"}
         placeholder={"Search"}
         component={"store"}
       />

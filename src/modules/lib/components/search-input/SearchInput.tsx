@@ -9,13 +9,11 @@ import classNames from "classnames";
 interface ISearchInput {
   component?: any;
   placeholder?: any;
-  svgSize?: any;
 }
 
 const SearchInput: FC<ISearchInput> = ({
   component,
   placeholder,
-  svgSize,
 }) => {
   const [searchTerm, setSearchTerm] = useState("");
   const [searchResults, setSearchResults] = useState<Product[]>([]);
@@ -90,7 +88,7 @@ const SearchInput: FC<ISearchInput> = ({
               : "md:pr-0 pr-20"
           }
         >
-          <BiSearch className={svgSize} onClick={handleOpenSearchModal} />
+          <BiSearch className={component === 'home' ? 'w-25 h-20 color-black l:color-white' : 'md:w-16 w-24 md:h-16 h-24 md:mb-0 mb--5 md:mr-14'} onClick={handleOpenSearchModal} />
         </div>
         {openSearchModal && (
           <div
