@@ -20,14 +20,15 @@ import StorefrontFooter from "@/modules/lib/components/footer/StorefrontFooter";
 const StorefrontLayout: FC<ILayout> = ({ children }) => {
   const scrollRef1 = useRef<HTMLDivElement>(null);
   const scrollRef2 = useRef<HTMLDivElement>(null);
-  const [showScrollButtons, setShowScrollButtons] = useState(false);
   const [selectedCategory, setSelectedCategory] =
     useState<ProductCategory | null>(null);
   const { products } = useStoreProductsView(selectedCategory);
   const { categories } = useCategoryNavView();
   const [filteredProducts, setFilteredProducts] = useState(products);
+
   const [newArrivals, setNewArrivals] = useState<Product[]>([]);
   const [dealsForYou, setDealsForYou] = useState<Product[]>([]);
+  const [featuredProducts, setFeaturedProducts] = useState<Product[]>([]);
 
   const updateFilters = (filteredProducts: Product[]) => {
     setFilteredProducts(filteredProducts);
@@ -44,36 +45,42 @@ const StorefrontLayout: FC<ILayout> = ({ children }) => {
   }, [selectedCategory, products, filteredProducts]);
 
   useEffect(() => {
-    const filterDealForYou = () => {
+    const sectionCategories = () => {
       const deals: Product[] = [];
+      const newDeals: Product[] = [];
+      const remainingDeals: Product[] = [];
+
       filteredProducts.forEach((product) => {
-        product?.tags?.forEach((tag) => {
-          if (tag.label.toLowerCase().includes("trending now")) {
+        if (!product?.tags) return;
+
+        let isCategorized = false;
+
+        product.tags.forEach((tag) => {
+          const label = tag.label.toLowerCase();
+
+          if (label.includes("new arrivals")) {
+            newDeals.push(product);
+            isCategorized = true;
+          } else if (label.includes("deals for you")) {
             deals.push(product);
+            isCategorized = true;
           }
         });
+
+        if (
+          !isCategorized &&
+          !remainingDeals.some((deal) => deal.id === product.id)
+        ) {
+          remainingDeals.push(product);
+        }
       });
+
       setDealsForYou(deals);
+      setNewArrivals(newDeals);
+      setFeaturedProducts(remainingDeals);
     };
 
-    filterDealForYou();
-  }, [products, filteredProducts]);
-
-  useEffect(() => {
-    const filterNewArrivals = () => {
-      const now = new Date();
-      const oneMonthAgo = new Date();
-      oneMonthAgo.setMonth(now.getMonth() - 1);
-
-      const filteredNewArrivals = filteredProducts.filter((product) => {
-        const productDate = new Date(product.dateCreated);
-        return productDate >= oneMonthAgo && productDate <= now;
-      });
-
-      setNewArrivals(filteredNewArrivals);
-    };
-
-    filterNewArrivals();
+    sectionCategories();
   }, [products, filteredProducts]);
 
   return (
@@ -90,7 +97,10 @@ const StorefrontLayout: FC<ILayout> = ({ children }) => {
         </div>
 
         <div className="px-24 sm:px-40 md:px-60 l:px-100 xl:px-200 flex flex-col gap-20">
-          <section className={`bg-#FEFBE8 radius-16 sm:p-24 p-20 flex-col md:gap-24 sm:gap-20 gap-24 w-full relative`}>
+          <section
+            className={`bg-#FEFBE8 radius-16 sm:p-24 p-20 flex flex-col md:gap-24 sm:gap-20 gap-24 w-full relative`}
+            key={newArrivals[0]?.id}
+          >
             <div className="flex flex-row j-content-between a-items-center">
               <h3 className="sm:text-24 text-20 weight-600 color-#000000E0">
                 New arrivals
@@ -105,18 +115,19 @@ const StorefrontLayout: FC<ILayout> = ({ children }) => {
               </Link>
             </div>
             <div className="scroll-x no-scrollbar" ref={scrollRef1}>
-              <div className="flex h-fit w-fit whitespace-nowrap gap-14">
+              <div className={`flex h-fit ${newArrivals?.length && 'w-fit'} whitespace-nowrap gap-14`}>
                 {newArrivals?.length ? (
                   newArrivals?.map((product, i) => (
-                    <>
-                      <div className="l:w-238 md:w-230 sm:w-220 w-150 l:mt--20 mt--30">
-                        <ProductTile product={product} key={i} />
-                      </div>
-                    </>
+                    <div
+                      key={i}
+                      className="l:w-238 md:w-230 sm:w-220 w-150 l:mt--20 mt--30"
+                    >
+                      <ProductTile product={product} key={i} />
+                    </div>
                   ))
                 ) : (
-                  <div className="mt-60 text-center">
-                    No products found for the selected filters
+                  <div className="mt-60 text-center flex-grow-1">
+                    No products found for new arrivals
                   </div>
                 )}
               </div>
@@ -131,6 +142,7 @@ const StorefrontLayout: FC<ILayout> = ({ children }) => {
 
           <section
             className={`bg-#FFF3F1 radius-16 sm:p-24 p-20 flex flex-col md:gap-24 sm:gap-20 gap-24 w-full relative`}
+            key={newArrivals[1]?.id}
           >
             <div className="flex flex-row j-content-between a-items-center">
               <h3 className="sm:text-24 text-20 weight-600 color-#000000E0">
@@ -145,18 +157,19 @@ const StorefrontLayout: FC<ILayout> = ({ children }) => {
               </Link>
             </div>
             <div className="scroll-x no-scrollbar" ref={scrollRef2}>
-              <div className="flex h-fit w-fit whitespace-nowrap gap-14">
+              <div className={`flex h-fit ${newArrivals?.length && 'w-fit'} whitespace-nowrap gap-14`}>
                 {dealsForYou.length ? (
                   dealsForYou.map((product, i) => (
-                    <>
-                      <div className="l:w-238 md:w-230 sm:w-220 w-150 l:mt--20 mt--30">
-                        <ProductTile product={product} key={i} />
-                      </div>
-                    </>
+                    <div
+                      key={i}
+                      className="l:w-238 md:w-230 sm:w-220 w-150 l:mt--20 mt--30"
+                    >
+                      <ProductTile product={product} key={i} />
+                    </div>
                   ))
                 ) : (
-                  <div className="mt-60 text-center">
-                    No products found for the selected filters
+                  <div className="mt-60 text-center flex-grow-1">
+                    No products found for deals for you
                   </div>
                 )}
               </div>
@@ -184,13 +197,11 @@ const StorefrontLayout: FC<ILayout> = ({ children }) => {
             </Link>
           </div>
           <div className="grid l:grid-4-cols-1fr sm:grid-3-cols-1fr grid-2-cols-1fr l:gap-20 sm:gap-10 gap-20 w-full">
-            {filteredProducts.length ? (
-              filteredProducts.map((product, i) => (
-                <>
-                  <div className="l:mt--20 mt--30 w-full overflow-hidden">
-                    <ProductTile product={product} key={i} />
-                  </div>
-                </>
+            {featuredProducts.length ? (
+              featuredProducts.map((product, i) => (
+                <div key={i} className="l:mt--20 mt--30 w-full overflow-hidden">
+                  <ProductTile product={product} key={i} />
+                </div>
               ))
             ) : (
               <div className="mt-60 grid-col-span-5 text-center bg-white">
