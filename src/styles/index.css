@@ -495,6 +495,7 @@
 .m-5 { margin: 5px; } 
 .color-\#fff { color: #fff; } 
 .pr-20 { padding-right: 20px; } 
+.mb--5 { margin-bottom: -5px; } 
 .w-90p { width: 90%; } 
 .h-70 { height: 70px; } 
 .h-60p { height: 60%; } 
@@ -749,7 +750,6 @@
 .pr-0 { padding-right: 0px; } 
 .gap-50 { gap: 50px; } 
 .mt-25 { margin-top: 25px; } 
-.mb--5 { margin-bottom: -5px; } 
 
 @media only screen and (min-width: 576px) { .sm\:px-80 { padding-left: 80px; padding-right: 80px; } } 
 @media only screen and (min-width: 576px) { .sm\:gap-35 { gap: 35px; } } 
@@ -812,15 +812,15 @@
 @media only screen and (min-width: 768px) { .md\:py-11\.2 { padding-top: 11.2px; padding-bottom: 11.2px; } } 
 @media only screen and (min-width: 768px) { .md\:pl-14 { padding-left: 14px; } } 
 @media only screen and (min-width: 768px) { .md\:pr-0 { padding-right: 0px; } } 
+@media only screen and (min-width: 768px) { .md\:w-16 { width: 16px; } } 
+@media only screen and (min-width: 768px) { .md\:h-16 { height: 16px; } } 
+@media only screen and (min-width: 768px) { .md\:mb-0 { margin-bottom: 0px; } } 
+@media only screen and (min-width: 768px) { .md\:mr-14 { margin-right: 14px; } } 
 @media only screen and (min-width: 768px) { .md\:pt-36 { padding-top: 36px; } } 
 @media only screen and (min-width: 768px) { .md\:h-125 { height: 125px; } } 
 @media only screen and (min-width: 768px) { .md\:gap-36 { gap: 36px; } } 
 @media only screen and (min-width: 768px) { .md\:pb-36 { padding-bottom: 36px; } } 
 @media only screen and (min-width: 768px) { .md\:w-230 { width: 230px; } } 
-@media only screen and (min-width: 768px) { .md\:w-16 { width: 16px; } } 
-@media only screen and (min-width: 768px) { .md\:h-16 { height: 16px; } } 
-@media only screen and (min-width: 768px) { .md\:mb-0 { margin-bottom: 0px; } } 
-@media only screen and (min-width: 768px) { .md\:mr-14 { margin-right: 14px; } } 
 
 
 @media only screen and (min-width: 1200px) { .xl\:mx-200 { margin-left: 200px; margin-right: 200px; } } 
@@ -1006,6 +1006,7 @@
 @media only screen and (min-width: 992px) { .l\:m-5 { margin: 5px; } } 
 @media only screen and (min-width: 992px) { .l\:h-30 { height: 30px; } } 
 @media only screen and (min-width: 992px) { @layer base {.l\:radius-50 { border-radius: 50px; } } } 
+@media only screen and (min-width: 992px) { .l\:color-white { color: white; } } 
 @media only screen and (min-width: 992px) { .l\:bg-\#f3f3f3 { background-color: #f3f3f3; } } 
 @media only screen and (min-width: 992px) { .l\:h-200 { height: 200px; } } 
 @media only screen and (min-width: 992px) { .l\:t-35 { top: 35px; } } 
@@ -1118,4 +1119,3 @@
 @media only screen and (min-width: 992px) { .l\:w-238 { width: 238px; } } 
 @media only screen and (min-width: 992px) { .l\:mt--20 { margin-top: -20px; } } 
 @media only screen and (min-width: 992px) { .l\:line-height-40 { line-height: 40px; } } 
-@media only screen and (min-width: 992px) { .l\:color-white { color: white; } } 
