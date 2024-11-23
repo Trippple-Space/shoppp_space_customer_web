@@ -45,7 +45,7 @@ export const useCategories = ({
         .then((fetchedCategories: ProductCategory[]) => {
           
           const additionalCategories = formatedStaticCategories(staticCategories)
-          //console.log(additionalCategories)
+ 
 
           const allCategories = [
             {

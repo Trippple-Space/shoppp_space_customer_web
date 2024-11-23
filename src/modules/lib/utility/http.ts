@@ -39,10 +39,8 @@ const retryCountCache: { [key: string]: number } = {};
 http.interceptors.request.use((config: any) => {
     config.headers['Content-Type'] = 'application/json'
     config.headers['Authorization'] = `Bearer ${localStorage.getItem('token')}`;
-    console.log({ config });
-    // if (config.method === 'get') {
-    //     config.timeout = 3000
-    // }
+
+
 
     return config
 })

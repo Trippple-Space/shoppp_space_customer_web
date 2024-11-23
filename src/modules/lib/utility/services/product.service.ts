@@ -26,8 +26,6 @@ class ProductService {
                http.get(endpoints.PRODUCTS, {
                     params: query,
                }).then((response: AxiosResponse) => {
-                    console.log({ param: query });
-                    console.log(response.data);
                     resolve(response.data);
                });
           });
@@ -46,12 +44,9 @@ class ProductService {
                Object.keys(query).forEach((key) =>
                     url.searchParams.append(key, query[key])
                );
-               console.log({ slug }, "from service");
 
                fetch(url.toString())
                     .then((res) => {
-                         console.log({ res: res.ok });
-                         console.log({ url });
                          if (!res.ok) {
                               throw new Error(
                                    `HTTP error! Status: ${res.status}`
