@@ -1,4 +1,4 @@
-'use client'
+"use client";
 
 import React, { useEffect, useState, useCallback } from 'react'
 import ProductTile from '@/modules/lib/components/product-tile/ProductTile'
@@ -67,7 +67,7 @@ const CentralArena = ({ selectedCategory }: ICentralArena) => {
         )}
       </section>
     </>
-  )
-}
+  );
+};
 
-export default CentralArena
+export default CentralArena;

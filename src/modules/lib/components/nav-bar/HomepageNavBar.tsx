@@ -11,7 +11,6 @@ const HomepageNavBar = () => {
       links={
         <SearchInput
           placeholder={"Search asoebi.africa"}
-          svgSize={"w-25 h-20 color-black l:color-white"}
           component={"home"}
         ></SearchInput>
       }

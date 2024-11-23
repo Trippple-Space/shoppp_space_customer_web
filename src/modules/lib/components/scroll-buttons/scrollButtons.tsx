@@ -42,7 +42,7 @@ const ScrollButtons: FC<IScrollButtons> = ({
         ? categoriesWidth * scrollLength
         : page === "store"
         ? storeFrontCats * scrollLength
-        : 238 * scrollLength;
+        : 240 * scrollLength;
 
     if (scrollRef.current) {
       const hasOverflow = scrollContainerWidth > scrollRef.current.clientWidth;
@@ -81,7 +81,7 @@ const ScrollButtons: FC<IScrollButtons> = ({
               className={`${
                 component === "categories"
                   ? "t-10p l--10  px-6 py-6 l:bg-white bg-#F5F5F5 sm:flex hidden"
-                  : "t-40p l-24 p-12 bg-#FFFFFFCC md:flex hidden"
+                  : "t-40p l-0 p-12 bg-#FFFFFFCC md:flex hidden"
               } absolute l:border border-#00000014 pointer round j-content-center items-center margin-left:12px;`}
             >
               <HiOutlineChevronLeft
@@ -98,7 +98,7 @@ const ScrollButtons: FC<IScrollButtons> = ({
               className={`${
                 component === "categories"
                   ? "t-10p r--10  px-6 py-6 l:bg-white bg-#F5F5F5 sm:flex hidden"
-                  : "t-40p r-24 p-12 bg-#FFFFFFCC md:flex hidden"
+                  : "t-40p r-0 p-12 bg-#FFFFFFCC md:flex hidden"
               } absolute l:border border-#00000014 pointer round j-content-center items-center margin-left:12px;`}
             >
               <HiOutlineChevronRight

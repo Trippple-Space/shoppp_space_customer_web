@@ -257,6 +257,27 @@
 .w-14 { width: 14px; } 
 .h-14 { height: 14px; } 
 .rotate-z-180 { transform: rotateZ(180deg); } 
+.bg-black { background-color: #000000; } 
+.px-24 { padding-left: 24px; padding-right: 24px; } 
+.gap-28 { gap: 28px; } 
+.py-24 { padding-top: 24px; padding-bottom: 24px; } 
+.gap-40 { gap: 40px; } 
+.flex-reverse { flex-wrap: wrap-reverse; } 
+.gap-14 { gap: 14px; } 
+.flex-row {    flex-direction: row;  } 
+.w-24 { width: 24px; } 
+.h-24 { height: 24px; } 
+.min-w-24 { min-width: 24px; } 
+.gap-12 { gap: 12px; } 
+@layer base {.radius-6 { border-radius: 6px; } } 
+.border-\#00000026 { border-color: #00000026; } 
+.color-\#00000099 { color: #00000099; } 
+.px-0 { padding-left: 0px; padding-right: 0px; } 
+.outline-none {    outline: none;  } 
+@layer lo { .\@lo\:placeholder\:text-14::placeholder { font-size: 14px; } } 
+.bg-\#FACE33 { background-color: #FACE33; } 
+.bg-\#FFFFFF4D { background-color: #FFFFFF4D; } 
+.color-\#1677FF { color: #1677FF; } 
 .mb-8 { margin-bottom: 8px; } 
 .text-grey-800 { color: #59534E; } 
 @layer lo { .\@lo\:w-full {    width: 100%;  } } 
@@ -276,7 +297,6 @@
 .pt-12 { padding-top: 12px; } 
 .pb-12 { padding-bottom: 12px; } 
 .hidden\! {    display: none !important;  } 
-.bg-black { background-color: #000000; } 
 .z-index-6, .z-6 { z-index: 6; } 
 .t-0 { top: 0px; } 
 .opacity-40 { opacity: 40%; } 
@@ -314,7 +334,6 @@
 .py-14 { padding-top: 14px; padding-bottom: 14px; } 
 .bg-\#F3F3F3 { background-color: #F3F3F3; } 
 .w-70 { width: 70px; } 
-@layer base {.radius-6 { border-radius: 6px; } } 
 .px-5 { padding-left: 5px; padding-right: 5px; } 
 .bg-\#0B9378 { background-color: #0B9378; } 
 .color-white { color: white; } 
@@ -358,11 +377,9 @@
 .pt-30 { padding-top: 30px; } 
 [class~='g|margin:auto']{margin:auto} 
 .py-16 { padding-top: 16px; padding-bottom: 16px; } 
-.px-24 { padding-left: 24px; padding-right: 24px; } 
 .hover\:text-green:hover { color: #0B9378; } 
 .pt-16 { padding-top: 16px; } 
 .pb-16 { padding-bottom: 16px; } 
-.flex-row {    flex-direction: row;  } 
 .j-content-between { justify-content: space-between; } 
 .border-0 { border-width: 0px; } 
 .border-b-1 { border-bottom-width: 1px; } 
@@ -373,8 +390,6 @@
 .pl-12 { padding-left: 12px; } 
 .border-\#00000014 { border-color: #00000014; } 
 @layer base {.radius-999 { border-radius: 999px; } } 
-.w-24 { width: 24px; } 
-.h-24 { height: 24px; } 
 .w-42 { width: 42px; } 
 .h-42 { height: 42px; } 
 .object-fit {    object-fit: cover;  } 
@@ -387,7 +402,6 @@
 .w-47\.02 { width: 47.02px; } 
 .h-46 { height: 46px; } 
 .h-64 { height: 64px; } 
-.border-\#00000026 { border-color: #00000026; } 
 .text-small {    font-size: 0.75rem;  } 
 [class~='g|max-width:90px']{max-width:90px} 
 .mt-80 { margin-top: 80px; } 
@@ -430,7 +444,6 @@
 .my-7 { margin-top: 7px; margin-bottom: 7px; } 
 .border-green-100 { border-color: rgba(11, 147, 120, 0.2); } 
 .grid-3-cols-1fr { grid-template-columns: repeat(3, 1fr); } 
-.gap-12 { gap: 12px; } 
 .color-\#726C6C { color: #726C6C; } 
 .bg-green-100\! { background-color: rgba(11, 147, 120, 0.2) !important; } 
 .text-green\! { color: #0B9378 !important; } 
@@ -469,35 +482,30 @@
 .px-27 { padding-left: 27px; padding-right: 27px; } 
 .py-17 { padding-top: 17px; padding-bottom: 17px; } 
 @layer base {.radius-30 { border-radius: 30px; } } 
-.gap-40 { gap: 40px; } 
-.outline-none {    outline: none;  } 
 .t-10p { top: 10%; } 
 .l--10 { left: -10px; } 
 .px-6 { padding-left: 6px; padding-right: 6px; } 
 .py-6 { padding-top: 6px; padding-bottom: 6px; } 
 .t-40p { top: 40%; } 
-.l-24 { left: 24px; } 
 .bg-\#FFFFFFCC { background-color: #FFFFFFCC; } 
 .r--10 { right: -10px; } 
-.r-24 { right: 24px; } 
 .weight-200 { font-weight: 200; } 
 @layer base {.radius-99 { border-radius: 99px; } } 
 .px-14 { padding-left: 14px; padding-right: 14px; } 
 .m-5 { margin: 5px; } 
 .color-\#fff { color: #fff; } 
 .pr-20 { padding-right: 20px; } 
+.mb--5 { margin-bottom: -5px; } 
 .w-90p { width: 90%; } 
 .h-70 { height: 70px; } 
 .h-60p { height: 60%; } 
 .a-items-start { align-items: flex-start; } 
 .h-80p { height: 80%; } 
-.color-\#00000099 { color: #00000099; } 
 .j-content-start { justify-content: flex-start; } 
 .object-fit-cover { object-fit: cover; } 
 .color-\#000000 { color: #000000; } 
 .opacity-50 { opacity: 50%; } 
 .color-\#000000B2 { color: #000000B2; } 
-.color-\#1677FF { color: #1677FF; } 
 .h-60vh { height: 60vh; } 
 .w-45 { width: 45px; } 
 .m-7 { margin: 7px; } 
@@ -573,7 +581,6 @@
 .my-60 { margin-top: 60px; margin-bottom: 60px; } 
 @layer base {.radius-14 { border-radius: 14px; } } 
 .a-content-center { align-content: center; } 
-.gap-14 { gap: 14px; } 
 .first-letter\:uppercase\!::first-letter {    text-transform: uppercase !important;  } 
 .text-green-300 { color: rgba(11, 147, 120, 0.6); } 
 @layer lo { .\@lo\:text-green-300 { color: rgba(11, 147, 120, 0.6); } } 
@@ -727,12 +734,13 @@
 .grid-2-rows-auto { grid-template-rows: repeat(2, auto); } 
 .w-160 { width: 160px; } 
 @layer base {.radius-12 { border-radius: 12px; } } 
-.bg-\#FEFBE8 { background-color: #FEFBE8; } 
-@layer base {.radius-16 { border-radius: 16px; } } 
-.gap-24 { gap: 24px; } 
+.pb-32 { padding-bottom: 32px; } 
 .color-\#000000E0 { color: #000000E0; } 
 .gap-6 { gap: 6px; } 
 .mt--30 { margin-top: -30px; } 
+.bg-\#FEFBE8 { background-color: #FEFBE8; } 
+@layer base {.radius-16 { border-radius: 16px; } } 
+.gap-24 { gap: 24px; } 
 .bg-\#FFF3F1 { background-color: #FFF3F1; } 
 .text-25 { font-size: 25px; } 
 .border-lightest-grey { border-color: #D9D9D9B2; } 
@@ -743,6 +751,15 @@
 .gap-50 { gap: 50px; } 
 .mt-25 { margin-top: 25px; } 
 
+@media only screen and (min-width: 576px) { .sm\:px-80 { padding-left: 80px; padding-right: 80px; } } 
+@media only screen and (min-width: 576px) { .sm\:gap-35 { gap: 35px; } } 
+@media only screen and (min-width: 576px) { .sm\:py-40 { padding-top: 40px; padding-bottom: 40px; } } 
+@media only screen and (min-width: 576px) { .sm\:flex-row {    flex-direction: row;  } } 
+@media only screen and (min-width: 576px) { .sm\:flex-nowrap { flex-wrap: nowrap; } } 
+@media only screen and (min-width: 576px) { .sm\:w-416 { width: 416px; } } 
+@media only screen and (min-width: 576px) { .sm\:min-w-416 { min-width: 416px; } } 
+@media only screen and (min-width: 576px) { .sm\:flex-grow-1 { flex-grow: 1; } } 
+@layer lo {  @media only screen and (min-width: 576px) { .\@lo\:placeholder\:sm\:text-16::placeholder { font-size: 16px; } }  } 
 @media only screen and (min-width: 576px) { .sm\:py-14 { padding-top: 14px; padding-bottom: 14px; } } 
 @media only screen and (min-width: 576px) { .sm\:px-40 { padding-left: 40px; padding-right: 40px; } } 
 @media only screen and (min-width: 576px) { .sm\:text-26 { font-size: 26px; } } 
@@ -763,9 +780,8 @@
 @media only screen and (min-width: 576px) { .sm\:gap-23 { gap: 23px; } } 
 @media only screen and (min-width: 576px) { .sm\:gap-8 { gap: 8px; } } 
 @media only screen and (min-width: 576px) { .sm\:gap-28 { gap: 28px; } } 
+@media only screen and (min-width: 576px) { .sm\:pb-28 { padding-bottom: 28px; } } 
 @media only screen and (min-width: 576px) { .sm\:py-20 { padding-top: 20px; padding-bottom: 20px; } } 
-@media only screen and (min-width: 576px) { .sm\:p-24 { padding: 24px; } } 
-@media only screen and (min-width: 576px) { .sm\:gap-20 { gap: 20px; } } 
 @media only screen and (min-width: 576px) { .sm\:text-24 { font-size: 24px; } } 
 @media only screen and (min-width: 576px) { .sm\:py-8 { padding-top: 8px; padding-bottom: 8px; } } 
 @media only screen and (min-width: 576px) { .sm\:inline {    display: inline;  } } 
@@ -775,6 +791,8 @@
 @media only screen and (min-width: 576px) { .sm\:mb--2 { margin-bottom: -2px; } } 
 @media only screen and (min-width: 576px) { .sm\:grid-3-cols-1fr { grid-template-columns: repeat(3, 1fr); } } 
 @media only screen and (min-width: 576px) { .sm\:gap-10 { gap: 10px; } } 
+@media only screen and (min-width: 576px) { .sm\:p-24 { padding: 24px; } } 
+@media only screen and (min-width: 576px) { .sm\:gap-20 { gap: 20px; } } 
 
 @media only screen and (min-width: 768px) { .md\:px-60 { padding-left: 60px; padding-right: 60px; } } 
 @media only screen and (min-width: 768px) { .md\:flex-grow-0 { flex-grow: 0; } } 
@@ -794,9 +812,14 @@
 @media only screen and (min-width: 768px) { .md\:py-11\.2 { padding-top: 11.2px; padding-bottom: 11.2px; } } 
 @media only screen and (min-width: 768px) { .md\:pl-14 { padding-left: 14px; } } 
 @media only screen and (min-width: 768px) { .md\:pr-0 { padding-right: 0px; } } 
+@media only screen and (min-width: 768px) { .md\:w-16 { width: 16px; } } 
+@media only screen and (min-width: 768px) { .md\:h-16 { height: 16px; } } 
+@media only screen and (min-width: 768px) { .md\:mb-0 { margin-bottom: 0px; } } 
+@media only screen and (min-width: 768px) { .md\:mr-14 { margin-right: 14px; } } 
 @media only screen and (min-width: 768px) { .md\:pt-36 { padding-top: 36px; } } 
 @media only screen and (min-width: 768px) { .md\:h-125 { height: 125px; } } 
 @media only screen and (min-width: 768px) { .md\:gap-36 { gap: 36px; } } 
+@media only screen and (min-width: 768px) { .md\:pb-36 { padding-bottom: 36px; } } 
 @media only screen and (min-width: 768px) { .md\:w-230 { width: 230px; } } 
 
 
@@ -916,6 +939,7 @@
 @media only screen and (min-width: 992px) { .l\:py-12 { padding-top: 12px; padding-bottom: 12px; } } 
 @media only screen and (min-width: 992px) { .l\:mx-auto {    margin-left: auto;    margin-right: auto;  } } 
 @media only screen and (min-width: 992px) { .l\:h-30vh { height: 30vh; } } 
+@media only screen and (min-width: 992px) { .l\:w-461 { width: 461px; } } 
 @media only screen and (min-width: 992px) { .l\:weight-400 { font-weight: 400; } } 
 @media only screen and (min-width: 992px) {  @layer lo { .l\:\@lo\:py-17 { padding-top: 17px; padding-bottom: 17px; } }  } 
 @layer lo {  @media only screen and (min-width: 992px) { .\@lo\:l\:text-16 { font-size: 16px; } }  } 
@@ -982,6 +1006,7 @@
 @media only screen and (min-width: 992px) { .l\:m-5 { margin: 5px; } } 
 @media only screen and (min-width: 992px) { .l\:h-30 { height: 30px; } } 
 @media only screen and (min-width: 992px) { @layer base {.l\:radius-50 { border-radius: 50px; } } } 
+@media only screen and (min-width: 992px) { .l\:color-white { color: white; } } 
 @media only screen and (min-width: 992px) { .l\:bg-\#f3f3f3 { background-color: #f3f3f3; } } 
 @media only screen and (min-width: 992px) { .l\:h-200 { height: 200px; } } 
 @media only screen and (min-width: 992px) { .l\:t-35 { top: 35px; } } 
