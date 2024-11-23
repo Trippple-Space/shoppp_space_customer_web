@@ -1,133 +1,80 @@
-'use client'
-import Image from '@/modules/lib/components/image/Image'
-import StorefrontNavBar from '@/modules/lib/components/nav-bar/StorefrontNavBar'
-import React, { useEffect } from 'react'
-import { RxCalendar } from 'react-icons/rx'
-import { FaRegUserCircle } from 'react-icons/fa'
-import { IoBagCheckOutline } from 'react-icons/io5'
-import Icon from '@/modules/lib/components/icon/Icon'
-import { useStoreProductsView } from '@/modules/lib/utility/hooks/views/use-store-products-view'
+"use client";
+import Image from "@/modules/lib/components/image/Image";
+import StorefrontNavBar from "@/modules/lib/components/nav-bar/StorefrontNavBar";
+import React from "react";
+import { useStoreProductsView } from "@/modules/lib/utility/hooks/views/use-store-products-view";
 
 const StorefrontAbout = ({ store }: { store: any }) => {
-  const { products } = useStoreProductsView()
+
   return (
     <>
-      <div className='bg-white w-full '>
+      <div className="bg-white w-full">
         <StorefrontNavBar store={store} />
 
-        <div className='app-width mt-80'>
-          <div className='relative'>
-            <div className='relative l:flex z-1 gap-50'>
-              <div className='l:w-60p'>
-                <div className='l:flex gap-15'>
-                  <Image
-                    src={store.thumbnail}
-                    className='w-80 h-80 radius-8'
-                    alt=''
-                  />
-                  <div className='l:a-self-center'>
-                    <h3 className='l:text-35 text-20 l:mt-0 mt-10'>
-                      {store.name}
-                      {/* <span className='text-green'>Gram</span> */}
-                    </h3>
-                    <p className='l:text-16 text-14'>
-                      {store.byline || 'Online store in your wardrobe'}
-                    </p>
-                  </div>
-                </div>
-                <div className='l:mt-48 mt-30'>
-                  <h1 className='l:text-48 text-20 weight-600'>
-                    {store.heading || `About ${store.name}`}
-                  </h1>
-                  <p className='l:max-w-550 w-100p l:mt-20 mt-12 l:text-20 text-14 l:line-height-38 line-height-28 letter-spacing-1 weight-300'>
-                    {store?.subHeading}
+        <div className="md:pt-36 sm:pt-28 pt-32 px-24 sm:px-40 md:px-60 l:px-100 xl:px-200 flex flex-col">
+          <section className="flex flex-row j-content-between gap-30">
+            <div className="flex flex-col gap-32 l:w-500">
+              <div className="flex flex-row gap-14">
+                <Image
+                  src={store?.thumbnail}
+                  alt="store thumbnail"
+                  className="sm:w-80 w-68 sm:h-80 h-68 round object-fit"
+                />
+                <div className="flex flex-col gap-8">
+                  <h2 className="sm:text-32 text-20 weight-500">{store?.name}</h2>
+                  <p className="flex flex-row a-items-center gap-12">
+                    <span className="text-14 weight-400">0 followers</span>
+                    <span className="text-12 weight-600 bg-black text-white py-4 px-16 radius-999 pointer">
+                      Follow
+                    </span>
                   </p>
                 </div>
-
-                <div className='flex mt-44 gap-30'>
-                  <div className='w-fit text-left border-r border-lightest-grey w-200 '>
-                    <RxCalendar className='inline-block l:w-40 l:h-40 l:m-15 :w-20 :h-20 :m-10 ' />
-                    <div className='l:text-16 text-12'>
-                      Monthly unique visit
-                    </div>
-                    <div className='l:text-24 text-16 weight-700 mt-15'>
-                      ##,###
-                    </div>
-                  </div>
-
-                  <div className='w-fit text-left border-r border-lightest-grey w-200'>
-                    <FaRegUserCircle className='inline-block l:w-40 l:h-40 l:m-15 :w-20 :h-20 :m-10 ' />
-                    <div className='l:text-16 text-12'>Active Customers</div>
-                    <div className='l:text-24 text-16 weight-700 mt-15'>
-                      ##,###
-                    </div>
-                  </div>
-
-                  <div className='w-fit text-left w-200'>
-                    <IoBagCheckOutline className='inline-block l:w-40 l:h-40 l:m-15 :w-20 :h-20 :m-10 ' />
-                    <div className='l:text-16 text-12'>Product Sold</div>
-                    <div className='l:text-24 text-16 weight-700 mt-15'>
-                      ##,###
-                    </div>
-                  </div>
-                </div>
               </div>
-              <div className='relative hidden l:block w-full g|min-height:430px'>
-                <Icon
-                  className='absolute z-0 inline w-fit t--10 r-0 h-full'
-                  name='store-about-dots-bg'
-                />
-                <div className='pr-70 w-full grid grid-3-cols-1fr grid-3-rows-1fr w-full max-w-700 absolute r-0 h-full gap-27 pt-70'>
-                  <div className=' grid-row-span-1 grid-col-span-2 grid grid-3-cols-1fr gap-17'>
-                    <div
-                      className='grid-col-span-2
-                          radius-t-l-0 radius-30'
-                      style={{
-                        backgroundImage: `url(${products?.[0]?.variants?.[0]?.media?.[0].url})`,
-                        backgroundRepeat: 'no-repeat',
-                        backgroundPosition: 'center',
-                        backgroundSize: 'cover'
-                      }}
-                    ></div>
-                    <div
-                      className='grid-col-span-1 
-                          radius-t-r-0 radius-30'
-                      style={{
-                        backgroundImage: `url(${products?.[0]?.variants?.[1]?.media?.[0].url})`,
-                        backgroundRepeat: 'no-repeat',
-                        backgroundPosition: 'center',
-                        backgroundSize: 'cover'
-                      }}
-                    ></div>
-                  </div>
-                  <div
-                    className='grid-col-span-1 grid-row-span-3
-                        radius-t-r-0 radius-b-l-0 radius-30'
-                    style={{
-                      backgroundImage: `url(${products?.[0]?.variants?.[2]?.media?.[0].url})`,
-                      backgroundRepeat: 'no-repeat',
-                      backgroundPosition: 'center',
-                      backgroundSize: 'cover'
-                    }}
-                  ></div>
-                  <div
-                    className='h-full grid-row-span-2 grid-col-span-2
-                        radius-30'
-                    style={{
-                      backgroundImage: `url(${products?.[0]?.variants?.[3]?.media?.[0].url})`,
-                      backgroundRepeat: 'no-repeat',
-                      backgroundPosition: 'center',
-                      backgroundSize: 'cover'
-                    }}
-                  ></div>
+              <div className="flex flex-col gap-12 w-fit">
+                <h1 className="sm:text-35 text-24 weight-600">
+                  {store.heading || `About ${store.name}`}
+                </h1>
+                <p className="sm:text-16 text-14 weight-400">{store?.subHeading}</p>
+                <div className="text-14 weight-400 flex flex-row sm:gap-23 gap-8">
+                  <p className="flex flex-row a-items-center sm:gap-8 gap-5">
+                    <span className="sm:text-16 text-14 weight-600">#,###</span>
+                    <span>monthly visits</span>
+                  </p>
+                  <p className="h-24 w-1 bg-#00000014"></p>
+                  <p className="flex flex-row a-items-center sm:gap-8 gap-5">
+                    <span className="sm:text-16 text-14 weight-600">#,###</span>
+                    <span>product sold</span>
+                  </p>
                 </div>
               </div>
             </div>
-          </div>
+            <div className="l:grid hidden grid-2-cols-auto grid-2-rows-auto gap-12 h-fit">
+              <Image
+                src={store.meta.heroImage1}
+                alt="hero img"
+                className="w-160 l:h-130 md:h-125 border border-#00000014 radius-12 object-fit"
+              />
+              <Image
+                src={store.meta.heroImage2}
+                alt="hero img"
+                className="w-160 l:h-130 md:h-125 border border-#00000014 radius-12 object-fit"
+              />
+              <Image
+                src={store.meta.heroImage3}
+                alt="hero img"
+                className="w-160 l:h-130 md:h-125 border border-#00000014 radius-12 object-fit"
+              />
+              <Image
+                src={store.meta.heroImage4}
+                alt="hero img"
+                className="w-160 l:h-130 md:h-125 border border-#00000014 radius-12 object-fit"
+              />
+            </div>
+          </section>
         </div>
       </div>
     </>
-  )
-}
+  );
+};
 
-export default StorefrontAbout
+export default StorefrontAbout;

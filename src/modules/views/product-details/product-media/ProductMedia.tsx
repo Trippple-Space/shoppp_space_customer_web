@@ -12,7 +12,7 @@ interface IProductMedia {
 }
 
 const ProductMedia: FC<IProductMedia> = ({ product, activeVariant }) => {
-    console.log({ product })
+
     const [variants, setVariants] = useState(activeVariant ? [activeVariant] : product.variants)
     const [activeMedium, setActiveMedium] = useState(variants[0].media[0])
 

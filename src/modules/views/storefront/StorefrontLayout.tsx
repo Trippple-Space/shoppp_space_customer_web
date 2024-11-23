@@ -1,89 +1,219 @@
 "use client";
 
-import BaseNavBar from "@/modules/lib/components/nav-bar/BaseNavBar";
-import StorefrontNavBar from "@/modules/lib/components/nav-bar/StorefrontNavBar";
-import { BsBasket3 } from "react-icons/bs";
-import { LiaCommentsDollarSolid } from "react-icons/lia";
-import React, { FC, useEffect, useState } from "react";
-import cx from "classnames";
+import React, { FC, useEffect, useRef, useState } from "react";
 import FabricsCategoryNav from "@/modules/lib/components/nav-bar/category-nav/FabricsCategoryNav";
 import ProductTile from "@/modules/lib/components/product-tile/ProductTile";
-import Footer from "@/modules/lib/components/footer/Footer";
 import { ILayout } from "@/app/layout";
-import StorefrontReviews from "./StorefrontReviews";
 import { useStoreProductsView } from "@/modules/lib/utility/hooks/views/use-store-products-view";
 import { useCategoryNavView } from "@/modules/lib/utility/hooks/views/use-category-nav-view";
-
-const tabs = [
-    // {
-    //     icon: BsBasket3,
-    //     text: "Products",
-    //     component: <></>
-    // },
-    // {
-    //     icon: LiaCommentsDollarSolid,
-    //     text: "Customer reviews (12,000)",
-    //     component: <StorefrontReviews />
-    // },
-];
+import {
+  Product,
+  ProductCategory,
+} from "@/modules/lib/utility/types/product.interface";
+import { useCategoryFilter } from "@/modules/lib/utility/hooks/use-category-filter";
+import { MdChevronRight } from "react-icons/md";
+import { GoArrowRight } from "react-icons/go";
+import Link from "next/link";
+import ScrollButtons from "@/modules/lib/components/scroll-buttons/scrollButtons";
+import StorefrontFooter from "@/modules/lib/components/footer/StorefrontFooter";
 
 const StorefrontLayout: FC<ILayout> = ({ children }) => {
-    // const [activeTab, setActiveTab] = useState(tabs[0]);
-    const [selectedCategory, setSelectedCategory] = useState();
-    const {  products } = useStoreProductsView(selectedCategory);
-    const { categories } = useCategoryNavView();
+  const scrollRef1 = useRef<HTMLDivElement>(null);
+  const scrollRef2 = useRef<HTMLDivElement>(null);
+  const [selectedCategory, setSelectedCategory] =
+    useState<ProductCategory | null>(null);
+  const { products } = useStoreProductsView(selectedCategory);
+  const { categories } = useCategoryNavView();
+  const [filteredProducts, setFilteredProducts] = useState(products);
 
-    return (
-        <div>
-            <div className="pb-100">
-                <div className="relative l:pb-20 pb-10">
-                    {children}
-                </div>
+  const [newArrivals, setNewArrivals] = useState<Product[]>([]);
+  const [dealsForYou, setDealsForYou] = useState<Product[]>([]);
+  const [featuredProducts, setFeaturedProducts] = useState<Product[]>([]);
 
-                <div className="app-width">
-                    <div className="flex gap-70 l:text-20 text-14">
-                        {/* {tabs.map((tab) => (
-                            <div
-                                onClick={() => setActiveTab(tab)}
-                                className={cx(
-                                    "flex weight-400 w-fit white-space-nowrap hover:text-green pointer gap-15",
-                                    {
-                                        "text-green": tab.text == activeTab.text,
-                                    }
-                                )}
-                            >
-                                <tab.icon /> <span>{tab.text}</span>
-                            </div>
-                        ))} */}
-                    </div>
-                </div>
+  const updateFilters = (filteredProducts: Product[]) => {
+    setFilteredProducts(filteredProducts);
+  };
 
-                <div className="border-b border-t border-whitesmoke l:pt-0 pt-20 mt-10 mb-50">
-                    <div className="l:mt--60 mt--70">
-                        <FabricsCategoryNav categories={categories} setSelectedCategory={setSelectedCategory} />
-                    </div>
-                </div>
+  const { handleCategoryChange } = useCategoryFilter(products, updateFilters);
 
-                <div className="app-width">
-                    {/* <div>
-                        {activeTab.component}
-                    </div> */}
-                    <section className="l:mt-55 ">
-                        <h3 className="l:text-20 text-16 weight-300 uppercase">New Arrivals</h3>
-                        <div className="grid l:grid-5-cols-1fr grid-2-cols-1fr gap-10 gap-30 w-full">
-                            {
-                                products.map(product => (
-                                    <ProductTile product={product} />
-                                ))
-                            }
-                        </div>
-                    </section>
-                </div>
-            </div>
-            <Footer />
+  useEffect(() => {
+    if (selectedCategory) {
+      handleCategoryChange(selectedCategory);
+    } else {
+      setFilteredProducts(products);
+    }
+  }, [selectedCategory, products, filteredProducts]);
+
+  useEffect(() => {
+    const sectionCategories = () => {
+      const deals: Product[] = [];
+      const newDeals: Product[] = [];
+      const remainingDeals: Product[] = [];
+
+      filteredProducts.forEach((product) => {
+        if (!product?.tags) return;
+
+        let isCategorized = false;
+
+        product.tags.forEach((tag) => {
+          const label = tag.label.toLowerCase();
+
+          if (label.includes("new arrivals")) {
+            newDeals.push(product);
+            isCategorized = true;
+          } else if (label.includes("deals for you")) {
+            deals.push(product);
+            isCategorized = true;
+          }
+        });
+
+        if (
+          !isCategorized &&
+          !remainingDeals.some((deal) => deal.id === product.id)
+        ) {
+          remainingDeals.push(product);
+        }
+      });
+
+      setDealsForYou(deals);
+      setNewArrivals(newDeals);
+      setFeaturedProducts(remainingDeals);
+    };
+
+    sectionCategories();
+  }, [products, filteredProducts]);
+
+  return (
+    <div>
+      <div className="flex flex-col md:gap-36 sm:gap-28 gap-32 md:pb-36 sm:pb-28 pb-32">
+        <div className="">{children}</div>
+
+        <div className="sm:py-20 py-16">
+          <FabricsCategoryNav
+            categories={categories}
+            setSelectedCategory={setSelectedCategory}
+            page={"store"}
+          />
         </div>
 
-    );
+        <div className="px-24 sm:px-40 md:px-60 l:px-100 xl:px-200 flex flex-col gap-20">
+          <section
+            className={`bg-#FEFBE8 radius-16 sm:p-24 p-20 flex flex-col md:gap-24 sm:gap-20 gap-24 w-full relative`}
+            key={newArrivals[0]?.id}
+          >
+            <div className="flex flex-row j-content-between a-items-center">
+              <h3 className="sm:text-24 text-20 weight-600 color-#000000E0">
+                New arrivals
+              </h3>
+
+              <Link
+                href={"/"}
+                className="bg-black text-white sm:py-8 py-6 px-14 flex flex-row a-items-center gap-6 radius-6"
+              >
+                <span className="sm:text-16 text-14 weight-600">View more</span>
+                <MdChevronRight className="w-16 h-16 sm:inline hidden" />
+              </Link>
+            </div>
+            <div className="scroll-x no-scrollbar" ref={scrollRef1}>
+              <div className={`flex h-fit ${newArrivals?.length && 'w-fit'} whitespace-nowrap gap-14`}>
+                {newArrivals?.length ? (
+                  newArrivals?.map((product, i) => (
+                    <div
+                      key={i}
+                      className="l:w-238 md:w-230 sm:w-220 w-150 l:mt--20 mt--30"
+                    >
+                      <ProductTile product={product} key={i} />
+                    </div>
+                  ))
+                ) : (
+                  <div className="mt-60 text-center flex-grow-1">
+                    No products found for new arrivals
+                  </div>
+                )}
+              </div>
+            </div>
+            <ScrollButtons
+              scrollRef={scrollRef1}
+              page={"productScroll"}
+              scrollLength={newArrivals.length}
+              component={"products"}
+            />
+          </section>
+
+          <section
+            className={`bg-#FFF3F1 radius-16 sm:p-24 p-20 flex flex-col md:gap-24 sm:gap-20 gap-24 w-full relative`}
+            key={newArrivals[1]?.id}
+          >
+            <div className="flex flex-row j-content-between a-items-center">
+              <h3 className="sm:text-24 text-20 weight-600 color-#000000E0">
+                Deals for you
+              </h3>
+              <Link
+                href={"/"}
+                className="bg-black text-white sm:py-8 py-6 px-14 flex flex-row a-items-center gap-6 radius-6"
+              >
+                <span className="sm:text-16 text-14 weight-600">View more</span>
+                <MdChevronRight className="w-16 h-16 sm:inline hidden" />
+              </Link>
+            </div>
+            <div className="scroll-x no-scrollbar" ref={scrollRef2}>
+              <div className={`flex h-fit ${newArrivals?.length && 'w-fit'} whitespace-nowrap gap-14`}>
+                {dealsForYou.length ? (
+                  dealsForYou.map((product, i) => (
+                    <div
+                      key={i}
+                      className="l:w-238 md:w-230 sm:w-220 w-150 l:mt--20 mt--30"
+                    >
+                      <ProductTile product={product} key={i} />
+                    </div>
+                  ))
+                ) : (
+                  <div className="mt-60 text-center flex-grow-1">
+                    No products found for deals for you
+                  </div>
+                )}
+              </div>
+            </div>
+            <ScrollButtons
+              scrollRef={scrollRef2}
+              page={"productScroll"}
+              scrollLength={dealsForYou.length}
+              component={"products"}
+            />
+          </section>
+        </div>
+
+        <section className="flex flex-col sm:gap-24 gap-20 mx-24 sm:mx-40 md:mx-60 l:mx-100 xl:mx-200">
+          <div className="flex flex-row j-content-between a-items-center">
+            <h3 className="sm:text-24 text-16 weight-600">Featured products</h3>
+            <Link
+              href={"/"}
+              className="text-16 flex flex-row a-items-center gap-3"
+            >
+              <span className="sm:inline-block hidden">
+                Browse all products
+              </span>
+              <GoArrowRight className="w-16 h-16 sm:mb--2" />
+            </Link>
+          </div>
+          <div className="grid l:grid-4-cols-1fr sm:grid-3-cols-1fr grid-2-cols-1fr l:gap-20 sm:gap-10 gap-20 w-full">
+            {featuredProducts.length ? (
+              featuredProducts.map((product, i) => (
+                <div key={i} className="l:mt--20 mt--30 w-full overflow-hidden">
+                  <ProductTile product={product} key={i} />
+                </div>
+              ))
+            ) : (
+              <div className="mt-60 grid-col-span-5 text-center bg-white">
+                No products found for the selected filters
+              </div>
+            )}
+          </div>
+        </section>
+      </div>
+      <StorefrontFooter />
+    </div>
+  );
 };
 
 export default StorefrontLayout;

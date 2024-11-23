@@ -1,21 +1,60 @@
 import { useState, useEffect } from "react";
-import { ProductCategory } from "../../types/product.interface";
-import { useProducts } from "../use-products";
 import { usePathname } from "next/navigation";
+import { useInView } from "react-intersection-observer";
+import { useProducts } from "../use-products";
+import { Product } from "../../types/product.interface";
 
 export const useTopSalesView = () => {
-  const pathname = usePathname();
-  const type = pathname.includes("wears")
-    ? "wear"
-    : pathname.includes("fabrics")
-    ? "fabric"
-    : "";
-  const { products, updateFilters } = type
-    ? useProducts({ filters: { type } })
-    : useProducts({});
+     const { ref, inView } = useInView();
+     const [page, setPage] = useState(1);
+     const [allProducts, setAllProducts] = useState<Product[]>([]);
+     const [limit] = useState(20);
 
-  return {
-    type,
-    products,
-  };
+     const pathname = usePathname();
+     const type = pathname.includes("wears")
+          ? "wear"
+          : pathname.includes("fabrics")
+          ? "fabric"
+          : "";
+
+     const { products, setPagination } = type
+          ? useProducts({
+                 filters: { type, status: { In: ["ACTIVE", "OUT_OF_STOCK"] } },
+                 pagination: { limit, page },
+            })
+          : useProducts({
+                 filters: { status: { In: ["ACTIVE", "OUT_OF_STOCK"] } },
+                 pagination: { limit, page },
+            });
+
+     useEffect(() => {
+          if (inView) {
+               setPage((prev) => prev + 1);
+               setPagination({ page, limit });
+          }
+     }, [inView]);
+
+     useEffect(() => {
+          if (products.length > 0) {
+               setAllProducts((prev) => {
+                    const validProducts = products.filter(
+                         (product) => product && product.id
+                    );
+                    const uniqueProducts = validProducts.filter(
+                         (newProduct) =>
+                              !prev.some(
+                                   (existingProduct) =>
+                                        existingProduct.id === newProduct.id
+                              )
+                    );
+                    return [...prev, ...uniqueProducts];
+               });
+          }
+     }, [products]);
+
+     return {
+          type,
+          products: allProducts,
+          ref,
+     };
 };

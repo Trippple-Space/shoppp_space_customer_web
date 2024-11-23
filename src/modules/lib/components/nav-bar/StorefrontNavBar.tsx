@@ -1,32 +1,79 @@
-'use client'
+"use client";
 
-import React from 'react'
-import BaseNavBar from './BaseNavBar'
-import { BiHomeAlt2 } from 'react-icons/bi'
-
-import Link from 'next/link'
-import { paths } from '../../utility/paths'
-import { usePathname } from 'next/navigation'
-import { Store } from '../../utility/types/store.interface'
+import React, { useState } from "react";
+import { Store } from "../../utility/types/store.interface";
+import SearchInput from "../search-input/SearchInput";
+import MiniCart from "../minicart/MiniCart";
+import { HiMenuAlt3 } from "react-icons/hi";
+import { useNavbarView } from "../../utility/hooks/views/use-navbar-view";
+import MobileNav from "./mobile-nav/MobileNav";
+import UserProfileDropdown from "./profile-modal/UserProfileDropdown";
+import OrdersModal from "./profile-modal/OrdersModal";
 
 const StorefrontNavBar = ({ store }: { store?: Store }) => {
-  const pathname = usePathname()
+  const { user } = useNavbarView();
+  const [userProfileDropdown, setUserProfileDropdown] =
+    useState<boolean>(false);
+  const [userOrderDropdown, setUserOrderDropdown] = useState<boolean>(false);
+
+  const handleUserProfileDropdown = () => {
+    setUserProfileDropdown((prev) => !prev);
+  };
+
+  const handleCloseDropdown = () => {
+    setUserProfileDropdown(false);
+  };
 
   return (
-    <BaseNavBar
-      links={
-        <ul className='w-fit mx-auto hidden l:flex space-between gap-50 weight-400'>
-          <li className='flex w-fit gap-10 text-green pointer whitespace-nowrap'>
-            {' '}
-            <BiHomeAlt2 className='color-inherit' /> <span>{store?.name}</span>{' '}
-          </li>
-          {/* <li className='hover:text-green pointer'>Store analytics</li> */}
-          {/* <li className='hover:text-green pointer'>Update store</li> */}
-          {/* <Link href={paths.storefront_about} className='hover:text-green pointer'>About store</Link> */}
-        </ul>
-      }
-    />
-  )
-}
+    <nav className="flex flex-row j-content-between a-items-center border border-0 border-b-1 border-b-#00000014 sm:py-14 py-12 l:px-80 md:px-60 sm:px-40 px-24">
+      <div className="md:flex-grow-0 flex-grow-1">
+        <h1 className="font-robotoMono weight-500 md:text-28 sm:text-26 text-22 w-fit">
+          {store?.name}
+        </h1>
+      </div>
 
-export default StorefrontNavBar
+      <SearchInput
+        placeholder={"Search"}
+        component={"store"}
+      />
+      <div className="">
+        <div className="flex flex-row md:gap-24 gap-10 a-items-center">
+          <MiniCart />
+          <div
+            className="flex flex-row md:gap-24 gap-20 a-items-center"
+            onClick={handleUserProfileDropdown}
+          >
+            <div className="sm:flex hidden flex-row a-items-center gap-8 p-4 pl-12 border border-#00000014 radius-999 pointer">
+              <HiMenuAlt3 className="w-24 h-24" />
+              <img
+                src={`https://api.dicebear.com/7.x/thumbs/svg?seed=${user?.username}`}
+                alt="user"
+                className="w-42 h-42 object-fit round border border-#00000014"
+              />
+            </div>
+          </div>
+          <div className="sm:hidden block">
+            <MobileNav />
+          </div>
+        </div>
+        <div className="l:px-80 md:px-60 sm:px-40 px-24 relative t--46 sm:block hidden">
+          {userProfileDropdown && (
+            <UserProfileDropdown
+              handleCloseDropdown={handleCloseDropdown}
+              setUserOrderDropdown={setUserOrderDropdown}
+            />
+          )}
+        </div>
+        {userOrderDropdown && (
+          <OrdersModal
+            modalOpen={userOrderDropdown}
+            handleCloseModal={() => setUserOrderDropdown(false)}
+            data={undefined}
+          />
+        )}
+      </div>
+    </nav>
+  );
+};
+
+export default StorefrontNavBar;

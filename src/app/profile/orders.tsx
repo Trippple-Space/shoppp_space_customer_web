@@ -39,7 +39,7 @@ const OrderModal: React.FC<ModalProps> = ({modalOpen, handleCloseModal, data}) =
     }
   };
 
-  console.log({orders})
+
 
   useEffect(() => {
     fetchOrders()

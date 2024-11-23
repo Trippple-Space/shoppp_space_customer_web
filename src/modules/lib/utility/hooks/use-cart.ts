@@ -34,7 +34,7 @@ export const useCart = () => {
 
      useEffect(() => {
           if (!cart.id && isAuthenticated && !fetching) {
-               console.log({ cart, isAuthenticated, fetching });
+   
                fetchCart();
           }
      });
