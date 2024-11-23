@@ -10,7 +10,7 @@ class OrderService {
 
     fetchOrders(query: IQueryParams): Promise<Order[]> {
         return new Promise((resolve) => {
-            console.log('fetchOrders')
+   
             http.get(endpoints.ORDERS, {
                 params: query
             })

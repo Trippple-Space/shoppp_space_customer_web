@@ -40,7 +40,7 @@ const useAddressStore = create<AddressStore>((set) => ({
   },
 
   selectAddress: (id: number) => {
-    console.log({id})
+
     set({ selectedAddressId: id })
   },
 

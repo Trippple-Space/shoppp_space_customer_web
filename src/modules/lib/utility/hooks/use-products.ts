@@ -132,7 +132,6 @@ export const useProducts = (initialQuery: IQueryParams) => {
                setProducts(cachedProducts[cacheKey]);
           } else {
                productService.fetchProducts(query).then((fetchedProducts) => {
-                    console.log("from use product hook", query);
                     setProducts(fetchedProducts);
                     setCachedProducts((prevCachedProducts) => ({
                          ...prevCachedProducts,
@@ -141,7 +140,6 @@ export const useProducts = (initialQuery: IQueryParams) => {
                });
           }
      }, [query, cachedProducts]);
-     console.log({ query });
 
      return { products, setFilters, updateFilters, setOrdering, setPagination };
 };

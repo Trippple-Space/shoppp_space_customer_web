@@ -31,7 +31,6 @@ const SearchInput: FC<ISearchInput> = ({
       try {
         const result = await productService.fetchProductBySearch(searchTerm);
         setSearchResults(result);
-        console.log({ result });
       } catch (err) {
         console.error(err);
       }
