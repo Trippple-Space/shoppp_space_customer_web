@@ -18,8 +18,14 @@ export const useTopSalesView = () => {
           : "";
 
      const { products, setPagination } = type
-          ? useProducts({ filters: { type }, pagination: { limit, page } })
-          : useProducts({ pagination: { limit, page } });
+          ? useProducts({
+                 filters: { type, status: { In: ["ACTIVE", "OUT_OF_STOCK"] } },
+                 pagination: { limit, page },
+            })
+          : useProducts({
+                 filters: { status: { In: ["ACTIVE", "OUT_OF_STOCK"] } },
+                 pagination: { limit, page },
+            });
 
      useEffect(() => {
           if (inView) {

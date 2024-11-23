@@ -24,14 +24,10 @@ class ProductService {
      fetchProducts(query: IQueryParams): Promise<Product[]> {
           return new Promise((resolve) => {
                http.get(endpoints.PRODUCTS, {
-                    ...query,
-                    params: {
-                         ...query,
-                         filter: { status: { In: ["ACTIVE", "OUT_OF_STOCK"] } },
-                    },
+                    params: query,
                }).then((response: AxiosResponse) => {
                     console.log({ param: query });
-                    console.log(response.data)
+                    console.log(response.data);
                     resolve(response.data);
                });
           });
