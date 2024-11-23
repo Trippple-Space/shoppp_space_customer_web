@@ -73,7 +73,7 @@ const useAddress = () => {
 
   const handleUpdateAddress = (addressId: number, newAddress: Address) => {
     if (user?.id && selectedAddressId !== null) {
-      console.log({ addressId, newAddress });
+
       updateAddress(user.id, addressId, newAddress);
     }
   };
@@ -89,7 +89,7 @@ const useAddress = () => {
   );
   const updateFormHandler = useFormik<Address>(
     formikAddressConfig(addressToUpdate, (address: Address) => {
-      console.log({ ll: address });
+
       handleUpdateAddress(address.id, address);
     })
   );
