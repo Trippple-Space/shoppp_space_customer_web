@@ -1,12 +1,22 @@
-import React from 'react'
-import BaseCategoryNav from './BaseCategoryNav'
+import React from "react";
+import BaseCategoryNav from "./BaseCategoryNav";
 
-const FabricsCategoryNav = ({categories, setSelectedCategory}: any) => {
-    return (
-        <div className='l:mt-100 mt-75 app-width sticky t-34 bg-white z-1 test-header'>
-            <BaseCategoryNav categories={categories} setSelectedCategory={setSelectedCategory} />
-        </div>
-    )
-}
+const FabricsCategoryNav = ({ categories, setSelectedCategory, page }: any) => {
+  return (
+    <div
+      className={` ${
+        page === "home"
+          ? "l:mt-100 mt-80 app-width test-header"
+          : "mx-24 sm:mx-40 md:mx-60 l:mx-100 xl:mx-200 "
+      } t-75 bg-white z-1`}
+    >
+      <BaseCategoryNav
+        categories={categories}
+        setSelectedCategory={setSelectedCategory}
+        page={page}
+      />
+    </div>
+  );
+};
 
-export default FabricsCategoryNav
+export default FabricsCategoryNav;

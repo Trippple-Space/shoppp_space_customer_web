@@ -1,12 +1,10 @@
 import axios, { AxiosError } from "axios";
 import envConfig from "env";
-import stagingConfig from "env/staging";
 import { toast } from "sonner";
 
 
 const http = axios.create({
-    baseURL: stagingConfig.API_HOST
-    // baseURL: envConfig.API_HOST
+    baseURL: envConfig.API_HOST
 })
 
 const isAxiosTimeout = (error: AxiosError) => {
@@ -41,10 +39,8 @@ const retryCountCache: { [key: string]: number } = {};
 http.interceptors.request.use((config: any) => {
     config.headers['Content-Type'] = 'application/json'
     config.headers['Authorization'] = `Bearer ${localStorage.getItem('token')}`;
-    console.log({ config });
-    // if (config.method === 'get') {
-    //     config.timeout = 3000
-    // }
+
+
 
     return config
 })
