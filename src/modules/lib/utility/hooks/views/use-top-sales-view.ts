@@ -18,7 +18,7 @@ export const useTopSalesView = () => {
           : "";
 
      const { products, setPagination } = type
-          ? useProducts({ filters: { type, pagination: { limit, page } } })
+          ? useProducts({ filters: { type }, pagination: { limit, page } })
           : useProducts({ pagination: { limit, page } });
 
      useEffect(() => {
