@@ -16,10 +16,10 @@ interface ICentralArena {
 
 const CentralArena = ({ selectedCategory }: ICentralArena) => {
   const { products, type, ref } = useTopSalesView()
-  const [filteredProducts, setFilteredProducts] = useState<Product[]>([])
+  const [filteredProducts, setFilteredProducts] = useState<Product[]>(products)
 
   const updateFilters = useCallback((filteredProducts: Product[]) => {
-    setFilteredProducts(prevProducts => [...prevProducts, ...filteredProducts])
+    setFilteredProducts(filteredProducts)
   }, [])
 
   const { handleCategoryChange, categories, categoryCount } = useCategoryFilter(
@@ -28,6 +28,9 @@ const CentralArena = ({ selectedCategory }: ICentralArena) => {
   )
 
   useEffect(() => {
+    if (selectedCategory?.name === 'All' || !selectedCategory?.name) {
+      setFilteredProducts(products)
+    }
     if (selectedCategory) {
       handleCategoryChange(selectedCategory)
     } else if (filteredProducts.length !== products.length) {
@@ -57,11 +60,11 @@ const CentralArena = ({ selectedCategory }: ICentralArena) => {
             </div>
           )}
         </div>
-        {/* the div the ref refers to when it wants to load more data */}
-        <div
-          ref={ref}
-          className='w-full flex j-content-center a-items-center'
-        ></div>
+        {(selectedCategory?.name === 'All' || !selectedCategory?.name) && (
+          <div ref={ref}>
+            <p></p>
+          </div>
+        )}
       </section>
     </>
   );

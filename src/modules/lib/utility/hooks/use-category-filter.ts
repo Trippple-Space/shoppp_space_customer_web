@@ -15,32 +15,42 @@ export const useCategoryFilter = (
      useEffect(() => {
           if (products.length > 0 && selectedCategory === null) {
                const productCategories = products.map(
-                    (product) =>
-                         product.category || { id: -1, name: "Uncategorized" }
+                    (product) => product.category
                );
 
+               // Filter out invalid or undefined categories
+               const validCategories = productCategories.filter(
+                    (category) => category && category.id
+               );
+
+               // Reduce categories to unique ones by ID
                const uniqueCategories: ProductCategory[] = Object.values(
-                    productCategories.reduce((acc: any, category: any) => {
-                         if (category && category.id) {
-                              acc[category.id] = category;
-                              setCategoryCount((categoryCount) => {
-                                   const _categoryCount = { ...categoryCount };
-                                   _categoryCount[category.id] = categoryCount[
-                                        category.id
-                                   ]
-                                        ? categoryCount[category.id] + 1
-                                        : 1;
-                                   return _categoryCount;
-                              });
-                         }
-                         return acc;
-                    }, {})
+                    validCategories.reduce(
+                         (acc: any, category: ProductCategory) => {
+                              if (category && category.id) {
+                                   acc[category.id] = category;
+                                   setCategoryCount((categoryCount) => {
+                                        const _categoryCount = {
+                                             ...categoryCount,
+                                        };
+                                        _categoryCount[category.id] =
+                                             categoryCount[category.id]
+                                                  ? categoryCount[category.id] +
+                                                    1
+                                                  : 1;
+                                        return _categoryCount;
+                                   });
+                              }
+                              return acc;
+                         },
+                         {}
+                    )
                );
 
                setCategories(uniqueCategories);
-               if (uniqueCategories.length > 0) {
-                    setSelectedCategory(uniqueCategories[0]);
-               }
+
+               // Select the first valid category or default to null
+               setSelectedCategory(uniqueCategories[0] || null);
           }
      }, [products]);
 
@@ -64,7 +74,7 @@ export const useCategoryFilter = (
                     updateFilters(filteredProducts);
                }
           }
-     }, [selectedCategory, products]);
+     }, [selectedCategory]);
 
      const handleCategoryChange = (category: ProductCategory) => {
           setSelectedCategory(category);

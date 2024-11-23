@@ -2,19 +2,16 @@ import React, { useState } from 'react'
 import { Product } from '../../utility/types/product.interface'
 import { cx } from '../../utility/utility'
 
-function ProductStockUnit({ product }: { product: Product }) {
-    
-    const [selectedSize, setSelectedSize] = useState('')
+function ProductStockUnit ({ product }: { product: Product }) {
+  const [selectedSize, setSelectedSize] = useState('')
 
   function getStockUnitLabel (stockType: string) {
-    switch (stockType) {
-      case 'fabric':
-        return 'Yards'
-      case 'wears':
-        return 'Unit'
-      default:
-        return false
+    const stockUnits: { [key: string]: string } = {
+      fabric: 'Yards',
+      wears: 'Unit'
     }
+
+    return stockUnits[stockType] ?? 'Pieces'
   }
 
   return (
@@ -22,7 +19,7 @@ function ProductStockUnit({ product }: { product: Product }) {
       {product.availableUnit && (
         <div className='l:mt-40 mt-30 border-b border-green-100 pb-30'>
           <div className='text-grey-500 l:text-16 text-14 weight-500'>
-            Select {getStockUnitLabel(product.type) || product.stockUnit}
+            Select {product.stockUnit ?? getStockUnitLabel(product.type)}
           </div>
           <div className='mt-20 l:flex grid grid-3-cols-1fr gap-12'>
             {product.availableUnit.map((text, i) => (

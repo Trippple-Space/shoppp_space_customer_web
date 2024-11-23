@@ -11,7 +11,11 @@ import Footer from '@/modules/lib/components/footer/Footer'
 import { Product } from '@/modules/lib/utility/types/product.interface'
 import './ProductDetails.scss'
 import { TfiAngleLeft, TfiAngleRight } from 'react-icons/tfi'
-import { cx, scrollToTop } from '@/modules/lib/utility/utility'
+import {
+  cx,
+  formatNumberAsPrice,
+  scrollToTop
+} from '@/modules/lib/utility/utility'
 import Breadcrumb from './breadcrumb/Breadcrumb'
 import { FaCheck } from 'react-icons/fa6'
 import { HiOutlineShoppingBag } from 'react-icons/hi2'
@@ -47,18 +51,8 @@ const ProductDetails = ({ product }: { product: Product }) => {
   }, [product])
 
   // const strikeOutPrice = (product?.finalPrice + product?.finalPrice * 0.05).toFixed(2) // TODO: implement proper strikeout price
-  const displayPrice = selectedVariant?.finalPrice || product?.finalPrice
 
-  function getStockUnitLabel (stockType: string) {
-    switch (stockType) {
-      case 'fabric':
-        return 'Yards'
-      case 'wears':
-        return 'Unit'
-      default:
-        return false
-    }
-  }
+  const displayPrice = selectedVariant?.price || product?.price
 
   return (
     <>
@@ -113,7 +107,7 @@ const ProductDetails = ({ product }: { product: Product }) => {
             <div className='l:flex l:mt-30 mt-20 gap-40'>
               <div>
                 <div className='text-green l:text-34 text-24 bold'>
-                  ₦{displayPrice}
+                  {formatNumberAsPrice(displayPrice)}
                 </div>
                 {/*<div className='text-grey-500 line-through l:text-21 text-14 weight-400 mt-6'>
                   ₦{strikeOutPrice}

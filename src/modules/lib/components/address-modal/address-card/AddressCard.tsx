@@ -26,7 +26,7 @@ const AddressCard: FC<AddressCardProps> = ({ address }) => {
   const editMode = addressToUpdateId === address.id;
   const isAddressSelected = address.id === selectedAddressId;
 
-  //console.log({ selectedAddressId });
+
 
   return (
     <div

@@ -36,31 +36,24 @@ export const useCartStore = create<CartStore>((set) => ({
      addToCart: async (variantId: number, quantity: number = 1) => {
           const updatedCart = await cartService.addToCart(variantId, quantity);
           set({ cart: updatedCart });
-          console.log({ updatedCart });
-          console.log(`Adding ${quantity} of product ${variantId} to the cart`);
      },
      incrementCartItem: async (variantId: number, quantity: number = 1) => {
           const updatedCart = await cartService.addToCart(variantId, quantity);
           set({ cart: updatedCart });
-          console.log(`Adding ${quantity} of product ${variantId} to the cart`);
      },
      decrementCartItem: async (variantId: number, quantity: number = 1) => {
           const updatedCart = await cartService.addToCart(variantId, -quantity);
           set({ cart: updatedCart });
-          console.log(
-               `Removing ${quantity} of product ${variantId} from the cart`
-          );
      },
      removeFromCart: async (variantId: number) => {
           const updatedCart = await cartService.removeFromCart(variantId);
           set({ cart: updatedCart });
-          console.log(`Removing product ${variantId} from the cart`);
      },
      showLoginModal: false,
      isLoginModal: () =>
           set((state) => {
                const newState = !state.showLoginModal;
-               console.log(`Toggling showLoginModal: ${newState}`);
+
                return { showLoginModal: newState };
           }),
 }));

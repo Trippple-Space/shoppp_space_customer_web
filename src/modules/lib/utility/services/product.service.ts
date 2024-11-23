@@ -24,11 +24,7 @@ class ProductService {
      fetchProducts(query: IQueryParams): Promise<Product[]> {
           return new Promise((resolve) => {
                http.get(endpoints.PRODUCTS, {
-                    ...query,
-                    params: {
-                         ...query,
-                         filter: { status: { In: ["ACTIVE", "OUT_OF_STOCK"] } },
-                    },
+                    params: query,
                }).then((response: AxiosResponse) => {
                     resolve(response.data);
                });
@@ -48,12 +44,9 @@ class ProductService {
                Object.keys(query).forEach((key) =>
                     url.searchParams.append(key, query[key])
                );
-               console.log({ slug }, "from service");
 
                fetch(url.toString())
                     .then((res) => {
-                         console.log({ res: res.ok });
-                         console.log({ url });
                          if (!res.ok) {
                               throw new Error(
                                    `HTTP error! Status: ${res.status}`

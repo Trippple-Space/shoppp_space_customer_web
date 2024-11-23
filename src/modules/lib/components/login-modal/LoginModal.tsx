@@ -13,7 +13,7 @@ import { paths } from '../../utility/paths'
 const LoginModal = () => {
   const { showLoginModal, isLoginModal } = useCartStore()
   const { formHandler: loginFormHandler } = useLoginView(isLoginModal)
-  console.log(showLoginModal)
+
 
   return (
     <>

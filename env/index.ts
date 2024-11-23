@@ -26,7 +26,7 @@ if (!process.env.ENV) {
 
 // currentEnv = 'staging';
 
-const resolvedConfigs = allConfigs[currentEnv]
+const resolvedConfigs = { ...allConfigs[currentEnv], ENV: currentEnv }
 
 export default resolvedConfigs;
 
