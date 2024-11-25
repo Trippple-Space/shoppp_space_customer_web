@@ -448,6 +448,8 @@
 .bg-green-100\! { background-color: rgba(11, 147, 120, 0.2) !important; } 
 .text-green\! { color: #0B9378 !important; } 
 .accent-green { accent-color: green; } 
+.bg-green\! { background-color: #0B9378 !important; } 
+.text-white\! { color: #FFFFFF !important; } 
 .disabled\:bg-yellow-200:disabled { background-color: #ffdc9e; } 
 .disabled\:cursor-not-allowed:disabled { cursor: not-allowed; } 
 .hover\:scale-1\.05:hover { scale: 1.05; } 
@@ -461,23 +463,25 @@
 .mx-2 { margin-left: 2px; margin-right: 2px; } 
 .my-1 { margin-top: 1px; margin-bottom: 1px; } 
 .hover\:underline:hover { text-decoration: underline; } 
+.lowercase {    text-transform: lowercase;  } 
 .bg-lighter-grey { background-color: #D9D9D9; } 
 @layer base {.radius-50 { border-radius: 50px; } } 
 .w-0 { width: 0px; } 
-.bg-yellow-600 { background-color:  #E0B12E; } 
-.border-yellow-900 { border-color:  #916A1F; } 
+.bg-green-400\! { background-color: rgba(11, 147, 120, 0.8) !important; } 
+.bg-green-600 { background-color:  #087E66; } 
+.border-green-900 { border-color:  #00412F; } 
 .font-oblique {font-style: oblique; } 
 .py-3 { padding-top: 3px; padding-bottom: 3px; } 
 .b--16 { bottom: -16px; } 
 .h-37 { height: 37px; } 
-.active\:bg-yellow-600:active { background-color:  #E0B12E; } 
+.active\:bg-green-600:active { background-color:  #087E66; } 
 .weight-900 { font-weight: 900; } 
 .focus\:outline-none:focus {    outline: none;  } 
 .w-32 { width: 32px; } 
-.bg-yellow-400 { background-color: rgba(250, 206, 51, 0.8); } 
+.bg-green-400 { background-color: rgba(11, 147, 120, 0.8); } 
 @layer hi { @layer base {    .\@hi\:border-l {       border-left: 1px solid;     }  } } 
 @layer hi { @layer base {    .\@hi\:border-r {       border-right: 1px solid;     }  } } 
-.border-yellow-700 { border-color:  #C59429; } 
+.border-green-700 { border-color:  #056A54; } 
 .min-w-0 { min-width: 0px; } 
 .px-27 { padding-left: 27px; padding-right: 27px; } 
 .py-17 { padding-top: 17px; padding-bottom: 17px; } 
@@ -766,10 +770,6 @@
 @media only screen and (min-width: 576px) { .sm\:flex {    display: flex;  } } 
 @media only screen and (min-width: 576px) { .sm\:hidden {    display: none;  } } 
 @media only screen and (min-width: 576px) { .sm\:block {    display: block;  } } 
-@media only screen and (min-width: 576px) { .sm\:gap-12 { gap: 12px; } } 
-@media only screen and (min-width: 576px) { .sm\:w-90 { width: 90px; } } 
-@media only screen and (min-width: 576px) { .sm\:w-116 { width: 116px; } } 
-@media only screen and (min-width: 576px) { .sm\:w-100 { width: 100px; } } 
 @media only screen and (min-width: 576px) { .sm\:mx-40 { margin-left: 40px; margin-right: 40px; } } 
 @media only screen and (min-width: 576px) { .sm\:pt-28 { padding-top: 28px; } } 
 @media only screen and (min-width: 576px) { .sm\:w-80 { width: 80px; } } 
@@ -793,6 +793,23 @@
 @media only screen and (min-width: 576px) { .sm\:gap-10 { gap: 10px; } } 
 @media only screen and (min-width: 576px) { .sm\:p-24 { padding: 24px; } } 
 @media only screen and (min-width: 576px) { .sm\:gap-20 { gap: 20px; } } 
+
+@media only screen and (min-width: 576px) { .s\:gap-12 { gap: 12px; } } 
+@media only screen and (min-width: 576px) { .s\:w-90 { width: 90px; } } 
+@media only screen and (min-width: 576px) { .s\:w-116 { width: 116px; } } 
+@media only screen and (min-width: 576px) { .s\:w-100 { width: 100px; } } 
+@media only screen and (min-width: 576px) { .s\:grid-3-cols-1fr { grid-template-columns: repeat(3, 1fr); } } 
+@media only screen and (min-width: 576px) { .s\:py-25 { padding-top: 25px; padding-bottom: 25px; } } 
+@media only screen and (min-width: 576px) { .s\:px-15 { padding-left: 15px; padding-right: 15px; } } 
+@media only screen and (min-width: 576px) { .s\:gap-15 { gap: 15px; } } 
+@media only screen and (min-width: 576px) { .s\:text-18 { font-size: 18px; } } 
+@media only screen and (min-width: 576px) { .s\:text-24 { font-size: 24px; } } 
+@media only screen and (min-width: 576px) { .s\:text-28 { font-size: 28px; } } 
+@media only screen and (min-width: 576px) { .s\:p-20 { padding: 20px; } } 
+@media only screen and (min-width: 576px) { .s\:pt-10 { padding-top: 10px; } } 
+@media only screen and (min-width: 576px) { .s\:mb-30 { margin-bottom: 30px; } } 
+@media only screen and (min-width: 576px) { .s\:text-larger {    font-size: 1.25rem;  } } 
+@media only screen and (min-width: 576px) { .s\:gap-20 { gap: 20px; } } 
 
 @media only screen and (min-width: 768px) { .md\:px-60 { padding-left: 60px; padding-right: 60px; } } 
 @media only screen and (min-width: 768px) { .md\:flex-grow-0 { flex-grow: 0; } } 
@@ -822,23 +839,6 @@
 @media only screen and (min-width: 768px) { .md\:pb-36 { padding-bottom: 36px; } } 
 @media only screen and (min-width: 768px) { .md\:w-230 { width: 230px; } } 
 
-
-@media only screen and (min-width: 1200px) { .xl\:mx-200 { margin-left: 200px; margin-right: 200px; } } 
-@media only screen and (min-width: 1200px) { .xl\:px-200 { padding-left: 200px; padding-right: 200px; } } 
-
-@media only screen and (min-width: 576px) { .s\:grid-3-cols-1fr { grid-template-columns: repeat(3, 1fr); } } 
-@media only screen and (min-width: 576px) { .s\:py-25 { padding-top: 25px; padding-bottom: 25px; } } 
-@media only screen and (min-width: 576px) { .s\:px-15 { padding-left: 15px; padding-right: 15px; } } 
-@media only screen and (min-width: 576px) { .s\:gap-15 { gap: 15px; } } 
-@media only screen and (min-width: 576px) { .s\:text-18 { font-size: 18px; } } 
-@media only screen and (min-width: 576px) { .s\:text-24 { font-size: 24px; } } 
-@media only screen and (min-width: 576px) { .s\:text-28 { font-size: 28px; } } 
-@media only screen and (min-width: 576px) { .s\:p-20 { padding: 20px; } } 
-@media only screen and (min-width: 576px) { .s\:pt-10 { padding-top: 10px; } } 
-@media only screen and (min-width: 576px) { .s\:mb-30 { margin-bottom: 30px; } } 
-@media only screen and (min-width: 576px) { .s\:text-larger {    font-size: 1.25rem;  } } 
-@media only screen and (min-width: 576px) { .s\:gap-20 { gap: 20px; } } 
-
 @media only screen and (min-width: 768px) { .m\:py-30 { padding-top: 30px; padding-bottom: 30px; } } 
 @media only screen and (min-width: 768px) { .m\:gap-60 { gap: 60px; } } 
 @media only screen and (min-width: 768px) { .m\:pr-30 { padding-right: 30px; } } 
@@ -859,6 +859,7 @@
 @media only screen and (min-width: 768px) { .m\:py-10 { padding-top: 10px; padding-bottom: 10px; } } 
 @media only screen and (min-width: 768px) { .m\:w-650 { width: 650px; } } 
 @media only screen and (min-width: 768px) { .m\:text-20 { font-size: 20px; } } 
+
 
 @media only screen and (min-width: 992px) { .l\:w-50p { width: 50%; } } 
 @media only screen and (min-width: 992px) { .l\:block {    display: block;  } } 
@@ -1023,9 +1024,7 @@
 @media only screen and (min-width: 992px) { .l\:content-end {    justify-content: flex-end;    align-content: flex-end;  } } 
 @media only screen and (min-width: 992px) { .l\:w-60p { width: 60%; } } 
 @media only screen and (min-width: 992px) { .l\:float-right {    float: right;  } } 
-@media only screen and (min-width: 992px) { .l\:grid-5-cols-1fr { grid-template-columns: repeat(5, 1fr); } } 
-@media only screen and (min-width: 992px) { .l\:mt-90 { margin-top: 90px; } } 
-@media only screen and (min-width: 992px) { .l\:mb-200 { margin-bottom: 200px; } } 
+@media only screen and (min-width: 992px) { .l\:grid-4-cols-1fr { grid-template-columns: repeat(4, 1fr); } } 
 @media only screen and (min-width: 992px) { .l\:t-150 { top: 150px; } } 
 @media only screen and (min-width: 992px) { .l\:l-100 { left: 100px; } } 
 @media only screen and (min-width: 992px) { .l\:w-700 { width: 700px; } } 
@@ -1096,7 +1095,6 @@
 @media only screen and (min-width: 992px) { .l\:grid-3-cols-1fr { grid-template-columns: repeat(3, 1fr); } } 
 @media only screen and (min-width: 992px) { .l\:mt-68 { margin-top: 68px; } } 
 @media only screen and (min-width: 992px) { .l\:mt-55 { margin-top: 55px; } } 
-@media only screen and (min-width: 992px) { .l\:grid-4-cols-1fr { grid-template-columns: repeat(4, 1fr); } } 
 @media only screen and (min-width: 992px) { .l\:mt-80 { margin-top: 80px; } } 
 @media only screen and (min-width: 992px) { .l\:text-48 { font-size: 48px; } } 
 @media only screen and (min-width: 992px) { .l\:letter-spacing-3 { letter-spacing: 3px; } } 
@@ -1119,3 +1117,7 @@
 @media only screen and (min-width: 992px) { .l\:w-238 { width: 238px; } } 
 @media only screen and (min-width: 992px) { .l\:mt--20 { margin-top: -20px; } } 
 @media only screen and (min-width: 992px) { .l\:line-height-40 { line-height: 40px; } } 
+
+@media only screen and (min-width: 1200px) { .xl\:mx-200 { margin-left: 200px; margin-right: 200px; } } 
+@media only screen and (min-width: 1200px) { .xl\:grid-5-cols-1fr { grid-template-columns: repeat(5, 1fr); } } 
+@media only screen and (min-width: 1200px) { .xl\:px-200 { padding-left: 200px; padding-right: 200px; } } 

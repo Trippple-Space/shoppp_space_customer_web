@@ -3,7 +3,6 @@ import cx from "classnames";
 import { ProductCategory } from "@/modules/lib/utility/types/product.interface";
 import ImageAlt from "../../image-alt/ImageAlt";
 import SkeletonLoader from "../../skeleton-loader/Skeleton";
-import staticCategories from "@/modules/lib/utility/json-data/categories.json";
 import ScrollButtons from "../../scroll-buttons/scrollButtons";
 
 // This one is gueressing Su's head :)
@@ -32,14 +31,14 @@ const BaseCategoryNav: FC<IBaseCategoryNav> = ({
       <div className="scroll-x no-scrollbar" ref={scrollRef}>
         <div
           className={`flex h-fit w-fit whitespace-nowrap ${
-            page === "store" && "sm:gap-12 gap-8"
+            page === "store" && "s:gap-12 gap-8"
           }`}
         >
           {categories?.map((category, i) => (
             <div
               key={i}
               className={`${
-                page === "home" ? "sm:w-90 w-71" : "sm:w-116 w-96"
+                page === "home" ? "s:w-90 w-71" : "s:w-116 w-96"
               } flex j-content-center`}
             >
               <div
@@ -54,7 +53,7 @@ const BaseCategoryNav: FC<IBaseCategoryNav> = ({
                     className={`${
                       page === "home"
                         ? "w-47.02 h-46 round"
-                        : "sm:w-100 w-80 h-64 radius-6"
+                        : "s:w-100 w-80 h-64 radius-6"
                     } border object-fit ${
                       i === activeOption
                         ? "border-2 border-green"
@@ -65,7 +64,7 @@ const BaseCategoryNav: FC<IBaseCategoryNav> = ({
                     iconClassName={`${
                       page === "home"
                         ? "w-47.02 h-46 round"
-                        : "sm:w-100 w-80 h-64 radius-6"
+                        : "s:w-100 w-80 h-64 radius-6"
                     } border object-fit ${
                       i === activeOption
                         ? "border-2 border-green"
@@ -93,7 +92,7 @@ const BaseCategoryNav: FC<IBaseCategoryNav> = ({
       <ScrollButtons
         scrollRef={scrollRef}
         page={page}
-        scrollLength={staticCategories.length + 1}
+        scrollLength={1}
         component={"categories"}
       />
     </div>

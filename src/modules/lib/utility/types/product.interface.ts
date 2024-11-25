@@ -1,11 +1,22 @@
 import { Store } from "./store.interface";
 
-export interface ProductCategory {
-  type: string;
-  id: number;
+interface ICategory {
   name: string;
-  images: string[];
+  filters: string;
+  images: {
+    icon: string;
+    picture: string;
+  };
   description: string | null;
+  subcategories: ICategory[];
+}
+
+export interface ProductCategory {
+  id: number;
+  label: string;
+  type: 'wears' | 'fabrics' | null;
+  categories: ICategory[];
+  storeId: number;
 }
 
 export interface Product {

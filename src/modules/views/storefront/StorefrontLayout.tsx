@@ -97,7 +97,9 @@ const StorefrontLayout: FC<ILayout> = ({ children }) => {
         </div>
 
         <div className="px-24 sm:px-40 md:px-60 l:px-100 xl:px-200 flex flex-col gap-20">
-          <section
+          {
+            !!newArrivals?.length &&
+            <section
             className={`bg-#FEFBE8 radius-16 sm:p-24 p-20 flex flex-col md:gap-24 sm:gap-20 gap-24 w-full relative`}
             key={newArrivals[0]?.id}
           >
@@ -138,49 +140,53 @@ const StorefrontLayout: FC<ILayout> = ({ children }) => {
               scrollLength={newArrivals.length}
               component={"products"}
             />
-          </section>
+            </section>
+          }
 
-          <section
-            className={`bg-#FFF3F1 radius-16 sm:p-24 p-20 flex flex-col md:gap-24 sm:gap-20 gap-24 w-full relative`}
-            key={newArrivals[1]?.id}
-          >
-            <div className="flex flex-row j-content-between a-items-center">
-              <h3 className="sm:text-24 text-20 weight-600 color-#000000E0">
-                Deals for you
-              </h3>
-              <Link
-                href={"/"}
-                className="bg-black text-white sm:py-8 py-6 px-14 flex flex-row a-items-center gap-6 radius-6"
-              >
-                <span className="sm:text-16 text-14 weight-600">View more</span>
-                <MdChevronRight className="w-16 h-16 sm:inline hidden" />
-              </Link>
-            </div>
-            <div className="scroll-x no-scrollbar" ref={scrollRef2}>
-              <div className={`flex h-fit ${newArrivals?.length && 'w-fit'} whitespace-nowrap gap-14`}>
-                {dealsForYou.length ? (
-                  dealsForYou.map((product, i) => (
-                    <div
-                      key={i}
-                      className="l:w-238 md:w-230 sm:w-220 w-150 l:mt--20 mt--30"
-                    >
-                      <ProductTile product={product} key={i} />
-                    </div>
-                  ))
-                ) : (
-                  <div className="mt-60 text-center flex-grow-1">
-                    No products found for deals for you
-                  </div>
-                )}
+          {
+            !!dealsForYou.length && 
+            <section
+              className={`bg-#FFF3F1 radius-16 sm:p-24 p-20 flex flex-col md:gap-24 sm:gap-20 gap-24 w-full relative`}
+              key={newArrivals[1]?.id}
+            >
+              <div className="flex flex-row j-content-between a-items-center">
+                <h3 className="sm:text-24 text-20 weight-600 color-#000000E0">
+                  Deals for you
+                </h3>
+                <Link
+                  href={"/"}
+                  className="bg-black text-white sm:py-8 py-6 px-14 flex flex-row a-items-center gap-6 radius-6"
+                >
+                  <span className="sm:text-16 text-14 weight-600">View more</span>
+                  <MdChevronRight className="w-16 h-16 sm:inline hidden" />
+                </Link>
               </div>
-            </div>
-            <ScrollButtons
-              scrollRef={scrollRef2}
-              page={"productScroll"}
-              scrollLength={dealsForYou.length}
-              component={"products"}
-            />
-          </section>
+              <div className="scroll-x no-scrollbar" ref={scrollRef2}>
+                <div className={`flex h-fit ${newArrivals?.length && 'w-fit'} whitespace-nowrap gap-14`}>
+                  {dealsForYou.length ? (
+                    dealsForYou.map((product, i) => (
+                      <div
+                        key={i}
+                        className="l:w-238 md:w-230 sm:w-220 w-150 l:mt--20 mt--30"
+                      >
+                        <ProductTile product={product} key={i} />
+                      </div>
+                    ))
+                  ) : (
+                    <div className="mt-60 text-center flex-grow-1">
+                      No products found for deals for you
+                    </div>
+                  )}
+                </div>
+              </div>
+              <ScrollButtons
+                scrollRef={scrollRef2}
+                page={"productScroll"}
+                scrollLength={dealsForYou.length}
+                component={"products"}
+              />
+            </section>
+          }
         </div>
 
         <section className="flex flex-col sm:gap-24 gap-20 mx-24 sm:mx-40 md:mx-60 l:mx-100 xl:mx-200">
