@@ -3,6 +3,7 @@ import { usePathname } from "next/navigation";
 import { useInView } from "react-intersection-observer";
 import { useProducts } from "../use-products";
 import { Product } from "../../types/product.interface";
+import { useCategories } from "../use-categories";
 
 export const useTopSalesView = () => {
      const { ref, inView } = useInView();
@@ -10,14 +11,25 @@ export const useTopSalesView = () => {
      const [allProducts, setAllProducts] = useState<Product[]>([]);
      const [limit] = useState(20);
 
+     
      const pathname = usePathname();
      const type = pathname.includes("wears")
-          ? "wear"
-          : pathname.includes("fabrics")
-          ? "fabric"
-          : "";
+     ? "wear"
+     : pathname.includes("fabrics")
+     ? "fabric"
+     : null;
 
-     const { products, setPagination } = type
+     const catType = pathname.includes("wears")
+     ? "wears"
+     : pathname.includes("fabrics")
+     ? "fabrics"
+     : null;
+     
+     const { selectedCategory, setSelectedCategory } = useCategories({ type: catType, storeId: 0, label: 'GLOBAL' })
+
+     console.log({selectedCategory})
+
+     const { products, setPagination, updateFilters } = type
           ? useProducts({
                  filters: { type, status: { In: ["ACTIVE", "OUT_OF_STOCK"] } },
                  pagination: { limit, page },
@@ -26,6 +38,10 @@ export const useTopSalesView = () => {
                  filters: { status: { In: ["ACTIVE", "OUT_OF_STOCK"] } },
                  pagination: { limit, page },
             });
+     
+     useEffect(() => {
+          updateFilters(selectedCategory.filters)
+     }, [selectedCategory?.name])
 
      useEffect(() => {
           if (inView) {
@@ -55,6 +71,8 @@ export const useTopSalesView = () => {
      return {
           type,
           products: allProducts,
+          setSelectedCategory,
+          selectedCategory,
           ref,
      };
 };
