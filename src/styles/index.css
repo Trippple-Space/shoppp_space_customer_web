@@ -829,7 +829,7 @@
 @media only screen and (min-width: 768px) { .md\:pr-0 { padding-right: 0px; } } 
 @media only screen and (min-width: 768px) { .md\:w-16 { width: 16px; } } 
 @media only screen and (min-width: 768px) { .md\:h-16 { height: 16px; } } 
-@media only screen and (min-width: 768px) { .md\:mb-0 { margin-bottom: 0px; } } 
+@media only screen and (min-width: 768px) { .md\:mb--2 { margin-bottom: -2px; } } 
 @media only screen and (min-width: 768px) { .md\:mr-14 { margin-right: 14px; } } 
 @media only screen and (min-width: 768px) { .md\:pt-36 { padding-top: 36px; } } 
 @media only screen and (min-width: 768px) { .md\:h-125 { height: 125px; } } 
