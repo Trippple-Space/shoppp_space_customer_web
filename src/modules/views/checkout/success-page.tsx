@@ -9,6 +9,7 @@ import React from "react";
 
 const SuccessMessage = () => {
   const { orders } = useOrders();
+  console.log(orders)
 
   return (
     <>

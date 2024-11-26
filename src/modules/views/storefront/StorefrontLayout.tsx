@@ -17,6 +17,7 @@ import Link from "next/link";
 import ScrollButtons from "@/modules/lib/components/scroll-buttons/scrollButtons";
 import StorefrontFooter from "@/modules/lib/components/footer/StorefrontFooter";
 import { Store } from "@/modules/lib/utility/types/store.interface";
+import Footer from "@/modules/lib/components/footer/Footer";
 
 const StorefrontLayout: FC<{store: Store, children: ReactNode}> = ({ store, children }) => {
   const scrollRef1 = useRef<HTMLDivElement>(null);
@@ -86,7 +87,7 @@ const StorefrontLayout: FC<{store: Store, children: ReactNode}> = ({ store, chil
 
   return (
     <div>
-      <div className="flex flex-col md:gap-36 sm:gap-28 gap-32 md:pb-36 sm:pb-28 pb-32">
+      <div className="flex flex-col md:gap-36 sm:gap-28 gap-32 pb-100">
         <div className="">{children}</div>
 
         <div className="sm:py-20 py-16">
@@ -218,7 +219,7 @@ const StorefrontLayout: FC<{store: Store, children: ReactNode}> = ({ store, chil
           </div>
         </section>
       </div>
-      <StorefrontFooter />
+      <Footer />
     </div>
   );
 };

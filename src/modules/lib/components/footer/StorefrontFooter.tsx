@@ -11,7 +11,7 @@ export default function StorefrontFooter() {
         <div className="flex flex-col gap-20">
           <h6 className="weight-600 text-20">Contact us</h6>
           <p className="flex flex-col gap-14">
-            <Link href={"tel:+801234567"} className="flex flex-row gap-8 w-fit">
+            <Link href={"tel:+234801234567"} className="flex flex-row gap-8 w-fit">
               <TbPhone className="w-24 h-24" />
               <span className="text-16">0801234567</span>
             </Link>
