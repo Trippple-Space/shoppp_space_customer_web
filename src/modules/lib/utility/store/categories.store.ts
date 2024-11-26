@@ -1,19 +1,33 @@
 import { create } from 'zustand';
+import { ICategory } from '../types/product.interface';
 
 
 interface CategoryStore {
     categoriesCache: Record<string, any>;
-    currentCategoryList: ICategory[]
+    selectedCategory: {
+        [x: string]: ICategory;
+    }
+    currentCategoryList: ICategory[];
     products: Record<string, any>;
     setCategoriesCache: (type: string | null, label: string, storeId: number, categories: any) => void;
-    setCurrentCategoryList: (categoryList: ICategory[]) => void; 
-    setProducts: (categoryId: string, products: any) => void;
+    setSelectedCategory: (type: string | null, label: string, storeId: number, category: ICategory) => void;
+    setCurrentCategoryList: (categoryList: ICategory[]) => void;
 }
 
 export const useCategoryStore = create<CategoryStore>((set) => ({
     categoriesCache: {},
     currentCategoryList: [],
+    selectedCategory: {},
     products: {},
+    setSelectedCategory: (type, label, storeId, category) => {
+        console.log('Hey', { type, label, storeId, category })
+        return set((state) => ({
+            selectedCategory: {
+                ...state.selectedCategory,
+                [`${type}_${label}_${storeId}`]: category,
+            },
+        }))
+    },
     setCategoriesCache: (type, label, storeId, categories) =>
         set((state) => ({
             categoriesCache: {
@@ -24,12 +38,5 @@ export const useCategoryStore = create<CategoryStore>((set) => ({
     setCurrentCategoryList: (categoryList) =>
         set((state) => ({
             currentCategoryList: categoryList,
-        })),
-    setProducts: (categoryId, products) =>
-        set((state) => ({
-            products: {
-                ...state.products,
-                [categoryId]: products,
-            },
         })),
 }));

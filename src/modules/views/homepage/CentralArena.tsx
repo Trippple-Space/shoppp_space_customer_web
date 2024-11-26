@@ -1,42 +1,18 @@
 "use client";
 
-import React, { useEffect, useState, useCallback } from 'react'
+import React from 'react'
 import ProductTile from '@/modules/lib/components/product-tile/ProductTile'
 import { useTopSalesView } from '@/modules/lib/utility/hooks/views/use-top-sales-view'
-import ImageAlt from '@/modules/lib/components/image-alt/ImageAlt'
 import {
-  Product,
-  ProductCategory
+  ICategory,
 } from '@/modules/lib/utility/types/product.interface'
-import { useCategoryFilter } from '@/modules/lib/utility/hooks/use-category-filter'
 
 interface ICentralArena {
-  selectedCategory?: ProductCategory
+  selectedCategory: ICategory
 }
 
 const CentralArena = ({ selectedCategory }: ICentralArena) => {
   const { products, type, ref } = useTopSalesView()
-  const [filteredProducts, setFilteredProducts] = useState<Product[]>(products)
-
-  const updateFilters = useCallback((filteredProducts: Product[]) => {
-    setFilteredProducts(filteredProducts)
-  }, [])
-
-  const { handleCategoryChange, categories, categoryCount } = useCategoryFilter(
-    products,
-    updateFilters
-  )
-
-  useEffect(() => {
-    if (selectedCategory?.name === 'All' || !selectedCategory?.name) {
-      setFilteredProducts(products)
-    }
-    if (selectedCategory) {
-      handleCategoryChange(selectedCategory)
-    } else if (filteredProducts.length !== products.length) {
-      setFilteredProducts(products)
-    }
-  }, [selectedCategory, products, handleCategoryChange])
 
   return (
     <>
@@ -47,8 +23,8 @@ const CentralArena = ({ selectedCategory }: ICentralArena) => {
           </h3>
         </div>
         <div className='grid xl:grid-5-cols-1fr l:grid-4-cols-1fr s:grid-3-cols-1fr grid-2-cols-1fr flex-wrap gap-15 l:gap-10 w-full relative'>
-          {filteredProducts.length ? (
-            filteredProducts.map((product, i: number) => (
+          {products.length ? (
+            products.map((product, i: number) => (
               <ProductTile product={product} key={product.id} />
             ))
           ) : (

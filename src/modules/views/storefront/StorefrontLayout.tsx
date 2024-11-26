@@ -1,6 +1,6 @@
 "use client";
 
-import React, { FC, useEffect, useRef, useState } from "react";
+import React, { FC, ReactNode, useEffect, useRef, useState } from "react";
 import FabricsCategoryNav from "@/modules/lib/components/nav-bar/category-nav/FabricsCategoryNav";
 import ProductTile from "@/modules/lib/components/product-tile/ProductTile";
 import { ILayout } from "@/app/layout";
@@ -16,14 +16,15 @@ import { GoArrowRight } from "react-icons/go";
 import Link from "next/link";
 import ScrollButtons from "@/modules/lib/components/scroll-buttons/scrollButtons";
 import StorefrontFooter from "@/modules/lib/components/footer/StorefrontFooter";
+import { Store } from "@/modules/lib/utility/types/store.interface";
 
-const StorefrontLayout: FC<ILayout> = ({ children }) => {
+const StorefrontLayout: FC<{store: Store, children: ReactNode}> = ({ store, children }) => {
   const scrollRef1 = useRef<HTMLDivElement>(null);
   const scrollRef2 = useRef<HTMLDivElement>(null);
   const [selectedCategory, setSelectedCategory] =
     useState<ProductCategory | null>(null);
   const { products } = useStoreProductsView(selectedCategory);
-  const { categories } = useCategoryNavView();
+  const { categories } = useCategoryNavView({ storeId: store.id });
   const [filteredProducts, setFilteredProducts] = useState(products);
 
   const [newArrivals, setNewArrivals] = useState<Product[]>([]);

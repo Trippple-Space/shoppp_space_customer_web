@@ -10,7 +10,7 @@ class ProductService {
 
      CACHE_EXPIRY = 60 * 60 * 1000; // 1 hour
 
-     async fetchProductCategories(type: "fabrics" | "wears", label = 'GLOBAL', storeId = 0) {
+     async fetchProductCategories(type: "fabrics" | "wears" | null, label = 'GLOBAL', storeId = 0) {
 
           const cacheKey = `product/categories_${type}_${label}_${storeId}`;
           const cachedData = this.getCachedCategories(cacheKey);

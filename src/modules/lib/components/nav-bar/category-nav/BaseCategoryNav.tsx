@@ -1,13 +1,13 @@
 import React, { FC, useState, useRef } from "react";
 import cx from "classnames";
-import { ProductCategory } from "@/modules/lib/utility/types/product.interface";
+import { ICategory, ProductCategory } from "@/modules/lib/utility/types/product.interface";
 import ImageAlt from "../../image-alt/ImageAlt";
 import SkeletonLoader from "../../skeleton-loader/Skeleton";
 import ScrollButtons from "../../scroll-buttons/scrollButtons";
 
 // This one is gueressing Su's head :)
 interface IBaseCategoryNav {
-  categories: ProductCategory[];
+  categories: ICategory[];
   displayFilter?: boolean;
   isRoute?: boolean;
   setSelectedCategory?: any;
@@ -22,6 +22,8 @@ const BaseCategoryNav: FC<IBaseCategoryNav> = ({
   const [activeOption, setActiveOption] = useState(0);
   const scrollRef = useRef<HTMLDivElement>(null);
 
+
+  console.log({ categories })
   return (
     <div
       className={`flex a-items-center w-full relative ${
@@ -48,7 +50,7 @@ const BaseCategoryNav: FC<IBaseCategoryNav> = ({
                 }}
                 className="flex flex-col a-items-center gap-7 space-between w-fit cursor-pointer"
               >
-                {!!category.images?.[0] ? (
+                {!!category.images?.icon || category.images?.picture ? (
                   <ImageAlt
                     className={`${
                       page === "home"
@@ -59,8 +61,8 @@ const BaseCategoryNav: FC<IBaseCategoryNav> = ({
                         ? "border-2 border-green"
                         : "border-#00000026"
                     }`}
-                    type={category?.type}
-                    src={category.images[0]}
+                    type={'image'}
+                    src={category.images.picture}
                     iconClassName={`${
                       page === "home"
                         ? "w-47.02 h-46 round"

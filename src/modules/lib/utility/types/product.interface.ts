@@ -1,8 +1,10 @@
 import { Store } from "./store.interface";
 
-interface ICategory {
+export interface ICategory {
   name: string;
-  filters: string;
+  filters: {
+    [x: string]: any
+  };
   images: {
     icon: string;
     picture: string;

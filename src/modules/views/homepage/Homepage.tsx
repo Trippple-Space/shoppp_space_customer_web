@@ -8,8 +8,7 @@ import CentralArena from "./CentralArena";
 import { useCategoryNavView } from "@/modules/lib/utility/hooks/views/use-category-nav-view";
 
 const Homepage = () => {
-  const { categories } = useCategoryNavView();
-  const [selectedCategory, setSelectedCategory] = useState();
+  const { categories, setSelectedCategory, selectedCategory } = useCategoryNavView();
 
   return (
     <>
