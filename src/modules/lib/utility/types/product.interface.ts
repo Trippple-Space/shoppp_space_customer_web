@@ -14,6 +14,7 @@ export interface ICategory {
 }
 
 export interface ProductCategory {
+  name?: any;
   id: number;
   label: string;
   type: 'wears' | 'fabrics' | null;
@@ -26,7 +27,6 @@ export interface Product {
   keywords: string[];
   id: number;
   slug: string;
-  category: ProductCategory;
   price: number;
   finalPrice?: number;
   type: string;

@@ -5,6 +5,7 @@ import http from "../http";
 import { IProductFilters, IQueryParams } from "../hooks/use-products";
 import { buildEndpoint } from "../utility";
 import config from "env";
+import { Store } from "../types/store.interface";
 
 class StoreService {
      fetchStores(query: IQueryParams): Promise<Product[]> {
@@ -17,7 +18,7 @@ class StoreService {
           });
      }
 
-     fetchStoreBySlug(slug: string, query: IQueryParams): Promise<Product> {
+     fetchStoreBySlug(slug: string, query: IQueryParams): Promise<Store> {
           return new Promise((resolve) => {
                fetch(
                     config.API_HOST +

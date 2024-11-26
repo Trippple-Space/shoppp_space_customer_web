@@ -41,7 +41,7 @@ export const useCategories = ({
   }
   return { 
     currentCategoryList, 
-    selectedCategory: !!Object.keys(cat).length ? cat : { name: '', images: {}, description: '', filters: {}, subcategories: [] }, 
+    selectedCategory: (!!Object.keys(cat).length ? cat : { name: '', images: {}, description: '', filters: {}, subcategories: [] } as unknown as ICategory), 
     setSelectedCategory: setCat
   };
 };
