@@ -41,7 +41,7 @@ const BaseNavBar: FC<IBaseNavBar> = ({ links }) => {
   };
 
   return (
-    <div className="fixed w-full t-0 l-0 bg-white border-b border-whitesmoke z-5">
+    <div className="fixed w-full t-0 l-0 bg-white z-5">
       <div
         className={cx(
           "flex a-items-center relative app-width space-between py-15",

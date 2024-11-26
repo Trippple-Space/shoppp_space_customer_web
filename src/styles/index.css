@@ -384,7 +384,7 @@
 .object-fit {    object-fit: cover;  } 
 .text-small {    font-size: 0.75rem;  } 
 [class~='g|max-width:90px']{max-width:90px} 
-.mt-80 { margin-top: 80px; } 
+.mt-94 { margin-top: 94px; } 
 .mx-24 { margin-left: 24px; margin-right: 24px; } 
 .t-75 { top: 75px; } 
 .z-index-1, .z-1 { z-index: 1; } 
@@ -545,6 +545,7 @@
 .my-100 { margin-top: 100px; margin-bottom: 100px; } 
 .grid-7-cols-1fr { grid-template-columns: repeat(7, 1fr); } 
 .my-12 { margin-top: 12px; margin-bottom: 12px; } 
+.mt-24 { margin-top: 24px; } 
 .grid-2-cols-1fr { grid-template-columns: repeat(2, 1fr); } 
 .grid-col-span-5 { grid-column: span 5; } 
 .grid-2-cols-auto { grid-template-columns: repeat(2, auto); } 
@@ -711,6 +712,7 @@
 .border-r-0 { border-right-width: 0px; } 
 .w-101 { width: 101px; } 
 .h-101 { height: 101px; } 
+.mt-80 { margin-top: 80px; } 
 .pb-38 { padding-bottom: 38px; } 
 .mt-48 { margin-top: 48px; } 
 .border-green-500 { border-color: #0B9378; } 
@@ -831,6 +833,7 @@
 @media only screen and (min-width: 768px) { .md\:h-16 { height: 16px; } } 
 @media only screen and (min-width: 768px) { .md\:mb--2 { margin-bottom: -2px; } } 
 @media only screen and (min-width: 768px) { .md\:mr-14 { margin-right: 14px; } } 
+@media only screen and (min-width: 768px) { .md\:mt-32 { margin-top: 32px; } } 
 @media only screen and (min-width: 768px) { .md\:pt-36 { padding-top: 36px; } } 
 @media only screen and (min-width: 768px) { .md\:h-125 { height: 125px; } } 
 @media only screen and (min-width: 768px) { .md\:gap-36 { gap: 36px; } } 

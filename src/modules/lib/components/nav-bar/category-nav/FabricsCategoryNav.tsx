@@ -6,7 +6,7 @@ const FabricsCategoryNav = ({ categories, setSelectedCategory, page }: any) => {
     <div
       className={` ${
         page === "home"
-          ? "l:mt-100 mt-80 app-width test-header"
+          ? "l:mt-100 mt-94 pb-20 app-width test-header"
           : "mx-24 sm:mx-40 md:mx-60 l:mx-100 xl:mx-200 "
       } t-75 bg-white z-1`}
     >
