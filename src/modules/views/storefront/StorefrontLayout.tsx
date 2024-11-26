@@ -15,11 +15,13 @@ import { MdChevronRight } from "react-icons/md";
 import { GoArrowRight } from "react-icons/go";
 import Link from "next/link";
 import ScrollButtons from "@/modules/lib/components/scroll-buttons/scrollButtons";
-import StorefrontFooter from "@/modules/lib/components/footer/StorefrontFooter";
 import { Store } from "@/modules/lib/utility/types/store.interface";
 import Footer from "@/modules/lib/components/footer/Footer";
 
-const StorefrontLayout: FC<{store: Store, children: ReactNode}> = ({ store, children }) => {
+const StorefrontLayout: FC<{ store: Store; children: ReactNode }> = ({
+  store,
+  children,
+}) => {
   const scrollRef1 = useRef<HTMLDivElement>(null);
   const scrollRef2 = useRef<HTMLDivElement>(null);
   const [selectedCategory, setSelectedCategory] =
@@ -78,7 +80,7 @@ const StorefrontLayout: FC<{store: Store, children: ReactNode}> = ({ store, chil
       });
 
       setDealsForYou(deals);
-      setNewArrivals(newDeals);
+      setNewArrivals(newArrivals);
       setFeaturedProducts(remainingDeals);
     };
 
@@ -99,72 +101,86 @@ const StorefrontLayout: FC<{store: Store, children: ReactNode}> = ({ store, chil
         </div>
 
         <div className="px-24 sm:px-40 md:px-60 l:px-100 xl:px-200 flex flex-col gap-20">
-          {
-            !!newArrivals?.length &&
+          {!!newArrivals?.length && (
             <section
-            className={`bg-#FEFBE8 radius-16 sm:p-24 p-20 flex flex-col md:gap-24 sm:gap-20 gap-24 w-full relative`}
-            key={newArrivals[0]?.id}
-          >
-            <div className="flex flex-row j-content-between a-items-center">
-              <h3 className="sm:text-24 text-20 weight-600 color-#000000E0">
-                New arrivals
-              </h3>
+              className={`bg-#FEFBE8 radius-16 sm:p-24 p-20 flex flex-col md:gap-24 sm:gap-20 gap-24 w-full relative`}
+              key={newArrivals[0]?.id}
+            >
+              <div className="flex flex-row j-content-between a-items-center">
+                <h3 className="sm:text-24 text-20 weight-600 color-#000000E0">
+                  New arrivals
+                </h3>
 
-              <Link
-                href={"/"}
-                className="bg-black text-white sm:py-8 py-6 px-14 flex flex-row a-items-center gap-6 radius-6"
-              >
-                <span className="sm:text-16 text-14 weight-600">View more</span>
-                <MdChevronRight className="w-16 h-16 sm:inline hidden" />
-              </Link>
-            </div>
-            <div className="scroll-x no-scrollbar" ref={scrollRef1}>
-              <div className={`flex h-fit ${newArrivals?.length && 'w-fit'} whitespace-nowrap gap-14`}>
-                {newArrivals?.length ? (
-                  newArrivals?.map((product, i) => (
-                    <div
-                      key={i}
-                      className="l:w-238 md:w-230 sm:w-220 w-150 l:mt--20 mt--30"
-                    >
-                      <ProductTile product={product} key={i} />
-                    </div>
-                  ))
-                ) : (
-                  <div className="mt-60 text-center flex-grow-1">
-                    No products found for new arrivals
-                  </div>
+                {newArrivals?.length > 4 && (
+                  <Link
+                    href={"/"}
+                    className="bg-black text-white sm:py-8 py-6 px-14 flex flex-row a-items-center gap-6 radius-6"
+                  >
+                    <span className="sm:text-16 text-14 weight-600">
+                      View more
+                    </span>
+                    <MdChevronRight className="w-16 h-16 sm:inline hidden" />
+                  </Link>
                 )}
               </div>
-            </div>
-            <ScrollButtons
-              scrollRef={scrollRef1}
-              page={"productScroll"}
-              scrollLength={newArrivals.length}
-              component={"products"}
-            />
+              <div className="scroll-x no-scrollbar" ref={scrollRef1}>
+                <div
+                  className={`flex h-fit ${
+                    newArrivals?.length && "w-fit"
+                  } whitespace-nowrap gap-14`}
+                >
+                  {newArrivals?.length ? (
+                    newArrivals?.map((product, i) => (
+                      <div
+                        key={i}
+                        className="l:w-238 md:w-230 sm:w-220 w-150 l:mt--20 mt--30"
+                      >
+                        <ProductTile product={product} key={i} />
+                      </div>
+                    ))
+                  ) : (
+                    <div className="mt-60 text-center flex-grow-1">
+                      No products found for new arrivals
+                    </div>
+                  )}
+                </div>
+              </div>
+              <ScrollButtons
+                scrollRef={scrollRef1}
+                page={"productScroll"}
+                scrollLength={newArrivals.length}
+                component={"products"}
+              />
             </section>
-          }
+          )}
 
-          {
-            !!dealsForYou.length && 
+          {!!dealsForYou.length && (
             <section
               className={`bg-#FFF3F1 radius-16 sm:p-24 p-20 flex flex-col md:gap-24 sm:gap-20 gap-24 w-full relative`}
-              key={newArrivals[1]?.id}
+              key={dealsForYou[0]?.id}
             >
               <div className="flex flex-row j-content-between a-items-center">
                 <h3 className="sm:text-24 text-20 weight-600 color-#000000E0">
                   Deals for you
                 </h3>
-                <Link
-                  href={"/"}
-                  className="bg-black text-white sm:py-8 py-6 px-14 flex flex-row a-items-center gap-6 radius-6"
-                >
-                  <span className="sm:text-16 text-14 weight-600">View more</span>
-                  <MdChevronRight className="w-16 h-16 sm:inline hidden" />
-                </Link>
+                {dealsForYou?.length > 4 && (
+                  <Link
+                    href={"/"}
+                    className="bg-black text-white sm:py-8 py-6 px-14 flex flex-row a-items-center gap-6 radius-6"
+                  >
+                    <span className="sm:text-16 text-14 weight-600">
+                      View more
+                    </span>
+                    <MdChevronRight className="w-16 h-16 sm:inline hidden" />
+                  </Link>
+                )}
               </div>
               <div className="scroll-x no-scrollbar" ref={scrollRef2}>
-                <div className={`flex h-fit ${newArrivals?.length && 'w-fit'} whitespace-nowrap gap-14`}>
+                <div
+                  className={`flex h-fit ${
+                    newArrivals?.length && "w-fit"
+                  } whitespace-nowrap gap-14`}
+                >
                   {dealsForYou.length ? (
                     dealsForYou.map((product, i) => (
                       <div
@@ -188,21 +204,23 @@ const StorefrontLayout: FC<{store: Store, children: ReactNode}> = ({ store, chil
                 component={"products"}
               />
             </section>
-          }
+          )}
         </div>
 
         <section className="flex flex-col sm:gap-24 gap-20 mx-24 sm:mx-40 md:mx-60 l:mx-100 xl:mx-200">
           <div className="flex flex-row j-content-between a-items-center">
             <h3 className="sm:text-24 text-16 weight-600">Featured products</h3>
-            <Link
-              href={"/"}
-              className="text-16 flex flex-row a-items-center gap-3"
-            >
-              <span className="sm:inline-block hidden">
-                Browse all products
-              </span>
-              <GoArrowRight className="w-16 h-16 sm:mb--2" />
-            </Link>
+            {featuredProducts?.length > 4 && (
+              <Link
+                href={"/"}
+                className="text-16 flex flex-row a-items-center gap-3"
+              >
+                <span className="sm:inline-block hidden">
+                  Browse all products
+                </span>
+                <GoArrowRight className="w-16 h-16 sm:mb--2" />
+              </Link>
+            )}
           </div>
           <div className="grid l:grid-4-cols-1fr sm:grid-3-cols-1fr grid-2-cols-1fr l:gap-20 sm:gap-10 gap-20 w-full">
             {featuredProducts.length ? (
