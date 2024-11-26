@@ -10,7 +10,7 @@ export const useStoreProductsView = (selectedCategory?: any) => {
   const { slug } = useParams();
 
   const { products, updateFilters } = useProducts({
-    filters: { store: { slug } },
+       filters: { store: { slug }, status: { In: ["ACTIVE", "OUT_OF_STOCK"] } },
   });
 
   return {
