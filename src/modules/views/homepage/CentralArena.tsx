@@ -2,7 +2,7 @@
 
 import React from 'react'
 import ProductTile from '@/modules/lib/components/product-tile/ProductTile'
-import { useTopSalesView } from '@/modules/lib/utility/hooks/views/use-top-sales-view'
+import { useProductListView } from '@/modules/lib/utility/hooks/views/use-product-list-view'
 import {
   ICategory,
 } from '@/modules/lib/utility/types/product.interface'
@@ -12,7 +12,7 @@ interface ICentralArena {
 }
 
 const CentralArena = ({ selectedCategory }: ICentralArena) => {
-  const { products, type, ref } = useTopSalesView()
+  const { products, type, ref } = useProductListView()
 
   return (
     <>
