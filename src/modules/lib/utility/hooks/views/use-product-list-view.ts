@@ -11,9 +11,9 @@ export const useProductListView = () => {
 
      const pathname = usePathname();
      const type = pathname.includes("wears")
-          ? "wear"
+          ? "wears"
           : pathname.includes("fabrics")
-               ? "fabric"
+               ? "fabrics"
                : null;
 
      const catType = pathname.includes("wears")
