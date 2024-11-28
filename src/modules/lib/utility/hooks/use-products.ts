@@ -37,13 +37,6 @@ const placeholderProduct: Product = {
      tags: [{ label: "" }],
      id: 0,
      slug: "",
-     category: {
-          type: "",
-          id: 0,
-          name: "",
-          images: [],
-          description: null,
-     },
      price: 0,
      name: "",
      type: "",

@@ -14,9 +14,7 @@ export const useCategoryFilter = (
 
      useEffect(() => {
           if (products.length > 0 && selectedCategory === null) {
-               const productCategories = products.map(
-                    (product) => product.category
-               );
+               const productCategories: any[] = [];
 
                // Filter out invalid or undefined categories
                const validCategories = productCategories.filter(
