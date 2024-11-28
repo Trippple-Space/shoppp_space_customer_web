@@ -55,26 +55,14 @@ const StorefrontAbout = ({ store }: { store: Store }) => {
             <div className='l:grid hidden grid-2-cols-auto grid-2-rows-auto gap-12 h-fit'>
               {store.meta?.heroImages && (
                 <>
-                  <Image
-                    src={store.meta?.heroImages.heroImage1}
-                    alt='hero img'
-                    className='w-160 l:h-130 md:h-125 border border-#00000014 radius-12 object-fit'
-                  />
-                  <Image
-                    src={store.meta?.heroImages?.heroImage2}
-                    alt='hero img'
-                    className='w-160 l:h-130 md:h-125 border border-#00000014 radius-12 object-fit'
-                  />
-                  <Image
-                    src={store.meta?.heroImages?.heroImage3}
-                    alt='hero img'
-                    className='w-160 l:h-130 md:h-125 border border-#00000014 radius-12 object-fit'
-                  />
-                  <Image
-                    src={store.meta?.heroImages?.heroImage4}
-                    alt='hero img'
-                    className='w-160 l:h-130 md:h-125 border border-#00000014 radius-12 object-fit'
-                  />
+                  {Object.values(store.meta.heroImages).map((image, index) => (
+                    <Image
+                      key={index}
+                      src={image}
+                      alt={`hero img ${index + 1}`}
+                      className='w-160 l:h-130 md:h-125 border border-#00000014 radius-12 object-fit'
+                    />
+                  ))}
                 </>
               )}
             </div>
