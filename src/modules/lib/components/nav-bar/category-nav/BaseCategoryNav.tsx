@@ -23,7 +23,6 @@ const BaseCategoryNav: FC<IBaseCategoryNav> = ({
   const scrollRef = useRef<HTMLDivElement>(null);
 
 
-  console.log({ categories })
   return (
     <div
       className={`flex a-items-center w-full relative ${
@@ -94,7 +93,7 @@ const BaseCategoryNav: FC<IBaseCategoryNav> = ({
       <ScrollButtons
         scrollRef={scrollRef}
         page={page}
-        scrollLength={1}
+        scrollLength={categories.length}
         component={"categories"}
       />
     </div>

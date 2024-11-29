@@ -80,7 +80,7 @@ const StorefrontLayout: FC<{ store: Store; children: ReactNode }> = ({
       });
 
       setDealsForYou(deals);
-      setNewArrivals(newArrivals);
+      setNewArrivals(newDeals);
       setFeaturedProducts(remainingDeals);
     };
 
@@ -97,6 +97,7 @@ const StorefrontLayout: FC<{ store: Store; children: ReactNode }> = ({
             categories={categories}
             setSelectedCategory={setSelectedCategory}
             page={"store"}
+            key={categories}
           />
         </div>
 
