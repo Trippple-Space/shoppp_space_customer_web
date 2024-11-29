@@ -33,11 +33,9 @@ const CentralArena = ({ selectedCategory }: ICentralArena) => {
             </div>
           )}
         </div>
-        {(selectedCategory?.name === 'All' || !selectedCategory?.name) && (
-          <div ref={ref}>
-            <p></p>
-          </div>
-        )}
+        <div ref={ref}>
+          <p></p>
+        </div>
       </section>
     </>
   );
