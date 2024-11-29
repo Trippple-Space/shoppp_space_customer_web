@@ -12,17 +12,9 @@ export const useProductListView = () => {
      const pathname = usePathname();
      const type = pathname.includes("wears")
           ? "wears"
-          : pathname.includes("fabrics")
-               ? "fabrics"
-               : null;
+          : 'fabrics'
 
-     const catType = pathname.includes("wears")
-          ? "wears"
-          : pathname.includes("fabrics")
-               ? "fabrics"
-               : null;
-
-     const { selectedCategory, setSelectedCategory } = useCategories({ type: catType, storeId: 0, label: 'GLOBAL' })
+     const { selectedCategory, setSelectedCategory } = useCategories({ type, storeId: 0, label: 'GLOBAL' })
 
      console.log({ selectedCategory })
 
