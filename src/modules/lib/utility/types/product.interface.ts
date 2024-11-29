@@ -1,11 +1,25 @@
 import { Store } from "./store.interface";
 
-export interface ProductCategory {
-  type: string;
-  id: number;
+export interface ICategory {
   name: string;
-  images: string[];
+  filters: {
+    [x: string]: any
+  };
+  images: {
+    icon: string;
+    picture: string;
+  };
   description: string | null;
+  subcategories: ICategory[];
+}
+
+export interface ProductCategory {
+  name?: any;
+  id: number;
+  label: string;
+  type: 'wears' | 'fabrics' | null;
+  categories: ICategory[];
+  storeId: number;
 }
 
 export interface Product {
@@ -13,7 +27,6 @@ export interface Product {
   keywords: string[];
   id: number;
   slug: string;
-  category: ProductCategory;
   price: number;
   finalPrice?: number;
   type: string;
