@@ -118,7 +118,7 @@ export const displayProductPill = () => {
      const getTwoActivePills = (pillable: PillableProp) => {
           const activeItems = Object.entries(pillable)
                .filter(([key, value]) => value.active)
-               .sort(([_, a], [__, b]) => b.priority - a.priority)
+               .sort(([_, a], [__, b]) => a.priority - b.priority)
                .slice(0, 2)
                .map((a) => a[1]);
 
