@@ -24,7 +24,7 @@ if (!process.env.ENV) {
 }
 
 
-// currentEnv = 'staging';
+currentEnv = 'staging';
 
 const resolvedConfigs = { ...allConfigs[currentEnv], ENV: currentEnv }
 

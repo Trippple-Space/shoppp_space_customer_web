@@ -26,7 +26,7 @@ export const useProductListView = () => {
 
      console.log({ selectedCategory })
 
-     const { products, setPagination, updateFilters } = useProducts({
+     const { products, setPagination, updateFilters, query } = useProducts({
           filters: { type, status: { In: ["ACTIVE", "OUT_OF_STOCK"] } },
           pagination: { limit, page },
      })
@@ -36,6 +36,10 @@ export const useProductListView = () => {
      useEffect(() => {
           updateFilters(selectedCategory.filters)
      }, [selectedCategory?.name])
+
+     useEffect(() => {
+          setPage(Math.floor(products.length / limit) + 1);
+     }, [JSON.stringify(query.filters)])
 
      useEffect(() => {
           if (inView) {
