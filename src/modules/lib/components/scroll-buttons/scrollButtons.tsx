@@ -53,7 +53,8 @@ const ScrollButtons: FC<IScrollButtons> = ({
 
       const atStart = scrollRef.current.scrollLeft === 0;
       const atEnd =
-        scrollRef.current.scrollLeft + scrollRef.current.clientWidth >=
+        Math.round(scrollRef.current.scrollLeft) +
+          scrollRef.current.clientWidth >=
         scrollContainerWidth;
 
       setShowLeftButton(!atStart);

@@ -19,6 +19,7 @@ const Homepage = () => {
           categories={categories}
           setSelectedCategory={setSelectedCategory}
           page={"home"}
+          key={categories}
         />
       </div>
       <div className="app-width">
