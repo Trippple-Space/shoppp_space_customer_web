@@ -11,6 +11,7 @@ import { SlArrowDown } from "react-icons/sl";
 import AsoebiLinksModal from "../AsoebiLinksModal";
 import Link from "next/link";
 import { paths } from "@/modules/lib/utility/paths";
+import config from '../../../../../../env'
 
 function MobileNav() {
   useAuthGuard(); // TODO: refactor to rely on Next 13 auth middleware
@@ -51,7 +52,7 @@ function MobileNav() {
               </div>
             )}
             <div className="flex flex-col gap-20">
-              <Link href={paths.vendor_signup} target="_blank">
+              <Link href={config.VENDOR_CENTER_HOST} target="_blank">
                 Sell on asoebi.africa
               </Link>
               <p>Help Center</p>
