@@ -57,7 +57,6 @@ const ProductDetails = ({ product }: { product: Product }) => {
   const sanitizedAddress = address?.replace(/[.,]+$/, '')
   const location = [sanitizedAddress, state].filter(Boolean).join('. ')
 
-
   return (
     <>
       <HomepageNavBar />
@@ -233,15 +232,17 @@ const ProductDetails = ({ product }: { product: Product }) => {
                 </Link>
               </div>
 
-              <div className='hidden l:flex radius-50p relative'>
-                <Image
-                  className='w-85 h-85'
-                  src='ankara-round.png'
-                  alt='product'
-                  type='image'
-                />
-                <Icon name='badge' className='w-35 h-35 absolute r-0 b-10' />
-              </div>
+              {product.store.thumbnail && (
+                <div className='hidden l:flex radius-50p relative'>
+                  <Image
+                    className='w-85 h-85'
+                    src={product.store.thumbnail}
+                    alt='product'
+                    type='image'
+                  />
+                  <Icon name='badge' className='w-35 h-35 absolute r-0 b-10' />
+                </div>
+              )}
             </div>
 
             <div className='border-t border-b line-height-25 l:line-height-32 border-lighter-grey l:mt-10 mt-20 l:pt-10 pt-20 l:block grid grid-2-cols-1fr'>
