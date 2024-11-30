@@ -40,7 +40,7 @@ const ProductTile: FC<IProductTile> = ({ product }: any) => {
 
   const [topTwoPills, setTopTwoPills] = useState<any[]>([])
   useEffect(() => {
-    const pills = displayProductPill()
+    const pills = displayProductPill(product?.tags)
     setTopTwoPills(pills)
   }, [])
 
@@ -177,7 +177,7 @@ const ProductTile: FC<IProductTile> = ({ product }: any) => {
         <div className='flex flex-wrap gap-4'>
           {product?.tags?.map((tag: any) => (
             <span className='text-green text-12 inline-block radius-5 mx-2 my-1 pointer hover:underline lowercase'>
-              #{tag.label}
+              {!tag.label.includes('pill') && '#'+tag.label}
             </span>
           ))}
         </div>

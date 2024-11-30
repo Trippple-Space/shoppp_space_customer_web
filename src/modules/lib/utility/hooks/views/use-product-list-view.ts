@@ -24,14 +24,14 @@ export const useProductListView = () => {
 
      const { selectedCategory, setSelectedCategory } = useCategories({ type: catType, storeId: 0, label: 'GLOBAL' })
 
-     console.log({ selectedCategory })
+     //console.log({ selectedCategory })
 
      const { products, setPagination, updateFilters } = useProducts({
           filters: { type, status: { In: ["ACTIVE", "OUT_OF_STOCK"] } },
           pagination: { limit, page },
      })
 
-     console.log({ len: products?.length, products })
+     //console.log({ len: products?.length, products })
 
      useEffect(() => {
           updateFilters(selectedCategory.filters)
