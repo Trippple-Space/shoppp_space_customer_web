@@ -14,7 +14,7 @@ const FabricsCategoryNav = ({ categories, setSelectedCategory, page }: any) => {
     <div
       className={
         cx(
-          't-75 bg-white z-1',
+          't-75 pb-24 bg-white z-1',
           {
             'l:mt-90 mt-80 app-width test-header': page === "home",
             'mx-24 sm:mx-40 md:mx-60 l:mx-100 xl:mx-200': page !== "home"
@@ -52,6 +52,7 @@ const FabricsCategoryNav = ({ categories, setSelectedCategory, page }: any) => {
                 </p>
               </div>
             </Link>
+            
             <Link
               href={paths.asoebi_wears}
               className={cx(

@@ -53,14 +53,17 @@ const placeholderProduct: Product = {
          },
     ],
     store: {
-         name: "",
-         slug: "",
-         id: 0,
-         description: "",
-         status: false,
-         type: "",
+        name: "",
+        slug: "",
+        id: 0,
+        description: "",
+        status: 'ACTIVE',
+        type: "",
+        thumbnail: '',
+        heading: '',
+        subHeading: '',
+        meta: null
     },
-    availableUnit: [],
     finalPrice: 0,
 };
 
