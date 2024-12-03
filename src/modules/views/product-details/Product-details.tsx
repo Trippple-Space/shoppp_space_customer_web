@@ -53,6 +53,9 @@ const ProductDetails = ({ product }: { product: Product }) => {
   // const strikeOutPrice = (product?.finalPrice + product?.finalPrice * 0.05).toFixed(2) // TODO: implement proper strikeout price
 
   const displayPrice = selectedVariant?.price || product?.price
+  const { address, state } = product.store.meta?.settings?.location || {}
+  const sanitizedAddress = address?.replace(/[.,]+$/, '')
+  const location = [sanitizedAddress, state].filter(Boolean).join('. ')
 
   return (
     <>
@@ -229,19 +232,21 @@ const ProductDetails = ({ product }: { product: Product }) => {
                 </Link>
               </div>
 
-              <div className='hidden l:flex radius-50p relative'>
-                <Image
-                  className='w-85 h-85'
-                  src='ankara-round.png'
-                  alt='product'
-                  type='image'
-                />
-                <Icon name='badge' className='w-35 h-35 absolute r-0 b-10' />
-              </div>
+              {product.store.thumbnail && (
+                <div className='hidden l:flex radius-50p relative'>
+                  <Image
+                    className='w-85 h-85'
+                    src={product.store.thumbnail}
+                    alt='product'
+                    type='image'
+                  />
+                  <Icon name='badge' className='w-35 h-35 absolute r-0 b-10' />
+                </div>
+              )}
             </div>
 
             <div className='border-t border-b line-height-25 l:line-height-32 border-lighter-grey l:mt-10 mt-20 l:pt-10 pt-20 l:block grid grid-2-cols-1fr'>
-              <div className='flex gap-10 pb-20 '>
+              {/* <div className='flex gap-10 pb-20 '>
                 <Icon name='verified' className='w-20 h-20 mt-6' />
                 <div>
                   <h2 className='text-14 l:text-16 weight-500'>Featured in</h2>
@@ -249,25 +254,33 @@ const ProductDetails = ({ product }: { product: Product }) => {
                     Sirbalo’s wedding, 2022
                   </div>
                 </div>
-              </div>
+              </div> */}
 
-              <div className='flex gap-10 pb-20'>
-                <Icon name='cut' className='w-20 h-20 mt-6' />
-                <div>
-                  <h2 className='text-14 l:text-16 weight-500'>Made in</h2>
-                  <div className='l:text-14 text-12 text-light-grey'>Italy</div>
-                </div>
-              </div>
-
-              <div className='flex gap-10 pb-20 l:pb-25'>
-                <GrLocation className='w-20 h-20 mt-6' />
-                <div>
-                  <h2 className='text-14 l:text-16 weight-500'>Currently in</h2>
-                  <div className='l:text-14 text-12 text-light-grey'>
-                    Lagos, Nigeria
+              {selectedVariant.properties.origin && (
+                <div className='flex gap-10 pb-20'>
+                  <Icon name='cut' className='w-20 h-20 mt-6' />
+                  <div>
+                    <h2 className='text-14 l:text-16 weight-500'>Made in</h2>
+                    <div className='l:text-14 text-12 text-light-grey'>
+                      {selectedVariant.properties.origin}
+                    </div>
                   </div>
                 </div>
-              </div>
+              )}
+
+              {product.store.meta?.settings?.location && (
+                <div className='flex gap-10 pb-20 l:pb-25'>
+                  <GrLocation className='w-20 h-20 mt-6' />
+                  <div>
+                    <h2 className='text-14 l:text-16 weight-500'>
+                      Currently in
+                    </h2>
+                    <div className='l:text-14 text-12 text-light-grey'>
+                      {location}
+                    </div>
+                  </div>
+                </div>
+              )}
             </div>
           </div>
         </div>

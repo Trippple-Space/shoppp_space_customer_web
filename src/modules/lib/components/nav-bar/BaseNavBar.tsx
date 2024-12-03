@@ -13,6 +13,7 @@ import MobileNav from "./mobile-nav/MobileNav";
 import { PiStorefrontBold } from "react-icons/pi";
 import { SlArrowDown } from "react-icons/sl";
 import UserProfileDropdown from "./profile-modal/UserProfileDropdown";
+import Link from "next/link";
 
 interface IBaseNavBar {
   links: ReactNode;
@@ -40,7 +41,7 @@ const BaseNavBar: FC<IBaseNavBar> = ({ links }) => {
   };
 
   return (
-    <div className="fixed w-full t-0 l-0 bg-white border-b border-whitesmoke z-5">
+    <div className="fixed w-full t-0 l-0 bg-white z-5">
       <div
         className={cx(
           "flex a-items-center relative app-width space-between py-15",
@@ -49,14 +50,14 @@ const BaseNavBar: FC<IBaseNavBar> = ({ links }) => {
           }
         )}
       >
-        <div className="w-fit">
+        <Link href={"/"} className="w-fit">
           <Image
             className="w-70 l:w-100"
             src="new-asoebi-logo.svg"
             alt="logo"
             type="logo"
           />
-        </div>
+        </Link>
 
         <div className=" flex l:j-content-center w-100p j-content-end">
           {links}
