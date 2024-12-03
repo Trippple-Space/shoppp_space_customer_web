@@ -83,5 +83,5 @@ export const useProducts = (initialQuery: IQueryParams) => {
           }
      }, [JSON.stringify(query.pagination ?? {})])
 
-     return { products: productsCache[cacheKey] ?? [], setFilters, updateFilters, setOrdering, setPagination };
+     return { products: productsCache[cacheKey] ?? [], setFilters, updateFilters, setOrdering, setPagination, query };
 };

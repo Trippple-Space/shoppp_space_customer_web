@@ -6,6 +6,7 @@ import { TbWorld } from 'react-icons/tb'
 import { SlArrowRight } from 'react-icons/sl'
 import classNames from 'classnames'
 import { usePathname } from 'next/navigation'
+import config from "env";
 
 const AsoebiLinksModal = ({ sellOnAsoebi }: { sellOnAsoebi: boolean }) => {
   const { origin } = window.location
@@ -30,7 +31,7 @@ const AsoebiLinksModal = ({ sellOnAsoebi }: { sellOnAsoebi: boolean }) => {
   return (
     <>
       <div className='flex flex-col gap-10'>
-        <Link
+        {/* <Link
           href={paths.homepage}
           className={classNames(
             `flex a-items-center gap-20 radius-8 hover:bg-#EDFCF7 ${
@@ -50,7 +51,7 @@ const AsoebiLinksModal = ({ sellOnAsoebi }: { sellOnAsoebi: boolean }) => {
               Discover the latest Asoebi trends etc.
             </p>
           </div>
-        </Link>
+        </Link> */}
         <Link
           href={paths.asoebi_wears}
           className={classNames(
@@ -103,9 +104,9 @@ const AsoebiLinksModal = ({ sellOnAsoebi }: { sellOnAsoebi: boolean }) => {
         </Link>
         {sellOnAsoebi && (
           <Link
-            href={paths.vendor_signup}
-            target='_blank'
-            className='flex a-items-center gap-20 radius-8 hover:bg-#F5F5F5 p-20'
+            href={`${config.VENDOR_CENTER_HOST}`}
+            target="_blank"
+            className="flex a-items-center gap-20 radius-8 hover:bg-#F5F5F5 p-20"
           >
             <div className='flex j-content-center bg-white p-10 radius-200'>
               <TbWorld className='w-28 h-28' />
