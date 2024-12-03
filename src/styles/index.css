@@ -405,11 +405,10 @@
 .h-64 { height: 64px; } 
 .text-small {    font-size: 0.75rem;  } 
 [class~='g|max-width:90px']{max-width:90px} 
-.mt-94 { margin-top: 94px; } 
-.mx-24 { margin-left: 24px; margin-right: 24px; } 
 .mt-85 { margin-top: 85px; } 
 .p-3 { padding: 3px; } 
 .t-75 { top: 75px; } 
+.pb-24 { padding-bottom: 24px; } 
 .z-index-1, .z-1 { z-index: 1; } 
 .mt-80 { margin-top: 80px; } 
 .mx-24 { margin-left: 24px; margin-right: 24px; } 
@@ -719,7 +718,6 @@
 .border-r-0 { border-right-width: 0px; } 
 .w-101 { width: 101px; } 
 .h-101 { height: 101px; } 
-.mt-80 { margin-top: 80px; } 
 .pb-38 { padding-bottom: 38px; } 
 .mt-48 { margin-top: 48px; } 
 .border-green-500 { border-color: #0B9378; } 

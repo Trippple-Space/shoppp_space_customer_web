@@ -31,7 +31,7 @@ const AsoebiLinksModal = ({ sellOnAsoebi }: { sellOnAsoebi: boolean }) => {
   return (
     <>
       <div className='flex flex-col gap-10'>
-        <Link
+        {/* <Link
           href={paths.homepage}
           className={classNames(
             `flex a-items-center gap-20 radius-8 hover:bg-#EDFCF7 ${
@@ -51,7 +51,7 @@ const AsoebiLinksModal = ({ sellOnAsoebi }: { sellOnAsoebi: boolean }) => {
               Discover the latest Asoebi trends etc.
             </p>
           </div>
-        </Link>
+        </Link> */}
         <Link
           href={paths.asoebi_wears}
           className={classNames(
