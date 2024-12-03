@@ -37,20 +37,24 @@ const ScrollButtons: FC<IScrollButtons> = ({
   const checkOverflowAndPosition = useCallback(() => {
     const categoriesWidth = screen.width >= 576 ? 90 : 71;
     const storeFrontCats = screen.width >= 576 ? 125 : 96;
+    const storeProductsWidth = screen.width >= 992 ? 250 : 242;
+
     const scrollContainerWidth =
       page === "home"
         ? categoriesWidth * scrollLength
         : page === "store"
         ? storeFrontCats * scrollLength
-        : 238 * scrollLength;
+        : storeProductsWidth * scrollLength;
 
     if (scrollRef.current) {
-      const hasOverflow = scrollContainerWidth > scrollRef.current.clientWidth;
+      const hasOverflow =
+        scrollContainerWidth > scrollRef.current.parentElement.clientWidth;
       setShowScrollButtons(hasOverflow);
 
       const atStart = scrollRef.current.scrollLeft === 0;
       const atEnd =
-        scrollRef.current.scrollLeft + scrollRef.current.clientWidth >=
+        Math.round(scrollRef.current.scrollLeft) +
+          scrollRef.current.clientWidth >=
         scrollContainerWidth;
 
       setShowLeftButton(!atStart);
@@ -81,7 +85,7 @@ const ScrollButtons: FC<IScrollButtons> = ({
               className={`${
                 component === "categories"
                   ? "t-10p l--10  px-6 py-6 l:bg-white bg-#F5F5F5 sm:flex hidden"
-                  : "t-40p l-24 p-12 bg-#FFFFFFCC md:flex hidden"
+                  : "t-40p l-0 p-12 bg-#FFFFFFCC md:flex hidden"
               } absolute l:border border-#00000014 pointer round j-content-center items-center margin-left:12px;`}
             >
               <HiOutlineChevronLeft
@@ -98,7 +102,7 @@ const ScrollButtons: FC<IScrollButtons> = ({
               className={`${
                 component === "categories"
                   ? "t-10p r--10  px-6 py-6 l:bg-white bg-#F5F5F5 sm:flex hidden"
-                  : "t-40p r-24 p-12 bg-#FFFFFFCC md:flex hidden"
+                  : "t-40p r-0 p-12 bg-#FFFFFFCC md:flex hidden"
               } absolute l:border border-#00000014 pointer round j-content-center items-center margin-left:12px;`}
             >
               <HiOutlineChevronRight

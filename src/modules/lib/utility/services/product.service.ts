@@ -7,31 +7,63 @@ import { buildEndpoint } from "../utility";
 import config from "env";
 
 class ProductService {
-     fetchProductCategories(
-          type?: "fabrics" | "wears"
-     ): Promise<ProductCategory[]> {
+
+     CACHE_EXPIRY = 60 * 60 * 1000; // 1 hour
+
+     async fetchProductCategories(type: "fabrics" | "wears" | null, label = 'GLOBAL', storeId = 0) {
+
+          const cacheKey = `product/categories_${type}_${label}_${storeId}`;
+          const cachedData = this.getCachedCategories(cacheKey);
+
+          if (cachedData) {
+               return cachedData;
+          }
+
           return new Promise((resolve) => {
                http.get(endpoints.PRODUCT_CATEGORIES, {
                     params: {
-                         filters: { type },
+                         filters: {
+                              type,
+                              label: 'GLOBAL',
+                              storeId
+                         },
                     },
                }).then((response: AxiosResponse) => {
-                    resolve(response.data);
+                    const fetchedCategories: ProductCategory = response.data?.[0]
+                    this.cacheCategories(cacheKey, fetchedCategories);
+                    resolve(fetchedCategories);
                });
           });
-     }
+
+     };
+
+     getCachedCategories(key: string) {
+          const cached = localStorage.getItem(key);
+          if (!cached) return null;
+
+          const parsed = JSON.parse(cached);
+          if (Date.now() - parsed.timestamp > this.CACHE_EXPIRY) {
+               localStorage.removeItem(key);
+               return null;
+          }
+
+          return parsed.data;
+     };
+
+     cacheCategories(key: string, data: any) {
+          const toCache = {
+               data,
+               timestamp: Date.now(),
+          };
+          localStorage.setItem(key, JSON.stringify(toCache));
+     };
+
 
      fetchProducts(query: IQueryParams): Promise<Product[]> {
           return new Promise((resolve) => {
                http.get(endpoints.PRODUCTS, {
-                    ...query,
-                    params: {
-                         ...query,
-                         filter: { status: { In: ["ACTIVE", "OUT_OF_STOCK"] } },
-                    },
+                    params: query,
                }).then((response: AxiosResponse) => {
-                    console.log({ param: query });
-                    console.log(response.data)
                     resolve(response.data);
                });
           });
@@ -50,12 +82,9 @@ class ProductService {
                Object.keys(query).forEach((key) =>
                     url.searchParams.append(key, query[key])
                );
-               console.log({ slug }, "from service");
 
                fetch(url.toString())
                     .then((res) => {
-                         console.log({ res: res.ok });
-                         console.log({ url });
                          if (!res.ok) {
                               throw new Error(
                                    `HTTP error! Status: ${res.status}`

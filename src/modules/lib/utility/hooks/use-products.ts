@@ -1,15 +1,16 @@
 import { useEffect, useState } from "react";
 import { productService } from "../services/product.service";
 import { Product } from "../types/product.interface";
+import { useProductStore } from "../store/products.store";
 
 export interface IProductFilters {
      page?: string;
      index?: string;
-     type?: string;
+     type?: string | null;
      tags?: any[];
      category?:
-          | { [key: string | number]: string | number }
-          | { [key: string | number]: string | number }[];
+     | { [key: string | number]: string | number }
+     | { [key: string | number]: string | number }[];
      keywords?: string[];
      [key: string]: any;
      status?: { In: string[] };
@@ -31,71 +32,9 @@ export interface IQueryParams {
      // key: any
 }
 
-const placeholderProduct: Product = {
-     longDescription: "",
-     keywords: [],
-     tags: [{ label: "" }],
-     id: 0,
-     slug: "",
-     category: {
-          type: "",
-          id: 0,
-          name: "",
-          images: [],
-          description: null,
-     },
-     price: 0,
-     name: "",
-     type: "",
-     stockUnit: "",
-     status: 0,
-     dateCreated: "",
-     lastUpdated: "",
-     reviewRating: 0,
-     reviews: undefined,
-     comments: undefined,
-     variants: [
-          {
-               id: 0,
-               media: [
-                    {
-                         url: "",
-                         type: "image",
-                    },
-               ],
-               stock: 0,
-               price: 0,
-               finalPrice: 0,
-               minPurchaseQuantity: 0,
-               incrementBy: 0,
-               meta: undefined,
-               properties: undefined,
-               stockUnit: "",
-               dateCreated: "",
-               lastUpdated: "",
-               preOrder: false,
-          },
-     ],
-     store: {
-          name: "",
-          slug: "",
-          id: 0,
-          description: "",
-          status: false,
-          type: "",
-     },
-     availableUnit: [],
-     finalPrice: 0,
-};
-
 export const useProducts = (initialQuery: IQueryParams) => {
      const [query, setQuery] = useState<IQueryParams>(initialQuery);
-     const [products, setProducts] = useState<Product[]>(
-          Array.from({ length: 10 }).map(() => placeholderProduct)
-     );
-     const [cachedProducts, setCachedProducts] = useState<{
-          [key: string]: Product[];
-     }>({});
+     const { productsCache, setProductsCache, setProductsCacheIdempotencyTracker, productCacheIdempotencyTracker } = useProductStore();
 
      const setFilters = (filters: IProductFilters) => {
           setQuery((prevQuery) => ({
@@ -125,23 +64,24 @@ export const useProducts = (initialQuery: IQueryParams) => {
           }));
      };
 
+     const cacheKey = 'products_' + JSON.stringify(query.filters ?? {}) + JSON.stringify(query.order ?? {});
      useEffect(() => {
-          const cacheKey = JSON.stringify(query);
-
-          if (cachedProducts[cacheKey]) {
-               setProducts(cachedProducts[cacheKey]);
-          } else {
+          if (!productsCache[cacheKey]) {
                productService.fetchProducts(query).then((fetchedProducts) => {
-                    console.log("from use product hook", query);
-                    setProducts(fetchedProducts);
-                    setCachedProducts((prevCachedProducts) => ({
-                         ...prevCachedProducts,
-                         [cacheKey]: fetchedProducts,
-                    }));
+                    setProductsCache(cacheKey, fetchedProducts);
                });
           }
-     }, [query, cachedProducts]);
-     console.log({ query });
+     }, [cacheKey, productsCache[cacheKey]?.length]);
 
-     return { products, setFilters, updateFilters, setOrdering, setPagination };
+     useEffect(() => {
+          console.log('Pagination changed', { pagination: query.pagination, productCacheIdempotencyTracker})
+          if ((productsCache[cacheKey]?.length ?? 0) < ((query.pagination?.limit ?? 0) * (query.pagination?.page ?? 1))) {
+               productService.fetchProducts(query).then((fetchedProducts) => {
+                    setProductsCache(cacheKey, [...(productsCache[cacheKey] ?? []), ...fetchedProducts.filter((product) => !productCacheIdempotencyTracker?.[cacheKey]?.[product.id])])
+                    setProductsCacheIdempotencyTracker(cacheKey, fetchedProducts.reduce((cumm, curr) => ({ ...cumm, [curr.id]: true}), {}));
+               });
+          }
+     }, [JSON.stringify(query.pagination ?? {})])
+
+     return { products: productsCache[cacheKey] ?? [], setFilters, updateFilters, setOrdering, setPagination, query };
 };

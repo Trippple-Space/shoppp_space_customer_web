@@ -1,0 +1,24 @@
+// app/providers.tsx
+'use client'
+import posthog from 'posthog-js'
+import { PostHogProvider } from 'posthog-js/react'
+import { useEffect } from 'react'
+import config from '../../env'
+
+export function PHProvider({
+  children,
+}: {
+  children: React.ReactNode
+}) {
+    useEffect(() => {
+      posthog.init(`${process.env.NEXT_PUBLIC_POSTHOG_KEY}`, {
+        api_host: `${process.env.NEXT_PUBLIC_POSTHOG_HOST}`,
+        person_profiles: 'identified_only',
+        disable_session_recording: config.ENV === 'production',
+        capture_pageview: false, // Disable automatic pageview capture, as we capture manually
+        capture_pageleave: true // we need to set capture_pageleave: true in the initialization because setting capture_pageview: false disables it.
+      })
+  }, []);
+
+  return <PostHogProvider client={posthog}>{children}</PostHogProvider>
+}

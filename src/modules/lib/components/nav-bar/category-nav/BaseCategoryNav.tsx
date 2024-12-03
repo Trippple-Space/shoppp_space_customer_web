@@ -1,14 +1,13 @@
 import React, { FC, useState, useRef } from "react";
 import cx from "classnames";
-import { ProductCategory } from "@/modules/lib/utility/types/product.interface";
+import { ICategory, ProductCategory } from "@/modules/lib/utility/types/product.interface";
 import ImageAlt from "../../image-alt/ImageAlt";
 import SkeletonLoader from "../../skeleton-loader/Skeleton";
-import staticCategories from "@/modules/lib/utility/json-data/categories.json";
 import ScrollButtons from "../../scroll-buttons/scrollButtons";
 
 // This one is gueressing Su's head :)
 interface IBaseCategoryNav {
-  categories: ProductCategory[];
+  categories: ICategory[];
   displayFilter?: boolean;
   isRoute?: boolean;
   setSelectedCategory?: any;
@@ -23,6 +22,7 @@ const BaseCategoryNav: FC<IBaseCategoryNav> = ({
   const [activeOption, setActiveOption] = useState(0);
   const scrollRef = useRef<HTMLDivElement>(null);
 
+
   return (
     <div
       className={`flex a-items-center w-full relative ${
@@ -32,14 +32,14 @@ const BaseCategoryNav: FC<IBaseCategoryNav> = ({
       <div className="scroll-x no-scrollbar" ref={scrollRef}>
         <div
           className={`flex h-fit w-fit whitespace-nowrap ${
-            page === "store" && "sm:gap-12 gap-8"
+            page === "store" && "s:gap-12 gap-8"
           }`}
         >
           {categories?.map((category, i) => (
             <div
               key={i}
               className={`${
-                page === "home" ? "sm:w-90 w-71" : "sm:w-116 w-96"
+                page === "home" ? "s:w-90 w-71" : "s:w-116 w-96"
               } flex j-content-center`}
             >
               <div
@@ -49,23 +49,23 @@ const BaseCategoryNav: FC<IBaseCategoryNav> = ({
                 }}
                 className="flex flex-col a-items-center gap-7 space-between w-fit cursor-pointer"
               >
-                {!!category.images?.[0] ? (
+                {!!category.images?.icon || category.images?.picture ? (
                   <ImageAlt
                     className={`${
                       page === "home"
                         ? "w-47.02 h-46 round"
-                        : "sm:w-100 w-80 h-64 radius-6"
+                        : "s:w-100 w-80 h-64 radius-6"
                     } border object-fit ${
                       i === activeOption
                         ? "border-2 border-green"
                         : "border-#00000026"
                     }`}
-                    type={category?.type}
-                    src={category.images[0]}
+                    type={'image'}
+                    src={category.images.picture}
                     iconClassName={`${
                       page === "home"
                         ? "w-47.02 h-46 round"
-                        : "sm:w-100 w-80 h-64 radius-6"
+                        : "s:w-100 w-80 h-64 radius-6"
                     } border object-fit ${
                       i === activeOption
                         ? "border-2 border-green"
@@ -93,7 +93,7 @@ const BaseCategoryNav: FC<IBaseCategoryNav> = ({
       <ScrollButtons
         scrollRef={scrollRef}
         page={page}
-        scrollLength={staticCategories.length + 1}
+        scrollLength={categories.length}
         component={"categories"}
       />
     </div>
