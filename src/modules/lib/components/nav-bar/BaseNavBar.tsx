@@ -3,7 +3,7 @@ import React, { FC, ReactNode, useState } from "react";
 import Image from "../image/Image";
 import OrdersModal from "./profile-modal/OrdersModal";
 import MiniCart from "../minicart/MiniCart";
-import { cx, getGreeting } from "../../utility/utility";
+import { cx } from "../../utility/utility";
 import { usePathname } from "next/navigation";
 import { useNavbarView } from "../../utility/hooks/views/use-navbar-view";
 import { useAuthGuard } from "../../utility/hooks/use-auth-guard";

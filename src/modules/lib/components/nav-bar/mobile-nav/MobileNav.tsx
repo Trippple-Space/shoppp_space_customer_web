@@ -1,10 +1,8 @@
 "use client";
 import { useAuthGuard } from "@/modules/lib/utility/hooks/use-auth-guard";
-import { useOrders } from "@/modules/lib/utility/hooks/use-orders";
 import { useNavbarView } from "@/modules/lib/utility/hooks/views/use-navbar-view";
 import useUserStore from "@/modules/lib/utility/store/user.store";
-import { usePathname } from "next/navigation";
-import React, { FC, ReactNode, useEffect, useState } from "react";
+import React, { FC, useState } from "react";
 import { PiStorefront } from "react-icons/pi";
 import { RxCross1, RxHamburgerMenu } from "react-icons/rx";
 import { SlArrowDown } from "react-icons/sl";
