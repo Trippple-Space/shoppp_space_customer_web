@@ -417,22 +417,22 @@
 .w-20p { width: 20%; } 
 .w-70p { width: 70%; } 
 .text-left {    text-align: left;  } 
+.r-0 { right: 0px; } 
+.t-64 { top: 64px; } 
+.border-\#00000014 { border-color: #00000014; } 
+[class~='g|box-shadow:0px|_|8px|_|16px|_|#494F5E1F;']{box-shadow:0px 8px 16px #494F5E1F;} 
 .border-b-\#00000014 { border-bottom-color: #00000014; } 
 .line-height-24 { line-height: 24px; } 
 .hover\:bg-grey-100:hover { background-color: #F7F6F5; } 
+[class~='g|transition:0.3s']{transition:0.3s} 
 .color-\#D4280C { color: #D4280C; } 
 .py-16 { padding-top: 16px; padding-bottom: 16px; } 
-.border-\#00000014 { border-color: #00000014; } 
 .w-60 { width: 60px; } 
 .h-60 { height: 60px; } 
 .border-0\.5 { border-width: 0.5px; } 
 .line-height-22 { line-height: 22px; } 
 .line-height-19 { line-height: 19px; } 
 .border-\#000000E0 { border-color: #000000E0; } 
-.r-0 { right: 0px; } 
-.t-64 { top: 64px; } 
-.h-70p { height: 70%; } 
-[class~='g|box-shadow:0px|_|8px|_|16px|_|#494F5E1F;']{box-shadow:0px 8px 16px #494F5E1F;} 
 .mt-12 { margin-top: 12px; } 
 .hover\:text-green:hover { color: #0B9378; } 
 [class~='g|grid-template-columns:1fr|_|auto']{grid-template-columns:1fr auto} 
@@ -440,7 +440,9 @@
 .text-grey-900 { color: #1F1B17; } 
 .t-50 { top: 50px; } 
 .w-360 { width: 360px; } 
+.pb-64 { padding-bottom: 64px; } 
 .color-\#000000E0 { color: #000000E0; } 
+[class~='g|max-height:540px;']{max-height:540px;} 
 .p-24 { padding: 24px; } 
 .w-40 { width: 40px; } 
 .bg-\#F5F5F5 { background-color: #F5F5F5; } 
@@ -1010,7 +1012,7 @@
 @media only screen and (min-width: 992px) { .l\:px-16 { padding-left: 16px; padding-right: 16px; } } 
 @media only screen and (min-width: 992px) { .l\:gap-52 { gap: 52px; } } 
 @media only screen and (min-width: 992px) { .l\:px-48 { padding-left: 48px; padding-right: 48px; } } 
-@media only screen and (min-width: 992px) { .l\:t-60 { top: 60px; } } 
+@media only screen and (min-width: 992px) { .l\:t-54 { top: 54px; } } 
 @media only screen and (min-width: 992px) { .l\:w-60 { width: 60px; } } 
 @media only screen and (min-width: 992px) { .l\:h-60 { height: 60px; } } 
 @media only screen and (min-width: 992px) { .l\:px-80 { padding-left: 80px; padding-right: 80px; } } 
