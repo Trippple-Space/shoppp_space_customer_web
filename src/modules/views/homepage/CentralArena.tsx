@@ -19,7 +19,7 @@ const CentralArena = ({ selectedCategory }: ICentralArena) => {
       <section className='md:mt-32 mt-24 w-100p l:mt-50 mb-150'>
         <div className='flex space-between text-20 weight-300 uppercase'>
           <h3 className='text-14 l:text-20 weight-300 '>
-            Top selling {type ? type : 'product'}s
+            Top selling
           </h3>
         </div>
         <div className='grid xl:grid-5-cols-1fr l:grid-4-cols-1fr s:grid-3-cols-1fr grid-2-cols-1fr flex-wrap gap-15 l:gap-10 w-full relative'>
@@ -33,11 +33,9 @@ const CentralArena = ({ selectedCategory }: ICentralArena) => {
             </div>
           )}
         </div>
-        {(selectedCategory?.name === 'All' || !selectedCategory?.name) && (
-          <div ref={ref}>
-            <p></p>
-          </div>
-        )}
+        <div ref={ref}>
+          <p></p>
+        </div>
       </section>
     </>
   );

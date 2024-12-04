@@ -9,12 +9,15 @@ import { useNavbarView } from "../../utility/hooks/views/use-navbar-view";
 import MobileNav from "./mobile-nav/MobileNav";
 import UserProfileDropdown from "./profile-modal/UserProfileDropdown";
 import OrdersModal from "./profile-modal/OrdersModal";
+import RecentlySearchItems from "./profile-modal/RecentlySearchItems ";
+import RecentlyViewedItems from "./profile-modal/RecentlyViewedItems ";
+import SavedItemsModal from "./profile-modal/SavedItems";
 
 const StorefrontNavBar = ({ store }: { store?: Store }) => {
   const { user } = useNavbarView();
   const [userProfileDropdown, setUserProfileDropdown] =
     useState<boolean>(false);
-  const [userOrderDropdown, setUserOrderDropdown] = useState<boolean>(false);
+  const [profileModal, setProfileModal] = useState<string>("");
 
   const handleUserProfileDropdown = () => {
     setUserProfileDropdown((prev) => !prev);
@@ -32,10 +35,7 @@ const StorefrontNavBar = ({ store }: { store?: Store }) => {
         </h1>
       </div>
 
-      <SearchInput
-        placeholder={"Search"}
-        component={"store"}
-      />
+      <SearchInput placeholder={"Search"} component={"store"} />
       <div className="">
         <div className="flex flex-row md:gap-24 gap-10 a-items-center">
           <MiniCart />
@@ -53,23 +53,43 @@ const StorefrontNavBar = ({ store }: { store?: Store }) => {
             </div>
           </div>
           <div className="sm:hidden block">
-            <MobileNav />
+            <MobileNav
+              handleCloseDropdown={handleCloseDropdown}
+              setProfileModal={setProfileModal}
+            />
           </div>
         </div>
         <div className="l:px-80 md:px-60 sm:px-40 px-24 relative t--46 sm:block hidden">
           {userProfileDropdown && (
             <UserProfileDropdown
               handleCloseDropdown={handleCloseDropdown}
-              setUserOrderDropdown={setUserOrderDropdown}
+              setProfileModal={setProfileModal}
             />
           )}
         </div>
-        {userOrderDropdown && (
-          <OrdersModal
-            modalOpen={userOrderDropdown}
-            handleCloseModal={() => setUserOrderDropdown(false)}
-            data={undefined}
-          />
+        {profileModal && (
+          <>
+            <OrdersModal
+              modalOpen={profileModal === "orders"}
+              handleCloseModal={() => setProfileModal("")}
+              data={undefined}
+            />
+            <RecentlySearchItems
+              modalOpen={profileModal === "recently searched"}
+              handleCloseModal={() => setProfileModal("")}
+              data={undefined}
+            />
+            <RecentlyViewedItems
+              modalOpen={profileModal === "recently viewed"}
+              handleCloseModal={() => setProfileModal("")}
+              data={undefined}
+            />
+            <SavedItemsModal
+              modalOpen={profileModal === "saved items"}
+              handleCloseModal={() => setProfileModal("")}
+              data={undefined}
+            />
+          </>
         )}
       </div>
     </nav>

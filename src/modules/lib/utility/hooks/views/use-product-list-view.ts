@@ -11,22 +11,14 @@ export const useProductListView = () => {
 
      const pathname = usePathname();
      const type = pathname.includes("wears")
-          ? "wear"
-          : pathname.includes("fabrics")
-               ? "fabric"
-               : null;
-
-     const catType = pathname.includes("wears")
           ? "wears"
-          : pathname.includes("fabrics")
-               ? "fabrics"
-               : null;
+          : 'fabrics'
 
-     const { selectedCategory, setSelectedCategory } = useCategories({ type: catType, storeId: 0, label: 'GLOBAL' })
+     const { selectedCategory, setSelectedCategory } = useCategories({ type, storeId: 0, label: 'GLOBAL' })
 
      //console.log({ selectedCategory })
 
-     const { products, setPagination, updateFilters } = useProducts({
+     const { products, setPagination, updateFilters, query } = useProducts({
           filters: { type, status: { In: ["ACTIVE", "OUT_OF_STOCK"] } },
           pagination: { limit, page },
      })
@@ -36,6 +28,10 @@ export const useProductListView = () => {
      useEffect(() => {
           updateFilters(selectedCategory.filters)
      }, [selectedCategory?.name])
+
+     useEffect(() => {
+          setPage(Math.floor(products.length / limit) + 1);
+     }, [JSON.stringify(query.filters)])
 
      useEffect(() => {
           if (inView) {
