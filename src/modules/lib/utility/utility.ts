@@ -89,30 +89,26 @@ interface PillableProp {
 
 export const displayProductPill = (tags: any) => {
   //console.log(tags);
-  const tagsWithPill = tags?.filter((tag: any) => tag.label.includes("pill"));
+
+  const tagsWithPill = tags?.filter((tag: any) => tag.label.includes("pill:"));
 
   const destringPills = (pills: { label: string }[]): PillableProp => {
     const pillable: PillableProp = {};
 
     pills.forEach((pill) => {
-      const { label } = pill;
+      const destringedPill = JSON.parse(pill.label);
 
-      const slicedPill = label.split("|");
-      const pillAttributes: { [key: string]: string } = {};
-
-      slicedPill.forEach((attribute) => {
-        const [key, value] = attribute.split(":");
-        pillAttributes[key] = value;
-      });
-
-      const destringedPill = pillAttributes["pill"];
-      pillable[destringedPill] = {
-        active: true,
-        pillColor: pillAttributes["pillColor"],
-        pillBackground: pillAttributes["pillBackground"],
-        priority: parseInt(pillAttributes["priority"]),
-        text: pillAttributes["text"],
-      };
+      for (const key in destringedPill) {
+        const { pillColor, pillBackground, priority, text } =
+          destringedPill[key];
+        pillable[key] = {
+          active: true,
+          pillColor,
+          pillBackground,
+          priority: parseInt(priority),
+          text,
+        };
+      }
     });
 
     return pillable;
