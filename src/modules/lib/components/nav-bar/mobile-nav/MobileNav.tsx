@@ -53,7 +53,7 @@ const MobileNav: FC<IMobileNav> = ({
       {hamburgerMenu && (
         <div
           className="md:hidden z-5 overflow-hidden bg-white r-0 w-100p t-64 fixed border-t border-1 border-#00000014 g|box-shadow:0px|_|8px|_|16px|_|#494F5E1F;"
-          style={{ height: "calc(100vh - 64px)" }}
+          style={{ height: "calc(100dvh - 64px)" }}
         >
           <div className="scroll-y no-scrollbar flex flex-col space-between h-full py-24">
             <div className="flex flex-col gap-14">

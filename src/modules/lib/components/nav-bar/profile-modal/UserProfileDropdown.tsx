@@ -38,7 +38,7 @@ const UserProfileDropdown: FC<IUserProfileDropdown> = ({
       {/* Dropdown */}
       <div
         className="absolute font-inter r-0 l:t-54 t-50 w-360 z-20 sm:block hidden pb-64"
-        style={{ height: isAuthenticated ? "calc(100vh - 64px)" : '336px' }}
+        style={{ height: isAuthenticated ? "calc(100dvh - 64px)" : '336px' }}
       >
         <div className="bg-white g|box-shadow:0px|_|8px|_|16px|_|#494F5E1F; radius-8 border border-#00000014 color-#000000E0 h-full g|max-height:540px; scroll-y no-scrollbar">
           <div className="">
