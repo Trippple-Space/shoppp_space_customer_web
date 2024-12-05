@@ -233,7 +233,7 @@ const ProductDetails = ({ product }: { product: Product }) => {
               </div>
 
               {product.store.thumbnail && (
-                <div className='hidden l:flex radius-50p relative'>
+                <div className='hidden l:flex radius-50p relative overflow-hidden'>
                   <Image
                     className='w-85 h-85'
                     src={product.store.thumbnail}
