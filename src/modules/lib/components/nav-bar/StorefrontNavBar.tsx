@@ -35,7 +35,7 @@ const StorefrontNavBar = ({ store }: { store?: Store }) => {
         </h1>
       </div>
 
-      <SearchInput placeholder={"Search"} component={"store"} />
+      <SearchInput placeholder={"Search"} component={"store"} storeSlug={store?.slug} />
       <div className="">
         <div className="flex flex-row md:gap-24 gap-10 a-items-center">
           <MiniCart />
