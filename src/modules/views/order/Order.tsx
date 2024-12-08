@@ -1,0 +1,120 @@
+'use client'
+import HomepageNavBar from '@/modules/lib/components/nav-bar/HomepageNavBar'
+import OngoingOrder from '@/modules/lib/components/order/OngoingOrder'
+import { useOrders } from '@/modules/lib/utility/hooks/use-orders'
+import classNames from 'classnames'
+import { useState } from 'react'
+import Image from '@/modules/lib/components/image/Image'
+import Link from 'next/link'
+import DeliveredOrder from '@/modules/lib/components/order/DeliveredOrder'
+import CancelledOrder from '@/modules/lib/components/order/CancelledOrder'
+
+const Order = () => {
+  const { orders } = useOrders()
+  const [activeTab, setActiveTab] = useState('Ongoing')
+
+  const renderTabContent = () => {
+    switch (activeTab) {
+      case 'Ongoing':
+        return <OngoingOrder status='Ongoing' />
+      case 'Delivered':
+        return <DeliveredOrder status={'Delivered'} />
+      case 'Cancelled/Returned':
+        return <CancelledOrder status='Cancelled' />
+      default:
+        return null
+    }
+  }
+
+  return (
+    <>
+      <HomepageNavBar />
+      <div className='mt-150 w-full h-full flex a-items-center flex-col  gap-30'>
+        <div className='l:w-50p w-90p flex flex-col gap-50'>
+          <div className='flex a-items-center gap-10 bg-#F5F5F5 p-5 radius-6 '>
+            <div
+              className={classNames('l:w-100p radius-6 cursor-pointer p-10', {
+                'bg-white': activeTab === 'Ongoing'
+              })}
+              onClick={() => setActiveTab('Ongoing')}
+            >
+              <p
+                className={classNames('text-center font-inter text-bold', {
+                  'weight-600': activeTab === 'Ongoing'
+                })}
+              >
+                Ongoing
+              </p>
+            </div>
+
+            <div
+              className={classNames(
+                'w-100p cursor-pointer cursor-pointer p-10 radius-6',
+                {
+                  'bg-white': activeTab === 'Delivered'
+                }
+              )}
+              onClick={() => setActiveTab('Delivered')}
+            >
+              <p
+                className={classNames('text-center font-inter', {
+                  'weight-600': activeTab === 'Delivered'
+                })}
+              >
+                Delivered
+              </p>
+            </div>
+            <div
+              className={classNames(
+                'l:w-100p cursor-pointer w-fit p-10 radius-6 overflow-hidden whitespace-nowrap ',
+                {
+                  'bg-white': activeTab === 'Cancelled/Returned'
+                }
+              )}
+              onClick={() => setActiveTab('Cancelled/Returned')}
+            >
+              <p
+                className={classNames(
+                  'text-center font-inter text-16 overflow-hidden text-ellipsis',
+                  {
+                    'weight-600': activeTab === 'Cancelled/Returned'
+                  }
+                )}
+              >
+                <span>Cancelled/Returned</span>
+              </p>
+            </div>
+          </div>
+          <div className='flex j-content-center'>{renderTabContent()}</div>
+        </div>
+
+        {orders.length <= 0 && (
+          <>
+            <div className='flex flex-col a-items-center gap-10 mt-30'>
+              <div className='flex flex-col a-items-center gap-10'>
+                <Image
+                  type='icon'
+                  className='w-200'
+                  src='order-message.svg'
+                  alt='no-order-image'
+                />
+                <p className='text-center text-14 color-#00000073'>
+                  We are waiting for your next order
+                </p>
+              </div>
+
+              <Link
+                href='/'
+                className='cursor-pointer px-15 py-12 l:w-250 bg-#0B9378  radius-6 color-white text-center weight-400'
+              >
+                Explore products
+              </Link>
+            </div>
+          </>
+        )}
+      </div>
+    </>
+  )
+}
+
+export default Order
