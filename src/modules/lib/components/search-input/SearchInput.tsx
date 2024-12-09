@@ -9,9 +9,10 @@ import classNames from "classnames";
 interface ISearchInput {
   component?: any;
   placeholder?: any;
+  storeSlug?: any
 }
 
-const SearchInput: FC<ISearchInput> = ({ component, placeholder }) => {
+const SearchInput: FC<ISearchInput> = ({ component, placeholder, storeSlug }) => {
   const [searchTerm, setSearchTerm] = useState("");
   const [searchResults, setSearchResults] = useState<Product[]>([]);
 
@@ -24,7 +25,10 @@ const SearchInput: FC<ISearchInput> = ({ component, placeholder }) => {
   useEffect(() => {
     const fetchProducts = async () => {
       try {
-        const result = await productService.fetchProductBySearch(searchTerm);
+        const result =
+          component === "home"
+            ? await productService.fetchProductBySearch(searchTerm)
+            : await productService.fetchProductBySlugSearch(storeSlug, searchTerm);
         setSearchResults(result);
       } catch (err) {
         console.error(err);
