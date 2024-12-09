@@ -27,7 +27,7 @@ const StorefrontLayout: FC<{ store: Store; children: ReactNode }> = ({
   const [selectedCategory, setSelectedCategory] =
     useState<ProductCategory | null>(null);
   const { products } = useStoreProductsView(selectedCategory);
-  const { categories } = useCategoryNavView({ storeId: store.id });
+  const { categories } = useStoreCategoryNavView({ storeId: store.id });
   const [filteredProducts, setFilteredProducts] = useState<Product[]>([]);
   const [newArrivals, setNewArrivals] = useState<Product[]>([]);
   const [dealsForYou, setDealsForYou] = useState<Product[]>([]);
