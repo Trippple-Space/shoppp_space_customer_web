@@ -27,9 +27,8 @@ const StorefrontLayout: FC<{ store: Store; children: ReactNode }> = ({
   const [selectedCategory, setSelectedCategory] =
     useState<ProductCategory | null>(null);
   const { products } = useStoreProductsView(selectedCategory);
-  const { categories } = useStoreCategoryNavView({ storeId: store.id, label: 'STORE' });
-  const [filteredProducts, setFilteredProducts] = useState(products);
-
+  const { categories } = useCategoryNavView({ storeId: store.id });
+  const [filteredProducts, setFilteredProducts] = useState<Product[]>([]);
   const [newArrivals, setNewArrivals] = useState<Product[]>([]);
   const [dealsForYou, setDealsForYou] = useState<Product[]>([]);
   const [featuredProducts, setFeaturedProducts] = useState<Product[]>([]);
@@ -41,12 +40,18 @@ const StorefrontLayout: FC<{ store: Store; children: ReactNode }> = ({
   const { handleCategoryChange } = useCategoryFilter(products, updateFilters);
 
   useEffect(() => {
-    if (selectedCategory) {
-      handleCategoryChange(selectedCategory);
-    } else {
-      setFilteredProducts(products);
+    const filterProducts = () => {
+      if (selectedCategory) {
+        handleCategoryChange(selectedCategory);
+      } else {
+        if (products.length > 0) {
+          setFilteredProducts(products);
+        }
+      }
     }
-  }, [selectedCategory, products, filteredProducts]);
+
+    filterProducts()
+  }, [selectedCategory, products]);
 
   useEffect(() => {
     const sectionCategories = () => {
@@ -85,7 +90,7 @@ const StorefrontLayout: FC<{ store: Store; children: ReactNode }> = ({
     };
 
     sectionCategories();
-  }, [products, filteredProducts]);
+  }, [filteredProducts]);
 
   return (
     <div>
