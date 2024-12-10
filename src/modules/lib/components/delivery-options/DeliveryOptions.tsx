@@ -1,0 +1,53 @@
+import React, { useState } from "react";
+import { deliveryOptions } from "@/modules/lib/utility/constants";
+import BoxRadio from "../box-radio/BoxRadio";
+import { formatNumberAsPrice } from "../../utility/utility";
+
+export default function DeliveryOptions() {
+  const [selectedDeliveryOption, setSelectedDeliveryOption] =
+    useState<keyof typeof deliveryOptions>("standard");
+  const selectedDeliveryOptionDetails = deliveryOptions[selectedDeliveryOption];
+  return (
+    <div className="bg-white py-20 px-24 radius-8 border border-#00000014 flex flex-col md:gap-24 gap-16">
+      <h2 className="md:text-20 text-16 md:line-height-28 line-height-24 weight-600">Delivery options</h2>
+      <div className="">
+        <div className="flex md:flex-col sm:flex-row flex-col gap-12">
+          {Object.entries(deliveryOptions).map(([key, option]) => (
+            <BoxRadio
+              id="delivery-type"
+              name="delivery-type"
+              key={key}
+              value={key}
+              className="checkout"
+              label={
+                <div className="flex gap-8">
+                  <div className="flex flex-col md:gap-4 gap-2">
+                    <h3 className="weight-600 md:text-16 text-14 md:line-height-24 line-height-22 capitalize">
+                      {option.title}
+                    </h3>
+                    <p className="weight-400 text-14 line-height-22">
+                      {option.description}
+                    </p>
+                  </div>
+                  <p
+                    className={`w-fit text-right px-10 py-2 h-fit radius-4 text-12 weight-400 line-height-20 ${
+                      selectedDeliveryOption === key
+                        ? "color-#0B9378 bg-#007B5D1F"
+                        : "color-#000000E0 bg-#F5F5F5"
+                    }`}
+                  >
+                    {formatNumberAsPrice(option.price)}
+                  </p>
+                </div>
+              }
+              checked={selectedDeliveryOption === key}
+              onChange={() =>
+                setSelectedDeliveryOption(key as keyof typeof deliveryOptions)
+              }
+            />
+          ))}
+        </div>
+      </div>
+    </div>
+  );
+}
