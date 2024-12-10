@@ -24,7 +24,7 @@ const OrderSummary: FC<IOrderSummary> = ({
 
         <div className="flex space-between">
           <div className="">Promo Code</div>
-          <div className="color-#1677FF underline">Enter code</div>
+          <div className="color-#1677FF underline pointer">Enter code</div>
         </div>
 
         {!!extraSavings && (
