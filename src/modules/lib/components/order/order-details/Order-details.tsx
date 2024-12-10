@@ -12,12 +12,13 @@ import { MdKeyboardArrowDown } from 'react-icons/md'
 import OrderedProductCard from '../../ordered-product/orderedProductCard'
 import OrderProgress from '../order-progress-details/OrderProgressDetails'
 import { PiArrowClockwise } from 'react-icons/pi'
+import OverlappingImages from '../../overlapping-images/OverlappingImages'
+import classNames from 'classnames'
 
 const OrderDetails = ({
   orderCartModal,
   handleOpenProductDetail,
-  svgSrc,
-  status
+  svgSrc
 }: any) => {
   const { user } = useUserStore()
   const [openTotal, setOpenTotal] = useState(false)
@@ -30,6 +31,7 @@ const OrderDetails = ({
   const handleOpenTotal = () => {
     setOpenTotal(prev => !prev)
   }
+
 
   return (
     <>
@@ -62,8 +64,8 @@ const OrderDetails = ({
           onClick={handleOrderedProducts}
         >
           <div className='flex a-items-center space-between'>
-            <div className='whitespace-nowrap w-150'>
-              <p className='color-#00000099 text-12 overflow-hidden text-ellipsis'>
+            <div className='whitespace-nowrap w-90p l:w-fit'>
+              <p className='color-#00000099 text-12 overflow-hidden text-ellipsis l:overflow'>
                 Order from:{' '}
                 <span className='weight-600 color-#000000E0 '>
                   {getStoreNames(orderCartModal.cart.cartItems)}
@@ -71,9 +73,17 @@ const OrderDetails = ({
               </p>
             </div>
             <div>
-              <div className='flex a-items-center'>
-                <p className='text-12 hidden l:block'>OverlayingImage</p>
-                <MdKeyboardArrowDown className='w-fit' />
+              <div className='flex a-items-center j-content-center'>
+                <div
+                  className={classNames(
+                    'text-12 hidden l:block relative',
+                    {}
+                  )}
+                >
+                  <OverlappingImages orderItem={orderCartModal} />
+                </div>
+
+                <MdKeyboardArrowDown className='w-25 h-25 ml-5' />
               </div>
             </div>
           </div>
@@ -83,7 +93,7 @@ const OrderDetails = ({
         </div>
 
         <div className='p-20 flex flex-col l:flex-row gap-15 l:gap-0 l:a-items-center space-between bg-white'>
-          {status === 'Ongoing' ? (
+          {orderCartModal.status === 'ONGOING' ? (
             <>
               <div className='flex flex-col gap-5'>
                 <p className='color-#00000099 text-14'>

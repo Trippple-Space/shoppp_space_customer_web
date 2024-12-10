@@ -17,19 +17,24 @@ class OrderService {
           });
      }
 
-     fetchOrderById(id: string, query: IQueryParams | any): Promise<Order> {
+     fetchOrderById(id: number, query: IQueryParams | any): Promise<Order> {
           return new Promise((resolve, reject) => {
                const url = new URL(
-                    buildEndpoint(config.API_HOST + "/" + endpoints.ORDERS, {
-                         id,
-                    })
+                    buildEndpoint(
+                         config.API_HOST + "/" + endpoints.ORDERS + "/" + id
+                    )
                );
-
                Object.keys(query).forEach((key) =>
                     url.searchParams.append(key, query[key])
                );
 
-               fetch(url.toString())
+               const token = localStorage.getItem("token");
+               const headers = {
+                    "Content-Type": "application/json",
+                    Authorization: `Bearer ${token}`,
+               };
+
+               fetch(url.toString(), { headers })
                     .then((res) => {
                          if (!res.ok) {
                               throw new Error(
@@ -39,8 +44,8 @@ class OrderService {
                          return res.json();
                     })
                     .then((response: any) => {
-                         console.log({ response });
                          resolve(response);
+                
                     })
                     .catch((err) => {
                          console.error("Error fetching order by ID:", err);

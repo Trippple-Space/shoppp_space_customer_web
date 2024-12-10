@@ -9,60 +9,78 @@ import classNames from 'classnames'
 import Link from 'next/link'
 import React from 'react'
 import { MdKeyboardArrowRight } from 'react-icons/md'
+import OverlappingImages from '../../overlapping-images/OverlappingImages'
 
 interface OrderProgressProp {
   orders: Order[]
   handleOrderModal: () => void
   setOrderCartModal: (order: Order) => void
   handleOpenProductDetail: (order: Order, id: number) => void
-  status: string
 }
 
 const OrderProgressCard = ({
   orders,
   handleOrderModal,
   setOrderCartModal,
-  handleOpenProductDetail,
-  status
+  handleOpenProductDetail
 }: OrderProgressProp) => {
+  const orderDetailModal = (order: Order) => {
+    handleOrderModal()
+    setOrderCartModal(order)
+  }
+
   return (
     <>
       {orders.map(order => (
         <>
-          <div className='bg-white'>
+          <div className='bg-white' key={order.id}>
             <div className='p-20 flex flex-col gap-20'>
-              <div className='flex space-between a-items-center'>
-                <p className='text-12 text-black'>
-                  <span className='color-#00000099'>Order from:</span>{' '}
-                  {getStoreNames(order.cart.cartItems)}
-                </p>
-                <p
-                  className={classNames('text-12 p-5 color-white radius-4', {
-                    'bg-#1677FF': status === 'Ongoing',
-                    'bg-#0B9378': status === 'Delivered',
-                    'bg-#00000099': status === 'Cancelled'
-                  })}
-                >
-                  {/* {order.status} */}
-                  {status}
-                </p>
-              </div>
-              <div className='flex a-items-center space-between'>
-                <div
-                  className='text-12 flex a-items-center w-fit bg-green cursor-pointer'
-                  onClick={handleOrderModal}
-                >
-                  <div onClick={() => setOrderCartModal(order)}>
-                    Overlapping image
+              <div className='flex flex-col gap-10'>
+                <div className='flex space-between a-items-center'>
+                  <div className='whitespace-nowrap w-50p l:w-fit'>
+                    <p className='color-#00000099 text-12 overflow-hidden text-ellipsis l:overflow'>
+                      Order from:{' '}
+                      <span className='weight-600 color-#000000E0 '>
+                        {getStoreNames(order.cart.cartItems)}
+                      </span>
+                    </p>
                   </div>
-                  <MdKeyboardArrowRight className='w-20 h-20' />
-                </div>
-
-                <div className='flex flex-col gap-10'>
-                  <p className='text-12 color-#00000099'>Total Amount</p>
-                  <p className='text-16 color-black text-end weight-600'>
-                    {formatNumberAsPrice(order.cart.total)}
+                  <p
+                    className={classNames('text-12 p-5 color-white radius-4', {
+                      'bg-#1677FF':
+                        order.status == 'Ongoing'.toLocaleUpperCase(),
+                      'bg-#0B9378':
+                        order.status == 'confirmed'.toLocaleUpperCase(),
+                      'bg-#00000099':
+                        order.status == 'Cancelled'.toLocaleUpperCase()
+                    })}
+                  >
+                    {order.status}
                   </p>
+                </div>
+                <div className='flex a-items-center space-between'>
+                  <div
+                    className='text-12 flex a-items-center cursor-pointer h-full'
+                    onClick={() => orderDetailModal(order)}
+                  >
+                    <div
+                      className={classNames('relative', {
+                        'ml-35': order.cart.cartItems.length >= 3,
+                        'ml-55': order.cart.cartItems.length === 2,
+                        'ml-40': order.cart.cartItems.length === 1
+                      })}
+                    >
+                      <OverlappingImages orderItem={order} />
+                    </div>
+                    <MdKeyboardArrowRight className='w-20 h-20 ml-5' />
+                  </div>
+
+                  <div className='flex flex-col gap-10'>
+                    <p className='text-12 color-#00000099 text-right'>Total Amount</p>
+                    <p className='color-black text-right weight-600'>
+                      {formatNumberAsPrice(order.cart.total)}
+                    </p>
+                  </div>
                 </div>
               </div>
 
@@ -73,7 +91,7 @@ const OrderProgressCard = ({
                 <p className='text-14 color-#00000099'>{order.id}</p>
               </div>
 
-              {status === 'Ongoing' && (
+              {order.status === 'ONGOING' && (
                 <>
                   <div className='flex flex-col gap-10 l:flex-row l:a-items-center l:space-between'>
                     <p className='text-14 weight-400 flex a-items-center'>
@@ -87,7 +105,13 @@ const OrderProgressCard = ({
                       ))}
                     </div>
                   </div>
-                  <div>progress bars</div>
+                  <div className='flex gap-10 a-items-center'>
+                    <div className='p-5 radius-10 w-20p h-5 bg-#0B9378'></div>
+                    <div className='p-5 radius-10 w-20p h-5 bg-whitesmoke'></div>
+                    <div className='p-5 radius-10 w-20p h-5 bg-whitesmoke'></div>
+                    <div className='p-5 radius-10 w-20p h-5 bg-whitesmoke'></div>
+                    <div className='p-5 radius-10 w-20p h-5 bg-whitesmoke'></div>
+                  </div>
                 </>
               )}
               <div

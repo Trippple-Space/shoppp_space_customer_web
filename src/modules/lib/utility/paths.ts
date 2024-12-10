@@ -9,7 +9,7 @@ export const paths = {
      asoebi_fabrics: "/fabrics",
      asoebi_wears: "/wears",
      explore: "/explore",
-     orders: "/order",
+     orders: "/orders",
 };
 
 export const protectedPaths = [paths.checkout, paths.orders];

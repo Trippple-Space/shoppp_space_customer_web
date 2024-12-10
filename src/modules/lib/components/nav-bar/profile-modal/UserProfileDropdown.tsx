@@ -17,7 +17,7 @@ const UserProfileDropdown: FC<IUserProfileDropdown> = ({
 }) => {
   const { user, signOut, openAddressModal } = useNavbarView()
   const { isAuthenticated } = useUserStore()
-  const { orders } = useOrders()
+  const { orders } = useOrders({})
 
   return (
     <>

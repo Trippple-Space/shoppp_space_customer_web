@@ -7,11 +7,13 @@ import { buildEndpoint } from "../utility";
 import config from "env";
 
 class ProductService {
-
      CACHE_EXPIRY = 60 * 60 * 1000; // 1 hour
 
-     async fetchProductCategories(type: "fabrics" | "wears" | null, label = 'GLOBAL', storeId = 0) {
-
+     async fetchProductCategories(
+          type: "fabrics" | "wears" | null,
+          label = "GLOBAL",
+          storeId = 0
+     ) {
           const cacheKey = `product/categories_${type}_${label}_${storeId}`;
           const cachedData = this.getCachedCategories(cacheKey);
 
@@ -24,18 +26,18 @@ class ProductService {
                     params: {
                          filters: {
                               type,
-                              label: 'GLOBAL',
-                              storeId
+                              label: "GLOBAL",
+                              storeId,
                          },
                     },
                }).then((response: AxiosResponse) => {
-                    const fetchedCategories: ProductCategory = response.data?.[0]
+                    const fetchedCategories: ProductCategory =
+                         response.data?.[0];
                     this.cacheCategories(cacheKey, fetchedCategories);
                     resolve(fetchedCategories);
                });
           });
-
-     };
+     }
 
      getCachedCategories(key: string) {
           const cached = localStorage.getItem(key);
@@ -48,7 +50,7 @@ class ProductService {
           }
 
           return parsed.data;
-     };
+     }
 
      cacheCategories(key: string, data: any) {
           const toCache = {
@@ -56,8 +58,7 @@ class ProductService {
                timestamp: Date.now(),
           };
           localStorage.setItem(key, JSON.stringify(toCache));
-     };
-
+     }
 
      fetchProducts(query: IQueryParams): Promise<Product[]> {
           return new Promise((resolve) => {

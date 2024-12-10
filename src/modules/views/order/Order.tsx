@@ -8,19 +8,20 @@ import Image from '@/modules/lib/components/image/Image'
 import Link from 'next/link'
 import DeliveredOrder from '@/modules/lib/components/order/DeliveredOrder'
 import CancelledOrder from '@/modules/lib/components/order/CancelledOrder'
+import { useOrderView } from '@/modules/lib/utility/hooks/views/use-order-view'
 
 const Order = () => {
-  const { orders } = useOrders()
+  const { orders } = useOrderView({})
   const [activeTab, setActiveTab] = useState('Ongoing')
 
   const renderTabContent = () => {
     switch (activeTab) {
       case 'Ongoing':
-        return <OngoingOrder status='Ongoing' />
+        return <OngoingOrder />
       case 'Delivered':
-        return <DeliveredOrder status={'Delivered'} />
+        return <DeliveredOrder />
       case 'Cancelled/Returned':
-        return <CancelledOrder status='Cancelled' />
+        return <CancelledOrder />
       default:
         return null
     }
