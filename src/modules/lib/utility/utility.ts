@@ -136,3 +136,4 @@ export const replaceParamInEndpoint = (
   slug: number | string
 ): string => {
   return endpoint.replace(`:${param}`, `${slug}`);
+};
