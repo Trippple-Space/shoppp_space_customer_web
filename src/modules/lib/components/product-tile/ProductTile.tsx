@@ -42,9 +42,26 @@ const ProductTile: FC<IProductTile> = ({ product }: any) => {
 
   const [topTwoPills, setTopTwoPills] = useState<any[]>([]);
   useEffect(() => {
-    const pills = displayProductPill();
+    const pills = displayProductPill(product?.tags);
     setTopTwoPills(pills);
   }, []);
+
+  const sampleTag = [
+    {
+      label:
+        '{"pill:shippedFromAbroad":{"pillColor":"#0B9378","pillBackground":"#EDFCF7","priority":"1","text":"shipped from abroad"}}',
+    },
+    { label: "luxury" },
+    { label: "new arrivals" },
+    {
+      label:
+        '{"pill:50%Off":{"pillColor":"#000000","pillBackground":"#D3D3D3","priority":"2","text":"50% off"}}',
+    },
+    {
+      label:
+        '{"pill:preOrder":{"pillColor":"#FFFFFF","pillBackground":"#800080","priority":"3","text":"pre-order"}}',
+    },
+  ];
 
   return (
     <div className="mt-30 l:mt-20 w-full overflow-hidden">
@@ -177,9 +194,12 @@ const ProductTile: FC<IProductTile> = ({ product }: any) => {
           {/* <span className="weight-300 l:text-15 text-10">{!!selectedVariant?.stockUnit && 'per'} {selectedVariant?.stockUnit}</span> */}
         </div>
         <div className="flex flex-wrap gap-4">
-          {product?.tags?.map((tag: any) => (
-            <span className="text-green text-12 inline-block radius-5 mx-2 my-1 pointer hover:underline lowercase">
-              #{tag.label}
+          {product?.tags?.map((tag: any, i: number) => (
+            <span
+              className="text-green text-12 inline-block radius-5 mx-2 my-1 pointer hover:underline lowercase"
+              key={i}
+            >
+              {!tag.label.includes("pill:") && "#" + tag.label}
             </span>
           ))}
         </div>

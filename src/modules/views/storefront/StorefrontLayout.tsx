@@ -5,7 +5,7 @@ import FabricsCategoryNav from "@/modules/lib/components/nav-bar/category-nav/Fa
 import ProductTile from "@/modules/lib/components/product-tile/ProductTile";
 import { ILayout } from "@/app/layout";
 import { useStoreProductsView } from "@/modules/lib/utility/hooks/views/use-store-products-view";
-import { useCategoryNavView } from "@/modules/lib/utility/hooks/views/use-category-nav-view";
+import { useStoreCategoryNavView } from "@/modules/lib/utility/hooks/views/use-category-nav-view";
 import {
   Product,
   ProductCategory,
@@ -30,9 +30,8 @@ const StorefrontLayout: FC<{ store: Store; children: ReactNode }> = ({
   const [selectedCategory, setSelectedCategory] =
     useState<ProductCategory | null>(null);
   const { products } = useStoreProductsView(selectedCategory);
-  const { categories } = useCategoryNavView({ storeId: store.id });
-  const [filteredProducts, setFilteredProducts] = useState(products);
-
+  const { categories } = useStoreCategoryNavView({ storeId: store.id });
+  const [filteredProducts, setFilteredProducts] = useState<Product[]>([]);
   const [newArrivals, setNewArrivals] = useState<Product[]>([]);
   const [dealsForYou, setDealsForYou] = useState<Product[]>([]);
   const [featuredProducts, setFeaturedProducts] = useState<Product[]>([]);
@@ -50,12 +49,18 @@ const StorefrontLayout: FC<{ store: Store; children: ReactNode }> = ({
   const { logVisit } = useLogVisit(store?.id, { ipAddress: ipAddress });
 
   useEffect(() => {
-    if (selectedCategory) {
-      handleCategoryChange(selectedCategory);
-    } else {
-      setFilteredProducts(products);
+    const filterProducts = () => {
+      if (selectedCategory) {
+        handleCategoryChange(selectedCategory);
+      } else {
+        if (products.length > 0) {
+          setFilteredProducts(products);
+        }
+      }
     }
-  }, [selectedCategory, products, filteredProducts]);
+
+    filterProducts()
+  }, [selectedCategory, products]);
 
   useEffect(() => {
     const sectionCategories = () => {
@@ -94,7 +99,7 @@ const StorefrontLayout: FC<{ store: Store; children: ReactNode }> = ({
     };
 
     sectionCategories();
-  }, [products, filteredProducts]);
+  }, [filteredProducts]);
 
   useEffect(() => {
     console.log("isAuthenticated", isAuthenticated);
@@ -171,9 +176,8 @@ const StorefrontLayout: FC<{ store: Store; children: ReactNode }> = ({
               </div>
               <div className="scroll-x no-scrollbar" ref={scrollRef1}>
                 <div
-                  className={`flex h-fit ${
-                    newArrivals?.length && "w-fit"
-                  } whitespace-nowrap gap-14`}
+                  className={`flex h-fit ${newArrivals?.length && "w-fit"
+                    } whitespace-nowrap gap-14`}
                 >
                   {newArrivals?.length ? (
                     newArrivals?.map((product, i) => (
@@ -223,9 +227,8 @@ const StorefrontLayout: FC<{ store: Store; children: ReactNode }> = ({
               </div>
               <div className="scroll-x no-scrollbar" ref={scrollRef2}>
                 <div
-                  className={`flex h-fit ${
-                    newArrivals?.length && "w-fit"
-                  } whitespace-nowrap gap-14`}
+                  className={`flex h-fit ${newArrivals?.length && "w-fit"
+                    } whitespace-nowrap gap-14`}
                 >
                   {dealsForYou.length ? (
                     dealsForYou.map((product, i) => (

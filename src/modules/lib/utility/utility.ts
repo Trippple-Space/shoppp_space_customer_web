@@ -87,36 +87,41 @@ interface PillableProp {
   };
 }
 
-export const displayProductPill = () => {
-  const pillable: PillableProp = {
-    preOrder: {
-      active: false,
-      text: "pre-order",
-      priority: 1,
-      pillColor: "#D4280C",
-      pillBackground: "#FFDBD6",
-    },
-    shippedAbroad: {
-      active: false,
-      priority: 1,
-      text: "shipped from abroad",
-      pillColor: "#0B9378",
-      pillBackground: "#EDFCF7",
-    },
-    productDiscount: {
-      active: false,
-      priority: 2,
-      text: "-20%",
-      pillColor: "#D4280C",
-      pillBackground: "#FFDBD6",
-    },
+export const displayProductPill = (tags: any) => {
+  //console.log(tags);
+
+  const tagsWithPill = tags?.filter((tag: any) => tag.label.includes("pill:"));
+
+  const destringPills = (pills: { label: string }[]): PillableProp => {
+    const pillable: PillableProp = {};
+
+    pills.forEach((pill) => {
+      const destringedPill = JSON.parse(pill.label);
+
+      for (const key in destringedPill) {
+        const { pillColor, pillBackground, priority, text } =
+          destringedPill[key];
+        pillable[key] = {
+          active: true,
+          pillColor,
+          pillBackground,
+          priority: parseInt(priority),
+          text,
+        };
+      }
+    });
+
+    return pillable;
   };
+
+  const pillable = destringPills(tagsWithPill);
 
   const getTwoActivePills = (pillable: PillableProp) => {
     const activeItems = Object.entries(pillable)
       .filter(([key, value]) => value.active)
-      .sort(([_, a], [__, b]) => b.priority - a.priority)
-      .slice(0, 2);
+      .sort(([_, a], [__, b]) => a.priority - b.priority)
+      .slice(0, 2)
+      .map((a) => a[1]);
 
     return activeItems;
   };
@@ -131,4 +136,3 @@ export const replaceParamInEndpoint = (
   slug: number | string
 ): string => {
   return endpoint.replace(`:${param}`, `${slug}`);
-};
