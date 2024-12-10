@@ -1,28 +1,19 @@
 "use client";
 import Modal from "@/modules/lib/components/modal/modal";
-import OrderSummary from "@/modules/lib/components/order-summary/OrderSummary";
 import { useCart } from "@/modules/lib/utility/hooks/use-cart";
 import {
-  cx,
   displayStockUnit,
   formatNumberAsPrice,
 } from "@/modules/lib/utility/utility";
 import { useRouter } from "next/navigation";
 import React, { useState } from "react";
-import { FaArrowLeftLong } from "react-icons/fa6";
-import { IoClose } from "react-icons/io5";
 import { paths } from "../../utility/paths";
-import { getCartItemVariantPropertiesAsJsx } from "./minicart.helper";
-import { HiOutlineShoppingBag } from "react-icons/hi2";
-import ImageAlt from "../image-alt/ImageAlt";
 import { CartItem } from "../../utility/types/cart.interface";
 import {
   PiMinus,
   PiPlus,
   PiShoppingCartBold,
   PiTrashSimple,
-  PiTrashSimpleLight,
-  PiTrashSimpleThin,
 } from "react-icons/pi";
 import { RxCross1 } from "react-icons/rx";
 import Image from "../image/Image";
@@ -34,11 +25,11 @@ interface ModalProps {}
 const MiniCart: React.FC<ModalProps> = () => {
   const [open, setOpen] = useState(false);
 
-  const { removeFromCart, cart, increment, decrement } = useCart();
+  const { cart, increment, decrement } = useCart();
 
   const router = useRouter();
 
-  const { user, signOut } = useNavbarView();
+  const { signOut } = useNavbarView();
   const { isAuthenticated } = useUserStore();
 
   return (

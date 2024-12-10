@@ -21,9 +21,10 @@ import { AiOutlineUser } from "react-icons/ai";
 
 interface IBaseNavBar {
   links: ReactNode;
+  parent: any;
 }
 
-const BaseNavBar: FC<IBaseNavBar> = ({ links }) => {
+const BaseNavBar: FC<IBaseNavBar> = ({ links, parent }) => {
   useAuthGuard(); // TODO: refactor to rely on Next 13 auth middleware
   const [userProfileDropdown, setUserProfileDropdown] =
     useState<boolean>(false);
@@ -47,7 +48,7 @@ const BaseNavBar: FC<IBaseNavBar> = ({ links }) => {
   };
 
   return (
-    <div className="fixed w-full t-0 l-0 bg-white z-5">
+    (<div className={`fixed w-full t-0 l-0 bg-white z-5 ${parent === 'checkout' && 'border-b border-b-#00000014 md:py-3 py-5.8625'}`}>
       <div
         className={cx(
           "flex a-items-center relative app-width space-between py-12",
@@ -84,7 +85,9 @@ const BaseNavBar: FC<IBaseNavBar> = ({ links }) => {
 
         <div className="l:block flex l:flex a-items-center l:gap-30 gap-10 w-fit relative j-self-end">
           <div
-            className="hidden l:block l:cursor-pointer"
+            className={`l:cursor-pointer ${
+              parent === "checkout" ? "hidden" : "hidden l:block"
+            }`}
             onClick={handleAsoebiDropdown}
           >
             <p className="flex a-items-center  weight-500">
@@ -94,7 +97,7 @@ const BaseNavBar: FC<IBaseNavBar> = ({ links }) => {
             </p>
           </div>
           <div className="flex sm:gap-24 gap-20 a-items-center">
-            <MiniCart />
+            {parent !== "checkout" && <MiniCart />}
 
             <div
               className="md:flex hidden gap-12 a-items-center text-black cursor-pointer"
@@ -151,7 +154,7 @@ const BaseNavBar: FC<IBaseNavBar> = ({ links }) => {
           </>
         )}
       </div>
-    </div>
+    </div>)
   );
 };
 

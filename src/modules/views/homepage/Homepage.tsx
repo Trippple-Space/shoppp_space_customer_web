@@ -14,7 +14,7 @@ const Homepage = () => {
   return (
     <>
       <div className="border-b border-whitesmoke">
-        <HomepageNavBar />
+        <HomepageNavBar parent='' />
         <FabricsCategoryNav
           categories={categories}
           setSelectedCategory={setSelectedCategory}

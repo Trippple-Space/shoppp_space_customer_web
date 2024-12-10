@@ -100,7 +100,7 @@ const Explore = () => {
 
   return (
     <div>
-      <HomepageNavBar />
+      <HomepageNavBar parent='' />
       <div className="app-width my-100">
         <div className="grid grid-7-cols-1fr gap-12">
           {groupedImages.map((images) => (
