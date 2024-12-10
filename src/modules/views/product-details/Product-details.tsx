@@ -59,7 +59,7 @@ const ProductDetails = ({ product }: { product: Product }) => {
 
   return (
     <>
-      <HomepageNavBar />
+      <HomepageNavBar parent='' />
       <div className={'product-details-page l:max-w-1400 w-full mx-auto my-60'}>
         <div className='l:flex w-full gap-25 l:pt-20 l:mt-100'>
           <div className='l:w-50p'>

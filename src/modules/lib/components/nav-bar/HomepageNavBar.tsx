@@ -5,15 +5,18 @@ import BaseNavBar from "./BaseNavBar";
 
 import SearchInput from "../search-input/SearchInput";
 
-const HomepageNavBar = () => {
+const HomepageNavBar = ({ parent }: { parent: any }) => {
   return (
     <BaseNavBar
       links={
-        <SearchInput
-          placeholder={"Search asoebi.africa"}
-          component={"home"}
-        ></SearchInput>
+        parent !== "checkout" && (
+          <SearchInput
+            placeholder={"Search asoebi.africa"}
+            component={"home"}
+          ></SearchInput>
+        )
       }
+      parent={parent}
     />
   );
 };

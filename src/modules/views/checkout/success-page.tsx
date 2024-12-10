@@ -13,7 +13,7 @@ const SuccessMessage = () => {
 
   return (
     <>
-      <HomepageNavBar />
+      <HomepageNavBar parent='checkout' />
       <div className="w-100p h-100p mx-auto flex flex-col items-center j-content-center p-20 l:p-70">
         <Icon name="amico" className="w-80p l:100p h-250 my-10" />
         <h1 className="text-24 l:text-30 line-height-40 my-15 weight-700" key={orders?.slice(-1)[0]?.id}>

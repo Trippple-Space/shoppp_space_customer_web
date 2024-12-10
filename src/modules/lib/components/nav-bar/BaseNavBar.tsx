@@ -20,12 +20,23 @@ import SavedItemsModal from './profile-modal/SavedItems'
 import { AiOutlineUser } from 'react-icons/ai'
 
 interface IBaseNavBar {
+<<<<<<< HEAD
   links: ReactNode
 }
 
 const BaseNavBar: FC<IBaseNavBar> = ({ links }) => {
   useAuthGuard() // TODO: refactor to rely on Next 13 auth middleware
   const [userProfileDropdown, setUserProfileDropdown] = useState<boolean>(false)
+=======
+  links: ReactNode;
+  parent: any;
+}
+
+const BaseNavBar: FC<IBaseNavBar> = ({ links, parent }) => {
+  useAuthGuard(); // TODO: refactor to rely on Next 13 auth middleware
+  const [userProfileDropdown, setUserProfileDropdown] =
+    useState<boolean>(false);
+>>>>>>> 6add272 (AAD-184 Client: Checkout flow UI revamp)
 
   const [profileModal, setProfileModal] = useState<string>('')
 
@@ -70,7 +81,11 @@ const BaseNavBar: FC<IBaseNavBar> = ({ links }) => {
   }, [asoebiModal, profileModal])
 
   return (
+<<<<<<< HEAD
     <div className='fixed w-full t-0 l-0 bg-white z-5'>
+=======
+    (<div className={`fixed w-full t-0 l-0 bg-white z-5 ${parent === 'checkout' && 'border-b border-b-#00000014 md:py-3 py-5.8625'}`}>
+>>>>>>> 6add272 (AAD-184 Client: Checkout flow UI revamp)
       <div
         className={cx(
           'flex a-items-center relative app-width space-between py-12',
@@ -107,7 +122,13 @@ const BaseNavBar: FC<IBaseNavBar> = ({ links }) => {
 
         <div className='l:block flex l:flex a-items-center l:gap-30 gap-10 w-fit relative j-self-end'>
           <div
+<<<<<<< HEAD
             className='hidden l:block l:cursor-pointer'
+=======
+            className={`l:cursor-pointer ${
+              parent === "checkout" ? "hidden" : "hidden l:block"
+            }`}
+>>>>>>> 6add272 (AAD-184 Client: Checkout flow UI revamp)
             onClick={handleAsoebiDropdown}
           >
             <p className='flex a-items-center  weight-500'>
@@ -116,8 +137,13 @@ const BaseNavBar: FC<IBaseNavBar> = ({ links }) => {
               <SlArrowDown className='w-10 ml-5' />
             </p>
           </div>
+<<<<<<< HEAD
           <div className='flex sm:gap-24 gap-20 a-items-center'>
             <MiniCart />
+=======
+          <div className="flex sm:gap-24 gap-20 a-items-center">
+            {parent !== "checkout" && <MiniCart />}
+>>>>>>> 6add272 (AAD-184 Client: Checkout flow UI revamp)
 
             <div
               className='md:flex hidden gap-12 a-items-center text-black cursor-pointer'
@@ -174,8 +200,14 @@ const BaseNavBar: FC<IBaseNavBar> = ({ links }) => {
           </>
         )}
       </div>
+<<<<<<< HEAD
     </div>
   )
 }
+=======
+    </div>)
+  );
+};
+>>>>>>> 6add272 (AAD-184 Client: Checkout flow UI revamp)
 
 export default BaseNavBar
