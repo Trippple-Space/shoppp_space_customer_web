@@ -11,7 +11,6 @@ const StorefrontAbout = ({ store }: { store: Store }) => {
   const { productSold } = useProductSold(store?.id);
   const { visit } = useGetVisit(store?.id);
 
-  console.log("visit", visit);
   return (
     <>
       <div className="bg-white w-full">
@@ -47,7 +46,7 @@ const StorefrontAbout = ({ store }: { store: Store }) => {
                 <div className="text-14 weight-400 flex flex-row sm:gap-23 gap-8">
                   <p className="flex flex-row a-items-center sm:gap-8 gap-5">
                     <span className="sm:text-16 text-14 weight-600">
-                      {visit ? visit : "#,###"}
+                      {visit ? visit?.totalCount : "#,###"}
                     </span>
                     <span>monthly visits</span>
                   </p>
