@@ -36,7 +36,7 @@ const OrderProgressDetails = ({
               })}
             ></div>
           </div>
-          h
+
           <div className='z-10'>
             <div
               className={classNames(
