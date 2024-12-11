@@ -8,6 +8,7 @@ import { BiCheck, BiTrash } from "react-icons/bi";
 import { PiPencil } from "react-icons/pi";
 import { IoCloseCircle } from "react-icons/io5";
 import { delay } from "framer-motion";
+import BoxRadio from "../../box-radio/BoxRadio";
 
 interface AddressCardProps {
   address: Address;
@@ -26,13 +27,15 @@ const AddressCard: FC<AddressCardProps> = ({ address }) => {
   const editMode = addressToUpdateId === address.id;
   const isAddressSelected = address.id === selectedAddressId;
 
-
+console.log(address.userId)
 
   return (
     <div
       className={cx(
-        "l:flex space-between items-center w-full h-fit pointer",
-        {}
+        "flex flex-row space-between gap-12 a-items-center w-full p-16 radius-6 border border-#00000014 pointer",
+        {
+          "border-black ": isAddressSelected,
+        }
       )}
       onClick={() => {
         selectAddress(address.id);
@@ -43,147 +46,140 @@ const AddressCard: FC<AddressCardProps> = ({ address }) => {
         }
       }}
     >
-      <div
-        className={cx(
-          "flex gap-10 l:gap-15 items-center w-full bg-white p-15 radius-5 border @lo:border-grey-300",
-          {
-            "border-black ": isAddressSelected,
-          }
-        )}
-      >
-        <Checkbox
-          name="address"
-          className={cx("a-self-start mt-4", {
-            "border-black bg-yellow": isAddressSelected,
-          })}
-          checked={isAddressSelected}
-        />
-
-        <div className="flex-col w-full">
-          <form
-            className="line-height-25 text-13 text-dimgrey opacity-70"
-            onSubmit={updateFormHandler.handleSubmit}
-          >
-            <h2 className="text-16 l:text-16 weight-500 text-black mb-5 ">
-              {editMode ? (
-                <AddressField
-                  field="label"
-                  label="Label"
-                  handler={updateFormHandler}
-                />
-              ) : (
-                address.label
-              )}
-            </h2>
-            <p>
-              {editMode ? (
-                <AddressField
-                  field="address"
-                  label="Address"
-                  handler={updateFormHandler}
-                />
-              ) : (
-                address.address
-              )}
-            </p>
-            <p>
-              {editMode ? (
-                <div className="flex gap-5">
-                  <AddressField
-                    field="city"
-                    label="City"
-                    handler={updateFormHandler}
-                  />
-                  <AddressField
-                    field="state"
-                    label="State"
-                    handler={updateFormHandler}
-                  />
-                </div>
-              ) : (
-                <span>
-                  {address.city} {address.state}
-                </span>
-              )}
-            </p>
-            <p>
-              {editMode ? (
-                <AddressField
-                  field="contactNo"
-                  label="Contact Number"
-                  handler={updateFormHandler}
-                />
-              ) : (
-                address.contactNo
-              )}
-            </p>
-            {(address.notes || editMode) && (
-              <p className="font-italic text-12">
+      <BoxRadio id={`${address.id}`} name={`${address.id}`} checked={isAddressSelected} label='' className="address" />
+      {
+        editMode ?
+          (
+            <form
+              className=""
+              onSubmit={updateFormHandler.handleSubmit}
+            >
+              <p>
                 {editMode ? (
                   <AddressField
-                    field="notes"
-                    type="textarea"
-                    label="Notes"
+                    field="contactNo1"
+                    label="Contact Number"
                     handler={updateFormHandler}
+                    disabled={false}
                   />
                 ) : (
-                  <span>Notes: {address.notes}</span>
+                  address.contactNo1
                 )}
               </p>
-            )}
-            {editMode && (
-              <div className="flex flex-col a-items-end a-self-end">
-                <div className="flex gap-8 l:gap-10 w-fit space-between a-self-end mt-10">
-                  <button
-                    type="reset"
-                    className="btn w-50p a-items-center j-items-center l:w-100p border-none bg-grey-100 text-grey-500 hover:bg-red-100 hover:text-red text-13 pr-8 pl-2 py-5 radius-20 weight-400 pointer flex"
-                    onClick={() => {
-                      setAddressToUpdateId(null);
-                      delay(() => {
-                        closeAddressModal();
-                      }, 500);
-                    }}
+              <p>
+                {editMode ? (
+                  <AddressField
+                    field="address"
+                    label="Address"
+                    handler={updateFormHandler}
+                    disabled={false}
+                  />
+                ) : (
+                  address.address
+                )}
+              </p>
+              <p>
+                {editMode ? (
+                  <div className="flex gap-5">
+                    <AddressField
+                      field="city"
+                      label="City"
+                      handler={updateFormHandler}
+                      disabled={false}
+                    />
+                    <AddressField
+                      field="state"
+                      label="State"
+                      handler={updateFormHandler}
+                      disabled={false}
+                    />
+                  </div>
+                ) : (
+                  <span>
+                    {address.city} {address.state}
+                  </span>
+                )}
+              </p>
+              {(address.notes || editMode) && (
+                <p className="font-italic text-12">
+                  {editMode ? (
+                    <AddressField
+                      field="notes"
+                      type="textarea"
+                      label="Notes"
+                      handler={updateFormHandler}
+                      disabled={false}
+                    />
+                  ) : (
+                    <span>Notes: {address.notes}</span>
+                  )}
+                </p>
+              )}
+              {editMode && (
+                <div className="flex flex-col a-items-end a-self-end">
+                  <div className="flex gap-8 l:gap-10 w-fit space-between a-self-end mt-10">
+                    <button
+                      type="reset"
+                      className="btn w-50p a-items-center j-items-center l:w-100p border-none bg-grey-100 text-grey-500 hover:bg-red-100 hover:text-red text-13 pr-8 pl-2 py-5 radius-20 weight-400 pointer flex"
+                      onClick={() => {
+                        setAddressToUpdateId(null);
+                        delay(() => {
+                          closeAddressModal();
+                        }, 500);
+                      }}
+                    >
+                      {" "}
+                      <IoCloseCircle className="w-20  mr-3 p-0 " />{" "}
+                      <span>Discard</span>{" "}
+                    </button>
+                    <button
+                      type="submit"
+                      className="btn w-50p l:w-100p border-none bg-green text-white text-13 pr-8 pl-2 py-5 radius-20 weight-400 pointer flex hover:bg-darkgreen"
+                    >
+                      <BiCheck className="w-20 text-white" />{" "}
+                      <span className="">Save</span>{" "}
+                    </button>
+                  </div>
+                </div>
+              )}
+            </form>
+          )
+          :
+          (
+            <div className="flex space-between a-items-center w-full">
+              <div className="flex flex-col gap-4 weight-400 text-16 line-height-24 color-#00000099">
+                <p>{address.contactNo1}, {address?.contactNo2}</p>
+                <p>{address.address}{', '}{address.city}{', '}{address.state}</p>
+                {
+                  address.notes && <p>Delivery note: {address.notes}</p>
+                }
+                {
+                  address.isDefault && <span className="bg-#D4280C1F py-2 px-10 radius-4 color-#D4280C weight-400 text-12 line-height-20 w-fit">Default</span>
+                }
+              </div>
+              <div className="">
+                {/*<button
+                    className="w-50p border-danger border-1 @lo:border-none bg-none text-danger text-15 p-5 round bg-grey-100 hover:bg-red-100 hover:border-red pointer radius-5 weight-400"
+                    onClick={() => handleDeleteAddress(address.id)}
                   >
                     {" "}
-                    <IoCloseCircle className="w-20  mr-3 p-0 " />{" "}
-                    <span>Discard</span>{" "}
-                  </button>
-                  <button
-                    type="submit"
-                    className="btn w-50p l:w-100p border-none bg-green text-white text-13 pr-8 pl-2 py-5 radius-20 weight-400 pointer flex hover:bg-darkgreen"
-                  >
-                    <BiCheck className="w-20 text-white" />{" "}
-                    <span className="">Save</span>{" "}
-                  </button>
-                </div>
-              </div>
-            )}
-          </form>
-          {!editMode && (
-            <div className="flex flex-col a-items-end a-self-end">
-              <div className="flex gap-8 l:gap-10 w-fit space-between a-self-end mt-10">
+                    <BiTrash className="w-20" />{" "}
+                  </button> */}
                 <button
-                  className="w-50p border-danger border-1 @lo:border-none bg-none text-danger text-15 p-5 round bg-grey-100 hover:bg-red-100 hover:border-red pointer radius-5 weight-400"
-                  onClick={() => handleDeleteAddress(address.id)}
-                >
-                  {" "}
-                  <BiTrash className="w-20" />{" "}
-                </button>
-                <button
-                  className="w-50p l:w-100p border-none round bg-faint-cream hover:bg-light-yellow text-white text-15 p-5 radius-7 weight-400 pointer"
+                  className="border-none pointer bg-white"
                   onClick={(e) => {
                     e.stopPropagation();
                     setAddressToUpdateId(address.id);
                   }}
                 >
-                  <PiPencil className="w-20 text-black" />
+                  <span className="color-#1677FF text-16 weight-500 line-height-24 underline">Edit</span>
                 </button>
               </div>
             </div>
-          )}
-        </div>
-      </div>
+          )
+      }
     </div>
+
   );
 };
 

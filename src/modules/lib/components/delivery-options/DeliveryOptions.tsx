@@ -1,12 +1,18 @@
-import React, { useState } from "react";
+import React, { FC, useState } from "react";
 import { deliveryOptions } from "@/modules/lib/utility/constants";
 import BoxRadio from "../box-radio/BoxRadio";
 import { formatNumberAsPrice } from "../../utility/utility";
 
-export default function DeliveryOptions() {
-  const [selectedDeliveryOption, setSelectedDeliveryOption] =
-    useState<keyof typeof deliveryOptions>("standard");
-  const selectedDeliveryOptionDetails = deliveryOptions[selectedDeliveryOption];
+interface IDeliveryOptions {
+  selectedDeliveryOption: any;
+  setSelectedDeliveryOption: any
+}
+
+const DeliveryOptions: FC<IDeliveryOptions> = ({
+  selectedDeliveryOption, setSelectedDeliveryOption
+
+}) => {
+
   return (
     <div className="bg-white py-20 px-24 radius-8 border border-#00000014 flex flex-col md:gap-24 gap-16">
       <h2 className="md:text-20 text-16 md:line-height-28 line-height-24 weight-600">Delivery options</h2>
@@ -30,11 +36,10 @@ export default function DeliveryOptions() {
                     </p>
                   </div>
                   <p
-                    className={`w-fit text-right px-10 py-2 h-fit radius-4 text-12 weight-400 line-height-20 ${
-                      selectedDeliveryOption === key
-                        ? "color-#0B9378 bg-#007B5D1F"
-                        : "color-#000000E0 bg-#F5F5F5"
-                    }`}
+                    className={`w-fit text-right px-10 py-2 h-fit radius-4 text-12 weight-400 line-height-20 ${selectedDeliveryOption === key
+                      ? "color-#0B9378 bg-#007B5D1F"
+                      : "color-#000000E0 bg-#F5F5F5"
+                      }`}
                   >
                     {formatNumberAsPrice(option.price)}
                   </p>
@@ -51,3 +56,5 @@ export default function DeliveryOptions() {
     </div>
   );
 }
+
+export default DeliveryOptions

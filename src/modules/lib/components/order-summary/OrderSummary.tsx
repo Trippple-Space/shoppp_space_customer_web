@@ -1,6 +1,5 @@
 import React, { FC } from "react";
 import { formatNumberAsPrice } from "../../utility/utility";
-
 interface IOrderSummary {
   subTotal: number;
   extraSavings: number;

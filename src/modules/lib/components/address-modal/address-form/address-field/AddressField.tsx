@@ -13,6 +13,7 @@ interface AddressFieldProps {
   inputClassName?: string;
   isEdit?: boolean;
   handler: any;
+  disabled: boolean
 }
 
 const AddressField: FC<AddressFieldProps> = ({
@@ -23,30 +24,26 @@ const AddressField: FC<AddressFieldProps> = ({
   inputClassName,
   placeholder,
   handler: formHandler,
+  disabled
 }) => {
-  const input_className = `${
-    field == "label"
-      ? "text-16 weight-400 text-black opacity-100"
-      : "line-height-25 text-13 text-black opacity-70"
-  }`;
   return (
     <Input
-      label={<span className="uppercase text-12 ">{label}</span>}
+      label={<span className="text-14 weight-400 line-height-19">{label}</span>}
       id={field}
       name={field}
       type={type || "text"}
       placeholder={placeholder}
       handleChange={formHandler.handleChange}
       handleBlur={formHandler.handleBlur}
-      value={formHandler.values[field]}
-      className={cx("my-5 w-full", className)}
+      value={field === 'state' ? 'Lagos' : formHandler.values[field]}
+      className={cx("w-full", className)}
+      disabled={disabled}
       inputClass={cx(
-        "radius-3! py-7 px-10 w-full border-grey-400",
+        "radius-6! p-12 w-full border-#6A6A6A4D text-16",
         {
           "border-red": formHandler.touched[field] && formHandler.errors[field],
         },
         inputClassName,
-        input_className
       )}
       after={
         <InputAlert

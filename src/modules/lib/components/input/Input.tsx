@@ -12,18 +12,20 @@ interface IInput {
   rows?: number
   value?: any
   checked?: boolean
+  disabled?: boolean
   handleChange?: Function,
   handleBlur?: Function
 }
-const Input: FC<IInput> = ({ label, id, name, type, placeholder, className, after, rows, inputClass: inputClassNames, value, checked, handleChange, handleBlur }) => {
+const Input: FC<IInput> = ({ label, id, name, type, placeholder, className, after, rows, inputClass: inputClassNames, value, checked, disabled, handleChange, handleBlur }) => {
   const Component = type === 'textarea' ? 'textarea' : 'input';
   const controlProps = {
     [value !== undefined ? 'value' : '']: value,
     [checked !== undefined ? 'checked' : '']: checked,
+    [disabled !== undefined ? 'disabled' : '']: disabled,
     [handleChange ? 'onChange' : '']: handleChange,
-    [handleBlur ? 'onBlur': '']: handleBlur
+    [handleBlur ? 'onBlur' : '']: handleBlur
   }
-  
+
   return (
     <div className={`input-group ${className}`}>
       {label && <label htmlFor={id} className='block w-fit mb-8 l:weight-400 weight-500 l:text-14 text-12 text-grey-800'>{label}</label>}
@@ -34,7 +36,7 @@ const Input: FC<IInput> = ({ label, id, name, type, placeholder, className, afte
             @lo:border-solid @lo:border-1 @lo:border-grey-300 l:@lo:py-17 @lo:py-12 @lo:px-20  
             @lo:radius-8 @lo:l:text-16 @lo:weight-400 @lo:outline-none
             @lo:placeholder:text-grey-400 @lo:text-grey-700
-            @lo:focus:border-green @lo:placeholder:l:text-12 @lo:placeholder:text-12 ${inputClassNames}`
+            @lo:focus:border-green @lo:placeholder:l:text-12 @lo:placeholder:text-12 disabled:bg-#F3F3F3 resize-none ${inputClassNames}`
         }
         placeholder={placeholder}
         rows={rows}
