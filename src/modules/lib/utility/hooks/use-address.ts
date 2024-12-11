@@ -8,17 +8,22 @@ import { FormikConfig, useFormik } from "formik";
 import * as Yup from "yup";
 
 export const AddressValidationSchema = Yup.object().shape({
-  label: Yup.string().trim().required("Label is required"),
+  firstname: Yup.string().trim().required("First name is required"),
+  lastname: Yup.string().trim().required("Last name is required"),
   address: Yup.string().trim().required("Address is required"),
   city: Yup.string().trim().required("City is required"),
   state: Yup.string().trim().required("State is required"),
-  contactNo: Yup.string()
-    .matches(
-      /^\+234\d{10}$/,
-      "Phone number must be in +234 format"
-    )
+  contactNo1: Yup.string()
+    .matches(/^\+234\d{10}$/, "Phone number must be in +234 format")
     .required("Contact number is required"),
-
+  contactNo2: Yup.string().test(
+    "is-valid-phone",
+    "Phone number must be in +234 format",
+    (value) => {
+      if (!value) return true;
+      return /^\+234\d{10}$/.test(value);
+    }
+  ),
   isDefault: Yup.boolean(),
 });
 
@@ -27,15 +32,18 @@ const formikAddressConfig = (
   handleSubmit: Function
 ): FormikConfig<any> => ({
   initialValues: initialValues || {
-    label: "",
+    firstname: "",
+    lastname: "",
     address: "",
     city: "",
-    state: "",
-    contactNo: "",
+    state: "Lagos",
+    contactNo1: "",
+    contactNo2: "",
     notes: "",
     isDefault: false,
   },
   onSubmit: (values, { resetForm }) => {
+    console.log(values);
     handleSubmit(values);
     resetForm();
   },
@@ -73,7 +81,6 @@ const useAddress = () => {
 
   const handleUpdateAddress = (addressId: number, newAddress: Address) => {
     if (user?.id && selectedAddressId !== null) {
-
       updateAddress(user.id, addressId, newAddress);
     }
   };
@@ -89,7 +96,6 @@ const useAddress = () => {
   );
   const updateFormHandler = useFormik<Address>(
     formikAddressConfig(addressToUpdate, (address: Address) => {
-
       handleUpdateAddress(address.id, address);
     })
   );

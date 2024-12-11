@@ -21,9 +21,8 @@ const BoxRadio: FC<IBoxRadio> = ({
 }) => {
   return (
     (<label
-      className={`border-solid border-grey-300 w-full g|transition:0.5s pointer hover:border-grey-500 g|:has(:checked)|border-color:#0B9378! ${
-        className === "checkout" ? "p-14 l:g|border-width:2px! border-1 radius-8" : "border-1 py-25 px-16 radius-5"
-      }`}
+      className={`border-solid border-grey-300 g|transition:0.5s pointer hover:border-grey-500 g|:has(:checked)|border-color:#0B9378! ${className === "checkout" ? "p-14 l:g|border-width:2px! border-1 radius-8 w-full" : className === 'address' ? 'border-0 p-0 w-fit' : "border-1 py-25 px-16 radius-5 w-full"
+        }`}
     >
       <div className={`flex text-12 content-center ${className === 'checkout' ? 'gap-8 a-items-center' : 'gap-16'}`}>
         <input
@@ -35,7 +34,9 @@ const BoxRadio: FC<IBoxRadio> = ({
           checked={checked}
           onChange={onChange}
         />
-        <div className="h-fit a-self-center w-full">{label}</div>
+        {
+          className !== 'address' && <div className="h-fit a-self-center w-full">{label}</div>
+        }
       </div>
     </label>)
   );
