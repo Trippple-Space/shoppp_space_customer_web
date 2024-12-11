@@ -122,7 +122,10 @@ const SearchModal = ({
           </div>
         )}
       </div>
+<<<<<<< HEAD
       s
+=======
+>>>>>>> cb7f388 (AAD-190 client ui fix finish up)
       {openSingleProductModal && (
         <>
           <div

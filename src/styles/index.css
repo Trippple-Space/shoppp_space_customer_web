@@ -548,6 +548,14 @@
 .h-50 { height: 50px; } 
 .object-fit-cover { object-fit: cover; } 
 .color-\#000000 { color: #000000; } 
+.opacity-50 { opacity: 50%; } 
+.color-\#000000B2 { color: #000000B2; } 
+.h-60vh { height: 60vh; } 
+.w-45 { width: 45px; } 
+@layer base {.radius-3 { border-radius: 3px; } } 
+.m-7 { margin: 7px; } 
+.outline { outline: 1px solid; } 
+.outline-2 { outline-width: 2px; } 
 .bg-grey-300 { background-color: #E4E1DF; } 
 .h-340 { height: 340px; } 
 .text-30 { font-size: 30px; } 
@@ -1144,8 +1152,11 @@
 @media only screen and (min-width: 992px) { .l\:text-24 { font-size: 24px; } } 
 @media only screen and (min-width: 992px) { .l\:h-70vh { height: 70vh; } } 
 @media only screen and (min-width: 992px) { .l\:w-500 { width: 500px; } } 
+<<<<<<< HEAD
 @media only screen and (min-width: 992px) { .l\:l-60p { left: 60%; } } 
 @media only screen and (min-width: 992px) { .l\:l-80p { left: 80%; } } 
+=======
+>>>>>>> cb7f388 (AAD-190 client ui fix finish up)
 @media only screen and (min-width: 992px) { .l\:h-45 { height: 45px; } } 
 @media only screen and (min-width: 992px) { .l\:w-54\.2p { width: 54.2%; } } 
 @media only screen and (min-width: 992px) { .l\:pl-70 { padding-left: 70px; } } 
