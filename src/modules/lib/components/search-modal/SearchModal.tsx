@@ -1,17 +1,16 @@
-import Link from 'next/link'
-import React, { useEffect, useState } from 'react'
-import { Product } from '../../utility/types/product.interface'
-import { cx, formatNumberAsPrice } from '../../utility/utility'
-import Image from '../image/Image'
-import { productService } from '../../utility/services/product.service'
-import { useCart } from '../../utility/hooks/use-cart'
-import { FaCheck } from 'react-icons/fa'
+import { useEffect, useState } from 'react'
+import ProductDetailModal from '../product-detail-modal/ProductDetailModal'
 import classNames from 'classnames'
-import QuantitySelector from '../quantity-selector/QuantitySelector'
-import { AiOutlinePlus } from 'react-icons/ai'
-import { IoMdClose } from 'react-icons/io'
-import ProductStockUnit from '../product-stock-unit/ProductStockUnit'
 import { useRouter } from 'next/navigation'
+import { IoMdClose } from 'react-icons/io'
+import { useCart } from '../../utility/hooks/use-cart'
+import { productService } from '../../utility/services/product.service'
+import { formatNumberAsPrice, cx } from '../../utility/utility'
+import ProductStockUnit from '../product-stock-unit/ProductStockUnit'
+import QuantitySelector from '../quantity-selector/QuantitySelector'
+import { Product } from '../../utility/types/product.interface'
+import Image from '../image/Image'
+import Link from 'next/link'
 
 const SearchModal = ({
   searchResults,
@@ -123,6 +122,7 @@ const SearchModal = ({
           </div>
         )}
       </div>
+      s
       {openSingleProductModal && (
         <>
           <div
@@ -271,6 +271,12 @@ const SearchModal = ({
           )}
         </>
       )}
+      <ProductDetailModal
+        openSingleProductModal={openSingleProductModal}
+        handleCloseProductModal={handleCloseProductModal}
+        position=''
+        product={product}
+      />
     </>
   )
 }
