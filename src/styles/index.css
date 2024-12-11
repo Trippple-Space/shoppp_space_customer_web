@@ -518,6 +518,9 @@
 .h-50 { height: 50px; } 
 .object-fit-cover { object-fit: cover; } 
 .color-\#000000 { color: #000000; } 
+.border-b-\#00000026 { border-bottom-color: #00000026; } 
+.radius-t-r-8 { border-top-right-radius: 8px;  } 
+.radius-t-l-8 { border-top-left-radius: 8px;  } 
 .opacity-50 { opacity: 50%; } 
 .color-\#000000B2 { color: #000000B2; } 
 .h-60vh { height: 60vh; } 
@@ -1054,7 +1057,7 @@
 @media only screen and (min-width: 992px) { .l\:h-70vh { height: 70vh; } } 
 @media only screen and (min-width: 992px) { .l\:w-500 { width: 500px; } } 
 @media only screen and (min-width: 992px) { .l\:l-60p { left: 60%; } } 
-@media only screen and (min-width: 992px) { .l\:l-80p { left: 80%; } } 
+@media only screen and (min-width: 992px) { .l\:l-0p { left: 0%; } } 
 @media only screen and (min-width: 992px) { .l\:h-45 { height: 45px; } } 
 @media only screen and (min-width: 992px) { .l\:py-5 { padding-top: 5px; padding-bottom: 5px; } } 
 @media only screen and (min-width: 992px) { .l\:content-end {    justify-content: flex-end;    align-content: flex-end;  } } 
