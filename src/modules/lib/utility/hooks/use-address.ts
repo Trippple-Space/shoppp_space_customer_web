@@ -7,21 +7,33 @@ import { Address } from "../types/address.interface";
 import { FormikConfig, useFormik } from "formik";
 import * as Yup from "yup";
 
+const nameValidation = Yup.string()
+  .trim()
+  .matches(/^[a-zA-Z\s]+$/, "Name must only contain letters and spaces")
+  .min(2, "Name must be at least 2 characters")
+  .max(50, "Name must be less than 50 characters");
+
 export const AddressValidationSchema = Yup.object().shape({
-  firstname: Yup.string().trim().required("First name is required"),
-  lastname: Yup.string().trim().required("Last name is required"),
+  firstname: nameValidation.required("First name is required"),
+  lastname: nameValidation.required("Last name is required"),
   address: Yup.string().trim().required("Address is required"),
   city: Yup.string().trim().required("City is required"),
   state: Yup.string().trim().required("State is required"),
-  contactNo1: Yup.string()
-    .matches(/^\+234\d{10}$/, "Phone number must be in +234 format")
+  contactNo: Yup.string()
+    .test(
+      "valid-nigerian-phone",
+      "Phone number must be a valid Nigerian number",
+      (value) => {
+        return typeof value === "string" && /^(7|8|9)\d{9}$/.test(value);
+      }
+    )
     .required("Contact number is required"),
-  contactNo2: Yup.string().test(
-    "is-valid-phone",
-    "Phone number must be in +234 format",
+  secondaryContactNo: Yup.string().test(
+    "valid-nigerian-phone",
+    "Phone number must be a valid Nigerian number",
     (value) => {
       if (!value) return true;
-      return /^\+234\d{10}$/.test(value);
+      return typeof value === "string" && /^(7|8|9)\d{9}$/.test(value);
     }
   ),
   isDefault: Yup.boolean(),
@@ -32,19 +44,27 @@ const formikAddressConfig = (
   handleSubmit: Function
 ): FormikConfig<any> => ({
   initialValues: initialValues || {
+    label: 'something',
     firstname: "",
     lastname: "",
     address: "",
     city: "",
     state: "Lagos",
-    contactNo1: "",
-    contactNo2: "",
+    contactNo: "",
+    secondaryContactNo: "",
     notes: "",
     isDefault: false,
   },
   onSubmit: (values, { resetForm }) => {
-    console.log(values);
-    handleSubmit(values);
+    const transformedValues = {
+      ...values,
+      contactNo: `+234${values.contactNo}`,
+      secondaryContactNo: values.secondaryContactNo
+        ? `+234${values.secondaryContactNo}`
+        : "",
+    };
+
+    handleSubmit(transformedValues);
     resetForm();
   },
 

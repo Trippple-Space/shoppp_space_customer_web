@@ -7,8 +7,8 @@ export interface Address {
   address: string;
   city: string;
   state: string;
-  contactNo1: string;
-  contactNo2: string;
+  contactNo: string;
+  secondaryContactNo: string;
   isDefault: boolean;
   notes: string;
   meta: JSON;
