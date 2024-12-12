@@ -14,7 +14,7 @@ const OrderSummary: FC<IOrderSummary> = ({
   total,
 }) => {
   return (
-    <div className="w-full flex flex-col md:gap-24 gap-20 md:py-0 py-12">
+    <div className="w-full flex flex-col md:gap-24 gap-20 md:pb-0 pb-12 md:pt-0 sm:pt-12 pt-56">
       <div className="flex flex-col gap-16 text-16 line-height-24 weight-400 color-#000000E0">
         <div className="flex space-between">
           <div className="">Subtotal</div>

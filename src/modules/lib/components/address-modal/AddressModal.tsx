@@ -15,33 +15,43 @@ const AddressModal: React.FC<ModalProps> = () => {
 
   return (
     <div>
-      <Modal isOpen={isAddressModalOpen} onClose={closeAddressModal} extraClass={{ overflow: 'auto' }} extraModalClass={{ backgroundColor: '#00000073' }} className="h-100vh l:h-fit w-100p l:w-fit">
-        <div className='l:w-800 h-fit relative' style={{ maxHeight: 'calc(100dvh - 120px)' }}>
+      <Modal isOpen={isAddressModalOpen} onClose={closeAddressModal} extraClass={{ overflow: 'auto' }} extraModalClass={{ backgroundColor: '#00000073' }} className="h-fit md:w-fit w-90p no-scrollbar">
+        <div className='l:w-720 md:w-650 h-fit relative' style={{ maxHeight: 'calc(100dvh - 90px)' }}>
           <div className='relative w-full'>
             <div className='sticky z-3 t-0 l-0 r-0 bg-white flex space-between a-items-center py-12 px-24 border-solid border-b border-1 border-#00000014'>
               <h5 className='text-16 weight-600 line-height-24'>Delivery address</h5>
               <AiOutlineClose className='pointer w-20 h-20' onClick={closeAddressModal} />
             </div>
-            <div className={`flex flex-col gap-24 ${showAddressForm ? 'p-24' : ''}`}>
+            <div className={`flex flex-col gap-24 p-24`}>
               {
-                addresses?.map((address, i) => (
-                  <AddressCard address={address} key={i} />
-                ))
-              } {
                 showAddressForm ?
                   <div className='bg-white w-full h-fit'>
-                    <AddressForm closeAddressForm={() => {setShowAddressForm(false); closeAddressModal()}} />
+                    <AddressForm type={'new'} closeAddressForm={() => {
+                      setShowAddressForm(false)
+                    }} />
                   </div>
                   :
                   (
                     addresses?.length === 0 ? (
                       <div className='bg-white w-full h-fit'>
-                        <AddressForm closeAddressForm={() => { setShowAddressForm(false); closeAddressModal()}} />
+                        <AddressForm type={'new'} closeAddressForm={(button) => {
+                          setShowAddressForm(false)
+                          if (button === 'cancel') {
+                            closeAddressModal()
+                          }
+                        }} />
                       </div>
                     ) : (
-                      <div className='flex j-content-center'>
-                        <p onClick={() => setShowAddressForm(true)} className="color-#1677FF pointer text-16 weight-400 line-height-24 underline text-center w-fit">Add new address</p>
-                      </div>
+                      <>
+                        {
+                          addresses?.map((address, i) => (
+                            <AddressCard address={address} key={i} />
+                          ))
+                        }
+                        <div className='flex j-content-center'>
+                          <p onClick={() => setShowAddressForm(true)} className="color-#1677FF pointer text-16 weight-400 line-height-24 underline text-center w-fit">Add new address</p>
+                        </div>
+                      </>
                     )
                   )
               }
