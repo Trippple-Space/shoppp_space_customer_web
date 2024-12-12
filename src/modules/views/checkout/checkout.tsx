@@ -114,7 +114,7 @@ const CheckoutPage = () => {
                 {selectedAddress && (
                   <div className="flex flex-col gap-4">
                     <p className="weight-400 text-16 line-height-24 color-#00000099">
-                      {selectedAddress?.contactNo1}, {selectedAddress?.contactNo2}
+                      {selectedAddress?.contactNo}{selectedAddress?.secondaryContactNo && ', '}{selectedAddress?.secondaryContactNo}
                     </p>
                     <p className="weight-400 text-16 line-height-24 color-#00000099">
                       {selectedAddress?.address}, {selectedAddress?.city},{" "}
@@ -203,7 +203,7 @@ const CheckoutPage = () => {
               <h2 className="color-#000000E0 text-20 line-height-28 weight-600 md:block hidden">
                 Payment Summary
               </h2>
-              <div className={`${showSummary ? 'block' : 'hidden'}`}>
+              <div className={`${showSummary ? 'block' : 'md:block hidden'}`}>
                 <OrderSummary
                   subTotal={cart.subTotal}
                   extraSavings={cart.total - cart.subTotal}
@@ -212,46 +212,57 @@ const CheckoutPage = () => {
                 />
               </div>
               <div className="flex sm:flex-row flex-col sm:gap-0 gap-20 space-between a-items-center">
-                <p className="md:hidden flex gap-12 a-items-center color-#00000099 sm:w-fit w-full space-between pointer" onClick={() => setshowSummary(!showSummary)}>
-                  <span className="text-16 weight-400 line-height-24">
-                    {showSummary ? 'Hide payment summary' : 'Show payment summary'}
-                  </span>
-                  {
-                    showSummary ? <PiCaretDown className="w-20 h-20" /> : <PiCaretUp className="w-20 h-20" />
-                  }
-                </p>
-                <button
-                  onClick={() => {
-                    if (canProceedToPayment) {
-                      setDevAddressError(true)
-                    } else {
-                      payWithPaystack({
-                        addressId: selectedAddress?.id,
-                        deliveryOption: selectedDeliveryOption,
-                      })
-                    }
-                  }
-                  }
-                  className="md:w-full sm:w-fit w-full border-none bg-#0B9378 m:flex text-white md:text-16 text-14 weight-500 md:line-height-22 line-height-19 md:px-24 px-16 py-12 radius-6 pointer l:float-right j-content-center"
-                >
-                  <span className="">
-                    Proceed to payment{" "}
+                <div className={`absolute t-0 sm:w-fit w-full sm:px-0 px-24 bg-#F5F5F5 pt-12 md:hidden block ${showSummary ? 'sm:b-10 sm:t-80p' : 'sm:t-10'}`}>
+                  <p className={`md:hidden flex gap-12 a-items-center color-#00000099 sm:w-fit w-full space-between pointer ${showSummary && 'border-b border-b-#00000014 sm:border-b-#F5F5F5 pb-20'}`} onClick={() => setshowSummary(!showSummary)}>
+                    <span className="text-16 weight-400 line-height-24">
+                      {showSummary ? 'Hide payment summary' : 'Show payment summary'}
+                    </span>
                     {
-                      !showSummary && <span className="weight-700">
-                        (
-                        {formatNumberAsPrice(
-                          cart.total + selectedDeliveryOptionDetails.price
-                        )}
-                        )
-                      </span>
+                      showSummary ? <PiCaretDown className="w-20 h-20 mt-4" /> : <PiCaretUp className="w-20 h-20 mt-6" />
                     }
-                  </span>
-                  <PuffLoader
-                    size={15}
-                    loading={isPaymentLoading}
-                    className="ml-10"
-                  />
-                </button>
+                  </p>
+                </div>
+                <div className="flex gap-14 a-items-center sm:j-content-end w-full">
+                  {
+                    !showSummary && <span className="sm:block hidden sm:weight-600 weight-700 sm:text-16 text-14 sm:line-height-22 line-height-19">
+                      {formatNumberAsPrice(
+                        cart.total + selectedDeliveryOptionDetails.price
+                      )}
+                    </span>
+                  }
+                  <button
+                    onClick={() => {
+                      if (canProceedToPayment) {
+                        setDevAddressError(true)
+                      } else {
+                        payWithPaystack({
+                          addressId: selectedAddress?.id,
+                          deliveryOption: selectedDeliveryOption,
+                        })
+                      }
+                    }
+                    }
+                    className={`md:w-full sm:w-fit w-full border-none bg-#0B9378 m:flex text-white md:text-16 text-14 weight-500 md:line-height-22 line-height-19 md:px-24 px-16 py-12 radius-6 pointer l:float-right j-content-center ${!showSummary && 'sm:mt-0 mt-56'}`}
+                  >
+                    <span className="">
+                      Proceed to payment{" "}
+                      {
+                        !showSummary && <span className="sm:hidden weight-700">
+                          (
+                          {formatNumberAsPrice(
+                            cart.total + selectedDeliveryOptionDetails.price
+                          )}
+                          )
+                        </span>
+                      }
+                    </span>
+                    <PuffLoader
+                      size={15}
+                      loading={isPaymentLoading}
+                      className="ml-10"
+                    />
+                  </button>
+                </div>
               </div>
 
               <p className="text-16 line-height-24 weight-400 text-center md:block hidden">

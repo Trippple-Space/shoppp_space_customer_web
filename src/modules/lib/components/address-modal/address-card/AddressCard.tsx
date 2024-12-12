@@ -9,6 +9,7 @@ import { PiPencil } from "react-icons/pi";
 import { IoCloseCircle } from "react-icons/io5";
 import { delay } from "framer-motion";
 import BoxRadio from "../../box-radio/BoxRadio";
+import AddressForm from "../address-form/AddressForm";
 
 interface AddressCardProps {
   address: Address;
@@ -27,14 +28,12 @@ const AddressCard: FC<AddressCardProps> = ({ address }) => {
   const editMode = addressToUpdateId === address.id;
   const isAddressSelected = address.id === selectedAddressId;
 
-console.log(address.userId)
-
   return (
     <div
       className={cx(
         "flex flex-row space-between gap-12 a-items-center w-full p-16 radius-6 border border-#00000014 pointer",
         {
-          "border-black ": isAddressSelected,
+          "border-green-400": isAddressSelected,
         }
       )}
       onClick={() => {
@@ -50,105 +49,111 @@ console.log(address.userId)
       {
         editMode ?
           (
-            <form
-              className=""
-              onSubmit={updateFormHandler.handleSubmit}
-            >
-              <p>
-                {editMode ? (
+            <>
+              {/**<AddressForm
+                closeAddressForm={(button) => {
+                  if (button === 'cancel') {
+                    setAddressToUpdateId(null);
+                  }
+                }}
+                type={'edit'} /> */}
+
+              <form
+                className=""
+                onSubmit={updateFormHandler.handleSubmit}
+              >
+                <p>
                   <AddressField
-                    field="contactNo1"
+                    field="contactNo"
                     label="Contact Number"
                     handler={updateFormHandler}
                     disabled={false}
                   />
-                ) : (
-                  address.contactNo1
-                )}
-              </p>
-              <p>
-                {editMode ? (
-                  <AddressField
-                    field="address"
-                    label="Address"
-                    handler={updateFormHandler}
-                    disabled={false}
-                  />
-                ) : (
-                  address.address
-                )}
-              </p>
-              <p>
-                {editMode ? (
-                  <div className="flex gap-5">
-                    <AddressField
-                      field="city"
-                      label="City"
-                      handler={updateFormHandler}
-                      disabled={false}
-                    />
-                    <AddressField
-                      field="state"
-                      label="State"
-                      handler={updateFormHandler}
-                      disabled={false}
-                    />
-                  </div>
-                ) : (
-                  <span>
-                    {address.city} {address.state}
-                  </span>
-                )}
-              </p>
-              {(address.notes || editMode) && (
-                <p className="font-italic text-12">
+                </p>
+                <p>
                   {editMode ? (
                     <AddressField
-                      field="notes"
-                      type="textarea"
-                      label="Notes"
+                      field="address"
+                      label="Address"
                       handler={updateFormHandler}
                       disabled={false}
                     />
                   ) : (
-                    <span>Notes: {address.notes}</span>
+                    address.address
                   )}
                 </p>
-              )}
-              {editMode && (
-                <div className="flex flex-col a-items-end a-self-end">
-                  <div className="flex gap-8 l:gap-10 w-fit space-between a-self-end mt-10">
-                    <button
-                      type="reset"
-                      className="btn w-50p a-items-center j-items-center l:w-100p border-none bg-grey-100 text-grey-500 hover:bg-red-100 hover:text-red text-13 pr-8 pl-2 py-5 radius-20 weight-400 pointer flex"
-                      onClick={() => {
-                        setAddressToUpdateId(null);
-                        delay(() => {
-                          closeAddressModal();
-                        }, 500);
-                      }}
-                    >
-                      {" "}
-                      <IoCloseCircle className="w-20  mr-3 p-0 " />{" "}
-                      <span>Discard</span>{" "}
-                    </button>
-                    <button
-                      type="submit"
-                      className="btn w-50p l:w-100p border-none bg-green text-white text-13 pr-8 pl-2 py-5 radius-20 weight-400 pointer flex hover:bg-darkgreen"
-                    >
-                      <BiCheck className="w-20 text-white" />{" "}
-                      <span className="">Save</span>{" "}
-                    </button>
+                <p>
+                  {editMode ? (
+                    <div className="flex gap-5">
+                      <AddressField
+                        field="city"
+                        label="City"
+                        handler={updateFormHandler}
+                        disabled={false}
+                      />
+                      <AddressField
+                        field="state"
+                        label="State"
+                        handler={updateFormHandler}
+                        disabled={false}
+                      />
+                    </div>
+                  ) : (
+                    <span>
+                      {address.city} {address.state}
+                    </span>
+                  )}
+                </p>
+                {(address.notes || editMode) && (
+                  <p className="font-italic text-12">
+                    {editMode ? (
+                      <AddressField
+                        field="notes"
+                        type="textarea"
+                        label="Notes"
+                        handler={updateFormHandler}
+                        disabled={false}
+                      />
+                    ) : (
+                      <span>Notes: {address.notes}</span>
+                    )}
+                  </p>
+                )}
+                {editMode && (
+                  <div className="flex flex-col a-items-end a-self-end">
+                    <div className="flex gap-8 l:gap-10 w-fit space-between a-self-end mt-10">
+                      <button
+                        type="reset"
+                        className="btn w-50p a-items-center j-items-center l:w-100p border-none bg-grey-100 text-grey-500 hover:bg-red-100 hover:text-red text-13 pr-8 pl-2 py-5 radius-20 weight-400 pointer flex"
+                        onClick={() => {
+                          setAddressToUpdateId(null);
+                          delay(() => {
+                            closeAddressModal();
+                          }, 500);
+                        }}
+                      >
+                        {" "}
+                        <IoCloseCircle className="w-20  mr-3 p-0 " />{" "}
+                        <span>Discard</span>{" "}
+                      </button>
+                      <button
+                        type="submit"
+                        className="btn w-50p l:w-100p border-none bg-green text-white text-13 pr-8 pl-2 py-5 radius-20 weight-400 pointer flex hover:bg-darkgreen"
+                      >
+                        <BiCheck className="w-20 text-white" />{" "}
+                        <span className="">Save</span>{" "}
+                      </button>
+                    </div>
                   </div>
-                </div>
-              )}
-            </form>
+                )}
+              </form>
+            </>
           )
           :
           (
             <div className="flex space-between a-items-center w-full">
               <div className="flex flex-col gap-4 weight-400 text-16 line-height-24 color-#00000099">
-                <p>{address.contactNo1}, {address?.contactNo2}</p>
+                <p>{address.contactNo}{address?.secondaryContactNo && ', '}{address?.secondaryContactNo}</p>
                 <p>{address.address}{', '}{address.city}{', '}{address.state}</p>
                 {
                   address.notes && <p>Delivery note: {address.notes}</p>
