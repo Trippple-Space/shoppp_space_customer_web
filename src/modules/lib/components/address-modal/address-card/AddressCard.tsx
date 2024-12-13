@@ -46,7 +46,7 @@ const AddressCard: FC<AddressCardProps> = ({ address, showAddressForm, setShowAd
       }}
     >
       {
-        !editMode && <BoxRadio id={`${address.id}`} name={`${address.id}`} checked={isAddressSelected} label='' className="address" />
+        !editMode && <BoxRadio id={`${address.id}`} name={`${address.id}`} checked={isAddressSelected} label='' className="address" onChange={() => { }} />
       }
       {
         editMode && showAddressForm ?

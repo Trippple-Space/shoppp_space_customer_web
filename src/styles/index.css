@@ -296,12 +296,11 @@
 @layer lo { .\@lo\:radius-t-l-8 { border-top-left-radius: 8px;  } } 
 @layer lo { .\@lo\:radius-b-l-8 { border-bottom-left-radius: 8px;  } } 
 .color-\#545F71 { color: #545F71; } 
-@layer lo { .\@lo\:border-green { border-color: #0B9378; } } 
-@layer lo { .\@lo\:border-grey-300 { border-color: #E4E1DF; } } 
 @layer lo { .\@lo\:w-full {    width: 100%;  } } 
 @layer lo { .\@lo\:bg-white { background-color: #FFFFFF; } } 
 @layer lo { .\@lo\:border-solid { border-style: solid; } } 
 @layer lo { .\@lo\:border-1 { border-width: 1px; } } 
+@layer lo { .\@lo\:border-grey-300 { border-color: #E4E1DF; } } 
 @layer lo { .\@lo\:py-12 { padding-top: 12px; padding-bottom: 12px; } } 
 @layer lo { .\@lo\:px-20 { padding-left: 20px; padding-right: 20px; } } 
 @layer lo { .\@lo\:weight-400 { font-weight: 400; } } 

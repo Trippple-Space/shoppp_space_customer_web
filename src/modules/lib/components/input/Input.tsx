@@ -1,4 +1,4 @@
-import React, { FC, HTMLInputTypeAttribute, ReactNode, useState } from 'react'
+import React, { FC, HTMLInputTypeAttribute, ReactNode, useEffect, useState } from 'react'
 
 interface IInput {
   label?: string | ReactNode
@@ -26,30 +26,13 @@ const Input: FC<IInput> = ({ label, id, name, type, placeholder, className, afte
     [handleBlur ? 'onBlur' : '']: handleBlur
   }
 
-  const [isFocused, setIsFocused] = useState(false);
-  const [hasError, setHasError] = useState(false);
-
-  const handleFocus = () => setIsFocused(true);
-  const handleBlurInternal = (e: React.FocusEvent<HTMLInputElement | HTMLTextAreaElement>) => {
-    setIsFocused(false);
-    setHasError(inputField?.classList.contains('border-red') || false);
-    handleBlur?.(e);
-  };
-  const inputField = document.getElementById(id || '') as HTMLElement;
-
-  const divBorderColor = isFocused
-    ? 'border-green'
-    : hasError
-      ? 'border-red'
-      : 'border-grey-300';
-
   return (
     (<div className={`input-group ${className}`}>
       {label && <label htmlFor={id} className='block w-fit mb-8 l:weight-400 weight-500 l:text-14 text-12 text-grey-800'>{label}</label>}
       <div className='flex a-items-center'>
         {
           id?.toLocaleLowerCase()?.includes('contact') && (
-            <div key={`${isFocused}`} className={`py-12 px-14 bg-#F3F3F3 border @lo:radius-t-l-8 @lo:radius-b-l-8 color-#545F71 text-16 ${inputField?.classList.contains('border-red') ? 'border-red' : inputField?.nodeValue ? '@lo:border-green' : '@lo:border-grey-300'}`}>+234</div>
+            <div className={`py-12 px-14 bg-#F3F3F3 border @lo:radius-t-l-8 @lo:radius-b-l-8 color-#545F71 text-16`}>+234</div>
           )
         }
         <Component
@@ -58,13 +41,11 @@ const Input: FC<IInput> = ({ label, id, name, type, placeholder, className, afte
             block font-inter @lo:w-full @lo:bg-white
             @lo:border-solid @lo:border-1 @lo:border-grey-300 l:@lo:py-17 @lo:py-12 @lo:px-20 @lo:l:text-16 @lo:weight-400 @lo:outline-none
             @lo:placeholder:text-grey-400 @lo:text-grey-700
-            @lo:focus:border-green @lo:placeholder:l:text-12 @lo:placeholder:text-12 disabled:bg-#F3F3F3 resize-none ${divBorderColor} ${inputClassNames} ${id?.toLocaleLowerCase()?.includes('contact') ? '@lo:radius-t-r-8 @lo:radius-b-r-8 border-l-0' : '@lo:radius-8'}`
+            @lo:focus:border-green @lo:placeholder:l:text-12 @lo:placeholder:text-12 disabled:bg-#F3F3F3 resize-none ${inputClassNames} ${id?.toLocaleLowerCase()?.includes('contact') ? '@lo:radius-t-r-8 @lo:radius-b-r-8 border-l-0' : '@lo:radius-8'}`
           }
           placeholder={placeholder}
           rows={rows}
           id={id}
-          onFocus={handleFocus}
-          onBlur={handleBlurInternal}
           name={name}
           {...controlProps}
         />

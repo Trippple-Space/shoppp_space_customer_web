@@ -33,7 +33,7 @@ export const AddressValidationSchema = Yup.object().shape({
       }
     )
     .required("Contact number is required"),
-    
+
   secondaryContactNo: Yup.string().test(
     "valid-nigerian-phone",
     "Phone number must be a valid Nigerian number",
@@ -73,6 +73,10 @@ const formikAddressConfig = (
         ? `+234${values.secondaryContactNo.replace(/^\+234/, "")}`
         : "",
     };
+
+    if (!values.secondaryContactNo) {
+      delete transformedValues.secondaryContactNo;
+    }
 
     handleSubmit(transformedValues);
     resetForm();
