@@ -11,6 +11,7 @@
     "prepare": "husky"
   },
   "dependencies": {
+    "@react-google-maps/api": "^2.20.3",
     "@types/node": "20.2.5",
     "@types/react": "^18.2.48",
     "@types/react-dom": "^18.2.18",
@@ -21,7 +22,9 @@
     "dotenv": "^16.4.5",
     "formik": "^2.4.5",
     "framer-motion": "^11.2.4",
+    "i": "^0.3.7",
     "next": "^14.1.0",
+    "npm": "^10.9.2",
     "posthog-js": "^1.188.1",
     "react": "^18.2.0",
     "react-chartjs-2": "^5.2.0",

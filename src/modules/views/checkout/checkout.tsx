@@ -23,6 +23,7 @@ import OrderSummary from "@/modules/lib/components/order-summary/OrderSummary";
 import { PiCaretDown, PiCaretUp } from "react-icons/pi";
 import Link from "next/link";
 import DeliveryOptions from "@/modules/lib/components/delivery-options/DeliveryOptions";
+import DeliveryMessage from "@/modules/lib/components/delivery-in-lagos/DeliveryMessage";
 
 const CheckoutPage = () => {
   const [selectedDeliveryOption, setSelectedDeliveryOption] =
@@ -92,6 +93,7 @@ const CheckoutPage = () => {
   return (<>
     <HomepageNavBar parent={"checkout"} />
     <div className="md:pt-69.6 pt-64 sm:mb-60 mb-111">
+      <DeliveryMessage />
       <div className="md:flex">
         <div className="l:w-54.2p md:w-50p md:py-44 sm:py-32 py-24 xl:pl-80 l:pl-70 md:pl-60 sm:pl-40 pl-24 xl:pr-80 l:pr-70 sm:pr-40 pr-24 flex flex-col gap-28 bg-white">
           <div className="flex flex-col gap-6">

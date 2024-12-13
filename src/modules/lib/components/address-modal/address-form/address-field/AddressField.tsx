@@ -35,7 +35,9 @@ const AddressField: FC<AddressFieldProps> = ({
       placeholder={placeholder}
       handleChange={formHandler.handleChange}
       handleBlur={formHandler.handleBlur}
-      value={field === 'state' ? 'Lagos' : formHandler.values[field]}
+      value={field === 'state'
+        ? 'Lagos'
+        : formHandler.values[field]?.replace(/^\+234/, '')}
       className={cx("w-full", className)}
       disabled={disabled}
       inputClass={cx(

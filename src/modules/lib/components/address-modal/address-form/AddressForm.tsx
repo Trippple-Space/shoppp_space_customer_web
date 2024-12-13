@@ -1,9 +1,12 @@
-import React, { FC } from 'react'
+import React, { FC, useEffect, useState } from 'react'
 import useAddress from '@/modules/lib/utility/hooks/use-address';
 import AddressField from './address-field/AddressField';
-import AddressMap from '../address-map/AddressMap';
 import { SlLocationPin } from 'react-icons/sl';
 import Input from '../../input/Input';
+
+import useCurrentLocation from '@/modules/lib/utility/hooks/use-fetch-address';
+import AddressMap from '../address-map/AddressMap';
+import UseCurrentLocationButton from '../address-map/UseCurrentLocationButton';
 
 interface AddressFormProps {
   closeAddressForm: (button: any) => void
@@ -11,51 +14,47 @@ interface AddressFormProps {
 }
 const AddressForm: FC<AddressFormProps> = ({ closeAddressForm, type }) => {
   const { formHandler, updateFormHandler, } = useAddress();
-
-  console.log(updateFormHandler.values)
+  const [userLocation, setUserLocation] = useState<any>({})
+  const formhandler = (type === 'edit') ? updateFormHandler : formHandler
 
   return (
-
-    <div className="flex-col w-full">
+    (<div className="flex-col w-full">
       <form className='flex flex-col' onSubmit={type === 'edit' ? updateFormHandler.handleSubmit : formHandler.handleSubmit}>
         <div className='flex flex-col p-24 mt--24 mx--24 gap-16'>
-          <div className='radius-8 h-100 overflow-hidden relative'>
-            <AddressMap />
+          <div className={`radius-8 overflow-hidden relative h-100`}>
+            <AddressMap location={{ lat: userLocation.latitude || 6.5244, lng: userLocation.longitude || 3.3792 }} />
             <div className='absolute bg-#00000073 t-0 b-0 w-full flex flex-col j-content-center'>
-              <div className='py-12 px-24 flex a-items-center gap-10 radius-6 bg-#F5F5F5 w-fit mx-auto weight-500 text-16 line-height-22 pointer'>
-                <SlLocationPin className='w-24 h-24' />
-                <p>Use current location</p>
-              </div>
+              <UseCurrentLocationButton formhandler={formhandler} setUserLocation={setUserLocation} />
             </div>
           </div>
           <div className='grid sm:grid-4-rows-1fr grid-2-cols-1fr gap-16'>
-            <p className='sm:grid-col-span-1 grid-col-span-2'>
+            <div className='sm:grid-col-span-1 grid-col-span-2'>
               <AddressField
-                field='firstname'
+                field='firstName'
                 label={<span>First name <span className='color-#B3261E'>*</span></span>}
                 placeholder='Enter your first name'
                 handler={type === 'edit' ? updateFormHandler : formHandler}
                 disabled={false}
               />
-            </p>
-            <p className='sm:grid-col-span-1 grid-col-span-2'>
+            </div>
+            <div className='sm:grid-col-span-1 grid-col-span-2'>
               <AddressField
-                field='lastname'
+                field='lastName'
                 label={<span>Last name <span className='color-#B3261E'>*</span></span>}
                 placeholder='Enter your last name'
                 handler={type === 'edit' ? updateFormHandler : formHandler}
                 disabled={false}
               />
-            </p>
-            <p className='sm:grid-col-span-1 grid-col-span-2'>
+            </div>
+            <div className='sm:grid-col-span-1 grid-col-span-2'>
               <AddressField
                 field='state'
                 label={<span>State <span className='color-#B3261E'>*</span></span>}
                 handler={type === 'edit' ? updateFormHandler : formHandler}
                 disabled={true}
               />
-            </p>
-            <p className='sm:grid-col-span-1 grid-col-span-2'>
+            </div>
+            <div className='sm:grid-col-span-1 grid-col-span-2'>
               <AddressField
                 field='city'
                 label={<span>City <span className='color-#B3261E'>*</span></span>}
@@ -63,8 +62,8 @@ const AddressForm: FC<AddressFormProps> = ({ closeAddressForm, type }) => {
                 handler={type === 'edit' ? updateFormHandler : formHandler}
                 disabled={false}
               />
-            </p>
-            <p className='grid-col-span-2'>
+            </div>
+            <div className='grid-col-span-2'>
               <AddressField
                 field='address'
                 label={<span>Street address <span className='color-#B3261E'>*</span></span>}
@@ -72,8 +71,8 @@ const AddressForm: FC<AddressFormProps> = ({ closeAddressForm, type }) => {
                 handler={type === 'edit' ? updateFormHandler : formHandler}
                 disabled={false}
               />
-            </p>
-            <p className='sm:grid-col-span-1 grid-col-span-2'>
+            </div>
+            <div className='sm:grid-col-span-1 grid-col-span-2'>
               <AddressField
                 field='contactNo'
                 label={<span>Contact number 1 <span className='color-#B3261E'>*</span></span>}
@@ -81,8 +80,8 @@ const AddressForm: FC<AddressFormProps> = ({ closeAddressForm, type }) => {
                 handler={type === 'edit' ? updateFormHandler : formHandler}
                 disabled={false}
               />
-            </p>
-            <p className='sm:grid-col-span-1 grid-col-span-2'>
+            </div>
+            <div className='sm:grid-col-span-1 grid-col-span-2'>
               <AddressField
                 field="secondaryContactNo"
                 label='Contact number 2'
@@ -90,9 +89,9 @@ const AddressForm: FC<AddressFormProps> = ({ closeAddressForm, type }) => {
                 handler={type === 'edit' ? updateFormHandler : formHandler}
                 disabled={false}
               />
-            </p>
+            </div>
           </div>
-          <p className="">
+          <div className="">
             <AddressField
               field='notes'
               type='textarea'
@@ -101,7 +100,7 @@ const AddressForm: FC<AddressFormProps> = ({ closeAddressForm, type }) => {
               disabled={false}
               inputClassName='h-200'
             />
-          </p>
+          </div>
 
           <div className="flex space-between w-full @lo:text-grey-700 text-16 weight-400 line-height-22">
             <label className="pointer content-center flex gap-8">
@@ -129,14 +128,14 @@ const AddressForm: FC<AddressFormProps> = ({ closeAddressForm, type }) => {
               const errorsCheck = Object.values(formhandler.errors).every(error => {
                 return error === '';
               });
-              if (errorsCheck && formhandler.values.firstname !== '') {
+              if (errorsCheck && formhandler.values.firstName !== '') {
                 setTimeout(() => closeAddressForm('submit'), 1000)
               }
             }}>{type === 'edit' ? 'Save' : 'Add address'}</button>
         </div>
       </form>
-    </div>
-  )
+    </div>)
+  );
 }
 
 export default AddressForm

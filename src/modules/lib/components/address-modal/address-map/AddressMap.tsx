@@ -1,16 +1,34 @@
-import React from "react";
+import React, { FC } from "react";
+import { GoogleMap, Marker, useLoadScript } from "@react-google-maps/api";
 
-const AddressMap: React.FC = () => {
+interface IAddressMap {
+    location: {
+        lat: number;
+        lng: number;
+    };
+}
+
+const AddressMap: FC<IAddressMap> = ({ location }) => {
+    const { isLoaded, loadError } = useLoadScript({
+        googleMapsApiKey: process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY || "",
+    });
+
+    if (loadError) return <div>Error loading maps</div>;
+    if (!isLoaded) return <div>Loading...</div>;
+
     return (
-        <iframe
-            src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d15856.253527566354!2d3.3892903999999997!3d6.5136621!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x103b8cfb29806459%3A0xe969b915b9128f99!2sSports%20Center%2C%20University%20of%20Lagos%20Akoka!5e0!3m2!1sen!2sng!4v1733917963749!5m2!1sen!2sng"
-            width="100%"
-            height="100%"
-            style={{ border: 0 }}
-            allowFullScreen
-            loading="lazy"
-            referrerPolicy="no-referrer-when-downgrade"
-        ></iframe>
+        <GoogleMap
+            mapContainerStyle={{ width: "100%", height: "100px" }}
+            center={location}
+            zoom={16}
+            options={{
+                disableDefaultUI: true,
+                keyboardShortcuts: false,
+                disableDoubleClickZoom: true,
+            }}
+        >
+            {location && <Marker position={location} />}
+        </GoogleMap>
     );
 };
 

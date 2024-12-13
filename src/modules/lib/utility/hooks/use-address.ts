@@ -11,11 +11,13 @@ const nameValidation = Yup.string()
   .trim()
   .matches(/^[a-zA-Z\s]+$/, "Name must only contain letters and spaces")
   .min(2, "Name must be at least 2 characters")
-  .max(50, "Name must be less than 50 characters");
+  .max(50, "Name must be less than 50 characters")
+  .required("Name cannot be empty");
 
 export const AddressValidationSchema = Yup.object().shape({
-  firstname: nameValidation.required("First name is required"),
-  lastname: nameValidation.required("Last name is required"),
+  label: Yup.string().trim().required("Label is required"),
+  firstName: nameValidation.required("First name is required"),
+  lastName: nameValidation.required("Last name is required"),
   address: Yup.string().trim().required("Address is required"),
   city: Yup.string().trim().required("City is required"),
   state: Yup.string().trim().required("State is required"),
@@ -23,19 +25,27 @@ export const AddressValidationSchema = Yup.object().shape({
     .test(
       "valid-nigerian-phone",
       "Phone number must be a valid Nigerian number",
-      (value) => {
+      (value, context) => {
+        if (!context.parent.address) {
+          return true;
+        }
         return typeof value === "string" && /^(7|8|9)\d{9}$/.test(value);
       }
     )
     .required("Contact number is required"),
+    
   secondaryContactNo: Yup.string().test(
     "valid-nigerian-phone",
     "Phone number must be a valid Nigerian number",
-    (value) => {
+    (value, context) => {
+      if (!context.parent.firstName) {
+        return true;
+      }
       if (!value) return true;
       return typeof value === "string" && /^(7|8|9)\d{9}$/.test(value);
     }
   ),
+
   isDefault: Yup.boolean(),
 });
 
@@ -44,9 +54,9 @@ const formikAddressConfig = (
   handleSubmit: Function
 ): FormikConfig<any> => ({
   initialValues: initialValues || {
-    label: 'something',
-    firstname: "",
-    lastname: "",
+    label: "something",
+    firstName: "",
+    lastName: "",
     address: "",
     city: "",
     state: "Lagos",
@@ -58,9 +68,9 @@ const formikAddressConfig = (
   onSubmit: (values, { resetForm }) => {
     const transformedValues = {
       ...values,
-      contactNo: `+234${values.contactNo}`,
+      contactNo: `+234${values.contactNo.replace(/^\+234/, "")}`,
       secondaryContactNo: values.secondaryContactNo
-        ? `+234${values.secondaryContactNo}`
+        ? `+234${values.secondaryContactNo.replace(/^\+234/, "")}`
         : "",
     };
 
