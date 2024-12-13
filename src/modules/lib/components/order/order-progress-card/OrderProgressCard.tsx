@@ -129,7 +129,7 @@ const OrderProgressCard = ({
                   </p>
                 )}
                 <p
-                  className='color-#1677FF text-14 border-b border-b-#1677FF pb-1 cursor pointer w-fit text-right'
+                  className='color-#1677FF text-14 border-b border-b-#1677FF pb-1 cursor-pointer w-fit text-right'
                   onClick={() => handleOpenProductDetail(order, order.id)}
                 >
                   View more details

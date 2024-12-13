@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import OrderDetails from './order-details/Order-details'
 import { useOrders } from '../../utility/hooks/use-orders'
 import OrderedProductModal from '../ordered-product/OrderedProductModal'
@@ -6,28 +6,32 @@ import OrderProgressCard from './order-progress-card/OrderProgressCard'
 import { orderService } from '../../utility/services/order.service'
 import { useOrderView } from '../../utility/hooks/views/use-order-view'
 import { Order } from '../../utility/types/order.interface'
+import Image from '../image/Image'
+import Link from 'next/link'
 
 const DeliveredOrder = () => {
-  const { orders, singleOrder } = useOrderView({
+  const { orders, singleOrder, fetchOrderById } = useOrderView({
     filters: { status: { In: ['CONFIRMED'] } }
   })
 
-const [openOrderModal, setOpenModalOpen] = useState(false)
-const [orderCartModal, setOrderCartModal] = useState<Order | void>(singleOrder)
-const [orderDetail, setOrderDetail] = useState(false)
+  const [openOrderModal, setOpenModalOpen] = useState(false)
+  const [orderCartModal, setOrderCartModal] = useState<Order | void>(
+    singleOrder
+  )
+  const [orderDetail, setOrderDetail] = useState(false)
 
-const handleOrderModal = () => {
-  setOpenModalOpen(prev => !prev)
-}
+  const handleOrderModal = () => {
+    setOpenModalOpen(prev => !prev)
+  }
 
-const handleOpenProductDetail = async (order: Order) => {
-   fetchOrderById(order.id, {})
-  setOrderDetail(prev => !prev)
-}
+  const handleOpenProductDetail = async (order: Order) => {
+    fetchOrderById(order.id, {})
+    setOrderDetail(prev => !prev)
+  }
 
-useEffect(() => {
-  setOrderCartModal(singleOrder)
-}, [singleOrder])
+  useEffect(() => {
+    setOrderCartModal(singleOrder)
+  }, [singleOrder])
 
   return (
     <>
@@ -60,16 +64,32 @@ useEffect(() => {
           )}
         </div>
       )}
+      {orders.length <= 0 && (
+        <>
+          <div className='flex flex-col a-items-center gap-10 mt-30'>
+            <div className='flex flex-col a-items-center gap-10'>
+              <Image
+                type='icon'
+                className='w-200'
+                src='order-message.svg'
+                alt='no-order-image'
+              />
+              <p className='text-center text-14 color-#00000073'>
+                We are waiting for your next order
+              </p>
+            </div>
+
+            <Link
+              href='/'
+              className='cursor-pointer px-15 py-12 l:w-250 bg-#0B9378  radius-6 color-white text-center weight-400'
+            >
+              Explore products
+            </Link>
+          </div>
+        </>
+      )}
     </>
   )
 }
 
 export default DeliveredOrder
-function fetchOrderById(id: number, arg1: {}) {
-  throw new Error('Function not implemented.')
-}
-
-function useEffect(arg0: () => void, arg1: any[]) {
-  throw new Error('Function not implemented.')
-}
-

@@ -11,6 +11,7 @@ export const useOrders = (initialQuery: IQueryParams) => {
      const [fetching, setFetching] = useState<boolean>(false);
      const [error, setError] = useState<string | null>(null);
      const [query, setQuery] = useState<IQueryParams>(initialQuery);
+     const [response, setResponse] = useState<Order>();
 
      const fetchOrders = async (query: IQueryParams) => {
           setFetching(true);
@@ -37,6 +38,21 @@ export const useOrders = (initialQuery: IQueryParams) => {
           }
      };
 
+     const cancelOrderById = async (id: number, query: IQueryParams) => {
+          setFetching(true);
+          try {
+               const orderResponse = await orderService.cancelOrderById(
+                    id,
+                    query
+               );
+               setResponse(orderResponse)
+          } catch (err) {
+               console.error("Error fetching order by ID:", err);
+          } finally {
+               setFetching(false);
+          }
+     };
+
      useEffect(() => {
           if (isAuthenticated && !fetching) {
                fetchOrders(query);
@@ -48,6 +64,8 @@ export const useOrders = (initialQuery: IQueryParams) => {
           singleOrder,
           fetchOrders,
           fetchOrderById,
+          cancelOrderById,
+          response,
           fetching,
           error,
      };

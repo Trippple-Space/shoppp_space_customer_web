@@ -4,7 +4,20 @@ import { orderService } from "../../services/order.service";
 import { IQueryParams } from "../use-products";
 
 export const useOrderView = (query: IQueryParams) => {
-     const { orders, singleOrder, fetchOrderById, fetchOrders } =
-          useOrders(query);
-     return { orders, singleOrder, fetchOrderById, fetchOrders };
+     const {
+          orders,
+          singleOrder,
+          fetchOrderById,
+          fetchOrders,
+          cancelOrderById,
+          response
+     } = useOrders(query);
+     return {
+          orders,
+          singleOrder,
+          fetchOrderById,
+          fetchOrders,
+          cancelOrderById,
+          response
+     };
 };
