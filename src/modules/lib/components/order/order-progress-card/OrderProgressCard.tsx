@@ -58,25 +58,30 @@ const OrderProgressCard = ({
                     {order.status}
                   </p>
                 </div>
-                <div className='flex a-items-center space-between'>
+                <div
+                  className={classNames('flex a-items-center space-between', {
+                    'ml-45': order.cart.cartItems.length > 4,
+                    'ml-70': order.cart.cartItems.length === 3,
+                    'ml-55': order.cart.cartItems.length === 2,
+                    'ml-40': order.cart.cartItems.length === 1,
+                  })}
+                >
                   <div
-                    className='text-12 flex a-items-center cursor-pointer h-full'
+                    className={classNames(
+                      'text-12 flex a-items-center cursor-pointer h-full'
+                    )}
                     onClick={() => orderDetailModal(order)}
                   >
-                    <div
-                      className={classNames('relative', {
-                        'ml-35': order.cart.cartItems.length >= 3,
-                        'ml-55': order.cart.cartItems.length === 2,
-                        'ml-40': order.cart.cartItems.length === 1
-                      })}
-                    >
+                    <div className={classNames('relative', {})}>
                       <OverlappingImages orderItem={order} />
                     </div>
                     <MdKeyboardArrowRight className='w-20 h-20 ml-5' />
                   </div>
 
                   <div className='flex flex-col gap-10'>
-                    <p className='text-12 color-#00000099 text-right'>Total Amount</p>
+                    <p className='text-12 color-#00000099 text-right'>
+                      Total Amount
+                    </p>
                     <p className='color-black text-right weight-600'>
                       {formatNumberAsPrice(order.cart.total)}
                     </p>

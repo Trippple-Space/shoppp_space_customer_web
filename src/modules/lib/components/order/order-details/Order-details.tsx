@@ -32,7 +32,6 @@ const OrderDetails = ({
     setOpenTotal(prev => !prev)
   }
 
-
   return (
     <>
       <div className='flex flex-col gap-10'>
@@ -60,7 +59,7 @@ const OrderDetails = ({
           </div>
         </div>
         <div
-          className='bg-white p-25 flex flex-col gap-10 cursor-pointer'
+          className='bg-white p-25 flex flex-col gap-25 cursor-pointer'
           onClick={handleOrderedProducts}
         >
           <div className='flex a-items-center space-between'>
@@ -75,10 +74,7 @@ const OrderDetails = ({
             <div>
               <div className='flex a-items-center j-content-center'>
                 <div
-                  className={classNames(
-                    'text-12 hidden l:block relative',
-                    {}
-                  )}
+                  className={classNames('text-12 hidden l:block relative', {})}
                 >
                   <OverlappingImages orderItem={orderCartModal} />
                 </div>

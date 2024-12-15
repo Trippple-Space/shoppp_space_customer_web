@@ -3,6 +3,10 @@ import { Order } from '@/modules/lib/utility/types/order.interface'
 import { formatDate } from '@/modules/lib/utility/utility'
 import classNames from 'classnames'
 import { PiDotsThreeOutline } from 'react-icons/pi'
+import Modal from '../../modal/modal'
+import { useState } from 'react'
+import { IoMdClose } from 'react-icons/io'
+import RadioGroup from '../../radio/Radio'
 
 interface OrderProcessProps {
   text: string
@@ -64,12 +68,29 @@ const OrderProcess = ({
   viewTimeline
 }: OrderProcessProps) => {
   const { cancelOrderById } = useOrderView({})
+  const [openCancelOrderModal, setOpenCancelOrderModal] = useState(false)
+  const [selectedReason, setSelectedReason] = useState<string>('')
 
   const isTimelineView =
     orderCartModal.status === 'CONFIRMED' && text === 'View all timelines'
 
   const handleCancelOrder = (id: number) => {
     cancelOrderById(id, {})
+  }
+  const handleOpenCancelOrderModal = () => {
+    setOpenCancelOrderModal(prev => !prev)
+  }
+
+  const options = [
+    { value: 'too-expensive', label: 'Too Expensive' },
+    { value: 'wrong-details', label: 'Wrong Details Provided' },
+    { value: 'found-another-option', label: 'Found Another Option' },
+    { value: 'personal-reason', label: 'Personal Reason' },
+    { value: 'other-reason', label: 'Other reason' }
+  ]
+
+  const handleSelection = (value: string) => {
+    setSelectedReason(value)
   }
 
   return (
@@ -182,12 +203,64 @@ const OrderProcess = ({
         )}
 
         {orderCartModal.status === 'ONGOING' && text === 'Order placed' && (
-          <p
-            className='border-b text-danger weight-500 w-fit text-14 cursor-pointer'
-            onClick={() => handleCancelOrder(orderCartModal.id)}
-          >
-            Cancel order
-          </p>
+          <>
+            <p
+              className='border-b text-danger weight-500 w-fit text-14 cursor-pointer'
+              // onClick={() => handleCancelOrder(orderCartModal.id)}
+              onClick={handleOpenCancelOrderModal}
+            >
+              Cancel this order
+            </p>
+            {openCancelOrderModal && (
+              <Modal
+                onClose={handleOpenCancelOrderModal}
+                children={
+                  <>
+                    <div className='l:w-400 p-20 flex flex-col gap-10'>
+                      <div className='flex a-items-center j-content-end'>
+                        <IoMdClose
+                          className='w-fit cursor-pointer'
+                          onClick={handleOpenCancelOrderModal}
+                        />
+                      </div>
+                      <div className='flex flex-col gap-20'>
+                        <p className='weight-600'>Cancel order</p>
+                        <div className='flex flex-col gap-10'>
+                          <p className='color-#6A6A6A text-14'>
+                            Why did you want to cancel this order?
+                          </p>
+
+                          <div className='bg-#F5F5F5 p-20 radius-5'>
+                            <RadioGroup
+                              options={options}
+                              name='reason'
+                              selectedValue={selectedReason}
+                              onChange={handleSelection}
+                            />
+                          </div>
+                        </div>
+                      </div>
+                      <div className='flex a-items-center j-content-end gap-10'>
+                        <button
+                          className='bg-none border-1 border-black px-20 py-7 radius-5 cursor-pointer bg-green'
+                          onClick={handleOpenCancelOrderModal}
+                        >
+                          Keep order
+                        </button>
+                        <button
+                          className='border-none px-20 py-8  radius-5 bg-#D4280C color-white cursor-pointer'
+                          onClick={() => handleCancelOrder(orderCartModal.id)}
+                        >
+                          Cancel order
+                        </button>
+                      </div>
+                    </div>
+                  </>
+                }
+                isOpen={openCancelOrderModal}
+              />
+            )}
+          </>
         )}
       </div>
     </div>
