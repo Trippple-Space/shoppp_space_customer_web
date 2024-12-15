@@ -14,7 +14,6 @@ import useAddress from "@/modules/lib/utility/hooks/use-address";
 import usePayment from "@/modules/lib/utility/hooks/use-payment";
 import PuffLoader from "@/modules/lib/components/puff-loader/PuffLoader";
 import {
-  cx,
   displayStockUnit,
   formatNumberAsPrice,
 } from "@/modules/lib/utility/utility";
@@ -30,7 +29,8 @@ const CheckoutPage = () => {
     useState<keyof typeof deliveryOptions>("standard");
   const { user } = useUserStore();
   const { cart, removeFromCart } = useCart();
-  const { openAddressModal, selectedAddress } = useAddress();
+  const { openAddressModal, closeAddressModal, selectedAddress } = useAddress();
+  const { fetchAddresses } = useAddressStore()
   const { loading: isPaymentLoading, payWithPaystack } = usePayment();
   const canProceedToPayment = !(!isPaymentLoading && selectedAddress && user);
   const selectedDeliveryOptionDetails = deliveryOptions[selectedDeliveryOption];
@@ -79,6 +79,9 @@ const CheckoutPage = () => {
 
   useEffect(() => {
     getCartItemsByStore();
+    if (user) {
+      fetchAddresses(user?.id)
+    }
   }, [cart]);
 
   useEffect(() => {
@@ -147,7 +150,7 @@ const CheckoutPage = () => {
             {cartItemsByStore?.map((store, i: number) => (
               <div className="flex flex-col gap-16" key={i}>
                 <div className="flex space-between a-items-center">
-                  <h6 className="text-14 weight-400 line-height-22 color-#00000099 pointer" onClick={() => setStoreAccordion(i)}>
+                  <h6 className="text-14 weight-400 line-height-22 color-#00000099 pointer" onClick={() => { setStoreAccordion(i) }}>
                     {store?.name}
                   </h6>
                   {store.visible ? (

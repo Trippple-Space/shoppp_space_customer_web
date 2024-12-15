@@ -5,6 +5,7 @@ import useAddressStore from "../store/address.store";
 import useUserStore from "../store/user.store";
 import { Address } from "../types/address.interface";
 import { FormikConfig, useFormik } from "formik";
+import { toast } from "sonner";
 import * as Yup from "yup";
 
 const nameValidation = Yup.string()
@@ -25,33 +26,41 @@ export const AddressValidationSchema = Yup.object().shape({
     .test(
       "valid-nigerian-phone",
       "Phone number must be a valid Nigerian number",
-      (value, context) => {
-        if (!context.parent.address) {
-          return true;
-        }
-        return typeof value === "string" && /^(7|8|9)\d{9}$/.test(value);
+      (value) => {
+        if (!value) return false;
+
+        const phoneNumber = value.startsWith("+234") ? value.slice(4) : value;
+        return /^(7|8|9)\d{9}$/.test(phoneNumber);
       }
     )
     .required("Contact number is required"),
 
-  secondaryContactNo: Yup.string().test(
-    "valid-nigerian-phone",
-    "Phone number must be a valid Nigerian number",
-    (value, context) => {
-      if (!context.parent.firstName) {
-        return true;
+  secondaryContactNo: Yup.string()
+    .nullable()
+    .test(
+      "valid-nigerian-phone",
+      "Phone number must be a valid Nigerian number",
+      function (value) {
+        const { secondaryContactNo } = this.parent;
+        if (
+          !value ||
+          secondaryContactNo === null ||
+          secondaryContactNo === undefined
+        ) {
+          return true;
+        }
+        const phoneNumber = value.startsWith("+234") ? value.slice(4) : value;
+        return /^(7|8|9)\d{9}$/.test(phoneNumber);
       }
-      if (!value) return true;
-      return typeof value === "string" && /^(7|8|9)\d{9}$/.test(value);
-    }
-  ),
+    ),
 
   isDefault: Yup.boolean(),
 });
 
 const formikAddressConfig = (
   initialValues: Address | undefined,
-  handleSubmit: Function
+  handleSubmit: Function,
+  existingAddresses: Address[]
 ): FormikConfig<any> => ({
   initialValues: initialValues || {
     label: "something",
@@ -73,9 +82,19 @@ const formikAddressConfig = (
         ? `+234${values.secondaryContactNo.replace(/^\+234/, "")}`
         : "",
     };
-
     if (!values.secondaryContactNo) {
       delete transformedValues.secondaryContactNo;
+    }
+
+    if (transformedValues.isDefault) {
+      if (
+        existingAddresses.some(
+          (address) => address.isDefault && address.id !== values.id
+        )
+      ) {
+        toast.warning("A default address already exists", { duration: 1000 });
+        transformedValues.isDefault = false;
+      }
     }
 
     handleSubmit(transformedValues);
@@ -126,12 +145,16 @@ const useAddress = () => {
   };
 
   const formHandler = useFormik<Address>(
-    formikAddressConfig(undefined, handleCreateAddress)
+    formikAddressConfig(undefined, handleCreateAddress, addresses ?? [])
   );
   const updateFormHandler = useFormik<Address>(
-    formikAddressConfig(addressToUpdate, (address: Address) => {
-      handleUpdateAddress(address.id, address);
-    })
+    formikAddressConfig(
+      addressToUpdate,
+      (address: Address) => {
+        handleUpdateAddress(address.id, address);
+      },
+      addresses ?? []
+    )
   );
 
   useEffect(() => {

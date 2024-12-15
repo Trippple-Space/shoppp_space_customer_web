@@ -15,26 +15,23 @@ interface IInput {
   disabled?: boolean
   handleChange?: Function,
   handleBlur?: Function
+  handleFocus?: any
 }
-const Input: FC<IInput> = ({ label, id, name, type, placeholder, className, after, rows, inputClass: inputClassNames, value, checked, disabled, handleChange, handleBlur }) => {
+const Input: FC<IInput> = ({ label, id, name, type, placeholder, className, after, rows, inputClass: inputClassNames, value, checked, disabled, handleChange, handleBlur, handleFocus }) => {
   const Component = type === 'textarea' ? 'textarea' : 'input';
   const controlProps = {
     [value !== undefined ? 'value' : '']: value,
     [checked !== undefined ? 'checked' : '']: checked,
     [disabled !== undefined ? 'disabled' : '']: disabled,
     [handleChange ? 'onChange' : '']: handleChange,
-    [handleBlur ? 'onBlur' : '']: handleBlur
+    [handleBlur ? 'onBlur' : '']: handleBlur,
+    [handleFocus ? 'onFocus' : '']: handleFocus
   }
 
   return (
     (<div className={`input-group ${className}`}>
       {label && <label htmlFor={id} className='block w-fit mb-8 l:weight-400 weight-500 l:text-14 text-12 text-grey-800'>{label}</label>}
       <div className='flex a-items-center'>
-        {
-          id?.toLocaleLowerCase()?.includes('contact') && (
-            <div className={`py-12 px-14 bg-#F3F3F3 border @lo:radius-t-l-8 @lo:radius-b-l-8 color-#545F71 text-16`}>+234</div>
-          )
-        }
         <Component
           type={type}
           className={`

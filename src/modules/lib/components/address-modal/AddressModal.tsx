@@ -21,7 +21,7 @@ const AddressModal: React.FC<ModalProps> = () => {
         setShowAddressForm(false)
         setShowEditAddressForm(false)
         closeAddressModal()
-      }} extraClass={{ overflow: 'auto' }} extraModalClass={{ backgroundColor: '#00000073' }} className="h-fit md:w-fit w-90p no-scrollbar">
+      }} extraClass={{ overflow: 'auto' }} extraModalClass={{ backgroundColor: '#00000073' }} className="h-fit md:w-fit sm:w-90p w-98p no-scrollbar">
         <div className='l:w-720 md:w-650 h-fit relative' style={{ maxHeight: 'calc(100dvh - 90px)' }}>
           <div className='relative w-full'>
             <div className='sticky z-3 t-0 l-0 r-0 bg-white flex space-between a-items-center py-12 px-24 border-solid border-b border-1 border-#00000014'>
@@ -33,7 +33,7 @@ const AddressModal: React.FC<ModalProps> = () => {
               }} />
             </div>
             <DeliveryMessage />
-            <div className={`flex flex-col gap-24 p-24`}>
+            <div className={`flex flex-col gap-24 py-24 sm:px-24 px-20`}>
               {
                 showAddressForm ?
                   <div className='bg-white w-full h-fit'>

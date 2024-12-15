@@ -32,9 +32,11 @@ const useAddressStore = create<AddressStore>((set) => ({
   fetchAddresses: async (userId: number) => {
     try {
       const fetchedAddresses = await addressService.fetchAddresses(userId);
-      set({ addresses: fetchedAddresses });
+      
+      const defaultAddress = fetchedAddresses.find(address => address.isDefault) || null;
+      set({ addresses: fetchedAddresses, selectedAddressId: defaultAddress?.id || null });
     } catch (error) {
-      set({ addresses: []})
+      set({ addresses: [], selectedAddressId: null });
       console.error('Error fetching addresses:', error);
     }
   },

@@ -1,52 +1,47 @@
-import { useState } from "react";
 import axios from "axios";
 import { toast } from "sonner";
 
 const useFetchAddress = () => {
-  const [addressDetails, setAddressDetails] = useState<{
-    address?: string;
-    city?: string;
-    state?: string;
-  }>({});
-  const [error, setError] = useState<string>("");
-
-  const googleMapsApiKey = process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY;
+  const esriApiKey = process.env.NEXT_PUBLIC_ESRI_API_KEY;
 
   const fetchAddressFromCoordinates = async (
     latitude: number,
-    longitude: number
+    longitude: number,
+    callback: (addressDetails: {
+      streetAddress?: string;
+      city?: string;
+      state?: string;
+    }) => void
   ) => {
     try {
       const response = await axios.get(
-        `https://maps.googleapis.com/maps/api/geocode/json?latlng=${latitude},${longitude}&key=${googleMapsApiKey}`
+        `https://geocode.arcgis.com/arcgis/rest/services/World/GeocodeServer/reverseGeocode?location=${longitude},${latitude}&f=json&outFields=*&token=${esriApiKey}`
       );
-      console.log(response.data);
+      //console.log(response.data.address);
 
-      const results = response.data.results;
-      if (results && results.length > 0) {
-        const formattedAddress =
-          results[0].formatted_address || "Address not found";
-
-        const addressComponents = results[0].address_components;
-        const city = addressComponents.find((comp: any) =>
-          comp.types.includes("locality")
-        )?.long_name;
-        const state = addressComponents.find((comp: any) =>
-          comp.types.includes("administrative_area_level_1")
-        )?.long_name;
-
-        setAddressDetails({ address: formattedAddress, city, state });
+      const address = response.data.address;
+      if (address) {
+        if (address.Region.toLowerCase().includes("lagos")) {
+          const addressDetails = {
+            streetAddress: address.Address,
+            city: address.District === "" ? address.City : address.District,
+            state: address.Region,
+          };
+          callback(addressDetails);
+        } else {
+          toast.error("Location must be within Lagos, Nigeria", {
+            duration: 2000,
+          });
+        }
       } else {
-        toast.success("Unable to extract address details", { duration: 2000 });
-        setError("Unable to extract address details");
+        toast.error("Unable to extract address details", { duration: 2000 });
       }
     } catch (err) {
       toast.success("Failed to fetch address", { duration: 2000 });
-      setError("Failed to fetch address");
+      //console.log(err);
     }
   };
-
-  return { addressDetails, error, fetchAddressFromCoordinates };
+  return { fetchAddressFromCoordinates };
 };
 
 export default useFetchAddress;

@@ -19,10 +19,10 @@ const AddressForm: FC<AddressFormProps> = ({ closeAddressForm, type }) => {
 
   return (
     (<div className="flex-col w-full">
-      <form className='flex flex-col' onSubmit={type === 'edit' ? updateFormHandler.handleSubmit : formHandler.handleSubmit}>
+      <form className='flex flex-col' onSubmit={formhandler.handleSubmit}>
         <div className='flex flex-col p-24 mt--24 mx--24 gap-16'>
           <div className={`radius-8 overflow-hidden relative h-100`}>
-            <AddressMap location={{ lat: userLocation.latitude || 6.5244, lng: userLocation.longitude || 3.3792 }} />
+            <AddressMap location={{ lat: userLocation.latitude || 6.5476701, lng: userLocation.longitude || 2.6599635 }} />
             <div className='absolute bg-#00000073 t-0 b-0 w-full flex flex-col j-content-center'>
               <UseCurrentLocationButton formhandler={formhandler} setUserLocation={setUserLocation} />
             </div>
@@ -33,7 +33,7 @@ const AddressForm: FC<AddressFormProps> = ({ closeAddressForm, type }) => {
                 field='firstName'
                 label={<span>First name <span className='color-#B3261E'>*</span></span>}
                 placeholder='Enter your first name'
-                handler={type === 'edit' ? updateFormHandler : formHandler}
+                handler={formhandler}
                 disabled={false}
               />
             </div>
@@ -42,7 +42,7 @@ const AddressForm: FC<AddressFormProps> = ({ closeAddressForm, type }) => {
                 field='lastName'
                 label={<span>Last name <span className='color-#B3261E'>*</span></span>}
                 placeholder='Enter your last name'
-                handler={type === 'edit' ? updateFormHandler : formHandler}
+                handler={formhandler}
                 disabled={false}
               />
             </div>
@@ -50,7 +50,7 @@ const AddressForm: FC<AddressFormProps> = ({ closeAddressForm, type }) => {
               <AddressField
                 field='state'
                 label={<span>State <span className='color-#B3261E'>*</span></span>}
-                handler={type === 'edit' ? updateFormHandler : formHandler}
+                handler={formhandler}
                 disabled={true}
               />
             </div>
@@ -59,7 +59,7 @@ const AddressForm: FC<AddressFormProps> = ({ closeAddressForm, type }) => {
                 field='city'
                 label={<span>City <span className='color-#B3261E'>*</span></span>}
                 placeholder='Enter city'
-                handler={type === 'edit' ? updateFormHandler : formHandler}
+                handler={formhandler}
                 disabled={false}
               />
             </div>
@@ -68,7 +68,7 @@ const AddressForm: FC<AddressFormProps> = ({ closeAddressForm, type }) => {
                 field='address'
                 label={<span>Street address <span className='color-#B3261E'>*</span></span>}
                 placeholder='Enter street address'
-                handler={type === 'edit' ? updateFormHandler : formHandler}
+                handler={formhandler}
                 disabled={false}
               />
             </div>
@@ -77,7 +77,7 @@ const AddressForm: FC<AddressFormProps> = ({ closeAddressForm, type }) => {
                 field='contactNo'
                 label={<span>Contact number 1 <span className='color-#B3261E'>*</span></span>}
                 placeholder='01245'
-                handler={type === 'edit' ? updateFormHandler : formHandler}
+                handler={formhandler}
                 disabled={false}
               />
             </div>
@@ -86,7 +86,7 @@ const AddressForm: FC<AddressFormProps> = ({ closeAddressForm, type }) => {
                 field="secondaryContactNo"
                 label='Contact number 2'
                 placeholder='01245'
-                handler={type === 'edit' ? updateFormHandler : formHandler}
+                handler={formhandler}
                 disabled={false}
               />
             </div>
@@ -96,7 +96,7 @@ const AddressForm: FC<AddressFormProps> = ({ closeAddressForm, type }) => {
               field='notes'
               type='textarea'
               label='Delivery note'
-              handler={type === 'edit' ? updateFormHandler : formHandler}
+              handler={formhandler}
               disabled={false}
               inputClassName='h-200'
             />
@@ -110,9 +110,9 @@ const AddressForm: FC<AddressFormProps> = ({ closeAddressForm, type }) => {
                 id="isDefault"
                 className="accent-#0B9378 w-20 h-20"
                 inputClass="accent-#0B9378 w-20 h-20"
-                checked={formHandler.values.isDefault}
+                checked={formhandler.values.isDefault}
                 handleChange={(e: any) => {
-                  formHandler.setFieldValue("isDefault", e.target.checked)
+                  formhandler.setFieldValue("isDefault", e.target.checked)
                 }
                 }
               />
@@ -124,7 +124,6 @@ const AddressForm: FC<AddressFormProps> = ({ closeAddressForm, type }) => {
           <button type='reset' className='w-fit border-2 border-black text-#000000E0 bg-white hover:bg-red-100 hover:border-red hover:text-red text-14 py-12 px-20 radius-6 weight-500 pointer line-height-19 g|transition:0.5s' onClick={() => closeAddressForm('cancel')} >{type === 'edit' ? 'Discard' : 'Cancel'}</button>
           <button type='submit' className='w-fit border-none bg-#0B9378 text-white text-14 py-15 px-20 radius-6 weight-500 pointer hover:bg-darkgreen g|transition:0.5s'
             onClick={() => {
-              const formhandler = (type === 'edit') ? updateFormHandler : formHandler
               const errorsCheck = Object.values(formhandler.errors).every(error => {
                 return error === '';
               });
