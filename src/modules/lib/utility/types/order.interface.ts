@@ -17,9 +17,11 @@ export interface Delivery {
 }
 
 export interface Order {
-    id: number;
-    cart: Cart;
-    status: string;
-    user: User;
-    delivery: Delivery;
+     id: number;
+     cart: Cart;
+     status: string;
+     user: User;
+     delivery: Delivery;
+     deliveryFee: number;
+     totalAmount: number;
 }

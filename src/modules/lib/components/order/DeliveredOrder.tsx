@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import OrderDetails from './order-details/Order-details'
+import OrderDetails from '../../../views/order-details/Order-details'
 import { useOrders } from '../../utility/hooks/use-orders'
 import OrderedProductModal from '../ordered-product/OrderedProductModal'
 import OrderProgressCard from './order-progress-card/OrderProgressCard'
@@ -8,9 +8,10 @@ import { useOrderView } from '../../utility/hooks/views/use-order-view'
 import { Order } from '../../utility/types/order.interface'
 import Image from '../image/Image'
 import Link from 'next/link'
+import { useParams } from 'next/navigation'
 
 const DeliveredOrder = () => {
-  const { orders, singleOrder, fetchOrderById } = useOrderView({
+  const { orders, singleOrder } = useOrderView({
     filters: { status: { In: ['CONFIRMED'] } }
   })
 
@@ -18,16 +19,12 @@ const DeliveredOrder = () => {
   const [orderCartModal, setOrderCartModal] = useState<Order | void>(
     singleOrder
   )
-  const [orderDetail, setOrderDetail] = useState(false)
 
   const handleOrderModal = () => {
     setOpenModalOpen(prev => !prev)
   }
 
-  const handleOpenProductDetail = async (order: Order) => {
-    fetchOrderById(order.id, {})
-    setOrderDetail(prev => !prev)
-  }
+  
 
   useEffect(() => {
     setOrderCartModal(singleOrder)
@@ -37,12 +34,9 @@ const DeliveredOrder = () => {
     <>
       {orders.length > 0 && (
         <div className='relative bg-whitesmoke p-15 w-100p flex flex-col gap-15'>
-          {orderDetail && orderCartModal ? (
+          {orderCartModal ? (
             <OrderDetails
               orderCartModal={orderCartModal}
-              handleOpenProductDetail={handleOpenProductDetail}
-              svgSrc='order-delivered.svg'
-              status='Delivered'
             />
           ) : (
             <>
@@ -50,7 +44,6 @@ const DeliveredOrder = () => {
                 orders={orders}
                 handleOrderModal={handleOrderModal}
                 setOrderCartModal={setOrderCartModal}
-                handleOpenProductDetail={handleOpenProductDetail}
               />
               {openOrderModal && (
                 <>

@@ -15,19 +15,19 @@ interface OrderProgressProp {
   orders: Order[]
   handleOrderModal: () => void
   setOrderCartModal: (order: Order) => void
-  handleOpenProductDetail: (order: Order, id: number) => void
 }
 
 const OrderProgressCard = ({
   orders,
   handleOrderModal,
-  setOrderCartModal,
-  handleOpenProductDetail
+  setOrderCartModal
 }: OrderProgressProp) => {
   const orderDetailModal = (order: Order) => {
     handleOrderModal()
     setOrderCartModal(order)
   }
+
+  
 
   return (
     <>
@@ -63,7 +63,7 @@ const OrderProgressCard = ({
                     'ml-45': order.cart.cartItems.length > 4,
                     'ml-70': order.cart.cartItems.length === 3,
                     'ml-55': order.cart.cartItems.length === 2,
-                    'ml-40': order.cart.cartItems.length === 1,
+                    'ml-40': order.cart.cartItems.length === 1
                   })}
                 >
                   <div
@@ -122,7 +122,7 @@ const OrderProgressCard = ({
               <div
                 className={classNames(
                   'l:flex grid gap-10 l:gap-0 a-items-center space-between',
-                  { 'j-content-end': status !== 'Ongoing' }
+                  { 'j-content-end': order.status !== 'Ongoing' }
                 )}
               >
                 {status === 'Ongoing' && (
@@ -133,12 +133,12 @@ const OrderProgressCard = ({
                     - Order Placed
                   </p>
                 )}
-                <p
+                <Link
+                  href={`/orders/${order.id}`}
                   className='color-#1677FF text-14 border-b border-b-#1677FF pb-1 cursor-pointer w-fit text-right'
-                  onClick={() => handleOpenProductDetail(order, order.id)}
                 >
                   View more details
-                </p>
+                </Link>
               </div>
             </div>
           </div>

@@ -87,7 +87,7 @@ class OrderService {
                     .then((response: any) => {
                          resolve(response);
                          if (response) {
-                              window.location.reload();
+                              window.location.replace('/orders');
                          }
                     })
                     .catch((err) => {
