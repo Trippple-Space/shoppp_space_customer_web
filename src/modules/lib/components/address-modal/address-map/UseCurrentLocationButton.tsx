@@ -23,6 +23,7 @@ const UseCurrentLocationButton = ({ formhandler, setUserLocation }: any) => {
                     formhandler.setFieldValue("address", addressDetails?.streetAddress || '');
                     formhandler.setFieldValue("city", addressDetails?.city || '');
                     //formhandler.setFieldValue("state", addressDetails?.state || '');
+                    formhandler.setFieldValue('meta', { 'location': { latitude, longitude } })
                 });
                 setLoading(false);
             },
