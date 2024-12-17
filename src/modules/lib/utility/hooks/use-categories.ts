@@ -22,17 +22,19 @@ export const useCategories = ({
     setSelectedCategory
   } = useCategoryStore()
 
+  console.log('START:', { type, storeId, label, len: currentCategoryList?.length })
   useEffect(() => {
     if (!categoriesCache[`${type}_${label}_${storeId}`]) {
       productService
         .fetchProductCategories(type, label, storeId)
         .then((cat: ProductCategory) => {
-          setCategoriesCache(cat.type, cat.label, cat.storeId, cat.categories);
-          setCurrentCategoryList(cat.categories)
+          setCategoriesCache(type, label, storeId, cat?.categories ?? []);
+          setCurrentCategoryList(cat?.categories ?? [])
         });
     } else {
       setCurrentCategoryList(categoriesCache[`${type}_${label}_${storeId}`])
     }
+    console.log('EFFECT:', { type, storeId, label, len: currentCategoryList?.length })
   }, [type, storeId, label]);
 
   const cat = selectedCategory[`${type}_${label}_${storeId}`] ?? {}
@@ -40,6 +42,7 @@ export const useCategories = ({
     setSelectedCategory(type, label, storeId, category) 
   }
   return { 
+    // currentCategoryList: categoriesCache[`${type}_${label}_${storeId}`] ?? [], 
     currentCategoryList, 
     selectedCategory: (!!Object.keys(cat).length ? cat : { name: '', images: {}, description: '', filters: {}, subcategories: [] } as unknown as ICategory), 
     setSelectedCategory: setCat

@@ -5,11 +5,11 @@ import FabricsCategoryNav from "@/modules/lib/components/nav-bar/category-nav/Fa
 import Footer from "@/modules/lib/components/footer/Footer";
 import HomepageNavBar from "@/modules/lib/components/nav-bar/HomepageNavBar";
 import CentralArena from "./CentralArena";
-import { useCategoryNavView } from "@/modules/lib/utility/hooks/views/use-category-nav-view";
+import { useStoreCategoryNavView } from "@/modules/lib/utility/hooks/views/use-category-nav-view";
 
 const Homepage = () => {
   const { categories, setSelectedCategory, selectedCategory } =
-    useCategoryNavView();
+    useStoreCategoryNavView();
 
   return (
     <>

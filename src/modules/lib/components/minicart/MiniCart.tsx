@@ -1,247 +1,217 @@
-"use client";
-import Modal from "@/modules/lib/components/modal/modal";
-import OrderSummary from "@/modules/lib/components/order-summary/OrderSummary";
-import { useCart } from "@/modules/lib/utility/hooks/use-cart";
+'use client'
+import Modal from '@/modules/lib/components/modal/modal'
+import OrderSummary from '@/modules/lib/components/order-summary/OrderSummary'
+import { useCart } from '@/modules/lib/utility/hooks/use-cart'
 import {
   cx,
   displayStockUnit,
-  formatNumberAsPrice,
-} from "@/modules/lib/utility/utility";
-import { useRouter } from "next/navigation";
-import React, { useState } from "react";
-import { FaArrowLeftLong } from "react-icons/fa6";
-import { IoClose } from "react-icons/io5";
-import { paths } from "../../utility/paths";
-import { getCartItemVariantPropertiesAsJsx } from "./minicart.helper";
-import { HiOutlineShoppingBag } from "react-icons/hi2";
-import ImageAlt from "../image-alt/ImageAlt";
-import { CartItem } from "../../utility/types/cart.interface";
-import { PiShoppingCartBold } from "react-icons/pi";
+  formatNumberAsPrice
+} from '@/modules/lib/utility/utility'
+import { useRouter } from 'next/navigation'
+import React, { useEffect, useState } from 'react'
+import { FaArrowLeftLong } from 'react-icons/fa6'
+import { IoClose } from 'react-icons/io5'
+import { paths } from '../../utility/paths'
+import { getCartItemVariantPropertiesAsJsx } from './minicart.helper'
+import { HiOutlineShoppingBag } from 'react-icons/hi2'
+import ImageAlt from '../image-alt/ImageAlt'
+import { CartItem } from '../../utility/types/cart.interface'
+import {
+  PiMinus,
+  PiPlus,
+  PiShoppingCartBold,
+  PiTrashSimple,
+  PiTrashSimpleLight,
+  PiTrashSimpleThin
+} from 'react-icons/pi'
+import { RxCross1 } from 'react-icons/rx'
+import Image from '../image/Image'
+import { useNavbarView } from '../../utility/hooks/views/use-navbar-view'
+import useUserStore from '../../utility/store/user.store'
 
 interface ModalProps {}
 
 const MiniCart: React.FC<ModalProps> = () => {
-  const [open, setOpen] = useState(false);
+  const [open, setOpen] = useState(false)
 
-  const { cart, removeFromCart } = useCart();
-  const router = useRouter();
+  const { removeFromCart, cart, increment, decrement } = useCart()
+
+  const router = useRouter()
+
+  const { user, signOut } = useNavbarView()
+  const { isAuthenticated } = useUserStore()
+
+  useEffect(() => {
+    if (open) {
+      document.body.style.overflow = 'hidden'
+    } else {
+      document.body.style.overflow = 'auto'
+    }
+
+    return () => {
+      document.body.style.overflow = 'auto'
+    }
+  }, [open])
 
   return (
-    <div className="w-fit">
+    <div className='w-fit'>
       <Modal
         isOpen={open}
         onClose={() => setOpen(false)}
-        extraClass={{ height: "100vh" }}
-        className="t-0 l:t-0 l:b-0 100vh l:h-100vh l:r-0 overflow-hidden l:w-520 w-full"
+        extraClass={{ height: '100dvh', borderRadius: '0px' }}
+        className='t-0 l:t-0 l:b-0 l:r-0 overflow-hidden l:w-520 w-full'
       >
-        <div className="relative h-full g|overflow-y:hidden">
-          <div
-            className="py-15 bg-grey-200 pointer"
-            onClick={() => setOpen(false)}
-          >
-            <div className="flex px-15 gap-10 j-content-center ">
-              <div className="h-fit self-center block">
-                <FaArrowLeftLong className="text-green h-fit mt-2" />
-              </div>
-              <div className="text-green block"> Continue shopping </div>
-            </div>
+        <div className='relative h-full g|overflow-y:hidden font-inter color-#000000E0'>
+          <div className='md:py-26 py-20 px-24 text-16 weight-600 flex space-between border-b border-#00000014'>
+            <p className='line-height-24'>
+              Shopping Cart ({cart.cartItems.length})
+            </p>
+            <RxCross1
+              onClick={() => setOpen(false)}
+              className='w-24 h-24 hover:pointer'
+            />
           </div>
-          <div className="l:min-w-500 h-full w-full py-10 scroll-y">
-            {!cart.cartItems.length ? (
-              <div className="mx-auto h-250 text-center items-center j-content-center mt-50">
-                <p className="text-16 text-grey-500">Your cart is empty</p>
 
-                <div className="w-100p px-20 py-10">
-                  <button
-                    onClick={() => setOpen(false)}
-                    className="pointer mx-auto w-40p border-none bg-green text-white text-16 py-10 px-20 radius-5 weight-400"
-                  >
-                    Shop now
-                  </button>
-                </div>
-              </div>
-            ) : (
-              <div className="px-20 pb-20">
-                <div className="uppercase mb-30 text-14 l:text-16 weight-500">
-                  Your cart
-                </div>
-                {cart.cartItems.map((cartItem: CartItem, i) => (
-                  <div
-                    className={cx(
-                      "space-between items-center radius-5 py-10 mb-20 px-15 g|box-shadow:1px|_|0px|_|2px|_|0px|_|rgba(0,0,0,0.10);",
-                      {
-                        "bg-whitesmoke border border-whitesmoke": i % 2,
-                        "border border-whitesmoke": !(i % 2),
-                      }
-                    )}
-                    key={i}
-                  >
-                    <span
-                      className="float-right pointer"
-                      onClick={() => removeFromCart(cartItem.id)}
-                    >
-                      {" "}
-                      <IoClose />{" "}
-                    </span>
-                    {/* <div className='flex w-100p gap-10 l:gap-30 items-center'>
-                      <div className='w-80 h-80 border border-lightgrey radius-5 l:radius-10 '>
-                        <Image
-                          className='w-full h-full radius-5 l:radius-10'
-                          src={cartItem.variant.media[0].url}
-                          alt='product'
-                          type='image'
-                        />
-                      </div>
-                      <div className='line-height-20'>
-                        <h2 className='text-12 l:text-14 weight-400'>{cartItem.variant.product.name} ({cartItem.variant.name})</h2>
-                        <p className='text-12 text-light-grey'>{cartItem.variant.stock} {cartItem.variant.stockUnit}(s) left</p>
-                        <h1 className='text-14 weight-400'>{formatNumberAsPrice(cartItem.variant.finalPrice * cartItem.quantity)}</h1>
-                        <div className='flex space-between gap-20 w-100p'>
-                          <button className='w-100p flex l:w-100p border-1 border-green bg-white text-green text-10 py-5 px-10 radius-5 weight-500'><MdOutlineLocalShipping className='w-25' /> 10% Shipping discount</button>
-                        </div>
-                      </div>
+          <div
+            className='l:min-w-500 w-full'
+            style={{ height: 'calc(100dvh - 76px)' }}
+          >
+            <div className='scroll-y no-scrollbar h-full flex flex-col space-between w-full'>
+              <div className='flex flex-col pb-183'>
+                {!cart.cartItems.length ? (
+                  <div className='mx-auto text-center flex flex-col a-items-center gap-16 py-24'>
+                    <div className='flex flex-col a-items-center gap-8 py-16'>
+                      <Image
+                        src='empty-tray.png'
+                        className='w-184 h-152 object-fit-scale-down'
+                        alt='empty'
+                      />
+                      <p className='text-14 weight-400 line-height-22 color-#00000073 w-320 px-12 py-5'>
+                        Continue shopping to discover our best deals!
+                      </p>
                     </div>
-                    <div className='flex space-between w-100p'>
-                      <div className='flex space-between w-100p'>
-                        <div className='flex gap-10 text-danger text-12 items-center weight-400'>
-                          <Icon name='delete' className='w-17 h-17' />
-                          <p>Remove</p>
-                        </div>
 
-                        <div className='flex j-content-center w-33p p-15 text-15 l:text-20 text-black'>
-                          <select name="" id="" className='border-none text-15 l:text-12 text-black weight-400'>
-                            <option value="">Bundle</option>
-                            <option value="">Bale</option>
-                          </select>
-                        </div>
-                        <div className='flex w-33p items-center'>
-                          <Icon name='decr' className='w-25 h-25' />
-                          <input type="number" value={cartItem.quantity} className='border-none w-55 text-16 text-center' placeholder='1' />
-                          <Icon name='incr' className='w-25 h-25' />
-                        </div>
-                      </div>
-                    </div> */}
+                    <div className='flex flex-col gap-8 text-14 w-250 mx-auto'>
+                      {!isAuthenticated && (
+                        <button
+                          className='bg-green text-white py-12 px-24 radius-6 line-height-19 border border-none weight-500 pointer w-full hover:bg-darkgreen g|transition:0.5s disabled:bg-grey'
+                          onClick={() => signOut()}
+                        >
+                          Sign in
+                        </button>
+                      )}
 
-                    <div className="flex gap-10">
-                      <div
-                        className={cx("w-50 h-50", {
-                          "bg-white": i % 2,
-                          "bg-grey-100": !(i % 2),
-                        })}
+                      <button
+                        onClick={() => setOpen(false)}
+                        className={`g|transition:0.5s py-12 px-24 radius-6 line-height-19 text-center w-full weight-500 border border-none hover:pointer ${
+                          isAuthenticated
+                            ? 'bg-green hover:bg-darkgreen text-white'
+                            : 'bg-#F5F5F5 hover:bg-grey-300 text-#333333'
+                        }`}
                       >
-                        <ImageAlt
-                          className="w-full h-full radius-3"
-                          src={cartItem.variant.media[0].url}
-                          type="image"
-                        />
-
-                        <div className="text-14 whitespace-nowrap mt-14 bold">
-                          {formatNumberAsPrice(cartItem.variant.finalPrice)} x{" "}
-                          {cartItem.quantity}
-                        </div>
-                      </div>
-
-                      <div className="w-full h-full flex flex-col">
-                        <div className="w-full h-20">
-                          <div
-                            className={cx(
-                              "w-150 radius-3 text-13 weight-500 overflow-hidden whitespace-nowrap text-ellipsis",
-                              {
-                                // 'bg-white': (i % 2),
-                                // 'bg-grey-100': !(i % 2),
-                              }
-                            )}
-                          >
-                            {cartItem?.variant?.product?.name}{" "}
-                          </div>
-                        </div>
-
-                        <div className="w-full h-20">
-                          <div
-                            className={cx(
-                              "w-100 h-8 radius-3 flex gap-3 text-13",
-                              {
-                                // 'bg-white': (i % 2),
-                                // 'bg-grey-100': !(i % 2),
-                              }
-                            )}
-                          >
-                            {getCartItemVariantPropertiesAsJsx(cartItem)}
-                          </div>
-                        </div>
-
-                        <div className="w-full h-20">
-                          <div
-                            className={cx("w-100 h-8 radius-3 flex text-12", {
-                              // 'bg-white': (i % 2),
-                              // 'bg-grey-100': !(i % 2),
-                            })}
-                          >
-                            {cartItem.variant.stock}{" "}
-                            {displayStockUnit(cartItem.variant.stockUnit)}(s)
-                            left
-                          </div>
-                        </div>
-
-                        <div className="w-full h-20 flex space-between">
-                          <div
-                            className={cx("radius-3 text-12 bold", {
-                              // 'bg-white': (i % 2),
-                              // 'bg-grey-100': !(i % 2),
-                            })}
-                          ></div>
-                          {/* <div className=""></div> */}
-                          <div className="bold">
-                            {formatNumberAsPrice(cartItem.totalPrice)}
-                          </div>
-                        </div>
-                      </div>
+                        Explore products
+                      </button>
                     </div>
                   </div>
-                ))}
-                <div className="offset h-400 w-full"></div>
+                ) : (
+                  <div className='p-24 flex flex-col gap-16'>
+                    {cart.cartItems.map((cartItem: CartItem, i) => (
+                      <div
+                        className='flex flex-col border border-#00000014 radius-6'
+                        key={i}
+                      >
+                        <div className='flex gap-10 p-12'>
+                          <Image
+                            src={cartItem.variant.media[0].url}
+                            alt='cart image'
+                            className='sm:w-80 w-70 sm:h-80 h-70 radius-6 border border-#00000014 object-fit'
+                          />
+                          <div className='flex flex-col gap-6'>
+                            <p className='weight-600 sm:text-16 text-14 sm:line-height-24 line-height-22'>
+                              {cartItem?.variant?.product?.name}{' '}
+                            </p>
+                            <p className='weight-400 text-14 line-height-16.94'>
+                              Size:{' '}
+                              {`${cartItem?.quantity} ${displayStockUnit(
+                                cartItem.variant.stockUnit
+                              )}${cartItem?.quantity > 1 ? 's' : ''}`}
+                            </p>
+                            <p className='weight-400 text-14 line-height-16.94'>
+                              Color: {cartItem?.variant?.properties?.color}
+                            </p>
+                          </div>
+                        </div>
+                        <div className='px-12 pb-12 flex space-between a-items-center'>
+                          <p className='weight-600 md:text-20 sm:text-16 text-14 md:line-height-28 sm:line-height-24 line-height-22'>
+                            {formatNumberAsPrice(cartItem.totalPrice)}
+                          </p>
+                          <div className='border border-#00000014 flex space-between a-items-center p-4 radius-100 bg-#F5F5F5 w-150'>
+                            <span
+                              className='bg-white p-6 round flex flex-col a-items-center hover:pointer'
+                              onClick={() => decrement(cartItem)}
+                            >
+                              {cartItem?.quantity ===
+                              cartItem?.variant?.minPurchaseQuantity ? (
+                                <PiTrashSimple className='w-20 h-20 color-#00000099' />
+                              ) : (
+                                <PiMinus className='w-20 h-20 color-#00000099' />
+                              )}
+                            </span>
+                            <span className='grow weight-500 line-height-19.36 text-16'>
+                              {cartItem?.quantity}
+                            </span>
+                            <span
+                              className='bg-white p-6 round flex flex-col a-items-center hover:pointer'
+                              onClick={() => increment(cartItem)}
+                            >
+                              <PiPlus className='w-20 h-20 color-#00000099' />
+                            </span>
+                          </div>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                )}
               </div>
-            )}
-          </div>
-          {!!cart.cartItems.length && (
-            <div className="bg-yellow-50 pb-30 absolute b-0 left-0 w-full ">
-              <div className="px-20 mt-15 mb-15">
-                <OrderSummary
-                  subTotal={cart.subTotal}
-                  extraSavings={cart.total - cart.subTotal}
-                  total={cart.total}
-                />
-              </div>
-              <div className="w-fit mx-auto mt-30">
-                <button
-                  className="bg-green border-none radius-5 text-white py-14 px-30 weight-600 l:text-16 text-12 pointer"
-                  onClick={() => router.push(paths.checkout)}
-                >
-                  Proceed to checkout
-                </button>
-              </div>
-              <div className="text-13 mt-8 w-fit mx-auto">
-                For Returns Policy,
-                <span className="text-green text-13"> click here</span>
-              </div>
+
+              {!!cart.cartItems.length && (
+                <div className='border-t border-#00000014 flex flex-col p-24 gap-16 absolute b-0 left-0 w-full bg-white g|box-shadow:0px|_|-2px|_|4px|_|#494F5E1F;'>
+                  <div className='flex flex-col gap-6'>
+                    <p className='py-12 flex a-items-center space-between text-16 line-height-24'>
+                      <span className='weight-400'>Subtotal</span>
+                      <span className='weight-500'>
+                        {formatNumberAsPrice(cart?.subTotal)}
+                      </span>
+                    </p>
+                    <p className='weight-400 text-14 line-height-22 color-#00000099'>
+                      Shipping and taxes calculated at checkout.
+                    </p>
+                  </div>
+                  <button
+                    className='bg-green text-white py-12 px-24 radius-6 line-height-19 border border-none weight-500 pointer w-full hover:bg-darkgreen g|transition:0.5s disabled:bg-grey'
+                    onClick={() => router.push(paths.checkout)}
+                  >
+                    Checkout
+                  </button>
+                </div>
+              )}
             </div>
-          )}
+          </div>
         </div>
       </Modal>
-
-      <div className="">
+      <div className=''>
         <div
           onClick={() => setOpen(true)}
-          className="relative pointer bg-#F3F3F3 flex a-items-center gap-8 w-70 radius-6 px-5 py-5"
+          className='relative pointer bg-#F3F3F3 flex a-items-center gap-8 w-70 radius-6 px-5 py-5'
         >
-          <p className="h-30 w-30 flex a-items-center j-content-center bg-#0B9378 radius-6 color-white weight-500">
+          <p className='h-30 w-30 flex a-items-center j-content-center bg-#0B9378 radius-6 color-white weight-500'>
             <span>{cart.cartItems.length}</span>
           </p>
-          <PiShoppingCartBold className="color-black  w-18 h-18" />
+          <PiShoppingCartBold className='color-black  w-18 h-18' />
         </div>
       </div>
     </div>
-  );
-};
+  )
+}
 
-export default MiniCart;
+export default MiniCart

@@ -7,136 +7,159 @@ import { buildEndpoint } from "../utility";
 import config from "env";
 
 class ProductService {
+  CACHE_EXPIRY = 60 * 60 * 1000; // 1 hour
 
-     CACHE_EXPIRY = 60 * 60 * 1000; // 1 hour
+  async fetchProductCategories(
+    type: "fabrics" | "wears" | null,
+    label = "GLOBAL",
+    storeId = 0
+  ) {
+    const cacheKey = `product/categories_${type}_${label}_${storeId}`;
+    const cachedData = this.getCachedCategories(cacheKey);
 
-     async fetchProductCategories(type: "fabrics" | "wears" | null, label = 'GLOBAL', storeId = 0) {
+    if (cachedData) {
+      return cachedData;
+    }
 
-          const cacheKey = `product/categories_${type}_${label}_${storeId}`;
-          const cachedData = this.getCachedCategories(cacheKey);
+    return new Promise((resolve) => {
+      http
+        .get(endpoints.PRODUCT_CATEGORIES, {
+          params: {
+            filters: {
+              type,
+              label: "GLOBAL",
+              storeId,
+            },
+          },
+        })
+        .then((response: AxiosResponse) => {
+          const fetchedCategories: ProductCategory = response.data?.[0];
+          this.cacheCategories(cacheKey, fetchedCategories);
+          resolve(fetchedCategories);
+        });
+    });
+  }
 
-          if (cachedData) {
-               return cachedData;
+  getCachedCategories(key: string) {
+    const cached = localStorage.getItem(key);
+    if (!cached) return null;
+
+    const parsed = JSON.parse(cached);
+    if (Date.now() - parsed.timestamp > this.CACHE_EXPIRY) {
+      localStorage.removeItem(key);
+      return null;
+    }
+
+    return parsed.data;
+  }
+
+  cacheCategories(key: string, data: any) {
+    const toCache = {
+      data,
+      timestamp: Date.now(),
+    };
+    localStorage.setItem(key, JSON.stringify(toCache));
+  }
+
+  fetchProducts(query: IQueryParams): Promise<Product[]> {
+    return new Promise((resolve) => {
+      http
+        .get(endpoints.PRODUCTS, {
+          params: query,
+        })
+        .then((response: AxiosResponse) => {
+          resolve(response.data);
+        });
+    });
+  }
+
+  fetchProductBySlug(
+    slug: string,
+    query: IQueryParams | any
+  ): Promise<Product> {
+    return new Promise((resolve, reject) => {
+      const url = new URL(
+        buildEndpoint(config.API_HOST + "/" + endpoints.PRODUCT, {
+          slug,
+        })
+      );
+      Object.keys(query).forEach((key) =>
+        url.searchParams.append(key, query[key])
+      );
+
+      fetch(url.toString())
+        .then((res) => {
+          if (!res.ok) {
+            throw new Error(`HTTP error! Status: ${res.status}`);
           }
+          return res.json();
+        })
+        .then((response: any) => {
+          resolve(response);
+        })
+        .catch((err) => {
+          console.error("Error fetching product by slug:", err);
+          reject(err);
+        });
+    });
+  }
 
-          return new Promise((resolve) => {
-               http.get(endpoints.PRODUCT_CATEGORIES, {
-                    params: {
-                         filters: {
-                              type,
-                              label: 'GLOBAL',
-                              storeId
-                         },
-                    },
-               }).then((response: AxiosResponse) => {
-                    const fetchedCategories: ProductCategory = response.data?.[0]
-                    this.cacheCategories(cacheKey, fetchedCategories);
-                    resolve(fetchedCategories);
-               });
-          });
+  fetchProductBySearch(searchTerm: string): Promise<Product[]> {
+    return new Promise((resolve, reject) => {
+      const url = new URL(
+        buildEndpoint(config.API_HOST + "/" + endpoints.SEARCH_PRODUCTS, {
+          searchTerm,
+        })
+      );
 
-     };
+      url.searchParams.append("search", searchTerm);
 
-     getCachedCategories(key: string) {
-          const cached = localStorage.getItem(key);
-          if (!cached) return null;
-
-          const parsed = JSON.parse(cached);
-          if (Date.now() - parsed.timestamp > this.CACHE_EXPIRY) {
-               localStorage.removeItem(key);
-               return null;
+      fetch(url.toString())
+        .then((res) => {
+          if (!res.ok) {
+            throw new Error(`HTTP error! Status: ${res.status}`);
           }
+          return res.json();
+        })
+        .then((data) => {
+          resolve(data);
+          data;
+        })
+        .catch((err) => {
+          console.error("Error fetching products by search:", err);
+          reject(err);
+        });
+    });
+  }
 
-          return parsed.data;
-     };
+  fetchProductBySlugSearch(
+    storeSlug: string,
+    searchTerm: string
+  ): Promise<Product[]> {
+    return new Promise((resolve, reject) => {
+      const url = new URL(
+        buildEndpoint(config.API_HOST + "/" + endpoints.SEARCH_PRODUCTS, {})
+      );
+      url.searchParams.append("filters[store][slug]", storeSlug);
+      url.searchParams.append("search", searchTerm);
 
-     cacheCategories(key: string, data: any) {
-          const toCache = {
-               data,
-               timestamp: Date.now(),
-          };
-          localStorage.setItem(key, JSON.stringify(toCache));
-     };
-
-
-     fetchProducts(query: IQueryParams): Promise<Product[]> {
-          return new Promise((resolve) => {
-               http.get(endpoints.PRODUCTS, {
-                    params: query,
-               }).then((response: AxiosResponse) => {
-                    resolve(response.data);
-               });
-          });
-     }
-
-     fetchProductBySlug(
-          slug: string,
-          query: IQueryParams | any
-     ): Promise<Product> {
-          return new Promise((resolve, reject) => {
-               const url = new URL(
-                    buildEndpoint(config.API_HOST + "/" + endpoints.PRODUCT, {
-                         slug,
-                    })
-               );
-               Object.keys(query).forEach((key) =>
-                    url.searchParams.append(key, query[key])
-               );
-
-               fetch(url.toString())
-                    .then((res) => {
-                         if (!res.ok) {
-                              throw new Error(
-                                   `HTTP error! Status: ${res.status}`
-                              );
-                         }
-                         return res.json();
-                    })
-                    .then((response: any) => {
-                         resolve(response);
-                    })
-                    .catch((err) => {
-                         console.error("Error fetching product by slug:", err);
-                         reject(err);
-                    });
-          });
-     }
-
-     fetchProductBySearch(searchTerm: string): Promise<Product[]> {
-          return new Promise((resolve, reject) => {
-               const url = new URL(
-                    buildEndpoint(
-                         config.API_HOST + "/" + endpoints.SEARCH_PRODUCTS,
-                         {
-                              searchTerm,
-                         }
-                    )
-               );
-
-               url.searchParams.append("search", searchTerm);
-
-               fetch(url.toString())
-                    .then((res) => {
-                         if (!res.ok) {
-                              throw new Error(
-                                   `HTTP error! Status: ${res.status}`
-                              );
-                         }
-                         return res.json();
-                    })
-                    .then((data) => {
-                         resolve(data);
-                         data;
-                    })
-                    .catch((err) => {
-                         console.error(
-                              "Error fetching products by search:",
-                              err
-                         );
-                         reject(err);
-                    });
-          });
-     }
+      fetch(url.toString())
+        .then((res) => {
+          if (!res.ok) {
+            throw new Error(`HTTP error! Status: ${res.status}`);
+          }
+          return res.json();
+        })
+        .then((data) => {
+          resolve(data);
+          data;
+        })
+        .catch((err) => {
+          console.error("Error fetching products by search:", err);
+          reject(err);
+        });
+    });
+  }
 }
 
 export const productService = new ProductService();
