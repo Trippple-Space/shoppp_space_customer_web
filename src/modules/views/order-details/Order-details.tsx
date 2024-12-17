@@ -211,6 +211,53 @@ const OrderDetails = ({ orderCartModal }: OrderDetailsProps) => {
                   <div>
                     <OrderProgress orderCartModal={orderCartModal} />
                   </div>
+                  <div>
+                    <div className='bg-white p-20'>
+                      <div
+                        className='flex a-items-center space-between cursor-pointer '
+                        onClick={handleOpenTotal}
+                      >
+                        <p className='text-16 font-inter weight-600'>
+                          Order info
+                        </p>
+                        <MdKeyboardArrowDown className='w-fit' />
+                      </div>
+                      {openTotal && (
+                        <div className='grid gap-10 pt-20'>
+                          <div className='grid gap-15'>
+                            <div className='flex space-between'>
+                              <p className='color-#000000E0'>Subtotal</p>
+                              <p className='text-16'>
+                                {formatNumberAsPrice(
+                                  orderCartModal.cart.subTotal
+                                )}
+                              </p>
+                            </div>
+                            <div className='flex space-between border-b border-b-#00000014 pb-10'>
+                              <p className='color-#000000E0'>Delivery</p>
+                              <p className='text-16'>
+                                {formatNumberAsPrice(orderCartModal.deliveryFee)}
+                              </p>
+                            </div>
+                          </div>
+                          <div className='grid gap-15'>
+                            <div className='flex space-between'>
+                              <p className='color-#000000E0'>Total</p>
+                              <p className='text-16'>
+                                {formatNumberAsPrice(
+                                  orderCartModal.totalAmount
+                                )}
+                              </p>
+                            </div>
+                            <div className='flex space-between'>
+                              <p className='color-#000000E0'>Payment Method</p>
+                              <p className='text-16'>Pay online</p>
+                            </div>
+                          </div>
+                        </div>
+                      )}
+                    </div>
+                  </div>
                 </div>
               ) : (
                 'Loading...'
