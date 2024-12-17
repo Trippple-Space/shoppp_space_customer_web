@@ -7,9 +7,10 @@ import {
 } from '@/modules/lib/utility/utility'
 import classNames from 'classnames'
 import Link from 'next/link'
-import React from 'react'
+import React, { useState } from 'react'
 import { MdKeyboardArrowRight } from 'react-icons/md'
 import OverlappingImages from '../../overlapping-images/OverlappingImages'
+import OrderedProductModal from '../../ordered-product/OrderedProductModal'
 
 interface OrderProgressProp {
   orders: Order[]
@@ -22,12 +23,15 @@ const OrderProgressCard = ({
   handleOrderModal,
   setOrderCartModal
 }: OrderProgressProp) => {
-  const orderDetailModal = (order: Order) => {
-    handleOrderModal()
-    setOrderCartModal(order)
-  }
+  // const orderDetailModal = (order: Order) => {
+  //   handleOrderModal()
+  //   setOrderCartModal(order)
+  // }
+  const [openOrderProductDetails, setOpenOrderProductDetails] = useState(false)
 
-  
+  const handleOpenOrderProductDetail = () => {
+    setOpenOrderProductDetails(prev => !prev)
+  }
 
   return (
     <>
@@ -70,7 +74,7 @@ const OrderProgressCard = ({
                     className={classNames(
                       'text-12 flex a-items-center cursor-pointer h-full'
                     )}
-                    onClick={() => orderDetailModal(order)}
+                    onClick={handleOpenOrderProductDetail}
                   >
                     <div className={classNames('relative', {})}>
                       <OverlappingImages orderItem={order} />
@@ -142,6 +146,12 @@ const OrderProgressCard = ({
               </div>
             </div>
           </div>
+          {openOrderProductDetails && (
+            <OrderedProductModal
+              handleOrderModal={handleOpenOrderProductDetail}
+              orderCartModal={order}
+            />
+          )}
         </>
       ))}
     </>

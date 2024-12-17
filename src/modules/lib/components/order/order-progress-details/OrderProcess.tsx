@@ -74,11 +74,16 @@ const OrderProcess = ({
   const isTimelineView =
     orderCartModal.status === 'CONFIRMED' && text === 'View all timelines'
 
-  const handleCancelOrder = (id: number) => {
-    cancelOrderById(id, {})
+  const handleCancelOrder = (id: number, reasons?: string) => {
+    const finalReason = reasons || 'This order has been cancelled'
+    cancelOrderById(id, { reasons: finalReason })
   }
+
   const handleOpenCancelOrderModal = () => {
     setOpenCancelOrderModal(prev => !prev)
+    if (openCancelOrderModal) {
+      setSelectedReason('')
+    }
   }
 
   const options = [
@@ -86,11 +91,11 @@ const OrderProcess = ({
     { value: 'wrong-details', label: 'Wrong Details Provided' },
     { value: 'found-another-option', label: 'Found Another Option' },
     { value: 'personal-reason', label: 'Personal Reason' },
-    { value: 'other-reason', label: 'Other reason' }
+    { value: 'other-reasons', label: 'Other reasons' }
   ]
 
-  const handleSelection = (value: string) => {
-    setSelectedReason(value)
+  const handleSelection = (label: string) => {
+    setSelectedReason(label)
   }
 
   return (
@@ -206,7 +211,6 @@ const OrderProcess = ({
           <>
             <p
               className='border-b text-danger weight-500 w-fit text-14 cursor-pointer'
-              // onClick={() => handleCancelOrder(orderCartModal.id)}
               onClick={handleOpenCancelOrderModal}
             >
               Cancel this order
@@ -249,7 +253,9 @@ const OrderProcess = ({
                         </button>
                         <button
                           className='border-none px-20 py-8  radius-5 bg-#D4280C color-white cursor-pointer'
-                          onClick={() => handleCancelOrder(orderCartModal.id)}
+                          onClick={() =>
+                            handleCancelOrder(orderCartModal.id, selectedReason)
+                          }
                         >
                           Cancel order
                         </button>

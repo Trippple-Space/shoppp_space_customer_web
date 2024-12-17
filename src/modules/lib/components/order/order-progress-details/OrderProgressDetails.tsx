@@ -12,6 +12,8 @@ const OrderProgressDetails = ({
     setTimeline(prev => !prev)
   }
 
+  console.log({ orderCartModal })
+
   return (
     <>
       <div className='py-20 px-15 bg-white flex flex-col gap-25 a-items-center w-full overflow-hidden'>
@@ -84,10 +86,8 @@ const OrderProgressDetails = ({
             />
             <div className='bg-#FFE5E1 w-100p z-10 px-10 py-20 radius-5 border border-2 border-#D4280C font-inter'>
               <p className='text-danger text-14 w-90p'>
-                Unfortunately this item/order has been cancelled because your
-                payment could not be completed. If you consider this an error
-                and you have been charged, kindly reach out to our support team
-                for assistance.
+                {orderCartModal?.cancellationReason ||
+                  'This order has been cancelled'}
               </p>
             </div>
           </>

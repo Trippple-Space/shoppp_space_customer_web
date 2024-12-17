@@ -26,8 +26,8 @@ const RadioGroup: React.FC<RadioGroupProps> = ({
             <input
               type='radio'
               name={name}
-              value={option.value}
-              checked={selectedValue === option.value}
+              value={option.label}
+              checked={selectedValue === option.label}
                       onChange={e => onChange(e.target.value)}
                       className='radio-accent-color-green'
             />

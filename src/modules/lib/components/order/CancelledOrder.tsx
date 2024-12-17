@@ -1,13 +1,11 @@
-import React, { useEffect, useState } from 'react'
+import React, { useState } from 'react'
 import OrderProgressCard from './order-progress-card/OrderProgressCard'
 import OrderDetails from '../../../views/order-details/Order-details'
-import { useOrders } from '../../utility/hooks/use-orders'
 import OrderedProductModal from '../ordered-product/OrderedProductModal'
 import { useOrderView } from '../../utility/hooks/views/use-order-view'
 import { Order } from '../../utility/types/order.interface'
 import Link from 'next/link'
 import Image from '../image/Image'
-import { useParams } from 'next/navigation'
 
 const CancelledOrder = () => {
   const { orders, fetchOrderById, singleOrder } = useOrderView({
@@ -23,20 +21,12 @@ const CancelledOrder = () => {
     setOpenModalOpen(prev => !prev)
   }
 
-  const handleOpenProductDetail = (order: Order) => {
-    fetchOrderById(order.id, {})
-  }
-
-  useEffect(() => {
-    setOrderCartModal(singleOrder)
-  }, [singleOrder])
-
   return (
     <>
       {orders.length > 0 && (
         <div className='relative bg-whitesmoke p-15 w-100p flex flex-col gap-15'>
-          {orderCartModal ? (
-            <OrderDetails orderCartModal={orderCartModal} />
+          {singleOrder ? (
+            <OrderDetails orderCartModal={singleOrder} />
           ) : (
             <>
               <OrderProgressCard
@@ -70,7 +60,7 @@ const CancelledOrder = () => {
             </div>
 
             <Link
-              href='/'
+              href='/wears'
               className='cursor-pointer px-15 py-12 l:w-250 bg-#0B9378  radius-6 color-white text-center weight-400'
             >
               Explore products

@@ -31,10 +31,13 @@ const OrderDetails = ({ orderCartModal }: OrderDetailsProps) => {
   const { user } = useUserStore()
   const router = useRouter()
 
+  // Use product status as the default active tab
   const savedActiveTab =
     typeof window !== 'undefined' ? localStorage.getItem('activeTab') : null
+  const defaultTab = orderCartModal?.status || 'ONGOING'
+
   const [activeTab, setActiveTab] = useState<string>(
-    savedActiveTab || orderCartModal?.status || 'ONGOING'
+    savedActiveTab || defaultTab
   )
   const [showDetails, setShowDetails] = useState(true)
 
@@ -56,12 +59,29 @@ const OrderDetails = ({ orderCartModal }: OrderDetailsProps) => {
   const [openTotal, setOpenTotal] = useState(false)
   const [openOrderedProducts, setOpenOrderedProducts] = useState(false)
 
+  // Sync activeTab with product status when loaded
+  useEffect(() => {
+    if (orderCartModal?.status) {
+      setActiveTab(orderCartModal.status)
+      localStorage.setItem('activeTab', orderCartModal.status)
+    }
+  }, [orderCartModal?.status])
+
   const handleOrderedProducts = () => {
     setOpenOrderedProducts(prev => !prev)
   }
 
   const handleOpenTotal = () => {
     setOpenTotal(prev => !prev)
+  }
+
+  const handleTabClick = (tab: string) => {
+    setActiveTab(tab)
+    setShowDetails(false)
+
+    if (typeof window !== 'undefined') {
+      localStorage.setItem('activeTab', tab)
+    }
   }
 
   const renderTabContent = () => {
@@ -74,15 +94,6 @@ const OrderDetails = ({ orderCartModal }: OrderDetailsProps) => {
         return <CancelledOrder />
       default:
         return null
-    }
-  }
-
-  const handleTabClick = (tab: string) => {
-    setActiveTab(tab)
-    setShowDetails(false)
-
-    if (typeof window !== 'undefined') {
-      localStorage.setItem('activeTab', tab)
     }
   }
 
@@ -175,7 +186,10 @@ const OrderDetails = ({ orderCartModal }: OrderDetailsProps) => {
                           {orderCartModal.delivery.code
                             .split('')
                             .map((str: string) => (
-                              <p className='w-40 h-40 p-10 radius-5 weight-600 bg-whitesmoke text-center'>
+                              <p
+                                key={str}
+                                className='w-40 h-40 p-10 radius-5 weight-600 bg-whitesmoke text-center'
+                              >
                                 {str.toLocaleUpperCase()}
                               </p>
                             ))}

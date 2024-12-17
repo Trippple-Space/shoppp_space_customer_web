@@ -38,7 +38,7 @@ export const useOrders = (initialQuery: IQueryParams) => {
           }
      };
 
-     const cancelOrderById = async (id: number, query: IQueryParams) => {
+     const cancelOrderById = async (id: number, query: IQueryParams | any) => {
           setFetching(true);
           try {
                const orderResponse = await orderService.cancelOrderById(

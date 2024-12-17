@@ -62,7 +62,8 @@ class OrderService {
                               endpoints.ORDERS +
                               "/" +
                               id +
-                              "/cancel"
+                              "/cancel",
+                         { query }
                     )
                );
                Object.keys(query).forEach((key) =>
@@ -87,7 +88,7 @@ class OrderService {
                     .then((response: any) => {
                          resolve(response);
                          if (response) {
-                              window.location.replace('/orders');
+                              window.location.replace("/orders");
                          }
                     })
                     .catch((err) => {

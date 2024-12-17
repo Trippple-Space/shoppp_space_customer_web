@@ -1,19 +1,18 @@
 import { Cart } from "./cart.interface";
 import { User } from "./user.interface";
 
-
 export interface Delivery {
-    id: number;
-    deliveryDate: string;
-    deliveryWindowStart: string;
-    deliveryWindowEnd: string;
-    notes: string;
-    status: string;
-    code: string;
-    meta: any;
-    dateTimeDelivered: string | null;
-    dateCreated: string;
-    lastUpdated: string;
+     id: number;
+     deliveryDate: string;
+     deliveryWindowStart: string;
+     deliveryWindowEnd: string;
+     notes: string;
+     status: string;
+     code: string;
+     meta: any;
+     dateTimeDelivered: string | null;
+     dateCreated: string;
+     lastUpdated: string;
 }
 
 export interface Order {
@@ -24,4 +23,5 @@ export interface Order {
      delivery: Delivery;
      deliveryFee: number;
      totalAmount: number;
+     cancellationReason: string | null;
 }
