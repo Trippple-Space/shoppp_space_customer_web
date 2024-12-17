@@ -65,6 +65,7 @@ const OrderProgressCard = ({
                 <div
                   className={classNames('flex a-items-center space-between', {
                     'ml-45': order.cart.cartItems.length > 4,
+                    'ml-80': order.cart.cartItems.length === 4,
                     'ml-70': order.cart.cartItems.length === 3,
                     'ml-55': order.cart.cartItems.length === 2,
                     'ml-40': order.cart.cartItems.length === 1

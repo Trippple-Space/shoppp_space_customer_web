@@ -460,6 +460,7 @@
 .bg-\#1677FF { background-color: #1677FF; } 
 .bg-\#00000099 { background-color: #00000099; } 
 .ml-45 { margin-left: 45px; } 
+.ml-80 { margin-left: 80px; } 
 .ml-70 { margin-left: 70px; } 
 .ml-55 { margin-left: 55px; } 
 .border-white { border-color: #FFFFFF; } 
@@ -724,7 +725,6 @@
 .letter-spacing-1 { letter-spacing: 1px; } 
 .max-w-840 { max-width: 840px; } 
 .hover\:bg-darkred:hover { background-color: darkred; } 
-.ml-80 { margin-left: 80px; } 
 [class~='g|letter-spacing:1.2px;']{letter-spacing:1.2px;} 
 .max-w-700 { max-width: 700px; } 
 .mt-55 { margin-top: 55px; } 
