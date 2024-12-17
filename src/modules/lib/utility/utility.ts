@@ -129,3 +129,11 @@ export const displayProductPill = (tags: any) => {
 
   return topTwoPills;
 };
+
+export const replaceParamInEndpoint = (
+  endpoint: string,
+  param: string,
+  slug: number | string
+): string => {
+  return endpoint.replace(`:${param}`, `${slug}`);
+};
