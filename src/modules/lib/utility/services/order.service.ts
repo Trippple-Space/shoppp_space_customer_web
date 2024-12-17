@@ -53,7 +53,11 @@ class OrderService {
           });
      }
 
-     cancelOrderById(id: number, query: IQueryParams | any): Promise<Order> {
+     cancelOrderById(
+          id: number,
+          reasons: string,
+          query: IQueryParams | any
+     ): Promise<Order> {
           return new Promise((resolve, reject) => {
                const url = new URL(
                     buildEndpoint(
@@ -62,8 +66,7 @@ class OrderService {
                               endpoints.ORDERS +
                               "/" +
                               id +
-                              "/cancel",
-                         { query }
+                              "/cancel"
                     )
                );
                Object.keys(query).forEach((key) =>
@@ -76,7 +79,14 @@ class OrderService {
                     Authorization: `Bearer ${token}`,
                };
 
-               fetch(url.toString(), { headers, method: "POST" })
+               const body = {
+                    reasons: reasons,
+               };
+               fetch(url.toString(), {
+                    headers,
+                    method: "POST",
+                    body: JSON.stringify(body),
+               })
                     .then((res) => {
                          if (!res.ok) {
                               throw new Error(

@@ -7,6 +7,7 @@ import Modal from '../../modal/modal'
 import { useState } from 'react'
 import { IoMdClose } from 'react-icons/io'
 import RadioGroup from '../../radio/Radio'
+import { orderService } from '@/modules/lib/utility/services/order.service'
 
 interface OrderProcessProps {
   text: string
@@ -76,7 +77,7 @@ const OrderProcess = ({
 
   const handleCancelOrder = (id: number, reasons?: string) => {
     const finalReason = reasons || 'This order has been cancelled'
-    cancelOrderById(id, { reasons: finalReason })
+    cancelOrderById(id, finalReason, {})
   }
 
   const handleOpenCancelOrderModal = () => {

@@ -38,14 +38,19 @@ export const useOrders = (initialQuery: IQueryParams) => {
           }
      };
 
-     const cancelOrderById = async (id: number, query: IQueryParams | any) => {
+     const cancelOrderById = async (
+          id: number,
+          reasons: string,
+          query: IQueryParams | any
+     ) => {
           setFetching(true);
           try {
                const orderResponse = await orderService.cancelOrderById(
                     id,
+                    reasons,
                     query
                );
-               setResponse(orderResponse)
+               setResponse(orderResponse);
           } catch (err) {
                console.error("Error fetching order by ID:", err);
           } finally {
