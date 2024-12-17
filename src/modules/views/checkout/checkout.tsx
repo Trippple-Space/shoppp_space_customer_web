@@ -35,7 +35,7 @@ const CheckoutPage = () => {
   const canProceedToPayment = !(!isPaymentLoading && selectedAddress && user);
   const [isCartCollapsed, setIsCartCollapsed] = useState(false);
   const selectedDeliveryOptionDetails = deliveryOptions[selectedDeliveryOption];
-  
+
   return (
     <>
       <HomepageNavBar />
@@ -123,14 +123,17 @@ const CheckoutPage = () => {
                           </div>
                         </div> */}
 
-                        <h3 className='text-14 m:text-14 weight-600'>
-                          {formatNumberAsPrice(cartItem?.variant?.finalPrice)}
-                        </h3>
+                            <h3 className="text-14 m:text-14 weight-600">
+                              {formatNumberAsPrice(
+                                cartItem?.variant?.finalPrice
+                              )}
+                            </h3>
+                          </div>
+                        </div>
                       </div>
-                    </div>
-
-                  </div>
-                )))}
+                    )
+                  )
+                )}
               </div>
             </div>
           </div>

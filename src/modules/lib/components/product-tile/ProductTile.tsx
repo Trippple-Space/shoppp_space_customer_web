@@ -195,7 +195,10 @@ const ProductTile: FC<IProductTile> = ({ product }: any) => {
         </div>
         <div className="flex flex-wrap gap-4">
           {product?.tags?.map((tag: any, i: number) => (
-            <span className="text-green text-12 inline-block radius-5 mx-2 my-1 pointer hover:underline lowercase" key={i}>
+            <span
+              className="text-green text-12 inline-block radius-5 mx-2 my-1 pointer hover:underline lowercase"
+              key={i}
+            >
               {!tag.label.includes("pill:") && "#" + tag.label}
             </span>
           ))}

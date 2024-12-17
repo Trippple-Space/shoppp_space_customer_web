@@ -42,8 +42,8 @@ export const useCategories = ({
     setSelectedCategory(type, label, storeId, category) 
   }
   return { 
-    currentCategoryList: categoriesCache[`${type}_${label}_${storeId}`] ?? [], 
-    // currentCategoryList, 
+    // currentCategoryList: categoriesCache[`${type}_${label}_${storeId}`] ?? [], 
+    currentCategoryList, 
     selectedCategory: (!!Object.keys(cat).length ? cat : { name: '', images: {}, description: '', filters: {}, subcategories: [] } as unknown as ICategory), 
     setSelectedCategory: setCat
   };
