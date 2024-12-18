@@ -10,6 +10,7 @@ import AsoebiLinksModal from '../AsoebiLinksModal'
 import Link from 'next/link'
 import { paths } from '@/modules/lib/utility/paths'
 import config from '../../../../../../env'
+import { useOrderView } from '@/modules/lib/utility/hooks/views/use-order-view'
 
 interface IMobileNav {
   handleCloseDropdown: () => void
@@ -25,6 +26,11 @@ const MobileNav: FC<IMobileNav> = ({
   const [hamburgerMenu, setHamburgerMenu] = useState<boolean>(false)
   const { user, signOut } = useNavbarView()
   const { isAuthenticated } = useUserStore()
+
+  const { orders } = useOrderView({
+  filters: { status: { In: ['ONGOING'] } }
+})
+
 
   const handleAsoebiMobileDropdown = () => {
     setAsoebiMobileModal(prev => !prev)
@@ -95,7 +101,7 @@ const MobileNav: FC<IMobileNav> = ({
                           href={'/orders'}
                           className='line-height-24 weight-400 capitalize w-full'
                         >
-                          {modal}
+                          Orders ({orders.length})
                         </Link>
                       ) : (
                         <p className='line-height-24 weight-400 capitalize'>
