@@ -15,7 +15,7 @@ interface ModalProps {
 
 const OrderModal: React.FC<ModalProps> = ({modalOpen, handleCloseModal, data}) => {
   const [tabVal, setTabVal] = useState('open');
-  const {orders, fetchOrders} = useOrders()
+  const {orders, fetchOrders} = useOrders({})
 
   const handleTabChange = (val: string) => {
     setTabVal(val);
@@ -42,7 +42,7 @@ const OrderModal: React.FC<ModalProps> = ({modalOpen, handleCloseModal, data}) =
 
 
   useEffect(() => {
-    fetchOrders()
+    fetchOrders({})
   }, [])
 
   const openOrderData = [

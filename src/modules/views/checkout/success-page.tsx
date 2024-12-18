@@ -8,7 +8,7 @@ import Link from "next/link";
 import React from "react";
 
 const SuccessMessage = () => {
-  const { orders } = useOrders();
+  const { orders } = useOrders({});
   console.log(orders)
 
   return (
