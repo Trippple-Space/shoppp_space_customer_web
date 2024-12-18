@@ -5,7 +5,7 @@ import FabricsCategoryNav from "@/modules/lib/components/nav-bar/category-nav/Fa
 import ProductTile from "@/modules/lib/components/product-tile/ProductTile";
 import { ILayout } from "@/app/layout";
 import { useStoreProductsView } from "@/modules/lib/utility/hooks/views/use-store-products-view";
-import { useCategoryNavView } from "@/modules/lib/utility/hooks/views/use-category-nav-view";
+import { useStoreCategoryNavView } from "@/modules/lib/utility/hooks/views/use-category-nav-view";
 import {
   Product,
   ProductCategory,
@@ -17,6 +17,9 @@ import Link from "next/link";
 import ScrollButtons from "@/modules/lib/components/scroll-buttons/scrollButtons";
 import { Store } from "@/modules/lib/utility/types/store.interface";
 import Footer from "@/modules/lib/components/footer/Footer";
+import useUserStore from "@/modules/lib/utility/store/user.store";
+import { useGetIPAddress } from "@/modules/lib/utility/hooks/use-get-ip-address";
+import { useLogVisit } from "@/modules/lib/utility/hooks/use-log-visit";
 
 const StorefrontLayout: FC<{ store: Store; children: ReactNode }> = ({
   store,
@@ -27,9 +30,8 @@ const StorefrontLayout: FC<{ store: Store; children: ReactNode }> = ({
   const [selectedCategory, setSelectedCategory] =
     useState<ProductCategory | null>(null);
   const { products } = useStoreProductsView(selectedCategory);
-  const { categories } = useCategoryNavView({ storeId: store.id });
-  const [filteredProducts, setFilteredProducts] = useState(products);
-
+  const { categories } = useStoreCategoryNavView({ storeId: store.id });
+  const [filteredProducts, setFilteredProducts] = useState<Product[]>([]);
   const [newArrivals, setNewArrivals] = useState<Product[]>([]);
   const [dealsForYou, setDealsForYou] = useState<Product[]>([]);
   const [featuredProducts, setFeaturedProducts] = useState<Product[]>([]);
@@ -40,13 +42,25 @@ const StorefrontLayout: FC<{ store: Store; children: ReactNode }> = ({
 
   const { handleCategoryChange } = useCategoryFilter(products, updateFilters);
 
+  const [hasScrolled, setHasScrolled] = useState(false);
+  const { isAuthenticated } = useUserStore();
+  const { ipAddress } = useGetIPAddress();
+  const [hasPerformedAction, setHasPerformedAction] = useState(false);
+  const { logVisit } = useLogVisit(store?.id, { ipAddress: ipAddress });
+
   useEffect(() => {
-    if (selectedCategory) {
-      handleCategoryChange(selectedCategory);
-    } else {
-      setFilteredProducts(products);
+    const filterProducts = () => {
+      if (selectedCategory) {
+        handleCategoryChange(selectedCategory);
+      } else {
+        if (products.length > 0) {
+          setFilteredProducts(products);
+        }
+      }
     }
-  }, [selectedCategory, products, filteredProducts]);
+
+    filterProducts()
+  }, [selectedCategory, products]);
 
   useEffect(() => {
     const sectionCategories = () => {
@@ -85,7 +99,43 @@ const StorefrontLayout: FC<{ store: Store; children: ReactNode }> = ({
     };
 
     sectionCategories();
-  }, [products, filteredProducts]);
+  }, [filteredProducts]);
+
+  useEffect(() => {
+    console.log("isAuthenticated", isAuthenticated);
+    // Define the function to be triggered after 1 minute
+    const triggerFunction = () => {
+      if (isAuthenticated && hasScrolled && hasPerformedAction) {
+        console.log("Triggered");
+        logVisit();
+      }
+    };
+    // Set up the timer
+    const timer = setTimeout(triggerFunction, 10000);
+
+    // Scroll event handler
+    const handleScroll = () => {
+      console.log("Handle Scroll triggered");
+      setHasScrolled(true);
+    };
+    // Click event handler
+    const handleClick = () => {
+      console.log("Handle Click triggered");
+      setHasPerformedAction(true);
+    };
+
+    // Add scroll event listener
+    window.addEventListener("scroll", handleScroll);
+    // Add click event listener
+    window.addEventListener("click", handleClick);
+
+    // Cleanup: remove event listener and clear timeout
+    return () => {
+      window.removeEventListener("scroll", handleScroll);
+      window.removeEventListener("click", handleClick);
+      clearTimeout(timer);
+    };
+  }, [isAuthenticated, hasScrolled, hasPerformedAction]);
 
   return (
     <div>
@@ -126,9 +176,8 @@ const StorefrontLayout: FC<{ store: Store; children: ReactNode }> = ({
               </div>
               <div className="scroll-x no-scrollbar" ref={scrollRef1}>
                 <div
-                  className={`flex h-fit ${
-                    newArrivals?.length && "w-fit"
-                  } whitespace-nowrap gap-14`}
+                  className={`flex h-fit ${newArrivals?.length && "w-fit"
+                    } whitespace-nowrap gap-14`}
                 >
                   {newArrivals?.length ? (
                     newArrivals?.map((product, i) => (
@@ -178,9 +227,8 @@ const StorefrontLayout: FC<{ store: Store; children: ReactNode }> = ({
               </div>
               <div className="scroll-x no-scrollbar" ref={scrollRef2}>
                 <div
-                  className={`flex h-fit ${
-                    newArrivals?.length && "w-fit"
-                  } whitespace-nowrap gap-14`}
+                  className={`flex h-fit ${newArrivals?.length && "w-fit"
+                    } whitespace-nowrap gap-14`}
                 >
                   {dealsForYou.length ? (
                     dealsForYou.map((product, i) => (
@@ -238,6 +286,7 @@ const StorefrontLayout: FC<{ store: Store; children: ReactNode }> = ({
           </div>
         </section>
       </div>
+      {/* <div className="h-screen"></div> */}
       <Footer />
     </div>
   );

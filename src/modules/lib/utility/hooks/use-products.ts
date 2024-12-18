@@ -17,19 +17,19 @@ export interface IProductFilters {
 }
 
 export interface IOrderBy {
-     [key: string]: "asc" | "desc";
+  [key: string]: "asc" | "desc";
 }
 
 export interface IPagination {
-     page: number;
-     limit: number;
+  page: number;
+  limit: number;
 }
 
 export interface IQueryParams {
-     filters?: IProductFilters;
-     order?: IOrderBy;
-     pagination?: IPagination;
-     // key: any
+  filters?: IProductFilters;
+  order?: IOrderBy;
+  pagination?: IPagination;
+  // key: any
 }
 
 export const useProducts = (initialQuery: IQueryParams) => {
@@ -49,26 +49,26 @@ export const useProducts = (initialQuery: IQueryParams) => {
      };
      
 
-     const updateFilters = (filters: IProductFilters) => {
-          setQuery((prevQuery) => ({
-               ...prevQuery,
-               filters: { ...prevQuery.filters, ...filters },
-          }));
-     };
+  const updateFilters = (filters: IProductFilters) => {
+    setQuery((prevQuery) => ({
+      ...prevQuery,
+      filters: { ...prevQuery.filters, ...filters },
+    }));
+  };
 
-     const setOrdering = (ordering: IOrderBy) => {
-          setQuery((prevQuery) => ({
-               ...prevQuery,
-               order: ordering,
-          }));
-     };
+  const setOrdering = (ordering: IOrderBy) => {
+    setQuery((prevQuery) => ({
+      ...prevQuery,
+      order: ordering,
+    }));
+  };
 
-     const setPagination = (pagination: IPagination) => {
-          setQuery((prevQuery) => ({
-               ...prevQuery,
-               pagination,
-          }));
-     };
+  const setPagination = (pagination: IPagination) => {
+    setQuery((prevQuery) => ({
+      ...prevQuery,
+      pagination,
+    }));
+  };
 
      const cacheKey =
           "products_" +
