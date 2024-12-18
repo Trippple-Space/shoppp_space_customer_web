@@ -20,7 +20,7 @@ import SavedItemsModal from "./profile-modal/SavedItems";
 import { AiOutlineUser } from "react-icons/ai";
 
 interface IBaseNavBar {
-  links: ReactNode;
+  links: ReactNode
 }
 
 const BaseNavBar: FC<IBaseNavBar> = ({ links }) => {
@@ -35,33 +35,33 @@ const BaseNavBar: FC<IBaseNavBar> = ({ links }) => {
   const { user } = useNavbarView();
 
   const handleUserProfileDropdown = () => {
-    setUserProfileDropdown((prev) => !prev);
-  };
+    setUserProfileDropdown(prev => !prev)
+  }
 
   const handleAsoebiDropdown = () => {
-    setAsoebiModal((prev) => !prev);
-  };
+    setAsoebiModal(prev => !prev)
+  }
 
   const handleCloseDropdown = () => {
-    setUserProfileDropdown(false);
-  };
+    setUserProfileDropdown(false)
+  }
 
   return (
-    <div className="fixed w-full t-0 l-0 bg-white z-5">
+    <div className='fixed w-full t-0 l-0 bg-white z-5 border-b border-b-#00000014'>
       <div
         className={cx(
           "flex a-items-center relative app-width space-between py-12",
           {
-            "max-w-1400!": pathname.startsWith("/products/"),
+            'max-w-1400!': pathname.startsWith('/products/')
           }
         )}
       >
-        <Link href={"/"} className="w-fit">
+        <Link href={'/'} className='w-fit'>
           <Image
-            className="w-70 l:w-100"
-            src="new-asoebi-logo.svg"
-            alt="logo"
-            type="logo"
+            className='w-70 l:w-100'
+            src='new-asoebi-logo.svg'
+            alt='logo'
+            type='logo'
           />
         </Link>
 
@@ -72,7 +72,7 @@ const BaseNavBar: FC<IBaseNavBar> = ({ links }) => {
         {asoebiModal && (
           <>
             <div
-              className="fixed inset-0 bg-black opacity-10 z-10"
+              className='fixed inset-0 bg-black opacity-10 z-10'
               onClick={handleAsoebiDropdown}
             />
 
@@ -82,15 +82,15 @@ const BaseNavBar: FC<IBaseNavBar> = ({ links }) => {
           </>
         )}
 
-        <div className="l:block flex l:flex a-items-center l:gap-30 gap-10 w-fit relative j-self-end">
+        <div className='l:block flex l:flex a-items-center l:gap-30 gap-10 w-fit relative j-self-end'>
           <div
-            className="hidden l:block l:cursor-pointer"
+            className='hidden l:block l:cursor-pointer'
             onClick={handleAsoebiDropdown}
           >
-            <p className="flex a-items-center  weight-500">
-              <PiStorefrontBold className="w-30" />
+            <p className='flex a-items-center  weight-500'>
+              <PiStorefrontBold className='w-30' />
               <span>Asoebi</span>
-              <SlArrowDown className="w-10 ml-5" />
+              <SlArrowDown className='w-10 ml-5' />
             </p>
           </div>
           <div className="flex sm:gap-24 gap-20 a-items-center">
@@ -152,7 +152,7 @@ const BaseNavBar: FC<IBaseNavBar> = ({ links }) => {
         )}
       </div>
     </div>
-  );
-};
+  )
+}
 
-export default BaseNavBar;
+export default BaseNavBar
