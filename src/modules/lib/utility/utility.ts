@@ -129,3 +129,70 @@ export const displayProductPill = (tags: any) => {
 
   return topTwoPills;
 };
+
+export const replaceParamInEndpoint = (
+  endpoint: string,
+  param: string,
+  slug: number | string
+): string => {
+  return endpoint.replace(`:${param}`, `${slug}`);
+};
+
+const getOrdinalSuffix = (day: number): string => {
+     const suffixes: string[] = ["th", "st", "nd", "rd"];
+     const remainder: number = day % 10;
+     const exception: boolean = day >= 11 && day <= 13;
+
+     return (
+          day +
+          (exception
+               ? "th"
+               : suffixes[remainder > 3 || remainder === 0 ? 0 : remainder])
+     );
+};
+
+export const formatDate = (date: Date): string => {
+     const dayWithSuffix: string = getOrdinalSuffix(date.getDate());
+     const month: string = date
+          .toLocaleString("default", { month: "short" })
+          .toUpperCase();
+     const year: number = date.getFullYear();
+
+     const hours: number = date.getHours() % 12 || 12;
+     const minutes: string = String(date.getMinutes()).padStart(2, "0");
+     const ampm: string = date.getHours() >= 12 ? "PM" : "AM";
+
+     return `${dayWithSuffix} ${month}, ${year}. ${hours}:${minutes}${ampm}`;
+};
+
+export function formatTime(timestamp: string): string {
+     const date = new Date(timestamp);
+     let hours = date.getHours();
+     const minutes = date.getMinutes();
+     const ampm = hours >= 12 ? "PM" : "AM";
+     hours = hours % 12;
+     hours = hours ? hours : 12;
+     const minutesStr = minutes < 10 ? "0" + minutes : minutes.toString();
+     return `${hours}:${minutesStr}${ampm}`;
+}
+
+export const getStoreNames = (cartItems: any) => {
+     const storeNames = cartItems
+          .map((item: any) => item.variant?.product?.store?.name)
+          .filter(Boolean)
+          .reduce((uniqueNames: any, name: any) => {
+               if (!uniqueNames.includes(name)) {
+                    uniqueNames.push(name);
+               }
+               return uniqueNames;
+          }, []);
+
+     if (storeNames.length > 2) {
+          const firstStore = storeNames[0];
+          const secondStore = storeNames[1];
+          const remainingCount = storeNames.length - 2;
+          return `${firstStore}, ${secondStore} and ${remainingCount} more`;
+     }
+
+     return storeNames.join(", ");
+};
