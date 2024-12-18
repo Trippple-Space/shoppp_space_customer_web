@@ -1,11 +1,6 @@
 import classNames from 'classnames'
-import React, { Dispatch, SetStateAction, useState } from 'react'
-import CancelledOrder from './CancelledOrder'
-import DeliveredOrder from './DeliveredOrder'
-import OngoingOrder from './OngoingOrder'
 
 const OrderHeader = ({
-  renderTabContent,
   setActiveTab,
   activeTab
 }: {
@@ -71,7 +66,6 @@ const OrderHeader = ({
               </p>
             </div>
           </div>
-          {/* <div className='flex j-content-center'>{renderTabContent?.()}</div> */}
         </div>
       </div>
     </>

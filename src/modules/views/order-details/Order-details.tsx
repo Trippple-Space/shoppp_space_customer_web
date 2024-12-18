@@ -31,9 +31,10 @@ const OrderDetails = ({ orderCartModal }: OrderDetailsProps) => {
   const { user } = useUserStore()
   const router = useRouter()
 
-  // Use product status as the default active tab
+
   const savedActiveTab =
     typeof window !== 'undefined' ? localStorage.getItem('activeTab') : null
+  
   const defaultTab = orderCartModal?.status || 'ONGOING'
 
   const [activeTab, setActiveTab] = useState<string>(

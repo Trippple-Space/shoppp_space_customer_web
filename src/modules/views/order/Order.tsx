@@ -12,6 +12,7 @@ const Order = () => {
 
   useEffect(() => {
     const savedTab = localStorage.getItem('activeTab')
+
     if (savedTab) {
       setActiveTab(savedTab)
     }
