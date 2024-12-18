@@ -37,14 +37,7 @@ const CheckoutPage = () => {
   const [cartItemsByStore, setcartItemsByStore] = useState<any[]>([]);
   const [devOptions, setDevOptions] = useState<string>();
   const [showSummary, setshowSummary] = useState(true);
-
-  return (
-    <>
-      <HomepageNavBar />
-      <div className="app-width pt-42 mb-150">
-        <h1 className="text-18 m:py-30 weight-300 uppercase text-dimgrey mt-50">
-          Checkout
-        </h1>
+  const [devAddressError, setDevAddressError] = useState(false)
 
   const setStoreAccordion = (i: number) => {
     setcartItemsByStore((prevCartItems) =>

@@ -5,7 +5,7 @@ import BaseNavBar from "./BaseNavBar";
 
 import SearchInput from "../search-input/SearchInput";
 
-const HomepageNavBar = ({ parent }: { parent: any }) => {
+const HomepageNavBar = ({ parent }: { parent?: any }) => {
   return (
     <BaseNavBar
       links={
