@@ -192,6 +192,7 @@
 [class~='g|transition:0.5s']{transition:0.5s} 
 .bg-\#0B9378 { background-color: #0B9378; } 
 .hover\:bg-darkgreen:hover { background-color: #0C7661; } 
+.disabled\:bg-green-300:disabled { background-color: rgba(11, 147, 120, 0.6); } 
 @layer base {.radius-8 { border-radius: 8px; } } 
 .h-100 { height: 100px; } 
 .object-fit {    object-fit: cover;  } 
