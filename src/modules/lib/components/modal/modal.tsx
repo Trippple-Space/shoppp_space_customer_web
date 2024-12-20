@@ -11,6 +11,7 @@ interface ModalProps {
 }
 
 const Modal: React.FC<ModalProps> = ({ isOpen, onClose, children, extraModalClass, extraClass, className }) => {
+  
   const modalRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {

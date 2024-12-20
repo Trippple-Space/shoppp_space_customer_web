@@ -142,7 +142,10 @@ const SearchInput: FC<ISearchInput> = ({ component, placeholder, storeSlug }) =>
               </div>
             </div>
             {searchResults.length > 0 && (
+              <>
+              
               <SearchModal searchResults={searchResults} position="" />
+              </>
             )}
           </div>
         </>

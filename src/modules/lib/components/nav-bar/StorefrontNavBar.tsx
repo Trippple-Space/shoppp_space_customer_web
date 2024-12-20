@@ -28,7 +28,7 @@ const StorefrontNavBar = ({ store }: { store?: Store }) => {
   };
 
   return (
-    <nav className="flex flex-row j-content-between a-items-center border border-0 border-b-1 border-b-#00000014 sm:py-14 py-12 l:px-80 md:px-60 sm:px-40 px-24">
+    <nav className="flex flex-row j-content-between a-items-center border border-0 border-b-1 border-b-#00000014 sm:py-14 py-12 l:px-80 md:px-60 sm:px-40 px-24 fixed w-100p bg-white z-10">
       <div className="md:flex-grow-0 flex-grow-1">
         <h1 className="font-robotoMono weight-500 md:text-28 sm:text-26 text-22 w-fit">
           {store?.name}

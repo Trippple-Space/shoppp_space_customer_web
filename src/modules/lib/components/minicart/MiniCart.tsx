@@ -1,28 +1,19 @@
 "use client";
 import Modal from "@/modules/lib/components/modal/modal";
-import OrderSummary from "@/modules/lib/components/order-summary/OrderSummary";
 import { useCart } from "@/modules/lib/utility/hooks/use-cart";
 import {
-  cx,
   displayStockUnit,
   formatNumberAsPrice,
 } from "@/modules/lib/utility/utility";
 import { useRouter } from "next/navigation";
 import React, { useState } from "react";
-import { FaArrowLeftLong } from "react-icons/fa6";
-import { IoClose } from "react-icons/io5";
 import { paths } from "../../utility/paths";
-import { getCartItemVariantPropertiesAsJsx } from "./minicart.helper";
-import { HiOutlineShoppingBag } from "react-icons/hi2";
-import ImageAlt from "../image-alt/ImageAlt";
 import { CartItem } from "../../utility/types/cart.interface";
 import {
   PiMinus,
   PiPlus,
   PiShoppingCartBold,
   PiTrashSimple,
-  PiTrashSimpleLight,
-  PiTrashSimpleThin,
 } from "react-icons/pi";
 import { RxCross1 } from "react-icons/rx";
 import Image from "../image/Image";
@@ -32,57 +23,57 @@ import useUserStore from "../../utility/store/user.store";
 interface ModalProps {}
 
 const MiniCart: React.FC<ModalProps> = () => {
-  const [open, setOpen] = useState(false);
+  const [open, setOpen] = useState(false)
 
-  const { removeFromCart, cart, increment, decrement } = useCart();
+  const { cart, increment, decrement } = useCart();
 
-  const router = useRouter();
+  const router = useRouter()
 
-  const { user, signOut } = useNavbarView();
+  const { signOut } = useNavbarView();
   const { isAuthenticated } = useUserStore();
 
   return (
-    <div className="w-fit">
+    <div className='w-fit'>
       <Modal
         isOpen={open}
         onClose={() => setOpen(false)}
-        extraClass={{ height: "100dvh", borderRadius: "0px" }}
-        className="t-0 l:t-0 l:b-0 l:r-0 overflow-hidden l:w-520 w-full"
+        extraClass={{ height: '100dvh', borderRadius: '0px' }}
+        className='t-0 l:t-0 l:b-0 l:r-0 overflow-hidden l:w-520 w-full'
       >
-        <div className="relative h-full g|overflow-y:hidden font-inter color-#000000E0">
-          <div className="md:py-26 py-20 px-24 text-16 weight-600 flex space-between border-b border-#00000014">
-            <p className="line-height-24">
+        <div className='relative h-full g|overflow-y:hidden font-inter color-#000000E0'>
+          <div className='md:py-26 py-20 px-24 text-16 weight-600 flex space-between border-b border-#00000014'>
+            <p className='line-height-24'>
               Shopping Cart ({cart.cartItems.length})
             </p>
             <RxCross1
               onClick={() => setOpen(false)}
-              className="w-24 h-24 hover:pointer"
+              className='w-24 h-24 hover:pointer'
             />
           </div>
 
           <div
-            className="l:min-w-500 w-full"
-            style={{ height: "calc(100dvh - 76px)" }}
+            className='l:min-w-500 w-full'
+            style={{ height: 'calc(100dvh - 76px)' }}
           >
-            <div className="scroll-y no-scrollbar h-full flex flex-col space-between w-full">
-              <div className="flex flex-col pb-183">
+            <div className='scroll-y no-scrollbar h-full flex flex-col space-between w-full'>
+              <div className='flex flex-col pb-183'>
                 {!cart.cartItems.length ? (
-                  <div className="mx-auto text-center flex flex-col a-items-center gap-16 py-24">
-                    <div className="flex flex-col a-items-center gap-8 py-16">
+                  <div className='mx-auto text-center flex flex-col a-items-center gap-16 py-24'>
+                    <div className='flex flex-col a-items-center gap-8 py-16'>
                       <Image
-                        src="empty-tray.png"
-                        className="w-184 h-152 object-fit-scale-down"
-                        alt="empty"
+                        src='empty-tray.png'
+                        className='w-184 h-152 object-fit-scale-down'
+                        alt='empty'
                       />
-                      <p className="text-14 weight-400 line-height-22 color-#00000073 w-320 px-12 py-5">
+                      <p className='text-14 weight-400 line-height-22 color-#00000073 w-320 px-12 py-5'>
                         Continue shopping to discover our best deals!
                       </p>
                     </div>
 
-                    <div className="flex flex-col gap-8 text-14 w-250 mx-auto">
+                    <div className='flex flex-col gap-8 text-14 w-250 mx-auto'>
                       {!isAuthenticated && (
                         <button
-                          className="bg-green text-white py-12 px-24 radius-6 line-height-19 border border-none weight-500 pointer w-full hover:bg-darkgreen g|transition:0.5s disabled:bg-grey"
+                          className='bg-green text-white py-12 px-24 radius-6 line-height-19 border border-none weight-500 pointer w-full hover:bg-darkgreen g|transition:0.5s disabled:bg-grey'
                           onClick={() => signOut()}
                         >
                           Sign in
@@ -93,8 +84,8 @@ const MiniCart: React.FC<ModalProps> = () => {
                         onClick={() => setOpen(false)}
                         className={`g|transition:0.5s py-12 px-24 radius-6 line-height-19 text-center w-full weight-500 border border-none hover:pointer ${
                           isAuthenticated
-                            ? "bg-green hover:bg-darkgreen text-white"
-                            : "bg-#F5F5F5 hover:bg-grey-300 text-#333333"
+                            ? 'bg-green hover:bg-darkgreen text-white'
+                            : 'bg-#F5F5F5 hover:bg-grey-300 text-#333333'
                         }`}
                       >
                         Explore products
@@ -102,57 +93,57 @@ const MiniCart: React.FC<ModalProps> = () => {
                     </div>
                   </div>
                 ) : (
-                  <div className="p-24 flex flex-col gap-16">
+                  <div className='p-24 flex flex-col gap-16'>
                     {cart.cartItems.map((cartItem: CartItem, i) => (
                       <div
-                        className="flex flex-col border border-#00000014 radius-6"
+                        className='flex flex-col border border-#00000014 radius-6'
                         key={i}
                       >
-                        <div className="flex gap-10 p-12">
+                        <div className='flex gap-10 p-12'>
                           <Image
                             src={cartItem.variant.media[0].url}
-                            alt="cart image"
-                            className="sm:w-80 w-70 sm:h-80 h-70 radius-6 border border-#00000014 object-fit"
+                            alt='cart image'
+                            className='sm:w-80 w-70 sm:h-80 h-70 radius-6 border border-#00000014 object-fit'
                           />
-                          <div className="flex flex-col gap-6">
-                            <p className="weight-600 sm:text-16 text-14 sm:line-height-24 line-height-22">
-                              {cartItem?.variant?.product?.name}{" "}
+                          <div className='flex flex-col gap-6'>
+                            <p className='weight-600 sm:text-16 text-14 sm:line-height-24 line-height-22'>
+                              {cartItem?.variant?.product?.name}{' '}
                             </p>
-                            <p className="weight-400 text-14 line-height-16.94">
-                              Size:{" "}
+                            <p className='weight-400 text-14 line-height-16.94'>
+                              Size:{' '}
                               {`${cartItem?.quantity} ${displayStockUnit(
                                 cartItem.variant.stockUnit
-                              )}${cartItem?.quantity > 1 ? "s" : ""}`}
+                              )}${cartItem?.quantity > 1 ? 's' : ''}`}
                             </p>
-                            <p className="weight-400 text-14 line-height-16.94">
+                            <p className='weight-400 text-14 line-height-16.94'>
                               Color: {cartItem?.variant?.properties?.color}
                             </p>
                           </div>
                         </div>
-                        <div className="px-12 pb-12 flex space-between a-items-center">
-                          <p className="weight-600 md:text-20 sm:text-16 text-14 md:line-height-28 sm:line-height-24 line-height-22">
+                        <div className='px-12 pb-12 flex space-between a-items-center'>
+                          <p className='weight-600 md:text-20 sm:text-16 text-14 md:line-height-28 sm:line-height-24 line-height-22'>
                             {formatNumberAsPrice(cartItem.totalPrice)}
                           </p>
-                          <div className="border border-#00000014 flex space-between a-items-center p-4 radius-100 bg-#F5F5F5 w-150">
+                          <div className='border border-#00000014 flex space-between a-items-center p-4 radius-100 bg-#F5F5F5 w-150'>
                             <span
-                              className="bg-white p-6 round flex flex-col a-items-center hover:pointer"
+                              className='bg-white p-6 round flex flex-col a-items-center hover:pointer'
                               onClick={() => decrement(cartItem)}
                             >
                               {cartItem?.quantity ===
                               cartItem?.variant?.minPurchaseQuantity ? (
-                                <PiTrashSimple className="w-20 h-20 color-#00000099" />
+                                <PiTrashSimple className='w-20 h-20 color-#00000099' />
                               ) : (
-                                <PiMinus className="w-20 h-20 color-#00000099" />
+                                <PiMinus className='w-20 h-20 color-#00000099' />
                               )}
                             </span>
-                            <span className="grow weight-500 line-height-19.36 text-16">
+                            <span className='grow weight-500 line-height-19.36 text-16'>
                               {cartItem?.quantity}
                             </span>
                             <span
-                              className="bg-white p-6 round flex flex-col a-items-center hover:pointer"
+                              className='bg-white p-6 round flex flex-col a-items-center hover:pointer'
                               onClick={() => increment(cartItem)}
                             >
-                              <PiPlus className="w-20 h-20 color-#00000099" />
+                              <PiPlus className='w-20 h-20 color-#00000099' />
                             </span>
                           </div>
                         </div>
@@ -163,20 +154,20 @@ const MiniCart: React.FC<ModalProps> = () => {
               </div>
 
               {!!cart.cartItems.length && (
-                <div className="border-t border-#00000014 flex flex-col p-24 gap-16 absolute b-0 left-0 w-full bg-white g|box-shadow:0px|_|-2px|_|4px|_|#494F5E1F;">
-                  <div className="flex flex-col gap-6">
-                    <p className="py-12 flex a-items-center space-between text-16 line-height-24">
-                      <span className="weight-400">Subtotal</span>
-                      <span className="weight-500">
+                <div className='border-t border-#00000014 flex flex-col p-24 gap-16 absolute b-0 left-0 w-full bg-white g|box-shadow:0px|_|-2px|_|4px|_|#494F5E1F;'>
+                  <div className='flex flex-col gap-6'>
+                    <p className='py-12 flex a-items-center space-between text-16 line-height-24'>
+                      <span className='weight-400'>Subtotal</span>
+                      <span className='weight-500'>
                         {formatNumberAsPrice(cart?.subTotal)}
                       </span>
                     </p>
-                    <p className="weight-400 text-14 line-height-22 color-#00000099">
+                    <p className='weight-400 text-14 line-height-22 color-#00000099'>
                       Shipping and taxes calculated at checkout.
                     </p>
                   </div>
                   <button
-                    className="bg-green text-white py-12 px-24 radius-6 line-height-19 border border-none weight-500 pointer w-full hover:bg-darkgreen g|transition:0.5s disabled:bg-grey"
+                    className='bg-green text-white py-12 px-24 radius-6 line-height-19 border border-none weight-500 pointer w-full hover:bg-darkgreen g|transition:0.5s disabled:bg-grey'
                     onClick={() => router.push(paths.checkout)}
                   >
                     Checkout
@@ -187,19 +178,19 @@ const MiniCart: React.FC<ModalProps> = () => {
           </div>
         </div>
       </Modal>
-      <div className="">
+      <div className=''>
         <div
           onClick={() => setOpen(true)}
-          className="relative pointer bg-#F3F3F3 flex a-items-center gap-8 w-70 radius-6 px-5 py-5"
+          className='relative pointer bg-#F3F3F3 flex a-items-center gap-8 w-70 radius-6 px-5 py-5'
         >
-          <p className="h-30 w-30 flex a-items-center j-content-center bg-#0B9378 radius-6 color-white weight-500">
+          <p className='h-30 w-30 flex a-items-center j-content-center bg-#0B9378 radius-6 color-white weight-500'>
             <span>{cart.cartItems.length}</span>
           </p>
-          <PiShoppingCartBold className="color-black  w-18 h-18" />
+          <PiShoppingCartBold className='color-black  w-18 h-18' />
         </div>
       </div>
     </div>
-  );
-};
+  )
+}
 
-export default MiniCart;
+export default MiniCart
