@@ -10,6 +10,7 @@ import { useCart } from "../../utility/hooks/use-cart";
 import QuantitySelector from "../quantity-selector/QuantitySelector";
 import Link from "next/link";
 import LoginModal from "../login-modal/LoginModal";
+import VideoSrc from "../video-src/VideoSrc";
 
 interface IProductTile {
   product: Product;
@@ -22,6 +23,7 @@ const ProductTile: FC<IProductTile> = ({ product }: any) => {
     product?.variants?.[0]
   );
   const [isFavourite, setIsFavorite] = useState(false);
+  const [mediaType, setMediaType] = useState<string>("image");
   const {
     addToCart,
     cart,
@@ -70,11 +72,18 @@ const ProductTile: FC<IProductTile> = ({ product }: any) => {
         className="relative ratio-1 radius-10 g|overflow:hidden l:radius-15 w-full"
       >
         <Link href={`/products/${product.slug}`}>
-          <Image
-            className="absolute w-full h-full a-self-center g|object-fit:cover pointer"
-            src={selectedImage}
-            alt="product-image"
-          />
+          {mediaType === "image" ? (
+            <Image
+              className="absolute w-full h-full a-self-center g|object-fit:cover pointer"
+              src={selectedImage}
+              alt="product-image"
+            />
+          ) : (
+            <VideoSrc
+              className="absolute w-full h-full a-self-center g|object-fit:cover pointer"
+              src={selectedImage}
+            />
+          )}
         </Link>
         <div
           className="skelly-rectangle w-full h-full pulsing-multi-color-bg text-white flex"
@@ -145,24 +154,44 @@ const ProductTile: FC<IProductTile> = ({ product }: any) => {
           className="mt-15 flex a-items-center l:gap-13 gap-8 w-fit whitespace-nowrap"
         >
           {product.variants.map((variant: any) =>
-            variant?.media?.map((mediaItem: any) => (
-              <Image
-                className={classNames(
-                  "l:w-32 l:h-32 w-24 h-24 pointer radius-5 l:radius-8 a-self-center g|object-fit:cover",
-                  {
-                    "border border-2": selectedImage == mediaItem?.url,
-                    [`border-${mediaItem.description?.toLocaleLowerCase()}`]:
-                      selectedImage == mediaItem?.url,
-                  }
-                )}
-                src={mediaItem?.url}
-                onClick={() => {
-                  setSelectedVariant(variant);
-                  setSelectedImage(mediaItem?.url);
-                }}
-                alt="product-image"
-              />
-            ))
+            variant?.media?.map((mediaItem: any) =>
+              mediaItem?.type === "image" ? (
+                <Image
+                  className={classNames(
+                    "l:w-32 l:h-32 w-24 h-24 pointer radius-5 l:radius-8 a-self-center g|object-fit:cover",
+                    {
+                      "border border-2": selectedImage == mediaItem?.url,
+                      [`border-${mediaItem.description?.toLocaleLowerCase()}`]:
+                        selectedImage == mediaItem?.url,
+                    }
+                  )}
+                  src={mediaItem?.url}
+                  onClick={() => {
+                    setSelectedVariant(variant);
+                    setMediaType("image");
+                    setSelectedImage(mediaItem?.url);
+                  }}
+                  alt="product-image"
+                />
+              ) : (
+                <VideoSrc
+                  className={classNames(
+                    "l:w-32 l:h-32 w-24 h-24 pointer radius-5 l:radius-8 a-self-center g|object-fit:cover",
+                    {
+                      "border border-2": selectedImage == mediaItem?.url,
+                      [`border-${mediaItem.description?.toLocaleLowerCase()}`]:
+                        selectedImage == mediaItem?.url,
+                    }
+                  )}
+                  onClick={() => {
+                    setSelectedVariant(variant);
+                    setMediaType("video");
+                    setSelectedImage(mediaItem?.url);
+                  }}
+                  src={mediaItem?.url}
+                />
+              )
+            )
           )}
         </div>
       </div>
