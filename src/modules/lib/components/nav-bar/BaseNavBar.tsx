@@ -20,15 +20,13 @@ import SavedItemsModal from './profile-modal/SavedItems'
 import { AiOutlineUser } from 'react-icons/ai'
 
 interface IBaseNavBar {
-  links: ReactNode;
-  parent: any;
+  links: ReactNode
+  parent: any
 }
 
-
 const BaseNavBar: FC<IBaseNavBar> = ({ links, parent }) => {
-  useAuthGuard(); // TODO: refactor to rely on Next 13 auth middleware
-  const [userProfileDropdown, setUserProfileDropdown] =
-    useState<boolean>(false);
+  useAuthGuard() // TODO: refactor to rely on Next 13 auth middleware
+  const [userProfileDropdown, setUserProfileDropdown] = useState<boolean>(false)
 
   const [profileModal, setProfileModal] = useState<string>('')
 
@@ -73,7 +71,12 @@ const BaseNavBar: FC<IBaseNavBar> = ({ links, parent }) => {
   }, [asoebiModal, profileModal])
 
   return (
-    (<div className={`fixed w-full t-0 l-0 bg-white z-5 ${parent === 'checkout' && 'border-b border-b-#00000014 md:py-3 py-5.8625'}`}>
+    <div
+      className={`fixed w-full t-0 l-0 bg-white z-5 ${
+        (parent === 'checkout' || parent === 'orders') &&
+        'border-b border-b-#00000014 md:py-3 py-5.8625'
+      }`}
+    >
       <div
         className={cx(
           'flex a-items-center relative app-width space-between py-12',
@@ -111,7 +114,7 @@ const BaseNavBar: FC<IBaseNavBar> = ({ links, parent }) => {
         <div className='l:block flex l:flex a-items-center l:gap-30 gap-10 w-fit relative j-self-end'>
           <div
             className={`l:cursor-pointer ${
-              parent === "checkout" ? "hidden" : "hidden l:block"
+              parent === 'checkout' ? 'hidden' : 'hidden l:block'
             }`}
             onClick={handleAsoebiDropdown}
           >
@@ -121,8 +124,8 @@ const BaseNavBar: FC<IBaseNavBar> = ({ links, parent }) => {
               <SlArrowDown className='w-10 ml-5' />
             </p>
           </div>
-          <div className="flex sm:gap-24 gap-20 a-items-center">
-            {parent !== "checkout" && <MiniCart />}
+          <div className='flex sm:gap-24 gap-20 a-items-center'>
+            {parent !== 'checkout' && <MiniCart />}
             <div
               className='md:flex hidden gap-12 a-items-center text-black cursor-pointer'
               onClick={handleUserProfileDropdown}
@@ -178,7 +181,7 @@ const BaseNavBar: FC<IBaseNavBar> = ({ links, parent }) => {
           </>
         )}
       </div>
-    </div>)
-  );
-};
+    </div>
+  )
+}
 export default BaseNavBar

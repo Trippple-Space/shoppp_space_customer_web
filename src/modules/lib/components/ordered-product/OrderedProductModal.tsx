@@ -3,29 +3,71 @@ import { IoMdClose } from 'react-icons/io'
 import Image from '../image/Image'
 import { PiArrowClockwise } from 'react-icons/pi'
 import { Order } from '../../utility/types/order.interface'
+import { CartItem } from '../../utility/types/cart.interface'
+import { cartService } from '../../utility/services/cart.service'
+import classNames from 'classnames'
+import { useEffect, useState } from 'react'
+import { useRouter } from 'next/navigation'
+import { useCart } from '../../utility/hooks/use-cart'
 
-const OrderedProductModal = ({
+const orderCartModalModal = ({
   handleOrderModal,
   orderCartModal
 }: {
   handleOrderModal: () => void
   orderCartModal: Order | void
 }) => {
+  const { addToCart } = useCart()
+
+  const router = useRouter()
+
+  const buyAgain = async (cartItems: CartItem[]) => {
+    try {
+      const currentCart = await cartService.fetchCart()
+
+      const existingCartItemIds = currentCart.cartItems.map(
+        (item: CartItem) => item.variant.id
+      )
+
+      for (const cartItem of cartItems) {
+        if (!existingCartItemIds.includes(cartItem.variant.id)) {
+          addToCart(cartItem.variant.id, cartItem.quantity)
+        }
+        router.push('/checkout')
+      }
+      router.push('/checkout')
+    } catch (error) {
+      console.error('Error processing buy again action:', error)
+    }
+  }
+
+  useEffect(() => {
+    if (orderCartModal) {
+      document.body.style.overflow = 'hidden'
+    } else {
+      document.body.style.overflow = 'auto'
+    }
+
+    return () => {
+      document.body.style.overflow = 'auto'
+    }
+  }, [])
+
   return (
     <>
       <div
-        className='fixed inset-0 bg-black opacity-10 z-10'
+        className='fixed inset-0 bg-#00000073 z-5 no-scrollbar'
         onClick={handleOrderModal}
       />
       {orderCartModal && (
-        <div className='bg-black'>
+        <div className='relative'>
           <div
-            className={`fixed l-50p g|transform:translate(-50%) z-10 t-0 t-10p w-90p l:w-40p h-60p bg-white overflow-scroll  radius-t-r-8 radius-t-l-8`}
+            className={`fixed l-50p g|transform:translate(-50%) z-10 t-10p  w-90p l:w-40p bg-white overflow-scroll radius-8`}
           >
-            <div className='overflow-auto h-100p no-scrollbar'>
+            <div className='overflow-auto no-scrollbar'>
               <div className='relative'>
-                <div className='fixed w-100p bg-white  border-b border-b-#00000026 flex a-items-center space-between p-15 radius-t-r-8 radius-t-l-8'>
-                  <p>Order - Products</p>
+                <div className='fixed w-100p bg-white border-b border-b-#00000026 flex a-items-center space-between p-15 radius-t-r-8 radius-t-l-8'>
+                  <p className='weight-500'>Order - Products</p>
                   <IoMdClose
                     className='w-fit cursor-pointer'
                     onClick={handleOrderModal}
@@ -34,77 +76,101 @@ const OrderedProductModal = ({
               </div>
               <div className='p-15 px-25 flex a-items-center space-between border-b border-b-10 border-b-whitesmoke mt-50'>
                 <p className='text-14 weight-500'>#{orderCartModal.id}</p>
-                <button className='flex gap-10 a-items-center px-10 py-7 radius-5 border border-#00000026 bg-none cursor-pointer'>
+                <button
+                  className='flex gap-10 a-items-center px-10 py-7 radius-5 border border-#00000026 bg-none cursor-pointer'
+                  onClick={() => buyAgain(orderCartModal.cart.cartItems)}
+                >
                   <PiArrowClockwise className='w-fit' />
                   Buy again
                 </button>
               </div>
-              <div className='p-25 flex flex-col gap-10 overflow-hidden'>
-                {orderCartModal?.cart.cartItems.map((item: any) => (
-                  <>
-                    <div className='bg-whitesmoke radius-5 p-10 flex space-between a-items-start'>
-                      <div className='flex gap-10 w-60p'>
-                        <Image
-                          src={item?.variant.media[0].url}
-                          alt={item.variant?.product?.name || ''}
-                          className='w-60 h-60 radius-8 object-fit-cover'
-                        />
-                        <div className='flex flex-col gap-10'>
-                          <div className='flex flex-col gap-3'>
-                            <p className='weight-600 text-14 w-fit'>
-                              {item.variant.product?.name}
-                            </p>
-                            <p className='color-#0000008C text-12'>
-                              {item.variant.product?.store.name}
-                            </p>
-                          </div>
-                          <div className='flex flex-col gap-5'>
-                            {' '}
-                            <p className='color-#0000008C text-14 w-fit'>
-                              Size: {item.variant.product?.stockUnit}
-                            </p>
-                            <p className='color-#0000008C text-14'>
-                              Color: {item.variant.properties.color}
-                            </p>
+              <div
+                className={classNames(
+                  'px-25 overflow-auto j-content-center no-scrollbar mb-20 mt-20 h-250',
+                  {
+                    'l:h-30vh': orderCartModal.cart.cartItems.length > 1
+                  }
+                )}
+                key={orderCartModal.id}
+              >
+                <div
+                  className={classNames(
+                    'flex flex-col gap-10 overflow-auto j-content-center no-scrollbar'
+                  )}
+                >
+                  {orderCartModal.cart.cartItems.map((item: CartItem) => (
+                    <>
+                      <div
+                        className={classNames(
+                          'bg-whitesmoke radius-8 p-10 flex flex-col w-full l:flex-row space-between a-items-start'
+                        )}
+                        key={item.id}
+                      >
+                        <div className='flex gap-10 l:w-60p'>
+                          <Image
+                            src={item?.variant.media[0].url}
+                            alt={item.variant?.product?.name || ''}
+                            className='w-70 h-70 radius-8 object-fit-cover'
+                          />
+                          <div className='flex flex-col gap-10'>
+                            <div className='flex flex-col gap-3'>
+                              <p className='weight-600 text-14 w-fit'>
+                                {item.variant.product?.name}
+                              </p>
+                              <p className='color-#0000008C text-12 w-fit'>
+                                {item.variant.product?.store.name}
+                              </p>
+                            </div>
+                            <div className='flex flex-col gap-5'>
+                              {' '}
+                              <p className='color-#0000008C text-14 w-fit'>
+                                Size: {item.variant.product?.stockUnit}
+                              </p>
+                              <p className='color-#0000008C text-14 w-fit'>
+                                Color: {item.variant.properties.color}
+                              </p>
+                            </div>
                           </div>
                         </div>
+                        <div className='l:grid flex flex-col a-items-end w-100p l:w-fit gap-5 mt-10 l:mt-0'>
+                          <p className='text-14 weight-500'>
+                            {formatNumberAsPrice(item.totalPrice)}
+                          </p>
+                          <p className='text-14 text-right'>
+                            {' '}
+                            X {item.quantity}
+                          </p>
+                        </div>
                       </div>
-                      <div className='grid gap-5'>
-                        <p className='text-14 weight-500'>
-                          {formatNumberAsPrice(item.totalPrice)}
-                        </p>
-                        <p className='text-14 text-right'> X {item.quantity}</p>
-                      </div>
-                    </div>
-                  </>
-                ))}
-
-                <div className='grid gap-10'>
-                  <div className='grid gap-15'>
-                    <div className='flex space-between'>
-                      <p className='color-#000000E0'>Subtotal</p>
-                      <p className='text-16'>
-                        {formatNumberAsPrice(orderCartModal.cart.subTotal)}
-                      </p>
-                    </div>
-                    <div className='flex space-between border-b border-b-#00000014 pb-10'>
-                      <p className='color-#000000E0'>Delivery</p>
-                      <p className='text-16'>
-                        {formatNumberAsPrice(orderCartModal.deliveryFee)}
-                      </p>
-                    </div>
+                    </>
+                  ))}
+                </div>
+              </div>
+              <div className={classNames('px-25 pb-20 flex flex-col gap-10')}>
+                <div className='grid gap-15'>
+                  <div className='flex space-between'>
+                    <p className='color-#000000E0'>Subtotal</p>
+                    <p className='text-16'>
+                      {formatNumberAsPrice(orderCartModal.cart.subTotal)}
+                    </p>
                   </div>
-                  <div className='grid gap-15'>
-                    <div className='flex space-between'>
-                      <p className='color-#000000E0'>Total</p>
-                      <p className='text-16'>
-                        {formatNumberAsPrice(orderCartModal.totalAmount)}
-                      </p>
-                    </div>
-                    <div className='flex space-between'>
-                      <p className='color-#000000E0'>Payment Method</p>
-                      <p className='text-16'>Pay online</p>
-                    </div>
+                  <div className='flex space-between border-b border-b-#00000014 pb-10'>
+                    <p className='color-#000000E0'>Delivery</p>
+                    <p className='text-16'>
+                      {formatNumberAsPrice(orderCartModal.deliveryFee)}
+                    </p>
+                  </div>
+                </div>
+                <div className='grid gap-15'>
+                  <div className='flex space-between'>
+                    <p className='color-#000000E0'>Total</p>
+                    <p className='text-16'>
+                      {formatNumberAsPrice(orderCartModal.totalAmount)}
+                    </p>
+                  </div>
+                  <div className='flex space-between'>
+                    <p className='color-#000000E0'>Payment Method</p>
+                    <p className='text-16'>Pay online</p>
                   </div>
                 </div>
               </div>
@@ -116,4 +182,4 @@ const OrderedProductModal = ({
   )
 }
 
-export default OrderedProductModal
+export default orderCartModalModal

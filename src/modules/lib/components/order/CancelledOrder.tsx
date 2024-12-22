@@ -1,14 +1,13 @@
-import React, { useState } from 'react'
-import OrderProgressCard from './order-progress-card/OrderProgressCard'
+import React, { useEffect, useState } from 'react'
 import OrderDetails from '../../../views/order-details/Order-details'
-import OrderedProductModal from '../ordered-product/OrderedProductModal'
-import { useOrderView } from '../../utility/hooks/views/use-order-view'
+import OrderProgressCard from './order-progress-card/OrderProgressCard'
 import { Order } from '../../utility/types/order.interface'
+import { useOrders } from '../../utility/hooks/use-orders'
 import Link from 'next/link'
-import Image from '../image/Image'
+import Image from '../../components/image/Image'
 
 const CancelledOrder = () => {
-  const { orders, fetchOrderById, singleOrder } = useOrderView({
+  const { orders, singleOrder } = useOrders({
     filters: { status: { In: ['CANCELLED'] } }
   })
 
@@ -21,12 +20,16 @@ const CancelledOrder = () => {
     setOpenModalOpen(prev => !prev)
   }
 
+  useEffect(() => {
+    setOrderCartModal(singleOrder)
+  }, [singleOrder])
+
   return (
     <>
       {orders.length > 0 && (
         <div className='relative bg-whitesmoke p-15 w-100p flex flex-col gap-15'>
-          {singleOrder ? (
-            <OrderDetails orderCartModal={singleOrder} />
+          {orderCartModal ? (
+            <OrderDetails orderCartModal={orderCartModal} />
           ) : (
             <>
               <OrderProgressCard
@@ -34,12 +37,6 @@ const CancelledOrder = () => {
                 handleOrderModal={handleOrderModal}
                 setOrderCartModal={setOrderCartModal}
               />
-              {openOrderModal && (
-                <OrderedProductModal
-                  handleOrderModal={handleOrderModal}
-                  orderCartModal={orderCartModal}
-                />
-              )}
             </>
           )}
         </div>
@@ -60,7 +57,7 @@ const CancelledOrder = () => {
             </div>
 
             <Link
-              href='/wears'
+              href='/'
               className='cursor-pointer px-15 py-12 l:w-250 bg-#0B9378  radius-6 color-white text-center weight-400'
             >
               Explore products

@@ -6,7 +6,7 @@ import useUserStore from '@/modules/lib/utility/store/user.store'
 import config from '../../../../../../env'
 import Link from 'next/link'
 import React, { FC } from 'react'
-import { useOrderView } from '@/modules/lib/utility/hooks/views/use-order-view'
+import { useOrders } from '@/modules/lib/utility/hooks/use-orders'
 
 interface IUserProfileDropdown {
   handleCloseDropdown: () => void
@@ -19,7 +19,7 @@ const UserProfileDropdown: FC<IUserProfileDropdown> = ({
 }) => {
   const { user, signOut } = useNavbarView()
   const { isAuthenticated } = useUserStore()
-  const { orders } = useOrderView({
+  const { orders } = useOrders({
     filters: { status: { In: ['ONGOING'] } }
   })
 

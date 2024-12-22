@@ -4,7 +4,7 @@ import OrderDetails from '@/modules/views/order-details/Order-details'
 import { useParams } from 'next/navigation'
 import React, { useEffect, useState } from 'react'
 import { Order } from '@/modules/lib/utility/types/order.interface'
-import { useOrderView } from '@/modules/lib/utility/hooks/views/use-order-view'
+
 import { orderService } from '@/modules/lib/utility/services/order.service'
 
 const Page = () => {

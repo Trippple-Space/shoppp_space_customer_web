@@ -487,12 +487,11 @@
 .border-b-10 { border-bottom-width: 10px; } 
 .border-b-whitesmoke { border-bottom-color: whitesmoke; } 
 .mt-50 { margin-top: 50px; } 
-.p-25 { padding: 25px; } 
-.a-items-start { align-items: flex-start; } 
 .object-fit-cover { object-fit: cover; } 
 .color-\#0000008C { color: #0000008C; } 
 .t-10p { top: 10%; } 
-.h-60p { height: 60%; } 
+.h-250 { height: 250px; } 
+.a-items-start { align-items: flex-start; } 
 .opacity-50 { opacity: 50%; } 
 .mt-60 { margin-top: 60px; } 
 .mt-5 { margin-top: 5px; } 
@@ -561,6 +560,7 @@
 .pr-20 { padding-right: 20px; } 
 .mr-20 { margin-right: 20px; } 
 .mb--5 { margin-bottom: -5px; } 
+.h-60p { height: 60%; } 
 .h-80p { height: 80%; } 
 .j-content-start { justify-content: flex-start; } 
 .w-50 { width: 50px; } 
@@ -587,7 +587,6 @@
 .mt-4 { margin-top: 4px; } 
 .z-index-4, .z-4 { z-index: 4; } 
 .mt-56 { margin-top: 56px; } 
-.h-250 { height: 250px; } 
 .my-100 { margin-top: 100px; margin-bottom: 100px; } 
 .grid-7-cols-1fr { grid-template-columns: repeat(7, 1fr); } 
 .my-12 { margin-top: 12px; margin-bottom: 12px; } 
@@ -620,6 +619,8 @@
 .mt-18 { margin-top: 18px; } 
 .mr-5 { margin-right: 5px; } 
 .mt-40 { margin-top: 40px; } 
+.mt-120 { margin-top: 120px; } 
+.p-25 { padding: 25px; } 
 @layer base {.radius-12 { border-radius: 12px; } } 
 .border-grey-100 { border-color: #F7F6F5; } 
 .mt-11 { margin-top: 11px; } 
@@ -703,7 +704,6 @@
 .mb-3 { margin-bottom: 3px; } 
 .max-w-60 { max-width: 60px; } 
 .mb-100 { margin-bottom: 100px; } 
-.mt-120 { margin-top: 120px; } 
 .text-28 { font-size: 28px; } 
 .mt-46 { margin-top: 46px; } 
 .mt-75 { margin-top: 75px; } 
@@ -875,23 +875,6 @@
 @media only screen and (min-width: 576px) { .sm\:p-24 { padding: 24px; } } 
 @media only screen and (min-width: 576px) { .sm\:gap-20 { gap: 20px; } } 
 
-@media only screen and (min-width: 576px) { .s\:gap-12 { gap: 12px; } } 
-@media only screen and (min-width: 576px) { .s\:w-90 { width: 90px; } } 
-@media only screen and (min-width: 576px) { .s\:w-116 { width: 116px; } } 
-@media only screen and (min-width: 576px) { .s\:w-100 { width: 100px; } } 
-@media only screen and (min-width: 576px) { .s\:grid-3-cols-1fr { grid-template-columns: repeat(3, 1fr); } } 
-@media only screen and (min-width: 576px) { .s\:py-25 { padding-top: 25px; padding-bottom: 25px; } } 
-@media only screen and (min-width: 576px) { .s\:px-15 { padding-left: 15px; padding-right: 15px; } } 
-@media only screen and (min-width: 576px) { .s\:gap-15 { gap: 15px; } } 
-@media only screen and (min-width: 576px) { .s\:text-18 { font-size: 18px; } } 
-@media only screen and (min-width: 576px) { .s\:text-24 { font-size: 24px; } } 
-@media only screen and (min-width: 576px) { .s\:text-28 { font-size: 28px; } } 
-@media only screen and (min-width: 576px) { .s\:p-20 { padding: 20px; } } 
-@media only screen and (min-width: 576px) { .s\:pt-10 { padding-top: 10px; } } 
-@media only screen and (min-width: 576px) { .s\:mb-30 { margin-bottom: 30px; } } 
-@media only screen and (min-width: 576px) { .s\:text-larger {    font-size: 1.25rem;  } } 
-@media only screen and (min-width: 576px) { .s\:gap-20 { gap: 20px; } } 
-
 @media only screen and (min-width: 768px) { .md\:w-fit {    width: fit-content;  } } 
 @media only screen and (min-width: 768px) { .md\:w-650 { width: 650px; } } 
 @media only screen and (min-width: 768px) { .md\:gap-24 { gap: 24px; } } 
@@ -976,6 +959,32 @@
 @media only screen and (min-width: 768px) { .md\:gap-36 { gap: 36px; } } 
 @media only screen and (min-width: 768px) { .md\:w-230 { width: 230px; } } 
 
+
+@media only screen and (min-width: 1200px) { .xl\:mt-3 { margin-top: 3px; } } 
+@media only screen and (min-width: 1200px) { .xl\:mt-27 { margin-top: 27px; } } 
+@media only screen and (min-width: 1200px) { .xl\:mx-200 { margin-left: 200px; margin-right: 200px; } } 
+@media only screen and (min-width: 1200px) { .xl\:pl-80 { padding-left: 80px; } } 
+@media only screen and (min-width: 1200px) { .xl\:pr-80 { padding-right: 80px; } } 
+@media only screen and (min-width: 1200px) { .xl\:grid-5-cols-1fr { grid-template-columns: repeat(5, 1fr); } } 
+@media only screen and (min-width: 1200px) { .xl\:px-200 { padding-left: 200px; padding-right: 200px; } } 
+
+@media only screen and (min-width: 576px) { .s\:gap-12 { gap: 12px; } } 
+@media only screen and (min-width: 576px) { .s\:w-90 { width: 90px; } } 
+@media only screen and (min-width: 576px) { .s\:w-116 { width: 116px; } } 
+@media only screen and (min-width: 576px) { .s\:w-100 { width: 100px; } } 
+@media only screen and (min-width: 576px) { .s\:grid-3-cols-1fr { grid-template-columns: repeat(3, 1fr); } } 
+@media only screen and (min-width: 576px) { .s\:py-25 { padding-top: 25px; padding-bottom: 25px; } } 
+@media only screen and (min-width: 576px) { .s\:px-15 { padding-left: 15px; padding-right: 15px; } } 
+@media only screen and (min-width: 576px) { .s\:gap-15 { gap: 15px; } } 
+@media only screen and (min-width: 576px) { .s\:text-18 { font-size: 18px; } } 
+@media only screen and (min-width: 576px) { .s\:text-24 { font-size: 24px; } } 
+@media only screen and (min-width: 576px) { .s\:text-28 { font-size: 28px; } } 
+@media only screen and (min-width: 576px) { .s\:p-20 { padding: 20px; } } 
+@media only screen and (min-width: 576px) { .s\:pt-10 { padding-top: 10px; } } 
+@media only screen and (min-width: 576px) { .s\:mb-30 { margin-bottom: 30px; } } 
+@media only screen and (min-width: 576px) { .s\:text-larger {    font-size: 1.25rem;  } } 
+@media only screen and (min-width: 576px) { .s\:gap-20 { gap: 20px; } } 
+
 @media only screen and (min-width: 768px) { .m\:flex {    display: flex;  } } 
 @media only screen and (min-width: 768px) { .m\:px-20 { padding-left: 20px; padding-right: 20px; } } 
 @media only screen and (min-width: 768px) { .m\:py-10 { padding-top: 10px; padding-bottom: 10px; } } 
@@ -984,7 +993,6 @@
 @media only screen and (min-width: 768px) { .m\:flex-row {    flex-direction: row;  } } 
 @media only screen and (min-width: 768px) { .m\:text-20 { font-size: 20px; } } 
 @media only screen and (min-width: 768px) { .m\:text-14 { font-size: 14px; } } 
-
 
 @media only screen and (min-width: 992px) { .l\:w-50p { width: 50%; } } 
 @media only screen and (min-width: 992px) { .l\:block {    display: block;  } } 
@@ -1103,9 +1111,9 @@
 @media only screen and (min-width: 992px) { .l\:space-between {    justify-content: space-between;  } } 
 @media only screen and (min-width: 992px) { [class~='l:g|grid-template-columns:auto|_|1fr|_|auto']{grid-template-columns:auto 1fr auto} } 
 @media only screen and (min-width: 992px) { .l\:gap-40 { gap: 40px; } } 
-@media only screen and (min-width: 992px) { .l\:w-40p { width: 40%; } } 
 @media only screen and (min-width: 992px) { .l\:w-60p { width: 60%; } } 
 @media only screen and (min-width: 992px) { .l\:grid {    display: grid;  } } 
+@media only screen and (min-width: 992px) { .l\:w-40p { width: 40%; } } 
 @media only screen and (min-width: 992px) { .l\:text-24 { font-size: 24px; } } 
 @media only screen and (min-width: 992px) { .l\:px-22 { padding-left: 22px; padding-right: 22px; } } 
 @media only screen and (min-width: 992px) { .l\:h-70vh { height: 70vh; } } 
@@ -1223,11 +1231,3 @@
 @media only screen and (min-width: 992px) { .l\:w-238 { width: 238px; } } 
 @media only screen and (min-width: 992px) { .l\:mt--20 { margin-top: -20px; } } 
 @media only screen and (min-width: 992px) { .l\:line-height-40 { line-height: 40px; } } 
-
-@media only screen and (min-width: 1200px) { .xl\:mt-3 { margin-top: 3px; } } 
-@media only screen and (min-width: 1200px) { .xl\:mt-27 { margin-top: 27px; } } 
-@media only screen and (min-width: 1200px) { .xl\:mx-200 { margin-left: 200px; margin-right: 200px; } } 
-@media only screen and (min-width: 1200px) { .xl\:pl-80 { padding-left: 80px; } } 
-@media only screen and (min-width: 1200px) { .xl\:pr-80 { padding-right: 80px; } } 
-@media only screen and (min-width: 1200px) { .xl\:grid-5-cols-1fr { grid-template-columns: repeat(5, 1fr); } } 
-@media only screen and (min-width: 1200px) { .xl\:px-200 { padding-left: 200px; padding-right: 200px; } } 
