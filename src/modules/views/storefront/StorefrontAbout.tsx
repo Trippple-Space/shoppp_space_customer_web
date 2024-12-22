@@ -13,12 +13,12 @@ const StorefrontAbout = ({ store }: { store: Store }) => {
 
   return (
     <>
-      <div className="bg-white w-full">
-        <StorefrontNavBar store={store} />
-        <div className="md:pt-36 sm:pt-28 pt-32 px-24 sm:px-40 md:px-60 l:px-100 xl:px-200 flex flex-col">
-          <section className="flex flex-row j-content-between gap-30">
-            <div className="flex flex-col gap-32 l:w-500">
-              <div className="flex flex-row gap-14">
+      <StorefrontNavBar store={store} />
+      <div className='bg-white w-full mt-60'>
+        <div className='md:pt-36 sm:pt-28 pt-32 px-24 sm:px-40 md:px-60 l:px-100 xl:px-200 flex flex-col'>
+          <section className='flex flex-row j-content-between gap-30'>
+            <div className='flex flex-col gap-32 l:w-500'>
+              <div className='flex flex-row gap-14'>
                 <Image
                   src={store?.thumbnail}
                   alt="store thumbnail"
