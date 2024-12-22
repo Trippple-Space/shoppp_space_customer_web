@@ -794,6 +794,7 @@
 .gap-32 { gap: 32px; } 
 .w-68 { width: 68px; } 
 .h-68 { height: 68px; } 
+.bg-\#e3e3e3 { background-color: #e3e3e3; } 
 .w-1 { width: 1px; } 
 .bg-\#00000014 { background-color: #00000014; } 
 .grid-2-rows-auto { grid-template-rows: repeat(2, auto); } 
@@ -1113,9 +1114,9 @@
 @media only screen and (min-width: 992px) { .l\:h-45 { height: 45px; } } 
 @media only screen and (min-width: 992px) { .l\:mt-40 { margin-top: 40px; } } 
 @media only screen and (min-width: 992px) { .l\:mt-20 { margin-top: 20px; } } 
+@media only screen and (min-width: 992px) { .l\:mr-15 { margin-right: 15px; } } 
 @media only screen and (min-width: 992px) { .l\:w-24 { width: 24px; } } 
 @media only screen and (min-width: 992px) { .l\:h-24 { height: 24px; } } 
-@media only screen and (min-width: 992px) { .l\:mr-15 { margin-right: 15px; } } 
 @media only screen and (min-width: 992px) { .l\:mt-15 { margin-top: 15px; } } 
 @media only screen and (min-width: 992px) { .l\:text-34 { font-size: 34px; } } 
 @media only screen and (min-width: 992px) { .l\:gap-13 { gap: 13px; } } 
