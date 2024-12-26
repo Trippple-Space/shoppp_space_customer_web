@@ -16,7 +16,7 @@ interface ModalProps {
 
 const OrdersModal: React.FC<ModalProps> = ({modalOpen, handleCloseModal, data}) => {
   const [action, setAction] = useState('open-orders');
-  const { orders, fetchOrders } = useOrders()
+  const { orders, fetchOrders } = useOrders({})
 
   const selected = (option: any) => {
     switch (option) {
