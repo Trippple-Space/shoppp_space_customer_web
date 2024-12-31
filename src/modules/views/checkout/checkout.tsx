@@ -88,7 +88,7 @@ const CheckoutPage = () => {
 
   useEffect(() => {
     const checkScreenWidth = () => {
-      setDevOptions(screen.width >= 768 ? "larger" : "smaller");
+      setDevOptions(window.innerWidth >= 768 ? "larger" : "smaller");
     };
     checkScreenWidth();
     window.addEventListener("resize", checkScreenWidth);
@@ -187,7 +187,7 @@ const CheckoutPage = () => {
                     </div>
                     <div className="flex flex-col gap-10 a-items-end">
                       <h3 className="weight-600 text-16 line-height-24">
-                        {formatNumberAsPrice(cartItem?.variant?.finalPrice)}
+                        {formatNumberAsPrice(cartItem?.totalPrice)}
                       </h3>
                       <p
                         className="weight-400 text-14 line-height-22 text-danger underline pointer"

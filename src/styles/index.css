@@ -190,11 +190,13 @@
 .border-black { border-color: #000000; } 
 .hover\:text-red:hover { color: #DE3838; } 
 [class~='g|transition:0.5s']{transition:0.5s} 
+@layer base {.radius-8 { border-radius: 8px; } } 
+.h-100 { height: 100px; } 
 .bg-\#0B9378 { background-color: #0B9378; } 
 .hover\:bg-darkgreen:hover { background-color: #0C7661; } 
 .disabled\:bg-green-300:disabled { background-color: rgba(11, 147, 120, 0.6); } 
-@layer base {.radius-8 { border-radius: 8px; } } 
-.h-100 { height: 100px; } 
+.cursor-not-allowed { cursor: not-allowed; } 
+.cursor-pointer { cursor: pointer; } 
 .object-fit {    object-fit: cover;  } 
 .px-12 { padding-left: 12px; padding-right: 12px; } 
 .gap-5 { gap: 5px; } 
@@ -363,7 +365,6 @@
 .bg-\#FCFCED { background-color: #FCFCED; } 
 @layer base {.radius-200 { border-radius: 200px; } } 
 .a-items-baseline { align-items: baseline; } 
-.cursor-pointer { cursor: pointer; } 
 .bg-\#F0FCED { background-color: #F0FCED; } 
 .bg-\#FCEDED { background-color: #FCEDED; } 
 .hover\:bg-\#F5F5F5:hover { background-color: #F5F5F5; } 

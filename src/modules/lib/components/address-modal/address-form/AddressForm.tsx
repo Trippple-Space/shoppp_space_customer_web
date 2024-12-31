@@ -136,8 +136,7 @@ const AddressForm: FC<AddressFormProps> = ({ closeAddressForm, type }) => {
         </div>
         <div className='flex j-content-end a-items-center border-t border-#00000014 py-12 gap-12'>
           <button type='reset' className='w-fit border-2 border-black text-#000000E0 bg-white hover:bg-red-100 hover:border-red hover:text-red text-14 py-12 px-20 radius-6 weight-500 pointer line-height-19 g|transition:0.5s' onClick={() => closeAddressForm('cancel')} >{type === 'edit' ? 'Discard' : 'Cancel'}</button>
-          <button type='submit' className='w-fit border-none bg-#0B9378 text-white text-14 py-15 px-20 radius-6 weight-500 pointer hover:bg-darkgreen disabled:bg-green-300 g|transition:0.5s'
-            style={{ cursor: disableButton ? 'not-allowed' : 'pointer' }}
+          <button type='submit' className={`w-fit border-none bg-#0B9378 text-white text-14 py-15 px-20 radius-6 weight-500 hover:bg-darkgreen disabled:bg-green-300 g|transition:0.5s ${disableButton ? 'cursor-not-allowed' : 'cursor-pointer'}`}
             disabled={disableButton}
             onClick={() => {
               if (!disableButton) {
