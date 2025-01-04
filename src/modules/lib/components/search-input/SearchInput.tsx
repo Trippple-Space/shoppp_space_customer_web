@@ -28,8 +28,6 @@ const SearchInput: FC<ISearchInput> = ({
     setOpenSearchModal(prev => !prev)
   }
 
-
-
   useEffect(() => {
     const fetchProducts = async () => {
       try {
@@ -50,7 +48,10 @@ const SearchInput: FC<ISearchInput> = ({
     if (searchTerm) {
       fetchProducts()
     }
-  }, [searchTerm])
+    if (!openSearchModal || searchTerm === '') {
+      setSearchResults([])
+    }
+  }, [searchTerm, openSearchModal])
 
   return (
     <div
