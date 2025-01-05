@@ -5,7 +5,7 @@ import { productService } from '../../utility/services/product.service'
 import { Product } from '../../utility/types/product.interface'
 import SearchModal from '../search-modal/SearchModal'
 import classNames from 'classnames'
-import { useParams, usePathname } from 'next/navigation'
+import { usePathname } from 'next/navigation'
 
 interface ISearchInput {
   component?: any
