@@ -85,9 +85,9 @@ const OrderedProductModal = ({
               </div>
               <div
                 className={classNames(
-                  'px-25 overflow-auto j-content-center no-scrollbar mb-20 mt-20 h-250',
+                  'px-25 overflow-auto j-content-center no-scrollbar mb-20 mt-20',
                   {
-                    'l:h-30vh': orderCartModal.cart.cartItems.length > 1
+                    'l:h-30vh': orderCartModal.cart.cartItems.length > 2
                   }
                 )}
                 key={orderCartModal.id}
