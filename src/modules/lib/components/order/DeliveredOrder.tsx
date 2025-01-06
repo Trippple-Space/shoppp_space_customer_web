@@ -49,7 +49,7 @@ const DeliveredOrder = () => {
                 <>
                   <OrderedProductModal
                     handleOrderModal={handleOrderModal}
-                    orderCartModal={orderCartModal}
+                    order={orderCartModal}
                   />
                 </>
               )}
