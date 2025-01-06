@@ -12,7 +12,7 @@ const OrderHeader = ({
     <>
       <div className='w-full h-full flex a-items-center flex-col  l:gap-30'>
         <div className='l:w-50p w-90p flex flex-col gap-50'>
-          <div className='flex a-items-center gap-10 bg-#F5F5F5 p-5 radius-6 '>
+          <div className='flex a-items-center l:gap-10 bg-#F5F5F5 p-5 radius-6 '>
             <div
               className={classNames('w-100p radius-6 cursor-pointer p-10 ', {
                 'bg-white': activeTab === 'ONGOING'
