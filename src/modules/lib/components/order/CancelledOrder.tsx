@@ -13,9 +13,8 @@ const CancelledOrder = () => {
   })
 
   const [openOrderModal, setOpenModalOpen] = useState(false)
-  const [orderCartModal, setOrderCartModal] = useState<Order | void>(
-    singleOrder
-  )
+  const [orderCartModal, setOrderCartModal] = useState<Order | null>(singleOrder || null);
+
 
   const handleOrderModal = () => {
     setOpenModalOpen(prev => !prev)

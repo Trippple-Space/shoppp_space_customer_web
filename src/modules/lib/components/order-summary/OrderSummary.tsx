@@ -21,10 +21,10 @@ const OrderSummary: FC<IOrderSummary> = ({
           <div className="">{formatNumberAsPrice(subTotal)}</div>
         </div>
 
-        <div className="flex space-between">
+        {/*<div className="flex space-between">
           <div className="">Promo Code</div>
           <div className="color-#1677FF underline pointer">Enter code</div>
-        </div>
+        </div> */}
 
         {!!extraSavings && (
           <div className="flex space-between">

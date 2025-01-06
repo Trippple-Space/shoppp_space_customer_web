@@ -15,9 +15,7 @@ const OngoingOrder = () => {
     filters: { status: { In: ['ONGOING'] } }
   })
   const [openOrderModal, setOpenModalOpen] = useState(false)
-  const [orderCartModal, setOrderCartModal] = useState<Order | void>(
-    singleOrder
-  )
+  const [orderCartModal, setOrderCartModal] = useState<Order | null>(singleOrder || null);
 
   const handleOrderModal = () => {
     setOpenModalOpen(prev => !prev)
@@ -28,7 +26,7 @@ const OngoingOrder = () => {
   }
 
   useEffect(() => {
-    setOrderCartModal(singleOrder)
+    setOrderCartModal(singleOrder || null)
   }, [singleOrder])
 
   return (
