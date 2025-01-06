@@ -57,7 +57,7 @@ const OrderProgressCard = ({ orders }: OrderProgressProp) => {
                 </div>
                 <div
                   className={classNames('flex a-items-center space-between', {
-                    'ml-50': order.cart.cartItems.length > 4,
+                    'ml-45': order.cart.cartItems.length > 4,
                     'ml-80': order.cart.cartItems.length === 4,
                     'ml-70': order.cart.cartItems.length === 3,
                     'ml-55': order.cart.cartItems.length === 2,
@@ -144,18 +144,12 @@ const OrderProgressCard = ({ orders }: OrderProgressProp) => {
               </div>
             </div>
           </div>
-          {openOrderProductDetails && (
-            <OrderedProductModal
-              handleOrderModal={handleOpenOrderProductDetail}
-              order={order}
-            />
-          )}
         </div>
       ))}
       {openOrderProductDetails && (
         <OrderedProductModal
           handleOrderModal={handleOpenOrderProductDetail}
-          order={orderedProduct}
+          orderCartModal={orderedProduct}
         />
       )}
     </>
