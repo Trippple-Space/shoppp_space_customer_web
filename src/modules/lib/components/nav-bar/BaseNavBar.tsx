@@ -47,7 +47,7 @@ const BaseNavBar: FC<IBaseNavBar> = ({ links, parent }) => {
   }
 
   useEffect(() => {
-    if (userProfileDropdown) {
+    if (asoebiModal || profileModal || userProfileDropdown) {
       document.body.style.overflow = 'hidden'
     } else {
       document.body.style.overflow = 'auto'
@@ -56,25 +56,12 @@ const BaseNavBar: FC<IBaseNavBar> = ({ links, parent }) => {
     return () => {
       document.body.style.overflow = 'auto'
     }
-  }, [userProfileDropdown])
-
-  useEffect(() => {
-    if (asoebiModal || profileModal) {
-      document.body.style.overflow = 'hidden'
-    } else {
-      document.body.style.overflow = 'auto'
-    }
-
-    return () => {
-      document.body.style.overflow = 'auto'
-    }
-  }, [asoebiModal, profileModal])
+  }, [asoebiModal, profileModal, userProfileDropdown])
 
   return (
     <div
       className={`fixed w-full t-0 l-0 bg-white z-5 ${
-        (parent === 'checkout' || parent === 'orders') &&
-        'border-b border-b-#00000014 md:py-3 py-5.8625'
+        parent === 'checkout' && 'border-b border-b-#00000014 md:py-3 py-5.8625'
       }`}
     >
       <div
