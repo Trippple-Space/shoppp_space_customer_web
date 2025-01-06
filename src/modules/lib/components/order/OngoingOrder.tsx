@@ -7,21 +7,22 @@ import { Order } from '../../utility/types/order.interface'
 import Image from '../image/Image'
 import Link from 'next/link'
 import { useOrders } from '../../utility/hooks/use-orders'
-import OrderedProductModal from '../ordered-product/OrderedProductModal'
 
 const OngoingOrder = () => {
   const { orders, singleOrder, fetchOrderById } = useOrders({
     filters: { status: { In: ['ONGOING'] } }
   })
   const [openOrderModal, setOpenModalOpen] = useState(false)
-  const [orderCartModal, setOrderCartModal] = useState<Order | null>(singleOrder || null);
+  const [orderCartModal, setOrderCartModal] = useState<Order | void>(
+    singleOrder
+  )
 
   const handleOrderModal = () => {
     setOpenModalOpen(prev => !prev)
   }
 
   useEffect(() => {
-    setOrderCartModal(singleOrder || null)
+    setOrderCartModal(singleOrder)
   }, [singleOrder])
 
   return (
@@ -37,14 +38,6 @@ const OngoingOrder = () => {
                 handleOrderModal={handleOrderModal}
                 setOrderCartModal={setOrderCartModal}
               />
-              {openOrderModal && (
-                <>
-                  <OrderedProductModal
-                    handleOrderModal={handleOrderModal}
-                    order={orderCartModal}
-                  />
-                </>
-              )}
             </>
           )}
         </div>
