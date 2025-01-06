@@ -31,7 +31,14 @@ class CartService {
           cartData.cartItems = cartData.cartItems.sort(
             (a: CartItem, b: CartItem) => a.id - b.id
           );
-          resolve(cartData);
+          this.fetchCart()
+            .then((updatedCartData) => {
+              resolve(updatedCartData);
+            })
+            .catch((error) => {
+              console.error("Error fetching updated cart:", error);
+              reject(error);
+            });
         })
         .catch((error) => {
           console.error("Error adding to cart:", error);

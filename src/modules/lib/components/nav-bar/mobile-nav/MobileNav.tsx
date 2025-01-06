@@ -10,7 +10,8 @@ import AsoebiLinksModal from '../AsoebiLinksModal'
 import Link from 'next/link'
 import { paths } from '@/modules/lib/utility/paths'
 import config from '../../../../../../env'
-import { useOrderView } from '@/modules/lib/utility/hooks/views/use-order-view'
+import { useOrders } from '@/modules/lib/utility/hooks/use-orders'
+
 
 interface IMobileNav {
   handleCloseDropdown: () => void
@@ -27,7 +28,7 @@ const MobileNav: FC<IMobileNav> = ({
   const { user, signOut } = useNavbarView()
   const { isAuthenticated } = useUserStore()
 
-  const { orders } = useOrderView({
+  const { orders } = useOrders({
   filters: { status: { In: ['ONGOING'] } }
 })
 

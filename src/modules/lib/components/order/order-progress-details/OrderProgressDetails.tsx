@@ -12,7 +12,7 @@ const OrderProgressDetails = ({
     setTimeline(prev => !prev)
   }
 
-  console.log({ orderCartModal })
+
 
   return (
     <>
@@ -84,7 +84,7 @@ const OrderProgressDetails = ({
               styles='t-0 h-60 bg-#D4280C overflow'
               orderCartModal={orderCartModal}
             />
-            <div className='bg-#FFE5E1 w-100p z-10 px-10 py-20 radius-5 border border-2 border-#D4280C font-inter'>
+            <div className='bg-#FFE5E1 w-100p px-10 py-20 radius-5 border border-2 border-#D4280C font-inter'>
               <p className='text-danger text-14 w-90p'>
                 {orderCartModal?.cancellationReason ||
                   'This order has been cancelled'}

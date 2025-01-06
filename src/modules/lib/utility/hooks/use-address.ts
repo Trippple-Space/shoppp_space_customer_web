@@ -5,7 +5,6 @@ import useAddressStore from "../store/address.store";
 import useUserStore from "../store/user.store";
 import { Address } from "../types/address.interface";
 import { FormikConfig, useFormik } from "formik";
-import { toast } from "sonner";
 import * as Yup from "yup";
 
 const nameValidation = Yup.string()
@@ -29,7 +28,11 @@ export const AddressValidationSchema = Yup.object().shape({
       (value) => {
         if (!value) return false;
 
-        const phoneNumber = value.startsWith("+234") ? value.slice(4) : value;
+        const phoneNumber = value.startsWith("+234")
+          ? value.slice(4)
+          : value.startsWith("0")
+          ? value.slice(1)
+          : value;
         return /^(7|8|9)\d{9}$/.test(phoneNumber);
       }
     )
@@ -49,7 +52,11 @@ export const AddressValidationSchema = Yup.object().shape({
         ) {
           return true;
         }
-        const phoneNumber = value.startsWith("+234") ? value.slice(4) : value;
+        const phoneNumber = value.startsWith("+234")
+          ? value.slice(4)
+          : value.startsWith("0")
+          ? value.slice(1)
+          : value;
         return /^(7|8|9)\d{9}$/.test(phoneNumber);
       }
     ),
@@ -59,8 +66,7 @@ export const AddressValidationSchema = Yup.object().shape({
 
 const formikAddressConfig = (
   initialValues: Address | undefined,
-  handleSubmit: Function,
-  existingAddresses: Address[]
+  handleSubmit: Function
 ): FormikConfig<any> => ({
   initialValues: initialValues || {
     label: "something",
@@ -77,24 +83,17 @@ const formikAddressConfig = (
   onSubmit: (values, { resetForm }) => {
     const transformedValues = {
       ...values,
-      contactNo: `+234${values.contactNo.replace(/^\+234/, "")}`,
+      contactNo: `+234${values.contactNo
+        .replace(/^0/, "")
+        .replace(/^\+234/, "")}`,
       secondaryContactNo: values.secondaryContactNo
-        ? `+234${values.secondaryContactNo.replace(/^\+234/, "")}`
+        ? `+234${values.secondaryContactNo
+            .replace(/^0/, "")
+            .replace(/^\+234/, "")}`
         : "",
     };
     if (!values.secondaryContactNo) {
       delete transformedValues.secondaryContactNo;
-    }
-
-    if (transformedValues.isDefault) {
-      if (
-        existingAddresses.some(
-          (address) => address.isDefault && address.id !== values.id
-        )
-      ) {
-        toast.warning("A default address already exists", { duration: 1000 });
-        transformedValues.isDefault = false;
-      }
     }
 
     handleSubmit(transformedValues);
@@ -145,16 +144,12 @@ const useAddress = () => {
   };
 
   const formHandler = useFormik<Address>(
-    formikAddressConfig(undefined, handleCreateAddress, addresses ?? [])
+    formikAddressConfig(undefined, handleCreateAddress)
   );
   const updateFormHandler = useFormik<Address>(
-    formikAddressConfig(
-      addressToUpdate,
-      (address: Address) => {
-        handleUpdateAddress(address.id, address);
-      },
-      addresses ?? []
-    )
+    formikAddressConfig(addressToUpdate, (address: Address) => {
+      handleUpdateAddress(address.id, address);
+    })
   );
 
   useEffect(() => {

@@ -37,7 +37,7 @@ const OverlappingImages = ({ orderItem }: any) => {
           className='w-40 h-40 radius-100 flex a-items-center j-content-center bg-#F5F5F5 text-12 weight-500'
           style={{
             left: `${maxVisibleItems * 15}px`, // Place "+X" after last image
-            zIndex: maxVisibleItems + 1
+            zIndex: maxVisibleItems
           }}
         >
           <p className='color-#00000099'>
