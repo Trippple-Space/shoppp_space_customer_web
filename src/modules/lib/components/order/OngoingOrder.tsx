@@ -48,7 +48,7 @@ const OngoingOrder = () => {
                 <>
                   <OrderedProductModal
                     handleOrderModal={handleOrderModal}
-                    orderCartModal={orderCartModal}
+                    order={orderCartModal}
                   />
                 </>
               )}

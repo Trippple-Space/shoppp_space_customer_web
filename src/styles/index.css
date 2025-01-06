@@ -797,6 +797,7 @@
 .gap-32 { gap: 32px; } 
 .w-68 { width: 68px; } 
 .h-68 { height: 68px; } 
+.bg-\#e3e3e3 { background-color: #e3e3e3; } 
 .w-1 { width: 1px; } 
 .bg-\#00000014 { background-color: #00000014; } 
 .grid-2-rows-auto { grid-template-rows: repeat(2, auto); } 

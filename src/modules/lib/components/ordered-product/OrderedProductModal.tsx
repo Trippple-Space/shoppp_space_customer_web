@@ -3,13 +3,14 @@ import { IoMdClose } from 'react-icons/io'
 import Image from '../image/Image'
 import { PiArrowClockwise } from 'react-icons/pi'
 import { Order } from '../../utility/types/order.interface'
+import { ReactNode } from 'react'
 
 const OrderedProductModal = ({
   handleOrderModal,
-  orderCartModal
+  order
 }: {
   handleOrderModal: () => void
-  orderCartModal: Order | null
+  order: Order | void
 }) => {
   return (
     <>
@@ -17,7 +18,7 @@ const OrderedProductModal = ({
         className='fixed inset-0 bg-black opacity-10 z-10'
         onClick={handleOrderModal}
       />
-      {orderCartModal && (
+      {order?.id && (
         <div className='bg-black'>
           <div
             className={`fixed l-50p g|transform:translate(-50%) z-10 t-0 t-10p w-90p l:w-40p h-60p bg-white overflow-scroll  radius-t-r-8 radius-t-l-8`}
@@ -33,14 +34,14 @@ const OrderedProductModal = ({
                 </div>
               </div>
               <div className='p-15 px-25 flex a-items-center space-between border-b border-b-10 border-b-whitesmoke mt-50'>
-                <p className='text-14 weight-500'>#{orderCartModal.id}</p>
+                <p className='text-14 weight-500'>#{order.id}</p>
                 <button className='flex gap-10 a-items-center px-10 py-7 radius-5 border border-#00000026 bg-none cursor-pointer'>
                   <PiArrowClockwise className='w-fit' />
                   Buy again
                 </button>
               </div>
               <div className='p-25 flex flex-col gap-10 overflow-hidden'>
-                {orderCartModal?.cart.cartItems.map((item: any) => (
+                {order?.cart.cartItems.map((item: any) => (
                   <>
                     <div className='bg-whitesmoke radius-5 p-10 flex space-between a-items-start'>
                       <div className='flex gap-10 w-60p'>
@@ -84,13 +85,13 @@ const OrderedProductModal = ({
                     <div className='flex space-between'>
                       <p className='color-#000000E0'>Subtotal</p>
                       <p className='text-16'>
-                        {formatNumberAsPrice(orderCartModal.cart.subTotal)}
+                        {formatNumberAsPrice(order.cart.subTotal)}
                       </p>
                     </div>
                     <div className='flex space-between border-b border-b-#00000014 pb-10'>
                       <p className='color-#000000E0'>Delivery</p>
                       <p className='text-16'>
-                        {formatNumberAsPrice(orderCartModal.deliveryFee)}
+                        {formatNumberAsPrice(order.deliveryFee)}
                       </p>
                     </div>
                   </div>
@@ -98,7 +99,7 @@ const OrderedProductModal = ({
                     <div className='flex space-between'>
                       <p className='color-#000000E0'>Total</p>
                       <p className='text-16'>
-                        {formatNumberAsPrice(orderCartModal.totalAmount)}
+                        {formatNumberAsPrice(order.totalAmount)}
                       </p>
                     </div>
                     <div className='flex space-between'>

@@ -36,7 +36,7 @@ const CancelledOrder = () => {
               {openOrderModal && (
                 <OrderedProductModal
                   handleOrderModal={handleOrderModal}
-                  orderCartModal={orderCartModal}
+                  order={orderCartModal}
                 />
               )}
             </>
