@@ -1104,6 +1104,7 @@
 @media only screen and (min-width: 992px) { .l\:w-60 { width: 60px; } } 
 @media only screen and (min-width: 992px) { .l\:h-60 { height: 60px; } } 
 @media only screen and (min-width: 992px) { .l\:w-250 { width: 250px; } } 
+@media only screen and (min-width: 992px) { .l\:gap-10 { gap: 10px; } } 
 @media only screen and (min-width: 992px) { .l\:gap-0 { gap: 0px; } } 
 @media only screen and (min-width: 992px) { .l\:flex-row {    flex-direction: row;  } } 
 @media only screen and (min-width: 992px) { .l\:a-items-center { align-items: center; } } 
@@ -1142,7 +1143,6 @@
 @media only screen and (min-width: 992px) { .l\:w-45\.8p { width: 45.8%; } } 
 @media only screen and (min-width: 992px) { .l\:float-right {    float: right;  } } 
 @media only screen and (min-width: 992px) { .l\:grid-4-cols-1fr { grid-template-columns: repeat(4, 1fr); } } 
-@media only screen and (min-width: 992px) { .l\:gap-10 { gap: 10px; } } 
 @media only screen and (min-width: 992px) { .l\:t-150 { top: 150px; } } 
 @media only screen and (min-width: 992px) { .l\:l-100 { left: 100px; } } 
 @media only screen and (min-width: 992px) { .l\:w-700 { width: 700px; } } 
