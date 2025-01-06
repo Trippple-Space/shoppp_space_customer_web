@@ -10,7 +10,7 @@ import { useEffect, useState } from 'react'
 import { useRouter } from 'next/navigation'
 import { useCart } from '../../utility/hooks/use-cart'
 
-const orderCartModalModal = ({
+const OrderedProductModal = ({
   handleOrderModal,
   order
 }: {
@@ -33,7 +33,6 @@ const orderCartModalModal = ({
         if (!existingCartItemIds.includes(cartItem.variant.id)) {
           addToCart(cartItem.variant.id, cartItem.quantity)
         }
-        router.push('/checkout')
       }
       router.push('/checkout')
     } catch (error) {
@@ -51,7 +50,7 @@ const orderCartModalModal = ({
     return () => {
       document.body.style.overflow = 'auto'
     }
-  }, [])
+  }, [order])
 
   return (
     <>
@@ -167,4 +166,4 @@ const orderCartModalModal = ({
   )
 }
 
-export default orderCartModalModal
+export default OrderedProductModal
