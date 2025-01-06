@@ -492,6 +492,7 @@
 .object-fit-cover { object-fit: cover; } 
 .color-\#0000008C { color: #0000008C; } 
 .t-10p { top: 10%; } 
+.h-250 { height: 250px; } 
 .a-items-start { align-items: flex-start; } 
 .opacity-50 { opacity: 50%; } 
 .mt-60 { margin-top: 60px; } 
@@ -588,7 +589,6 @@
 .mt-4 { margin-top: 4px; } 
 .z-index-4, .z-4 { z-index: 4; } 
 .mt-56 { margin-top: 56px; } 
-.h-250 { height: 250px; } 
 .my-100 { margin-top: 100px; margin-bottom: 100px; } 
 .grid-7-cols-1fr { grid-template-columns: repeat(7, 1fr); } 
 .my-12 { margin-top: 12px; margin-bottom: 12px; } 

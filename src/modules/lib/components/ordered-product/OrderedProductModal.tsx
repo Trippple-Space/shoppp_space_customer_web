@@ -87,7 +87,8 @@ const OrderedProductModal = ({
                 className={classNames(
                   'px-25 overflow-auto j-content-center no-scrollbar mb-20 mt-20',
                   {
-                    'l:h-30vh': orderCartModal.cart.cartItems.length > 2
+                    'l:h-30vh': orderCartModal.cart.cartItems.length > 2,
+                    'h-250': orderCartModal.cart.cartItems.length > 2,
                   }
                 )}
                 key={orderCartModal.id}
