@@ -10,11 +10,11 @@ const OrderHeader = ({
 }) => {
   return (
     <>
-      <div className='w-full h-full flex a-items-center flex-col  gap-30'>
+      <div className='w-full h-full flex a-items-center flex-col  l:gap-30'>
         <div className='l:w-50p w-90p flex flex-col gap-50'>
-          <div className='flex a-items-center gap-10 bg-#F5F5F5 p-5 radius-6'>
+          <div className='flex a-items-center l:gap-10 bg-#F5F5F5 p-5 radius-6 '>
             <div
-              className={classNames('l:w-100p radius-6 cursor-pointer p-10', {
+              className={classNames('w-100p radius-6 cursor-pointer p-10 ', {
                 'bg-white': activeTab === 'ONGOING'
               })}
               onClick={() => setActiveTab?.('ONGOING')}
@@ -47,7 +47,7 @@ const OrderHeader = ({
             </div>
             <div
               className={classNames(
-                'l:w-100p cursor-pointer w-fit p-10 radius-6 overflow-hidden whitespace-nowrap ',
+                'w-100p cursor-pointer p-10 radius-6 overflow-hidden whitespace-nowrap ',
                 {
                   'bg-white': activeTab === 'CANCELLED'
                 }

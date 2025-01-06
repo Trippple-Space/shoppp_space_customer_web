@@ -18,26 +18,19 @@ interface OrderProgressProp {
   setOrderCartModal: (order: Order) => void
 }
 
-const OrderProgressCard = ({
-  orders,
-  handleOrderModal,
-  setOrderCartModal
-}: OrderProgressProp) => {
-  // const orderDetailModal = (order: Order) => {
-  //   handleOrderModal()
-  //   setOrderCartModal(order)
-  // }
+const OrderProgressCard = ({ orders }: OrderProgressProp) => {
   const [openOrderProductDetails, setOpenOrderProductDetails] = useState(false)
+  const [orderedProduct, setOrderedProduct] = useState<Order>()
 
-  const handleOpenOrderProductDetail = () => {
+  const handleOpenOrderProductDetail = (order?: Order) => {
     setOpenOrderProductDetails(prev => !prev)
+    setOrderedProduct(order)
   }
-
   return (
     <>
       {orders.map(order => (
-        <>
-          <div className='bg-white' key={order.id}>
+        <div key={order.id}>
+          <div className='bg-white'>
             <div className='p-20 flex flex-col gap-20'>
               <div className='flex flex-col gap-10'>
                 <div className='flex space-between a-items-center'>
@@ -75,7 +68,8 @@ const OrderProgressCard = ({
                     className={classNames(
                       'text-12 flex a-items-center cursor-pointer h-full'
                     )}
-                    onClick={handleOpenOrderProductDetail}
+                    //  onClick = { handleOpenOrderProductDetail }
+                    onClick={() => handleOpenOrderProductDetail(order)}
                   >
                     <div className={classNames('relative', {})}>
                       <OverlappingImages orderItem={order} />
@@ -109,7 +103,10 @@ const OrderProgressCard = ({
                     </p>
                     <div className='flex a-items-center gap-10'>
                       {order.delivery.code.split('').map(str => (
-                        <p className='h-40 w-40 radius-5 weight-600 bg-whitesmoke text-center flex a-items-center j-content-center'>
+                        <p
+                          className='h-40 w-40 radius-5 weight-600 bg-whitesmoke text-center flex a-items-center j-content-center'
+                          key={str}
+                        >
                           {str.toLocaleUpperCase()}
                         </p>
                       ))}
@@ -127,10 +124,10 @@ const OrderProgressCard = ({
               <div
                 className={classNames(
                   'l:flex grid gap-10 l:gap-0 a-items-center space-between',
-                  { 'j-content-end': order.status !== 'Ongoing' }
+                  { 'j-content-end': order.status !== 'ONGOING' }
                 )}
               >
-                {status === 'Ongoing' && (
+                {order.status === 'ONGOING' && (
                   <p className='color-#00000099 text-14 weight-400'>
                     {formatTime(
                       order.delivery.deliveryWindowStart
@@ -150,11 +147,17 @@ const OrderProgressCard = ({
           {openOrderProductDetails && (
             <OrderedProductModal
               handleOrderModal={handleOpenOrderProductDetail}
-              orderCartModal={order}
+              order={order}
             />
           )}
-        </>
+        </div>
       ))}
+      {openOrderProductDetails && (
+        <OrderedProductModal
+          handleOrderModal={handleOpenOrderProductDetail}
+          order={orderedProduct}
+        />
+      )}
     </>
   )
 }

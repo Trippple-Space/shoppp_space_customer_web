@@ -6,8 +6,7 @@ import {
 } from '@/modules/lib/utility/utility'
 import React, { useEffect, useState } from 'react'
 import Image from '../../lib/components/image/Image'
-import { GoArrowLeft } from 'react-icons/go'
-import useUserStore from '@/modules/lib/utility/store/user.store'
+import { GoArrowLeft, GoHome } from 'react-icons/go'
 import { MdKeyboardArrowDown } from 'react-icons/md'
 import OrderedProductCard from '../../lib/components/ordered-product/orderedProductCard'
 import OrderProgress from '../../lib/components/order/order-progress-details/OrderProgressDetails'
@@ -21,30 +20,29 @@ import OrderHeader from '@/modules/lib/components/order/OrderHeader'
 import CancelledOrder from '../../lib/components/order/CancelledOrder'
 import DeliveredOrder from '../../lib/components/order/DeliveredOrder'
 import OngoingOrder from '../../lib/components/order/OngoingOrder'
-import { useOrderView } from '@/modules/lib/utility/hooks/views/use-order-view'
+import { CartItem } from '@/modules/lib/utility/types/cart.interface'
+import Link from 'next/link'
+import { useCart } from '@/modules/lib/utility/hooks/use-cart'
+import { cartService } from '@/modules/lib/utility/services/cart.service'
 
 interface OrderDetailsProps {
   orderCartModal?: Order
 }
 
 const OrderDetails = ({ orderCartModal }: OrderDetailsProps) => {
-  const { user } = useUserStore()
-  const router = useRouter()
+  const { addToCart } = useCart()
 
+  const router = useRouter()
 
   const savedActiveTab =
     typeof window !== 'undefined' ? localStorage.getItem('activeTab') : null
-  
+
   const defaultTab = orderCartModal?.status || 'ONGOING'
 
   const [activeTab, setActiveTab] = useState<string>(
     savedActiveTab || defaultTab
   )
   const [showDetails, setShowDetails] = useState(true)
-
-  const { orders } = useOrderView({
-    filters: { status: { In: [activeTab] } }
-  })
 
   const getOrderImage = (status?: string) => {
     switch (status) {
@@ -60,7 +58,6 @@ const OrderDetails = ({ orderCartModal }: OrderDetailsProps) => {
   const [openTotal, setOpenTotal] = useState(false)
   const [openOrderedProducts, setOpenOrderedProducts] = useState(false)
 
-  // Sync activeTab with product status when loaded
   useEffect(() => {
     if (orderCartModal?.status) {
       setActiveTab(orderCartModal.status)
@@ -77,6 +74,7 @@ const OrderDetails = ({ orderCartModal }: OrderDetailsProps) => {
   }
 
   const handleTabClick = (tab: string) => {
+    router.push('/orders')
     setActiveTab(tab)
     setShowDetails(false)
 
@@ -102,10 +100,39 @@ const OrderDetails = ({ orderCartModal }: OrderDetailsProps) => {
     setShowDetails(true)
   }, [orderCartModal])
 
+  const buyAgain = async (cartItems: CartItem[]) => {
+    try {
+      const currentCart = await cartService.fetchCart()
+
+      const existingCartItemIds = currentCart.cartItems.map(
+        (item: CartItem) => item.variant.id
+      )
+
+      for (const cartItem of cartItems) {
+        if (!existingCartItemIds.includes(cartItem.variant.id)) {
+          addToCart(cartItem.variant.id, cartItem.quantity)
+        }
+        router.push('/checkout')
+      }
+      router.push('/checkout')
+    } catch (error) {
+      console.error('Error processing buy again action:', error)
+    }
+  }
+
   return (
     <>
-      <HomepageNavBar />
-      <div className='w-full h-full flex a-items-center flex-col gap-30 mt-150'>
+      <div>
+        <HomepageNavBar parent={"orders"} />
+      </div>
+      <div className='mt-120 w-full h-full flex a-items-center flex-col gap-30'>
+        <div className='flex  a-items-center gap-5 l:w-50p w-90p'>
+          <GoHome className='w-fit color-#00000066 w-15 h-15' />
+          <Link href='/home' className='text-14 color-#00000066'>
+            Home /
+          </Link>
+          <span className='text-14 weight-400'>Orders</span>
+        </div>
         <OrderHeader setActiveTab={handleTabClick} activeTab={activeTab} />
         <div className='l:w-50p w-90p flex flex-col gap-50'>
           {/* Default "Order Details" View */}
@@ -125,7 +152,7 @@ const OrderDetails = ({ orderCartModal }: OrderDetailsProps) => {
                   <div className='bg-white p-25 flex a-items-center space-between'>
                     <div className='grid gap-5'>
                       <p className='text-18 weight-600'>
-                        Hi, {user?.profile.firstName}
+                        Hi, {orderCartModal.user.profile.firstName}
                       </p>
                       <p className='text-14 color-#00000099'>
                         Your order will be confirmed shortly.
@@ -202,7 +229,12 @@ const OrderDetails = ({ orderCartModal }: OrderDetailsProps) => {
                           #{orderCartModal.id}
                         </p>
 
-                        <button className='flex gap-10 a-items-center px-10 py-7 radius-5 border border-#00000026 bg-none cursor-pointer'>
+                        <button
+                          className='flex gap-10 a-items-center px-10 py-7 radius-5 border border-#00000026 bg-none cursor-pointer'
+                          onClick={() =>
+                            buyAgain(orderCartModal.cart.cartItems)
+                          }
+                        >
                           <PiArrowClockwise className='w-fit' />
                           Buy again
                         </button>
@@ -237,7 +269,9 @@ const OrderDetails = ({ orderCartModal }: OrderDetailsProps) => {
                             <div className='flex space-between border-b border-b-#00000014 pb-10'>
                               <p className='color-#000000E0'>Delivery</p>
                               <p className='text-16'>
-                                {formatNumberAsPrice(orderCartModal.deliveryFee)}
+                                {formatNumberAsPrice(
+                                  orderCartModal.deliveryFee
+                                )}
                               </p>
                             </div>
                           </div>
