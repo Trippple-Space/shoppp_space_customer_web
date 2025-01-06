@@ -1,10 +1,8 @@
 import React, { FC, useEffect, useState } from 'react'
 import useAddress from '@/modules/lib/utility/hooks/use-address';
 import AddressField from './address-field/AddressField';
-import { SlLocationPin } from 'react-icons/sl';
 import Input from '../../input/Input';
 
-import useCurrentLocation from '@/modules/lib/utility/hooks/use-fetch-address';
 import AddressMap from '../address-map/AddressMap';
 import UseCurrentLocationButton from '../address-map/UseCurrentLocationButton';
 
@@ -15,14 +13,30 @@ interface AddressFormProps {
 const AddressForm: FC<AddressFormProps> = ({ closeAddressForm, type }) => {
   const { formHandler, updateFormHandler, } = useAddress();
   const [userLocation, setUserLocation] = useState<any>({})
+  const [disableButton, setDisableButton] = useState(true)
   const formhandler = (type === 'edit') ? updateFormHandler : formHandler
+
+  useEffect(() => {
+    const emptyFields = Object.entries(formhandler.values).every(
+      ([key, value]) =>
+        (key === "label" || key === "state") || value === "" || value === false
+    );
+    const errorsCheck = () => {
+      return Object.keys(formhandler.errors).length !== 0
+    }
+    if (!errorsCheck() && !emptyFields) {
+      setDisableButton(false)
+    } else {
+      setDisableButton(true)
+    }
+  }, [formhandler.values, formhandler.errors])
 
   return (
     (<div className="flex-col w-full">
       <form className='flex flex-col' onSubmit={formhandler.handleSubmit}>
         <div className='flex flex-col p-24 mt--24 mx--24 gap-16'>
           <div className={`radius-8 overflow-hidden relative h-100`}>
-            <AddressMap location={{ lat: userLocation.latitude || 6.5476701, lng: userLocation.longitude || 2.6599635 }} />
+            <AddressMap location={{ lat: userLocation.latitude || 6.5480282, lng: userLocation.longitude || 3.1191456 }} />
             <div className='absolute bg-#00000073 t-0 b-0 w-full flex flex-col j-content-center'>
               <UseCurrentLocationButton formhandler={formhandler} setUserLocation={setUserLocation} />
             </div>
@@ -122,12 +136,10 @@ const AddressForm: FC<AddressFormProps> = ({ closeAddressForm, type }) => {
         </div>
         <div className='flex j-content-end a-items-center border-t border-#00000014 py-12 gap-12'>
           <button type='reset' className='w-fit border-2 border-black text-#000000E0 bg-white hover:bg-red-100 hover:border-red hover:text-red text-14 py-12 px-20 radius-6 weight-500 pointer line-height-19 g|transition:0.5s' onClick={() => closeAddressForm('cancel')} >{type === 'edit' ? 'Discard' : 'Cancel'}</button>
-          <button type='submit' className='w-fit border-none bg-#0B9378 text-white text-14 py-15 px-20 radius-6 weight-500 pointer hover:bg-darkgreen g|transition:0.5s'
+          <button type='submit' className={`w-fit border-none bg-#0B9378 text-white text-14 py-15 px-20 radius-6 weight-500 hover:bg-darkgreen disabled:bg-green-300 g|transition:0.5s ${disableButton ? 'cursor-not-allowed' : 'cursor-pointer'}`}
+            disabled={disableButton}
             onClick={() => {
-              const errorsCheck = Object.values(formhandler.errors).every(error => {
-                return error === '';
-              });
-              if (errorsCheck && formhandler.values.firstName !== '') {
+              if (!disableButton) {
                 setTimeout(() => closeAddressForm('submit'), 1000)
               }
             }}>{type === 'edit' ? 'Save' : 'Add address'}</button>

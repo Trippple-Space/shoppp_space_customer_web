@@ -42,11 +42,17 @@ const AddressField: FC<AddressFieldProps> = ({
         type={type || "text"}
         placeholder={placeholder}
         handleChange={formHandler.handleChange}
-        handleBlur={() => {setIsFocused(false); formHandler.handleBlur();}}
+        handleBlur={(e: any) => {
+          setIsFocused(false);
+          formHandler.handleBlur(e);
+        }}
         handleFocus={() => setIsFocused(true)}
-        value={field === 'state'
-          ? 'Lagos'
-          : formHandler.values[field]?.replace(/^\+234/, '')}
+        value={
+          field === 'state'
+            ? 'Lagos'
+            : formHandler.values[field]?.replace(/^\+234/, '') || ''
+        }
+
         className={cx("w-full", className)}
         disabled={disabled}
         inputClass={cx(

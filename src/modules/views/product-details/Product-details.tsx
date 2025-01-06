@@ -60,9 +60,9 @@ const ProductDetails = ({ product }: { product: Product }) => {
   return (
     <>
       <HomepageNavBar parent='' />
-      <div className={'product-details-page l:max-w-1400 w-full mx-auto my-60'}>
-        <div className='l:flex w-full gap-25 l:pt-20 l:mt-100'>
-          <div className='l:w-50p'>
+      <div className={'product-details-page l:max-w-1400 w-full mx-auto my-67 xl:px-60 md:px-50 sm:px-40 px-24'}>
+        <div className='l:flex w-full xl:gap-75 l:gap-60 gap-25 l:pt-20 l:mt-100'>
+          <div className='l:w-50p flex flex-col l:gap-25 l:ps-25'>
             <Breadcrumb
               crumbs={[
                 {
@@ -74,11 +74,11 @@ const ProductDetails = ({ product }: { product: Product }) => {
             />
             <Image
               src={selectedImage}
-              className='l:w-600 w-100p l:mt-25 l:radius-15 border border-grey-100'
+              className='flex-grow-1 w-100p l:radius-15 radius-8 border border-grey-100 object-fit l:h-full md:h-420 sm:h-350 h-270'
               alt={''}
             />
           </div>
-          <div className='l:w-50p l:px-0 px-10'>
+          <div className='l:w-50p'>
             <div className='flex flex-row space-between a-items-end'>
               <div>
                 <div className='l:flex grid l:gap-0 gap-20 space-between mt-10'>
@@ -199,9 +199,9 @@ const ProductDetails = ({ product }: { product: Product }) => {
                   onClick={() => {
                     isAuthenticated
                       ? addToCart(
-                          selectedVariant?.id,
-                          selectedVariant?.minPurchaseQuantity || 1
-                        )
+                        selectedVariant?.id,
+                        selectedVariant?.minPurchaseQuantity || 1
+                      )
                       : isLoginModal()
                   }}
                 >

@@ -5,6 +5,7 @@ import { Order } from '../../utility/types/order.interface'
 import { useOrders } from '../../utility/hooks/use-orders'
 import Link from 'next/link'
 import Image from '../../components/image/Image'
+import OrderedProductModal from '../ordered-product/OrderedProductModal'
 
 const CancelledOrder = () => {
   const { orders, singleOrder } = useOrders({
@@ -12,9 +13,8 @@ const CancelledOrder = () => {
   })
 
   const [openOrderModal, setOpenModalOpen] = useState(false)
-  const [orderCartModal, setOrderCartModal] = useState<Order | void>(
-    singleOrder
-  )
+  const [orderCartModal, setOrderCartModal] = useState<Order | null | any>(singleOrder || null);
+
 
   const handleOrderModal = () => {
     setOpenModalOpen(prev => !prev)
@@ -37,6 +37,12 @@ const CancelledOrder = () => {
                 handleOrderModal={handleOrderModal}
                 setOrderCartModal={setOrderCartModal}
               />
+              {openOrderModal && (
+                <OrderedProductModal
+                  handleOrderModal={handleOrderModal}
+                  order={orderCartModal}
+                />
+              )}
             </>
           )}
         </div>

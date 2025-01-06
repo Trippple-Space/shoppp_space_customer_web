@@ -1,5 +1,4 @@
 "use client";
-import Icon from "@/modules/lib/components/icon/Icon";
 import Image from "@/modules/lib/components/image/Image";
 import React, { useEffect, useState } from "react";
 import HomepageNavBar from "@/modules/lib/components/nav-bar/HomepageNavBar";
@@ -7,8 +6,6 @@ import { useRouter } from "next/navigation";
 import Footer from "@/modules/lib/components/footer/Footer";
 import useUserStore from "@/modules/lib/utility/store/user.store";
 import { useCart } from "@/modules/lib/utility/hooks/use-cart";
-import { getCartItemVariantPropertiesAsJsx } from "@/modules/lib/components/minicart/minicart.helper";
-import { useSignOut } from "@/modules/lib/utility/hooks/use-sign-out";
 import useAddressStore from "@/modules/lib/utility/store/address.store";
 import useAddress from "@/modules/lib/utility/hooks/use-address";
 import usePayment from "@/modules/lib/utility/hooks/use-payment";
@@ -23,6 +20,7 @@ import { PiCaretDown, PiCaretUp } from "react-icons/pi";
 import Link from "next/link";
 import DeliveryOptions from "@/modules/lib/components/delivery-options/DeliveryOptions";
 import DeliveryMessage from "@/modules/lib/components/delivery-in-lagos/DeliveryMessage";
+import { paths } from "@/modules/lib/utility/paths";
 
 const CheckoutPage = () => {
   const [selectedDeliveryOption, setSelectedDeliveryOption] =
@@ -30,6 +28,7 @@ const CheckoutPage = () => {
   const { user } = useUserStore();
   const { cart, removeFromCart } = useCart();
   const { openAddressModal, closeAddressModal, selectedAddress } = useAddress();
+  const router = useRouter()
   const { fetchAddresses } = useAddressStore()
   const { loading: isPaymentLoading, payWithPaystack } = usePayment();
   const canProceedToPayment = !(!isPaymentLoading && selectedAddress && user);
@@ -81,12 +80,15 @@ const CheckoutPage = () => {
     getCartItemsByStore();
     if (user) {
       fetchAddresses(user?.id)
+      if (cart.cartItems.length === 0) {
+        router.push(paths.homepage)
+      }
     }
   }, [cart]);
 
   useEffect(() => {
     const checkScreenWidth = () => {
-      setDevOptions(screen.width >= 768 ? "larger" : "smaller");
+      setDevOptions(window.innerWidth >= 768 ? "larger" : "smaller");
     };
     checkScreenWidth();
     window.addEventListener("resize", checkScreenWidth);
@@ -185,7 +187,7 @@ const CheckoutPage = () => {
                     </div>
                     <div className="flex flex-col gap-10 a-items-end">
                       <h3 className="weight-600 text-16 line-height-24">
-                        {formatNumberAsPrice(cartItem?.variant?.finalPrice)}
+                        {formatNumberAsPrice(cartItem?.totalPrice)}
                       </h3>
                       <p
                         className="weight-400 text-14 line-height-22 text-danger underline pointer"

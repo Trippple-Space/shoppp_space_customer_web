@@ -144,12 +144,18 @@ const OrderProgressCard = ({ orders }: OrderProgressProp) => {
               </div>
             </div>
           </div>
+          {openOrderProductDetails && (
+            <OrderedProductModal
+              handleOrderModal={handleOpenOrderProductDetail}
+              order={order}
+            />
+          )}
         </div>
       ))}
       {openOrderProductDetails && (
         <OrderedProductModal
           handleOrderModal={handleOpenOrderProductDetail}
-          orderCartModal={orderedProduct}
+          order={orderedProduct}
         />
       )}
     </>
