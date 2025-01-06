@@ -3,30 +3,71 @@ import { IoMdClose } from 'react-icons/io'
 import Image from '../image/Image'
 import { PiArrowClockwise } from 'react-icons/pi'
 import { Order } from '../../utility/types/order.interface'
-import { ReactNode } from 'react'
+import { CartItem } from '../../utility/types/cart.interface'
+import { cartService } from '../../utility/services/cart.service'
+import classNames from 'classnames'
+import { useEffect, useState } from 'react'
+import { useRouter } from 'next/navigation'
+import { useCart } from '../../utility/hooks/use-cart'
 
-const OrderedProductModal = ({
+const orderCartModalModal = ({
   handleOrderModal,
   order
 }: {
   handleOrderModal: () => void
-  order: Order | void
+  order: Order | void | any
 }) => {
+  const { addToCart } = useCart()
+
+  const router = useRouter()
+
+  const buyAgain = async (cartItems: CartItem[]) => {
+    try {
+      const currentCart = await cartService.fetchCart()
+
+      const existingCartItemIds = currentCart.cartItems.map(
+        (item: CartItem) => item.variant.id
+      )
+
+      for (const cartItem of cartItems) {
+        if (!existingCartItemIds.includes(cartItem.variant.id)) {
+          addToCart(cartItem.variant.id, cartItem.quantity)
+        }
+        router.push('/checkout')
+      }
+      router.push('/checkout')
+    } catch (error) {
+      console.error('Error processing buy again action:', error)
+    }
+  }
+
+  useEffect(() => {
+    if (order?.id) {
+      document.body.style.overflow = 'hidden'
+    } else {
+      document.body.style.overflow = 'auto'
+    }
+
+    return () => {
+      document.body.style.overflow = 'auto'
+    }
+  }, [])
+
   return (
     <>
       <div
-        className='fixed inset-0 bg-black opacity-10 z-10'
+        className='fixed inset-0 bg-#00000073 z-5 no-scrollbar'
         onClick={handleOrderModal}
       />
       {order?.id && (
         <div className='bg-black'>
           <div
-            className={`fixed l-50p g|transform:translate(-50%) z-10 t-0 t-10p w-90p l:w-40p h-60p bg-white overflow-scroll  radius-t-r-8 radius-t-l-8`}
+            className={`fixed l-50p g|transform:translate(-50%) z-10 t-10p  w-90p l:w-40p bg-white overflow-scroll radius-8`}
           >
-            <div className='overflow-auto h-100p no-scrollbar'>
+            <div className='overflow-auto no-scrollbar'>
               <div className='relative'>
-                <div className='fixed w-100p bg-white  border-b border-b-#00000026 flex a-items-center space-between p-15 radius-t-r-8 radius-t-l-8'>
-                  <p>Order - Products</p>
+                <div className='fixed w-100p bg-white border-b border-b-#00000026 flex a-items-center space-between p-15 radius-t-r-8 radius-t-l-8'>
+                  <p className='weight-500'>Order - Products</p>
                   <IoMdClose
                     className='w-fit cursor-pointer'
                     onClick={handleOrderModal}
@@ -68,6 +109,15 @@ const OrderedProductModal = ({
                               Color: {item.variant.properties.color}
                             </p>
                           </div>
+                        </div>
+                        <div className='l:grid flex flex-col a-items-end w-100p l:w-fit gap-5 mt-10 l:mt-0'>
+                          <p className='text-14 weight-500'>
+                            {formatNumberAsPrice(item.totalPrice)}
+                          </p>
+                          <p className='text-14 text-right'>
+                            {' '}
+                            X {item.quantity}
+                          </p>
                         </div>
                       </div>
                       <div className='grid gap-5'>
@@ -117,4 +167,4 @@ const OrderedProductModal = ({
   )
 }
 
-export default OrderedProductModal
+export default orderCartModalModal

@@ -1,4 +1,3 @@
-import { useOrderView } from '@/modules/lib/utility/hooks/views/use-order-view'
 import { Order } from '@/modules/lib/utility/types/order.interface'
 import { formatDate } from '@/modules/lib/utility/utility'
 import classNames from 'classnames'
@@ -7,7 +6,7 @@ import Modal from '../../modal/modal'
 import { useState } from 'react'
 import { IoMdClose } from 'react-icons/io'
 import RadioGroup from '../../radio/Radio'
-import { orderService } from '@/modules/lib/utility/services/order.service'
+import { useOrders } from '@/modules/lib/utility/hooks/use-orders'
 
 interface OrderProcessProps {
   text: string
@@ -68,7 +67,7 @@ const OrderProcess = ({
   handleViewTimeline,
   viewTimeline
 }: OrderProcessProps) => {
-  const { cancelOrderById } = useOrderView({})
+  const { cancelOrderById } = useOrders({})
   const [openCancelOrderModal, setOpenCancelOrderModal] = useState(false)
   const [selectedReason, setSelectedReason] = useState<string>('')
 

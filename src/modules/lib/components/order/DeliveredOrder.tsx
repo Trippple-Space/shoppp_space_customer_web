@@ -1,17 +1,14 @@
 import React, { useEffect, useState } from 'react'
 import OrderDetails from '../../../views/order-details/Order-details'
-import { useOrders } from '../../utility/hooks/use-orders'
-import OrderedProductModal from '../ordered-product/OrderedProductModal'
 import OrderProgressCard from './order-progress-card/OrderProgressCard'
-import { orderService } from '../../utility/services/order.service'
-import { useOrderView } from '../../utility/hooks/views/use-order-view'
 import { Order } from '../../utility/types/order.interface'
-import Image from '../image/Image'
+import { useOrders } from '../../utility/hooks/use-orders'
 import Link from 'next/link'
-import { useParams } from 'next/navigation'
+import Image from '../../components/image/Image'
+import OrderedProductModal from '../ordered-product/OrderedProductModal'
 
 const DeliveredOrder = () => {
-  const { orders, singleOrder } = useOrderView({
+  const { orders, singleOrder } = useOrders({
     filters: { status: { In: ['CONFIRMED'] } }
   })
 
@@ -23,8 +20,6 @@ const DeliveredOrder = () => {
     setOpenModalOpen(prev => !prev)
   }
 
-  
-
   useEffect(() => {
     setOrderCartModal(singleOrder || null)
   }, [singleOrder])
@@ -34,9 +29,7 @@ const DeliveredOrder = () => {
       {orders.length > 0 && (
         <div className='relative bg-whitesmoke p-15 w-100p flex flex-col gap-15'>
           {orderCartModal ? (
-            <OrderDetails
-              orderCartModal={orderCartModal}
-            />
+            <OrderDetails orderCartModal={orderCartModal} />
           ) : (
             <>
               <OrderProgressCard
