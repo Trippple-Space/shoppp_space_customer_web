@@ -1,17 +1,17 @@
 import { productService } from '@/modules/lib/utility/services/product.service'
 import ProductDetails from '@/modules/views/product-details/Product-details'
 import React from 'react'
+import Head from 'next/head'
 import type { Metadata } from 'next'
 
-/*
-export async function generateMetadata ({
+export async function generateMetadata({
   params
 }: {
   params: { slug: string }
 }): Promise<Metadata> {
   try {
     const product = await productService.fetchProductBySlug(params.slug, {})
-  
+
 
     return {
       title: `${product?.name} - Asoebi Africa`,
@@ -54,12 +54,7 @@ export async function generateMetadata ({
     }
   }
 }
-*/
 
-export const metadata = {
-  title: "Asoebi Africa - Product",
-  description: "Fabrics touche",
-};
 
 export default async function product_details({
   params
@@ -70,9 +65,23 @@ export default async function product_details({
     const product = await productService.fetchProductBySlug(params.slug, {})
 
     return (
-      <div>
-        <ProductDetails product={product} />
-      </div>
+      <>
+        <Head>
+          <title>{product.name} - Asoebi Africa</title>
+          <meta name="description" content={product.longDescription || `${product.name} - Check out this piece on Asoebi Africa`} />
+          <meta property="og:title" content={`${product.name} - Asoebi Africa`} />
+          <meta property="og:description" content={product.longDescription || `${product.name} - Check out this piece on Asoebi Africa`} />
+          <meta property="og:url" content={`https://staging.asoebi.africa/products/${params.slug}`} />
+          <meta property="og:image" content={product.variants?.[0]?.media?.[0]?.url || 'new-asoebi-logo.svg'} />
+          <meta property="twitter:card" content="summary_large_image" />
+          <meta property="twitter:title" content={`${product.name} - Asoebi Africa`} />
+          <meta property="twitter:description" content={product.longDescription || `${product.name} - Check out this piece on Asoebi Africa`} />
+          <meta property="twitter:image" content={product.variants?.[0]?.media?.[0]?.url || 'new-asoebi-logo.svg'} />
+        </Head>
+        <div>
+          <ProductDetails product={product} />
+        </div>
+      </>
     )
   } catch (error) {
     console.error('Error fetching product details:', error)

@@ -5,11 +5,19 @@ import { usePathname, useSearchParams } from "next/navigation";
 import { useEffect } from "react";
 import { usePostHog } from 'posthog-js/react';
 
+const isCrawler = () => {
+  const userAgent = navigator.userAgent.toLowerCase();
+  return /bot|crawler|spider|crawling/i.test(userAgent);
+}
+
 export default function PostHogPageView() : null {
   const pathname = usePathname();
   const searchParams = useSearchParams();
   const posthog = usePostHog();
   useEffect(() => {
+    //prevent crawlers tracking
+    if (isCrawler()) return;
+
     // Track pageviews
     if (pathname && posthog) {
       let url = window.origin + pathname
