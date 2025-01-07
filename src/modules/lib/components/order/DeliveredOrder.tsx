@@ -5,7 +5,6 @@ import { Order } from '../../utility/types/order.interface'
 import { useOrders } from '../../utility/hooks/use-orders'
 import Link from 'next/link'
 import Image from '../../components/image/Image'
-import OrderedProductModal from '../ordered-product/OrderedProductModal'
 
 const DeliveredOrder = () => {
   const { orders, singleOrder } = useOrders({
@@ -13,15 +12,16 @@ const DeliveredOrder = () => {
   })
 
   const [openOrderModal, setOpenModalOpen] = useState(false)
-  const [orderCartModal, setOrderCartModal] = useState<Order | null>(singleOrder || null);
-
+  const [orderCartModal, setOrderCartModal] = useState<Order | void>(
+    singleOrder
+  )
 
   const handleOrderModal = () => {
     setOpenModalOpen(prev => !prev)
   }
 
   useEffect(() => {
-    setOrderCartModal(singleOrder || null)
+    setOrderCartModal(singleOrder)
   }, [singleOrder])
 
   return (
@@ -37,14 +37,6 @@ const DeliveredOrder = () => {
                 handleOrderModal={handleOrderModal}
                 setOrderCartModal={setOrderCartModal}
               />
-              {openOrderModal && (
-                <>
-                  <OrderedProductModal
-                    handleOrderModal={handleOrderModal}
-                    order={orderCartModal}
-                  />
-                </>
-              )}
             </>
           )}
         </div>
