@@ -4,14 +4,15 @@ import React from 'react'
 import Head from 'next/head'
 import type { Metadata } from 'next'
 
-export async function generateMetadata({
+/*
+export async function generateMetadata ({
   params
 }: {
   params: { slug: string }
 }): Promise<Metadata> {
   try {
     const product = await productService.fetchProductBySlug(params.slug, {})
-
+  
 
     return {
       title: `${product?.name} - Asoebi Africa`,
@@ -54,7 +55,7 @@ export async function generateMetadata({
     }
   }
 }
-
+*/
 
 export default async function product_details({
   params
@@ -67,16 +68,8 @@ export default async function product_details({
     return (
       <>
         <Head>
-          <title>{product.name} - Asoebi Africa</title>
-          <meta name="description" content={product.longDescription || `${product.name} - Check out this piece on Asoebi Africa`} />
-          <meta property="og:title" content={`${product.name} - Asoebi Africa`} />
-          <meta property="og:description" content={product.longDescription || `${product.name} - Check out this piece on Asoebi Africa`} />
-          <meta property="og:url" content={`https://staging.asoebi.africa/products/${params.slug}`} />
-          <meta property="og:image" content={product.variants?.[0]?.media?.[0]?.url || 'new-asoebi-logo.svg'} />
-          <meta property="twitter:card" content="summary_large_image" />
-          <meta property="twitter:title" content={`${product.name} - Asoebi Africa`} />
-          <meta property="twitter:description" content={product.longDescription || `${product.name} - Check out this piece on Asoebi Africa`} />
-          <meta property="twitter:image" content={product.variants?.[0]?.media?.[0]?.url || 'new-asoebi-logo.svg'} />
+          <title>Asoebi Africa - product</title>
+          <meta name="description" content='Fabrics touche' />
         </Head>
         <div>
           <ProductDetails product={product} />
