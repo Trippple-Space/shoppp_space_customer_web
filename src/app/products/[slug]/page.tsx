@@ -3,6 +3,7 @@ import ProductDetails from '@/modules/views/product-details/Product-details'
 import React from 'react'
 import type { Metadata } from 'next'
 
+/*
 export async function generateMetadata ({
   params
 }: {
@@ -53,8 +54,14 @@ export async function generateMetadata ({
     }
   }
 }
+*/
 
-export default async function product_details ({
+export const metadata = {
+  title: "Asoebi Africa - Product",
+  description: "Fabrics touche",
+};
+
+export default async function product_details({
   params
 }: {
   params: { slug: string }
