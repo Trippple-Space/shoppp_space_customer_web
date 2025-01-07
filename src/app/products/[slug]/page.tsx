@@ -1,7 +1,6 @@
 import { productService } from '@/modules/lib/utility/services/product.service'
 import ProductDetails from '@/modules/views/product-details/Product-details'
 import React from 'react'
-import Head from 'next/head'
 import type { Metadata } from 'next'
 
 /*
@@ -57,6 +56,11 @@ export async function generateMetadata ({
 }
 */
 
+export const metadata: Metadata = {
+  title: "Asoebi Africa - Product",
+  description: "Fabrics touche",
+};
+
 export default async function product_details({
   params
 }: {
@@ -66,15 +70,9 @@ export default async function product_details({
     const product = await productService.fetchProductBySlug(params.slug, {})
 
     return (
-      <>
-        <Head>
-          <title>Asoebi Africa - product</title>
-          <meta name="description" content='Fabrics touche' />
-        </Head>
-        <div>
-          <ProductDetails product={product} />
-        </div>
-      </>
+      <div>
+        <ProductDetails product={product} />
+      </div>
     )
   } catch (error) {
     console.error('Error fetching product details:', error)
