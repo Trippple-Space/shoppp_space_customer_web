@@ -61,7 +61,7 @@ const OrderedProductModal = ({
       {order?.id && (
         <div className='relative'>
           <div
-            className={`fixed l-50p g|transform:translate(-50%) z-10 t-10p  w-90p l:w-40p bg-white overflow-scroll radius-8`}
+            className={`fixed l-50p g|transform:translate(-50%) z-10 t-10p l:t-17p w-90p l:w-40p bg-white overflow-scroll radius-8`}
           >
             <div className='overflow-auto no-scrollbar'>
               <div className='relative'>
@@ -87,7 +87,7 @@ const OrderedProductModal = ({
                 className={classNames(
                   'px-25 overflow-auto j-content-center no-scrollbar mb-20 mt-20',
                   {
-                    'l:h-30vh': order.cart.cartItems.length > 2,
+                    'l:h-33vh': order.cart.cartItems.length > 2,
                     'h-250': order.cart.cartItems.length > 2,
                   }
                 )}
