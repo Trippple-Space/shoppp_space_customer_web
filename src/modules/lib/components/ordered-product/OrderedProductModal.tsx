@@ -12,10 +12,10 @@ import { useCart } from '../../utility/hooks/use-cart'
 
 const OrderedProductModal = ({
   handleOrderModal,
-  orderCartModal
+  order
 }: {
   handleOrderModal: () => void
-  orderCartModal: Order | undefined
+  order: Order | undefined
 }) => {
   const { addToCart } = useCart()
 
@@ -41,7 +41,7 @@ const OrderedProductModal = ({
   }
 
   useEffect(() => {
-    if (orderCartModal) {
+    if (order?.id) {
       document.body.style.overflow = 'hidden'
     } else {
       document.body.style.overflow = 'auto'
@@ -50,7 +50,7 @@ const OrderedProductModal = ({
     return () => {
       document.body.style.overflow = 'auto'
     }
-  }, [orderCartModal])
+  }, [order])
 
   return (
     <>
@@ -58,7 +58,7 @@ const OrderedProductModal = ({
         className='fixed inset-0 bg-#00000073 z-5 no-scrollbar'
         onClick={handleOrderModal}
       />
-      {orderCartModal && (
+      {order?.id && (
         <div className='relative'>
           <div
             className={`fixed l-50p g|transform:translate(-50%) z-10 t-10p  w-90p l:w-40p bg-white overflow-scroll radius-8`}
@@ -74,10 +74,10 @@ const OrderedProductModal = ({
                 </div>
               </div>
               <div className='p-15 px-25 flex a-items-center space-between border-b border-b-10 border-b-whitesmoke mt-50'>
-                <p className='text-14 weight-500'>#{orderCartModal.id}</p>
+                <p className='text-14 weight-500'>#{order.id}</p>
                 <button
                   className='flex gap-10 a-items-center px-10 py-7 radius-5 border border-#00000026 bg-none cursor-pointer'
-                  onClick={() => buyAgain(orderCartModal.cart.cartItems)}
+                  onClick={() => buyAgain(order.cart.cartItems)}
                 >
                   <PiArrowClockwise className='w-fit' />
                   Buy again
@@ -87,18 +87,18 @@ const OrderedProductModal = ({
                 className={classNames(
                   'px-25 overflow-auto j-content-center no-scrollbar mb-20 mt-20',
                   {
-                    'l:h-30vh': orderCartModal.cart.cartItems.length > 2,
-                    'h-250': orderCartModal.cart.cartItems.length > 2,
+                    'l:h-30vh': order.cart.cartItems.length > 2,
+                    'h-250': order.cart.cartItems.length > 2,
                   }
                 )}
-                key={orderCartModal.id}
+                key={order.id}
               >
                 <div
                   className={classNames(
                     'flex flex-col gap-10 overflow-auto j-content-center no-scrollbar'
                   )}
                 >
-                  {orderCartModal.cart.cartItems.map((item: CartItem) => (
+                  {order.cart.cartItems.map((item: CartItem) => (
                     <>
                       <div
                         className={classNames(
@@ -151,13 +151,13 @@ const OrderedProductModal = ({
                   <div className='flex space-between'>
                     <p className='color-#000000E0'>Subtotal</p>
                     <p className='text-16'>
-                      {formatNumberAsPrice(orderCartModal.cart.subTotal)}
+                      {formatNumberAsPrice(order.cart.subTotal)}
                     </p>
                   </div>
                   <div className='flex space-between border-b border-b-#00000014 pb-10'>
                     <p className='color-#000000E0'>Delivery</p>
                     <p className='text-16'>
-                      {formatNumberAsPrice(orderCartModal.deliveryFee)}
+                      {formatNumberAsPrice(order.deliveryFee)}
                     </p>
                   </div>
                 </div>
@@ -165,7 +165,7 @@ const OrderedProductModal = ({
                   <div className='flex space-between'>
                     <p className='color-#000000E0'>Total</p>
                     <p className='text-16'>
-                      {formatNumberAsPrice(orderCartModal.totalAmount)}
+                      {formatNumberAsPrice(order.totalAmount)}
                     </p>
                   </div>
                   <div className='flex space-between'>
