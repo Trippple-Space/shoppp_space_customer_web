@@ -1,65 +1,6 @@
 import { productService } from '@/modules/lib/utility/services/product.service'
 import ProductDetails from '@/modules/views/product-details/Product-details'
 import React from 'react'
-import type { Metadata } from 'next'
-
-/*
-export async function generateMetadata ({
-  params
-}: {
-  params: { slug: string }
-}): Promise<Metadata> {
-  try {
-    const product = await productService.fetchProductBySlug(params.slug, {})
-  
-
-    return {
-      title: `${product?.name} - Asoebi Africa`,
-      description:
-        `${product?.longDescription}` ||
-        `${product?.name} - Check out this piece on Asoebi Africa`,
-      openGraph: {
-        title: `${product?.name} - Asoebi Africa`,
-        description:
-          `${product?.longDescription}` ||
-          `${product?.name} - Check out this piece on Asoebi Africa`,
-        url: `https://staging.asoebi.africa/products/${params.slug}`,
-        siteName: 'Asoebi Africa',
-        images: [
-          {
-            url:
-              product?.variants?.[0]?.media?.[0]?.url || 'new-asoebi-logo.svg',
-            alt: product?.name,
-            height: 630,
-            width: 1200
-          }
-        ]
-      },
-      twitter: {
-        card: 'summary_large_image',
-        title: `${product?.name} - Asoebi Africa`,
-        description:
-          `${product?.longDescription}` ||
-          `${product?.name} - Check out this piece on Asoebi Africa`,
-        images: [
-          product?.variants?.[0]?.media?.[0]?.url || 'new-asoebi-logo.svg'
-        ]
-      }
-    }
-  } catch (error) {
-    console.error('Error generating metadata:', error)
-    return {
-      title: 'Product Not Found - Asoebi Africa',
-      description: 'This product could not be found'
-    }
-  }
-}
-*/
-
-export const metadata: Metadata = {
-  title: "Asoebi Africa - Product",
-  description: "Fabrics touche",
-};
 
 export default async function product_details({
   params
@@ -70,9 +11,9 @@ export default async function product_details({
     const product = await productService.fetchProductBySlug(params.slug, {})
 
     return (
-      <div>
-        <ProductDetails product={product} />
-      </div>
+        <div>
+          <ProductDetails product={product} />
+        </div>
     )
   } catch (error) {
     console.error('Error fetching product details:', error)
