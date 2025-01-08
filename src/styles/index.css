@@ -584,6 +584,8 @@
 .border-lightgreen { border-color: #E2FFFA; } 
 .pt-64 { padding-top: 64px; } 
 .mb-111 { margin-bottom: 111px; } 
+.pt-24 { padding-top: 24px; } 
+.pb-147 { padding-bottom: 147px; } 
 .pl-24 { padding-left: 24px; } 
 .pr-24 { padding-right: 24px; } 
 .mt-4 { margin-top: 4px; } 
@@ -846,7 +848,8 @@
 @media only screen and (min-width: 576px) { .sm\:hidden {    display: none;  } } 
 @media only screen and (min-width: 576px) { .sm\:pt-12 { padding-top: 12px; } } 
 @media only screen and (min-width: 576px) { .sm\:mb-60 { margin-bottom: 60px; } } 
-@media only screen and (min-width: 576px) { .sm\:py-32 { padding-top: 32px; padding-bottom: 32px; } } 
+@media only screen and (min-width: 576px) { .sm\:pt-32 { padding-top: 32px; } } 
+@media only screen and (min-width: 576px) { .sm\:pb-99 { padding-bottom: 99px; } } 
 @media only screen and (min-width: 576px) { .sm\:pl-40 { padding-left: 40px; } } 
 @media only screen and (min-width: 576px) { .sm\:pr-40 { padding-right: 40px; } } 
 @media only screen and (min-width: 576px) { .sm\:space-between {    justify-content: space-between;  } } 
@@ -961,7 +964,8 @@
 @media only screen and (min-width: 768px) { .md\:t-60 { top: 60px; } } 
 @media only screen and (min-width: 768px) { .md\:h-100p { height: 100%; } } 
 @media only screen and (min-width: 768px) { .md\:pt-69\.6 { padding-top: 69.6px; } } 
-@media only screen and (min-width: 768px) { .md\:py-44 { padding-top: 44px; padding-bottom: 44px; } } 
+@media only screen and (min-width: 768px) { .md\:pt-44 { padding-top: 44px; } } 
+@media only screen and (min-width: 768px) { .md\:pb-102 { padding-bottom: 102px; } } 
 @media only screen and (min-width: 768px) { .md\:pl-60 { padding-left: 60px; } } 
 @media only screen and (min-width: 768px) { .md\:text-24 { font-size: 24px; } } 
 @media only screen and (min-width: 768px) { .md\:line-height-32 { line-height: 32px; } } 

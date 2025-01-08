@@ -3,9 +3,6 @@ import ProductDetails from '@/modules/views/product-details/Product-details'
 import React from 'react'
 import type { Metadata } from 'next'
 
-
-export const dynamic = 'force-dynamic';
-
 export async function generateMetadata ({
   params
 }: {
