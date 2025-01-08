@@ -483,6 +483,7 @@
 .my-7 { margin-top: 7px; margin-bottom: 7px; } 
 .bg-yellow { background-color: #FACE33; } 
 .pt-56 { padding-top: 56px; } 
+.t-10 { top: 10px; } 
 .border-b-\#00000026 { border-bottom-color: #00000026; } 
 .radius-t-r-8 { border-top-right-radius: 8px;  } 
 .radius-t-l-8 { border-top-left-radius: 8px;  } 
@@ -491,7 +492,6 @@
 .mt-50 { margin-top: 50px; } 
 .object-fit-cover { object-fit: cover; } 
 .color-\#0000008C { color: #0000008C; } 
-.t-10p { top: 10%; } 
 .h-250 { height: 250px; } 
 .a-items-start { align-items: flex-start; } 
 .opacity-50 { opacity: 50%; } 
@@ -549,6 +549,7 @@
 .px-27 { padding-left: 27px; padding-right: 27px; } 
 .py-17 { padding-top: 17px; padding-bottom: 17px; } 
 @layer base {.radius-30 { border-radius: 30px; } } 
+.t-10p { top: 10%; } 
 .l--10 { left: -10px; } 
 .px-6 { padding-left: 6px; padding-right: 6px; } 
 .py-6 { padding-top: 6px; padding-bottom: 6px; } 
@@ -1123,7 +1124,6 @@
 @media only screen and (min-width: 992px) { .l\:gap-40 { gap: 40px; } } 
 @media only screen and (min-width: 992px) { .l\:w-60p { width: 60%; } } 
 @media only screen and (min-width: 992px) { .l\:grid {    display: grid;  } } 
-@media only screen and (min-width: 992px) { .l\:t-17p { top: 17%; } } 
 @media only screen and (min-width: 992px) { .l\:w-40p { width: 40%; } } 
 @media only screen and (min-width: 992px) { .l\:h-33vh { height: 33vh; } } 
 @media only screen and (min-width: 992px) { .l\:text-24 { font-size: 24px; } } 
