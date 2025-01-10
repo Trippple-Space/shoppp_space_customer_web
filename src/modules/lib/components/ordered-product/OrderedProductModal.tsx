@@ -54,14 +54,15 @@ const OrderedProductModal = ({
 
   return (
     <>
-      <div
-        className='fixed inset-0 bg-#00000073 z-5 no-scrollbar'
-        onClick={handleOrderModal}
-      />
+      <div className='fixed inset-0 bg-#00000073 z-5 no-scrollbar' />
       {order?.id && (
-        <div className='relative'>
+        <div
+          className='fixed t-10 flex inset-0 z-5 j-content-center a-items-center'
+          onClick={handleOrderModal}
+        >
           <div
-            className={`fixed l-50p g|transform:translate(-50%) z-10 t-10p  w-90p l:w-40p bg-white overflow-scroll radius-8`}
+            className={`absolute z-10 l-50p g|transform:translate(-50%) z-10 w-90p l:w-40p bg-white overflow-scroll radius-8`}
+            onClick={e => e.stopPropagation()}
           >
             <div className='overflow-auto no-scrollbar'>
               <div className='relative'>
@@ -87,8 +88,8 @@ const OrderedProductModal = ({
                 className={classNames(
                   'px-25 overflow-auto j-content-center no-scrollbar mb-20 mt-20',
                   {
-                    'l:h-30vh': order.cart.cartItems.length > 2,
-                    'h-250': order.cart.cartItems.length > 2,
+                    'l:h-33vh': order.cart.cartItems.length > 2,
+                    'h-250': order.cart.cartItems.length > 2
                   }
                 )}
                 key={order.id}
