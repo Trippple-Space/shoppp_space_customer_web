@@ -300,6 +300,7 @@
 .bg-\#FFFFFF4D { background-color: #FFFFFF4D; } 
 .mb-8 { margin-bottom: 8px; } 
 .text-grey-800 { color: #59534E; } 
+.r-15 { right: 15px; } 
 @layer lo { .\@lo\:w-full {    width: 100%;  } } 
 @layer lo { .\@lo\:bg-white { background-color: #FFFFFF; } } 
 @layer lo { .\@lo\:border-solid { border-style: solid; } } 
