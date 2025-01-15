@@ -1,8 +1,12 @@
 import { useState, useEffect, useCallback } from "react";
 import { followService } from "../services/follow.service";
-import { error } from "console";
+import { useCart } from "./use-cart";
 
 const useFollow = (storeId: number) => {
+  const {
+      isAuthenticated,
+    } = useCart();
+
   const [followersCount, setFollowersCount] = useState<number>(0);
   const [isFollowing, setIsFollowing] = useState<boolean>(false);
 
@@ -47,7 +51,7 @@ const useFollow = (storeId: number) => {
   useEffect(() => {
     getFollowersCount();
     getStoresFollowing();
-  }, [getFollowersCount]);
+  }, [getFollowersCount, isAuthenticated]);
 
   return {
     followersCount,
