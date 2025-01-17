@@ -61,7 +61,7 @@ const OrderedProductModal = ({
           onClick={handleOrderModal}
         >
           <div
-            className={`absolute z-10 l-50p g|transform:translate(-50%) z-10 w-80p l:w-40p bg-white no-scrollbar overflow-auto radius-8 g|max-height:70vh l:h-fit`}
+            className={`absolute z-10 l-50p g|transform:translate(-50%) z-10 w-80p l:w-40p bg-white no-scrollbar overflow-auto radius-8 g|max-height:90vh l:h-fit`}
             onClick={e => e.stopPropagation()}
           >
             <div className='overflow-auto no-scrollbar '>

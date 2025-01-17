@@ -493,7 +493,7 @@
 .mt-50 { margin-top: 50px; } 
 .object-fit-cover { object-fit: cover; } 
 .color-\#0000008C { color: #0000008C; } 
-[class~='g|max-height:70vh']{max-height:70vh} 
+[class~='g|max-height:90vh']{max-height:90vh} 
 .h-250 { height: 250px; } 
 .a-items-start { align-items: flex-start; } 
 .opacity-50 { opacity: 50%; } 
