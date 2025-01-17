@@ -10,7 +10,7 @@ export async function generateMetadata ({
 }): Promise<Metadata> {
   try {
     const product = await productService.fetchProductBySlug(params.slug, {})
-  
+    console.log("Product fetched for metadata:", product);
 
     return {
       title: `${product?.name} - Asoebi Africa`,
@@ -54,7 +54,8 @@ export async function generateMetadata ({
   }
 }
 
-export default async function product_details ({
+
+export default async function product_details({
   params
 }: {
   params: { slug: string }
