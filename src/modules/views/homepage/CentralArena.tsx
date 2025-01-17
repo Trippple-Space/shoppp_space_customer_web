@@ -16,7 +16,7 @@ const CentralArena = ({ selectedCategory }: ICentralArena) => {
 
   return (
     <>
-      <section className='md:mt-32 mt-24 w-100p l:mt-50 mb-150'>
+      <section className='md:mt-32 mt-24 w-100p l:mt-50 mb-150 pb-90'>
         <div className='flex space-between text-20 weight-300 uppercase'>
           <h3 className='text-14 l:text-20 weight-300 '>
             Top selling

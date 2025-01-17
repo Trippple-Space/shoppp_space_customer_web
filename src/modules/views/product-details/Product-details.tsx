@@ -285,7 +285,7 @@ const ProductDetails = ({ product }: { product: Product }) => {
           </div>
         </div>
         <div className='w-100p l:w-55p mt-20'>
-          <div className='flex gap-10 pb-20 l:pb-25 l:px-0 px-10'>
+          <div className='flex gap-10 pb-80 l:pb-85 l:px-0 px-10'>
             <Icon name='info' className='w-20 h-20 mt-2' />
             <div className=''>
               <h2 className='text-14 l:text-16 weight-500'>
