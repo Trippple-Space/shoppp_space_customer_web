@@ -9,14 +9,14 @@ import { usePathname } from "next/navigation";
 const FabricsCategoryNav = ({ categories, setSelectedCategory, page }: any) => {
 
   const path = usePathname();
-
+  
   return (
     <div
       className={
         cx(
-          't-75 pb-24 bg-white z-1',
+          't-75 bg-white z-1',
           {
-            'l:mt-90 mt-80 app-width test-header': page === "home",
+            'l:mt-90 mt-80 pb-24 app-width test-header': page === "home",
             'mx-24 sm:mx-40 md:mx-60 l:mx-100 xl:mx-200': page !== "home"
           }
         )

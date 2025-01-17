@@ -405,9 +405,9 @@
 .mt-85 { margin-top: 85px; } 
 .p-3 { padding: 3px; } 
 .t-75 { top: 75px; } 
-.pb-24 { padding-bottom: 24px; } 
 .z-index-1, .z-1 { z-index: 1; } 
 .mt-80 { margin-top: 80px; } 
+.pb-24 { padding-bottom: 24px; } 
 .mx-24 { margin-left: 24px; margin-right: 24px; } 
 @layer base {.radius-20 { border-radius: 20px; } } 
 .hover\:bg-green-50:hover { background-color: rgba(11, 147, 120, 0.1); } 
@@ -627,6 +627,7 @@
 .mr-5 { margin-right: 5px; } 
 .mt-40 { margin-top: 40px; } 
 .mt-120 { margin-top: 120px; } 
+.pb-32 { padding-bottom: 32px; } 
 .p-25 { padding: 25px; } 
 @layer base {.radius-12 { border-radius: 12px; } } 
 .a-content-center { align-content: center; } 

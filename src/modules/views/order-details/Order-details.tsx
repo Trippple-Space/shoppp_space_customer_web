@@ -134,14 +134,14 @@ const OrderDetails = ({ orderCartModal }: OrderDetailsProps) => {
           <span className='text-14 weight-400'>Orders</span>
         </div>
         <OrderHeader setActiveTab={handleTabClick} activeTab={activeTab} />
-        <div className='l:w-50p w-90p flex flex-col gap-50'>
+        <div className='l:w-50p w-90p flex flex-col gap-50 pb-32'>
           {/* Default "Order Details" View */}
           {showDetails ? (
             <div className='flex a-items-center gap-10 bg-#F5F5F5 p-5 radius-6 j-content-center'>
               {orderCartModal ? (
                 <div className='flex flex-col gap-10 w-100p p-10'>
                   <div
-                    className='flex a-items-center gap-10 mb-10 cursor-pointer'
+                    className='flex a-items-center gap-10 mb-10 cursor-pointer w-fit'
                     onClick={() => router.push('/orders')}
                   >
                     <GoArrowLeft className='w-fit' />
