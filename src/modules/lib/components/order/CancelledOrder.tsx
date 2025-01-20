@@ -11,14 +11,12 @@ const CancelledOrder = () => {
     filters: { status: { In: ['CANCELLED'] } }
   })
 
-  const [openOrderModal, setOpenModalOpen] = useState(false)
+
   const [orderCartModal, setOrderCartModal] = useState<Order | void>(
     singleOrder
   )
 
-  const handleOrderModal = () => {
-    setOpenModalOpen(prev => !prev)
-  }
+
 
   useEffect(() => {
     setOrderCartModal(singleOrder)
@@ -34,7 +32,6 @@ const CancelledOrder = () => {
             <>
               <OrderProgressCard
                 orders={orders}
-                handleOrderModal={handleOrderModal}
                 setOrderCartModal={setOrderCartModal}
               />
             </>

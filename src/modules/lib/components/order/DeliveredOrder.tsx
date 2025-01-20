@@ -11,14 +11,9 @@ const DeliveredOrder = () => {
     filters: { status: { In: ['CONFIRMED'] } }
   })
 
-  const [openOrderModal, setOpenModalOpen] = useState(false)
   const [orderCartModal, setOrderCartModal] = useState<Order | void>(
     singleOrder
   )
-
-  const handleOrderModal = () => {
-    setOpenModalOpen(prev => !prev)
-  }
 
   useEffect(() => {
     setOrderCartModal(singleOrder)
@@ -34,7 +29,6 @@ const DeliveredOrder = () => {
             <>
               <OrderProgressCard
                 orders={orders}
-                handleOrderModal={handleOrderModal}
                 setOrderCartModal={setOrderCartModal}
               />
             </>

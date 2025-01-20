@@ -17,27 +17,8 @@ const OrderedProductModal = ({
   handleOrderModal: () => void
   order: Order | undefined
 }) => {
-  const { addToCart } = useCart()
-
-  const router = useRouter()
-
   const buyAgain = async (cartItems: CartItem[]) => {
-    try {
-      const currentCart = await cartService.fetchCart()
-
-      const existingCartItemIds = currentCart.cartItems.map(
-        (item: CartItem) => item.variant.id
-      )
-
-      for (const cartItem of cartItems) {
-        if (!existingCartItemIds.includes(cartItem.variant.id)) {
-          addToCart(cartItem.variant.id, cartItem.quantity)
-        }
-      }
-      router.push('/checkout')
-    } catch (error) {
-      console.error('Error processing buy again action:', error)
-    }
+    await cartService.buyCartItemAgain(cartItems)
   }
 
   useEffect(() => {

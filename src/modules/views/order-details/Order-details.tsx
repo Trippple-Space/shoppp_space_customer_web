@@ -101,29 +101,13 @@ const OrderDetails = ({ orderCartModal }: OrderDetailsProps) => {
   }, [orderCartModal])
 
   const buyAgain = async (cartItems: CartItem[]) => {
-    try {
-      const currentCart = await cartService.fetchCart()
-
-      const existingCartItemIds = currentCart.cartItems.map(
-        (item: CartItem) => item.variant.id
-      )
-
-      for (const cartItem of cartItems) {
-        if (!existingCartItemIds.includes(cartItem.variant.id)) {
-          addToCart(cartItem.variant.id, cartItem.quantity)
-        }
-        router.push('/checkout')
-      }
-      router.push('/checkout')
-    } catch (error) {
-      console.error('Error processing buy again action:', error)
-    }
+    await cartService.buyCartItemAgain(cartItems)
   }
 
   return (
     <>
       <div>
-        <HomepageNavBar parent={"orders"} />
+        <HomepageNavBar parent={'orders'} />
       </div>
       <div className='mt-120 w-full h-full flex a-items-center flex-col gap-30'>
         <div className='flex  a-items-center gap-5 l:w-50p w-90p'>
