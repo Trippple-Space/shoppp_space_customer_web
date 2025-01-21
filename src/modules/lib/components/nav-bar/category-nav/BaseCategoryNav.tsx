@@ -23,8 +23,6 @@ const BaseCategoryNav: FC<IBaseCategoryNav> = ({
 }) => {
   const [activeOption, setActiveOption] = useState('Random');
   const scrollRef = useRef<HTMLDivElement>(null);
-  console.log(selectedCategory, categories)
-
 
   useEffect(() => {
     setActiveOption(selectedCategory?.name || 'Random')
