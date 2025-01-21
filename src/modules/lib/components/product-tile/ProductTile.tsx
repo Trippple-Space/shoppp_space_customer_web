@@ -8,10 +8,10 @@ import { displayProductPill, formatNumberAsPrice } from "../../utility/utility";
 import { useCart } from "../../utility/hooks/use-cart";
 import QuantitySelector from "../quantity-selector/QuantitySelector";
 import Link from "next/link";
-import LoginModal from "../login-modal/LoginModal";
 import VideoSrc from "../video-src/VideoSrc";
 import { FaEye } from "react-icons/fa6";
 import ProductDetailModal from "../product-detail-modal/ProductDetailModal";
+import { PiShoppingCartFill, PiStorefront } from "react-icons/pi";
 
 interface IProductTile {
   product: Product;
@@ -35,7 +35,6 @@ const ProductTile: FC<IProductTile> = ({ product }: any) => {
     decrement,
     isAuthenticated,
     isLoginModal,
-    showLoginModal,
   } = useCart();
   const selectedVariantItemInCart = cart.cartItems.find(
     (item) => item.variant.id === selectedVariant?.id
@@ -72,6 +71,7 @@ const ProductTile: FC<IProductTile> = ({ product }: any) => {
         '{"pill:preOrder":{"pillColor":"#FFFFFF","pillBackground":"#800080","priority":"3","text":"pre-order"}}',
     },
   ];
+
 
   return (
     <div className="mt-30 l:mt-20 w-full overflow-hidden">
@@ -127,18 +127,15 @@ const ProductTile: FC<IProductTile> = ({ product }: any) => {
                 onClick={() => {
                   isAuthenticated
                     ? addToCart(
-                        selectedVariant.id,
-                        selectedVariant.minPurchaseQuantity || 1
-                      )
+                      selectedVariant.id,
+                      selectedVariant.minPurchaseQuantity || 1
+                    )
                     : isLoginModal();
                 }}
                 disabled={!selectedImage}
-                className="bg-green! text-white! bg-yellow disabled:bg-yellow-200 disabled:cursor-not-allowed hover:scale-1.05 g|transition:0.5s pointer font-roboto text-grey-900 border-hidden px-10 py-10 radius-5 l:px-22 l:py-12 l:radius-10"
+                className="bg-#FACE33! shadow-0-4-8-0-#00000033 hover:shadow-0-8-8-0-#00000033 text-black! disabled:bg-gray-200 disabled:cursor-not-allowed hover:scale-1.06 g|transition:0.5s g|will-change:transform pointer font-roboto border-hidden outline-none s:p-14 p-12 round flex a-items-center j-items-center gap-10"
               >
-                <span className="hidden l:block weight-500">Add to cart</span>
-                <div className="l:hidden">
-                  <AiOutlinePlus className="l:w-24 l:h-24 w-14 h-14" />
-                </div>
+                <PiShoppingCartFill className="s:w-22 w-20 s:h-22 h-20" />
               </button>
             )}
           </div>
@@ -172,17 +169,17 @@ const ProductTile: FC<IProductTile> = ({ product }: any) => {
       <div className="scroll-x no-scrollbar">
         <div
           id="product varients"
-          className="mt-15 flex a-items-center l:gap-13 gap-8 w-fit whitespace-nowrap"
+          className="md:mt-16 mt-14 flex a-items-center md:gap-6 gap-4 w-fit whitespace-nowrap"
         >
           {product.variants.map((variant: any) =>
             variant?.media?.map((mediaItem: any) =>
               mediaItem?.type === "image" ? (
                 <Image
                   className={classNames(
-                    "l:w-32 l:h-32 w-24 h-24 pointer radius-5 l:radius-8 a-self-center g|object-fit:cover",
+                    "l:w-35.2 l:h-35.2 w-31 h-31 pointer md:radius-4 radius-3 a-self-center g|object-fit:cover",
                     {
                       "border border-2": selectedImage == mediaItem?.url,
-                      [`border-${mediaItem.description?.toLocaleLowerCase()}`]:
+                      [`border-${/*variant?.properties?.color?.toLocaleLowerCase() ||*/'#0B9378'}`]:
                         selectedImage == mediaItem?.url,
                     }
                   )}
@@ -197,10 +194,10 @@ const ProductTile: FC<IProductTile> = ({ product }: any) => {
               ) : (
                 <VideoSrc
                   className={classNames(
-                    "l:w-32 l:h-32 w-24 h-24 pointer radius-5 l:radius-8 a-self-center g|object-fit:cover",
+                    "l:w-35.2 l:h-35.2 w-31 h-31 pointer md:radius-4 radius-3 a-self-center g|object-fit:cover",
                     {
                       "border border-2": selectedImage == mediaItem?.url,
-                      [`border-${mediaItem.description?.toLocaleLowerCase()}`]:
+                      [`border-${/*variant?.properties?.color?.toLocaleLowerCase() ||*/'#0B9378'}`]:
                         selectedImage == mediaItem?.url,
                     }
                   )}
@@ -218,17 +215,18 @@ const ProductTile: FC<IProductTile> = ({ product }: any) => {
       </div>
       <div
         id="product details"
-        className="mt-15 overflow-hidden white-space-nowrap text-overflow-ellipsis"
+        className="md:mt-16 mt-20 overflow-hidden white-space-nowrap text-overflow-ellipsis flex flex-col gap-8"
       >
         <div
           title={product.name}
-          className="l:text-15 text-14 weight-500 w-100 l:white-space-nowrap text-overflow-ellipsis"
+          className="md:text-16 text-15 weight-500 text-#000000E0 md:line-height-24 line-height-22 w-100 l:white-space-nowrap text-overflow-ellipsis"
         >
           <Link href={`/products/${product.slug}`}>{product.name}</Link>
         </div>
-        <div className="flex a-items-center gap-10 l:gap-18 mt-5 text-dimgrey">
-          <Link href={`/${product.store.slug}`}>
-            <p className="l:text-16 text-12">{product?.store?.name}</p>
+        <div className="flex a-items-center gap-10 l:gap-18 text-dimgrey py-6 border-y border-#00000014">
+          <Link href={`/${product.store.slug}`} className="flex gap-6 a-items-center color-#00000099 capitalize">
+            <PiStorefront className="md:w-16 w-14 md:h-16 h-14" />
+            <p className="md:text-12 text-10 weight-400 md:line-height-20 line-height-12.1">{product?.store?.name}</p>
           </Link>
           {!!product.reviewRating && (
             <div className="flex gap-3 items-center">
@@ -237,7 +235,7 @@ const ProductTile: FC<IProductTile> = ({ product }: any) => {
             </div>
           )}
         </div>
-        <div className="mt-6 l:text-15 text-12 weight-700">
+        <div className="md:text-16 text-12 weight-600 md:line-height-24 line-height-20">
           {formatNumberAsPrice(
             selectedVariant?.finalPrice || product.finalPrice
           )}
@@ -246,7 +244,7 @@ const ProductTile: FC<IProductTile> = ({ product }: any) => {
         <div className="flex flex-wrap gap-4">
           {product?.tags?.map((tag: any, i: number) => (
             <span
-              className="text-green text-12 inline-block radius-5 mx-2 my-1 pointer hover:underline lowercase"
+              className="text-green md:text-12 text-10 inline-block radius-5 mx-2 my-1 pointer hover:underline lowercase"
               key={i}
             >
               {!tag.label.includes("pill:") && "#" + tag.label}
