@@ -22,7 +22,7 @@ export const useCategories = ({
     setSelectedCategory
   } = useCategoryStore()
 
-  console.log('START:', { type, storeId, label, len: currentCategoryList?.length })
+  //console.log('START:', { type, storeId, label, len: currentCategoryList?.length })
   useEffect(() => {
     if (!categoriesCache[`${type}_${label}_${storeId}`]) {
       productService

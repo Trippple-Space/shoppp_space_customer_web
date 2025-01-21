@@ -3,16 +3,10 @@
 import React from 'react'
 import ProductTile from '@/modules/lib/components/product-tile/ProductTile'
 import { useProductListView } from '@/modules/lib/utility/hooks/views/use-product-list-view'
-import {
-  ICategory,
-} from '@/modules/lib/utility/types/product.interface'
 
-interface ICentralArena {
-  selectedCategory: ICategory
-}
-
-const CentralArena = ({ selectedCategory }: ICentralArena) => {
+const CentralArena = () => {
   const { products, type, ref } = useProductListView()
+  const renderedIds = new Set<number>();
 
   return (
     <>
@@ -24,9 +18,13 @@ const CentralArena = ({ selectedCategory }: ICentralArena) => {
         </div>
         <div className='grid xl:grid-5-cols-1fr l:grid-4-cols-1fr s:grid-3-cols-1fr grid-2-cols-1fr flex-wrap gap-15 l:gap-10 w-full relative'>
           {products.length ? (
-            products.map((product, i: number) => (
-              <ProductTile product={product} key={product.id} />
-            ))
+            products.map((product) => {
+              if (renderedIds.has(product.id)) {
+                return null;
+              }
+              renderedIds.add(product.id);
+              return <ProductTile product={product} key={product.id} />;
+            })
           ) : (
             <div className='mt-60 bg-white grid-col-span-5 text-center'>
               No products found for the selected filters
