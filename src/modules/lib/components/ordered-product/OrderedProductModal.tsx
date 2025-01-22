@@ -42,10 +42,10 @@ const OrderedProductModal = ({
           onClick={handleOrderModal}
         >
           <div
-            className={`absolute z-10 l-50p g|transform:translate(-50%) z-10 w-90p l:w-40p bg-white overflow-scroll radius-8`}
+            className={`absolute z-10 l-50p g|transform:translate(-50%) z-10 w-80p l:w-40p bg-white no-scrollbar overflow-auto radius-8 g|max-height:90vh l:h-fit`}
             onClick={e => e.stopPropagation()}
           >
-            <div className='overflow-auto no-scrollbar'>
+            <div className='overflow-auto no-scrollbar '>
               <div className='relative'>
                 <div className='fixed w-100p bg-white border-b border-b-#00000026 flex a-items-center space-between p-15 radius-t-r-8 radius-t-l-8'>
                   <p className='weight-500'>Order - Products</p>
@@ -84,7 +84,7 @@ const OrderedProductModal = ({
                     <>
                       <div
                         className={classNames(
-                          'bg-whitesmoke radius-8 p-10 flex flex-col w-full l:flex-row space-between a-items-start'
+                          'bg-whitesmoke radius-8 p-10 flex flex-col  l:flex-row space-between a-items-start'
                         )}
                         key={item.id}
                       >
