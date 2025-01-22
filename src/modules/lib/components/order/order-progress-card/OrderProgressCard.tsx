@@ -14,7 +14,6 @@ import OrderedProductModal from '../../ordered-product/OrderedProductModal'
 
 interface OrderProgressProp {
   orders: Order[]
-  handleOrderModal: () => void
   setOrderCartModal: (order: Order) => void
 }
 
