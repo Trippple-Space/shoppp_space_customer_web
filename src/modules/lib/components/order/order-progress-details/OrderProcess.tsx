@@ -34,7 +34,7 @@ const OrderProgressCircle = ({
 }: OrderProgressProps) => (
   <div
     className={classNames(
-      `w-20 h-20 radius-20 z-10 border border-3 border-white  ${
+      `w-20 h-20 radius-20 z-1 border border-3 border-white  ${
         orderCartModal?.status === 'CANCELLED' &&
         text === 'Cancelled-Payment Unsuccessful' &&
         'bg-#D4280C'
