@@ -488,6 +488,7 @@
 .border-b-10 { border-bottom-width: 10px; } 
 .border-b-whitesmoke { border-bottom-color: whitesmoke; } 
 .mt-50 { margin-top: 50px; } 
+[class~='g|max-height:90vh']{max-height:90vh} 
 .h-250 { height: 250px; } 
 .opacity-50 { opacity: 50%; } 
 .mt-60 { margin-top: 60px; } 
@@ -1144,6 +1145,7 @@
 @media only screen and (min-width: 992px) { .l\:w-60p { width: 60%; } } 
 @media only screen and (min-width: 992px) { .l\:grid {    display: grid;  } } 
 @media only screen and (min-width: 992px) { .l\:w-40p { width: 40%; } } 
+@media only screen and (min-width: 992px) { .l\:h-fit {    height: fit-content;  } } 
 @media only screen and (min-width: 992px) { .l\:h-33vh { height: 33vh; } } 
 @media only screen and (min-width: 992px) { .l\:text-24 { font-size: 24px; } } 
 @media only screen and (min-width: 992px) { .l\:px-22 { padding-left: 22px; padding-right: 22px; } } 
@@ -1179,7 +1181,6 @@
 @media only screen and (min-width: 992px) { .l\:ml-50 { margin-left: 50px; } } 
 @media only screen and (min-width: 992px) { .l\:text-56 { font-size: 56px; } } 
 @media only screen and (min-width: 992px) { .l\:h-75 { height: 75px; } } 
-@media only screen and (min-width: 992px) { .l\:h-fit {    height: fit-content;  } } 
 @media only screen and (min-width: 992px) { .l\:text-32 { font-size: 32px; } } 
 @media only screen and (min-width: 992px) { .l\:w-20 { width: 20px; } } 
 @media only screen and (min-width: 992px) { .l\:h-20 { height: 20px; } } 
