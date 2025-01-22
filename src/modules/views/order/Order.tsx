@@ -41,7 +41,7 @@ const Order = () => {
   return (
     <>
       <HomepageNavBar parent={'orders'} />
-      <div className='mt-120 w-full h-full flex a-items-center flex-col gap-30'>
+      <div className='mt-120 w-full flex a-items-center flex-col gap-30'>
         <div className='flex  a-items-center gap-5 l:w-50p w-90p'>
           <GoHome className='w-fit color-#00000066 w-15 h-15' />
           <Link href='/home' className='text-14 color-#00000066'>
@@ -50,7 +50,7 @@ const Order = () => {
           <span className='text-14 weight-400'>Orders</span>
         </div>
         <OrderHeader setActiveTab={handleTabChange} activeTab={activeTab} />
-        <div className='l:w-50p w-90p flex flex-col gap-50'>
+        <div className='l:w-50p w-90p flex flex-col gap-50 pb-32'>
           <div className='flex j-content-center'>{renderTabContent()}</div>
         </div>
       </div>

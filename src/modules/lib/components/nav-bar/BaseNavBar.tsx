@@ -60,9 +60,8 @@ const BaseNavBar: FC<IBaseNavBar> = ({ links, parent }) => {
 
   return (
     <div
-      className={`fixed w-full t-0 l-0 bg-white z-5 ${
-        parent === 'checkout' && 'border-b border-b-#00000014 md:py-3 py-5.8625'
-      }`}
+      className={`fixed w-full t-0 l-0 bg-white z-5 ${(parent === 'checkout' || parent === 'orders') && 'border-b border-b-#00000014 md:py-3 py-5.8625'
+        }`}
     >
       <div
         className={cx(
@@ -100,9 +99,8 @@ const BaseNavBar: FC<IBaseNavBar> = ({ links, parent }) => {
 
         <div className='l:block flex l:flex a-items-center l:gap-30 gap-10 w-fit relative j-self-end'>
           <div
-            className={`l:cursor-pointer ${
-              parent === 'checkout' ? 'hidden' : 'hidden l:block'
-            }`}
+            className={`l:cursor-pointer ${parent === 'checkout' ? 'hidden' : 'hidden l:block'
+              }`}
             onClick={handleAsoebiDropdown}
           >
             <p className='flex a-items-center  weight-500'>
