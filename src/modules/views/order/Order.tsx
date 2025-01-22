@@ -41,7 +41,7 @@ const Order = () => {
   return (
     <>
       <HomepageNavBar parent={'orders'} />
-      <div className='mt-120 w-full h-full flex a-items-center flex-col gap-30'>
+      <div className='mt-120 w-full flex a-items-center flex-col gap-30'>
         <div className='flex  a-items-center gap-5 l:w-50p w-90p'>
           <GoHome className='w-fit color-#00000066 w-15 h-15' />
           <Link href='/home' className='text-14 color-#00000066'>
