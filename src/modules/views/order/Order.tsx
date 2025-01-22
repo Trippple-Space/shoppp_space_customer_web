@@ -50,7 +50,7 @@ const Order = () => {
           <span className='text-14 weight-400'>Orders</span>
         </div>
         <OrderHeader setActiveTab={handleTabChange} activeTab={activeTab} />
-        <div className='l:w-50p w-90p flex flex-col gap-50'>
+        <div className='l:w-50p w-90p flex flex-col gap-50 pb-32'>
           <div className='flex j-content-center'>{renderTabContent()}</div>
         </div>
       </div>

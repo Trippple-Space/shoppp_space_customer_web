@@ -17,13 +17,14 @@ const Homepage = () => {
         <HomepageNavBar parent='' />
         <FabricsCategoryNav
           categories={categories}
+          selectedCategory={selectedCategory}
           setSelectedCategory={setSelectedCategory}
           page={"home"}
           key={categories}
         />
       </div>
       <div className="app-width">
-        <CentralArena selectedCategory={selectedCategory} />
+        <CentralArena />
       </div>
       <Footer />
     </>

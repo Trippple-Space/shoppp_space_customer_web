@@ -5,46 +5,48 @@ import { useProducts } from "../use-products";
 import { useCategories } from "../use-categories";
 
 export const useProductListView = () => {
-     const { ref, inView } = useInView();
-     const [page, setPage] = useState(1);
-     const [limit] = useState(20);
+  const { ref, inView } = useInView();
+  const [page, setPage] = useState(1);
+  const [limit] = useState(20);
 
-     const pathname = usePathname();
-     const type = pathname.includes("wears")
-          ? "wears"
-          : 'fabrics'
+  const pathname = usePathname();
+  const type = pathname.includes("wears") ? "wears" : "fabrics";
 
-     const { selectedCategory, setSelectedCategory } = useCategories({ type, storeId: 0, label: 'GLOBAL' })
+  const { selectedCategory, setSelectedCategory } = useCategories({
+    type,
+    storeId: 0,
+    label: "GLOBAL",
+  });
 
-     //console.log({ selectedCategory })
+  //console.log({ selectedCategory });
 
-     const { products, setPagination, updateFilters, query } = useProducts({
-          filters: { type, status: { In: ["ACTIVE", "OUT_OF_STOCK"] } },
-          pagination: { limit, page },
-     })
+  const { products, setPagination, updateFilters, query } = useProducts({
+    filters: { type, status: { In: ["ACTIVE", "OUT_OF_STOCK"] } },
+    pagination: { limit, page },
+  });
 
-     //console.log({ len: products?.length, products })
+  //console.log({ len: products?.length, products });
 
-     useEffect(() => {
-          updateFilters(selectedCategory.filters)
-     }, [selectedCategory?.name])
+  useEffect(() => {
+    updateFilters(selectedCategory.filters);
+  }, [selectedCategory?.name]);
 
-     useEffect(() => {
-          setPage(Math.floor(products.length / limit) + 1);
-     }, [JSON.stringify(query.filters)])
+  useEffect(() => {
+    setPage(Math.floor(products.length / limit) + 1);
+  }, [JSON.stringify(query.filters)]);
 
-     useEffect(() => {
-          if (inView) {
-               setPage((prev) => prev + 1);
-               setPagination({ page, limit });
-          }
-     }, [inView]);
+  useEffect(() => {
+    if (inView) {
+      setPage((prev) => prev + 1);
+      setPagination({ page, limit });
+    }
+  }, [inView]);
 
-     return {
-          type,
-          products,
-          setSelectedCategory,
-          selectedCategory,
-          ref,
-     };
+  return {
+    type,
+    products,
+    setSelectedCategory,
+    selectedCategory,
+    ref,
+  };
 };

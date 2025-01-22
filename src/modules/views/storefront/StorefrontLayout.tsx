@@ -141,14 +141,18 @@ const StorefrontLayout: FC<{ store: Store; children: ReactNode }> = ({
       <div className="flex flex-col md:gap-36 sm:gap-28 gap-32 pb-100">
         <div className="">{children}</div>
 
-        <div className="sm:py-20 py-16">
-          <FabricsCategoryNav
-            categories={categories}
-            setSelectedCategory={setSelectedCategory}
-            page={"store"}
-            key={categories}
-          />
-        </div>
+        {
+          !!categories?.length && (
+            <div className="sm:py-20 py-16">
+              <FabricsCategoryNav
+                categories={categories}
+                setSelectedCategory={setSelectedCategory}
+                page={"store"}
+                key={categories}
+              />
+            </div>
+          )
+        }
 
         {
           (!!newArrivals?.length || !!dealsForYou.length) && (
