@@ -491,9 +491,9 @@
 .border-b-10 { border-bottom-width: 10px; } 
 .border-b-whitesmoke { border-bottom-color: whitesmoke; } 
 .mt-50 { margin-top: 50px; } 
+.h-80 { height: 80px; } 
 .object-fit-cover { object-fit: cover; } 
 .color-\#0000008C { color: #0000008C; } 
-[class~='g|max-height:90vh']{max-height:90vh} 
 .h-250 { height: 250px; } 
 .a-items-start { align-items: flex-start; } 
 .opacity-50 { opacity: 50%; } 
@@ -724,7 +724,6 @@
 .radius-b-r-5 { border-bottom-right-radius: 5px;  } 
 .bg-red { background-color: #DE3838; } 
 .ml-15 { margin-left: 15px; } 
-.h-80 { height: 80px; } 
 .mt-22 { margin-top: 22px; } 
 .border-dashed { border-style: dashed; } 
 .border-grey-500 { border-color: #A39F9C; } 
@@ -977,6 +976,10 @@
 @media only screen and (min-width: 1200px) { .xl\:mt-3 { margin-top: 3px; } } 
 @media only screen and (min-width: 1200px) { .xl\:mt-27 { margin-top: 27px; } } 
 @media only screen and (min-width: 1200px) { .xl\:mx-200 { margin-left: 200px; margin-right: 200px; } } 
+@media only screen and (min-width: 1200px) { .xl\:w-70 { width: 70px; } } 
+@media only screen and (min-width: 1200px) { .xl\:h-70 { height: 70px; } } 
+@media only screen and (min-width: 1200px) { .xl\:w-10 { width: 10px; } } 
+@media only screen and (min-width: 1200px) { .xl\:white-space-nowrap { white-space: nowrap; } } 
 @media only screen and (min-width: 1200px) { .xl\:pl-80 { padding-left: 80px; } } 
 @media only screen and (min-width: 1200px) { .xl\:pr-80 { padding-right: 80px; } } 
 @media only screen and (min-width: 1200px) { .xl\:grid-5-cols-1fr { grid-template-columns: repeat(5, 1fr); } } 
