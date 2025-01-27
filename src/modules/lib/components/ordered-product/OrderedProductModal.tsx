@@ -22,13 +22,13 @@ const OrderedProductModal = ({
 
   const ellipseText = (text: string, isExpanded: boolean) => {
     if (isExpanded || text.length <= limit) {
-      return text // Show full text if expanded or within the limit
+      return text 
     }
-    return `${text.substring(0, limit)}...` // Truncate with ellipsis
+    return `${text.substring(0, limit)}...` 
   }
 
   const handleTextClick = (id: number) => {
-    setExpandedId(prevId => (prevId === id ? null : id)) // Toggle between expand/collapse
+    setExpandedId(prevId => (prevId === id ? null : id))
   }
 
   const buyAgain = async (cartItems: CartItem[]) => {
