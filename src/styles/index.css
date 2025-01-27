@@ -995,7 +995,7 @@
 @media only screen and (min-width: 768px) { .md\:h-100p { height: 100%; } } 
 @media only screen and (min-width: 768px) { .md\:pt-69\.6 { padding-top: 69.6px; } } 
 @media only screen and (min-width: 768px) { .md\:pt-44 { padding-top: 44px; } } 
-@media only screen and (min-width: 768px) { .md\:pb-102 { padding-bottom: 102px; } } 
+@media only screen and (min-width: 768px) { .md\:pb-90 { padding-bottom: 90px; } } 
 @media only screen and (min-width: 768px) { .md\:pl-60 { padding-left: 60px; } } 
 @media only screen and (min-width: 768px) { .md\:text-24 { font-size: 24px; } } 
 @media only screen and (min-width: 768px) { .md\:line-height-32 { line-height: 32px; } } 
@@ -1005,6 +1005,7 @@
 @media only screen and (min-width: 768px) { .md\:py-20 { padding-top: 20px; padding-bottom: 20px; } } 
 @media only screen and (min-width: 768px) { .md\:px-24 { padding-left: 24px; padding-right: 24px; } } 
 @media only screen and (min-width: 768px) { .md\:bg-white { background-color: #FFFFFF; } } 
+@media only screen and (min-width: 768px) { .md\:pb-85 { padding-bottom: 85px; } } 
 @media only screen and (min-width: 768px) { .md\:pl-40 { padding-left: 40px; } } 
 @media only screen and (min-width: 768px) { .md\:pr-60 { padding-right: 60px; } } 
 @media only screen and (min-width: 768px) { .md\:w-full {    width: 100%;  } } 

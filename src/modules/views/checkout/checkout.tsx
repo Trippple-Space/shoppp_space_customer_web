@@ -27,7 +27,7 @@ const CheckoutPage = () => {
     useState<keyof typeof deliveryOptions>("standard");
   const { user } = useUserStore();
   const { cart, removeFromCart } = useCart();
-  const { openAddressModal, closeAddressModal, selectedAddress } = useAddress();
+  const { openAddressModal, selectedAddress } = useAddress();
   const router = useRouter()
   const { fetchAddresses } = useAddressStore()
   const { loading: isPaymentLoading, payWithPaystack } = usePayment();
@@ -99,8 +99,8 @@ const CheckoutPage = () => {
     <HomepageNavBar parent={"checkout"} />
     <div className="md:pt-69.6 pt-64 sm:mb-60 mb-111 h-full">
       <DeliveryMessage />
-      <div className="md:flex h-fit">
-        <div className="l:w-54.2p md:w-50p md:pt-44 md:pb-102 sm:pt-32 sm:pb-99 pt-24 pb-147 xl:pl-80 l:pl-70 md:pl-60 sm:pl-40 pl-24 xl:pr-80 l:pr-70 sm:pr-40 pr-24 flex flex-col gap-28 bg-white">
+      <div className="md:flex overflow-hidden" style={{ height: 'calc(100dvh - 128px)' }}>
+        <div className="l:w-54.2p md:w-50p h-full overflow-auto no-scrollbar md:pt-44 md:pb-90 sm:pt-32 sm:pb-99 pt-24 pb-147 xl:pl-80 l:pl-70 md:pl-60 sm:pl-40 pl-24 xl:pr-80 l:pr-70 sm:pr-40 pr-24 flex flex-col gap-28 bg-white">
           <div className="flex flex-col gap-6">
             <h1 className="weight-600 md:text-24 text-20 md:line-height-32 line-heigth-28">
               Order Summary
@@ -136,7 +136,7 @@ const CheckoutPage = () => {
                 )}
                 <p
                   className="text-16 line-height-24 weight-500 color-#1677FF underline pointer w-fit"
-                  onClick={openAddressModal}
+                  onClick={() => { openAddressModal(); setDevAddressError(false) }}
                 >
                   {selectedAddress ? "Change" : "Add delivery address"}
                 </p>
@@ -171,7 +171,7 @@ const CheckoutPage = () => {
                       alt="order image"
                       className="w-70 h-70 radius-6 border border-#00000014 object-fit"
                     />
-                    <div className="flex-grow-1 flex flex-col gap-6">
+                    <div className="flex-grow-1 flex flex-col gap-6 overflow-hidden white-space-nowrap text-overflow-ellipsis">
                       <p className="weight-600 text-14 line-height-22 color-#000000E0">
                         {cartItem?.variant?.product?.name}
                       </p>
@@ -203,8 +203,8 @@ const CheckoutPage = () => {
           </div>
         </div>
 
-        <div className="relative l:w-45.8p md:w-50p bg-#F5F5F5">
-          <div className={`bg-#F5F5F5 md:pt-44 md:pb-102 xl:pl-80 l:pl-70 md:pl-40 xl:pr-80 l:pr-70 md:pr-60 flex flex-col gap-16 ${devOptions === 'smaller' ? 'fixed l-0 r-0 b-0 z-4' : ''}`}>
+        <div className="relative bg-#F5F5F5 l:w-45.8p md:w-50p">
+          <div className={`h-full overflow-auto no-scrollbar bg-#F5F5F5 md:pt-44 md:pb-85 xl:pl-80 l:pl-70 md:pl-40 xl:pr-80 l:pr-70 md:pr-60 flex flex-col gap-16 ${devOptions === 'smaller' ? 'fixed l-0 r-0 b-0 z-4' : ''}`}>
             {devOptions === "larger" && <DeliveryOptions selectedDeliveryOption={selectedDeliveryOption} setSelectedDeliveryOption={setSelectedDeliveryOption} />}
             <div className="md:py-20 py-12 md:px-24 sm:px-40 px-24 md:border border-t border-#00000014 md:bg-white bg-#F5F5F5 md:radius-8 flex flex-col sm:gap-24 gap-20">
               <h2 className="color-#000000E0 text-20 line-height-28 weight-600 md:block hidden">
