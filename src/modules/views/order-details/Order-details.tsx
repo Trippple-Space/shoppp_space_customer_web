@@ -17,20 +17,28 @@ import { Order } from '@/modules/lib/utility/types/order.interface'
 import { useRouter } from 'next/navigation'
 import HomepageNavBar from '@/modules/lib/components/nav-bar/HomepageNavBar'
 import OrderHeader from '@/modules/lib/components/order/OrderHeader'
-import CancelledOrder from '../../lib/components/order/CancelledOrder'
-import DeliveredOrder from '../../lib/components/order/DeliveredOrder'
-import OngoingOrder from '../../lib/components/order/OngoingOrder'
 import { CartItem } from '@/modules/lib/utility/types/cart.interface'
 import Link from 'next/link'
-import { useCart } from '@/modules/lib/utility/hooks/use-cart'
 import { cartService } from '@/modules/lib/utility/services/cart.service'
+import { orderService } from '@/modules/lib/utility/services/order.service'
+import OrderTabContent from '@/modules/lib/components/order/OrderTabContent'
 
 interface OrderDetailsProps {
-  orderCartModal?: Order
+  orderId: number
 }
 
-const OrderDetails = ({ orderCartModal }: OrderDetailsProps) => {
-  const { addToCart } = useCart()
+const OrderDetails = ({ orderId }: OrderDetailsProps) => {
+  const [orderCartModal, setOrderCartModal] = useState<Order>()
+
+  useEffect(() => {
+    async function fetchSingleOrder () {
+      const singleOrder = await orderService.fetchOrderById(orderId, {})
+      setOrderCartModal(singleOrder)
+    }
+    fetchSingleOrder()
+  }, [orderId])
+
+  console.log({ orderId })
 
   const router = useRouter()
 
@@ -80,19 +88,6 @@ const OrderDetails = ({ orderCartModal }: OrderDetailsProps) => {
 
     if (typeof window !== 'undefined') {
       localStorage.setItem('activeTab', tab)
-    }
-  }
-
-  const renderTabContent = () => {
-    switch (activeTab) {
-      case 'ONGOING':
-        return <OngoingOrder />
-      case 'CONFIRMED':
-        return <DeliveredOrder />
-      case 'CANCELLED':
-        return <CancelledOrder />
-      default:
-        return null
     }
   }
 
@@ -283,7 +278,7 @@ const OrderDetails = ({ orderCartModal }: OrderDetailsProps) => {
               )}
             </div>
           ) : (
-            renderTabContent()
+            <OrderTabContent status={activeTab} />
           )}
         </div>
       </div>

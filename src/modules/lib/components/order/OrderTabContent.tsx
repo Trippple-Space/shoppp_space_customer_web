@@ -8,9 +8,13 @@ import Image from '../image/Image'
 import Link from 'next/link'
 import { useOrders } from '../../utility/hooks/use-orders'
 
-const OngoingOrder = () => {
-  const { orders, singleOrder, fetchOrderById } = useOrders({
-    filters: { status: { In: ['ONGOING'] } }
+interface OrderTabContentProps {
+  status: string
+}
+
+const OrderTabContent = ({ status }: OrderTabContentProps) => {
+  const { orders, singleOrder, fetchOrders } = useOrders({
+    filters: { status: { In: [status] } }
   })
 
   const [orderCartModal, setOrderCartModal] = useState<Order | void>(
@@ -18,15 +22,23 @@ const OngoingOrder = () => {
   )
 
   useEffect(() => {
+    fetchOrders({
+      filters: {
+        status: {
+          In: [status]
+        }
+      }
+    })
     setOrderCartModal(singleOrder)
-  }, [singleOrder])
+  }, [status, singleOrder])
+
 
   return (
     <>
       {orders.length > 0 && (
         <div className='relative bg-whitesmoke p-15 w-100p flex flex-col gap-15'>
           {orderCartModal ? (
-            <OrderDetails orderCartModal={orderCartModal} />
+            <OrderDetails orderId={orderCartModal.id} />
           ) : (
             <>
               <OrderProgressCard
@@ -65,4 +77,4 @@ const OngoingOrder = () => {
   )
 }
 
-export default OngoingOrder
+export default OrderTabContent

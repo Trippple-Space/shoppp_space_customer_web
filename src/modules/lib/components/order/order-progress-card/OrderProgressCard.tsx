@@ -42,16 +42,21 @@ const OrderProgressCard = ({ orders }: OrderProgressProp) => {
                     </p>
                   </div>
                   <p
-                    className={classNames('text-12 p-5 color-white radius-4', {
-                      'bg-#1677FF':
-                        order.status == 'Ongoing'.toLocaleUpperCase(),
-                      'bg-#0B9378':
-                        order.status == 'confirmed'.toLocaleUpperCase(),
-                      'bg-#00000099':
-                        order.status == 'Cancelled'.toLocaleUpperCase()
-                    })}
+                    className={classNames(
+                      'text-12 px-10 py-5 color-white radius-4 font-inter',
+                      {
+                        'bg-#1677FF':
+                          order.status == 'Ongoing'.toLocaleUpperCase(),
+                        'bg-#0B9378':
+                          order.status == 'confirmed'.toLocaleUpperCase(),
+                        'bg-#00000099':
+                          order.status == 'Cancelled'.toLocaleUpperCase()
+                      }
+                    )}
                   >
-                    {order.status}
+                    {order.status.toLowerCase() === 'confirmed'
+                      ? 'Delivered'
+                      : order.status}
                   </p>
                 </div>
                 <div
@@ -67,7 +72,6 @@ const OrderProgressCard = ({ orders }: OrderProgressProp) => {
                     className={classNames(
                       'text-12 flex a-items-center cursor-pointer h-full'
                     )}
-                    //  onClick = { handleOpenOrderProductDetail }
                     onClick={() => handleOpenOrderProductDetail(order)}
                   >
                     <div className={classNames('relative', {})}>

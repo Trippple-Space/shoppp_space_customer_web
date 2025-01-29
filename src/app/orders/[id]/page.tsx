@@ -23,7 +23,9 @@ const Page = () => {
     fetchSingleOrder()
   }, [orderId])
 
-  return <OrderDetails orderCartModal={orderCartModal} />
+  console.log({ orderId })
+
+  return <OrderDetails orderId={orderId} />
 }
 
 export default Page
