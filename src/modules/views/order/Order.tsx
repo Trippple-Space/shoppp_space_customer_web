@@ -8,9 +8,12 @@ import { GoHome } from 'react-icons/go'
 import Link from 'next/link'
 
 const Order = () => {
-  const [activeTab, setActiveTab] = useState<string>(
-    localStorage.getItem('activeTab') || 'ONGOING'
-  )
+  const [activeTab, setActiveTab] = useState<string>(() => {
+    if (typeof window !== 'undefined') {
+      return localStorage.getItem('activeTab') || 'ONGOING'
+    }
+    return 'ONGOING'
+  })
 
   useEffect(() => {
     const savedTab = localStorage.getItem('activeTab')
@@ -20,7 +23,6 @@ const Order = () => {
   const handleTabChange = (tab: string) => {
     setActiveTab(tab)
     localStorage.setItem('activeTab', tab)
-    localStorage.removeItem('activeTab')
   }
 
 
