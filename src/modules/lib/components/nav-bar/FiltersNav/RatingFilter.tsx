@@ -1,0 +1,24 @@
+import React, { useState } from 'react'
+
+export const RatingFilter = () => {
+
+  const ratings = [
+    '3+', '3.5+', '4+', '4.5+', '5+'
+  ]
+  const [activeRating, setActiveRating] = useState<string>()
+
+  return (
+    (<div className='flex flex-col gap-26'>
+      <h5 className='weight-500 text-16 line-height-24'>Over 4</h5>
+      <div className='grid grid-5-cols-auto gap-8'>
+        {
+          ratings.map((rating) => (
+            <div key={rating} onClick={() => { setActiveRating(rating) }} className={`flex gap-40 border-b border-b-3 h-64 cursor-pointer ${rating === activeRating ? 'bg-#EDFCF7 border-b-#0B9378 color-#0B9378' : 'border-b-#F5F5F5 color-#000000E0 hover:bg-#f6fdfb g|transition:0.4s'}`}>
+              <p className='text-16 weight-400 line-height-24'>{rating}</p>
+            </div>
+          ))
+        }
+      </div>
+    </div>)
+  );
+}

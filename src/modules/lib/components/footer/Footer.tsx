@@ -15,7 +15,7 @@ const Footer = () => {
   }
 
   return (
-    <div className='fixed b-0 l-0 w-full z-inde]x-1'>
+    <div className='fixed b-0 l-0 w-full z-index-2'>
       {isFooterOpen && (
         <div
           className='fixed inset-0'

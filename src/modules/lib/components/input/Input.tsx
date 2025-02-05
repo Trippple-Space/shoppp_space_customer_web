@@ -11,7 +11,7 @@ import { FaEye, FaEyeSlash } from 'react-icons/fa'
 interface IInput {
   label?: string | ReactNode
   id?: string
-  name: string
+  name?: string
   type?: HTMLInputTypeAttribute
   placeholder?: string
   className?: string
@@ -80,6 +80,7 @@ const Input: FC<IInput> = ({
           rows={rows}
           id={id}
           name={name}
+          min={0}
           {...controlProps}
         />
         {type === 'password' && (
