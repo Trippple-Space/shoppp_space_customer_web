@@ -7,16 +7,15 @@ import { cx } from "@/modules/lib/utility/utility";
 import { usePathname } from "next/navigation";
 
 const FabricsCategoryNav = ({ categories, selectedCategory, setSelectedCategory, page }: any) => {
-
   const path = usePathname();
-  console.log(categories)
+
   return (
     <div
       className={
         cx(
           't-75 bg-white z-1',
           {
-            'l:mt-90 mt-80 pb-24 app-width test-header': page === "home",
+            'l:mt-90 mt-80 pb-30 app-width test-header': page === "home",
             'mx-24 sm:mx-40 md:mx-60 l:mx-100 xl:mx-200': page !== "home"
           }
         )
