@@ -17,6 +17,20 @@ const OrderedProductModal = ({
   handleOrderModal: () => void
   order: Order | undefined
 }) => {
+  const [expandedId, setExpandedId] = useState<number | null>(null) // Tracks which text is expanded
+  const limit = 30
+
+  const ellipseText = (text: string, isExpanded: boolean) => {
+    if (isExpanded || text.length <= limit) {
+      return text 
+    }
+    return `${text.substring(0, limit)}...` 
+  }
+
+  const handleTextClick = (id: number) => {
+    setExpandedId(prevId => (prevId === id ? null : id))
+  }
+
   const buyAgain = async (cartItems: CartItem[]) => {
     await cartService.buyCartItemAgain(cartItems)
   }
@@ -42,7 +56,7 @@ const OrderedProductModal = ({
           onClick={handleOrderModal}
         >
           <div
-            className={`absolute z-10 l-50p g|transform:translate(-50%); z-10 w-90p l:w-40p bg-white overflow-scroll radius-8`}
+            className={`absolute z-10 l-50p g|transform:translate(-50%) z-10 w-80p l:w-40p bg-white no-scrollbar overflow-auto radius-8 g|max-height:90vh l:h-fit`}
             onClick={e => e.stopPropagation()}
           >
             <div className='overflow-auto no-scrollbar '>
@@ -92,23 +106,29 @@ const OrderedProductModal = ({
                           <Image
                             src={item?.variant.media[0].url}
                             alt={item.variant?.product?.name || ''}
-                            className='w-70 h-70 radius-8 object-fit-cover'
+                            className='w-80 h-80 xl:w-70 xl:h-70 radius-8 object-fit-cover'
                           />
-                          <div className='flex flex-col gap-10'>
+                          <div className='flex flex-col gap-6'>
                             <div className='flex flex-col gap-3'>
-                              <p className='weight-600 text-14 w-fit'>
-                                {item.variant.product?.name}
-                              </p>
-                              <p className='color-#0000008C text-12 w-fit'>
+                              <div
+                                className='weight-600 text-12 xl:w-10 xl:white-space-nowrap text-overflow-ellipsis'
+                                onClick={() => handleTextClick(item.id)}
+                              >
+                                {ellipseText(
+                                  item.variant.product?.name ?? '',
+                                  expandedId === item.id
+                                )}
+                              </div>
+                              <p className='color-#0000008C text-10 w-fit'>
                                 {item.variant.product?.store.name}
                               </p>
                             </div>
                             <div className='flex flex-col gap-5'>
                               {' '}
-                              <p className='color-#0000008C text-14 w-fit'>
+                              <p className='color-#0000008C text-12 w-fit'>
                                 Size: {item.variant.product?.stockUnit}
                               </p>
-                              <p className='color-#0000008C text-14 w-fit'>
+                              <p className='color-#0000008C text-12 w-fit'>
                                 Color: {item.variant.properties.color}
                               </p>
                             </div>
@@ -118,7 +138,7 @@ const OrderedProductModal = ({
                           <p className='text-14 weight-500'>
                             {formatNumberAsPrice(item.totalPrice)}
                           </p>
-                          <p className='text-14 text-right'>
+                          <p className='text-12 weight-600 color-#0000008C text-right'>
                             {' '}
                             X {item.quantity}
                           </p>

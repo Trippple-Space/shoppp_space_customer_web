@@ -6,6 +6,7 @@ import Footer from "@/modules/lib/components/footer/Footer";
 import HomepageNavBar from "@/modules/lib/components/nav-bar/HomepageNavBar";
 import CentralArena from "./CentralArena";
 import { useStoreCategoryNavView } from "@/modules/lib/utility/hooks/views/use-category-nav-view";
+import Filters from "@/modules/lib/components/nav-bar/FiltersNav/FiltersComponent";
 
 const Homepage = () => {
   const { categories, setSelectedCategory, selectedCategory } =
@@ -22,6 +23,7 @@ const Homepage = () => {
           page={"home"}
           key={categories}
         />
+        <Filters />
       </div>
       <div className="app-width">
         <CentralArena />
