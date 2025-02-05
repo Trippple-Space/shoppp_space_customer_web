@@ -16,14 +16,14 @@ const OrderedProductModal = ({
   handleOrderModal: () => void
   order: Order | undefined
 }) => {
-  const [expandedId, setExpandedId] = useState<number | null>(null) 
+  const [expandedId, setExpandedId] = useState<number | null>(null) // Tracks which text is expanded
   const limit = 30
 
   const ellipseText = (text: string, isExpanded: boolean) => {
     if (isExpanded || text.length <= limit) {
-      return text
+      return text 
     }
-    return `${text.substring(0, limit)}...`
+    return `${text.substring(0, limit)}...` 
   }
 
   const handleTextClick = (id: number) => {
@@ -55,7 +55,7 @@ const OrderedProductModal = ({
           onClick={handleOrderModal}
         >
           <div
-            className={`absolute z-10 l-50p g|transform:translate(-50%); z-10 w-90p l:w-40p bg-white overflow-scroll radius-8`}
+            className={`absolute z-10 l-50p g|transform:translate(-50%) z-10 w-80p l:w-40p bg-white no-scrollbar overflow-auto radius-8 g|max-height:90vh l:h-fit`}
             onClick={e => e.stopPropagation()}
           >
             <div className='overflow-auto no-scrollbar '>
@@ -101,24 +101,16 @@ const OrderedProductModal = ({
                         )}
                         key={item.id}
                       >
-                        <div
-                          className='flex gap-10'
-                        >
-                          <div className='w-80 h-80'>
-                            <Image
-                              src={item?.variant.media[0].url}
-                              alt={item.variant?.product?.name || ''}
-                              className='w-80 h-80 xl:w-70 xl:h-70 radius-8 object-fit-cover'
-                            />
-                          </div>
-                          <div
-                            className='flex flex-col gap-6'
-                          >
-                            <div
-                              className='flex flex-col gap-3'
-                            >
+                        <div className='flex gap-10 l:w-60p'>
+                          <Image
+                            src={item?.variant.media[0].url}
+                            alt={item.variant?.product?.name || ''}
+                            className='w-80 h-80 xl:w-70 xl:h-70 radius-8 object-fit-cover'
+                          />
+                          <div className='flex flex-col gap-6'>
+                            <div className='flex flex-col gap-3'>
                               <div
-                                className='weight-600 text-14 xl:white-spce-nowrap text-overflow-ellipsis w-fit'
+                                className='weight-600 text-12 xl:w-10 xl:white-space-nowrap text-overflow-ellipsis'
                                 onClick={() => handleTextClick(item.id)}
                               >
                                 {ellipseText(
@@ -126,16 +118,16 @@ const OrderedProductModal = ({
                                   expandedId === item.id
                                 )}
                               </div>
-                              <p className='color-#0000008C text-12 weight-400 w-fit'>
+                              <p className='color-#0000008C text-10 w-fit'>
                                 {item.variant.product?.store.name}
                               </p>
                             </div>
                             <div className='flex flex-col gap-5'>
                               {' '}
-                              <p className='color-#0000008C text-12 weight-400 w-fit'>
+                              <p className='color-#0000008C text-12 w-fit'>
                                 Size: {item.variant.product?.stockUnit}
                               </p>
-                              <p className='color-#0000008C text-12 weight-400 w-fit'>
+                              <p className='color-#0000008C text-12 w-fit'>
                                 Color: {item.variant.properties.color}
                               </p>
                             </div>
