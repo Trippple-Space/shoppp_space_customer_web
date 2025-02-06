@@ -3,7 +3,7 @@ import { Product, ProductCategory } from "../types/product.interface";
 import endpoints from "../endpoints";
 import http from "../http";
 import { IProductFilters, IQueryParams } from "../hooks/use-products";
-import { buildEndpoint } from "../utility";
+import { buildEndpoint, buildFilterParams } from "../utility";
 import config from "env";
 
 class ProductService {
@@ -60,15 +60,18 @@ class ProductService {
           localStorage.setItem(key, JSON.stringify(toCache));
      }
 
-     fetchProducts(query: IQueryParams): Promise<Product[]> {
+     fetchProducts(query: IQueryParams, filters = {}): Promise<Product[]> {
           return new Promise((resolve) => {
-               http.get(endpoints.PRODUCTS, {
-                    params: query,
+            const filterParams = buildFilterParams(filters);
+            http.get(endpoints.PRODUCTS, {
+                    params: { ...query, ...filterParams } 
                }).then((response: AxiosResponse) => {
                     resolve(response.data);
-               });
+                    console.log("Fetched data:", response.data)
+              });
           });
      }
+        
 
      fetchProductBySlug(
           slug: string,

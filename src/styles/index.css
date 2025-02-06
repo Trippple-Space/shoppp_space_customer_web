@@ -419,10 +419,11 @@
 .max-w-400 { max-width: 400px; } 
 .pb-24 { padding-bottom: 24px; } 
 .py-6 { padding-top: 6px; padding-bottom: 6px; } 
-.hover\:bg-\#00000014:hover { background-color: #00000014; } 
 [class~='g|transition:0.4s;']{transition:0.4s;} 
 @layer base {.radius-999 { border-radius: 999px; } } 
 .bg-\#00000014 { background-color: #00000014; } 
+.hover\:bg-\#00000014:hover { background-color: #00000014; } 
+.hover\:bg-\#FACE33:hover { background-color: #FACE33; } 
 .h-19 { height: 19px; } 
 .r-12 { right: 12px; } 
 .b-12 { bottom: 12px; } 

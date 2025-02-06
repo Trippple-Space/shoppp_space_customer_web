@@ -3,6 +3,7 @@ import { usePathname } from "next/navigation";
 import { useInView } from "react-intersection-observer";
 import { useProducts } from "../use-products";
 import { useCategories } from "../use-categories";
+import { useFilter } from "../use-filter";
 
 export const useProductListView = () => {
   const { ref, inView } = useInView();
@@ -15,14 +16,15 @@ export const useProductListView = () => {
   const { selectedCategory, setSelectedCategory } = useCategories({
     type,
     storeId: 0,
-    label: "GLOBAL",
+    label: "GLOBAL"
   });
+  const { allFilters } = useFilter();
 
   //console.log({ selectedCategory });
 
-  const { products, setPagination, updateFilters, query } = useProducts({
+  const { products, setPagination, updateFilters, query, updateHomePageFilter } = useProducts({
     filters: { type, status: { In: ["ACTIVE", "OUT_OF_STOCK"] } },
-    pagination: { limit, page },
+    pagination: { limit, page }
   });
 
   //console.log({ len: products?.length, products });
@@ -32,8 +34,12 @@ export const useProductListView = () => {
   }, [selectedCategory?.name]);
 
   useEffect(() => {
+    updateHomePageFilter(allFilters)
+  }, [allFilters, JSON.stringify(query.allFilters)])
+
+  useEffect(() => {
     setPage(Math.floor(products.length / limit) + 1);
-  }, [JSON.stringify(query.filters)]);
+  }, [JSON.stringify(query.filters), JSON.stringify(query.allFilters)]);
 
   useEffect(() => {
     if (inView) {
@@ -47,6 +53,6 @@ export const useProductListView = () => {
     products,
     setSelectedCategory,
     selectedCategory,
-    ref,
+    ref
   };
 };
