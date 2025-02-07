@@ -19,9 +19,7 @@ const CentralArena = () => {
         </div>
         {
           productLoading ?
-            <div className='w-full flex flex-row j-items-center'>
-              <DotsLoader />
-            </div> :
+            <DotsLoader /> :
             <div className='grid xxlgrid-5-cols xl:grid-4-cols-1fr s:grid-3-cols-1fr grid-2-cols-1fr flex-wrap gap-18 s:gap-20 md:gap-24 w-full relative'>
               {products.length ? (
                 products.map((product) => {
@@ -42,7 +40,7 @@ const CentralArena = () => {
           <p></p>
         </div>
         {
-          paginationLoading && !productLoading && products.length % 20 === 0 && <div>pagination loading</div>
+          paginationLoading && !productLoading && products.length % 20 === 0 && <DotsLoader />
         }
       </section>
     </>
