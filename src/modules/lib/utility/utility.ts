@@ -69,7 +69,7 @@ export const buildFilterParams = (filters: any) => {
     params["filters[price][LessThanOrEqual]"] = price.max;
   }
 
-  if (sort?.sortBy) {
+  /*if (sort?.sortBy) {
     params["sort"] = sort.sortBy;
   }
 
@@ -79,7 +79,7 @@ export const buildFilterParams = (filters: any) => {
 
   if (showOffers) {
     params["filters[showOffer]"] = "true";
-  }
+  }*/
 
   return params;
 };

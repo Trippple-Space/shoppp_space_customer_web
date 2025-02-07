@@ -35,6 +35,9 @@ export interface IQueryParams {
 
 export const useProducts = (initialQuery: IQueryParams) => {
   const [query, setQuery] = useState<IQueryParams>(initialQuery);
+  const [productLoading, setProductLoading] = useState(true);
+  const [paginationLoading, setPaginationLoading] = useState(true);
+
   const {
     productsCache,
     setProductsCache,
@@ -59,7 +62,7 @@ export const useProducts = (initialQuery: IQueryParams) => {
   const updateHomePageFilter = (allFilters: IFilters) => {
     setQuery((prevQuery) => ({
       ...prevQuery,
-      allFilters: {...allFilters}
+      allFilters: { ...allFilters }
     }));
   };
 
@@ -82,17 +85,24 @@ export const useProducts = (initialQuery: IQueryParams) => {
     JSON.stringify(query.filters ?? {}) +
     JSON.stringify(query.order ?? {}) +
     JSON.stringify(query.allFilters ?? {});
+
   useEffect(() => {
-    if (!productsCache[cacheKey]) {
+    if (!productsCache[cacheKey] || productsCache[cacheKey].length === 0) {
+      setProductLoading(true);
       productService
         .fetchProducts(query, query.allFilters)
         .then((fetchedProducts) => {
-          console.log(query.allFilters)
-          console.log(fetchedProducts)
           setProductsCache(cacheKey, fetchedProducts);
+        })
+        .finally(() => {
+          setProductLoading(false);
         });
     }
-  }, [cacheKey, productsCache[cacheKey]?.length, JSON.stringify(query.allFilters)]);
+  }, [
+    cacheKey,
+    productsCache[cacheKey]?.length,
+    JSON.stringify(query.allFilters)
+  ]);
 
   useEffect(() => {
     console.log("Pagination changed", {
@@ -101,13 +111,12 @@ export const useProducts = (initialQuery: IQueryParams) => {
     });
     if (
       (productsCache[cacheKey]?.length ?? 0) <
-      (query.pagination?.limit ?? 0) * (query.pagination?.page ?? 1)
+      (query.pagination?.limit ?? 0) * (query.pagination?.page ?? 0)
     ) {
+      setPaginationLoading(true);
       productService
         .fetchProducts(query, query.allFilters)
         .then((fetchedProducts) => {
-          console.log(query.allFilters)
-          console.log(fetchedProducts)
           setProductsCache(cacheKey, [
             ...(productsCache[cacheKey] ?? []),
             ...fetchedProducts.filter(
@@ -122,9 +131,15 @@ export const useProducts = (initialQuery: IQueryParams) => {
               {}
             )
           );
+        })
+        .finally(() => {
+          setPaginationLoading(false);
         });
     }
-  }, [JSON.stringify(query.pagination ?? {}), JSON.stringify(query.allFilters)]);
+  }, [
+    JSON.stringify(query.pagination ?? {}),
+    JSON.stringify(query.allFilters)
+  ]);
 
   return {
     products: productsCache[cacheKey] ?? [],
@@ -133,6 +148,8 @@ export const useProducts = (initialQuery: IQueryParams) => {
     updateHomePageFilter,
     setOrdering,
     setPagination,
-    query
+    query,
+    productLoading,
+    paginationLoading
   };
 };

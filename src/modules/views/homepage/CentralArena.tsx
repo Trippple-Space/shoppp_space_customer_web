@@ -3,9 +3,10 @@
 import React from 'react'
 import ProductTile from '@/modules/lib/components/product-tile/ProductTile'
 import { useProductListView } from '@/modules/lib/utility/hooks/views/use-product-list-view'
+import { DotsLoader } from '@/modules/lib/components/dots-loader/DotsLoader';
 
 const CentralArena = () => {
-  const { products, type, ref } = useProductListView()
+  const { products, type, ref, productLoading, paginationLoading } = useProductListView()
   const renderedIds = new Set<number>();
 
   return (
@@ -16,24 +17,33 @@ const CentralArena = () => {
             Top selling
           </h3>
         </div>
-        <div className='grid xxlgrid-5-cols xl:grid-4-cols-1fr s:grid-3-cols-1fr grid-2-cols-1fr flex-wrap gap-18 s:gap-20 md:gap-24 w-full relative'>
-          {products.length ? (
-            products.map((product) => {
-              if (renderedIds.has(product.id)) {
-                return null;
-              }
-              renderedIds.add(product.id);
-              return <ProductTile product={product} key={product.id} />;
-            })
-          ) : (
-            <div className='mt-60 bg-white grid-col-span-5 text-center'>
-              No products found for the selected filters
+        {
+          productLoading ?
+            <div className='w-full flex flex-row j-items-center'>
+              <DotsLoader />
+            </div> :
+            <div className='grid xxlgrid-5-cols xl:grid-4-cols-1fr s:grid-3-cols-1fr grid-2-cols-1fr flex-wrap gap-18 s:gap-20 md:gap-24 w-full relative'>
+              {products.length ? (
+                products.map((product) => {
+                  if (renderedIds.has(product.id)) {
+                    return null;
+                  }
+                  renderedIds.add(product.id);
+                  return <ProductTile product={product} key={product.id} />;
+                })
+              ) : (
+                <div className='mt-60 bg-white grid-col-span-5 text-center'>
+                  No products found for the selected filters
+                </div>
+              )}
             </div>
-          )}
-        </div>
+        }
         <div ref={ref}>
           <p></p>
         </div>
+        {
+          paginationLoading && !productLoading && products.length % 20 === 0 && <div>pagination loading</div>
+        }
       </section>
     </>
   );

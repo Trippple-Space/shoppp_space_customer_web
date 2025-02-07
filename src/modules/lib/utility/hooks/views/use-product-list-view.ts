@@ -22,7 +22,7 @@ export const useProductListView = () => {
 
   //console.log({ selectedCategory });
 
-  const { products, setPagination, updateFilters, query, updateHomePageFilter } = useProducts({
+  const { products, setPagination, updateFilters, query, updateHomePageFilter, productLoading, paginationLoading } = useProducts({
     filters: { type, status: { In: ["ACTIVE", "OUT_OF_STOCK"] } },
     pagination: { limit, page }
   });
@@ -35,7 +35,8 @@ export const useProductListView = () => {
 
   useEffect(() => {
     updateHomePageFilter(allFilters)
-  }, [allFilters, JSON.stringify(query.allFilters)])
+    setPagination({ page: 0, limit });
+  }, [allFilters, JSON.stringify(query.allFilters), JSON.stringify(query.filters)])
 
   useEffect(() => {
     setPage(Math.floor(products.length / limit) + 1);
@@ -51,6 +52,8 @@ export const useProductListView = () => {
   return {
     type,
     products,
+    productLoading,
+    paginationLoading,
     setSelectedCategory,
     selectedCategory,
     ref

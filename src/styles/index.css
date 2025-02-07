@@ -247,6 +247,8 @@
 .color-\#0B9378 { color: #0B9378; } 
 .bg-\#007B5D1F { background-color: #007B5D1F; } 
 .color-\#000000E0 { color: #000000E0; } 
+.w-5 { width: 5px; } 
+.h-5 { height: 5px; } 
 .p-20 { padding: 20px; } 
 .text-24 { font-size: 24px; } 
 .line-height-40 { line-height: 40px; } 
@@ -470,7 +472,6 @@
 .text-ellipsis { text-overflow: ellipsis; } 
 .border-t-\#00000014 { border-top-color: #00000014; } 
 .w-20p { width: 20%; } 
-.h-5 { height: 5px; } 
 .border-b-\#1677FF { border-bottom-color: #1677FF; } 
 .pb-1 { padding-bottom: 1px; } 
 .bg-\#00000099 { background-color: #00000099; } 
