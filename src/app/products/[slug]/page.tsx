@@ -10,7 +10,6 @@ export async function generateMetadata ({
 }): Promise<Metadata> {
   try {
     const product = await productService.fetchProductBySlug(params.slug, {})
-  
 
     return {
       title: `${product?.name} - Asoebi Africa`,

@@ -43,7 +43,7 @@ const ShareProductModal: React.FC<ModalProps> = ({
         >
           <Modal
             isOpen={modalOpen}
-            onClose={() => ''}
+            onClose={handleCloseModal}
             extraModalClass={{ zIndex: 10, overflowY: 'auto' }}
             extraClass={{
               transform: 'translate(50%)',

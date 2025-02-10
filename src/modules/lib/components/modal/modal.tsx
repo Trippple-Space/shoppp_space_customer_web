@@ -1,6 +1,5 @@
 "use client"
-
-import React, { useRef, useEffect, useState } from 'react';
+import  { useRef, useEffect, useState } from 'react';
 
 interface ModalProps {
   isOpen: boolean;
@@ -12,6 +11,7 @@ interface ModalProps {
 }
 
 const Modal: React.FC<ModalProps> = ({ isOpen, onClose, children, extraModalClass, extraClass, className }) => {
+  
   const modalRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -47,14 +47,19 @@ const Modal: React.FC<ModalProps> = ({ isOpen, onClose, children, extraModalClas
     width: '100%',
     height: '100%',
     backgroundColor: 'rgba(0, 0, 0, 0.1)',
-    zIndex: 6,
+    zIndex: 11,
+    scrollbarWidth: "none",
+    msOverflowStyle: "none",
     ...extraModalClass
   };
-
+  
   const modalContentStyle: any = {
     backgroundColor: '#fff',
     borderRadius: '8px',
     overflowY: 'scroll',
+    
+    scrollbarWidth: "none",
+    msOverflowStyle: "none",
     // maxHeight: '90vh',
     // height: '100%',
     position: 'absolute',
