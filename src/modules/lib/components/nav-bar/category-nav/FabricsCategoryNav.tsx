@@ -8,7 +8,6 @@ import { usePathname } from "next/navigation";
 
 const FabricsCategoryNav = ({ categories, selectedCategory, setSelectedCategory, page }: any) => {
   const path = usePathname();
-
   return (
     <div
       className={

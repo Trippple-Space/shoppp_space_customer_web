@@ -14,7 +14,7 @@ const OrderHeader = ({
         <div className='l:w-50p w-90p flex flex-col gap-50'>
           <div className='flex a-items-center l:gap-10 bg-#F5F5F5 p-5 radius-6 '>
             <div
-              className={classNames('w-100p radius-6 cursor-pointer p-10 ', {
+              className={classNames('w-100p radius-6 cursor-pointer p-10 weight-400', {
                 'bg-white': activeTab === 'ONGOING'
               })}
               onClick={() => setActiveTab?.('ONGOING')}
@@ -30,7 +30,7 @@ const OrderHeader = ({
 
             <div
               className={classNames(
-                'w-100p cursor-pointer cursor-pointer p-10 radius-6',
+                'w-100p cursor-pointer cursor-pointer p-10 radius-6 weight-400',
                 {
                   'bg-white': activeTab === 'CONFIRMED'
                 }
@@ -56,7 +56,7 @@ const OrderHeader = ({
             >
               <p
                 className={classNames(
-                  'text-center font-inter text-16 overflow-hidden text-ellipsis',
+                  'text-center font-inter text-16 overflow-hidden text-ellipsis weight-400',
                   {
                     'weight-600': activeTab === 'CANCELLED'
                   }

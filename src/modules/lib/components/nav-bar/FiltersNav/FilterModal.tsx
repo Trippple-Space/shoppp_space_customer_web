@@ -57,6 +57,7 @@ const FilterModal: React.FC<ModalProps> = ({ modalOpen, handleCloseModal, filter
       </form>
     </Modal>
   </div>);
+
 };
 
 export default FilterModal;

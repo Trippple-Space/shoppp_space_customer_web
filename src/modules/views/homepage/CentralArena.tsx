@@ -1,9 +1,10 @@
-"use client";
+'use client'
 
 import React from 'react'
 import ProductTile from '@/modules/lib/components/product-tile/ProductTile'
 import { useProductListView } from '@/modules/lib/utility/hooks/views/use-product-list-view'
 import { DotsLoader } from '@/modules/lib/components/dots-loader/DotsLoader';
+import PuffLoader from '@/modules/lib/components/puff-loader/PuffLoader'
 
 const CentralArena = () => {
   const { products, type, ref, productLoading, paginationLoading } = useProductListView()
@@ -37,14 +38,16 @@ const CentralArena = () => {
             </div>
         }
         <div ref={ref}>
-          <p></p>
+          <p className='w-100p flex j-content-center mt-10'>
+            {products.length > 0 && <PuffLoader />}
+          </p>
         </div>
         {
           paginationLoading && !productLoading && products.length % 20 === 0 && <DotsLoader />
         }
       </section>
     </>
-  );
-};
+  )
+}
 
-export default CentralArena;
+export default CentralArena
