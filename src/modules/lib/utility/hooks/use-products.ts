@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { productService } from "../services/product.service";
-import { Product } from "../types/product.interface";
 import { useProductStore } from "../store/products.store";
+import { IFilters } from "../types/product.interface";
 
 export interface IProductFilters {
   page?: string;
@@ -30,93 +30,126 @@ export interface IQueryParams {
   order?: IOrderBy;
   pagination?: IPagination;
   // key: any
+  allFilters?: IFilters;
 }
 
 export const useProducts = (initialQuery: IQueryParams) => {
   const [query, setQuery] = useState<IQueryParams>(initialQuery);
+  const [productLoading, setProductLoading] = useState(true);
+  const [paginationLoading, setPaginationLoading] = useState(true);
+
   const {
     productsCache,
     setProductsCache,
     setProductsCacheIdempotencyTracker,
-    productCacheIdempotencyTracker,
+    productCacheIdempotencyTracker
   } = useProductStore();
 
   const setFilters = (filters: IProductFilters) => {
     setQuery((prevQuery) => ({
       ...prevQuery,
-      filters,
+      filters
     }));
   };
 
   const updateFilters = (filters: IProductFilters) => {
     setQuery((prevQuery) => ({
       ...prevQuery,
-      filters: { ...prevQuery.filters, ...filters },
+      filters: { ...prevQuery.filters, ...filters }
+    }));
+  };
+
+  const updateHomePageFilter = (allFilters: IFilters) => {
+    setQuery((prevQuery) => ({
+      ...prevQuery,
+      allFilters: { ...allFilters }
     }));
   };
 
   const setOrdering = (ordering: IOrderBy) => {
     setQuery((prevQuery) => ({
       ...prevQuery,
-      order: ordering,
+      order: ordering
     }));
   };
 
   const setPagination = (pagination: IPagination) => {
     setQuery((prevQuery) => ({
       ...prevQuery,
-      pagination,
+      pagination
     }));
   };
 
   const cacheKey =
     "products_" +
     JSON.stringify(query.filters ?? {}) +
-    JSON.stringify(query.order ?? {});
+    JSON.stringify(query.order ?? {}) +
+    JSON.stringify(query.allFilters ?? {});
+
   useEffect(() => {
-    if (!productsCache[cacheKey]) {
-      productService.fetchProducts(query).then((fetchedProducts) => {
-        //console.log(fetchedProducts);
-        setProductsCache(cacheKey, fetchedProducts);
-      });
+    if (!productsCache[cacheKey] || productsCache[cacheKey].length === 0) {
+      setProductLoading(true);
+      productService
+        .fetchProducts(query, query.allFilters)
+        .then((fetchedProducts) => {
+          setProductsCache(cacheKey, fetchedProducts);
+        })
+        .finally(() => {
+          setProductLoading(false);
+        });
     }
-  }, [cacheKey, productsCache[cacheKey]?.length]);
+  }, [
+    cacheKey,
+    productsCache[cacheKey]?.length,
+    JSON.stringify(query.allFilters)
+  ]);
 
   useEffect(() => {
     console.log("Pagination changed", {
       pagination: query.pagination,
-      productCacheIdempotencyTracker,
+      productCacheIdempotencyTracker
     });
     if (
       (productsCache[cacheKey]?.length ?? 0) <
-      (query.pagination?.limit ?? 0) * (query.pagination?.page ?? 1)
+      (query.pagination?.limit ?? 0) * (query.pagination?.page ?? 0)
     ) {
-      productService.fetchProducts(query).then((fetchedProducts) => {
-        setProductsCache(cacheKey, [
-          ...(productsCache[cacheKey] ?? []),
-          ...fetchedProducts.filter(
-            (product) =>
-              !productCacheIdempotencyTracker?.[cacheKey]?.[product.id]
-          ),
-        ]);
-        setProductsCacheIdempotencyTracker(
-          cacheKey,
-          fetchedProducts.reduce(
-            (cumm, curr) => ({ ...cumm, [curr.id]: true }),
-            {}
-          )
-        );
-      });
+      setPaginationLoading(true);
+      productService
+        .fetchProducts(query, query.allFilters)
+        .then((fetchedProducts) => {
+          setProductsCache(cacheKey, [
+            ...(productsCache[cacheKey] ?? []),
+            ...fetchedProducts.filter(
+              (product) =>
+                !productCacheIdempotencyTracker?.[cacheKey]?.[product.id]
+            )
+          ]);
+          setProductsCacheIdempotencyTracker(
+            cacheKey,
+            fetchedProducts.reduce(
+              (cumm, curr) => ({ ...cumm, [curr.id]: true }),
+              {}
+            )
+          );
+        })
+        .finally(() => {
+          setPaginationLoading(false);
+        });
     }
-  }, [JSON.stringify(query.pagination ?? {})]);
-
+  }, [
+    JSON.stringify(query.pagination ?? {}),
+    JSON.stringify(query.allFilters)
+  ]);
 
   return {
     products: productsCache[cacheKey] ?? [],
     setFilters,
     updateFilters,
+    updateHomePageFilter,
     setOrdering,
     setPagination,
     query,
+    productLoading,
+    paginationLoading
   };
 };
