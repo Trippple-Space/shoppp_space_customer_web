@@ -72,7 +72,7 @@ const ProductTile: FC<IProductTile> = ({ product }: any) => {
     },
   ];
 
-
+useEffect(() => {console.log({selectedVariant})},[selectedVariant])
   return (
     <div className="mt-30 l:mt-20 w-full overflow-hidden">
       <div
@@ -123,22 +123,37 @@ const ProductTile: FC<IProductTile> = ({ product }: any) => {
                 cartItem={selectedVariantItemInCart}
               />
             ) : (
+                <>
               <button
                 onClick={() => {
                   isAuthenticated
-                    ? addToCart(
+                    ? selectedVariant.stock > 0 && addToCart(
                       selectedVariant.id,
                       selectedVariant.minPurchaseQuantity || 1
-                    )
+                    ) 
                     : isLoginModal();
                 }}
                 disabled={!selectedImage}
-                className="bg-#FACE33! shadow-0-4-8-0-#00000033 hover:shadow-0-8-8-0-#00000033 text-black! disabled:bg-gray-200 disabled:cursor-not-allowed hover:scale-1.06 g|transition:0.5s g|will-change:transform pointer font-roboto border-hidden outline-none s:p-14 p-12 round flex a-items-center j-items-center gap-10"
+                    className={classNames(
+                      "shadow-0-4-8-0-#00000033 hover:shadow-0-8-8-0-#00000033 text-black! disabled:bg-gray-200 disabled:cursor-not-allowed hover:scale-1.06 g|transition:0.5s g|will-change:transform pointer font-roboto border-hidden outline-none s:p-14 p-12 round flex a-items-center j-items-center gap-10"
+                      , {
+                  'bg-whitesmoke': selectedVariant.stock <= 0,
+                  'bg-#FACE33': selectedVariant.stock > 0
+                })}
               >
                 <PiShoppingCartFill className="s:w-22 w-20 s:h-22 h-20" />
               </button>
+            </>
             )}
           </div>
+          { selectedVariant.stock <= 0 && <div
+            className="absolute b-0 l-0 ml-10 mb-10 l:ml-15 l:mb-15 bg-whitesmoke radius-10"
+          >
+            <div className="px-4 py-4">
+              Out of stock
+            </div>
+
+          </div>}
         </div>
         <div
           id="favorite icon"

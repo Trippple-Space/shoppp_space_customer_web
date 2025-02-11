@@ -24,6 +24,7 @@ import { useCart } from '@/modules/lib/utility/hooks/use-cart'
 import CollapsibleDesc from './product-description/collapsibleDesc'
 import ShareProductModal from './share-modal/shareProductModal'
 import ProductStockUnit from '@/modules/lib/components/product-stock-unit/ProductStockUnit'
+import classNames from 'classnames'
 
 const ProductDetails = ({ product }: { product: Product }) => {
   const [unitCounter, setUnitCounter] = useState<number>(1)
@@ -193,26 +194,36 @@ const ProductDetails = ({ product }: { product: Product }) => {
                 <></>
               )}
 
-              {!selectedVariantItemInCart ? (
+                {!selectedVariantItemInCart ? (
                 <button
-                  className='bg-green text-white border-none l:px-90 l:py-20 py-15 w-100p radius-30 pointer'
+                  className={classNames('text-white border-none l:px-90 l:py-20 py-15 w-100p radius-30 pointer', {
+                  'bg-gray-300': selectedVariant && selectedVariant.stock <= 0,
+                  'bg-#0B9378': selectedVariant && selectedVariant.stock > 0
+                  })}
                   onClick={() => {
-                    isAuthenticated
-                      ? addToCart(
-                        selectedVariant?.id,
-                        selectedVariant?.minPurchaseQuantity || 1
-                      )
-                      : isLoginModal()
+                  if (isAuthenticated) {
+                    if (selectedVariant && selectedVariant.stock > 0) {
+                    addToCart(
+                      selectedVariant?.id ?? 0,
+                      selectedVariant?.minPurchaseQuantity || 1
+                    )
+                    }
+                  } else {
+                    isLoginModal()
+                  }
                   }}
                 >
                   <div className='l:flex grid grid-2-cols-auto gap-10 items-center w-fit mx-auto'>
-                    <HiOutlineShoppingBag className='h-21' />
-                    <div className='whitespace-nowrap text-16'>Add To Cart</div>
+                  {selectedVariant.stock > 0 && <HiOutlineShoppingBag className='h-21' />}
+                  <div className={classNames('whitespace-nowrap text-16', {
+                    'text-black': selectedVariant && selectedVariant.stock <= 0,
+                    'text-white': selectedVariant && selectedVariant.stock > 0
+                  })}>
+                    {selectedVariant && selectedVariant.stock > 0 ? 'Add to cart' : 'Out of stock'}
+                  </div>
                   </div>
                 </button>
-              ) : (
-                <></>
-              )}
+                ) : null}
             </div>
           </div>
         </div>

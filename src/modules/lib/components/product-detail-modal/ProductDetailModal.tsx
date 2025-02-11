@@ -75,10 +75,10 @@ const ProductDetailModal = ({
           />
           {product && (
             <>
-              <div className='relative'>
+              <div className='relative no-scrollbar'>
                 <div
                   className={`fixed bg-white t-70  z-10 l-50p g|transform:translate(-50%) h-60vh l:h-70vh l:w-500
-                  radius-8   
+                  radius-8  no-scrollbar  
                   `}
                 >
                   <div className='overflow-auto no-scrollbar h-100p'>
@@ -184,18 +184,33 @@ const ProductDetailModal = ({
                           ) : (
                             <button
                               onClick={() => {
-                                isAuthenticated
-                                  ? addToCart(
-                                      selectedVariant?.id ?? 0,
-                                      selectedVariant?.minPurchaseQuantity || 1
-                                    )
-                                  : isLoginModal()
+                              if (isAuthenticated) {
+                                if (selectedVariant && selectedVariant.stock > 0) {
+                                addToCart(
+                                  selectedVariant?.id ?? 0,
+                                  selectedVariant?.minPurchaseQuantity || 1
+                                )
+                                }
+                              } else {
+                                isLoginModal()
+                              }
                               }}
                               disabled={!selectedImage}
-                              className='bg-#0B9378 disabled:bg-yellow-200 disabled:cursor-not-allowed hover:scale-1.05 g|transition:0.5s pointer font-roboto text-grey-900 border-hidden px-10 py-10 radius-5 l:px-22 l:py-12 l:radius-10'
+                              className={classNames(
+                              'disabled:bg-yellow-200 disabled:cursor-not-allowed hover:scale-1.05 transition-0.5s pointer font-roboto text-grey-900 border-hidden px-10 py-10 radius-5 l:px-22 l:py-12 l:radius-10',
+                              {
+                                'bg-#F3F3F3': selectedVariant && selectedVariant.stock <= 0,
+                                'bg-#0B9378': selectedVariant && selectedVariant.stock > 0
+                              }
+                              )}
                             >
-                              <span className='l:block weight-500 color-white'>
-                                Add to cart
+                              <span
+                              className={classNames('l:block weight-500', {
+                                'color-black': selectedVariant && selectedVariant.stock <= 0,
+                                'color-white': selectedVariant && selectedVariant.stock > 0
+                              })}
+                              >
+                              {selectedVariant && selectedVariant.stock > 0 ? 'Add to cart' : 'Out of stock'}
                               </span>
                             </button>
                           )}
