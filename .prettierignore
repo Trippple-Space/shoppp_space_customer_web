@@ -1,0 +1,6 @@
+# Ignore all files except those you want to format
+*
+!*.js
+!*.jsx
+!*.ts
+!*.tsx 

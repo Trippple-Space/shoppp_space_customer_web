@@ -8,7 +8,8 @@
     "build": "cxcss --build && next build",
     "start": "next start",
     "lint": "next lint",
-    "prepare": "husky"
+    "prepare": "husky",
+    "prettier": "prettier --config .prettierrc --write ."
   },
   "dependencies": {
     "@types/node": "20.2.5",
@@ -42,7 +43,8 @@
     "cross-env": "^7.0.3",
     "cxcss": "^0.0.49",
     "husky": "^9.1.7",
-    "lint-staged": "^15.2.10"
+    "lint-staged": "^15.2.10",
+    "prettier": "3.5.0"
   },
   "husky": {
     "hooks": {

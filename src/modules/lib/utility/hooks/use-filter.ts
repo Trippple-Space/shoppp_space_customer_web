@@ -20,7 +20,7 @@ export const useFilter = () => {
       if (sortBy) filters.sort = sortBy;
       if (rateBy) filters.rating = rateBy;
       if (showOffers) filters.showOffers = showOffers;
-      productService.fetchProducts({}, filters);
+      // productService.fetchProducts({}, filters);
     };
 
     fetchFilteredProducts();

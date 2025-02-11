@@ -8,7 +8,7 @@ import { useFilter } from "../use-filter";
 export const useProductListView = () => {
   const { ref, inView } = useInView();
   const [page, setPage] = useState(1);
-  const [limit] = useState(20);
+  const limit = 20;
 
   const pathname = usePathname();
   const type = pathname.includes("wears") ? "wears" : "fabrics";
@@ -20,27 +20,18 @@ export const useProductListView = () => {
   });
   const { allFilters } = useFilter();
 
-  //console.log({ selectedCategory });
-
-  const { products, setPagination, updateFilters, query, updateHomePageFilter, productLoading, paginationLoading } = useProducts({
-    filters: { type, status: { In: ["ACTIVE", "OUT_OF_STOCK"] } },
-    pagination: { limit, page }
+  const { products, setPagination, updateFilters, query, updateHomePageFilter, loading } = useProducts({
+    filters: { type, status: { In: ["ACTIVE", "OUT_OF_STOCK"] } }
   });
-
-  //console.log({ len: products?.length, products });
 
   useEffect(() => {
     updateFilters(selectedCategory.filters);
-  }, [selectedCategory?.name]);
+  }, [selectedCategory]);
 
   useEffect(() => {
     updateHomePageFilter(allFilters)
     setPagination({ page: 0, limit });
   }, [allFilters, JSON.stringify(query.allFilters), JSON.stringify(query.filters)])
-
-  useEffect(() => {
-    setPage(Math.floor(products.length / limit) + 1);
-  }, [JSON.stringify(query.filters), JSON.stringify(query.allFilters)]);
 
   useEffect(() => {
     if (inView) {
@@ -52,8 +43,7 @@ export const useProductListView = () => {
   return {
     type,
     products,
-    productLoading,
-    paginationLoading,
+    loading,
     setSelectedCategory,
     selectedCategory,
     ref
