@@ -34,24 +34,29 @@ const OrderProgressCard = ({ orders }: OrderProgressProp) => {
               <div className='flex flex-col gap-10'>
                 <div className='flex space-between a-items-center'>
                   <div className='whitespace-nowrap w-50p l:w-fit'>
-                    <p className='color-#00000099 text-12 overflow-hidden text-ellipsis l:overflow'>
+                    <p className='color-#00000099 weight-400 text-12 overflow-hidden text-ellipsis l:overflow font-inter'>
                       Order from:{' '}
-                      <span className='weight-600 color-#000000E0 '>
+                      <span className='text-14 weight-500 color-#000000E0 '>
                         {getStoreNames(order.cart.cartItems)}
                       </span>
                     </p>
                   </div>
                   <p
-                    className={classNames('text-12 p-5 color-white radius-4', {
-                      'bg-#1677FF':
-                        order.status == 'Ongoing'.toLocaleUpperCase(),
-                      'bg-#0B9378':
-                        order.status == 'confirmed'.toLocaleUpperCase(),
-                      'bg-#00000099':
-                        order.status == 'Cancelled'.toLocaleUpperCase()
-                    })}
+                    className={classNames(
+                      'text-12 px-10 py-5 color-white radius-4 font-inter',
+                      {
+                        'bg-#1677FF':
+                          order.status == 'Ongoing'.toLocaleUpperCase(),
+                        'bg-#0B9378':
+                          order.status == 'confirmed'.toLocaleUpperCase(),
+                        'bg-#00000099':
+                          order.status == 'Cancelled'.toLocaleUpperCase()
+                      }
+                    )}
                   >
-                    {order.status}
+                    {order.status.toLowerCase() === 'confirmed'
+                      ? 'Delivered'
+                      : order.status}
                   </p>
                 </div>
                 <div
@@ -67,7 +72,6 @@ const OrderProgressCard = ({ orders }: OrderProgressProp) => {
                     className={classNames(
                       'text-12 flex a-items-center cursor-pointer h-full'
                     )}
-                    //  onClick = { handleOpenOrderProductDetail }
                     onClick={() => handleOpenOrderProductDetail(order)}
                   >
                     <div className={classNames('relative', {})}>
@@ -77,7 +81,7 @@ const OrderProgressCard = ({ orders }: OrderProgressProp) => {
                   </div>
 
                   <div className='flex flex-col gap-10'>
-                    <p className='text-12 color-#00000099 text-right'>
+                    <p className='text-12 weight-400 color-#00000099 text-right'>
                       Total Amount
                     </p>
                     <p className='color-black text-right weight-600'>
@@ -88,10 +92,10 @@ const OrderProgressCard = ({ orders }: OrderProgressProp) => {
               </div>
 
               <div className='l:flex grid gap-10 l:gap-0 a-items-center space-between border-b border-t border-t-#00000014 border-b-#00000014  py-15'>
-                <p className='text-14 color-#00000099'>
+                <p className='text-14 weight-400 color-#00000099'>
                   {formatDate(new Date(order.delivery.deliveryWindowStart))}
                 </p>
-                <p className='text-14 color-#00000099'>{order.id}</p>
+                <p className='text-14 weight-400 color-#00000099'>{order.id}</p>
               </div>
 
               {order.status === 'ONGOING' && (
@@ -103,7 +107,7 @@ const OrderProgressCard = ({ orders }: OrderProgressProp) => {
                     <div className='flex a-items-center gap-10'>
                       {order.delivery.code.split('').map(str => (
                         <p
-                          className='h-40 w-40 radius-5 weight-600 bg-whitesmoke text-center flex a-items-center j-content-center'
+                          className='h-40 w-40 radius-5 weight-600 bg-whitesmoke text-center flex a-items-center j-content-center text-16'
                           key={str}
                         >
                           {str.toLocaleUpperCase()}
@@ -136,7 +140,7 @@ const OrderProgressCard = ({ orders }: OrderProgressProp) => {
                 )}
                 <Link
                   href={`/orders/${order.id}`}
-                  className='color-#1677FF text-14 border-b border-b-#1677FF pb-1 cursor-pointer w-fit text-right'
+                  className='color-#1677FF text-14 weight-400 border-b border-b-#1677FF pb-1 cursor-pointer w-fit text-right'
                 >
                   View more details
                 </Link>

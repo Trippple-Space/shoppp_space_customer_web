@@ -34,7 +34,7 @@ const OrderProgressCircle = ({
 }: OrderProgressProps) => (
   <div
     className={classNames(
-      `w-20 h-20 radius-20 z-1 border border-3 border-white  ${
+      `w-20 h-20 radius-20 z-1 border border-2 border-white  ${
         orderCartModal?.status === 'CANCELLED' &&
         text === 'Cancelled-Payment Unsuccessful' &&
         'bg-#D4280C'
@@ -104,14 +104,12 @@ const OrderProcess = ({
         {isTimelineView ? (
           <>
             <OrderProgressLine
-              styles='b-10 h-70 l-10'
+              styles='b-10 h-70 l-9'
               active={active}
               orderCartModal={orderCartModal}
               text={text}
             />
-            <div className='w-100p h-100p radius-20 z-10 border border-3 border-white flex a-items-center mr-10'>
-              <PiDotsThreeOutline className='w-25 h-25 bg-white border border-2 border-white' />
-            </div>
+            <PiDotsThreeOutline className='w-20 h-20 radius-20 bg-white z-10' />
             <OrderProgressLine styles={styles} active={active} text={text} />
           </>
         ) : orderCartModal.status === 'CANCELLED' ? (
@@ -169,7 +167,7 @@ const OrderProcess = ({
             className='px-10 py-7 bg-white weight-400 border border-2 border-#00000026 radius-5 cursor-pointer absolute'
             onClick={handleViewTimeline}
           >
-            {viewTimeline ? 'Close timeline' : text}
+            {viewTimeline ? 'Close all timelines' : text}
           </button>
         ) : text === 'Cancelled-Payment Unsuccessful' &&
           orderCartModal.status === 'CANCELLED' ? (
@@ -209,12 +207,14 @@ const OrderProcess = ({
 
         {orderCartModal.status === 'ONGOING' && text === 'Order placed' && (
           <>
-            <p
-              className='border-b text-danger weight-500 w-fit text-14 cursor-pointer'
-              onClick={handleOpenCancelOrderModal}
-            >
-              Cancel this order
-            </p>
+            {
+              <p
+                className='border-b text-danger weight-500 w-fit text-14 cursor-pointer'
+                onClick={handleOpenCancelOrderModal}
+              >
+                Cancel this order
+              </p>
+            }
             {openCancelOrderModal && (
               <Modal
                 onClose={handleOpenCancelOrderModal}

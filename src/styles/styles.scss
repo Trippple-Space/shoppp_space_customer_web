@@ -201,6 +201,12 @@
     }
   }
 
+  
+  @media (min-width: 1700px) {
+    .xxlgrid-5-cols {
+      grid-template-columns: repeat(5, 1fr) !important;
+    }
+  }
 
 
   .skelly-rectangle .skelly-rectangle__shape {

@@ -13,17 +13,7 @@ const Page = () => {
     ? parseInt(params.id[0])
     : parseInt(params.id)
 
-  const [orderCartModal, setOrderCartModal] = useState<Order>()
-
-  useEffect(() => {
-    async function fetchSingleOrder () {
-      const singleOrder = await orderService.fetchOrderById(orderId, {})
-      setOrderCartModal(singleOrder)
-    }
-    fetchSingleOrder()
-  }, [orderId])
-
-  return <OrderDetails orderCartModal={orderCartModal} />
+  return <OrderDetails orderId={orderId} />
 }
 
 export default Page

@@ -7,8 +7,7 @@ import { CartItem } from '../../utility/types/cart.interface'
 import { cartService } from '../../utility/services/cart.service'
 import classNames from 'classnames'
 import { useEffect, useState } from 'react'
-import { useRouter } from 'next/navigation'
-import { useCart } from '../../utility/hooks/use-cart'
+
 
 const OrderedProductModal = ({
   handleOrderModal,
@@ -72,7 +71,7 @@ const OrderedProductModal = ({
               <div className='p-15 px-25 flex a-items-center space-between border-b border-b-10 border-b-whitesmoke mt-50'>
                 <p className='text-14 weight-500'>#{order.id}</p>
                 <button
-                  className='flex gap-10 a-items-center px-10 py-7 radius-5 border border-#00000026 bg-none cursor-pointer'
+                  className='flex gap-10 a-items-center px-10 py-7 radius-5 border border-#00000026 bg-none cursor-pointer weight-500'
                   onClick={() => buyAgain(order.cart.cartItems)}
                 >
                   <PiArrowClockwise className='w-fit' />
@@ -98,7 +97,7 @@ const OrderedProductModal = ({
                     <>
                       <div
                         className={classNames(
-                          'bg-whitesmoke radius-8 p-10 flex flex-col  l:flex-row space-between a-items-start'
+                          'bg-whitesmoke radius-8 p-10 gap-5 flex flex-col  l:flex-row space-between a-items-start'
                         )}
                         key={item.id}
                       >
@@ -151,28 +150,28 @@ const OrderedProductModal = ({
               <div className={classNames('px-25 pb-20 flex flex-col gap-10')}>
                 <div className='grid gap-15'>
                   <div className='flex space-between'>
-                    <p className='color-#000000E0'>Subtotal</p>
-                    <p className='text-16'>
+                    <p className='color-#000000E0 weight-400'>Subtotal</p>
+                    <p className='text-16 weight-400'>
                       {formatNumberAsPrice(order.cart.subTotal)}
                     </p>
                   </div>
                   <div className='flex space-between border-b border-b-#00000014 pb-10'>
-                    <p className='color-#000000E0'>Delivery</p>
-                    <p className='text-16'>
+                    <p className='color-#000000E0 weight-400'>Delivery</p>
+                    <p className='text-16 weight-400'>
                       {formatNumberAsPrice(order.deliveryFee)}
                     </p>
                   </div>
                 </div>
                 <div className='grid gap-15'>
                   <div className='flex space-between'>
-                    <p className='color-#000000E0'>Total</p>
-                    <p className='text-16'>
+                    <p className='color-#000000E0  weight-400'>Total</p>
+                    <p className='text-16 weight-400'>
                       {formatNumberAsPrice(order.totalAmount)}
                     </p>
                   </div>
                   <div className='flex space-between'>
-                    <p className='color-#000000E0'>Payment Method</p>
-                    <p className='text-16'>Pay online</p>
+                    <p className='color-#000000E0 weight-400'>Payment Method</p>
+                    <p className='text-16 weight-400'>Pay online</p>
                   </div>
                 </div>
               </div>
