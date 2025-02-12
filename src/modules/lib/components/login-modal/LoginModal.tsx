@@ -56,7 +56,7 @@ const LoginModal = () => {
                     name='password'
                     type='password'
                     placeholder='Password'
-                    inputClass='h-2 text-12'
+                    inputClass='h-20 text-12'
                     className='mt-16'
                     handleBlur={loginFormHandler.handleBlur}
                     handleChange={loginFormHandler.handleChange}
