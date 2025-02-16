@@ -26,7 +26,7 @@ export const useProductListView = () => {
 
   useEffect(() => {
     updateFilters(selectedCategory.filters);
-  }, [selectedCategory]);
+  }, [selectedCategory?.name]);
 
   useEffect(() => {
     updateHomePageFilter(allFilters)

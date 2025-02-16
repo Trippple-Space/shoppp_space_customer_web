@@ -15,7 +15,7 @@ import {
   PiShoppingCartBold,
   PiTrashSimple,
 } from "react-icons/pi";
-import { RxCross1 } from "react-icons/rx";
+import { RxCross1, RxCross2 } from "react-icons/rx";
 import Image from "../image/Image";
 import { useNavbarView } from "../../utility/hooks/views/use-navbar-view";
 import useUserStore from "../../utility/store/user.store";
@@ -25,12 +25,21 @@ interface ModalProps {}
 const MiniCart: React.FC<ModalProps> = () => {
   const [open, setOpen] = useState(false)
 
-  const { cart, increment, decrement } = useCart();
+  const { cart, increment, decrement, removeFromCart } = useCart();
 
   const router = useRouter()
 
   const { signOut } = useNavbarView();
   const { isAuthenticated } = useUserStore();
+
+  
+  const checkoutCart = () => { 
+    cart.cartItems
+      .filter(item => item.variant.stock <= 0)
+      .forEach(item => removeFromCart(item.id))
+    router.push(paths.checkout)
+  }
+
 
   return (
     <div className='w-fit'>
@@ -96,14 +105,16 @@ const MiniCart: React.FC<ModalProps> = () => {
                   <div className='p-24 flex flex-col gap-16'>
                     {cart.cartItems.map((cartItem: CartItem, i) => (
                       <div
-                        className='flex flex-col border border-#00000014 radius-6'
+                        className='flex  flex-col border border-#00000014 radius-6'
                         key={i}
                       >
-                        <div className='flex gap-10 p-12'>
+                        <div className={`flex j-content-between gap-10 p-12 ${cartItem.variant.stock <= 0 ? 'color-#00000099' : ''}`}>
+                          <div className="flex gap-10">
+
                           <Image
                             src={cartItem.variant.media[0].url}
                             alt='cart image'
-                            className='sm:w-80 w-70 sm:h-80 h-70 radius-6 border border-#00000014 object-fit'
+                            className={`sm:w-80 w-70 sm:h-80 h-70 radius-6 border border-#00000014 object-fit ${cartItem.variant.stock <= 0 ? 'greyscale' : ''}`}
                           />
                           <div className='flex flex-col gap-6'>
                             <p className='weight-600 sm:text-16 text-14 sm:line-height-24 line-height-22'>
@@ -118,17 +129,29 @@ const MiniCart: React.FC<ModalProps> = () => {
                             <p className='weight-400 text-14 line-height-16.94'>
                               Color: {cartItem?.variant?.properties?.color}
                             </p>
+                            </div>
                           </div>
+                            
+    { <RxCross2 className="w-fit cursor-pointer color-red" onClick={() => removeFromCart(cartItem.id)}/>}
                         </div>
                         <div className='px-12 pb-12 flex space-between a-items-center'>
-                          <p className='weight-600 md:text-20 sm:text-16 text-14 md:line-height-28 sm:line-height-24 line-height-22'>
-                            {formatNumberAsPrice(cartItem.totalPrice)}
+                          <p className={`weight-600 md:text-20 sm:text-16 text-14 md:line-height-28 sm:line-height-24 line-height-22 ${cartItem.variant.stock <= 0 ? 'color-#00000099' : ''}`}> 
+                            {formatNumberAsPrice(cartItem.totalPrice)} 
                           </p>
-                          <div className='border border-#00000014 flex space-between a-items-center p-4 radius-100 bg-#F5F5F5 w-150'>
-                            <span
+                          <div className='border border-#00000014 flex space-between a-items-center  p-4 radius-100 bg-#F5F5F5 w-150'>
+                            {cartItem.variant.stock <= 0 ?
+                         
+                              <div className='text-14 grid weight-400 color-#00000099  w-full'>
+                                <span className="text-center">
+                                Out of stock
+                                </span>
+                              </div>
+                              :
+                               <>
+                           <span
                               className='bg-white p-6 round flex flex-col a-items-center hover:pointer'
                               onClick={() => decrement(cartItem)}
-                            >
+                              >
                               {cartItem?.quantity ===
                               cartItem?.variant?.minPurchaseQuantity ? (
                                 <PiTrashSimple className='w-20 h-20 color-#00000099' />
@@ -142,9 +165,11 @@ const MiniCart: React.FC<ModalProps> = () => {
                             <span
                               className='bg-white p-6 round flex flex-col a-items-center hover:pointer'
                               onClick={() => increment(cartItem)}
-                            >
+                              >
                               <PiPlus className='w-20 h-20 color-#00000099' />
-                            </span>
+                              </span>
+                              </>
+                            }
                           </div>
                         </div>
                       </div>
@@ -159,7 +184,9 @@ const MiniCart: React.FC<ModalProps> = () => {
                     <p className='py-12 flex a-items-center space-between text-16 line-height-24'>
                       <span className='weight-400'>Subtotal</span>
                       <span className='weight-500'>
-                        {formatNumberAsPrice(cart?.subTotal)}
+                        {formatNumberAsPrice(cart?.cartItems
+                          .filter(item => item.variant.stock > 0)
+                          .reduce((acc, item) => acc + item.totalPrice, 0))}
                       </span>
                     </p>
                     <p className='weight-400 text-14 line-height-22 color-#00000099'>
@@ -168,7 +195,7 @@ const MiniCart: React.FC<ModalProps> = () => {
                   </div>
                   <button
                     className='bg-green text-white py-12 px-24 radius-6 line-height-19 border border-none weight-500 pointer w-full hover:bg-darkgreen g|transition:0.5s disabled:bg-grey'
-                    onClick={() => router.push(paths.checkout)}
+                    onClick={() => checkoutCart()}
                   >
                     Checkout
                   </button>

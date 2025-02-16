@@ -75,7 +75,7 @@ const ProductDetails = ({ product }: { product: Product }) => {
             />
             <Image
               src={selectedImage}
-              className='flex-grow-1 w-100p l:radius-15 radius-8 border border-grey-100 object-fit l:h-full md:h-420 sm:h-350 h-270'
+              className={`flex-grow-1 w-100p l:radius-15 radius-8 border border-grey-100 object-fit l:h-full md:h-420 sm:h-350 h-270 ${selectedVariant.stock <= 0 ? 'greyscale' : ''}`}
               alt={''}
             />
           </div>
@@ -128,7 +128,7 @@ const ProductDetails = ({ product }: { product: Product }) => {
                   variant?.media?.map((mediaItem: any) => (
                     <div
                       className={cx(
-                        'l:w-115 l:h-115 w-85 h-85 overflow-hidden radius-14',
+                        `l:w-115 l:h-115 w-85 h-85 overflow-hidden radius-14 ${ variant.stock <= 0  ? 'greyscale' : ''}`,
                         {
                           'border border-green border-2':
                             selectedImage == mediaItem?.url,

@@ -82,8 +82,8 @@ const ProductDetailModal = ({
                   `}
                 >
                   <div className='overflow-auto no-scrollbar h-100p'>
-                    <div className='relative'>
-                      <div className='fixed  w-100p bg-white border-b border-b-#00000014 p-10 l:p-20 flex a-items-center j-content-between'>
+                    <div className='relative z-10'>
+                      <div className='fixed  w-100p bg-white border-b border-b-#00000014 p-10 l:p-20 flex a-items-center j-content-between '>
                         <p className='text-left  weight-600'>Price details</p>
                         <IoMdClose
                           className='w-30 cursor-pointer'
@@ -99,7 +99,7 @@ const ProductDetailModal = ({
                             <Image
                               src={selectedImage}
                               alt={product?.name}
-                              className=' radius-8 object-fit h-100p'
+                              className={` radius-8 object-fit h-100p ${(selectedVariant?.stock  ?? 0) <= 0 ? 'greyscale': ''}`}
                             />
                           </div>
                         )}
@@ -110,7 +110,7 @@ const ProductDetailModal = ({
                             <div
                               key={variant.id}
                               className={cx(
-                                'l:w-40 l:h-45 w-45 h-30 overflow-hidden radius-3',
+                                `l:w-40 l:h-45 w-45 h-30 overflow-hidden radius-3  ${variant.stock <= 0 ? 'greyscale': ''}`,
                                 {
                                   'border border-green border-2':
                                     selectedImage == mediaItem?.url,

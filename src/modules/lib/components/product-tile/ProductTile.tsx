@@ -4,7 +4,7 @@ import Image from "../image/Image";
 import { AiFillStar, AiOutlinePlus, AiFillHeart } from "react-icons/ai";
 import classNames from "classnames";
 import { Product } from "../../utility/types/product.interface";
-import { displayProductPill, formatNumberAsPrice } from "../../utility/utility";
+import { cx, displayProductPill, formatNumberAsPrice } from "../../utility/utility";
 import { useCart } from "../../utility/hooks/use-cart";
 import QuantitySelector from "../quantity-selector/QuantitySelector";
 import Link from "next/link";
@@ -72,7 +72,7 @@ const ProductTile: FC<IProductTile> = ({ product }: any) => {
     },
   ];
 
-useEffect(() => {console.log({selectedVariant})},[selectedVariant])
+
   return (
     <div className="mt-30 l:mt-20 w-full overflow-hidden">
       <div
@@ -82,7 +82,7 @@ useEffect(() => {console.log({selectedVariant})},[selectedVariant])
         <Link href={`/products/${product.slug}`}>
           {mediaType === "image" ? (
             <Image
-              className="absolute w-full h-full a-self-center g|object-fit:cover pointer"
+              className={`absolute w-full h-full a-self-center g|object-fit:cover pointer ${selectedVariant?.stock <= 0 && 'greyscale'}`}
               src={selectedImage}
               alt="product-image"
             />
@@ -124,10 +124,10 @@ useEffect(() => {console.log({selectedVariant})},[selectedVariant])
               />
             ) : (
                 <>
-              <button
+             {selectedVariant?.stock > 0 ? <button
                 onClick={() => {
                   isAuthenticated
-                    ? selectedVariant.stock > 0 && addToCart(
+                    ?  addToCart(
                       selectedVariant.id,
                       selectedVariant.minPurchaseQuantity || 1
                     ) 
@@ -135,25 +135,19 @@ useEffect(() => {console.log({selectedVariant})},[selectedVariant])
                 }}
                 disabled={!selectedImage}
                     className={classNames(
-                      "shadow-0-4-8-0-#00000033 hover:shadow-0-8-8-0-#00000033 text-black! disabled:bg-gray-200 disabled:cursor-not-allowed hover:scale-1.06 g|transition:0.5s g|will-change:transform pointer font-roboto border-hidden outline-none s:p-14 p-12 round flex a-items-center j-items-center gap-10"
-                      , {
-                  'bg-whitesmoke': selectedVariant.stock <= 0,
-                  'bg-#FACE33': selectedVariant.stock > 0
-                })}
+                      "bg-#FACE33 shadow-0-4-8-0-#00000033 hover:shadow-0-8-8-0-#00000033 text-black! disabled:bg-gray-200 disabled:cursor-not-allowed hover:scale-1.06 g|transition:0.5s g|will-change:transform pointer font-roboto border-hidden outline-none s:p-14 p-12 round flex a-items-center j-items-center gap-10")}
               >
                 <PiShoppingCartFill className="s:w-22 w-20 s:h-22 h-20" />
-              </button>
-            </>
-            )}
-          </div>
-          { selectedVariant.stock <= 0 && <div
-            className="absolute b-0 l-0 ml-10 mb-10 l:ml-15 l:mb-15 bg-whitesmoke radius-10"
+              </button>: <div
+            className="bg-whitesmoke radius-10 flex a-items-center j-content-center"
           >
             <div className="px-4 py-4">
               Out of stock
-            </div>
-
+             </div>
           </div>}
+            </>
+            )}
+          </div>
         </div>
         <div
           id="favorite icon"
@@ -191,7 +185,7 @@ useEffect(() => {console.log({selectedVariant})},[selectedVariant])
               mediaItem?.type === "image" ? (
                 <Image
                   className={classNames(
-                    "l:w-35.2 l:h-35.2 w-31 h-31 pointer md:radius-4 radius-3 a-self-center g|object-fit:cover",
+                    `l:w-35.2 l:h-35.2 w-31 h-31 pointer md:radius-4 radius-3 a-self-center g|object-fit:cover ${variant?.stock <= 0 && 'greyscale'}`,
                     {
                       "border border-2": selectedImage == mediaItem?.url,
                       [`border-${/*variant?.properties?.color?.toLocaleLowerCase() ||*/'#0B9378'}`]:
