@@ -29,7 +29,7 @@ const RadioGroup: React.FC<RadioGroupProps> = ({
               value={option.label}
               checked={selectedValue === option.label}
                       onChange={e => onChange(e.target.value)}
-                      className='radio-accent-color-green'
+                      className='accent-#0B9378'
             />
             <span className='weight-400'>{option.label}</span>
           </label>
