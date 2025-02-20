@@ -12,7 +12,7 @@ const layout: FC<ILayout> = ({ children }) => {
         <div className="bg-green flex flex-col h-100p radius-15 overflow-hidden">
           <div>
             <Image
-              className='w-115 h-31 ml-40 mt-30'
+              className='w-115 h-31 ml-40 mt-20'
               src='new-asoebi-logo-white.svg'
               alt='logo'
               type='logo'
@@ -20,12 +20,11 @@ const layout: FC<ILayout> = ({ children }) => {
           </div>
           <div className='relative w-100p h-100p'>
             <Image
-              className='absolute h-95p w-fit l-50p g|transform:translate(-50%); b-0'
-              src='carton-man-1.png'
+              className='absolute h-95p w-fit r-0 b-0'
+              src='carton-man-0.png'
               alt='Delivery'
             />
           </div>
-
         </div>
       </div>
       <div className="form-side w-100p l:w-50p h-full overflow-hidden">
