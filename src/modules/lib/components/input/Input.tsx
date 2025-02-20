@@ -91,7 +91,7 @@ const Input: FC<IInput> = ({
         />
         {type === 'password' && (
           <div
-            className='absolute  flex r-10 a-items-center j-content-center text-right cursor-pointer ml-10 h-30 bg-white w-30'
+            className='absolute  flex r-10 a-items-center j-content-center text-right cursor-pointer ml-10 h-30 bg-inherit w-30'
             onClick={() => setViewPassword(view => !view)}
           >
             {!viewPassword ? <LuEye className='w-20 h-20'/>  : <LuEyeOff  className='w-20 h-20'/>}
