@@ -1,14 +1,17 @@
 'use client'
 
-import React from 'react'
+import React, { useEffect } from 'react'
 import ProductTile from '@/modules/lib/components/product-tile/ProductTile'
 import { useProductListView } from '@/modules/lib/utility/hooks/views/use-product-list-view'
 import { DotsLoader } from '@/modules/lib/components/dots-loader/DotsLoader';
 import PuffLoader from '@/modules/lib/components/puff-loader/PuffLoader'
+import { useSavedItem } from '@/modules/lib/utility/hooks/use-saved-item';
 
 const CentralArena = () => {
   const { products, type, ref, loading } = useProductListView()
+  const { saveItem, savedItems, removeSavedItem } = useSavedItem();
   const renderedIds = new Set<number>();
+
 
   return (
     <>
@@ -54,7 +57,13 @@ const CentralArena = () => {
                       return null;
                     }
                     renderedIds.add(product.id);
-                    return <ProductTile product={product} key={product.id} />;
+                    return <ProductTile
+                      product={product}
+                      key={product.id}
+                      savedItems={savedItems}
+                      saveItem={saveItem}
+                      removeSavedItem={removeSavedItem}
+                    />;
                   })
                 }
               </div>
