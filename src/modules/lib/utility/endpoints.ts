@@ -1,6 +1,9 @@
 const endpoints = {
   SIGN_IN: "/auth/login",
   SIGN_UP: "/auth/register",
+  SIGN_UP_DETAILS: '/auth/details',
+  SIGN_UP_CREATE_PASSWORD: '/auth/create-password',
+  SIGN_UP_VERIFY_OTP: '/auth/verify-otp',
   VALIDATE_TOKEN: "/auth/validate",
   PRODUCT_CATEGORIES: "product/categories",
   PRODUCTS: "products",

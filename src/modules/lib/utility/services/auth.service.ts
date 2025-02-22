@@ -3,6 +3,7 @@ import { LoginCredentials, RegistrationDetails } from "../types/auth.interface";
 import { User } from "../types/user.interface";
 import endpoints from "../endpoints";
 import http from "../http"
+import { useRouter, useSearchParams } from "next/navigation";
 
 class AuthService {
 
@@ -43,6 +44,24 @@ class AuthService {
                 return response.data
             })
     }
+
+  signUpInitial(details: { fullname: string; email: string }): Promise<any> {
+      return http.post(endpoints.SIGN_UP_DETAILS, details).then((response: AxiosResponse) => {
+          console.log({response})
+        return  response.data
+      });
+  }
+
+    
+    verifyOtp(payload: { token: string; otp: string }): Promise<any> {
+    return http.post(endpoints.SIGN_UP_VERIFY_OTP, payload).then((response: AxiosResponse) => response.data);
+  }
+
+
+  setPassword(payload: { token: string, password: string }): Promise<any> {
+    return http.post(endpoints.SIGN_UP_CREATE_PASSWORD, payload).then((response: AxiosResponse) => response.data);
+  }
+
 }
 
 export const authService = new AuthService()

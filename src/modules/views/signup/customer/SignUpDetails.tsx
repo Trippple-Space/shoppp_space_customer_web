@@ -9,88 +9,82 @@ import { useRouter } from 'next/navigation';
 import { paths } from '@/modules/lib/utility/paths';
 
 const SignUpDetails: FC = () => {
-  const { formHandler } = useSignUpView();
-  const router = useRouter()
+  const { formikInitial } = useSignUpView(); // using the initial form from our hook
+  const router = useRouter();
+
   return (
-    <>
-          <div className="w-full">
-            <div className="font-inter mb-30">
-              <h3 className="text-center text-20  weight-500 mb-10 text-grey-900">
-                Welcome to aseoebi.africa
-              </h3>
-              <p className="text-center text-14  text-grey-700">
-                Enter your details to start stress-free shopping.
-              </p>
-            </div>
+    <div className="w-full">
+      <div className="font-inter mb-30">
+        <h3 className="text-center text-20 weight-500 mb-10 text-grey-900">
+          Welcome to aseoebi.africa
+        </h3>
+        <p className="text-center text-14 text-grey-700">
+          Enter your details to start stress-free shopping.
+        </p>
+      </div>
 
-            <form
-              onSubmit={formHandler.handleSubmit}
-              className=""
+      <form onSubmit={formikInitial.handleSubmit}>
+        <Input
+          label="Full name"
+          id="fullname"
+          name="fullname"
+          placeholder="Enter your full name"
+          handleChange={formikInitial.handleChange}
+          handleBlur={formikInitial.handleBlur}
+          inputClass={cx({
+            "border-red": formikInitial.touched.fullname && formikInitial.errors.fullname,
+          })}
+          after={
+            <InputAlert 
+              hasError={!!(formikInitial.touched.fullname && formikInitial.errors.fullname)} 
+              errorMessage={formikInitial.errors.fullname}
+            />
+          }
+        />
+
+        <Input
+          label="Email"
+          id="email"
+          name="email"
+          type="email"
+          className="l:mt-30 mt-18"
+          placeholder="your@email.com"
+          handleChange={formikInitial.handleChange}
+          handleBlur={formikInitial.handleBlur}
+          inputClass={cx('', {
+            "border-red": formikInitial.touched.email && formikInitial.errors.email,
+          })}
+          after={
+            <div
+              className={cx(
+                "notice text-12 h-0 @one:flex gap-5 j-content-end w-full mt-12 text-danger",
+                {
+                  "hidden!": !(formikInitial.touched.email && formikInitial.errors.email),
+                }
+              )}
             >
-              <Input
-                label="Full name"
-                id="fullname"
-                name="fullname"
-                placeholder="Firstname Lastname"
-                handleChange={formHandler.handleChange}
-                handleBlur={formHandler.handleBlur}
-                inputClass={cx({
-                  "border-red":
-                    formHandler.touched.fullname && formHandler.errors.fullname,
-                })}
-                after={
-                  <InputAlert 
-                    hasError={!!(formHandler.touched.fullname && formHandler.errors.fullname)} 
-                    errorMessage={formHandler.errors.fullname}
-                  />
-                }
-              />
+              <Icon name="alert-circle" className="w-14 a-self-center" />
+              <span className="a-self-center">{formikInitial.errors.email}</span>
+            </div>
+          }
+        />
 
-              <Input
-                label="Email"
-                id="email"
-                name="email"
-                type="email"
-                className="l:mt-30 mt-18"
-                placeholder="Enter your email"
-                handleChange={formHandler.handleChange}
-                handleBlur={formHandler.handleBlur}
-                inputClass={cx('',{
-                  "border-red":
-                    formHandler.touched.email && formHandler.errors.email,
-                })}
-                after={
-                  <div
-                    className={cx(
-                      "notice text-12 h-0 @one:flex gap-5 j-content-end w-full mt-12 text-danger",
-                      {
-                        "hidden!": !(
-                          formHandler.touched.email && formHandler.errors.email
-                        ),
-                      }
-                    )}
-                  >
-                    <Icon name="alert-circle" className="w-14 a-self-center" />
-                    <span className="a-self-center">
-                      {formHandler.errors.email}
-                    </span>
-                  </div>
-                }
-          />
-          <div
-    className="btn text-center bg-green weight-500 text-16 l:btn-lg btn-lg font-inter mt-30 text-14"
-    onClick={() => {
-      if (!formHandler.errors.fullname && !formHandler.errors.email) {
-        router.push(paths.verify)
-      }
-    }}
-  >
-    Continue
-  </div>
-  </form>
-          </div>
-      </>
+        {/* Instead of a button that manually redirects,
+            we call formikInitial.handleSubmit when the user clicks continue.
+            This triggers the API call to send fullname/email to the backend,
+            and on success, the hook automatically redirects to the verify page
+            with the token appended in the URL. */}
+        <div
+          className="btn text-center bg-green weight-500 text-16 l:btn-lg btn-lg font-inter mt-30 text-14 cursor-pointer"
+          onClick={() => {
+            formikInitial.handleSubmit();
+          }}
+        >
+          Continue
+        </div>
+      </form>
+    </div>
   )
 }
 
-export default SignUpDetails
+export default SignUpDetails;

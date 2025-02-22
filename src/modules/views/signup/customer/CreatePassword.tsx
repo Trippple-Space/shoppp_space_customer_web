@@ -8,7 +8,7 @@ import React, { FC, useState } from 'react'
 import PasswordStrengthMeter from '@/modules/lib/components/password-strength-meter/PasswordStrengthMeter';
 
 const CreatePassword: FC = () => {
-  const { formHandler } = useSignUpView();
+  const { formikComplete } = useSignUpView();
   const [password, setPassword] = useState<string>('')
   const [confirmPassword, setConfirmPassword] = useState<string>('')
 
@@ -35,9 +35,9 @@ const CreatePassword: FC = () => {
             className="l:mt-30 mt-18"
             handleChange={(e: any) => {
               setPassword(e.target.value);
-              formHandler.handleChange(e);
+              formikComplete.handleChange(e);
             }}
-            handleBlur={formHandler.handleBlur}
+            handleBlur={formikComplete.handleBlur}
             // inputClass={cx({
             //       "border-red":
             //         formHandler.touched.password && formHandler.errors.password,
@@ -62,9 +62,9 @@ const CreatePassword: FC = () => {
                 className="l:mt-20 mt-18"
                 handleChange={(e: any) => {
               setConfirmPassword(e.target.value);
-              formHandler.handleChange(e);
+              formikComplete.handleChange(e);
             }}
-                handleBlur={formHandler.handleBlur}
+                handleBlur={formikComplete.handleBlur}
                 inputClass={cx({"border-red": password !== confirmPassword,})}
                 after={
                   <>

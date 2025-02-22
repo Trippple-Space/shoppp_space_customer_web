@@ -57,8 +57,8 @@ const layout: FC<ILayout> = ({ children }) => {
         </div>
       </div>
       <div className="w-100p l:w-50p h-full overflow-hidden">
-        { pathname === paths.vendor_signup ? <VendorSignUp />
-          : <CustomerSignUp/>
+        {pathname === paths.vendor_signup ?
+          <VendorSignUp /> : <CustomerSignUp/>
          }
       <div className="relative mx-25 flex-col flex h-full items-center j-content-center">
         
