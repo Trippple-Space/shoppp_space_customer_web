@@ -1,18 +1,18 @@
+'use client'
+
 import Icon from '@/modules/lib/components/icon/Icon';
 import Input from '@/modules/lib/components/input/Input'
 import { useSignUpView } from '@/modules/lib/utility/hooks/use-signup';
 import { cx, passwordValidatorRegex, preventCopyPaste } from '@/modules/lib/utility/utility';
 import React, { FC, useState } from 'react'
-import { ICustomerSignUpStep } from './SignUp';
 import PasswordStrengthMeter from '@/modules/lib/components/password-strength-meter/PasswordStrengthMeter';
 
-const CustomerSignUpPassword3: FC<ICustomerSignUpStep> = ({}) => {
+const CreatePassword: FC = () => {
   const { formHandler } = useSignUpView();
   const [password, setPassword] = useState<string>('')
   const [confirmPassword, setConfirmPassword] = useState<string>('')
 
   const createAccount = () => { }
-
 
   return (
     <div className='w-full'>
@@ -91,4 +91,4 @@ const CustomerSignUpPassword3: FC<ICustomerSignUpStep> = ({}) => {
   )
 }
 
-export default CustomerSignUpPassword3
+export default CreatePassword

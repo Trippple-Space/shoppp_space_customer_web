@@ -43,9 +43,6 @@ class AuthService {
                 return response.data
             })
     }
-
-
-
 }
 
 export const authService = new AuthService()

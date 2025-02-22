@@ -1,13 +1,16 @@
+'use client'
 import React, { FC } from 'react'
 import Input from "@/modules/lib/components/input/Input";
 import InputAlert from "@/modules/lib/components/input/input-alert/InputAlert";
 import { useSignUpView } from '@/modules/lib/utility/hooks/use-signup';
 import { cx } from '@/modules/lib/utility/utility';
 import Icon from '@/modules/lib/components/icon/Icon';
-import { ICustomerSignUpStep } from './SignUp';
+import { useRouter } from 'next/navigation';
+import { paths } from '@/modules/lib/utility/paths';
 
-const CustomerSignUpDetails1: FC<ICustomerSignUpStep> = ({setCurrentStep}) => {
-     const { formHandler } = useSignUpView();
+const SignUpDetails: FC = () => {
+  const { formHandler } = useSignUpView();
+  const router = useRouter()
   return (
     <>
           <div className="w-full">
@@ -73,12 +76,12 @@ const CustomerSignUpDetails1: FC<ICustomerSignUpStep> = ({setCurrentStep}) => {
                     </span>
                   </div>
                 }
-              />
-  <div
+          />
+          <div
     className="btn text-center bg-green weight-500 text-16 l:btn-lg btn-lg font-inter mt-30 text-14"
     onClick={() => {
       if (!formHandler.errors.fullname && !formHandler.errors.email) {
-        setCurrentStep(2);
+        router.push(paths.verify)
       }
     }}
   >
@@ -90,4 +93,4 @@ const CustomerSignUpDetails1: FC<ICustomerSignUpStep> = ({setCurrentStep}) => {
   )
 }
 
-export default CustomerSignUpDetails1
+export default SignUpDetails

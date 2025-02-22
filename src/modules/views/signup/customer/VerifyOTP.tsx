@@ -1,5 +1,9 @@
-import React, { FC, useEffect, useRef, useState } from 'react'
-import { ICustomerSignUpStep } from './SignUp';
+'use client'
+
+import { paths } from '@/modules/lib/utility/paths';
+import { useRouter } from 'next/navigation';
+import { useEffect, useRef, useState } from 'react'
+
 
 interface HandleChangeEvent {
     target: {
@@ -11,9 +15,10 @@ interface HandleKeyDownEvent {
     key: string;
 }
 
-const CustomerSignUpOtp2: FC<ICustomerSignUpStep> = ({setCurrentStep}) => {
-    const [otp, setOtp] = useState(Array(length = 6).fill(''));
-    const inputRefs = useRef<(HTMLInputElement | null)[]>([]);
+const VerifyOTP = () => {
+    const [otp, setOtp] = useState(Array(6).fill(''));
+  const inputRefs = useRef<(HTMLInputElement | null)[]>([]);
+  const router = useRouter();
 
     
     useEffect(() => {
@@ -70,7 +75,6 @@ const handleKeyDown = (index: number, e: HandleKeyDownEvent) => {
     
   return (
           <div className="w-full">
-          
             <div className="font-inter">
               <h3 className="text-center text-20  weight-500 mb-10 text-grey-900">
                 Email Verification
@@ -98,7 +102,7 @@ const handleKeyDown = (index: number, e: HandleKeyDownEvent) => {
       })}
               </div>
               <div className={`radius-5 cursor-pointer text-16 weight-500 p-15 text-center ${otp.join('').length < 6 ? 'bg-whitesmoke text-black' : 'bg-green text-white'} mt-30`} onClick={() =>
-                  otp.join('').length === 6 && setCurrentStep(3)}
+                  otp.join('').length === 6 && router.push(paths.create_password)}
               >
                Create Password
               </div>
@@ -107,4 +111,4 @@ const handleKeyDown = (index: number, e: HandleKeyDownEvent) => {
   )
 }
 
-export default CustomerSignUpOtp2
+export default VerifyOTP
