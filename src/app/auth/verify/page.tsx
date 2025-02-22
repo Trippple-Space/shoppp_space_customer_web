@@ -1,9 +1,11 @@
 import VerifyOTP from '@/modules/views/signup/customer/VerifyOTP'
-import React from 'react'
+import React, { Suspense } from 'react'
 
 const verifyOTP = () => {
   return (
+    <Suspense>
     <VerifyOTP />
+    </Suspense>
   )
 }
 

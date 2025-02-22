@@ -1,10 +1,12 @@
 import CreatePassword from '@/modules/views/signup/customer/CreatePassword'
 
-import React from 'react'
+import React, { Suspense } from 'react'
 
 const createPassword = () => {
-    return (
+  return (
+      <Suspense>
         <CreatePassword />
+      </Suspense>
   )
 }
 
