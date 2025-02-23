@@ -28,9 +28,9 @@ const MobileNav: FC<IMobileNav> = ({
   const { user, signOut } = useNavbarView()
   const { isAuthenticated } = useUserStore()
 
-  // const { orders } = useOrders({
-  //   filters: { status: { In: ['ONGOING'] } }
-  // })
+  const { orders } = useOrders({
+    filters: { status: { In: ['ONGOING'] } }
+  })
 
 
 
@@ -103,8 +103,7 @@ const MobileNav: FC<IMobileNav> = ({
                           href={'/orders'}
                           className='line-height-24 weight-400 capitalize w-full'
                         >
-                          Orders
-                          {/* ({orders.length})   */}
+                          Orders ({orders.length})  
                         </Link>
                       ) : (
                         <p className='line-height-24 weight-400 capitalize'>
