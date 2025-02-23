@@ -109,7 +109,7 @@ const ProductTile: FC<IProductTile> = ({ product }: any) => {
               onClick={handleCloseProductModal}
             >
               <p className='bg-white radius-20 p-5 cursor-pointer text-12 flex a-items-center gap-5'>
-                <FaEye className='w-fit ' />
+                <FaEye className='w-fit' />
                 Quick look
               </p>
             </div>
@@ -150,13 +150,6 @@ const ProductTile: FC<IProductTile> = ({ product }: any) => {
             </>
             )}
           </div>
-          {selectedVariant.stock <= 0 && <div
-            className="absolute b-0 l-0 ml-10 mb-10 l:ml-15 l:mb-15 bg-whitesmoke radius-10"
-          >
-            <div className="px-4 py-4">
-              Out of stock
-            </div>
-          </div>}
         </div>
         <div
           id="favorite icon"
