@@ -13,9 +13,10 @@ const OrderProgressDetails = ({
   }
 
   const statusOrder = [
-    'PLACED',
-    'INITIATED',
-    'CONFIRMED',
+    'ONGOING',
+    'PENDING_CONFIRMATION',
+    'ACKNOWLEDGED',
+    'WAITING_TO_BE_SHIPPED',
     'SHIPPED',
     'DELIVERED'
   ]
@@ -25,13 +26,15 @@ const OrderProgressDetails = ({
 
   function getStatusText (status: string) {
     switch (status) {
-      case 'PLACED':
+      case 'ONGOING':
         return 'Order placed'
-      case 'INITIATED':
+      case 'PENDING_CONFIRMATION':
         return 'Pending Confirmation'
-      case 'CONFIRMED':
+      case 'ACKNOWLEDGED':
+        return 'Your order has being received'
+      case 'WAITING_TO_BE_SHIPPED':
         return 'Waiting to be shipped'
-      case 'SHIPPED':
+      case 'OUT_FOR_DELIVERY':
         return 'Out for delivery'
       case 'DELIVERED':
         return 'Delivered'
@@ -65,8 +68,14 @@ const OrderProgressDetails = ({
 
             {viewTimeline && (
               <>
+                  <OrderProcess
+                    text='Pending Confirmation'
+                    date={orderCartModal.delivery.deliveryWindowStart}
+                    active={orderCartModal.status === 'CONFIRMED'}
+                    orderCartModal={orderCartModal}
+                  />
                 <OrderProcess
-                  text='Pending Confirmation'
+                  text='Your order has been recieved'
                   date={orderCartModal.delivery.deliveryWindowStart}
                   active={orderCartModal.status === 'CONFIRMED'}
                   orderCartModal={orderCartModal}
