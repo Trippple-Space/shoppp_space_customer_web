@@ -6,7 +6,7 @@ import React, {
   useState
 } from 'react'
 import { IconType } from 'react-icons'
-import { FaEye, FaEyeSlash } from 'react-icons/fa'
+import { LuEye, LuEyeOff } from 'react-icons/lu'
 
 interface IInput {
   label?: string | ReactNode
@@ -25,6 +25,8 @@ interface IInput {
   handleChange?: Function
   handleBlur?: Function
   handleFocus?: any
+ onCopy?: any
+ onPaste?: any
 }
 const Input: FC<IInput> = ({
   label,
@@ -41,7 +43,9 @@ const Input: FC<IInput> = ({
   disabled,
   handleChange,
   handleBlur,
-  handleFocus
+  handleFocus,
+  onCopy,
+  onPaste
 }) => {
   const Component = type === 'textarea' ? 'textarea' : 'input'
   const controlProps = {
@@ -50,7 +54,9 @@ const Input: FC<IInput> = ({
     [disabled !== undefined ? 'disabled' : '']: disabled,
     [handleChange ? 'onChange' : '']: handleChange,
     [handleBlur ? 'onBlur' : '']: handleBlur,
-    [handleFocus ? 'onFocus' : '']: handleFocus
+    [handleFocus ? 'onFocus' : '']: handleFocus,
+    [onCopy ? 'onCopy' : '']: onCopy,
+    [onPaste ? 'onPaste' : '']: onPaste,
   }
   const [viewPassword, setViewPassword] = useState(false)
 
@@ -85,10 +91,10 @@ const Input: FC<IInput> = ({
         />
         {type === 'password' && (
           <div
-            className='absolute b-0 h-100p r-15 flex a-items-center j-content-center cursor-pointer'
+            className='absolute  flex r-10 a-items-center j-content-center text-right cursor-pointer ml-10 h-30 bg-inherit w-30'
             onClick={() => setViewPassword(view => !view)}
           >
-            {!viewPassword ? <FaEye /> : <FaEyeSlash />}
+            {!viewPassword ? <LuEye className='w-20 h-20'/>  : <LuEyeOff  className='w-20 h-20'/>}
           </div>
         )}
       </div>
