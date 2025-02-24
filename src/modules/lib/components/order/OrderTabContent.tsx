@@ -10,37 +10,18 @@ import { useOrders } from '../../utility/hooks/use-orders'
 import PuffLoader from '../puff-loader/PuffLoader'
 
 interface OrderTabContentProps {
-  status: string
+  status: any
 }
 
 const OrderTabContent = ({ status }: OrderTabContentProps) => {
-  const { orders, singleOrder, fetchOrders } = useOrders({
+  const { orders, singleOrder, fetching } = useOrders({
     filters: { status: { In: [status] } }
   })
-
   const [orderCartModal, setOrderCartModal] = useState<Order | void>(
     singleOrder
   )
-  const [loading, setLoading] = useState<boolean>(true)
 
-  useEffect(() => {
-    const fetchData = async () => {
-      setLoading(true)
-      await fetchOrders({
-        filters: {
-          status: {
-            In: [status]
-          }
-        }
-      })
-      setOrderCartModal(singleOrder)
-      setLoading(false)
-    }
-
-    fetchData()
-  }, [status, singleOrder])
-
-  if (loading) {
+  if (fetching) {
     return (
       <div className='relative w-100p h-250'>
         <div className='h-100p absolute flex a-items-center  l-50p g|transform:translate(-50%) b-0'>

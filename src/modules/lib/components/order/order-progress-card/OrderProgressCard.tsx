@@ -46,11 +46,11 @@ const OrderProgressCard = ({ orders }: OrderProgressProp) => {
                       'text-12 px-10 py-5 color-white radius-4 font-inter',
                       {
                         'bg-#1677FF':
-                          order.status == 'Ongoing'.toLocaleUpperCase(),
+                          order.status == 'ONGOING',
                         'bg-#0B9378':
-                          order.status == 'confirmed'.toLocaleUpperCase(),
+                          order.status == 'CONFIRMED',
                         'bg-#00000099':
-                          order.status == 'Cancelled'.toLocaleUpperCase()
+                          order.status == 'CANCELLED'
                       }
                     )}
                   >

@@ -1,8 +1,8 @@
 import Order from '@/modules/views/order/Order'
-import React from 'react'
+import React, { Suspense } from 'react'
 
 const page = () => {
-  return <Order />
+  return <Suspense><Order /> </Suspense> 
 }
 
 export default page
