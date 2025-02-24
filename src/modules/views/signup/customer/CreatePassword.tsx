@@ -12,7 +12,6 @@ const CreatePassword: FC = () => {
   const [password, setPassword] = useState<string>('')
   const [confirmPassword, setConfirmPassword] = useState<string>('')
 
-  const createAccount = () => { }
 
   return (
     <div className='w-full'>
@@ -38,10 +37,6 @@ const CreatePassword: FC = () => {
               formikComplete.handleChange(e);
             }}
             handleBlur={formikComplete.handleBlur}
-            // inputClass={cx({
-            //       "border-red":
-            //         formHandler.touched.password && formHandler.errors.password,
-            // })}
             after={
               <div className='mt-10'>
                 {
@@ -65,7 +60,7 @@ const CreatePassword: FC = () => {
               formikComplete.handleChange(e);
             }}
                 handleBlur={formikComplete.handleBlur}
-                inputClass={cx({"border-red": password !== confirmPassword,})}
+                inputClass={cx({"border-red": password !== confirmPassword})}
                 after={
                   <>
                     {
@@ -78,7 +73,7 @@ const CreatePassword: FC = () => {
                       </>
                 }
           />
-            <div className="btn text-center bg-green weight-500 text-16 l:btn-lg btn-lg font-inter mt-30 text-14" onClick={() => createAccount()}>
+            <div className="btn text-center bg-green weight-500 text-16 l:btn-lg btn-lg font-inter mt-30 text-14">
                Create password
               </div>
         </div>

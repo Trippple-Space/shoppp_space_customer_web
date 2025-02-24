@@ -3,10 +3,10 @@ import { passwordValidatorRegex } from '../../utility/utility';
 import { motion } from 'framer-motion';
 
 const getPasswordStrength = (password: string) => {
-  const hasSpecialChar = passwordValidatorRegex.test(password);
   const hasUpperCase = /[A-Z]/.test(password);
   const hasLowerCase = /[a-z]/.test(password);
   const hasNumber = /\d/.test(password);
+  const hasSpecialChar = passwordValidatorRegex.test(password);
   
   if (password.length < 3) return 1;
   if (password.length <= 7) return 2;

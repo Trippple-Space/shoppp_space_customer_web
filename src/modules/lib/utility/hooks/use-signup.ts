@@ -11,15 +11,14 @@ import { paths } from "@/modules/lib/utility/paths";
 const signUpValidationSchema = Yup.object().shape({
   fullname: Yup.string()
     .trim()
-    .min(4, "Can your fullname be that short? I'm not convinced")
+    .min(3, "Can your fullname be that short? I'm not convinced")
     .max(25, "Over 25 characters. Kilode. Na essay?")
     .required("Required"),
   email: Yup.string()
     .trim()
-    .test("test-username", "Enter Valid Phone/Email", (value) => {
+    .test("test-username", "Enter Valid Email", (value) => {
       const emailRegex = /^([a-zA-Z0-9_.\-]+)([+][a-zA-Z0-9_.\-]+)*@(([a-zA-Z0-9-])+\.)+([a-zA-Z0-9]{2,4})+$/;
-      const phoneRegex = /^\+?\d{7,}$/;
-      return value ? emailRegex.test(value) || phoneRegex.test(value) : false;
+      return value ? emailRegex.test(value) : false;
     })
     .required("Required"),
 });
@@ -35,7 +34,7 @@ const passwordCreationSchema = Yup.object().shape({
     .max(20, "Max password length is 20 characters")
     .required("Required"),
   confirmPassword: Yup.string()
-    .oneOf([Yup.ref("password")], "Passwords do not match")
+    .oneOf([Yup.ref("password")], "Passwords does not match")
     .required("Required")
 });
 
@@ -140,8 +139,8 @@ export const useSignUpView = () => {
           token: storedToken,
           password: values.password
         };
-        const response = await authService.setPassword(payload);
-          toast.success(`Hey ${response.username}. Welcome to Asoebi Africa! Login here.`);
+        await authService.setPassword(payload);
+          toast.success(`Thank you for signing up with Asoebi.Africa. Have a wonderful time shopping`);
           localStorage.removeItem('create-password-token')
         router.push(paths.login);
       } catch (error: any) {
