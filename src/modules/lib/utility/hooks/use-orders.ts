@@ -10,7 +10,6 @@ export const useOrders = (initialQuery: IQueryParams) => {
      const [singleOrder, setSingleOrder] = useState<Order>();
      const [fetching, setFetching] = useState<boolean>(false);
      const [error, setError] = useState<string | null>(null);
-     const [query, setQuery] = useState<IQueryParams>(initialQuery);
      const [response, setResponse] = useState<Order>();
 
      const fetchOrders = async (query: IQueryParams) => {
@@ -60,9 +59,9 @@ export const useOrders = (initialQuery: IQueryParams) => {
 
      useEffect(() => {
           if (isAuthenticated && !fetching) {
-               fetchOrders(query);
+               fetchOrders(initialQuery);
           }
-     }, [isAuthenticated]);
+     }, [isAuthenticated, JSON.stringify(initialQuery)]);
 
      return {
           orders,
@@ -74,4 +73,4 @@ export const useOrders = (initialQuery: IQueryParams) => {
           fetching,
           error,
      };
-};
+}

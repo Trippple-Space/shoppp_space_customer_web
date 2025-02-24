@@ -14,7 +14,7 @@ import { PiArrowClockwise } from 'react-icons/pi'
 import OverlappingImages from '../../lib/components/overlapping-images/OverlappingImages'
 import classNames from 'classnames'
 import { Order } from '@/modules/lib/utility/types/order.interface'
-import { useRouter } from 'next/navigation'
+import { useRouter, useSearchParams } from 'next/navigation'
 import HomepageNavBar from '@/modules/lib/components/nav-bar/HomepageNavBar'
 import OrderHeader from '@/modules/lib/components/order/OrderHeader'
 import { CartItem } from '@/modules/lib/utility/types/cart.interface'
@@ -30,6 +30,7 @@ interface OrderDetailsProps {
 
 const OrderDetails = ({ orderId }: OrderDetailsProps) => {
   const [orderCartModal, setOrderCartModal] = useState<Order>()
+   const router = useRouter()
 
   useEffect(() => {
     async function fetchSingleOrder () {
@@ -39,16 +40,6 @@ const OrderDetails = ({ orderId }: OrderDetailsProps) => {
     fetchSingleOrder()
   }, [orderId])
 
-  const router = useRouter()
-
-  const savedActiveTab =
-    typeof window !== 'undefined' ? localStorage.getItem('activeTab') : null
-
-  const defaultTab = orderCartModal?.status || 'ONGOING'
-
-  const [activeTab, setActiveTab] = useState<string>(
-    savedActiveTab || defaultTab
-  )
   const [showDetails, setShowDetails] = useState(true)
 
   const getOrderImage = (status?: string) => {
@@ -65,12 +56,6 @@ const OrderDetails = ({ orderId }: OrderDetailsProps) => {
   const [openTotal, setOpenTotal] = useState(false)
   const [openOrderedProducts, setOpenOrderedProducts] = useState(false)
 
-  useEffect(() => {
-    if (orderCartModal?.status) {
-      setActiveTab(orderCartModal.status)
-      localStorage.setItem('activeTab', orderCartModal.status)
-    }
-  }, [orderCartModal?.status])
 
   const handleOrderedProducts = () => {
     setOpenOrderedProducts(prev => !prev)
@@ -80,15 +65,6 @@ const OrderDetails = ({ orderId }: OrderDetailsProps) => {
     setOpenTotal(prev => !prev)
   }
 
-  const handleTabClick = (tab: string) => {
-    router.push('/orders')
-    setActiveTab(tab)
-    setShowDetails(false)
-
-    if (typeof window !== 'undefined') {
-      localStorage.setItem('activeTab', tab)
-    }
-  }
 
   useEffect(() => {
     setShowDetails(true)
@@ -98,34 +74,6 @@ const OrderDetails = ({ orderId }: OrderDetailsProps) => {
     await cartService.buyCartItemAgain(cartItems)
   }
   
-
-  // const statusOrder = [
-  //   {
-  //     status: 'PLACED',
-  //     text: 'Your order has been placed and is being processed.'
-  //   },
-  //   {
-  //     status: 'INITIATED',
-  //     text: 'Your order has been initiated, await confirmation.'
-  //   },
-  //   {
-  //     status: 'PROCESSED',
-  //     text: 'Your order has been confirmed and is in the process of shipping.'
-  //   },
-  //   {
-  //     status: 'SHIPPED',
-  //     text: 'Your order has been shipped.'
-  //   },
-  //   {
-  //     status: 'DISPATCHED',
-  //     text: 'Your order is out for delivery.'
-  //   },
-  //   {
-  //     status: 'DELIVERED',
-  //     text: 'Your order has been delivered.'
-  //   }
-  // ]
-
   return (
     <>
       <div>
@@ -139,7 +87,7 @@ const OrderDetails = ({ orderId }: OrderDetailsProps) => {
           </Link>
           <span className='text-14 weight-400'>Orders</span>
         </div>
-        <OrderHeader setActiveTab={handleTabClick} activeTab={activeTab} />
+        <OrderHeader orderStatus={orderCartModal?.status} />
         <div className='l:w-50p w-90p flex flex-col gap-50 pb-32'>
           {/* Default "Order Details" View */}
           {showDetails ? (
@@ -147,15 +95,15 @@ const OrderDetails = ({ orderId }: OrderDetailsProps) => {
               {orderCartModal ? (
                 <div className='flex a-items-center gap-10 bg-#F5F5F5 p-5 radius-6 j-content-center'>
                   <div className='flex flex-col gap-10 w-100p p-10'>
-                    <Link
-                      href={'/orders'}
+                    <div
+                      onClick={() => router.back()}
                       className='flex a-items-center gap-10 mb-10 cursor-pointer w-fit weight-400 text-16'
                     >
                       <GoArrowLeft className='w-fit' />
                       <p className='weight-400 text-16'>
                         Order #{orderCartModal.id}
                       </p>
-                    </Link>
+                    </div>
                     <div className='bg-white p-25 flex a-items-center space-between'>
                       <div className='grid gap-5'>
                         <p className='text-18 weight-600'>
@@ -319,7 +267,7 @@ const OrderDetails = ({ orderId }: OrderDetailsProps) => {
               )}
             </>
           ) : (
-            <OrderTabContent status={activeTab} />
+            <OrderTabContent status={orderCartModal?.status} />
           )}
         </div>
       </div>

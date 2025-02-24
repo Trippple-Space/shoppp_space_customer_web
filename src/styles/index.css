@@ -1060,6 +1060,7 @@
 @media only screen and (min-width: 768px) { .m\:text-14 { font-size: 14px; } } 
 
 @media only screen and (min-width: 992px) { .l\:w-80p { width: 80%; } } 
+@media only screen and (min-width: 992px) { .l\:w-50p { width: 50%; } } 
 @media only screen and (min-width: 992px) { .l\:block {    display: block;  } } 
 @media only screen and (min-width: 992px) { .l\:w-50p { width: 50%; } } 
 @media only screen and (min-width: 992px) { .l\:hidden {    display: none;  } } 
