@@ -75,7 +75,7 @@ const ProductDetails = ({ product }: { product: Product }) => {
             />
             <Image
               src={selectedImage}
-              className={`flex-grow-1 w-100p l:radius-15 radius-8 border border-grey-100 object-fit l:h-full md:h-420 sm:h-350 h-270 ${selectedVariant.stock <= 0 ? 'greyscale' : ''}`}
+              className={`flex-grow-1 w-100p l:radius-15 radius-8 border border-grey-100 object-fit l:h-full md:h-420 sm:h-350 h-270 ${selectedVariant.status  === 'OUT_OF_STOCK'? 'greyscale' : ''}`}
               alt={''}
             />
           </div>
@@ -128,7 +128,7 @@ const ProductDetails = ({ product }: { product: Product }) => {
                   variant?.media?.map((mediaItem: any) => (
                     <div
                       className={cx(
-                        `l:w-115 l:h-115 w-85 h-85 overflow-hidden radius-14 ${ variant.stock <= 0  ? 'greyscale' : ''}`,
+                        `l:w-115 l:h-115 w-85 h-85 overflow-hidden radius-14 ${ variant.status === 'OUT_OF_STOCK' ? 'greyscale' : ''}`,
                         {
                           'border border-green border-2':
                             selectedImage == mediaItem?.url,
@@ -196,13 +196,10 @@ const ProductDetails = ({ product }: { product: Product }) => {
 
                 {!selectedVariantItemInCart ? (
                 <button
-                  className={classNames('text-white border-none l:px-90 l:py-20 py-15 w-100p radius-30 pointer', {
-                  'bg-gray-300': selectedVariant && selectedVariant.stock <= 0,
-                  'bg-#0B9378': selectedVariant && selectedVariant.stock > 0
-                  })}
+                  className={classNames(`text-white border-none l:px-90 l:py-20 py-15 w-100p radius-30 pointer ${selectedVariant && selectedVariant.status === 'OUT_OF_STOCK' ?'bg-gray-300' :  'bg-#0B9378'}`)}
                   onClick={() => {
                   if (isAuthenticated) {
-                    if (selectedVariant && selectedVariant.stock > 0) {
+                    if (selectedVariant && selectedVariant.status !== 'OUT_OF_STOCK') {
                     addToCart(
                       selectedVariant?.id ?? 0,
                       selectedVariant?.minPurchaseQuantity || 1
@@ -214,12 +211,9 @@ const ProductDetails = ({ product }: { product: Product }) => {
                   }}
                 >
                   <div className='l:flex grid grid-2-cols-auto gap-10 items-center w-fit mx-auto'>
-                  {selectedVariant.stock > 0 && <HiOutlineShoppingBag className='h-21' />}
-                  <div className={classNames('whitespace-nowrap text-16', {
-                    'text-black': selectedVariant && selectedVariant.stock <= 0,
-                    'text-white': selectedVariant && selectedVariant.stock > 0
-                  })}>
-                    {selectedVariant && selectedVariant.stock > 0 ? 'Add to cart' : 'Out of stock'}
+                    {selectedVariant.status !== 'OUT_OF_STOCK' && <HiOutlineShoppingBag className='h-21' />}
+                  <div className={classNames(`whitespace-nowrap text-16 ${selectedVariant && selectedVariant.status === 'OUT_OF_STOCK' ? 'text-black' : 'text-white' }`)}>
+                    {selectedVariant && selectedVariant.status !== "OUT_OF_STOCK" ? 'Add to cart' : 'Out of stock'}
                   </div>
                   </div>
                 </button>

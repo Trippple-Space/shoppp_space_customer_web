@@ -84,7 +84,7 @@ const ProductTile: FC<IProductTile> = ({ product }: any) => {
         <Link href={`/products/${product.slug}`}>
           {mediaType === "image" ? (
             <Image
-              className={`absolute w-full h-full a-self-center g|object-fit:cover pointer ${selectedVariant?.stock <= 0 && 'greyscale'}`}
+              className={`absolute w-full h-full a-self-center g|object-fit:cover pointer ${selectedVariant?.status === 'OUT_OF_STOCK' && 'greyscale'}`}
               src={selectedImage}
               alt="product-image"
             />
@@ -126,7 +126,7 @@ const ProductTile: FC<IProductTile> = ({ product }: any) => {
               />
             ) : (
                 <>
-             {selectedVariant?.stock > 0 ? <button
+             {selectedVariant?.status !== 'OUT_OF_STOCK' ? <button
                 onClick={() => {
                   isAuthenticated
                     ?  addToCart(
@@ -187,7 +187,7 @@ const ProductTile: FC<IProductTile> = ({ product }: any) => {
               mediaItem?.type === "image" ? (
                 <Image
                   className={classNames(
-                    `l:w-35.2 l:h-35.2 w-31 h-31 pointer md:radius-4 radius-3 a-self-center g|object-fit:cover ${variant?.stock <= 0 && 'greyscale'}`,
+                    `l:w-35.2 l:h-35.2 w-31 h-31 pointer md:radius-4 radius-3 a-self-center g|object-fit:cover ${variant?.status === 'OUT_OF_STOCK' && 'greyscale'}`,
                     {
                       "border border-2": selectedImage == mediaItem?.url,
                       [`border-${/*variant?.properties?.color?.toLocaleLowerCase() ||*/'#0B9378'}`]:

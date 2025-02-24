@@ -35,7 +35,7 @@ const MiniCart: React.FC<ModalProps> = () => {
   
   const checkoutCart = () => { 
     cart.cartItems
-      .filter(item => item.variant.stock <= 0)
+      .filter(item => item.variant.status === 'OUT_OF_STOCK')
       .forEach(item => removeFromCart(item.id))
     router.push(paths.checkout)
   }
@@ -108,13 +108,13 @@ const MiniCart: React.FC<ModalProps> = () => {
                         className='flex  flex-col border border-#00000014 radius-6'
                         key={i}
                       >
-                        <div className={`flex j-content-between gap-10 p-12 ${cartItem.variant.stock <= 0 ? 'color-#00000099' : ''}`}>
+                        <div className={`flex j-content-between gap-10 p-12 ${cartItem.variant.status === 'OUT_OF_STOCK' ? 'color-#00000099' : ''}`}>
                           <div className="flex gap-10">
 
                           <Image
                             src={cartItem.variant.media[0].url}
                             alt='cart image'
-                            className={`sm:w-80 w-70 sm:h-80 h-70 radius-6 border border-#00000014 object-fit ${cartItem.variant.stock <= 0 ? 'greyscale' : ''}`}
+                            className={`sm:w-80 w-70 sm:h-80 h-70 radius-6 border border-#00000014 object-fit ${cartItem.variant.status == 'OUT_OF_STOCK' ? 'greyscale' : ''}`}
                           />
                           <div className='flex flex-col gap-6'>
                             <p className='weight-600 sm:text-16 text-14 sm:line-height-24 line-height-22'>
@@ -135,11 +135,11 @@ const MiniCart: React.FC<ModalProps> = () => {
     { <RxCross2 className="w-fit cursor-pointer color-red" onClick={() => removeFromCart(cartItem.id)}/>}
                         </div>
                         <div className='px-12 pb-12 flex space-between a-items-center'>
-                          <p className={`weight-600 md:text-20 sm:text-16 text-14 md:line-height-28 sm:line-height-24 line-height-22 ${cartItem.variant.stock <= 0 ? 'color-#00000099' : ''}`}> 
+                          <p className={`weight-600 md:text-20 sm:text-16 text-14 md:line-height-28 sm:line-height-24 line-height-22 ${cartItem.variant.status === 'OUT_OF_STOCK' ? 'color-#00000099' : ''}`}> 
                             {formatNumberAsPrice(cartItem.totalPrice)} 
                           </p>
                           <div className='border border-#00000014 flex space-between a-items-center  p-4 radius-100 bg-#F5F5F5 w-150'>
-                            {cartItem.variant.stock <= 0 ?
+                            {cartItem.variant.status === 'OUT_OF_STOCK' ?
                          
                               <div className='text-14 grid weight-400 color-#00000099  w-full'>
                                 <span className="text-center">
@@ -185,7 +185,7 @@ const MiniCart: React.FC<ModalProps> = () => {
                       <span className='weight-400'>Subtotal</span>
                       <span className='weight-500'>
                         {formatNumberAsPrice(cart?.cartItems
-                          .filter(item => item.variant.stock > 0)
+                          .filter(item => item.variant.status !== 'OUT_OF_STOCK')
                           .reduce((acc, item) => acc + item.totalPrice, 0))}
                       </span>
                     </p>
