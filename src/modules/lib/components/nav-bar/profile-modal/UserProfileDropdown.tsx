@@ -7,6 +7,7 @@ import config from '../../../../../../env'
 import Link from 'next/link'
 import React, { FC } from 'react'
 import { useOrders } from '@/modules/lib/utility/hooks/use-orders'
+import { useSavedItem } from '@/modules/lib/utility/hooks/use-saved-item'
 
 interface IUserProfileDropdown {
   handleCloseDropdown: () => void
@@ -22,6 +23,7 @@ const UserProfileDropdown: FC<IUserProfileDropdown> = ({
   const { orders } = useOrders({
     filters: { status: { In: ['ONGOING'] } }
   })
+const {savedItems} = useSavedItem()
 
   const profileModals = [
     'orders',
@@ -84,7 +86,7 @@ const UserProfileDropdown: FC<IUserProfileDropdown> = ({
                         </Link>
                       ) : (
                         <p className='line-height-24 weight-400 capitalize'>
-                          {modal}
+                          {modal === 'saved items' ? `Saved items (${savedItems.length})` : modal}
                         </p>
                       )}
                     </div>
