@@ -7,7 +7,8 @@ import React, { useState } from 'react';
 import { AiOutlineClose } from 'react-icons/ai'
 import OrderCard from '../../order-card/OrderCard';
 import SavedItemCard from '../../save-item-card/SavedItemCard';
-import { useSavedItem } from '@/modules/lib/utility/hooks/use-saved-item';
+import { useSavedVariant } from '@/modules/lib/utility/hooks/use-saved-variants';
+
 
 interface ModalProps {
   modalOpen: boolean;
@@ -17,7 +18,8 @@ interface ModalProps {
 
 const SavedItemsModal: React.FC<ModalProps> = ({modalOpen, handleCloseModal}) => {
   const [action, setAction] = useState('open-orders');
-  const { savedItems, removeSavedItem, clearSavedItems } = useSavedItem();
+
+  const { savedVariants, removeSavedVariant, clearSavedVariants } = useSavedVariant()
   
 
   const selected = (option: any) => {
@@ -26,9 +28,9 @@ const SavedItemsModal: React.FC<ModalProps> = ({modalOpen, handleCloseModal}) =>
         return (
           <div className='text-16 weight-400 text-grey-700 l:mt-60 mt-80'>
             {
-              savedItems.map((savedItem) => (
+              savedVariants.map((savedVariant) => (
                 <div className="pb-20 mb-30 border-b border-1 border-grey-300">
-                  <SavedItemCard savedItem={savedItem} removeSavedItem={removeSavedItem} />
+                  <SavedItemCard savedVariant={savedVariant} removeSavedVariant={removeSavedVariant} />
                 </div>
               ))
             }
@@ -50,7 +52,7 @@ const SavedItemsModal: React.FC<ModalProps> = ({modalOpen, handleCloseModal}) =>
                 <div className={`py-20 pointer w-fit ${action == 'open-orders' && 'text-green border-b border-2 border-green'}`} onClick={() => setAction('open-orders') }>Saved items</div>
                 <div className="text-grey-700 weight-600 pointer flex gap-20" onClick={handleCloseModal}>
                   <button className='bg-none border-none text-14 text-dimgrey' onClick={() => {
-                    clearSavedItems()
+                    clearSavedVariants()
                   }}>Clear all</button>
                   <AiOutlineClose className='text-grey-900 w-15 h-15 l:w-22 l:h-22' />
                 </div>

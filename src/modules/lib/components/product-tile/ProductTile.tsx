@@ -12,16 +12,15 @@ import VideoSrc from '../video-src/VideoSrc'
 import { FaEye } from 'react-icons/fa6'
 import ProductDetailModal from '../product-detail-modal/ProductDetailModal'
 import { PiShoppingCartFill, PiStorefront } from 'react-icons/pi'
-import { useSavedItem } from '../../utility/hooks/use-saved-item'
-import { SavedItem } from '../../utility/types/savedItem.interface'
+import { SavedVariant } from '../../utility/types/SavedVariant.interface'
 
 interface IProductTile {
   product: Product
-  saveItem?: any
-  removeSavedItem?: any
-  savedItems?: SavedItem[]
+  saveVariant?: (variantId: number) => void
+  removeSavedVariant?: (variantId: number) => void
+  savedVariants?: SavedVariant[]
 }
-const ProductTile: FC<IProductTile> = ({ product, savedItems, saveItem, removeSavedItem }: any) => {
+const ProductTile: FC<IProductTile> = ({ product, savedVariants, saveVariant, removeSavedVariant}: any) => {
   const [onProductTileHover, setOnProductTileHover] = useState(false)
   const [openSingleProductModal, setOpenSingleProductModal] = useState(false)
 
@@ -57,13 +56,13 @@ const ProductTile: FC<IProductTile> = ({ product, savedItems, saveItem, removeSa
     setTopTwoPills(pills)
   }, [])
 
-  const isSaved = savedItems.find((item: SavedItem) => item.variantId === selectedVariant?.id)
+  const isSaved = savedVariants.find((item: SavedVariant) => item.variantId === selectedVariant?.id)
 
   const handleSave = () => {
     if (isSaved) {
-      removeSavedItem(selectedVariant?.id)
+      removeSavedVariant(selectedVariant?.id)
     } else {
-      saveItem(selectedVariant?.id)
+      saveVariant(selectedVariant?.id)
     }
   }
 

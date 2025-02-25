@@ -16,7 +16,7 @@ const endpoints = {
   GET_FOLLOWERS: "stores/get-followers-count/:storeId",
   GET_FOLLOWING: "/stores/is-following-store/:storeId",
   ORDERS: "orders",
-  SAVED_ITEMS: "/saved-product",
+  SAVED_VARIANT: "/saved-product",
   LOG_VISIT: "/store-visit/log/:storeID",
   GET_VISIT: "/store-visit/:storeID?period=monthly",
   GET_PRODUCT_SOLD: "/orders/product-sold/:storeID",

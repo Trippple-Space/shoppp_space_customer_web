@@ -5,6 +5,8 @@ import http from "../http";
 import { IProductFilters, IQueryParams } from "../hooks/use-products";
 import { buildEndpoint, buildFilterParams } from "../utility";
 import config from "env";
+import { SavedVariant } from "../types/SavedVariant.interface";
+
 
 class ProductService {
      CACHE_EXPIRY = 60 * 60 * 1000; // 1 hour
@@ -192,6 +194,39 @@ class ProductService {
                     });
           });
      }
+
+
+
+     fetchSavedVariants(): Promise<SavedVariant[]> {
+          return new Promise((resolve) => {
+              http.get(endpoints.SAVED_VARIANT).then((response: AxiosResponse) => {
+                    resolve(response.data);
+               });
+          });
+     }
+    
+    saveVariant(productVariantId: number): Promise<SavedVariant> {
+        return new Promise((resolve, reject) => {
+            http.post(`${endpoints.SAVED_VARIANT}/${productVariantId}`).then((response: AxiosResponse) => {
+                resolve(response.data);
+            })
+        })
+    }
+    removeSavedVariant(productVariantId: number): Promise<SavedVariant> {
+        return new Promise((resolve, reject) => {
+            http.delete(`${endpoints.SAVED_VARIANT}/${productVariantId}`).then((response: AxiosResponse) => {
+                resolve(response.data);
+            })
+        })
+    }
+
+    clearSavedVariants(): Promise<SavedVariant[]> {
+        return new Promise((resolve) => {
+            http.delete(endpoints.SAVED_VARIANT).then((response: AxiosResponse) => {
+                resolve(response.data);
+            })
+        })
+    }
 }
 
 export const productService = new ProductService();
