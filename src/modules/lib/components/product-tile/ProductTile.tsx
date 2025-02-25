@@ -12,13 +12,21 @@ import VideoSrc from '../video-src/VideoSrc'
 import { FaEye } from 'react-icons/fa6'
 import ProductDetailModal from '../product-detail-modal/ProductDetailModal'
 import { PiShoppingCartFill, PiStorefront } from 'react-icons/pi'
+import { useSavedItem } from '../../utility/hooks/use-saved-item'
+import { SavedItem } from '../../utility/types/savedItem.interface'
 
 interface IProductTile {
-  product: Product;
+  product: Product
+  saveItem?: any
+  removeSavedItem?: any
+  savedItems?: SavedItem[]
 }
-const ProductTile: FC<IProductTile> = ({ product }: any) => {
-  const [onProductTileHover, setOnProductTileHover] = useState(false);
-  const [openSingleProductModal, setOpenSingleProductModal] = useState(false);
+const ProductTile: FC<IProductTile> = ({ product, savedItems, saveItem, removeSavedItem }: any) => {
+  const [onProductTileHover, setOnProductTileHover] = useState(false)
+  const [openSingleProductModal, setOpenSingleProductModal] = useState(false)
+
+
+
 
   const [selectedImage, setSelectedImage] = useState(
     product?.variants?.[0]?.media?.[0]?.url
@@ -34,8 +42,10 @@ const ProductTile: FC<IProductTile> = ({ product }: any) => {
     increment,
     decrement,
     isAuthenticated,
-    isLoginModal,
-  } = useCart();
+    isLoginModal
+  } = useCart()
+
+
   const selectedVariantItemInCart = cart.cartItems.find(
     (item) => item.variant.id === selectedVariant?.id
   );
@@ -47,13 +57,26 @@ const ProductTile: FC<IProductTile> = ({ product }: any) => {
 
   const [topTwoPills, setTopTwoPills] = useState<any[]>([]);
   useEffect(() => {
-    const pills = displayProductPill(product?.tags);
-    setTopTwoPills(pills);
-  }, []);
+    const pills = displayProductPill(product?.tags)
+    setTopTwoPills(pills)
+  }, [])
+
+  const isSaved = savedItems.find((item: SavedItem) => item.variantId === selectedVariant?.id)
+
+  const handleSave = () => {
+    if (isSaved) {
+      removeSavedItem(selectedVariant?.id)
+    } else {
+      saveItem(selectedVariant?.id)
+    }
+  }
 
   const handleCloseProductModal = () => {
-    setOpenSingleProductModal((prev) => !prev);
-  };
+    setOpenSingleProductModal(prev => !prev)
+  }
+
+
+
 
   const sampleTag = [
     {
@@ -68,9 +91,10 @@ const ProductTile: FC<IProductTile> = ({ product }: any) => {
     },
     {
       label:
-        '{"pill:preOrder":{"pillColor":"#FFFFFF","pillBackground":"#800080","priority":"3","text":"pre-order"}}',
-    },
-  ];
+        '{"pill:preOrder":{"pillColor":"#FFFFFF","pillBackground":"#800080","priority":"3","text":"pre-order"}}'
+    }
+  ]
+
 
 
   return (
@@ -152,13 +176,14 @@ const ProductTile: FC<IProductTile> = ({ product }: any) => {
           </div>
         </div>
         <div
-          id="favorite icon"
-          className="absolute t-0 r-0 mr-10 mt-10 l:mr-15 l:mt-15 text-24 l:text-34"
-          onClick={() => setIsFavorite((fav) => !fav)}
+          id='favorite icon'
+          className='absolute t-0 r-0 mr-10 mt-10 l:mr-15 l:mt-15 text-24 l:text-34'
+          onClick={isAuthenticated ? handleSave : () => isLoginModal()}
+          
         >
           <AiFillHeart
-            color={isFavourite ? "#ffffffee" : "#000000aa"}
-            className="shadow"
+            color={isSaved ? '#ffffffee' : '#000000aa'}
+            className='shadow'
           />
         </div>
 
