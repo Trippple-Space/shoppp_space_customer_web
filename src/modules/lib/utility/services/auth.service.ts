@@ -47,7 +47,6 @@ class AuthService {
 
   signUpInitial(details: { fullname: string; email: string }): Promise<any> {
       return http.post(endpoints.SIGN_UP_DETAILS, details).then((response: AxiosResponse) => {
-          console.log({response})
         return  response.data
       });
   }

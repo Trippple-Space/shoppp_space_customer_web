@@ -6,11 +6,18 @@ import Image from '@/modules/lib/components/image/Image'
 import Input from '@/modules/lib/components/input/Input'
 import { paths } from '@/modules/lib/utility/paths'
 import Link from 'next/link'
-import { usePathname } from 'next/navigation'
-import React, { FC } from 'react'
+import { usePathname, useSearchParams } from 'next/navigation'
+import React, { FC, useEffect, useState } from 'react'
 import { FcGoogle } from 'react-icons/fc'
 
 const layout: FC<ILayout> = ({ children }) => {
+  const pathName = usePathname()
+  const path = pathName.split('/')[2]
+
+
+
+
+
   const VendorSignUp = () => {
     return (
       <div className="text-right w-full l:w-80p mt-53 mx-25 hidden l:block">
@@ -34,7 +41,9 @@ const layout: FC<ILayout> = ({ children }) => {
 
 
 
-  const pathname = usePathname()
+
+
+
   return (
     <div className="flex h-100vh w-full">
       <div className="l:w-50p hidden l:block m-15">
@@ -57,7 +66,7 @@ const layout: FC<ILayout> = ({ children }) => {
         </div>
       </div>
       <div className="w-100p l:w-50p h-full overflow-hidden">
-        {pathname === paths.vendor_signup ?
+        {pathName === paths.vendor_signup ?
           <VendorSignUp /> : <CustomerSignUp/>
          }
       <div className="relative mx-25 flex-col flex h-full items-center j-content-center">
@@ -72,7 +81,7 @@ const layout: FC<ILayout> = ({ children }) => {
         </div>
     
         <div className="w-full l:w-60p h-full flex flex-col j-content-center">
-            {pathname !== paths.vendor_signup && <AuthHeader activeTab="signup" />}
+            {pathName !== paths.vendor_signup && <AuthHeader activeTab={path} />}
             {children}
           <div className="mt-30">
               {/* <div className="flex j-content-between a-items-center  text-grey-800">

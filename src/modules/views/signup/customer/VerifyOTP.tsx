@@ -20,9 +20,7 @@ const VerifyOTP = () => {
   const [otpDigits, setOtpDigits] = useState(Array(6).fill(''));
   const inputRefs = useRef<(HTMLInputElement | null)[]>([]);
 
-
   const { formikOtp } = useSignUpView();
-
 
   useEffect(() => {
     if (inputRefs.current[0]) {
@@ -30,27 +28,20 @@ const VerifyOTP = () => {
     }
   }, []);
 
-
   const handleChange = (e: HandleChangeEvent, index: number) => {
     const value = e.target.value;
 
-    if (isNaN(Number(value))) return;
+    if (!/^[A-Za-z0-9]*$/.test(value)) return; 
 
     const newOtp = [...otpDigits];
 
-    newOtp[index] = value.substring(value.length - 1);
+    newOtp[index] = value.substring(value.length - 1);  
     setOtpDigits(newOtp);
 
-  
     const combinedOtp = newOtp.join("");
     if (combinedOtp.length === otpDigits.length) {
-
       formikOtp.setFieldValue("otp", combinedOtp);
-
-      formikOtp.handleSubmit();
     }
-
-    // Move focus to the next input, if available.
     if (value && index < otpDigits.length - 1 && inputRefs.current[index + 1]) {
       inputRefs.current[index + 1]?.focus();
     }
