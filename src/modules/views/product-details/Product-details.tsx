@@ -24,6 +24,7 @@ import { useCart } from '@/modules/lib/utility/hooks/use-cart'
 import CollapsibleDesc from './product-description/collapsibleDesc'
 import ShareProductModal from './share-modal/shareProductModal'
 import ProductStockUnit from '@/modules/lib/components/product-stock-unit/ProductStockUnit'
+import classNames from 'classnames'
 
 const ProductDetails = ({ product }: { product: Product }) => {
   const [unitCounter, setUnitCounter] = useState<number>(1)
@@ -74,7 +75,7 @@ const ProductDetails = ({ product }: { product: Product }) => {
             />
             <Image
               src={selectedImage}
-              className='flex-grow-1 w-100p l:radius-15 radius-8 border border-grey-100 object-fit l:h-full md:h-420 sm:h-350 h-270'
+              className={`flex-grow-1 w-100p l:radius-15 radius-8 border border-grey-100 object-fit l:h-full md:h-420 sm:h-350 h-270 ${selectedVariant.status  === 'OUT_OF_STOCK'? 'greyscale' : ''}`}
               alt={''}
             />
           </div>
@@ -127,7 +128,7 @@ const ProductDetails = ({ product }: { product: Product }) => {
                   variant?.media?.map((mediaItem: any) => (
                     <div
                       className={cx(
-                        'l:w-115 l:h-115 w-85 h-85 overflow-hidden radius-14',
+                        `l:w-115 l:h-115 w-85 h-85 overflow-hidden radius-14 ${ variant.status === 'OUT_OF_STOCK' ? 'greyscale' : ''}`,
                         {
                           'border border-green border-2':
                             selectedImage == mediaItem?.url,
@@ -193,26 +194,30 @@ const ProductDetails = ({ product }: { product: Product }) => {
                 <></>
               )}
 
-              {!selectedVariantItemInCart ? (
+                {!selectedVariantItemInCart ? (
                 <button
-                  className='bg-green text-white border-none l:px-90 l:py-20 py-15 w-100p radius-30 pointer'
+                  className={classNames(`text-white border-none l:px-90 l:py-20 py-15 w-100p radius-30 pointer ${selectedVariant && selectedVariant.status === 'OUT_OF_STOCK' ?'bg-gray-300' :  'bg-#0B9378'}`)}
                   onClick={() => {
-                    isAuthenticated
-                      ? addToCart(
-                        selectedVariant?.id,
-                        selectedVariant?.minPurchaseQuantity || 1
-                      )
-                      : isLoginModal()
+                  if (isAuthenticated) {
+                    if (selectedVariant && selectedVariant.status !== 'OUT_OF_STOCK') {
+                    addToCart(
+                      selectedVariant?.id ?? 0,
+                      selectedVariant?.minPurchaseQuantity || 1
+                    )
+                    }
+                  } else {
+                    isLoginModal()
+                  }
                   }}
                 >
                   <div className='l:flex grid grid-2-cols-auto gap-10 items-center w-fit mx-auto'>
-                    <HiOutlineShoppingBag className='h-21' />
-                    <div className='whitespace-nowrap text-16'>Add To Cart</div>
+                    {selectedVariant.status !== 'OUT_OF_STOCK' && <HiOutlineShoppingBag className='h-21' />}
+                  <div className={classNames(`whitespace-nowrap text-16 ${selectedVariant && selectedVariant.status === 'OUT_OF_STOCK' ? 'text-black' : 'text-white' }`)}>
+                    {selectedVariant && selectedVariant.status !== "OUT_OF_STOCK" ? 'Add to cart' : 'Out of stock'}
+                  </div>
                   </div>
                 </button>
-              ) : (
-                <></>
-              )}
+                ) : null}
             </div>
           </div>
         </div>

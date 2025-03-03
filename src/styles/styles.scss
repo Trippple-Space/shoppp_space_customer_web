@@ -36,6 +36,8 @@
     padding-left: 0;
   }
 
+  .greyscale { filter: grayscale(1); }
+
   ::-webkit-scrollbar {
     width: 5px;
     background: whitesmoke;
