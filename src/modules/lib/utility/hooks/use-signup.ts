@@ -32,9 +32,6 @@ const passwordCreationSchema = Yup.object().shape({
   password: Yup.string()
     .min(8, "Minimum password length is 8 characters")
     .max(20, "Max password length is 20 characters")
-    .required("Required"),
-  confirmPassword: Yup.string()
-    .oneOf([Yup.ref("password")], "Passwords does not match")
     .required("Required")
 });
 
@@ -63,11 +60,10 @@ export const useSignUpView = () => {
           fullname: values.fullname,
           email: values.email
         });
-          setToken(response.token);
           toast.success("OTP sent. Please check your email.");
-          router.push(`${paths.verify}?token=${token}`);
+          router.push(`${paths.verify}?token=${response.token}`);
       } catch (error: any) {
-        toast.error(error.message || "Something went wrong during sign-up");
+        toast.error(error.response.data.message || "Something went wrong during sign-up");
       }
     }
   } as FormikConfig<Pick<{ fullname: string; email: string;}, "fullname" | "email">>);
@@ -78,17 +74,19 @@ export const useSignUpView = () => {
       otp: ""
     },
     validationSchema: otpValidationSchema,
-      onSubmit: async (values: { otp: string }) => {
-      try {
-          const response = await authService.verifyOtp({ token, otp: values.otp });
-              localStorage.setItem("create-password-token", response.token);
-              setToken(response.token);
+    onSubmit: async (values: { otp: string }) => {
+      const tokenFromUrl = searchParams.get("token") || "";
+
+       try {
+        const response = await authService.verifyOtp({ token: tokenFromUrl, otp: values.otp });
+        localStorage.setItem("create-password-token", response.createPasswordToken);
+              setToken(response.createPasswordToken);
               toast.success("OTP verified successfully.");
               router.push(paths.create_password);
               setStep("createPassword");
 
       } catch (error: any) {
-        toast.error(error.message || "OTP verification failed");
+        toast.error(error.response.data.message || "OTP verification failed");
       }
     }
   } as FormikConfig<{ otp: string }>);
@@ -97,8 +95,7 @@ export const useSignUpView = () => {
   useEffect(() => {
     const tokenFromUrl = searchParams.get("token") || "";
       const otpFromUrl = searchParams.get("otp");
-    
-    
+  
       if (tokenFromUrl) {
           setToken(tokenFromUrl);
         if (otpFromUrl) {
@@ -106,7 +103,7 @@ export const useSignUpView = () => {
           .verifyOtp({ token: tokenFromUrl, otp: otpFromUrl })
             .then((response) => {
 
-            localStorage.setItem("password-token", response.token);
+            localStorage.setItem("create-password-token", response.createPasswordToken);
             setToken(response.token);
             toast.success("OTP verified via link successfully.");
             setStep("createPassword");
@@ -127,8 +124,8 @@ export const useSignUpView = () => {
       confirmPassword: ""
     },
     validationSchema: passwordCreationSchema,
-    onSubmit: async (values) => {
-
+    onSubmit: async (values) => {      
+      if (values.password === values.confirmPassword) {
       try {
         const storedToken = localStorage.getItem("create-password-token");
         if (!storedToken) {
@@ -139,12 +136,15 @@ export const useSignUpView = () => {
           token: storedToken,
           password: values.password
         };
-        await authService.setPassword(payload);
+        const res = await authService.setPassword(payload);
           toast.success(`Thank you for signing up with Asoebi.Africa. Have a wonderful time shopping`);
           localStorage.removeItem('create-password-token')
         router.push(paths.login);
       } catch (error: any) {
-        toast.error(error.message || "Registration failed");
+        toast.error(error.response.data.message || "Registration failed");
+      }
+      } else {
+        toast.error("Password does not match")
       }
     }
   } as FormikConfig<{ password: string; confirmPassword: string }>);

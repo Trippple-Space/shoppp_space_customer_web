@@ -1,12 +1,20 @@
 import classNames from 'classnames'
 import { useRouter } from 'next/navigation'
-import React from 'react'
+import React, { useEffect } from 'react'
 import { paths } from '../../utility/paths'
 
 const AuthHeader = ({ activeTab }: { activeTab: string }) => {
     const router = useRouter()
+    const [active, setActive] = React.useState(activeTab)
 
-    const [active, setActiveTab] = React.useState(activeTab || 'login')
+  
+  useEffect(() => {
+    if (activeTab === 'create-password' || activeTab === 'verify') {
+      setActive('signup')
+    } else {
+      setActive(activeTab)
+    }
+  }, [activeTab])
 
   return (
       <>
@@ -19,7 +27,7 @@ const AuthHeader = ({ activeTab }: { activeTab: string }) => {
                              'bg-white': active === 'signup'
                            })}
                            onClick={() => {
-                                setActiveTab?.('signup');
+                                setActive?.('signup');
                                 router.push(paths.signup);
                               }}
                          >
@@ -40,7 +48,7 @@ const AuthHeader = ({ activeTab }: { activeTab: string }) => {
                              }
                            )}
                               onClick={() => {
-                                setActiveTab?.('login');
+                                setActive?.('login');
                                 router.push(paths.login);
                               }}
                          >

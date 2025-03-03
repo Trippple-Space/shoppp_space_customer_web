@@ -9,9 +9,8 @@ import { useRouter } from 'next/navigation';
 import { paths } from '@/modules/lib/utility/paths';
 
 const SignUpDetails: FC = () => {
-  const { formikInitial } = useSignUpView(); // using the initial form from our hook
-  const router = useRouter();
-
+  const { formikInitial } = useSignUpView();
+  
   return (
     <div className="w-full">
       <div className="font-inter mb-30">
@@ -68,12 +67,6 @@ const SignUpDetails: FC = () => {
             </div>
           }
         />
-
-        {/* Instead of a button that manually redirects,
-            we call formikInitial.handleSubmit when the user clicks continue.
-            This triggers the API call to send fullname/email to the backend,
-            and on success, the hook automatically redirects to the verify page
-            with the token appended in the URL. */}
         <div
           className="btn text-center bg-green weight-500 text-16 l:btn-lg btn-lg font-inter mt-30 text-14 cursor-pointer"
           onClick={() => {
