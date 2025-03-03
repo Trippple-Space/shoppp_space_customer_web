@@ -40,13 +40,7 @@ const VendorSignUp = () => {
   const VendorSignUpStep = vendorSignUpSteps[currentStep];
 
   return (
-    <div className='h-full'>
-      <div className="text-right w-full l:w-80p mt-53 mx-25 hidden l:block">
-        <span>Not a vendor? </span>
-        <Link href={paths.signup} className='text-green-700 pointer'>Sign up here instead</Link>
-      </div>
-      <div className='flex content-center h-full'>
-        <div className='a-self-center w-80p mx-auto'>
+    <>    
           <div className="mb-43">
             <Image
               className='w-100 h-27 mb-16 a-self-left'
@@ -57,9 +51,8 @@ const VendorSignUp = () => {
             <ProgressBar percentage={percentageProgress(currentStep)} />
           </div>
           {VendorSignUpStep && <VendorSignUpStep setCurrentStep={setCurrentStep} />}
-        </div>
-      </div>
-    </div>
+
+      </>
 
   );
 };
