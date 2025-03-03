@@ -1,24 +1,32 @@
-"use client";
-import React, { FC, useEffect, useState } from "react";
-import Image from "../image/Image";
-import { AiFillStar, AiOutlinePlus, AiFillHeart } from "react-icons/ai";
-import classNames from "classnames";
-import { Product } from "../../utility/types/product.interface";
-import { displayProductPill, formatNumberAsPrice } from "../../utility/utility";
-import { useCart } from "../../utility/hooks/use-cart";
-import QuantitySelector from "../quantity-selector/QuantitySelector";
-import Link from "next/link";
-import VideoSrc from "../video-src/VideoSrc";
-import { FaEye } from "react-icons/fa6";
-import ProductDetailModal from "../product-detail-modal/ProductDetailModal";
-import { PiShoppingCartFill, PiStorefront } from "react-icons/pi";
+'use client'
+import React, { FC, useEffect, useState } from 'react'
+import Image from '../image/Image'
+import { AiFillStar, AiOutlinePlus, AiFillHeart } from 'react-icons/ai'
+import classNames from 'classnames'
+import { Product } from '../../utility/types/product.interface'
+import { cx, displayProductPill, formatNumberAsPrice } from '../../utility/utility'
+import { useCart } from '../../utility/hooks/use-cart'
+import QuantitySelector from '../quantity-selector/QuantitySelector'
+import Link from 'next/link'
+import VideoSrc from '../video-src/VideoSrc'
+import { FaEye } from 'react-icons/fa6'
+import ProductDetailModal from '../product-detail-modal/ProductDetailModal'
+import { PiShoppingCartFill, PiStorefront } from 'react-icons/pi'
+import { useSavedItem } from '../../utility/hooks/use-saved-item'
+import { SavedItem } from '../../utility/types/savedItem.interface'
 
 interface IProductTile {
-  product: Product;
+  product: Product
+  saveItem?: any
+  removeSavedItem?: any
+  savedItems?: SavedItem[]
 }
-const ProductTile: FC<IProductTile> = ({ product }: any) => {
-  const [onProductTileHover, setOnProductTileHover] = useState(false);
-  const [openSingleProductModal, setOpenSingleProductModal] = useState(false);
+const ProductTile: FC<IProductTile> = ({ product, savedItems, saveItem, removeSavedItem }: any) => {
+  const [onProductTileHover, setOnProductTileHover] = useState(false)
+  const [openSingleProductModal, setOpenSingleProductModal] = useState(false)
+
+
+
 
   const [selectedImage, setSelectedImage] = useState(
     product?.variants?.[0]?.media?.[0]?.url
@@ -34,8 +42,10 @@ const ProductTile: FC<IProductTile> = ({ product }: any) => {
     increment,
     decrement,
     isAuthenticated,
-    isLoginModal,
-  } = useCart();
+    isLoginModal
+  } = useCart()
+
+
   const selectedVariantItemInCart = cart.cartItems.find(
     (item) => item.variant.id === selectedVariant?.id
   );
@@ -47,13 +57,26 @@ const ProductTile: FC<IProductTile> = ({ product }: any) => {
 
   const [topTwoPills, setTopTwoPills] = useState<any[]>([]);
   useEffect(() => {
-    const pills = displayProductPill(product?.tags);
-    setTopTwoPills(pills);
-  }, []);
+    const pills = displayProductPill(product?.tags)
+    setTopTwoPills(pills)
+  }, [])
+
+  const isSaved = savedItems.find((item: SavedItem) => item.variantId === selectedVariant?.id)
+
+  const handleSave = () => {
+    if (isSaved) {
+      removeSavedItem(selectedVariant?.id)
+    } else {
+      saveItem(selectedVariant?.id)
+    }
+  }
 
   const handleCloseProductModal = () => {
-    setOpenSingleProductModal((prev) => !prev);
-  };
+    setOpenSingleProductModal(prev => !prev)
+  }
+
+
+
 
   const sampleTag = [
     {
@@ -68,21 +91,24 @@ const ProductTile: FC<IProductTile> = ({ product }: any) => {
     },
     {
       label:
-        '{"pill:preOrder":{"pillColor":"#FFFFFF","pillBackground":"#800080","priority":"3","text":"pre-order"}}',
-    },
-  ];
+        '{"pill:preOrder":{"pillColor":"#FFFFFF","pillBackground":"#800080","priority":"3","text":"pre-order"}}'
+    }
+  ]
+
 
 
   return (
-    <div className="mt-30 l:mt-20 w-full overflow-hidden">
+    <div className='mt-30 l:mt-20 w-full overflow-hidden'>
       <div
-        id="image"
-        className="relative ratio-1 radius-10 g|overflow:hidden l:radius-15 w-full"
+        id='image'
+        className='relative ratio-1 radius-10 g|overflow:hidden l:radius-15 w-full'
+        onMouseOver={() => setOnProductTileHover(true)}
+        onMouseOut={() => setOnProductTileHover(false)}
       >
         <Link href={`/products/${product.slug}`}>
           {mediaType === "image" ? (
             <Image
-              className="absolute w-full h-full a-self-center g|object-fit:cover pointer"
+              className={`absolute w-full h-full a-self-center g|object-fit:cover pointer ${selectedVariant?.status === 'OUT_OF_STOCK' && 'greyscale'}`}
               src={selectedImage}
               alt="product-image"
             />
@@ -106,8 +132,8 @@ const ProductTile: FC<IProductTile> = ({ product }: any) => {
               className=" hidden l:block absolute b-0 l-0 ml-10 mb-10 l:mr-15 l:mb-15"
               onClick={handleCloseProductModal}
             >
-              <p className="bg-white radius-20 p-5 cursor-pointer text-12 flex a-items-center gap-5">
-                <FaEye className="w-fit " />
+              <p className='bg-white radius-20 p-5 cursor-pointer text-12 flex a-items-center gap-5'>
+                <FaEye className='w-fit' />
                 Quick look
               </p>
             </div>
@@ -123,31 +149,41 @@ const ProductTile: FC<IProductTile> = ({ product }: any) => {
                 cartItem={selectedVariantItemInCart}
               />
             ) : (
-              <button
+                <>
+             {selectedVariant?.status !== 'OUT_OF_STOCK' ? <button
                 onClick={() => {
                   isAuthenticated
-                    ? addToCart(
+                    ?  addToCart(
                       selectedVariant.id,
                       selectedVariant.minPurchaseQuantity || 1
-                    )
+                    ) 
                     : isLoginModal();
                 }}
                 disabled={!selectedImage}
-                className="bg-#FACE33! shadow-0-4-8-0-#00000033 hover:shadow-0-8-8-0-#00000033 text-black! disabled:bg-gray-200 disabled:cursor-not-allowed hover:scale-1.06 g|transition:0.5s g|will-change:transform pointer font-roboto border-hidden outline-none s:p-14 p-12 round flex a-items-center j-items-center gap-10"
+                    className={classNames(
+                      "bg-#FACE33 shadow-0-4-8-0-#00000033 hover:shadow-0-8-8-0-#00000033 text-black! disabled:bg-gray-200 disabled:cursor-not-allowed hover:scale-1.06 g|transition:0.5s g|will-change:transform pointer font-roboto border-hidden outline-none s:p-14 p-12 round flex a-items-center j-items-center gap-10")}
               >
                 <PiShoppingCartFill className="s:w-22 w-20 s:h-22 h-20" />
-              </button>
+              </button>: <div
+            className="bg-whitesmoke radius-10 flex a-items-center j-content-center"
+          >
+            <div className="px-4 py-4">
+              Out of stock
+             </div>
+          </div>}
+            </>
             )}
           </div>
         </div>
         <div
-          id="favorite icon"
-          className="absolute t-0 r-0 mr-10 mt-10 l:mr-15 l:mt-15 text-24 l:text-34"
-          onClick={() => setIsFavorite((fav) => !fav)}
+          id='favorite icon'
+          className='absolute t-0 r-0 mr-10 mt-10 l:mr-15 l:mt-15 text-24 l:text-34'
+          onClick={isAuthenticated ? handleSave : () => isLoginModal()}
+          
         >
           <AiFillHeart
-            color={isFavourite ? "#ffffffee" : "#000000aa"}
-            className="shadow"
+            color={isSaved ? '#ffffffee' : '#000000aa'}
+            className='shadow'
           />
         </div>
 
@@ -176,7 +212,7 @@ const ProductTile: FC<IProductTile> = ({ product }: any) => {
               mediaItem?.type === "image" ? (
                 <Image
                   className={classNames(
-                    "l:w-35.2 l:h-35.2 w-31 h-31 pointer md:radius-4 radius-3 a-self-center g|object-fit:cover",
+                    `l:w-35.2 l:h-35.2 w-31 h-31 pointer md:radius-4 radius-3 a-self-center g|object-fit:cover ${variant?.status === 'OUT_OF_STOCK' && 'greyscale'}`,
                     {
                       "border border-2": selectedImage == mediaItem?.url,
                       [`border-${/*variant?.properties?.color?.toLocaleLowerCase() ||*/'#0B9378'}`]:

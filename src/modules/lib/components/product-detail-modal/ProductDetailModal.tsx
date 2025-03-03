@@ -75,15 +75,15 @@ const ProductDetailModal = ({
           />
           {product && (
             <>
-              <div className='relative'>
+              <div className='relative no-scrollbar'>
                 <div
                   className={`fixed bg-white t-70  z-10 l-50p g|transform:translate(-50%) h-60vh l:h-70vh l:w-500
-                  radius-8   
+                  radius-8  no-scrollbar  
                   `}
                 >
                   <div className='overflow-auto no-scrollbar h-100p'>
-                    <div className='relative'>
-                      <div className='fixed  w-100p bg-white border-b border-b-#00000014 p-10 l:p-20 flex a-items-center j-content-between'>
+                    <div className='relative z-10'>
+                      <div className='fixed  w-100p bg-white border-b border-b-#00000014 p-10 l:p-20 flex a-items-center j-content-between '>
                         <p className='text-left  weight-600'>Price details</p>
                         <IoMdClose
                           className='w-30 cursor-pointer'
@@ -99,7 +99,7 @@ const ProductDetailModal = ({
                             <Image
                               src={selectedImage}
                               alt={product?.name}
-                              className=' radius-8 object-fit h-100p'
+                              className={` radius-8 object-fit h-100p ${selectedVariant?.status === 'OUT_OF_STOCK' ? 'greyscale': ''}`}
                             />
                           </div>
                         )}
@@ -110,7 +110,7 @@ const ProductDetailModal = ({
                             <div
                               key={variant.id}
                               className={cx(
-                                'l:w-40 l:h-45 w-45 h-30 overflow-hidden radius-3',
+                                `l:w-40 l:h-45 w-45 h-30 overflow-hidden radius-3  ${variant.status ==='OUT_OF_STOCK' ? 'greyscale': ''}`,
                                 {
                                   'border border-green border-2':
                                     selectedImage == mediaItem?.url,
@@ -184,18 +184,31 @@ const ProductDetailModal = ({
                           ) : (
                             <button
                               onClick={() => {
-                                isAuthenticated
-                                  ? addToCart(
-                                      selectedVariant?.id ?? 0,
-                                      selectedVariant?.minPurchaseQuantity || 1
-                                    )
-                                  : isLoginModal()
+                              if (isAuthenticated) {
+                                if (selectedVariant && selectedVariant.status === 'OUT_OF_STOCK') {
+                                addToCart(
+                                  selectedVariant?.id ?? 0,
+                                  selectedVariant?.minPurchaseQuantity || 1
+                                )
+                                }
+                              } else {
+                                isLoginModal()
+                              }
                               }}
                               disabled={!selectedImage}
-                              className='bg-#0B9378 disabled:bg-yellow-200 disabled:cursor-not-allowed hover:scale-1.05 g|transition:0.5s pointer font-roboto text-grey-900 border-hidden px-10 py-10 radius-5 l:px-22 l:py-12 l:radius-10'
+                              className={classNames(
+                              'disabled:bg-yellow-200 disabled:cursor-not-allowed hover:scale-1.05 transition-0.5s pointer font-roboto text-grey-900 border-hidden px-10 py-10 radius-5 l:px-22 l:py-12 l:radius-10',
+                              {
+                                'bg-#F3F3F3': selectedVariant && selectedVariant.status === 'OUT_OF_STOCK' ,
+                                'bg-#0B9378': selectedVariant && selectedVariant.status !== 'OUT_OF_STOCK'
+                              }
+                              )}
                             >
-                              <span className='l:block weight-500 color-white'>
-                                Add to cart
+                              <span
+                                  className={classNames(`l:block weight-500 ${selectedVariant && selectedVariant.status === 'OUT_OF_STOCK' ? 'color-black' : 'color-white'}
+                                  `)}
+                              >
+                              {selectedVariant && selectedVariant.status === 'OUT_OF_STOCK' ? 'Out of stock' : 'Add to cart'}
                               </span>
                             </button>
                           )}
