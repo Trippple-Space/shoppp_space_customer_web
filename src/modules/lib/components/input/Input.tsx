@@ -1,7 +1,9 @@
 import React, {
+  CSSProperties,
   FC,
   HTMLInputTypeAttribute,
   ReactNode,
+  Ref,
   useEffect,
   useState
 } from 'react'
@@ -24,11 +26,17 @@ interface IInput {
   disabled?: boolean
   handleChange?: Function
   handleBlur?: Function
+  handleKeyDown?: Function
   handleFocus?: any
- onCopy?: any
- onPaste?: any
+  onCopy?: any
+  onPaste?: any
+  ref?: Ref<any>
+  max?: number
+  min?: number
+  style?: CSSProperties
 }
-const Input: FC<IInput> = ({
+
+const Input: React.ForwardRefExoticComponent<Omit<IInput, 'ref'> & React.RefAttributes<any>> = React.forwardRef<any, Omit<IInput, 'ref'>>(({
   label,
   id,
   name,
@@ -44,9 +52,13 @@ const Input: FC<IInput> = ({
   handleChange,
   handleBlur,
   handleFocus,
+  handleKeyDown,
   onCopy,
-  onPaste
-}) => {
+  onPaste,
+  min,
+  max,
+  style,
+}, ref) => {
   const Component = type === 'textarea' ? 'textarea' : 'input'
   const controlProps = {
     [value !== undefined ? 'value' : '']: value,
@@ -55,6 +67,7 @@ const Input: FC<IInput> = ({
     [handleChange ? 'onChange' : '']: handleChange,
     [handleBlur ? 'onBlur' : '']: handleBlur,
     [handleFocus ? 'onFocus' : '']: handleFocus,
+    [handleKeyDown ? 'onKeyDown' : '']: handleKeyDown,
     [onCopy ? 'onCopy' : '']: onCopy,
     [onPaste ? 'onPaste' : '']: onPaste,
   }
@@ -81,12 +94,15 @@ const Input: FC<IInput> = ({
             id?.toLocaleLowerCase()?.includes('contact')
               ? '@lo:radius-t-r-8 @lo:radius-b-r-8 border-l-0'
               : '@lo:radius-8'
-          }`}
+            }`}
+          ref={ref}
           placeholder={placeholder}
           rows={rows}
           id={id}
           name={name}
-          min={0}
+          min={min ?? 0}
+          max={max}
+          style={style}
           {...controlProps}
         />
         {type === 'password' && (
@@ -101,6 +117,6 @@ const Input: FC<IInput> = ({
       {after}
     </div>
   )
-}
+})
 
 export default Input
