@@ -153,7 +153,7 @@ const handleNextImage = () => {
                                 <MdArrowForwardIos className='w-fit'/>
                             </div>}
                           </div>
-                            <div className='flex gap-10 overflow-auto a-items-center no-scrollbar'>
+                            <div className='flex gap-10 py-5 overflow-x-auto a-items-center no-scrollbar'>
                               {product?.variants?.map((variant, idx) =>
                           variant?.media?.map((mediaItem: any) => (
                             <div
@@ -252,7 +252,7 @@ const handleNextImage = () => {
                               }}
                               disabled={selectedVariant && selectedVariant.status === 'OUT_OF_STOCK'}
                               className={classNames(
-                              'disabled:bg-yellow-200 disabled:cursor-not-allowed hover:scale-1.05 transition-0.5s pointer font-roboto text-grey-900 border-hidden px-10 py-10 radius-5 l:px-22 l:py-12 l:radius-10',
+                              'disabled:bg-yellow-200 disabled:cursor-not-allowed pointer font-roboto text-grey-900 border-hidden px-10 py-10 radius-5 l:px-22 l:py-12 l:radius-10',
                               {
                                 'bg-#F3F3F3': selectedVariant && selectedVariant.status === 'OUT_OF_STOCK' ,
                                 'bg-#0B9378': selectedVariant && selectedVariant.status !== 'OUT_OF_STOCK'
