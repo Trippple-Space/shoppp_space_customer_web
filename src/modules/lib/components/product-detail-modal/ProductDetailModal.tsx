@@ -98,22 +98,38 @@ const handleNextImage = () => {
       {openSingleProductModal && (
         <>
           <div
-            className='fixed inset-0 bg-black opacity-50 w-100p h-100p z-10'
+            className='fixed inset-0 bg-#00000073 w-100p h-100p z-10 hidden l:block'
             onClick={handleCloseProductModal}
-          />
+          >
           {product && (
             <>
-              <div className='relative no-scrollbar'>
+                <div className='relative no-scrollbar w-full h-full flex flex-col j-content-center a-items-center'
+                  >
                 <div
-                  className={`fixed bg-white l:b-25p b-20p z-10 l-50p g|transform:translate(-50%) l:w-50p l:h-60p h-70p radius-8  no-scrollbar  
-                  `}
+                  className={`fixed bg-white z-10 w-90p sm:w-80p l:w-65p  xl:w-50p  radius-8 no-scrollbar`}
+                  style={{
+                    height: 'fit-content',
+                    maxHeight: 'calc(100vh - 80px)'
+                  }}
+                  onClick={e => e.stopPropagation()}
                 >
-                  <div className='l:overflow-hidden overflow-auto no-scrollbar h-100p relative'>
-                    <div className='fixed flex j-content-end text-right p-10 w-full cursor-pointer bg-white z-10 radius-6' onClick={handleCloseProductModal}>
+                    <div className='overflow-hidden no-scrollbar relative'
+                      style={{
+                      height: 'fit-content',
+                      maxHeight: 'calc(100vh - 80px)'
+                    }}
+                    >
+                    <div className='flex j-content-end text-right p-10 w-full cursor-pointer bg-white z-10 radius-6' onClick={handleCloseProductModal}>
                       <IoMdClose className='w-25 h-25 ' />
-                    </div>
-                    <div className="l:flex grid j-content-center gap-30 p-30 mt-30">
-                      <div className='l:w-50p w-full'>
+                      </div>
+                      <div className='overflow-auto no-scrollbar pb-20'
+                         style={{
+                      height: 'fit-content',
+                      maxHeight: 'calc(100vh - 100px)'
+                    }}
+                      > 
+                    <div className="l:flex grid  j-content-center gap-30 px-30 pb-30 overflow-auto">
+                      <div className='l:w-50p w-full  overflow-hidden'>
                         <div className='w-100p'>
                           <div className='flex flex-col gap-20'>
                             <div className='relative' onMouseOver={() => setIsHover(true)}
@@ -124,7 +140,7 @@ const handleNextImage = () => {
                               >
                                 <MdArrowBackIos className='w-full relative l-3' />
                               </div>}
-                              <div className='bg-red w-full h-400'>
+                              <div className='w-full h-350'>
 
                             <Image
                               src={selectedImage}
@@ -137,7 +153,7 @@ const handleNextImage = () => {
                                 <MdArrowForwardIos className='w-fit'/>
                             </div>}
                           </div>
-                            <div className='flex gap-10 a-items-center'>
+                            <div className='flex gap-10 overflow-auto a-items-center no-scrollbar'>
                               {product?.variants?.map((variant, idx) =>
                           variant?.media?.map((mediaItem: any) => (
                             <div
@@ -146,7 +162,7 @@ const handleNextImage = () => {
                                 setSelectedVariant(variant)
                                 setSelectedImage(mediaItem?.url)
                               }}
-                              className='w-90 h-90'
+                              className='min-w-90 h-90'
                             >
                               <Image
                                 src={mediaItem?.url}
@@ -234,7 +250,7 @@ const handleNextImage = () => {
                                 isLoginModal()
                               }
                               }}
-                              disabled={!selectedImage}
+                              disabled={selectedVariant && selectedVariant.status === 'OUT_OF_STOCK'}
                               className={classNames(
                               'disabled:bg-yellow-200 disabled:cursor-not-allowed hover:scale-1.05 transition-0.5s pointer font-roboto text-grey-900 border-hidden px-10 py-10 radius-5 l:px-22 l:py-12 l:radius-10',
                               {
@@ -263,15 +279,19 @@ const handleNextImage = () => {
                             </div>
                         </div>
                       </div>
-                    </div> 
+                        </div> 
+                      </div>
+                        
                   </div>
                 </div>
-              </div>
-            </>
+                </div>
+              </>
           )}
+          </div>
         </>
       )}
-    </div>
+        </div>
+    
   )
 }
 
