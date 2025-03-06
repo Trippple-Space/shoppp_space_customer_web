@@ -9,6 +9,8 @@ import { cx, formatNumberAsPrice } from '../../utility/utility'
 import ProductStockUnit from '../product-stock-unit/ProductStockUnit'
 import QuantitySelector from '../quantity-selector/QuantitySelector'
 import Image from '../image/Image'
+import { SlArrowLeft, SlArrowRight } from 'react-icons/sl'
+import { MdArrowBackIos, MdArrowForwardIos } from 'react-icons/md'
 
 interface ProductDetailModalProp {
   openSingleProductModal: boolean
@@ -31,15 +33,16 @@ const ProductDetailModal = ({
     isAuthenticated,
     isLoginModal
   } = useCart()
-  const router = useRouter()
 
-  const [selectedImage, setSelectedImage] = useState(
+  const [isHover, setIsHover] = useState(false)
+  const [selectedImage, setSelectedImage] = useState<any>(
     product?.variants?.[0]?.media?.[0]?.url
   )
   const [selectedVariant, setSelectedVariant] = useState(product?.variants?.[0])
   const selectedVariantItemInCart = cart.cartItems.find(
     item => item.variant.id === selectedVariant?.id
   )
+
 
   useEffect(() => {
     setSelectedImage(product?.variants?.[0]?.media?.[0]?.url)
@@ -65,6 +68,31 @@ const ProductDetailModal = ({
 
   const displayPrice = selectedVariant?.price || product?.price
 
+
+const handlePreviousImage = () => {
+  if (!selectedVariant || !product?.variants?.length) return;
+
+  const currentVariantIndex = product.variants.indexOf(selectedVariant);
+  const previousIndex = currentVariantIndex > 0 ? currentVariantIndex - 1 : product.variants.length - 1; // Loop to last
+
+  const previousVariant = product.variants[previousIndex];
+  setSelectedVariant(previousVariant);
+  setSelectedImage(previousVariant?.media?.[0]?.url);
+};
+
+const handleNextImage = () => {
+  if (!selectedVariant || !product?.variants?.length) return;
+
+  const currentVariantIndex = product.variants.indexOf(selectedVariant);
+  const nextVariantIndex = (currentVariantIndex + 1) % product.variants.length; 
+
+  const nextVariant = product.variants[nextVariantIndex];
+  setSelectedVariant(nextVariant);
+  setSelectedImage(nextVariant?.media?.[0]?.url);
+};
+
+  
+ 
   return (
     <div>
       {openSingleProductModal && (
@@ -77,12 +105,180 @@ const ProductDetailModal = ({
             <>
               <div className='relative no-scrollbar'>
                 <div
-                  className={`fixed bg-white t-70  z-10 l-50p g|transform:translate(-50%) h-60vh l:h-70vh l:w-500
-                  radius-8  no-scrollbar  
+                  className={`fixed bg-white l:b-25p b-20p z-10 l-50p g|transform:translate(-50%) l:w-50p l:h-60p h-70p radius-8  no-scrollbar  
                   `}
                 >
-                  <div className='overflow-auto no-scrollbar h-100p'>
-                    <div className='relative z-10'>
+                  <div className='l:overflow-hidden overflow-auto no-scrollbar h-100p relative'>
+                    <div className='fixed flex j-content-end text-right p-10 w-full cursor-pointer bg-white z-10 radius-6' onClick={handleCloseProductModal}>
+                      <IoMdClose className='w-25 h-25 ' />
+                    </div>
+                    <div className="l:flex grid j-content-center gap-30 p-30 mt-30">
+                      <div className='l:w-50p w-full'>
+                        <div className='w-100p'>
+                          <div className='flex flex-col gap-20'>
+                            <div className='relative' onMouseOver={() => setIsHover(true)}
+                              onMouseOut={() => setIsHover(false)}
+                              >
+                              {isHover && <div className='absolute z-10 b-45p bg-white l-20  p-15 radius-99 flex a-items-center j-content-center cursor-pointer icon-box-shadow' 
+                                onClick={handlePreviousImage}
+                              >
+                                <MdArrowBackIos className='w-full relative l-3' />
+                              </div>}
+                              <div className='bg-red w-full h-400'>
+
+                            <Image
+                              src={selectedImage}
+                              alt={product?.name}
+                              className={`object-fit w-full h-full ${selectedVariant?.status === 'OUT_OF_STOCK' ? 'greyscale': ''}`}
+                              />
+                              </div>
+                           
+                            {isHover &&  <div className='absolute z-10 b-45p bg-white r-20 p-15 radius-99 flex a-items-center j-content-center cursor-pointer   icon-box-shadow' onClick={handleNextImage}>
+                                <MdArrowForwardIos className='w-fit'/>
+                            </div>}
+                          </div>
+                            <div className='flex gap-10 a-items-center'>
+                              {product?.variants?.map((variant, idx) =>
+                          variant?.media?.map((mediaItem: any) => (
+                            <div
+                              key={variant.id}
+                              onClick={() => {
+                                setSelectedVariant(variant)
+                                setSelectedImage(mediaItem?.url)
+                              }}
+                              className='w-90 h-90'
+                            >
+                              <Image
+                                src={mediaItem?.url}
+                                alt='product-image'
+                                 className={cx(
+                                `g|object-fit:cover w-full h-full overflow-hidden ${variant.status ==='OUT_OF_STOCK' ? 'greyscale': ''}`,
+                                {
+                                  'outline outline-green outline-2':
+                                    selectedImage == mediaItem?.url,
+                                  [`border-${mediaItem?.description?.toLocaleLowerCase()}`]:
+                                    selectedImage == mediaItem?.url
+                                }
+                              )}
+                              />
+                            </div>
+                          ))
+                        )}
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+
+                      <div className='l:w-50p w-full'>
+                        <div className='flex flex-col gap-10'>
+                          <p className='weight-400'>{product.name} - {product.longDescription}</p>
+                          <div>
+                            <p className='weight-400 text-grey-500 text-14'>507 sold | sold by {product.store.name} </p>
+                          </div>
+                            <p className='weight-400'> in {product.type} </p>
+                            <p className='weight-600 text-30 text-black'> {formatNumberAsPrice(displayPrice || 0)} </p>
+                          <p className='weight-600 text-13 text-black'> Color:{' '}{selectedVariant?.properties.color} </p>
+
+                           </div>
+                   
+                      <div className='mt-10 flex flex-col'>
+                        <p className='text-left text-14 weight-400'>
+                         Select color:
+                        </p>
+                        <div className='mt-10 flex gap-6 a-items-center'>
+                          {product.variants.map(variant => (
+                            <div
+                              key={variant.id}
+                              onClick={() => {
+                                setSelectedVariant(variant)
+                                setSelectedImage(variant?.media?.[0]?.url)
+                              }}
+                              style={{
+                                background: variant.properties?.['color']
+                              }}
+                              className={classNames(
+                                'w-30 h-30 flex round',
+                                {
+                                  'outline outline-2 w-26 h-26':
+                                    variant.id === selectedVariant?.id
+                                }
+                              )}
+                            ></div>
+                          ))}
+                          </div> 
+
+                        <div className='grid mt-20 mb-10 gap-10'>
+                          {selectedVariantItemInCart ? (
+                            <div className=''>
+                              <QuantitySelector
+                                decrement={() =>
+                                  decrement(selectedVariantItemInCart)
+                                }
+                                increment={() =>
+                                  increment(selectedVariantItemInCart)
+                                }
+                                cartItem={selectedVariantItemInCart}
+                              />
+                            </div>
+                          ) : (
+                            <button
+                              onClick={() => {
+                              if (isAuthenticated) {
+                                if (selectedVariant && selectedVariant.status === 'OUT_OF_STOCK') {
+                                addToCart(
+                                  selectedVariant?.id ?? 0,
+                                  selectedVariant?.minPurchaseQuantity || 1
+                                )
+                                }
+                              } else {
+                                isLoginModal()
+                              }
+                              }}
+                              disabled={!selectedImage}
+                              className={classNames(
+                              'disabled:bg-yellow-200 disabled:cursor-not-allowed hover:scale-1.05 transition-0.5s pointer font-roboto text-grey-900 border-hidden px-10 py-10 radius-5 l:px-22 l:py-12 l:radius-10',
+                              {
+                                'bg-#F3F3F3': selectedVariant && selectedVariant.status === 'OUT_OF_STOCK' ,
+                                'bg-#0B9378': selectedVariant && selectedVariant.status !== 'OUT_OF_STOCK'
+                              }
+                              )}
+                            >
+                              <span
+                                  className={classNames(`l:block weight-500 ${selectedVariant && selectedVariant.status === 'OUT_OF_STOCK' ? 'color-black' : 'color-white'}
+                                  `)}
+                              >
+                              {selectedVariant && selectedVariant.status === 'OUT_OF_STOCK' ? 'Out of stock' : 'Add to cart'}
+                              </span>
+                            </button>
+                          )}
+                          </div>  
+                             <div className='text-left text-12 flex a-items-center weight-400'>
+                          <Link
+                            href={`/products/${product.slug}`}
+                            className='cursor-pointer flex a-items-center'
+                          >
+                              All details
+                              <MdArrowForwardIos className='w-fit' />
+                            </Link>
+                            </div>
+                        </div>
+                      </div>
+                    </div> 
+                  </div>
+                </div>
+              </div>
+            </>
+          )}
+        </>
+      )}
+    </div>
+  )
+}
+
+export default ProductDetailModal
+
+
+  {/* <div className='relative z-10'>
                       <div className='fixed  w-100p bg-white border-b border-b-#00000014 p-10 l:p-20 flex a-items-center j-content-between '>
                         <p className='text-left  weight-600'>Price details</p>
                         <IoMdClose
@@ -168,70 +364,8 @@ const ProductDetailModal = ({
                           {formatNumberAsPrice(displayPrice || 0)}
                         </p>
 
-                        <div className='grid mt-20 mb-10 gap-10'>
-                          {selectedVariantItemInCart ? (
-                            <div className=''>
-                              <QuantitySelector
-                                decrement={() =>
-                                  decrement(selectedVariantItemInCart)
-                                }
-                                increment={() =>
-                                  increment(selectedVariantItemInCart)
-                                }
-                                cartItem={selectedVariantItemInCart}
-                              />
-                            </div>
-                          ) : (
-                            <button
-                              onClick={() => {
-                              if (isAuthenticated) {
-                                if (selectedVariant && selectedVariant.status === 'OUT_OF_STOCK') {
-                                addToCart(
-                                  selectedVariant?.id ?? 0,
-                                  selectedVariant?.minPurchaseQuantity || 1
-                                )
-                                }
-                              } else {
-                                isLoginModal()
-                              }
-                              }}
-                              disabled={!selectedImage}
-                              className={classNames(
-                              'disabled:bg-yellow-200 disabled:cursor-not-allowed hover:scale-1.05 transition-0.5s pointer font-roboto text-grey-900 border-hidden px-10 py-10 radius-5 l:px-22 l:py-12 l:radius-10',
-                              {
-                                'bg-#F3F3F3': selectedVariant && selectedVariant.status === 'OUT_OF_STOCK' ,
-                                'bg-#0B9378': selectedVariant && selectedVariant.status !== 'OUT_OF_STOCK'
-                              }
-                              )}
-                            >
-                              <span
-                                  className={classNames(`l:block weight-500 ${selectedVariant && selectedVariant.status === 'OUT_OF_STOCK' ? 'color-black' : 'color-white'}
-                                  `)}
-                              >
-                              {selectedVariant && selectedVariant.status === 'OUT_OF_STOCK' ? 'Out of stock' : 'Add to cart'}
-                              </span>
-                            </button>
-                          )}
-                        </div>
-                        <div className='text-center'>
-                          <Link
-                            href={`/products/${product.slug}`}
-                            className='text-15 color-#1677FF border-b pb-5 cursor-pointer'
-                          >
-                            Show more details
-                          </Link>
+                      
+                     
                         </div>
                       </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </>
-          )}
-        </>
-      )}
-    </div>
-  )
-}
-
-export default ProductDetailModal
+                    </div> */}

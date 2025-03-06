@@ -74,12 +74,14 @@ const SearchInput: FC<ISearchInput> = ({
               )
         }
       >
+
+        <div className='w-full hidden md:block'>
         <input
           type='text'
           className={
             component === 'home'
               ? classNames(
-                  'hidden flex md:block md:border md:bg-#F3F3F3 md:border-none md:py-12 md:px-14 md:outline-none md:w-100p',
+                  'hidden flex l:block md:border md:bg-#F3F3F3 md:border-none md:py-12 md:px-14 md:outline-none md:w-100p',
                   {
                     'md:radius-99': !openSearchModal,
                     'md:radius-t-r-9': openSearchModal,
@@ -92,7 +94,9 @@ const SearchInput: FC<ISearchInput> = ({
           value={searchTerm}
           onChange={e => setSearchTerm(e.target.value)}
           onClick={() => setOpenSearchModal(true)}
-        />
+          />
+      </div>
+          
         <div
           className={
             component === 'home'
@@ -109,7 +113,7 @@ const SearchInput: FC<ISearchInput> = ({
           <BiSearch
             className={
               component === 'home'
-                ? 'w-25 h-20 color-black md:color-white md:mr-0 mr-20'
+                ? 'w-20 h-20 color-black md:color-white md:mr-0 mr-10'
                 : 'md:w-16 w-24 md:h-16 h-24 md:mb--2 mb--5 md:mr-14'
             }
             onClick={handleOpenSearchModal}

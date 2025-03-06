@@ -22,6 +22,7 @@ interface IProductTile {
   savedItems?: SavedItem[]
 }
 const ProductTile: FC<IProductTile> = ({ product, savedItems, saveItem, removeSavedItem }: any) => {
+  const [loading, setLoading] = useState(false)
   const [onProductTileHover, setOnProductTileHover] = useState(false)
   const [openSingleProductModal, setOpenSingleProductModal] = useState(false)
 
@@ -34,7 +35,6 @@ const ProductTile: FC<IProductTile> = ({ product, savedItems, saveItem, removeSa
   const [selectedVariant, setSelectedVariant] = useState(
     product?.variants?.[0]
   );
-  const [isFavourite, setIsFavorite] = useState(false);
   const [mediaType, setMediaType] = useState<string>("image");
   const {
     addToCart,
@@ -44,8 +44,6 @@ const ProductTile: FC<IProductTile> = ({ product, savedItems, saveItem, removeSa
     isAuthenticated,
     isLoginModal
   } = useCart()
-
-
   const selectedVariantItemInCart = cart.cartItems.find(
     (item) => item.variant.id === selectedVariant?.id
   );
@@ -72,7 +70,7 @@ const ProductTile: FC<IProductTile> = ({ product, savedItems, saveItem, removeSa
   }
 
   const handleCloseProductModal = () => {
-    setOpenSingleProductModal(prev => !prev)
+    setOpenSingleProductModal(prev => !prev)    
   }
 
 
