@@ -4,7 +4,7 @@ import Image from '../image/Image'
 import { AiFillStar, AiOutlinePlus, AiFillHeart } from 'react-icons/ai'
 import classNames from 'classnames'
 import { Product } from '../../utility/types/product.interface'
-import { displayProductPill, formatNumberAsPrice } from '../../utility/utility'
+import { cx, displayProductPill, formatNumberAsPrice } from '../../utility/utility'
 import { useCart } from '../../utility/hooks/use-cart'
 import QuantitySelector from '../quantity-selector/QuantitySelector'
 import Link from 'next/link'
@@ -29,9 +29,12 @@ const ProductTile: FC<IProductTile> = ({ product, savedVariants, saveVariant, re
 
   const [selectedImage, setSelectedImage] = useState(
     product?.variants?.[0]?.media?.[0]?.url
-  )
-  const [selectedVariant, setSelectedVariant] = useState(product?.variants?.[0])
-  const [mediaType, setMediaType] = useState<string>('image')
+  );
+  const [selectedVariant, setSelectedVariant] = useState(
+    product?.variants?.[0]
+  );
+  const [isFavourite, setIsFavorite] = useState(false);
+  const [mediaType, setMediaType] = useState<string>("image");
   const {
     addToCart,
     cart,
@@ -43,14 +46,15 @@ const ProductTile: FC<IProductTile> = ({ product, savedVariants, saveVariant, re
 
 
   const selectedVariantItemInCart = cart.cartItems.find(
-    item => item.variant.id === selectedVariant?.id
-  )
-  useEffect(() => {
-    setSelectedImage(product?.variants?.[0]?.media?.[0]?.url)
-    setSelectedVariant(product?.variants?.[0])
-  }, [product?.id])
+    (item) => item.variant.id === selectedVariant?.id
+  );
 
-  const [topTwoPills, setTopTwoPills] = useState<any[]>([])
+  useEffect(() => {
+    setSelectedImage(product?.variants?.[0]?.media?.[0]?.url);
+    setSelectedVariant(product?.variants?.[0]);
+  }, [product?.id]);
+
+  const [topTwoPills, setTopTwoPills] = useState<any[]>([]);
   useEffect(() => {
     const pills = displayProductPill(product?.tags)
     setTopTwoPills(pills)
@@ -76,13 +80,13 @@ const ProductTile: FC<IProductTile> = ({ product, savedVariants, saveVariant, re
   const sampleTag = [
     {
       label:
-        '{"pill:shippedFromAbroad":{"pillColor":"#0B9378","pillBackground":"#EDFCF7","priority":"1","text":"shipped from abroad"}}'
+        '{"pill:shippedFromAbroad":{"pillColor":"#0B9378","pillBackground":"#EDFCF7","priority":"1","text":"shipped from abroad"}}',
     },
-    { label: 'luxury' },
-    { label: 'new arrivals' },
+    { label: "luxury" },
+    { label: "new arrivals" },
     {
       label:
-        '{"pill:50%Off":{"pillColor":"#000000","pillBackground":"#D3D3D3","priority":"2","text":"50% off"}}'
+        '{"pill:50%Off":{"pillColor":"#000000","pillBackground":"#D3D3D3","priority":"2","text":"50% off"}}',
     },
     {
       label:
@@ -101,41 +105,41 @@ const ProductTile: FC<IProductTile> = ({ product, savedVariants, saveVariant, re
         onMouseOut={() => setOnProductTileHover(false)}
       >
         <Link href={`/products/${product.slug}`}>
-          {mediaType === 'image' ? (
+          {mediaType === "image" ? (
             <Image
-              className='absolute w-full h-full a-self-center g|object-fit:cover pointer'
+              className={`absolute w-full h-full a-self-center g|object-fit:cover pointer ${selectedVariant?.status === 'OUT_OF_STOCK' && 'greyscale'}`}
               src={selectedImage}
-              alt='product-image'
+              alt="product-image"
             />
           ) : (
             <VideoSrc
-              className='absolute w-full h-full a-self-center g|object-fit:cover pointer'
+              className="absolute w-full h-full a-self-center g|object-fit:cover pointer"
               src={selectedImage}
             />
           )}
         </Link>
         <div
-          className='skelly-rectangle w-full h-full pulsing-multi-color-bg text-white flex'
-          data-width='100%'
-          data-radius='100%'
+          className="skelly-rectangle w-full h-full pulsing-multi-color-bg text-white flex"
+          data-width="100%"
+          data-radius="100%"
         ></div>
 
-        <div className=''>
+        <div className="">
           {onProductTileHover && product && (
             <div
-              id='add to cart button'
-              className=' hidden l:block absolute t-0 l-0 ml-10 mt-15 l:mr-15 l:mb-15'
+              id="add to cart button"
+              className=" hidden l:block absolute b-0 l-0 ml-10 mb-10 l:mr-15 l:mb-15"
               onClick={handleCloseProductModal}
             >
               <p className='bg-white radius-20 p-5 cursor-pointer text-12 flex a-items-center gap-5'>
-                <FaEye className='w-fit ' />
+                <FaEye className='w-fit' />
                 Quick look
               </p>
             </div>
           )}
           <div
-            id='add to cart button'
-            className='absolute b-0 r-0 mr-10 mb-10 l:mr-15 l:mb-15'
+            id="add to cart button"
+            className="absolute b-0 r-0 mr-10 mb-10 l:mr-15 l:mb-15"
           >
             {selectedVariantItemInCart ? (
               <QuantitySelector
@@ -144,20 +148,29 @@ const ProductTile: FC<IProductTile> = ({ product, savedVariants, saveVariant, re
                 cartItem={selectedVariantItemInCart}
               />
             ) : (
-              <button
+                <>
+             {selectedVariant?.status !== 'OUT_OF_STOCK' ? <button
                 onClick={() => {
                   isAuthenticated
-                    ? addToCart(
-                        selectedVariant.id,
-                        selectedVariant.minPurchaseQuantity || 1
-                      )
-                    : isLoginModal()
+                    ?  addToCart(
+                      selectedVariant.id,
+                      selectedVariant.minPurchaseQuantity || 1
+                    ) 
+                    : isLoginModal();
                 }}
                 disabled={!selectedImage}
-                className='bg-#FACE33! shadow-0-4-8-0-#00000033 hover:shadow-0-8-8-0-#00000033 text-black! disabled:bg-gray-200 disabled:cursor-not-allowed hover:scale-1.06 g|transition:0.5s g|will-change:transform pointer font-roboto border-hidden outline-none s:p-14 p-12 round flex a-items-center j-items-center gap-10'
+                    className={classNames(
+                      "bg-#FACE33 shadow-0-4-8-0-#00000033 hover:shadow-0-8-8-0-#00000033 text-black! disabled:bg-gray-200 disabled:cursor-not-allowed hover:scale-1.06 g|transition:0.5s g|will-change:transform pointer font-roboto border-hidden outline-none s:p-14 p-12 round flex a-items-center j-items-center gap-10")}
               >
-                <PiShoppingCartFill className='s:w-22 w-20 s:h-22 h-20' />
-              </button>
+                <PiShoppingCartFill className="s:w-22 w-20 s:h-22 h-20" />
+              </button>: <div
+            className="bg-whitesmoke radius-10 flex a-items-center j-content-center"
+          >
+            <div className="px-4 py-4">
+              Out of stock
+             </div>
+          </div>}
+            </>
             )}
           </div>
         </div>
@@ -173,62 +186,60 @@ const ProductTile: FC<IProductTile> = ({ product, savedVariants, saveVariant, re
           />
         </div>
 
-        <div className='absolute w-fit h-fit t-0 l-0'>
+        <div className="absolute w-fit h-fit t-0 l-0">
           {topTwoPills.map((pill, index) => (
             <div
               key={index}
-              className='mt-10 l:ml-15 l:mt-15 whitespace-nowrap w-fit h-20 radius-20 flex a-items-center j-content-center px-10 py-15 ml-5'
+              className="mt-10 l:ml-15 l:mt-15 whitespace-nowrap w-fit h-20 radius-20 flex a-items-center j-content-center px-10 py-15 ml-5"
               style={{
                 backgroundColor: pill.pillBackground,
-                color: pill.pillColor
+                color: pill.pillColor,
               }}
             >
-              <p className='text-10 l:text-12'>{pill.text}</p>
+              <p className="text-10 l:text-12">{pill.text}</p>
             </div>
           ))}
         </div>
       </div>
-      <div className='scroll-x no-scrollbar'>
+      <div className="scroll-x no-scrollbar">
         <div
-          id='product varients'
-          className='md:mt-16 mt-14 flex a-items-center md:gap-6 gap-4 w-fit whitespace-nowrap'
+          id="product varients"
+          className="md:mt-16 mt-14 flex a-items-center md:gap-6 gap-4 w-fit whitespace-nowrap"
         >
           {product.variants.map((variant: any) =>
             variant?.media?.map((mediaItem: any) =>
-              mediaItem?.type === 'image' ? (
+              mediaItem?.type === "image" ? (
                 <Image
                   className={classNames(
-                    'l:w-35.2 l:h-35.2 w-31 h-31 pointer md:radius-4 radius-3 a-self-center g|object-fit:cover',
+                    `l:w-35.2 l:h-35.2 w-31 h-31 pointer md:radius-4 radius-3 a-self-center g|object-fit:cover ${variant?.status === 'OUT_OF_STOCK' && 'greyscale'}`,
                     {
-                      'border border-2': selectedImage == mediaItem?.url,
-                      [`border-${
-                        /*variant?.properties?.color?.toLocaleLowerCase() ||*/ '#0B9378'
-                      }`]: selectedImage == mediaItem?.url
+                      "border border-2": selectedImage == mediaItem?.url,
+                      [`border-${/*variant?.properties?.color?.toLocaleLowerCase() ||*/'#0B9378'}`]:
+                        selectedImage == mediaItem?.url,
                     }
                   )}
                   src={mediaItem?.url}
                   onClick={() => {
-                    setSelectedVariant(variant)
-                    setMediaType('image')
-                    setSelectedImage(mediaItem?.url)
+                    setSelectedVariant(variant);
+                    setMediaType("image");
+                    setSelectedImage(mediaItem?.url);
                   }}
-                  alt='product-image'
+                  alt="product-image"
                 />
               ) : (
                 <VideoSrc
                   className={classNames(
-                    'l:w-35.2 l:h-35.2 w-31 h-31 pointer md:radius-4 radius-3 a-self-center g|object-fit:cover',
+                    "l:w-35.2 l:h-35.2 w-31 h-31 pointer md:radius-4 radius-3 a-self-center g|object-fit:cover",
                     {
-                      'border border-2': selectedImage == mediaItem?.url,
-                      [`border-${
-                        /*variant?.properties?.color?.toLocaleLowerCase() ||*/ '#0B9378'
-                      }`]: selectedImage == mediaItem?.url
+                      "border border-2": selectedImage == mediaItem?.url,
+                      [`border-${/*variant?.properties?.color?.toLocaleLowerCase() ||*/'#0B9378'}`]:
+                        selectedImage == mediaItem?.url,
                     }
                   )}
                   onClick={() => {
-                    setSelectedVariant(variant)
-                    setMediaType('video')
-                    setSelectedImage(mediaItem?.url)
+                    setSelectedVariant(variant);
+                    setMediaType("video");
+                    setSelectedImage(mediaItem?.url);
                   }}
                   src={mediaItem?.url}
                 />
@@ -238,45 +249,40 @@ const ProductTile: FC<IProductTile> = ({ product, savedVariants, saveVariant, re
         </div>
       </div>
       <div
-        id='product details'
-        className='md:mt-16 mt-20 overflow-hidden white-space-nowrap text-overflow-ellipsis flex flex-col gap-8'
+        id="product details"
+        className="md:mt-16 mt-20 overflow-hidden white-space-nowrap text-overflow-ellipsis flex flex-col gap-8"
       >
         <div
           title={product.name}
-          className='md:text-16 text-15 weight-500 text-#000000E0 md:line-height-24 line-height-22 w-100 l:white-space-nowrap text-overflow-ellipsis'
+          className="md:text-16 text-15 weight-500 text-#000000E0 md:line-height-24 line-height-22 w-100 l:white-space-nowrap text-overflow-ellipsis"
         >
           <Link href={`/products/${product.slug}`}>{product.name}</Link>
         </div>
-        <div className='flex a-items-center gap-10 l:gap-18 text-dimgrey py-6 border-y border-#00000014'>
-          <Link
-            href={`/${product.store.slug}`}
-            className='flex gap-6 a-items-center color-#00000099 capitalize'
-          >
-            <PiStorefront className='md:w-16 w-14 md:h-16 h-14' />
-            <p className='md:text-12 text-10 weight-400 md:line-height-20 line-height-12.1'>
-              {product?.store?.name}
-            </p>
+        <div className="flex a-items-center gap-10 l:gap-18 text-dimgrey py-6 border-y border-#00000014">
+          <Link href={`/${product.store.slug}`} className="flex gap-6 a-items-center color-#00000099 capitalize">
+            <PiStorefront className="md:w-16 w-14 md:h-16 h-14" />
+            <p className="md:text-12 text-10 weight-400 md:line-height-20 line-height-12.1">{product?.store?.name}</p>
           </Link>
           {!!product.reviewRating && (
-            <div className='flex gap-3 items-center'>
-              <AiFillStar className='w-12' />
-              <span className='l:text-16 text-12'>{product.reviewRating}</span>
+            <div className="flex gap-3 items-center">
+              <AiFillStar className="w-12" />
+              <span className="l:text-16 text-12">{product.reviewRating}</span>
             </div>
           )}
         </div>
-        <div className='md:text-16 text-12 weight-600 md:line-height-24 line-height-20'>
+        <div className="md:text-16 text-12 weight-600 md:line-height-24 line-height-20">
           {formatNumberAsPrice(
             selectedVariant?.finalPrice || product.finalPrice
           )}
           {/* <span className="weight-300 l:text-15 text-10">{!!selectedVariant?.stockUnit && 'per'} {selectedVariant?.stockUnit}</span> */}
         </div>
-        <div className='flex flex-wrap gap-4'>
+        <div className="flex flex-wrap gap-4">
           {product?.tags?.map((tag: any, i: number) => (
             <span
-              className='text-green md:text-12 text-10 inline-block radius-5 mx-2 my-1 pointer hover:underline lowercase'
+              className="text-green md:text-12 text-10 inline-block radius-5 mx-2 my-1 pointer hover:underline lowercase"
               key={i}
             >
-              {!tag.label.includes('pill:') && '#' + tag.label}
+              {!tag.label.includes("pill:") && "#" + tag.label}
             </span>
           ))}
         </div>
@@ -285,12 +291,12 @@ const ProductTile: FC<IProductTile> = ({ product, savedVariants, saveVariant, re
         <ProductDetailModal
           openSingleProductModal={openSingleProductModal}
           handleCloseProductModal={handleCloseProductModal}
-          position=''
+          position=""
           product={product}
         />
       )}
     </div>
-  )
-}
+  );
+};
 
-export default ProductTile
+export default ProductTile;

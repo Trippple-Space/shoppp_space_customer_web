@@ -1,31 +1,15 @@
 'use client'
 
+import { useRouter, useSearchParams } from 'next/navigation'
 import HomepageNavBar from '@/modules/lib/components/nav-bar/HomepageNavBar'
-import { useState, useEffect } from 'react'
 import OrderTabContent from '@/modules/lib/components/order/OrderTabContent'
 import OrderHeader from '@/modules/lib/components/order/OrderHeader'
 import { GoHome } from 'react-icons/go'
 import Link from 'next/link'
 
 const Order = () => {
-  const [activeTab, setActiveTab] = useState<string>(() => {
-    if (typeof window !== 'undefined') {
-      return localStorage.getItem('activeTab') || 'ONGOING'
-    }
-    return 'ONGOING'
-  })
-
-  useEffect(() => {
-    const savedTab = localStorage.getItem('activeTab')
-    if (savedTab) setActiveTab(savedTab)
-  }, [])
-
-  const handleTabChange = (tab: string) => {
-    setActiveTab(tab)
-    localStorage.setItem('activeTab', tab)
-  }
-
-
+  const searchParams = useSearchParams()
+  const activeTab = searchParams.get('tab')?.toUpperCase() || 'ONGOING' 
 
   return (
     <>
@@ -38,7 +22,7 @@ const Order = () => {
           </Link>
           <span className='text-14 weight-400'>Orders</span>
         </div>
-        <OrderHeader setActiveTab={handleTabChange} activeTab={activeTab} />
+        <OrderHeader  />
         <div className='l:w-50p w-90p flex flex-col gap-50 pb-32'>
           <div className='flex j-content-center'>
             <OrderTabContent status={activeTab} />

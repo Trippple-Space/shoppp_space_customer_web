@@ -60,6 +60,7 @@ export interface ProductVariant {
   minPurchaseQuantity: number;
   incrementBy: number;
   product?: Product;
+  status: string;
   meta: null | any;
   properties: null | any;
   stockUnit: string;

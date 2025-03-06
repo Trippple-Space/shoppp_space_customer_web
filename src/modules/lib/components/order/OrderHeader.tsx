@@ -1,13 +1,29 @@
-import classNames from 'classnames'
+'use client'
 
-const OrderHeader = ({
-  setActiveTab,
-  activeTab
-}: {
-  renderTabContent?: () => JSX.Element | null
-  setActiveTab?: (tab: string) => void
-  activeTab?: string
-}) => {
+import classNames from 'classnames'
+import { useRouter, useSearchParams } from 'next/navigation'
+import { useEffect, useState } from 'react'
+
+const OrderHeader = ({ orderStatus }: { orderStatus?: string }) => {
+  const router = useRouter()
+  const searchParams = useSearchParams()
+  const params = new URLSearchParams(searchParams)
+   const tab = searchParams.get("tab");
+
+  const handleTabChange = (tab: string) => {
+    params.set('tab', tab)
+    router.push(`/orders?${params.toString()}`, { scroll: false })
+    setActiveTab(tab)
+  }
+  const clickedTab = searchParams.get('tab')?.toUpperCase() || 'ONGOING' 
+
+  const [activeTab, setActiveTab] = useState('')
+
+  useEffect(() => {
+    setActiveTab(orderStatus || clickedTab)
+  }, [orderStatus, tab])
+  
+ 
   return (
     <>
       <div className='w-full h-fit flex a-items-center flex-col  l:gap-30'>
@@ -17,7 +33,7 @@ const OrderHeader = ({
               className={classNames('w-100p radius-6 cursor-pointer p-10 weight-400', {
                 'bg-white': activeTab === 'ONGOING'
               })}
-              onClick={() => setActiveTab?.('ONGOING')}
+              onClick={() => handleTabChange('ONGOING')}
             >
               <p
                 className={classNames('text-center font-inter text-bold text-16', {
@@ -35,7 +51,7 @@ const OrderHeader = ({
                   'bg-white': activeTab === 'CONFIRMED'
                 }
               )}
-              onClick={() => setActiveTab?.('CONFIRMED')}
+              onClick={() => handleTabChange('CONFIRMED')}
             >
               <p
                 className={classNames('text-center font-inter text-16', {
@@ -52,7 +68,7 @@ const OrderHeader = ({
                   'bg-white': activeTab === 'CANCELLED'
                 }
               )}
-              onClick={() => setActiveTab?.('CANCELLED')}
+              onClick={() => handleTabChange('CANCELLED')}
             >
               <p
                 className={classNames(
