@@ -26,6 +26,7 @@ const placeholderProduct: Product = {
     stockUnit: "",
     status: 0,
     dateCreated: "",
+    shortDescription: "",
     lastUpdated: "",
     reviewRating: 0,
     reviews: undefined,

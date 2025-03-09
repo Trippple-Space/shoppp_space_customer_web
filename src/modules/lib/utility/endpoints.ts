@@ -9,6 +9,7 @@ const endpoints = {
   PRODUCTS: "products",
   PRODUCT: "products/:slug",
   SEARCH_PRODUCTS: "products",
+  RECENTLY_VIEWED:"/recently-viewed-items",
   CART: "/cart",
   USER_ADDRESSES: "users/:userId/addresses",
   PAY_WITH_PAYSTACK: "payment/initialize/paystack",

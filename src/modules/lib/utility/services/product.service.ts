@@ -194,39 +194,21 @@ class ProductService {
                     });
           });
      }
-
-
-
-     fetchSavedVariants(): Promise<SavedVariant[]> {
-          return new Promise((resolve) => {
-              http.get(endpoints.SAVED_VARIANT).then((response: AxiosResponse) => {
-                    resolve(response.data);
-               });
-          });
+     getRecentlyViewedVariants() {   
+          return new Promise((resolve, reject) => {
+               http.get(`${endpoints.RECENTLY_VIEWED}/viewed`).then((response) => resolve(response.data))
+          })
      }
-    
-    saveVariant(productVariantId: number): Promise<SavedVariant> {
-        return new Promise((resolve, reject) => {
-            http.post(`${endpoints.SAVED_VARIANT}/${productVariantId}`).then((response: AxiosResponse) => {
-                resolve(response.data);
-            })
-        })
-    }
-    removeSavedVariant(productVariantId: number): Promise<SavedVariant> {
-        return new Promise((resolve, reject) => {
-            http.delete(`${endpoints.SAVED_VARIANT}/${productVariantId}`).then((response: AxiosResponse) => {
-                resolve(response.data);
-            })
-        })
-    }
+     addRecentlyViewedVariants(payload: { productVariantId: number, type?: string }) {   
+          
+          console.log({payload})
+          return new Promise((resolve, reject) => {
 
-    clearSavedVariants(): Promise<SavedVariant[]> {
-        return new Promise((resolve) => {
-            http.delete(endpoints.SAVED_VARIANT).then((response: AxiosResponse) => {
-                resolve(response.data);
-            })
-        })
-    }
+
+               http.post(endpoints.RECENTLY_VIEWED, payload).then((response) => resolve(response.data))
+
+          })
+     }
 }
 
 export const productService = new ProductService();

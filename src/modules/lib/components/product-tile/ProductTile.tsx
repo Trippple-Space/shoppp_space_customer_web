@@ -204,7 +204,7 @@ const ProductTile: FC<IProductTile> = ({ product, savedVariants, saveVariant, re
       <div className="scroll-x no-scrollbar">
         <div
           id="product varients"
-          className="md:mt-16 mt-14 flex a-items-center md:gap-6 gap-4 w-fit whitespace-nowrap"
+          className="md:mt-16 mt-14 flex a-items-center md:gap-6 gap-4 w-200 overlow-auto whitespace-nowrap"
         >
           {product.variants.map((variant: any) =>
             variant?.media?.map((mediaItem: any) =>
@@ -276,7 +276,7 @@ const ProductTile: FC<IProductTile> = ({ product, savedVariants, saveVariant, re
           )}
           {/* <span className="weight-300 l:text-15 text-10">{!!selectedVariant?.stockUnit && 'per'} {selectedVariant?.stockUnit}</span> */}
         </div>
-        <div className="flex flex-wrap gap-4">
+        {/* <div className="flex flex-wrap gap-4">
           {product?.tags?.map((tag: any, i: number) => (
             <span
               className="text-green md:text-12 text-10 inline-block radius-5 mx-2 my-1 pointer hover:underline lowercase"
@@ -285,7 +285,7 @@ const ProductTile: FC<IProductTile> = ({ product, savedVariants, saveVariant, re
               {!tag.label.includes("pill:") && "#" + tag.label}
             </span>
           ))}
-        </div>
+        </div> */}
       </div>
       {openSingleProductModal && (
         <ProductDetailModal

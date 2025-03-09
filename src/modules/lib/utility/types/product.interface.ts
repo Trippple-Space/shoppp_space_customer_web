@@ -24,6 +24,7 @@ export interface ProductCategory {
 
 export interface Product {
   longDescription: string;
+  shortDescription: string;
   keywords: string[];
   id: number;
   slug: string;
