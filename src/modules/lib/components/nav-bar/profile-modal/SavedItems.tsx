@@ -48,14 +48,14 @@ const SavedItemsModal: React.FC<ModalProps> = ({modalOpen, handleCloseModal}) =>
         <div className='w-330 l:w-1000 l:h-600 h-500 no-scrollbar'>
           <div className='relative'>
             <div className='fixed top-0 l:w-1000 w-330 bg-white z-5' style={{borderTopLeftRadius: '10px', borderTopRightRadius: '10px'}}>
-              <div className='flex space-between items-center gap-52 px-48   border-b border-1 border-grey-300 text-18 weight-400 text-grey-700'>
+              <div className='flex space-between items-center  px-48   border-b border-1 border-grey-300 text-18 weight-400 text-grey-700'>
                 <div className={`py-20 pointer w-fit ${action == 'open-orders' && 'text-green border-b border-2 border-green'}`} onClick={() => setAction('open-orders') }>Saved items</div>
-                <div className="text-grey-700 weight-600 pointer flex gap-20" onClick={handleCloseModal}>
-                  <button className='bg-none border-none text-14 text-dimgrey' onClick={() => {
+                <div className="text-grey-700 weight-600 pointer flex gap-2" onClick={() => {
                     clearSavedVariants()
-                  }}>Clear all</button>
-                  <AiOutlineClose className='text-grey-900 w-15 h-15 l:w-22 l:h-22' />
+                  }}>
+                  <button className='bg-none border-none text-14 text-dimgrey'>Clear all</button>
                 </div>
+                  <AiOutlineClose className='text-grey-900 w-fit' onClick={handleCloseModal}  />
               </div>
             </div>
             <div className="p-20">

@@ -33,11 +33,14 @@ export const useSavedVariantStore = create<SavedVariantStore>((set) => ({
         set({ savedVariants });
     },
     removeSavedVariant: async (productVariantId: number) => {
-        const savedVariants = await productService.fetchSavedVariants();
-        if (savedVariants.length === 1) {
-            set({ savedVariants: [] });  
-        };
-        await productService.removeSavedVariant(productVariantId);
+        try {
+            await productService.removeSavedVariant(productVariantId);
+            const savedVariants = await productService.fetchSavedVariants();
+
+            set({ savedVariants });
+        } catch (error) {
+            console.error("Error removing saved variant:", error);
+        }
     },
     clearSavedVariants: async () => {
      await productService.clearSavedVariants();

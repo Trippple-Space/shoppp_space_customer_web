@@ -2,8 +2,8 @@
 
 import Image from '@/modules/lib/components/image/Image'
 import Link from 'next/link'
-import { useEffect, useState } from 'react'
-import { AiFillHeart } from 'react-icons/ai'
+import { CSSProperties, useEffect, useState } from 'react'
+import { AiFillHeart, AiOutlineHeart } from 'react-icons/ai'
 import HomepageNavBar from '@/modules/lib/components/nav-bar/HomepageNavBar'
 import { Product } from '@/modules/lib/utility/types/product.interface'
 import './ProductDetails.scss'
@@ -30,12 +30,16 @@ import Modal from '@/modules/lib/components/modal/modal'
 
 
 const ProductDetails = ({ product }: { product: Product }) => {
+let globalMediaIndex = 0;
+
+
 
   const [unitCounter, setUnitCounter] = useState<number>(1)
   const [recentlyViewedVariants,setRecentlyViewedVariants] = useState<any>([])
-   const [selectedImage, setSelectedImage] = useState(
+  const [selectedImage, setSelectedImage] = useState(
     product?.variants?.[0]?.media?.[0]?.url
   )
+  const {saveVariant, savedVariants, removeSavedVariant } = useSavedVariant();
   const [selectedVariant, setSelectedVariant] = useState(product?.variants?.[0])
   const {
     addToCart,
@@ -60,7 +64,6 @@ const ProductDetails = ({ product }: { product: Product }) => {
     setSelectedImage(product?.variants?.[0]?.media?.[0]?.url)
   }, [product])
 
-  const {saveVariant, savedVariants } = useSavedVariant();
 
   // const strikeOutPrice = (product?.finalPrice + product?.finalPrice * 0.05).toFixed(2) // TODO: implement proper strikeout price
 
@@ -102,9 +105,9 @@ function showLongDescElipsis(desc: string) {
   
   useEffect(() => {
     (async () => {
-        await productService.addRecentlyViewedVariants({ productVariantId: selectedVariant?.id, type: 'view' })
+        await productService.addRecentlyViewedVariants({productVariantId: selectedVariant?.id, type: 'view' })
     })()
-  }, [selectedVariant.id])
+  }, [])
 
   useEffect(() => {
     (async () => {
@@ -120,13 +123,19 @@ function showLongDescElipsis(desc: string) {
 
 
 
-  const isSaved = savedVariants.find((v: SavedVariant) => {
-    product.variants.some((variant) => variant.id === v.id)
-    })
+  const isSaved = savedVariants.find((variant: SavedVariant) => selectedVariant.id === variant.variantId)
 
-  console.log({isSaved})
 
-  console.log({product})
+  
+    const handleSave = () => {
+    if (isSaved) {
+      removeSavedVariant(selectedVariant?.id)
+
+    } else {
+      saveVariant(selectedVariant?.id)
+    }
+  }
+
 
   return (
     <>
@@ -148,22 +157,20 @@ function showLongDescElipsis(desc: string) {
               <RxShare2 className='shadow w-20 h-20' />
               <span className='border-b hidden l:block'>Share</span>
             </p>
-            <p className='cursor-pointer flex a-items-center gap-8 text-15 weight-400 color-#00000099'>
-              <AiFillHeart className='w-20 h-20 shadow'
-                color={isSaved ? '#ffffffee' : '#000000aa'}
-              />
+            <p className='cursor-pointer flex a-items-center gap-8 text-15 weight-400 color-#00000099' onClick={handleSave}>
+               {isSaved ? <AiFillHeart/> : <AiOutlineHeart />}
               <span className='border-b hidden l:block'>Save</span>
             </p>
           </div>
         </div>
 
         <div className='flex flex-col l:flex-row a-items-start j-content-between mt-20 gap-6 l:g|max-height:480px relative'>
-          <div className='hidden l:block absolute r-0 b-0 p-20 cursor-pointer'>
+         {product.variants.length > 4 &&  <div className='hidden l:block absolute r-0 b-0 p-20 cursor-pointer'>
             <div className='bg-white flex gap-8 radius-8  a-items-center border px-16 py-10' onClick={() => setShowAllPhotos(prev => !prev)}>
             <LuGrid2X2 className='w-fit flex' />
             <p className='text-14 weight-500'>Show all photos</p>
             </div>
-            </div>
+            </div>}
           <div className='w-full'>
             <Image
               src={selectedImage}
@@ -175,23 +182,26 @@ function showLongDescElipsis(desc: string) {
           <div className='w-100p flex l:grid grid-2-cols-1fr l:grid-2-row-auto gap-6'>
             {product?.variants?.slice(0,4).map((variant, idx) =>
               variant?.media?.map((mediaItem, index) => {
+   const currentIndex = globalMediaIndex++;
+
                 return (
                   <div
                     key={index}
                     style={{
                       filter: variant.status === 'OUT_OF_STOCK' ? 'grayscale(100%)' : 'none'
                     }}
-                    className='l:h-207 l:w-230'
-    >
-      
-      <Image
-        src={mediaItem?.url}
-        alt="product-image"
-                      className={cx('object-fit w-50 h-50 radius-4 l:radius-0 l:w-full l:h-full', {
+                    className='l:h-207'
+                  >
+
+                    <Image
+                      src={mediaItem?.url}
+                      alt="product-image"
+                      className={cx('object-fit w-50 h-50 radius-4 l:w-full l:h-full   l:radius-t-l-0 l:radius-b-l-0  l:radius-t-r-0 l:radius-b-r-0', {
                         'border border-green border-2':
                           selectedImage == mediaItem?.url,
-                        [`border-${mediaItem?.description?.toLocaleLowerCase()}`]:
-                          selectedImage == mediaItem?.url
+                     'l:radius-t-r-16': currentIndex === 1, 
+            'l:radius-b-r-16': currentIndex === 3,
+                      
                       })}
                       onClick={() => {
                         setSelectedVariant(variant);
@@ -231,7 +241,7 @@ function showLongDescElipsis(desc: string) {
                 <p className='color-#000000B2 text-12 flex a-items-center gap-5'>
                   <span className='color-' style={{color: '#D9D9D9B2'}}>|</span>
                   <span className='border-b'>
-                    {product.reviews.length ?? 0} Reviews
+                    {product.reviews?.length ?? 0} Reviews
                   </span>
                   </p>
                 </div>
@@ -276,7 +286,7 @@ function showLongDescElipsis(desc: string) {
                               className={classNames(
                                 'w-30 h-30 flex round',
                                 {
-                                  'outline outline-2 w-36 h-36':
+                                  'outline outline-2 w-27 h-27 flex':
                                     variant.id === selectedVariant?.id
                                 }
                               )}
@@ -390,7 +400,7 @@ function showLongDescElipsis(desc: string) {
                               className={classNames(
                                 'w-30 h-30 flex round',
                                 {
-                                  'outline outline-2 w-36 h-36':
+                                  'outline outline-2 w-27 h-27 flex':
                                     variant.id === selectedVariant?.id
                                 }
                               )}
@@ -471,7 +481,12 @@ function showLongDescElipsis(desc: string) {
       <div className="flex a-items-center gap-20 w-full overflow-auto w-full no-scrollbar">
             {recentlyViewedVariants.map((product: Product, i: number) => (
               <div key={i} className="">
-                <ProductTile product={product} key={i} />
+                <ProductTile product={product}
+                  key={i}
+                  savedVariants={savedVariants}
+                      saveVariant={saveVariant}
+                  removeSavedVariant={removeSavedVariant}
+                />
               </div>
               ))}
           </div>
@@ -479,9 +494,9 @@ function showLongDescElipsis(desc: string) {
         <div className='flex flex-col gap-12 pb-15 pt-15 mt-10'>
           <div className=''>
             <p className='text-16  weight-600'>
-              Customer Reviews ({product.reviews.length})
+              Customer Reviews ({product.reviews?.length ?? 0})
             </p>
-            <div className=''>{product.reviews.length <= 0 ?
+            <div className=''>{!product.reviews?.length  ?
               <div className='flex a-items-center flex-col'>
                 <Image type='image' src='empty-tray.png' alt='no comments' className='w-150 h-150' />
                 <p className='color-#00000073'>Customers who have bought this product</p>
@@ -503,7 +518,12 @@ function showLongDescElipsis(desc: string) {
       <div className="flex a-items-center gap-20 w-full overflow-auto w-full no-scrollbar mb-100 ">
             {recentlyViewedVariants.map((product: Product, i: number) => (
               <div key={i} className="">
-                <ProductTile product={product} key={i} />
+                 <ProductTile product={product}
+                  key={i}
+                  savedVariants={savedVariants}
+                      saveVariant={saveVariant}
+                  removeSavedVariant={removeSavedVariant}
+                />
               </div>
               ))}
           </div>
@@ -558,252 +578,3 @@ function showLongDescElipsis(desc: string) {
 }
 
 export default ProductDetails
-
-      // <div className={'product-details-page l:max-w-1400 w-full mx-auto my-67 xl:px-60 md:px-50 sm:px-40 px-24'}>
-      //   <div className='l:flex w-full xl:gap-75 l:gap-60 gap-25 l:pt-20 l:mt-100'>
-      //     <div className='l:w-50p flex flex-col l:gap-25 l:ps-25'>
-      //       <Breadcrumb
-      //         crumbs={[
-      //           {
-      //             label: product?.store?.name,
-      //             route: `/${product.store?.slug}`
-      //           },
-      //           { label: product?.name, route: `/products/${product?.slug}` }
-      //         ]}
-      //       />
-      //       <Image
-      //         src={selectedImage}
-      //         className={`flex-grow-1 w-100p l:radius-15 radius-8 border border-grey-100 object-fit l:h-full md:h-420 sm:h-350 h-270 ${selectedVariant.status  === 'OUT_OF_STOCK'? 'greyscale' : ''}`}
-      //         alt={''}
-      //       />
-      //     </div>
-      //     <div className='l:w-50p'>
-      //       <div className='flex flex-row space-between a-items-end'>
-      //         <div>
-      //           <div className='l:flex grid l:gap-0 gap-20 space-between mt-10'>
-      //             <div className='l:text-28 text-22 weight-600'>
-      //               {product.name}
-      //             </div>
-      //           </div>
-
-      //           <Link href={`/${product?.store?.slug}`} as=''>
-      //             <div className='mt-11'>
-      //               <div className='text-grey-500 l:text-16 text-14 weight-500'>
-      //                 {product?.store?.name} Store
-      //               </div>
-      //             </div>
-      //           </Link>
-      //         </div>
-
-      //         <button
-      //           className='flex items-center gap-10 bg-none m:px-20 px-10 m:py-10 py-6 m:text-16 text-14 weight-500 text-dimgrey border-1 radius-10 cursor-pointer'
-      //           onClick={() => setShowShareModal(true)}
-      //         >
-      //           <AiOutlineShareAlt className='w-20 h-20' />
-      //           Share
-      //         </button>
-      //       </div>
-
-      //       <hr className='mt-30 @lo:border-none @hi:border-t @hi:border-green-100' />
-
-      //       <div className='l:flex l:mt-30 mt-20 gap-40'>
-      //         <div>
-      //           <div className='text-green l:text-34 text-24 bold'>
-      //             {formatNumberAsPrice(displayPrice)}
-      //           </div>
-      //           {/*<div className='text-grey-500 line-through l:text-21 text-14 weight-400 mt-6'>
-      //             ₦{strikeOutPrice}
-      //           </div> */}
-      //         </div>
-      //       </div>
-
-      //       <div className='flex items-center l:gap-10 gap-5 mt-30 l:ml--35 overflow-auto no-scrollbar'>
-      //         <div className=''>
-      //           <TfiAngleLeft className='h-24 a-self-center color-black' />
-      //         </div>
-      //         <div className='flex gap-20'>
-      //           {product?.variants?.map((variant, idx) =>
-      //             variant?.media?.map((mediaItem: any) => (
-      //               <div
-      //                 className={cx(
-      //                   `l:w-115 l:h-115 w-85 h-85 overflow-hidden radius-14 ${ variant.status === 'OUT_OF_STOCK' ? 'greyscale' : ''}`,
-      //                   {
-      //                     'border border-green border-2':
-      //                       selectedImage == mediaItem?.url,
-      //                     [`border-${mediaItem?.description?.toLocaleLowerCase()}`]:
-      //                       selectedImage == mediaItem?.url
-      //                   }
-      //                 )}
-      //               >
-      //                 <Image
-      //                   src={mediaItem?.url}
-      //                   alt='product-image'
-      //                   className=''
-      //                   onClick={() => {
-      //                     setSelectedVariant(variant)
-      //                     setSelectedImage(mediaItem?.url)
-      //                     scrollToTop()
-      //                   }}
-      //                 />
-      //               </div>
-      //             ))
-      //           )}
-      //         </div>
-      //         <div>
-      //           <TfiAngleRight className='h-24 a-self-center color-black' />
-      //         </div>
-      //       </div>
-
-      //       <div className='mt-40 border-b @hi:border-green-100 pb-30'>
-      //         <div className='text-grey-500 l:text-16 text-14 weight-500'>
-      //           Choose a color
-      //         </div>
-      //         <div className='mt-20 flex gap-12'>
-      //           {product.variants.map(variant => (
-      //             <div
-      //               onClick={() => {
-      //                 setSelectedVariant(variant)
-      //                 setSelectedImage(variant?.media?.[0]?.url)
-      //               }}
-      //               style={{
-      //                 background: variant.properties?.['color'],
-      //                 outlineColor: variant.properties?.['color']
-      //               }}
-      //               className='l:w-50 l:h-50 w-40 h-40 round m-7 outline g|outline-color:#ECDECC outline-offset-5 outline-3 flex pointer'
-      //             >
-      //               {variant.id === selectedVariant.id && (
-      //                 <FaCheck className='color-white l:h-24 a-self-center' />
-      //               )}
-      //             </div>
-      //           ))}
-      //         </div>
-      //       </div>
-      //       <ProductStockUnit product={product} />
-
-      //       {/* <hr className='l:mt-30 mt-20 @lo:border-none @hi:border-t @hi:border-green-100' /> */}
-      //       <div className='mt-30 flex gap-20'>
-      //         {selectedVariantItemInCart ? (
-      //           <QuantitySelector2
-      //             decrement={() => decrement(selectedVariantItemInCart)}
-      //             increment={() => increment(selectedVariantItemInCart)}
-      //             cartItem={selectedVariantItemInCart}
-      //           />
-      //         ) : (
-      //           <></>
-      //         )}
-
-      //           {!selectedVariantItemInCart ? (
-      //           <button
-      //             className={classNames(`text-white border-none l:px-90 l:py-20 py-15 w-100p radius-30 pointer ${selectedVariant && selectedVariant.status === 'OUT_OF_STOCK' ?'bg-gray-300' :  'bg-#0B9378'}`)}
-      //             onClick={() => {
-      //             if (isAuthenticated) {
-      //               if (selectedVariant && selectedVariant.status !== 'OUT_OF_STOCK') {
-      //               addToCart(
-      //                 selectedVariant?.id ?? 0,
-      //                 selectedVariant?.minPurchaseQuantity || 1
-      //               )
-      //               }
-      //             } else {
-      //               isLoginModal()
-      //             }
-      //             }}
-      //           >
-      //             <div className='l:flex grid grid-2-cols-auto gap-10 items-center w-fit mx-auto'>
-      //               {selectedVariant.status !== 'OUT_OF_STOCK' && <HiOutlineShoppingBag className='h-21' />}
-      //             <div className={classNames(`whitespace-nowrap text-16 ${selectedVariant && selectedVariant.status === 'OUT_OF_STOCK' ? 'text-black' : 'text-white' }`)}>
-      //               {selectedVariant && selectedVariant.status !== "OUT_OF_STOCK" ? 'Add to cart' : 'Out of stock'}
-      //             </div>
-      //             </div>
-      //           </button>
-      //           ) : null}
-      //       </div>
-      //     </div>
-      //   </div>
-
-      //   <div className='l:flex pt-20 l:pt-40 l:px-0 px-10 gap-60'>
-      //     <div className='w-100p l:w-55p l:pr-30'>
-      //       <div className='l:flex space-between items-center'>
-      //         <div>
-      //           <h1 className='text-16 l:text-20 weight-500 py-3 m:py-10'>
-      //             {product?.name} from {product?.store?.name} Store
-      //           </h1>
-
-      //           <Link href={`/${product?.store?.slug}`}>
-      //             <p className='text-danger underline text-14 m:text-16 py-5 l:py-15'>
-      //               Visit Store home
-      //             </p>
-      //           </Link>
-      //         </div>
-
-      //         {product.store.thumbnail && (
-      //           <div className='hidden l:flex radius-50p relative overflow-hidden'>
-      //             <Image
-      //               className='w-85 h-85'
-      //               src={product.store.thumbnail}
-      //               alt='product'
-      //               type='image'
-      //             />
-      //             <Icon name='badge' className='w-35 h-35 absolute r-0 b-10' />
-      //           </div>
-      //         )}
-      //       </div>
-
-      //       <div className='border-t border-b line-height-25 l:line-height-32 border-lighter-grey l:mt-10 mt-20 l:pt-10 pt-20 l:block grid grid-2-cols-1fr'>
-      //         {/* <div className='flex gap-10 pb-20 '>
-      //           <Icon name='verified' className='w-20 h-20 mt-6' />
-      //           <div>
-      //             <h2 className='text-14 l:text-16 weight-500'>Featured in</h2>
-      //             <div className='l:text-14 text-12 text-light-grey'>
-      //               Sirbalo’s wedding, 2022
-      //             </div>
-      //           </div>
-      //         </div> */}
-
-      //         {selectedVariant.properties.origin && (
-      //           <div className='flex gap-10 pb-20'>
-      //             <Icon name='cut' className='w-20 h-20 mt-6' />
-      //             <div>
-      //               <h2 className='text-14 l:text-16 weight-500'>Made in</h2>
-      //               <div className='l:text-14 text-12 text-light-grey'>
-      //                 {selectedVariant.properties.origin}
-      //               </div>
-      //             </div>
-      //           </div>
-      //         )}
-
-      //         {product.store.meta?.settings?.location && (
-      //           <div className='flex gap-10 pb-20 l:pb-25'>
-      //             <GrLocation className='w-20 h-20 mt-6' />
-      //             <div>
-      //               <h2 className='text-14 l:text-16 weight-500'>
-      //                 Currently in
-      //               </h2>
-      //               <div className='l:text-14 text-12 text-light-grey'>
-      //                 {location}
-      //               </div>
-      //             </div>
-      //           </div>
-      //         )}
-      //       </div>
-      //     </div>
-      //   </div>
-      //   <div className='w-100p l:w-55p mt-20'>
-      //     <div className='flex gap-10 pb-80 l:pb-85 l:px-0 px-10'>
-      //       <Icon name='info' className='w-20 h-20 mt-2' />
-      //       <div className=''>
-      //         <h2 className='text-14 l:text-16 weight-500'>
-      //           About this product
-      //         </h2>
-      //         <CollapsibleDesc product={product} />
-      //       </div>
-      //     </div>
-      //   </div>
-      // </div>
-
-      // <ShareProductModal
-      //   modalOpen={showShareModal}
-      //   handleCloseModal={() => {
-      //     setShowShareModal(false)
-      //   }}
-      // />
-      // <Footer />

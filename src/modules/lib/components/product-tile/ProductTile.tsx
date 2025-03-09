@@ -60,11 +60,12 @@ const ProductTile: FC<IProductTile> = ({ product, savedVariants, saveVariant, re
     setTopTwoPills(pills)
   }, [])
 
-  const isSaved = savedVariants.find((item: SavedVariant) => item.variantId === selectedVariant?.id)
+  const isSaved = savedVariants?.find((item: SavedVariant) => item.variantId === selectedVariant?.id)
 
   const handleSave = () => {
     if (isSaved) {
       removeSavedVariant(selectedVariant?.id)
+
     } else {
       saveVariant(selectedVariant?.id)
     }
@@ -74,27 +75,7 @@ const ProductTile: FC<IProductTile> = ({ product, savedVariants, saveVariant, re
     setOpenSingleProductModal(prev => !prev)
   }
 
-
-
-
-  const sampleTag = [
-    {
-      label:
-        '{"pill:shippedFromAbroad":{"pillColor":"#0B9378","pillBackground":"#EDFCF7","priority":"1","text":"shipped from abroad"}}',
-    },
-    { label: "luxury" },
-    { label: "new arrivals" },
-    {
-      label:
-        '{"pill:50%Off":{"pillColor":"#000000","pillBackground":"#D3D3D3","priority":"2","text":"50% off"}}',
-    },
-    {
-      label:
-        '{"pill:preOrder":{"pillColor":"#FFFFFF","pillBackground":"#800080","priority":"3","text":"pre-order"}}'
-    }
-  ]
-
-
+  
 
   return (
     <div className='mt-30 l:mt-20 w-full overflow-hidden'>

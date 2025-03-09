@@ -20,8 +20,8 @@ const SavedVariantsCard: React.FC<any> = ({ savedVariant, removeSavedVariant }: 
   
   return (
     <div className='l:flex space-between items-center'>
-      <div className='flex w-100p l:w-50p gap-10 l:gap-30 items-center'>
-        <div className='w-115 h-115'>
+      <div className='flex w-100p l:w-50p gap-10 l:gap-30 items-center mb-10'>
+        <div className='l:w-115 l:h-115 w-70 w-70 '>
         <Image
           className='w-100p h-100p radius-5 l:radius-10'
           src={savedVariant.variant.media[0].url}
@@ -33,14 +33,14 @@ const SavedVariantsCard: React.FC<any> = ({ savedVariant, removeSavedVariant }: 
           <h2 className='text-16 l:text-18 weight-400 text-grey-900'>{savedVariant.variant.product?.name}</h2>
           <h1 className='text-16 weight-400 text-grey-900'>{formatNumberAsPrice(savedVariant.variant.product?.price ?? 0) }</h1>
           <p className='text-12'>{formatDate(new Date(savedVariant.savedAt))}</p>
-          {
+          
         
-            <div className='hidden l:flex gap-10 text-danger text-12 items-center pointer w-fit' onClick={() => removeSavedVariant(savedVariant.variantId)}>
+            <div className='hidden l:flex gap-10 text-danger text-12 items-center pointer' onClick={() => removeSavedVariant(savedVariant.variantId)}>
               <Icon name='delete' className='w-17 h-17' />
               <p>Remove</p>
             </div>
     
-          }
+          
 
         </div>
       </div>
@@ -48,7 +48,7 @@ const SavedVariantsCard: React.FC<any> = ({ savedVariant, removeSavedVariant }: 
      
 
       <div className='flex space-between gap-20 w-100p l:w-15p'>
-        {<button className='flex j-content-center l:hidden w-50p l:w-100p border-1 border-red bg-none text-danger text-16 py-10 px-20 radius-5 weight-400'>Remove</button>}
+        {<button className='flex j-content-center l:hidden border-1 border-red bg-none text-danger text-16 py-10 px-20 radius-5 weight-400' onClick={() => removeSavedVariant(savedVariant.variantId)}>Remove</button>}
 
         <div>
 
@@ -58,7 +58,7 @@ const SavedVariantsCard: React.FC<any> = ({ savedVariant, removeSavedVariant }: 
               increment={() => increment(selectedVariantInCart)}
               cartItem={selectedVariantInCart}
             />
-          ) : <button className='w-50p l:w-100p border-none bg-green text-white text-15 py-10 px-20 radius-5 weight-400 pointer' onClick={() =>
+          ) : <button className='border-none bg-green text-white text-15 py-10 px-20 radius-5 weight-400 pointer h-full' onClick={() =>
               addToCart(
                 savedVariant.variantId,
                 savedVariant.variant.minPurchaseQuantity || 1

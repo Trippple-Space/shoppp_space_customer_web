@@ -194,6 +194,46 @@ class ProductService {
                     });
           });
      }
+
+
+
+     fetchSavedVariants(): Promise<SavedVariant[]> {
+          return new Promise((resolve, reject) => {
+               http.get(endpoints.SAVED_VARIANT).then((response: AxiosResponse) => {
+                    resolve(response.data);
+               }).catch((err) => {
+                    if (err.response && err.response.data.message === "No saved variants found for this user") {
+                         return resolve([] as SavedVariant[]);
+                    } else {
+                         reject(err);
+                    }
+         });
+          });
+     }
+    
+    saveVariant(productVariantId: number): Promise<SavedVariant> {
+        return new Promise((resolve, reject) => {
+            http.post(`${endpoints.SAVED_VARIANT}/${productVariantId}`).then((response: AxiosResponse) => {
+                resolve(response.data);
+            })
+        })
+    }
+     removeSavedVariant(productVariantId: number) {
+         console.log(productVariantId)
+        return new Promise((resolve, reject) => {
+            http.delete(`${endpoints.SAVED_VARIANT}/${productVariantId}`).then((response: AxiosResponse) => {
+                 resolve(response.data);
+            })
+        })
+    }
+
+    clearSavedVariants(): Promise<SavedVariant[]> {
+        return new Promise((resolve) => {
+            http.delete(endpoints.SAVED_VARIANT).then((response: AxiosResponse) => {
+                resolve(response.data);
+            })
+        })
+    }
      getRecentlyViewedVariants() {   
           return new Promise((resolve, reject) => {
                http.get(`${endpoints.RECENTLY_VIEWED}/viewed`).then((response) => resolve(response.data))
@@ -201,10 +241,7 @@ class ProductService {
      }
      addRecentlyViewedVariants(payload: { productVariantId: number, type?: string }) {   
           
-          console.log({payload})
           return new Promise((resolve, reject) => {
-
-
                http.post(endpoints.RECENTLY_VIEWED, payload).then((response) => resolve(response.data))
 
           })
