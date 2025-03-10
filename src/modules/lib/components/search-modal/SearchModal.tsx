@@ -23,34 +23,8 @@ const SearchModal = ({
   const [product, setProduct] = useState<Product | null>(null)
   const [error, setError] = useState<string | null>(null)
 
-  const {
-    addToCart,
-    cart,
-    increment,
-    decrement,
-    isAuthenticated,
-    isLoginModal
-  } = useCart()
+  
   const router = useRouter()
-
-  const [selectedImage, setSelectedImage] = useState(
-    product?.variants?.[0]?.media?.[0]?.url
-  )
-  const [selectedVariant, setSelectedVariant] = useState(product?.variants?.[0])
-  const selectedVariantItemInCart = cart.cartItems.find(
-    item => item.variant.id === selectedVariant?.id
-  )
-
-  useEffect(() => {
-    setSelectedImage(product?.variants?.[0]?.media?.[0]?.url)
-
-    if (product?.variants?.length) {
-      const defaultVariant = product.variants[0]
-      setSelectedVariant(defaultVariant)
-      setSelectedImage(defaultVariant?.media?.[0]?.url)
-    }
-  }, [product])
-
   const handleFetchProduct = async (slug: string) => {
     if (window.innerWidth >= 768) {
       setOpenSingleProductModal(true)
@@ -74,9 +48,7 @@ const SearchModal = ({
   }
 
 
-  const displayPrice = selectedVariant?.price || product?.price
 
-  console.log({selectedVariant})
 
   return (
     <>
