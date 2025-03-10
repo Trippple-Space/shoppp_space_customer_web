@@ -239,11 +239,19 @@ class ProductService {
                http.get(`${endpoints.RECENTLY_VIEWED}/viewed`).then((response) => resolve(response.data))
           })
      }
-     addRecentlyViewedVariants(payload: { productVariantId: number, type?: string }) {   
-          
+     addRecentlyViewedVariants(payload: { productVariantId: number, type?: string }) {     
           return new Promise((resolve, reject) => {
                http.post(endpoints.RECENTLY_VIEWED, payload).then((response) => resolve(response.data))
 
+          })
+     }
+
+     createProductReview(payload:
+          { productVariantId: number, rating: number, comment: string }) {
+          return new Promise((resolve, reject) => {
+               http.post(`${endpoints.PRODUCT_REVIEW}/create`, payload).then((response) => 
+               resolve(response.data)
+               )
           })
      }
 }
