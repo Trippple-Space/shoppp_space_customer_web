@@ -26,21 +26,34 @@ const LoginValidationSchema = Yup.object().shape({
 })
 
 
-const formikLoginConfig = (router: any, callback?: (user: User) => void, isLoginModal?: any): FormikConfig<LoginCredentials> => ({
+const formikLoginConfig = (
+    router: any, 
+    callback?: (user: User) => void, 
+    isLoginModal?: any
+): FormikConfig<LoginCredentials> => ({
     initialValues: {
         email: '',
         password: ''
     },
-    onSubmit: (values: LoginCredentials) => {
-        authService.signIn(values)
-            .then(({ user }) => {
-                toast.success(`Welcome ${user.profile.firstName}`)
-                callback?.(user)
-                isLoginModal?.()    
-            })
+    onSubmit: async (values: LoginCredentials, { setSubmitting, setErrors }) => {
+        try {
+            const { user } = await authService.signIn(values);
+            toast.success(`Welcome ${user.profile.firstName}`);
+            callback?.(user);
+            isLoginModal?.();
+        } catch (err: any) {
+            if (err.response?.data?.message === 'Your password has not been set' || err.response?.data?.message === 'Account not verified' ) {
+                setErrors({ password: 'You have not completed sign up process.' });
+            } else {
+                return
+            }
+        } finally {
+            setSubmitting(false);
+        }
     },
     validationSchema: LoginValidationSchema
-})
+});
+
 
 export const useLoginView = (isLoginModal?: any) => {
     const router = useRouter()
