@@ -77,6 +77,33 @@ const ProductTile: FC<IProductTile> = ({ product, savedVariants, saveVariant, re
 
   
 
+  function handleLogin(variantId: number, minimumPurchase: number) {
+    localStorage.setItem('variantId',variantId.toString())
+    localStorage.setItem('variantIdMinimumPurchase',minimumPurchase.toString())
+    isLoginModal()
+  }
+
+  useEffect(() => {
+    if (isAuthenticated) {  
+      const variantId = localStorage.getItem("variantId");
+      const variantIdMinimumPurchase = localStorage.getItem("variantIdMinimumPurchase");
+            if (variantId && variantIdMinimumPurchase) {
+                const parsedVariantId = parseInt(variantId, 10);
+                const parsedMinimumPurchase = parseInt(variantIdMinimumPurchase, 10);
+
+                if (!isNaN(parsedVariantId) && !isNaN(parsedMinimumPurchase)) {
+                    addToCart(parsedVariantId, parsedMinimumPurchase);
+                    console.log("Item added from localStorage to cart!");
+                }
+
+              
+                localStorage.removeItem("variantId");
+                localStorage.removeItem("variantIdMinimumPurchase");
+            }
+        }
+    }, [isAuthenticated]);
+
+
   return (
     <div className='mt-30 l:mt-20 w-full overflow-hidden'>
       <div
@@ -137,7 +164,8 @@ const ProductTile: FC<IProductTile> = ({ product, savedVariants, saveVariant, re
                       selectedVariant.id,
                       selectedVariant.minPurchaseQuantity || 1
                     ) 
-                    : isLoginModal();
+                    : handleLogin(selectedVariant.id,
+                      selectedVariant.minPurchaseQuantity || 1);
                 }}
                 disabled={!selectedImage}
                     className={classNames(

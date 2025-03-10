@@ -26,6 +26,7 @@ import { Rating } from '@smastrom/react-rating'
 import { PiTruck, PiGlobeHemisphereEast } from 'react-icons/pi'
 import Footer from '@/modules/lib/components/footer/Footer'
 import Modal from '@/modules/lib/components/modal/modal'
+import QuantitySelector from '@/modules/lib/components/quantity-selector/QuantitySelector'
 
 
 
@@ -134,7 +135,33 @@ function showLongDescElipsis(desc: string) {
     } else {
       saveVariant(selectedVariant?.id)
     }
-  }
+    }
+  
+    function handleLogin(variantId: number, minimumPurchase: number) {
+      localStorage.setItem('variantId',variantId.toString())
+      localStorage.setItem('variantIdMinimumPurchase',minimumPurchase.toString())
+      isLoginModal()
+    }
+  
+    useEffect(() => {
+      if (isAuthenticated) {  
+        const variantId = localStorage.getItem("variantId");
+        const variantIdMinimumPurchase = localStorage.getItem("variantIdMinimumPurchase");
+              if (variantId && variantIdMinimumPurchase) {
+                  const parsedVariantId = parseInt(variantId, 10);
+                  const parsedMinimumPurchase = parseInt(variantIdMinimumPurchase, 10);
+  
+                  if (!isNaN(parsedVariantId) && !isNaN(parsedMinimumPurchase)) {
+                      addToCart(parsedVariantId, parsedMinimumPurchase);
+                      console.log("Item added from localStorage to cart!");
+                  }
+  
+                
+                  localStorage.removeItem("variantId");
+                  localStorage.removeItem("variantIdMinimumPurchase");
+              }
+          }
+      }, [isAuthenticated]);
 
 
   return (
@@ -440,7 +467,8 @@ function showLongDescElipsis(desc: string) {
                 <div className='flex flex-col gap-16'>
                   <p className='text-24 weight-600'>{formatNumberAsPrice(selectedVariant.price)}</p>
                   
-          {!selectedVariantItemInCart ? (
+                  {!selectedVariantItemInCart ?
+                    (
                 <button
                   className={classNames(`text-white border-none l:px-24 l:py-12 py-15 w-100p radius-6 pointer ${selectedVariant && selectedVariant.status === 'OUT_OF_STOCK' ?'bg-gray-300' :  'bg-#0B9378'}`)}
                   onClick={() => {
@@ -452,7 +480,8 @@ function showLongDescElipsis(desc: string) {
                     )
                     }
                   } else {
-                    isLoginModal()
+                    handleLogin(selectedVariant?.id ?? 0,
+                      selectedVariant?.minPurchaseQuantity || 1)
                   }
                   }}
                 >
@@ -463,7 +492,11 @@ function showLongDescElipsis(desc: string) {
                   </div>
                   </div>
                 </button>
-                ) : null}
+                ) : <QuantitySelector
+                decrement={() => decrement(selectedVariantItemInCart)}
+                increment={() => increment(selectedVariantItemInCart)}
+                cartItem={selectedVariantItemInCart}
+              />}
                 </div>
 
             </div>
