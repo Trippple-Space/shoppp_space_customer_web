@@ -10,6 +10,7 @@
     box-sizing: border-box;
     padding: 0;
     margin: 0;
+    // outline: 1px solid;
   }
 
 
@@ -75,6 +76,8 @@
 .bg-inherit {
   background-color: inherit;
 }
+
+
 
   .custom-progress::-webkit-progress-value {
     background-color: #333333;
@@ -146,6 +149,8 @@
       input:focus+.slider {
         box-shadow: 0 0 1px #FACE33;
       }
+
+      
 
       input:checked+.slider:before {
         -webkit-transform: translateX(26px);
@@ -363,6 +368,11 @@ input[type="number"].no-arrows {
 	background-size: 400% 400%;
 	animation: pulsing-multi-color-bg-animation 15s ease infinite;
 }
+
+.icon-box-shadow {
+   box-shadow: rgba(50, 50, 93, 0.25) 0px 6px 12px -2px, rgba(0, 0, 0, 0.3) 0px 3px 7px -3px;
+        // padding: 30pc;
+      }
 
 @keyframes pulsing-multi-color-bg-animation {
 	0% {
