@@ -105,9 +105,11 @@ function showLongDescElipsis(desc: string) {
 }
   
   useEffect(() => {
+    if(isAuthenticated) {
     (async () => {
         await productService.addRecentlyViewedVariants({productVariantId: selectedVariant?.id, type: 'view' })
-    })()
+      })()
+    }
   }, [])
 
   useEffect(() => {
