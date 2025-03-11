@@ -49,12 +49,14 @@ const layout: FC<ILayout> = ({ children }) => {
       <div className="l:w-50p hidden l:block m-15">
         <div className="bg-green flex flex-col h-100p radius-15 overflow-hidden">
           <div>
+            <Link href={'/'}>
             <Image
               className='w-115 h-31 ml-40 mt-20'
               src='new-asoebi-logo-white.svg'
               alt='logo'
               type='logo'
-            />
+              />
+              </Link>
           </div>
           <div className='relative w-100p h-100p'>
             <Image
@@ -65,7 +67,7 @@ const layout: FC<ILayout> = ({ children }) => {
           </div>
         </div>
       </div>
-      <div className="w-100p l:w-50p h-full overflow-hidden">
+      <div className="w-full l:w-50p h-full overflow-hidden">
         {pathName === paths.vendor_signup ?
           <VendorSignUp /> : <CustomerSignUp/>
          }
@@ -80,7 +82,7 @@ const layout: FC<ILayout> = ({ children }) => {
             />
         </div>
     
-        <div className="w-full l:w-60p h-full flex flex-col j-content-center">
+        <div className="w-full xl:w-60p h-full flex flex-col j-content-center">
             {pathName !== paths.vendor_signup && <AuthHeader activeTab={path} />}
             {children}
           <div className="mt-30">
