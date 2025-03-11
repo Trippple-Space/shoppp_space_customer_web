@@ -3,6 +3,7 @@ const endpoints = {
   SIGN_UP: "/auth/register",
   SIGN_UP_DETAILS: '/auth/register',
   SIGN_UP_VERIFY_OTP: '/auth/verify',
+  RESEND_OTP: '/auth/resend-otp',
   SIGN_UP_CREATE_PASSWORD: '/auth/create-password',
   VALIDATE_TOKEN: "/auth/validate",
   PRODUCT_CATEGORIES: "product/categories",

@@ -33,7 +33,6 @@ const ProductTile: FC<IProductTile> = ({ product, savedVariants, saveVariant, re
   const [selectedVariant, setSelectedVariant] = useState(
     product?.variants?.[0]
   );
-  const [isFavourite, setIsFavorite] = useState(false);
   const [mediaType, setMediaType] = useState<string>("image");
   const {
     addToCart,
@@ -43,8 +42,6 @@ const ProductTile: FC<IProductTile> = ({ product, savedVariants, saveVariant, re
     isAuthenticated,
     isLoginModal
   } = useCart()
-
-
   const selectedVariantItemInCart = cart.cartItems.find(
     (item) => item.variant.id === selectedVariant?.id
   );
@@ -72,7 +69,7 @@ const ProductTile: FC<IProductTile> = ({ product, savedVariants, saveVariant, re
   }
 
   const handleCloseProductModal = () => {
-    setOpenSingleProductModal(prev => !prev)
+    setOpenSingleProductModal(prev => !prev)    
   }
 
   
@@ -172,13 +169,8 @@ const ProductTile: FC<IProductTile> = ({ product, savedVariants, saveVariant, re
                       "bg-#FACE33 shadow-0-4-8-0-#00000033 hover:shadow-0-8-8-0-#00000033 text-black! disabled:bg-gray-200 disabled:cursor-not-allowed hover:scale-1.06 g|transition:0.5s g|will-change:transform pointer font-roboto border-hidden outline-none s:p-14 p-12 round flex a-items-center j-items-center gap-10")}
               >
                 <PiShoppingCartFill className="s:w-22 w-20 s:h-22 h-20" />
-              </button>: <div
-            className="bg-whitesmoke radius-10 flex a-items-center j-content-center"
-          >
-            <div className="px-4 py-4">
-              Out of stock
-             </div>
-          </div>}
+              </button>: ''
+                  }
             </>
             )}
           </div>
@@ -263,9 +255,15 @@ const ProductTile: FC<IProductTile> = ({ product, savedVariants, saveVariant, re
       >
         <div
           title={product.name}
-          className="md:text-16 text-15 weight-500 text-#000000E0 md:line-height-24 line-height-22 w-100 l:white-space-nowrap text-overflow-ellipsis"
+          className="md:text-16 text-15 weight-500 text-#000000E0 md:line-height-24 line-height-22 l:w-100p w-100 l:white-space-nowrap text-overflow-ellipsis flex flex-wrap a-items-center j-content-between"
         >
           <Link href={`/products/${product.slug}`}>{product.name}</Link>
+  
+         
+          {selectedVariant?.status === 'OUT_OF_STOCK'
+            && <div className="color-red text-12 text-left">
+            Out of stock
+          </div> }
         </div>
         <div className="flex a-items-center gap-10 l:gap-18 text-dimgrey py-6 border-y border-#00000014">
           <Link href={`/${product.store.slug}`} className="flex gap-6 a-items-center color-#00000099 capitalize">

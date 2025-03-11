@@ -4,6 +4,9 @@ import { User } from "../types/user.interface";
 import endpoints from "../endpoints";
 import http from "../http"
 import { useRouter, useSearchParams } from "next/navigation";
+import { toast } from "sonner";
+import router from "next/router";
+import { paths } from "../paths";
 
 class AuthService {
 
@@ -64,6 +67,14 @@ class AuthService {
   setPassword(payload: { token: string, password: string }): Promise<any> {
     return http.post(endpoints.SIGN_UP_CREATE_PASSWORD, payload).then((response: AxiosResponse) => response.data);
   }
+    
+resendOtp(email: string) {
+    return http.post(endpoints.RESEND_OTP, { email })
+        .then((response) => {
+            toast.success("An OTP has been sent to your email for verification");
+            return response.data; // Return response so component can handle it
+        });
+}
 
 }
 
