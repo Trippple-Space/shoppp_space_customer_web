@@ -520,7 +520,6 @@
 .l-3 { left: 3px; } 
 .h-350 { height: 350px; } 
 .r-20 { right: 20px; } 
-.overflow-x-auto { overflow-x: auto; } 
 .min-w-90 { min-width: 90px; } 
 .text-grey-500 { color: #A39F9C; } 
 .text-30 { font-size: 30px; } 
@@ -657,6 +656,7 @@
 .p-25 { padding: 25px; } 
 @layer base {.radius-12 { border-radius: 12px; } } 
 .mt-110 { margin-top: 110px; } 
+.h-270 { height: 270px; } 
 .text-28 { font-size: 28px; } 
 .line-through { text-decoration: line-through; } 
 .bg-\#FFDBD6 { background-color: #FFDBD6; } 
@@ -664,10 +664,8 @@
 .w-40p { width: 40%; } 
 .pl-10 { padding-left: 10px; } 
 .h-21 { height: 21px; } 
+.pb-100 { padding-bottom: 100px; } 
 .h-150 { height: 150px; } 
-.mb-100 { margin-bottom: 100px; } 
-.border-grey-100 { border-color: #F7F6F5; } 
-.h-270 { height: 270px; } 
 .w-27 { width: 27px; } 
 .h-27 { height: 27px; } 
 .a-content-center { align-content: center; } 
@@ -728,6 +726,7 @@
 .mb-3 { margin-bottom: 3px; } 
 .max-w-60 { max-width: 60px; } 
 .mt-9 { margin-top: 9px; } 
+.mb-100 { margin-bottom: 100px; } 
 .mt-46 { margin-top: 46px; } 
 .gap-60 { gap: 60px; } 
 .mt-75 { margin-top: 75px; } 
@@ -769,7 +768,6 @@
 .t-20 { top: 20px; } 
 .bg-light-yellow { background-color: #FFE68BB2; } 
 .bg-grey-400 { background-color: #C8C6C3; } 
-.pb-100 { padding-bottom: 100px; } 
 .letter-spacing-1 { letter-spacing: 1px; } 
 .max-w-840 { max-width: 840px; } 
 .hover\:bg-darkred:hover { background-color: darkred; } 

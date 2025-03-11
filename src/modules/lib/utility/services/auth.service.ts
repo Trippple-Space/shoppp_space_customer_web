@@ -20,9 +20,9 @@ class AuthService {
 
     signOut() {
         localStorage.removeItem('token')
-        window.location.reload()
         localStorage.removeItem("variantId");
         localStorage.removeItem("variantIdMinimumPurchase");
+        window.location.replace(paths.login)
         
     }
 

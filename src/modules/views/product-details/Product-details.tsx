@@ -104,20 +104,15 @@ function showLongDescElipsis(desc: string) {
     
 }
   
-  useEffect(() => {
-    if(isAuthenticated) {
-    (async () => {
-        await productService.addRecentlyViewedVariants({productVariantId: selectedVariant?.id, type: 'view' })
-      })()
-    }
-  }, [])
 
   useEffect(() => {
     (async () => {
   const response = await productService.fetchProducts({filters: {status: {In: ['ACTIVE']}}, pagination:{limit: 8,  page: 1}})  
   
-  // const response = await productService.getRecentlyViewedVariants()
-      // const response = await productService.getRecentlyViewedVariants()
+      if(isAuthenticated) {
+  const viewed = await productService.getRecentlyViewedVariants()
+        console.log({ viewed })
+      }
       setRecentlyViewedVariants(response)
     })()
   }, [])
@@ -200,11 +195,12 @@ function showLongDescElipsis(desc: string) {
             <p className='text-14 weight-500'>Show all photos</p>
             </div>
             </div>}
-          <div className='w-full'>
+          <div className='w-full h-270 md:h-420 sm:h-350'>
             <Image
               src={selectedImage}
-              className={`flex-grow-1 h-full radius-8 l:radius-t-l-16 l:radius-b-l-16 l:radius-b-r-0 l:radius-t-r-0  border border-grey-100 object-fit md:h-420 sm:h-350 h-270 ${selectedVariant.status  === 'OUT_OF_STOCK'? 'greyscale' : ''}`}
+              className={`flex-grow-1 h-full radius-8 l:radius-t-l-16 l:radius-b-l-16 l:radius-b-r-0 l:radius-t-r-0   w-full h-full a-self-center object-fit-cover  pointer  ${selectedVariant.status  === 'OUT_OF_STOCK'? 'greyscale' : ''}`}
               alt={''}
+              
             />
           </div>
 
@@ -506,27 +502,27 @@ function showLongDescElipsis(desc: string) {
           </div>
 
         </div>
-        <div className='flex flex-col gap-12 pb-15 pt-20'>
+      <div className='flex flex-col gap-12 pb-15 pt-20'>
           <div className='flex a-items-center j-content-between'>
             <p className='text-16  weight-600'>
               Customers who viewed this also viewed
             </p>
             <p className='color-#1677FF cursor-pointer border-b hidden l:block'> See all</p>
           </div>
-      <div className="flex a-items-center gap-20 w-full overflow-auto w-full no-scrollbar">
+      <div className="flex  gap-20 h-full overflow-auto w-full h-full no-scrollbar">
             {recentlyViewedVariants.map((product: Product, i: number) => (
-              <div key={i} className="">
+              <div className='overflow-hidden w-full h-full'>
                 <ProductTile product={product}
                   key={i}
                   savedVariants={savedVariants}
-                      saveVariant={saveVariant}
+                  saveVariant={saveVariant}
                   removeSavedVariant={removeSavedVariant}
                 />
               </div>
               ))}
           </div>
         </div>
-        <div className='flex flex-col gap-12 pb-15 pt-15 mt-10'>
+        <div className='flex flex-col gap-12 pt-15 mt-10 pb-100'>
           <div className=''>
             <p className='text-16  weight-600'>
               Customer Reviews ({product.reviews?.length ?? 0})
@@ -542,29 +538,6 @@ function showLongDescElipsis(desc: string) {
           </div>
 
         </div>
-
-    <div className='flex flex-col gap-12 pb-15 pt-20 '>
-          <div className='flex a-items-center j-content-between'>
-            <p className='text-16  weight-600'>
-              You may also like
-            </p>
-            <p className='color-#1677FF cursor-pointer border-b hidden l:block'> See all</p>
-          </div>
-      <div className="flex a-items-center gap-20 w-full overflow-auto w-full no-scrollbar mb-100 ">
-            {recentlyViewedVariants.map((product: Product, i: number) => (
-              <div key={i} className="">
-                 <ProductTile product={product}
-                  key={i}
-                  savedVariants={savedVariants}
-                      saveVariant={saveVariant}
-                  removeSavedVariant={removeSavedVariant}
-                />
-              </div>
-              ))}
-          </div>
-          <div className='w-50p'></div>
-        </div>
-
       </div>
       <ShareProductModal
         modalOpen={showShareModal}
@@ -604,7 +577,6 @@ function showLongDescElipsis(desc: string) {
               })
             )}
           </div>
-          
 </Modal>
 
       <Footer />

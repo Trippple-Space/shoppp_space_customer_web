@@ -13,6 +13,7 @@ import { FaEye } from 'react-icons/fa6'
 import ProductDetailModal from '../product-detail-modal/ProductDetailModal'
 import { PiShoppingCartFill, PiStorefront } from 'react-icons/pi'
 import { SavedVariant } from '../../utility/types/SavedVariant.interface'
+import { productService } from '../../utility/services/product.service'
 
 interface IProductTile {
   product: Product
@@ -79,6 +80,15 @@ const ProductTile: FC<IProductTile> = ({ product, savedVariants, saveVariant, re
     localStorage.setItem('variantIdMinimumPurchase',minimumPurchase.toString())
     isLoginModal()
   }
+
+
+    useEffect(() => {
+      if(isAuthenticated) {
+      (async () => {
+          await productService.addRecentlyViewedVariants({productVariantId: selectedVariant?.id, type: 'view' })
+        })()
+      }
+    }, [selectedVariant.id])
 
   useEffect(() => {
     if (isAuthenticated) {  
