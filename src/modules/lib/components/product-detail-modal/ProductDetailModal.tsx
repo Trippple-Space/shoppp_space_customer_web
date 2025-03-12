@@ -153,7 +153,7 @@ const handleNextImage = () => {
                                 <MdArrowForwardIos className='w-fit'/>
                             </div>}
                           </div>
-                            <div className='flex gap-10 py-5 overflow-auto a-items-center no-scrollbar bg-green'>
+                            <div className='flex gap-10 py-5 overflow-auto a-items-center no-scrollbar'>
                               {product?.variants?.map((variant, idx) =>
                           variant?.media?.map((mediaItem: any) => (
                             <div

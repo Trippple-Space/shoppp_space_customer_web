@@ -5,7 +5,7 @@ import Link from 'next/link'
 import { CSSProperties, useEffect, useState } from 'react'
 import { AiFillHeart, AiOutlineHeart } from 'react-icons/ai'
 import HomepageNavBar from '@/modules/lib/components/nav-bar/HomepageNavBar'
-import { Product } from '@/modules/lib/utility/types/product.interface'
+import { Product, RecentlyViewed } from '@/modules/lib/utility/types/product.interface'
 import './ProductDetails.scss'
 import {
   cx,
@@ -27,6 +27,7 @@ import { PiTruck, PiGlobeHemisphereEast } from 'react-icons/pi'
 import Footer from '@/modules/lib/components/footer/Footer'
 import Modal from '@/modules/lib/components/modal/modal'
 import QuantitySelector from '@/modules/lib/components/quantity-selector/QuantitySelector'
+import VariantModal from '@/modules/lib/components/variant-modal/VariantModal'
 
 
 
@@ -36,7 +37,7 @@ let globalMediaIndex = 0;
 
 
   const [unitCounter, setUnitCounter] = useState<number>(1)
-  const [recentlyViewedVariants,setRecentlyViewedVariants] = useState<any>([])
+  const [recentlyViewedVariants,setRecentlyViewedVariants]=useState<RecentlyViewed[]>([])
   const [selectedImage, setSelectedImage] = useState(
     product?.variants?.[0]?.media?.[0]?.url
   )
@@ -107,15 +108,14 @@ function showLongDescElipsis(desc: string) {
 
   useEffect(() => {
     (async () => {
-  const response = await productService.fetchProducts({filters: {status: {In: ['ACTIVE']}}, pagination:{limit: 8,  page: 1}})  
+ 
   
       if(isAuthenticated) {
-  const viewed = await productService.getRecentlyViewedVariants()
-        console.log({ viewed })
+  const response: RecentlyViewed[] = await productService.getRecentlyViewedVariants()
+        setRecentlyViewedVariants(response)
       }
-      setRecentlyViewedVariants(response)
     })()
-  }, [])
+  }, [isAuthenticated])
 
 
 
@@ -150,7 +150,7 @@ function showLongDescElipsis(desc: string) {
   
                   if (!isNaN(parsedVariantId) && !isNaN(parsedMinimumPurchase)) {
                       addToCart(parsedVariantId, parsedMinimumPurchase);
-                      console.log("Item added from localStorage to cart!");
+                      
                   }
   
                 
@@ -160,7 +160,7 @@ function showLongDescElipsis(desc: string) {
           }
       }, [isAuthenticated]);
 
-
+  
   return (
     <>
       <HomepageNavBar parent='' />
@@ -198,7 +198,7 @@ function showLongDescElipsis(desc: string) {
           <div className='w-full h-270 md:h-420 sm:h-350'>
             <Image
               src={selectedImage}
-              className={`flex-grow-1 h-full radius-8 l:radius-t-l-16 l:radius-b-l-16 l:radius-b-r-0 l:radius-t-r-0   w-full h-full a-self-center object-fit-cover  pointer  ${selectedVariant.status  === 'OUT_OF_STOCK'? 'greyscale' : ''}`}
+              className={`flex-grow-1 h-full radius-8 l:radius-t-l-16 l:radius-b-l-16 l:radius-b-r-0 l:radius-t-r-0   w-full h-full a-self-center object-fit-cover  pointer  ${selectedVariant.status  === 'OUT_OF_STOCK'? 'out' : ''}`}
               alt={''}
               
             />
@@ -509,17 +509,20 @@ function showLongDescElipsis(desc: string) {
             </p>
             <p className='color-#1677FF cursor-pointer border-b hidden l:block'> See all</p>
           </div>
-      <div className="flex  gap-20 h-full overflow-auto w-full h-full no-scrollbar">
-            {recentlyViewedVariants.map((product: Product, i: number) => (
-              <div className='overflow-hidden w-full h-full'>
-                <ProductTile product={product}
-                  key={i}
-                  savedVariants={savedVariants}
-                  saveVariant={saveVariant}
-                  removeSavedVariant={removeSavedVariant}
-                />
-              </div>
-              ))}
+          <div className="flex gap-20 a-items-start overflow-auto w-full h-fit no-scrollbar">
+            {
+              recentlyViewedVariants.map((variant, i) => 
+                <div className=''>
+                  <VariantModal
+                    variant={variant}
+                    saveVariant={saveVariant}
+                    removeSavedVariant={removeSavedVariant} 
+                    savedVariants={savedVariants}
+                    key={i}
+                  />
+                </div>
+              )
+            }
           </div>
         </div>
         <div className='flex flex-col gap-12 pt-15 mt-10 pb-100'>
@@ -555,9 +558,7 @@ function showLongDescElipsis(desc: string) {
                     style={{
                       filter: variant.status === 'OUT_OF_STOCK' ? 'grayscale(100%)' : 'none'
                     }}
-     
     >
-      
       <Image
         src={mediaItem?.url}
         alt="product-image"

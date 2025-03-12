@@ -24,6 +24,7 @@ interface IProductTile {
 const ProductTile: FC<IProductTile> = ({ product, savedVariants, saveVariant, removeSavedVariant}: any) => {
   const [onProductTileHover, setOnProductTileHover] = useState(false)
   const [openSingleProductModal, setOpenSingleProductModal] = useState(false)
+  const [recentlyViewedId, setRecentlyViewsId] = useState<any>() 
 
 
 
@@ -73,7 +74,6 @@ const ProductTile: FC<IProductTile> = ({ product, savedVariants, saveVariant, re
     setOpenSingleProductModal(prev => !prev)    
   }
 
-  
 
   function handleLogin(variantId: number, minimumPurchase: number) {
     localStorage.setItem('variantId',variantId.toString())
@@ -81,14 +81,16 @@ const ProductTile: FC<IProductTile> = ({ product, savedVariants, saveVariant, re
     isLoginModal()
   }
 
-
-    useEffect(() => {
-      if(isAuthenticated) {
+  useEffect(() => {
+    if (recentlyViewedId && isAuthenticated) {
       (async () => {
-          await productService.addRecentlyViewedVariants({productVariantId: selectedVariant?.id, type: 'view' })
-        })()
-      }
-    }, [selectedVariant.id])
+        await productService.addRecentlyViewedVariants({
+          productVariantId: selectedVariant?.id,
+          type: 'view'
+        });
+      })();
+    }
+  }, [recentlyViewedId, isAuthenticated]);
 
   useEffect(() => {
     if (isAuthenticated) {  
@@ -232,6 +234,7 @@ const ProductTile: FC<IProductTile> = ({ product, savedVariants, saveVariant, re
                   src={mediaItem?.url}
                   onClick={() => {
                     setSelectedVariant(variant);
+                    setRecentlyViewsId(variant.id)
                     setMediaType("image");
                     setSelectedImage(mediaItem?.url);
                   }}

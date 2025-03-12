@@ -90,3 +90,15 @@ export interface IFilters {
   rating: { rateBy: string };
   showOffers: boolean;
 }
+
+
+
+export interface RecentlyViewed {
+  id: number;
+  productVariantId: number;
+  userId: number;
+  type: string;
+  productVariant: ProductVariant;
+  createdAt: string;
+  updatedAt: string;
+}

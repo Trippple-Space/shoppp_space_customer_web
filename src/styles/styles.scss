@@ -197,6 +197,10 @@
     }
   }
 
+.out-of-stock  {
+  filter: grayscale(80%) brightness(50%);
+}
+
   .container {
     max-height: 0;
     overflow: hidden;

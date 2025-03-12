@@ -127,7 +127,7 @@ export const displayProductPill = (tags: any) => {
   const destringPills = (pills: { label: string }[]): PillableProp => {
     const pillable: PillableProp = {};
 
-    pills.forEach((pill) => {
+    pills?.forEach((pill) => {
       const destringedPill = JSON.parse(pill.label);
 
       for (const key in destringedPill) {

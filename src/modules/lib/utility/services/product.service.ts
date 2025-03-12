@@ -1,11 +1,12 @@
 import { AxiosResponse } from "axios";
-import { Product, ProductCategory } from "../types/product.interface";
+import { Product, ProductCategory, RecentlyViewed } from "../types/product.interface";
 import endpoints from "../endpoints";
 import http from "../http";
 import { IProductFilters, IQueryParams } from "../hooks/use-products";
 import { buildEndpoint, buildFilterParams } from "../utility";
 import config from "env";
 import { SavedVariant } from "../types/SavedVariant.interface";
+
 
 
 class ProductService {
@@ -234,9 +235,9 @@ class ProductService {
             })
         })
     }
-     getRecentlyViewedVariants() {   
+     getRecentlyViewedVariants(): Promise<RecentlyViewed[]> {   
           return new Promise((resolve, reject) => {
-               http.get(`${endpoints.RECENTLY_VIEWED}/viewed`).then((response) => resolve(response.data))
+               http.get(`${endpoints.RECENTLY_VIEWED}/viewed`).then((response: AxiosResponse<RecentlyViewed[]>) => resolve(response.data))
           })
      }
      addRecentlyViewedVariants(payload: { productVariantId: number, type?: string }) {     
