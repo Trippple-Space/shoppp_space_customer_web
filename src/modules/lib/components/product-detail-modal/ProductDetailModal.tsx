@@ -72,25 +72,26 @@ const ProductDetailModal = ({
 
 const handlePreviousImage = () => {
   if (!selectedVariant || !product?.variants?.length) return;
-
+  if (product.variants.length > 1) {
   const currentVariantIndex = product.variants.indexOf(selectedVariant);
   const previousIndex = currentVariantIndex > 0 ? currentVariantIndex - 1 : product.variants.length - 1; // Loop to last
 
   const previousVariant = product.variants[previousIndex];
   setSelectedVariant(previousVariant);
   setSelectedImage(previousVariant?.media?.[0]?.url || variantSelectedImage);
-};
+}};
 
 const handleNextImage = () => {
   if (!selectedVariant || !product?.variants?.length) return;
 
+  if (product.variants.length > 1) {
   const currentVariantIndex = product.variants.indexOf(selectedVariant);
   const nextVariantIndex = (currentVariantIndex + 1) % product.variants.length; 
 
   const nextVariant = product.variants[nextVariantIndex];
   setSelectedVariant(nextVariant);
   setSelectedImage(nextVariant?.media?.[0]?.url || variantSelectedImage);
-};
+}};
 
   
 
@@ -138,7 +139,7 @@ const handleNextImage = () => {
                             <div className='relative' onMouseOver={() => setIsHover(true)}
                               onMouseOut={() => setIsHover(false)}
                               >
-                              {isHover && product.variants.length > 1 && <div className='absolute z-10 b-45p bg-white l-20  p-15 radius-99 flex a-items-center j-content-center cursor-pointer icon-box-shadow' 
+                              {isHover  && <div className={`absolute z-10 b-45p ${product.variants.length > 1 ? 'bg-white color-black' : 'color-#A9A9A9 bg-#D3D3D3'} l-20  p-15 radius-99 flex a-items-center j-content-center cursor-pointer icon-box-shadow`} 
                                 onClick={handlePreviousImage}
                               >
                                 <MdArrowBackIos className='w-full relative l-3' />
@@ -152,7 +153,7 @@ const handleNextImage = () => {
                               />
                               </div>
                            
-                            {isHover && product.variants.length > 1 &&  <div className='absolute z-10 b-45p bg-white r-20 p-15 radius-99 flex a-items-center j-content-center cursor-pointer   icon-box-shadow' onClick={handleNextImage}>
+                            {isHover  &&  <div className={`absolute z-10 b-45p ${product.variants.length > 1 ? 'bg-white color-black' : 'color-#A9A9A9 bg-#D3D3D3'} r-20 p-15 radius-99 flex a-items-center j-content-center cursor-pointer   icon-box-shadow `}onClick={handleNextImage}>
                                 <MdArrowForwardIos className='w-fit'/>
                             </div>}
                           </div>
