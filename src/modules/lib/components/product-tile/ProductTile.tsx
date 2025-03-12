@@ -21,7 +21,12 @@ interface IProductTile {
   removeSavedVariant?: (variantId: number) => void
   savedVariants?: SavedVariant[]
 }
+<<<<<<< HEAD
 const ProductTile: FC<IProductTile> = ({ product, savedVariants, saveVariant, removeSavedVariant}: any) => {
+=======
+const ProductTile: FC<IProductTile> = ({ product, savedItems, saveItem, removeSavedItem }: any) => {
+  const [loading, setLoading] = useState(false)
+>>>>>>> staging
   const [onProductTileHover, setOnProductTileHover] = useState(false)
   const [openSingleProductModal, setOpenSingleProductModal] = useState(false)
   const [recentlyViewedId, setRecentlyViewsId] = useState<any>() 

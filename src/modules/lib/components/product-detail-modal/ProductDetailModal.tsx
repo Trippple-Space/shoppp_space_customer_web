@@ -153,7 +153,11 @@ const handleNextImage = () => {
                                 <MdArrowForwardIos className='w-fit'/>
                             </div>}
                           </div>
+<<<<<<< HEAD
                             <div className='flex gap-10 py-5 overflow-auto a-items-center no-scrollbar'>
+=======
+                            <div className='flex gap-10 py-5 overflow-x-auto a-items-center no-scrollbar'>
+>>>>>>> staging
                               {product?.variants?.map((variant, idx) =>
                           variant?.media?.map((mediaItem: any) => (
                             <div
@@ -168,7 +172,11 @@ const handleNextImage = () => {
                                 src={mediaItem?.url}
                                 alt='product-image'
                                  className={cx(
+<<<<<<< HEAD
                                 `g|object-fit:cover w-full h-full overflow-auto ${variant.status ==='OUT_OF_STOCK' ? 'greyscale': ''}`,
+=======
+                                `g|object-fit:cover w-full h-full overflow-hidden ${variant.status ==='OUT_OF_STOCK' ? 'greyscale': ''}`,
+>>>>>>> staging
                                 {
                                   'outline outline-green outline-2':
                                     selectedImage == mediaItem?.url,

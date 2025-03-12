@@ -520,6 +520,7 @@
 .l-3 { left: 3px; } 
 .h-350 { height: 350px; } 
 .r-20 { right: 20px; } 
+.overflow-x-auto { overflow-x: auto; } 
 .min-w-90 { min-width: 90px; } 
 .text-grey-500 { color: #A39F9C; } 
 .text-30 { font-size: 30px; } 
