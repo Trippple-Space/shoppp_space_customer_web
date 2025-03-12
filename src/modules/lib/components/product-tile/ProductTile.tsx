@@ -21,12 +21,7 @@ interface IProductTile {
   removeSavedVariant?: (variantId: number) => void
   savedVariants?: SavedVariant[]
 }
-<<<<<<< HEAD
 const ProductTile: FC<IProductTile> = ({ product, savedVariants, saveVariant, removeSavedVariant}: any) => {
-=======
-const ProductTile: FC<IProductTile> = ({ product, savedItems, saveItem, removeSavedItem }: any) => {
-  const [loading, setLoading] = useState(false)
->>>>>>> staging
   const [onProductTileHover, setOnProductTileHover] = useState(false)
   const [openSingleProductModal, setOpenSingleProductModal] = useState(false)
   const [recentlyViewedId, setRecentlyViewsId] = useState<any>() 
@@ -150,7 +145,7 @@ const ProductTile: FC<IProductTile> = ({ product, savedItems, saveItem, removeSa
           {onProductTileHover && product && (
             <div
               id="add to cart button"
-              className=" hidden l:block absolute b-0 l-0 ml-10 mb-10 l:mr-15 l:mb-15"
+              className=" hidden l:block absolute t-0 l-0 ml-10 mt-20 l:mr-15 l:mb-15"
               onClick={handleCloseProductModal}
             >
               <p className='bg-white radius-20 p-5 cursor-pointer text-12 flex a-items-center gap-5'>

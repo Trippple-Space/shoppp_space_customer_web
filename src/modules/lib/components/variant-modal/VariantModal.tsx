@@ -106,7 +106,7 @@ const VariantModal = ({variant, saveVariant, removeSavedVariant, savedVariants}:
           {onProductTileHover && variant.productVariant.product && (
             <div
               id="add to cart button"
-              className="hidden l:block absolute b-0 l-0 ml-10 mb-10 l:mr-15 l:mb-15"
+              className="hidden l:block absolute z-10 t-0 l-0 ml-10 mt-15 l:mr-15 l:mb-15"
               onClick={handleCloseProductModal}
             >
               <p className='bg-white radius-20 p-5 cursor-pointer text-12 flex a-items-center gap-5'>
@@ -149,16 +149,16 @@ const VariantModal = ({variant, saveVariant, removeSavedVariant, savedVariants}:
         </div>
         <div
           id='favorite icon'
-          className='absolute t-0 z-10 r-0 mr-10 mt-10 l:mr-15 l:mt-15 text-24 l:text-34 text-white cursor-pointer'
+          className='absolute t-0 z-10 r-0 mr-5 mt-10 l:mr-10 text-24 text-white cursor-pointer'
           onClick={isAuthenticated ? handleSave : () => isLoginModal()}
           
                   >
                       {isSaved ?
                           <AiFillHeart
-                          className='shadow w-20 h-20'
+                          className='shadow w-25 h-25'
                       /> :
                       <AiOutlineHeart
-                          className='shadow w-20 h-20'
+                          className='shadow w-25 h-25'
                       />}
                   </div>
                   
@@ -255,7 +255,8 @@ const VariantModal = ({variant, saveVariant, removeSavedVariant, savedVariants}:
           openSingleProductModal={openSingleProductModal}
           handleCloseProductModal={handleCloseProductModal}
           position=""
-          product={variant?.productVariant.product ?? null}
+            product={variant?.productVariant.product ?? null}
+            variantSelectedImage= {selectedImage}
         />
       )}
     </div>
