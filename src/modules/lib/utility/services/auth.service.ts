@@ -3,6 +3,10 @@ import { LoginCredentials, RegistrationDetails } from "../types/auth.interface";
 import { User } from "../types/user.interface";
 import endpoints from "../endpoints";
 import http from "../http"
+import { useRouter, useSearchParams } from "next/navigation";
+import { toast } from "sonner";
+import router from "next/router";
+import { paths } from "../paths";
 
 class AuthService {
 
@@ -44,7 +48,29 @@ class AuthService {
             })
     }
 
+  signUpInitial(details: { fullname: string; email: string }): Promise<any> {
+      return http.post(endpoints.SIGN_UP_DETAILS, details).then((response: AxiosResponse) => {
+        return  response.data
+      });
+  }
 
+    
+    verifyOtp(payload: { token: string; otp: string }): Promise<any> {
+    return http.post(endpoints.SIGN_UP_VERIFY_OTP, payload).then((response: AxiosResponse) => response.data);
+  }
+
+
+  setPassword(payload: { token: string, password: string }): Promise<any> {
+    return http.post(endpoints.SIGN_UP_CREATE_PASSWORD, payload).then((response: AxiosResponse) => response.data);
+  }
+    
+resendOtp(email: string) {
+    return http.post(endpoints.RESEND_OTP, { email })
+        .then((response) => {
+            toast.success("An OTP has been sent to your email for verification");
+            return response.data; // Return response so component can handle it
+        });
+}
 
 }
 

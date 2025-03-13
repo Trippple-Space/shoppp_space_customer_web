@@ -1,13 +1,13 @@
-import React, { FC } from 'react'
+import React, { FC } from "react";
 
 interface IBoxRadio {
-  id?: string
-  name: string
-  label: React.ReactNode
-  value?: string
-  className?: string
-  checked?: boolean
-  onChange?: () => void
+  id?: string;
+  name?: string;
+  label?: React.ReactNode;
+  value?: string;
+  className?: string;
+  checked?: boolean;
+  onChange?: () => void;
 }
 
 const BoxRadio: FC<IBoxRadio> = ({
@@ -17,24 +17,29 @@ const BoxRadio: FC<IBoxRadio> = ({
   label,
   className,
   checked,
-  onChange
+  onChange,
 }) => {
   return (
-    <label className='border-1 border-solid border-grey-300 py-25 px-16 w-full radius-5 g|transition:0.5s pointer hover:border-grey-500 g|:has(:checked)|border-color:#0B9378!'>
-      <div className='flex gap-16 text-12 content-center'>
+    (<label
+      className={`border-solid border-grey-300 g|transition:0.5s pointer hover:border-grey-500 g|:has(:checked)|border-color:#0B9378! ${className === "checkout" ? "p-14 l:g|border-width:2px! border-1 radius-8 w-full" : className === 'address' || className === 'filter' ? 'border-0 p-0 w-fit' : "border-1 py-25 px-16 radius-5 w-full"
+        }`}
+    >
+      <div className={`flex text-12 content-center ${className === 'checkout' ? 'gap-8 a-items-center' : className === 'filter' ? 'gap-12 items-center' : 'gap-16'}`}>
         <input
-          type='radio'
-          className='accent-#0B9378 w-20 h-20 border-1 border-red'
+          type="radio"
+          className="accent-#0B9378 w-20 h-20 border-1 border-red outline-none"
           value={value}
           name={name}
           id={id || name}
           checked={checked}
           onChange={onChange}
         />
-        <div className='h-fit a-self-center w-full'>{label}</div>
+        {
+          className !== 'address' && <div className={`h-fit a-self-center w-full ${className === 'filter' ? 'weight-400 text-16 line-height-24' : ''}`}>{label}</div>
+        }
       </div>
-    </label>
-  )
-}
+    </label>)
+  );
+};
 
-export default BoxRadio
+export default BoxRadio;

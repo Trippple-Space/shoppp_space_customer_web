@@ -1,50 +1,122 @@
-import React, { FC, HTMLInputTypeAttribute, ReactNode } from 'react'
+import React, {
+  CSSProperties,
+  FC,
+  HTMLInputTypeAttribute,
+  ReactNode,
+  Ref,
+  useEffect,
+  useState
+} from 'react'
+import { IconType } from 'react-icons'
+import { LuEye, LuEyeOff } from 'react-icons/lu'
 
 interface IInput {
   label?: string | ReactNode
   id?: string
-  name: string
+  name?: string
   type?: HTMLInputTypeAttribute
   placeholder?: string
   className?: string
+  suffixIcon?: IconType
   after?: any
   inputClass?: any
   rows?: number
   value?: any
   checked?: boolean
-  handleChange?: Function,
+  disabled?: boolean
+  handleChange?: Function
   handleBlur?: Function
+  handleKeyDown?: Function
+  handleFocus?: any
+  onCopy?: any
+  onPaste?: any
+  ref?: Ref<any>
+  max?: number
+  min?: number
+  style?: CSSProperties
 }
-const Input: FC<IInput> = ({ label, id, name, type, placeholder, className, after, rows, inputClass: inputClassNames, value, checked, handleChange, handleBlur }) => {
-  const Component = type === 'textarea' ? 'textarea' : 'input';
+
+const Input: React.ForwardRefExoticComponent<Omit<IInput, 'ref'> & React.RefAttributes<any>> = React.forwardRef<any, Omit<IInput, 'ref'>>(({
+  label,
+  id,
+  name,
+  type,
+  placeholder,
+  className,
+  after,
+  rows,
+  inputClass: inputClassNames,
+  value,
+  checked,
+  disabled,
+  handleChange,
+  handleBlur,
+  handleFocus,
+  handleKeyDown,
+  onCopy,
+  onPaste,
+  min,
+  max,
+  style,
+}, ref) => {
+  const Component = type === 'textarea' ? 'textarea' : 'input'
   const controlProps = {
     [value !== undefined ? 'value' : '']: value,
     [checked !== undefined ? 'checked' : '']: checked,
+    [disabled !== undefined ? 'disabled' : '']: disabled,
     [handleChange ? 'onChange' : '']: handleChange,
-    [handleBlur ? 'onBlur': '']: handleBlur
+    [handleBlur ? 'onBlur' : '']: handleBlur,
+    [handleFocus ? 'onFocus' : '']: handleFocus,
+    [handleKeyDown ? 'onKeyDown' : '']: handleKeyDown,
+    [onCopy ? 'onCopy' : '']: onCopy,
+    [onPaste ? 'onPaste' : '']: onPaste,
   }
-  
+  const [viewPassword, setViewPassword] = useState(false)
+
   return (
     <div className={`input-group ${className}`}>
-      {label && <label htmlFor={id} className='block w-fit mb-8 l:weight-400 weight-500 l:text-14 text-12 text-grey-800'>{label}</label>}
-      <Component
-        type={type}
-        className={`
+      {label && (
+        <label
+          htmlFor={id}
+          className='block w-fit mb-8 l:weight-400 weight-500 l:text-14 text-12 text-grey-800'
+        >
+          {label}
+        </label>
+      )}
+      <div className='flex a-items-center relative'>
+        <Component
+          type={type === 'password' ? (viewPassword ? 'text' : 'password') : type}
+          className={`
             block font-inter @lo:w-full @lo:bg-white
-            @lo:border-solid @lo:border-1 @lo:border-grey-300 l:@lo:py-17 @lo:py-12 @lo:px-20  
-            @lo:radius-8 @lo:l:text-16 @lo:weight-400 @lo:outline-none
+            @lo:border-solid @lo:border-1 @lo:border-grey-300 l:@lo:py-17 @lo:py-12 @lo:px-20 @lo:l:text-16 @lo:weight-400 @lo:outline-none
             @lo:placeholder:text-grey-400 @lo:text-grey-700
-            @lo:focus:border-green @lo:placeholder:l:text-12 @lo:placeholder:text-12 ${inputClassNames}`
-        }
-        placeholder={placeholder}
-        rows={rows}
-        id={id}
-        name={name}
-        {...controlProps}
-      />
+            @lo:focus:border-green @lo:placeholder:l:text-12 @lo:placeholder:text-12 disabled:bg-#F3F3F3 resize-none ${inputClassNames} ${
+            id?.toLocaleLowerCase()?.includes('contact')
+              ? '@lo:radius-t-r-8 @lo:radius-b-r-8 border-l-0'
+              : '@lo:radius-8'
+            }`}
+          ref={ref}
+          placeholder={placeholder}
+          rows={rows}
+          id={id}
+          name={name}
+          min={min ?? 0}
+          max={max}
+          style={style}
+          {...controlProps}
+        />
+        {type === 'password' && (
+          <div
+            className='absolute  flex r-10 a-items-center j-content-center text-right cursor-pointer ml-10 h-30 bg-inherit w-30'
+            onClick={() => setViewPassword(view => !view)}
+          >
+            {!viewPassword ? <LuEye className='w-20 h-20'/>  : <LuEyeOff  className='w-20 h-20'/>}
+          </div>
+        )}
+      </div>
       {after}
     </div>
   )
-}
+})
 
 export default Input

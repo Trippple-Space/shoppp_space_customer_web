@@ -1,6 +1,9 @@
-import SignUp from '@/modules/views/signup/SignUp'
-import React from 'react'
+import SignUpDetails from '@/modules/views/signup/customer/SignUpDetails'
+import React, { Suspense } from 'react'
 
 export default async function signup () {
-    return <SignUp />
+    
+   return <Suspense>
+    <SignUpDetails />
+    </Suspense>
 }

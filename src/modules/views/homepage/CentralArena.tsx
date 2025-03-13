@@ -1,44 +1,89 @@
-"use client";
+'use client'
 
-import React from 'react'
+import React, { useEffect } from 'react'
 import ProductTile from '@/modules/lib/components/product-tile/ProductTile'
 import { useProductListView } from '@/modules/lib/utility/hooks/views/use-product-list-view'
-import {
-  ICategory,
-} from '@/modules/lib/utility/types/product.interface'
+import { DotsLoader } from '@/modules/lib/components/dots-loader/DotsLoader';
+import PuffLoader from '@/modules/lib/components/puff-loader/PuffLoader'
+import { useSavedItem } from '@/modules/lib/utility/hooks/use-saved-item';
 
-interface ICentralArena {
-  selectedCategory: ICategory
-}
+const CentralArena = () => {
+  const { products, type, ref, loading } = useProductListView()
+  const { saveItem, savedItems, removeSavedItem } = useSavedItem();
+  const renderedIds = new Set<number>();
 
-const CentralArena = ({ selectedCategory }: ICentralArena) => {
-  const { products, type, ref } = useProductListView()
 
   return (
     <>
-      <section className='md:mt-32 mt-24 w-100p l:mt-50 mb-150'>
-        <div className='flex space-between text-20 weight-300 uppercase'>
-          <h3 className='text-14 l:text-20 weight-300 '>
+      <section className='md:mt-32 mt-24 w-100p mb-150 pb-90'>
+        <div className='flex space-between text-20 weight-300 capitalize'>
+          <h3 className='text-16 md:text-20 weight-600 md:line-height-28 line-height-24 color-#000000E0'>
             Top selling
           </h3>
         </div>
-        <div className='grid xl:grid-5-cols-1fr l:grid-4-cols-1fr s:grid-3-cols-1fr grid-2-cols-1fr flex-wrap gap-15 l:gap-10 w-full relative'>
-          {products.length ? (
-            products.map((product, i: number) => (
-              <ProductTile product={product} key={product.id} />
-            ))
-          ) : (
-            <div className='mt-60 bg-white grid-col-span-5 text-center'>
-              No products found for the selected filters
-            </div>
-          )}
-        </div>
+        {/* {
+          products.length ?
+            <PuffLoader /> :
+          <div className='grid xxlgrid-5-cols xl:grid-4-cols-1fr s:grid-3-cols-1fr grid-2-cols-1fr flex-wrap gap-18 s:gap-20 md:gap-24 w-full relative'>
+            {products.length ? (
+              products.map((product) => {
+                if (renderedIds.has(product.id)) {
+                  return null;
+                }
+                renderedIds.add(product.id);
+                return <ProductTile product={product} key={product.id} />;
+              })
+            ) : (
+              <div className='mt-60 bg-white grid-col-span-5 text-center'>
+                No products found for the selected filters
+              </div>
+            )}
+          </div>
+        } */}
+
+        {
+          <>
+            {
+              (!products.length && loading) ?
+              <p className='w-100p flex j-content-center mt-10'>
+                <DotsLoader />
+              </p>
+              : 
+              products.length ?
+              <div className='grid xxlgrid-5-cols xl:grid-4-cols-1fr s:grid-3-cols-1fr grid-2-cols-1fr flex-wrap gap-18 s:gap-20 md:gap-24 w-full relative'>
+                {
+                  products.map((product) => {
+                    if (renderedIds.has(product.id)) {
+                      return null;
+                    }
+                    renderedIds.add(product.id);
+                    return <ProductTile
+                      product={product}
+                      key={product.id}
+                      savedItems={savedItems}
+                      saveItem={saveItem}
+                      removeSavedItem={removeSavedItem}
+                    />;
+                  })
+                }
+              </div>
+              :
+              <div className='mt-60 bg-white grid-col-span-5 text-center'>
+                No products found for the selected filters
+              </div>
+            }
+          </>
+        }
+
+
         <div ref={ref}>
-          <p></p>
+          <p className='w-100p flex j-content-center mt-10'>
+            {(products.length && loading) ? <PuffLoader /> : ""}
+          </p>
         </div>
       </section>
     </>
-  );
-};
+  )
+}
 
-export default CentralArena;
+export default CentralArena

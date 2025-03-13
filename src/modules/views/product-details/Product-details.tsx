@@ -24,6 +24,7 @@ import { useCart } from '@/modules/lib/utility/hooks/use-cart'
 import CollapsibleDesc from './product-description/collapsibleDesc'
 import ShareProductModal from './share-modal/shareProductModal'
 import ProductStockUnit from '@/modules/lib/components/product-stock-unit/ProductStockUnit'
+import classNames from 'classnames'
 
 const ProductDetails = ({ product }: { product: Product }) => {
   const [unitCounter, setUnitCounter] = useState<number>(1)
@@ -59,10 +60,10 @@ const ProductDetails = ({ product }: { product: Product }) => {
 
   return (
     <>
-      <HomepageNavBar />
-      <div className={'product-details-page l:max-w-1400 w-full mx-auto my-60'}>
-        <div className='l:flex w-full gap-25 l:pt-20 l:mt-100'>
-          <div className='l:w-50p'>
+      <HomepageNavBar parent='' />
+      <div className={'product-details-page l:max-w-1400 w-full mx-auto my-67 xl:px-60 md:px-50 sm:px-40 px-24'}>
+        <div className='l:flex w-full xl:gap-75 l:gap-60 gap-25 l:pt-20 l:mt-100'>
+          <div className='l:w-50p flex flex-col l:gap-25 l:ps-25'>
             <Breadcrumb
               crumbs={[
                 {
@@ -74,11 +75,11 @@ const ProductDetails = ({ product }: { product: Product }) => {
             />
             <Image
               src={selectedImage}
-              className='l:w-600 w-100p l:mt-25 l:radius-15 border border-grey-100'
+              className={`flex-grow-1 w-100p l:radius-15 radius-8 border border-grey-100 object-fit l:h-full md:h-420 sm:h-350 h-270 ${selectedVariant.status  === 'OUT_OF_STOCK'? 'greyscale' : ''}`}
               alt={''}
             />
           </div>
-          <div className='l:w-50p l:px-0 px-10'>
+          <div className='l:w-50p'>
             <div className='flex flex-row space-between a-items-end'>
               <div>
                 <div className='l:flex grid l:gap-0 gap-20 space-between mt-10'>
@@ -127,7 +128,7 @@ const ProductDetails = ({ product }: { product: Product }) => {
                   variant?.media?.map((mediaItem: any) => (
                     <div
                       className={cx(
-                        'l:w-115 l:h-115 w-85 h-85 overflow-hidden radius-14',
+                        `l:w-115 l:h-115 w-85 h-85 overflow-hidden radius-14 ${ variant.status === 'OUT_OF_STOCK' ? 'greyscale' : ''}`,
                         {
                           'border border-green border-2':
                             selectedImage == mediaItem?.url,
@@ -193,26 +194,30 @@ const ProductDetails = ({ product }: { product: Product }) => {
                 <></>
               )}
 
-              {!selectedVariantItemInCart ? (
+                {!selectedVariantItemInCart ? (
                 <button
-                  className='bg-green text-white border-none l:px-90 l:py-20 py-15 w-100p radius-30 pointer'
+                  className={classNames(`text-white border-none l:px-90 l:py-20 py-15 w-100p radius-30 pointer ${selectedVariant && selectedVariant.status === 'OUT_OF_STOCK' ?'bg-gray-300' :  'bg-#0B9378'}`)}
                   onClick={() => {
-                    isAuthenticated
-                      ? addToCart(
-                          selectedVariant?.id,
-                          selectedVariant?.minPurchaseQuantity || 1
-                        )
-                      : isLoginModal()
+                  if (isAuthenticated) {
+                    if (selectedVariant && selectedVariant.status !== 'OUT_OF_STOCK') {
+                    addToCart(
+                      selectedVariant?.id ?? 0,
+                      selectedVariant?.minPurchaseQuantity || 1
+                    )
+                    }
+                  } else {
+                    isLoginModal()
+                  }
                   }}
                 >
                   <div className='l:flex grid grid-2-cols-auto gap-10 items-center w-fit mx-auto'>
-                    <HiOutlineShoppingBag className='h-21' />
-                    <div className='whitespace-nowrap text-16'>Add To Cart</div>
+                    {selectedVariant.status !== 'OUT_OF_STOCK' && <HiOutlineShoppingBag className='h-21' />}
+                  <div className={classNames(`whitespace-nowrap text-16 ${selectedVariant && selectedVariant.status === 'OUT_OF_STOCK' ? 'text-black' : 'text-white' }`)}>
+                    {selectedVariant && selectedVariant.status !== "OUT_OF_STOCK" ? 'Add to cart' : 'Out of stock'}
+                  </div>
                   </div>
                 </button>
-              ) : (
-                <></>
-              )}
+                ) : null}
             </div>
           </div>
         </div>
@@ -233,7 +238,7 @@ const ProductDetails = ({ product }: { product: Product }) => {
               </div>
 
               {product.store.thumbnail && (
-                <div className='hidden l:flex radius-50p relative'>
+                <div className='hidden l:flex radius-50p relative overflow-hidden'>
                   <Image
                     className='w-85 h-85'
                     src={product.store.thumbnail}
@@ -285,7 +290,7 @@ const ProductDetails = ({ product }: { product: Product }) => {
           </div>
         </div>
         <div className='w-100p l:w-55p mt-20'>
-          <div className='flex gap-10 pb-20 l:pb-25 l:px-0 px-10'>
+          <div className='flex gap-10 pb-80 l:pb-85 l:px-0 px-10'>
             <Icon name='info' className='w-20 h-20 mt-2' />
             <div className=''>
               <h2 className='text-14 l:text-16 weight-500'>

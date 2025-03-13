@@ -3,7 +3,7 @@ import { Store } from "./store.interface";
 export interface ICategory {
   name: string;
   filters: {
-    [x: string]: any
+    [x: string]: any;
   };
   images: {
     icon: string;
@@ -17,7 +17,7 @@ export interface ProductCategory {
   name?: any;
   id: number;
   label: string;
-  type: 'wears' | 'fabrics' | null;
+  type: "wears" | "fabrics" | null;
   categories: ICategory[];
   storeId: number;
 }
@@ -60,14 +60,32 @@ export interface ProductVariant {
   minPurchaseQuantity: number;
   incrementBy: number;
   product?: Product;
+  status: string;
   meta: null | any;
   properties: null | any;
   stockUnit: string;
   dateCreated: string;
   lastUpdated: string;
-  preOrder?: boolean
-};
+  preOrder?: boolean;
+}
 
 export interface Tag {
   label: string;
+}
+
+export interface PillableProp {
+  [x: string]: {
+    active: boolean;
+    pillColor: string;
+    pillBackground: string;
+    priority: number;
+    text: string;
+  };
+}
+
+export interface IFilters {
+  sort: { sortBy: string };
+  price: { min: string; max: string };
+  rating: { rateBy: string };
+  showOffers: boolean;
 }

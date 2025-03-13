@@ -55,7 +55,8 @@ export const useCategoryFilter = (
      useEffect(() => {
           if (selectedCategory !== null) {
                const filteredProducts: Product[] = [];
-               if (selectedCategory?.name === "All") {
+               if (selectedCategory?.name === "Random") {
+                    console.log(products)
                     updateFilters(products);
                } else {
                     products.forEach((product) => {

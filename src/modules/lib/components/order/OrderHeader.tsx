@@ -1,0 +1,91 @@
+'use client'
+
+import classNames from 'classnames'
+import { useRouter, useSearchParams } from 'next/navigation'
+import { useEffect, useState } from 'react'
+
+const OrderHeader = ({ orderStatus }: { orderStatus?: string }) => {
+  const router = useRouter()
+  const searchParams = useSearchParams()
+  const params = new URLSearchParams(searchParams)
+   const tab = searchParams.get("tab");
+
+  const handleTabChange = (tab: string) => {
+    params.set('tab', tab)
+    router.push(`/orders?${params.toString()}`, { scroll: false })
+    setActiveTab(tab)
+  }
+  const clickedTab = searchParams.get('tab')?.toUpperCase() || 'ONGOING' 
+
+  const [activeTab, setActiveTab] = useState('')
+
+  useEffect(() => {
+    setActiveTab(orderStatus || clickedTab)
+  }, [orderStatus, tab])
+  
+ 
+  return (
+    <>
+      <div className='w-full h-fit flex a-items-center flex-col  l:gap-30'>
+        <div className='l:w-50p w-90p flex flex-col gap-50'>
+          <div className='flex a-items-center l:gap-10 bg-#F5F5F5 p-5 radius-6 '>
+            <div
+              className={classNames('w-100p radius-6 cursor-pointer p-10 weight-400', {
+                'bg-white': activeTab === 'ONGOING'
+              })}
+              onClick={() => handleTabChange('ONGOING')}
+            >
+              <p
+                className={classNames('text-center font-inter text-bold text-16', {
+                  'weight-600': activeTab === 'ONGOING'
+                })}
+              >
+                Ongoing
+              </p>
+            </div>
+
+            <div
+              className={classNames(
+                'w-100p cursor-pointer cursor-pointer p-10 radius-6 weight-400',
+                {
+                  'bg-white': activeTab === 'CONFIRMED'
+                }
+              )}
+              onClick={() => handleTabChange('CONFIRMED')}
+            >
+              <p
+                className={classNames('text-center font-inter text-16', {
+                  'weight-600': activeTab === 'CONFIRMED'
+                })}
+              >
+                Delivered
+              </p>
+            </div>
+            <div
+              className={classNames(
+                'w-100p cursor-pointer p-10 radius-6 overflow-hidden whitespace-nowrap ',
+                {
+                  'bg-white': activeTab === 'CANCELLED'
+                }
+              )}
+              onClick={() => handleTabChange('CANCELLED')}
+            >
+              <p
+                className={classNames(
+                  'text-center font-inter text-16 overflow-hidden text-ellipsis weight-400',
+                  {
+                    'weight-600': activeTab === 'CANCELLED'
+                  }
+                )}
+              >
+                <span>Cancelled/Returned</span>
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </>
+  )
+}
+
+export default OrderHeader

@@ -20,13 +20,13 @@ const LoginModal = () => {
       <AnimatePresence>
         {showLoginModal ? (
           <div className='radius-8 w-100p'>
-            <div className='bg-black absolute z-6 l-0 t-0 h-100vh w-100p fixed opacity-40'></div>
+            <div className='bg-black absolute z-6 l-0 t-0 h-100vh w-100p fixed opacity-40 z-20'></div>
             <motion.div
               initial={{ scale: 0 }}
               animate={{ scale: 1 }}
               exit={{ scale: 0 }}
               transition={{ duration: 0.3 }}
-              className='absolute l:l-40p l:t-35p mt-150 l:mt-0 mx-45 l:mx-0 l:ml-0 g|transform:translate(-50%) bg-white z-7 fixed radius-8 l:w-400 w-80p'
+              className='absolute l:l-40p l:t-35p mt-150 l:mt-0 mx-45 l:mx-0 l:ml-0 g|transform:translate(-50%) bg-white z-20 fixed radius-8 l:w-400 w-80p'
             >
               <header className='flex space-between items-center p-16'>
                 <div className='weight-500 text-16 whitespace-nowrap text-green-700'>
@@ -56,7 +56,7 @@ const LoginModal = () => {
                     name='password'
                     type='password'
                     placeholder='Password'
-                    inputClass='h-2 text-12'
+                    inputClass='h-20 text-12'
                     className='mt-16'
                     handleBlur={loginFormHandler.handleBlur}
                     handleChange={loginFormHandler.handleChange}

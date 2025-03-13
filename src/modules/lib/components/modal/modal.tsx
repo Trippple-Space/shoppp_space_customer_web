@@ -1,17 +1,18 @@
 "use client"
-
-import React, { useRef, useEffect, useState } from 'react';
+import { useRef, useEffect, useState } from 'react';
 
 interface ModalProps {
   isOpen: boolean;
   onClose: () => void;
   children: React.ReactNode;
   extraModalClass?: React.CSSProperties
-  extraClass?: any
+  extraClass?: React.CSSProperties
   className?: any
+  modalClassName?: string
 }
 
-const Modal: React.FC<ModalProps> = ({ isOpen, onClose, children, extraModalClass, extraClass, className }) => {
+const Modal: React.FC<ModalProps> = ({ isOpen, onClose, children, extraModalClass, extraClass, className, modalClassName }) => {
+
   const modalRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -31,9 +32,9 @@ const Modal: React.FC<ModalProps> = ({ isOpen, onClose, children, extraModalClas
   }, [isOpen, onClose]);
 
   if (!isOpen) return null;
-  
-  
-  
+
+
+
 
   if (!isOpen) return null;
 
@@ -41,13 +42,12 @@ const Modal: React.FC<ModalProps> = ({ isOpen, onClose, children, extraModalClas
     display: 'flex',
     justifyContent: 'center',
     alignItems: 'center',
-    position: 'fixed',
-    top: 0,
     left: 0,
     width: '100%',
+    backgroundColor: '#00000073',
     height: '100%',
-    backgroundColor: 'rgba(0, 0, 0, 0.1)',
-    zIndex: 6,
+    scrollbarWidth: "none",
+    msOverflowStyle: "none",
     ...extraModalClass
   };
 
@@ -55,6 +55,9 @@ const Modal: React.FC<ModalProps> = ({ isOpen, onClose, children, extraModalClas
     backgroundColor: '#fff',
     borderRadius: '8px',
     overflowY: 'scroll',
+
+    scrollbarWidth: "none",
+    msOverflowStyle: "none",
     // maxHeight: '90vh',
     // height: '100%',
     position: 'absolute',
@@ -62,7 +65,7 @@ const Modal: React.FC<ModalProps> = ({ isOpen, onClose, children, extraModalClas
   };
 
   return (
-    <div style={modalStyle}>
+    <div style={modalStyle} className={`${modalClassName === 'filter' ? 'm:absolute fixed m:t-40 t-0 md:bg-transparent! md:z-1 z-11' : 'fixed t-0 z-11'}`}>
       <div ref={modalRef} className={className} style={modalContentStyle}>
         <div className='h-full'>{children}</div>
       </div>

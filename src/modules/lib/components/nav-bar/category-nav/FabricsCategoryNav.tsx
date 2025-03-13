@@ -6,17 +6,15 @@ import Image from "../../image/Image";
 import { cx } from "@/modules/lib/utility/utility";
 import { usePathname } from "next/navigation";
 
-const FabricsCategoryNav = ({ categories, setSelectedCategory, page }: any) => {
-
+const FabricsCategoryNav = ({ categories, selectedCategory, setSelectedCategory, page }: any) => {
   const path = usePathname();
-
   return (
     <div
       className={
         cx(
-          't-75 pb-24 bg-white z-1',
+          't-75 bg-white z-1',
           {
-            'l:mt-90 mt-80 app-width test-header': page === "home",
+            'l:mt-90 mt-80 pb-30 app-width test-header': page === "home",
             'mx-24 sm:mx-40 md:mx-60 l:mx-100 xl:mx-200': page !== "home"
           }
         )
@@ -52,7 +50,7 @@ const FabricsCategoryNav = ({ categories, setSelectedCategory, page }: any) => {
                 </p>
               </div>
             </Link>
-            
+
             <Link
               href={paths.asoebi_wears}
               className={cx(
@@ -77,6 +75,7 @@ const FabricsCategoryNav = ({ categories, setSelectedCategory, page }: any) => {
       }
       <BaseCategoryNav
         categories={categories}
+        selectedCategory={selectedCategory}
         setSelectedCategory={setSelectedCategory}
         page={page}
       />

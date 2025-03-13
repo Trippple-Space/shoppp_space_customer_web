@@ -37,7 +37,7 @@ export const useCart = () => {
    
                fetchCart();
           }
-     });
+     },[isAuthenticated]);
 
      return {
           cart,

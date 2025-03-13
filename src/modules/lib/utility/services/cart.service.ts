@@ -8,7 +8,11 @@ class CartService {
           return new Promise((resolve, reject) => {
                http.get(endpoints.CART)
                     .then((response: AxiosResponse) => {
-                         resolve(response.data);
+                         const cartData = response.data;
+                         cartData.cartItems = cartData.cartItems.sort(
+                              (a: CartItem, b: CartItem) => a.id - b.id
+                         );
+                         resolve(cartData);
                     })
                     .catch((error) => {
                          console.error("Error fetching cart:", error);
@@ -21,7 +25,21 @@ class CartService {
           return new Promise((resolve, reject) => {
                http.post(endpoints.CART, { variantId, quantity })
                     .then((response) => {
-                         resolve(response.data);
+                         const cartData = response.data;
+                         cartData.cartItems = cartData.cartItems.sort(
+                              (a: CartItem, b: CartItem) => a.id - b.id
+                         );
+                         this.fetchCart()
+                              .then((updatedCartData) => {
+                                   resolve(updatedCartData);
+                              })
+                              .catch((error) => {
+                                   console.error(
+                                        "Error fetching updated cart:",
+                                        error
+                                   );
+                                   reject(error);
+                              });
                     })
                     .catch((error) => {
                          console.error("Error adding to cart:", error);
@@ -34,7 +52,11 @@ class CartService {
           return new Promise((resolve, reject) => {
                http.delete(`${endpoints.CART}/${variantId}`)
                     .then((response) => {
-                         resolve(response.data);
+                         const cartData = response.data;
+                         cartData.cartItems = cartData.cartItems.sort(
+                              (a: CartItem, b: CartItem) => a.id - b.id
+                         );
+                         resolve(cartData);
                     })
                     .catch((error) => {
                          console.error("Error removing from cart:", error);
@@ -47,13 +69,48 @@ class CartService {
           return new Promise((resolve, reject) => {
                http.put(`${endpoints.CART}/${variantId}`, { quantity })
                     .then((response) => {
-                         resolve(response.data);
+                         const cartData = response.data;
+                         cartData.cartItems = cartData.cartItems.sort(
+                              (a: CartItem, b: CartItem) => a.id - b.id
+                         );
+                         resolve(cartData);
                     })
                     .catch((error) => {
                          console.error("Error updating item quantity:", error);
                          reject(error);
                     });
           });
+     }
+
+     async buyCartItemAgain(cartItems: CartItem[]): Promise<void> {
+          try {
+               const currentCart = await this.fetchCart();
+               const existingCartItemIds = new Set(
+                    currentCart.cartItems.map(
+                         (item: CartItem) => item.variant.id
+                    )
+               );
+
+               const itemsToAdd = cartItems.filter(
+                    (cartItem) => !existingCartItemIds.has(cartItem.variant.id)
+               );
+
+               if (itemsToAdd.length === 0) {
+                    window.location.href = "/checkout";
+                    return;
+               }
+
+               await Promise.all(
+                    itemsToAdd.map((cartItem) =>
+                         this.addToCart(cartItem.variant.id, cartItem.quantity)
+                    )
+               );
+
+               window.location.href = "/checkout";
+          } catch (error) {
+               console.error("Error processing buy again action:", error);
+               throw error;
+          }
      }
 }
 

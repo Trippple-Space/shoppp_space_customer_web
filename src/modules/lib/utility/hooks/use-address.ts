@@ -7,17 +7,59 @@ import { Address } from "../types/address.interface";
 import { FormikConfig, useFormik } from "formik";
 import * as Yup from "yup";
 
+const nameValidation = Yup.string()
+  .trim()
+  .matches(/^[a-zA-Z\s]+$/, "Name must only contain letters and spaces")
+  .min(2, "Name must be at least 2 characters")
+  .max(50, "Name must be less than 50 characters")
+  .required("Name cannot be empty");
+
 export const AddressValidationSchema = Yup.object().shape({
   label: Yup.string().trim().required("Label is required"),
+  firstName: nameValidation.required("First name is required"),
+  lastName: nameValidation.required("Last name is required"),
   address: Yup.string().trim().required("Address is required"),
   city: Yup.string().trim().required("City is required"),
   state: Yup.string().trim().required("State is required"),
   contactNo: Yup.string()
-    .matches(
-      /^\+234\d{10}$/,
-      "Phone number must be in +234 format"
+    .test(
+      "valid-nigerian-phone",
+      "Phone number must be a valid Nigerian number",
+      (value) => {
+        if (!value) return false;
+
+        const phoneNumber = value.startsWith("+234")
+          ? value.slice(4)
+          : value.startsWith("0")
+          ? value.slice(1)
+          : value;
+        return /^(7|8|9)\d{9}$/.test(phoneNumber);
+      }
     )
     .required("Contact number is required"),
+
+  secondaryContactNo: Yup.string()
+    .nullable()
+    .test(
+      "valid-nigerian-phone",
+      "Phone number must be a valid Nigerian number",
+      function (value) {
+        const { secondaryContactNo } = this.parent;
+        if (
+          !value ||
+          secondaryContactNo === null ||
+          secondaryContactNo === undefined
+        ) {
+          return true;
+        }
+        const phoneNumber = value.startsWith("+234")
+          ? value.slice(4)
+          : value.startsWith("0")
+          ? value.slice(1)
+          : value;
+        return /^(7|8|9)\d{9}$/.test(phoneNumber);
+      }
+    ),
 
   isDefault: Yup.boolean(),
 });
@@ -27,16 +69,34 @@ const formikAddressConfig = (
   handleSubmit: Function
 ): FormikConfig<any> => ({
   initialValues: initialValues || {
-    label: "",
+    label: "something",
+    firstName: "",
+    lastName: "",
     address: "",
     city: "",
-    state: "",
+    state: "Lagos",
     contactNo: "",
+    secondaryContactNo: "",
     notes: "",
     isDefault: false,
   },
   onSubmit: (values, { resetForm }) => {
-    handleSubmit(values);
+    const transformedValues = {
+      ...values,
+      contactNo: `+234${values.contactNo
+        .replace(/^0/, "")
+        .replace(/^\+234/, "")}`,
+      secondaryContactNo: values.secondaryContactNo
+        ? `+234${values.secondaryContactNo
+            .replace(/^0/, "")
+            .replace(/^\+234/, "")}`
+        : "",
+    };
+    if (!values.secondaryContactNo) {
+      delete transformedValues.secondaryContactNo;
+    }
+
+    handleSubmit(transformedValues);
     resetForm();
   },
 
@@ -73,7 +133,6 @@ const useAddress = () => {
 
   const handleUpdateAddress = (addressId: number, newAddress: Address) => {
     if (user?.id && selectedAddressId !== null) {
-
       updateAddress(user.id, addressId, newAddress);
     }
   };
@@ -89,7 +148,6 @@ const useAddress = () => {
   );
   const updateFormHandler = useFormik<Address>(
     formikAddressConfig(addressToUpdate, (address: Address) => {
-
       handleUpdateAddress(address.id, address);
     })
   );
