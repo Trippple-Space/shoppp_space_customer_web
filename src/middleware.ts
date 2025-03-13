@@ -6,13 +6,13 @@ function getSubstringBefore(input: string, target: string): string {
   if (index === -1) {
     return input; // Return the whole string if the target is not found
   }
-  return input.slice(0, index);
+  return `${input.slice(0, index)}`.replace(/-$/, '');
 }
 
 const extractMerchantSubdomainFromHost = (host: string) => {
   const hostParts = host.split(".");
   const subdomain = hostParts.length >= 3 ? `${hostParts[0]}`.replace(/-staging$/, '') : '';
-  return getSubstringBefore(subdomain, '-asoebi-client');
+  return getSubstringBefore(subdomain, 'asoebi-client');
 }
 
 export function middleware(request: NextRequest) {
