@@ -33,8 +33,8 @@ export function middleware(request: NextRequest) {
     reconstructedHost,
   });
 
-  if (subdomain !== "www" && subdomain !== "api") {
-    const pathname = `${subdomain ? '/' : ''}${subdomain}${url.pathname}`;
+  if (subdomain && subdomain !== "www" && subdomain !== "api") {
+    const pathname = `/${subdomain}${url.pathname}`;
     console.log('After if subdomain', {
       pathname,
       URL: new URL(`https://${reconstructedHost}${pathname}`)
@@ -45,6 +45,10 @@ export function middleware(request: NextRequest) {
   // Avoid redirecting protected routes (e.g., already on login/dashboard)
   if (pathname.startsWith('/dashboard') || pathname.startsWith('/login')) {
     return NextResponse.next();
+  }
+
+  if (pathname === '/' && !subdomain) {
+    return NextResponse.redirect(new URL('/wears', request.url))
   }
 
   if (currentUser) {
