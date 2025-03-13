@@ -193,7 +193,7 @@ const handleNextImage = () => {
                         <div className='flex flex-col gap-10'>
                           <p className='weight-400'>{product.name} - {product.longDescription}</p>
                           <div>
-                            <p className='weight-400 text-grey-500 text-14'>507 sold | sold by {product.store.name} </p>
+                            <p className='weight-400 text-grey-500 text-14'> sold by {product.store.name} </p>
                           </div>
                             <p className='weight-400'> in {product.type} </p>
                             <p className='weight-600 text-30 text-black'> {formatNumberAsPrice(displayPrice || 0)} </p>
