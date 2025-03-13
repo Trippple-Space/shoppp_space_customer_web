@@ -42,16 +42,8 @@ export function middleware(request: NextRequest) {
     return NextResponse.rewrite(new URL(`https://${reconstructedHost}${pathname}`));
   }
 
-  // Avoid redirecting protected routes (e.g., already on login/dashboard)
-  if (pathname.startsWith('/dashboard') || pathname.startsWith('/login')) {
-    return NextResponse.next();
-  }
+  return NextResponse.next();
 
-  if (currentUser) {
-    return NextResponse.redirect(new URL('/dashboard', request.url));
-  }
-  
-  return NextResponse.redirect(new URL('/login', request.url));
 }
 
 export const config = {
