@@ -34,7 +34,7 @@ export function middleware(request: NextRequest) {
   });
 
   if (subdomain && subdomain !== "www" && subdomain !== "api") {
-    const pathname = `/${subdomain}${url.pathname}`;
+    const pathname = subdomain !== url.pathname?.replace('/', '') ? `/${subdomain}${url.pathname}` : `${url.pathname}`;
     console.log('After if subdomain', {
       pathname,
       URL: new URL(`https://${reconstructedHost}${pathname}`)
@@ -43,6 +43,10 @@ export function middleware(request: NextRequest) {
   }
 
   if (pathname === '/' && !subdomain) {
+    console.log('Redirecting to /wears', {
+      pathname,
+      subdomain
+    })
     return NextResponse.redirect(new URL('/wears', request.url))
   }
 
