@@ -34,7 +34,7 @@ export function middleware(request: NextRequest) {
   });
 
   if (subdomain && subdomain !== "www" && subdomain !== "api") {
-    const pathname = `/${subdomain}${url.pathname?.replace?.(/\/$/, '')}`;
+    const pathname = subdomain !== url.pathname?.replace('/', '') ? `/${subdomain}${url.pathname}` : `${url.pathname}`;
     console.log('After if subdomain', {
       subdomain,
       pathname,
