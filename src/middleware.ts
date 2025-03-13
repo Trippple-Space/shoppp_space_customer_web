@@ -37,9 +37,9 @@ export function middleware(request: NextRequest) {
     const pathname = `${subdomain ? '/' : ''}${subdomain}${url.pathname}`;
     console.log('After if subdomain', {
       pathname,
-      URL: new URL(`${reconstructedHost}${pathname}`)
+      URL: new URL(`https://${reconstructedHost}${pathname}`)
     });
-    return NextResponse.rewrite(new URL(`${reconstructedHost}${pathname}`));
+    return NextResponse.rewrite(new URL(`https://${reconstructedHost}${pathname}`));
   }
 
   // Avoid redirecting protected routes (e.g., already on login/dashboard)
