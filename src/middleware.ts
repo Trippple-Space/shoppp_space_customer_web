@@ -33,13 +33,17 @@ export function middleware(request: NextRequest) {
     reconstructedHost,
   });
 
-  if (subdomain !== "www" && subdomain !== "api") {
-    const pathname = `${subdomain ? '/' : ''}${subdomain}${url.pathname}`;
+  if (subdomain && subdomain !== "www" && subdomain !== "api") {
+    const pathname = `/${subdomain}${url.pathname}`;
     console.log('After if subdomain', {
       pathname,
       URL: new URL(`https://${reconstructedHost}${pathname}`)
     });
     return NextResponse.rewrite(new URL(`https://${reconstructedHost}${pathname}`));
+  }
+
+  if (pathname === '/' && !subdomain) {
+    return NextResponse.redirect(new URL('/wears', request.url))
   }
 
   return NextResponse.next();
