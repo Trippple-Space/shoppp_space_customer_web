@@ -27,12 +27,7 @@ const nextConfig = {
         source: '/home',
         destination: '/',
         permanent: true,
-      },
-      {
-        source: '/',
-        destination: '/wears',
-        permanent: false,
-      },
+      }
     ];
   },
   env: {
