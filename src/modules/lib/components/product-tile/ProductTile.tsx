@@ -25,10 +25,6 @@ const ProductTile: FC<IProductTile> = ({ product, savedItems, saveItem, removeSa
   const [loading, setLoading] = useState(false)
   const [onProductTileHover, setOnProductTileHover] = useState(false)
   const [openSingleProductModal, setOpenSingleProductModal] = useState(false)
-
-
-
-
   const [selectedImage, setSelectedImage] = useState(
     product?.variants?.[0]?.media?.[0]?.url
   );
@@ -59,7 +55,7 @@ const ProductTile: FC<IProductTile> = ({ product, savedItems, saveItem, removeSa
     setTopTwoPills(pills)
   }, [])
 
-  const isSaved = savedItems.find((item: SavedItem) => item.variantId === selectedVariant?.id)
+  const isSaved = savedItems?.find((item: SavedItem) => item.variantId === selectedVariant?.id)
 
   const handleSave = () => {
     if (isSaved) {
@@ -72,9 +68,6 @@ const ProductTile: FC<IProductTile> = ({ product, savedItems, saveItem, removeSa
   const handleCloseProductModal = () => {
     setOpenSingleProductModal(prev => !prev)    
   }
-
-
-
 
   const sampleTag = [
     {
@@ -92,8 +85,6 @@ const ProductTile: FC<IProductTile> = ({ product, savedItems, saveItem, removeSa
         '{"pill:preOrder":{"pillColor":"#FFFFFF","pillBackground":"#800080","priority":"3","text":"pre-order"}}'
     }
   ]
-
-
 
   return (
     <div className='mt-30 l:mt-20 w-full overflow-hidden'>
