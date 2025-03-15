@@ -40,8 +40,7 @@ export function middleware(request: NextRequest) {
       pathname,
       URL: `https://${reconstructedHost}${pathname}`
     });
-    return NextResponse.rewrite(`https://${reconstructedHost}${pathname}`);
-    // return NextResponse.rewrite(`https://asoebi.africa/aznzee/`);
+    return NextResponse.rewrite(`https://${reconstructedHost}${pathname}`); // aznzee.asoebi.africa ==> https://asoebi.africa/aznzee
   }
 
   if (pathname === '/' && !subdomain) {
