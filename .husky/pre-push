@@ -1,2 +1,0 @@
-# Pull from the remote origin before push
-git pull origin $(git rev-parse --abbrev-ref HEAD) --no-rebase --no-edit
