@@ -34,13 +34,13 @@ export function middleware(request: NextRequest) {
   });
 
   if (subdomain && subdomain !== "www" && subdomain !== "api") {
-    // const pathname = subdomain !== url.pathname?.replace('/', '') ? `/${subdomain}${url.pathname}` : `${url.pathname}`;
-    // console.log('After if subdomain', {
-    //   pathname,
-    //   URL: new URL(`https://${reconstructedHost}${pathname}`)
-    // });
-    // return NextResponse.rewrite(new URL(`https://${reconstructedHost}${pathname}`));
-    return NextResponse.rewrite('https://asoebi.africa/aznzee');
+    const pathname = subdomain !== url.pathname?.replace('/', '') ? `/${subdomain}${url.pathname}` : `${url.pathname}`;
+    console.log('After if subdomain', {
+      subdomain,
+      pathname,
+      URL: `https://${reconstructedHost}${pathname}`
+    });
+    return NextResponse.rewrite(`https://${reconstructedHost}${pathname}`);
   }
 
   if (pathname === '/' && !subdomain) {
@@ -52,7 +52,6 @@ export function middleware(request: NextRequest) {
   }
 
   return NextResponse.next();
-
 }
 
 export const config = {
