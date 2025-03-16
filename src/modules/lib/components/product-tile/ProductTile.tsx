@@ -12,19 +12,19 @@ import VideoSrc from '../video-src/VideoSrc'
 import { FaEye } from 'react-icons/fa6'
 import ProductDetailModal from '../product-detail-modal/ProductDetailModal'
 import { PiShoppingCartFill, PiStorefront } from 'react-icons/pi'
-import { useSavedItem } from '../../utility/hooks/use-saved-item'
-import { SavedItem } from '../../utility/types/savedItem.interface'
+import { SavedVariant } from '../../utility/types/SavedVariant.interface'
+import { productService } from '../../utility/services/product.service'
 
 interface IProductTile {
   product: Product
-  saveItem?: any
-  removeSavedItem?: any
-  savedItems?: SavedItem[]
+  saveVariant?: (variantId: number) => void
+  removeSavedVariant?: (variantId: number) => void
+  savedVariants?: SavedVariant[]
 }
-const ProductTile: FC<IProductTile> = ({ product, savedItems, saveItem, removeSavedItem }: any) => {
-  const [loading, setLoading] = useState(false)
+const ProductTile: FC<IProductTile> = ({ product, savedVariants, saveVariant, removeSavedVariant}: any) => {
   const [onProductTileHover, setOnProductTileHover] = useState(false)
   const [openSingleProductModal, setOpenSingleProductModal] = useState(false)
+  const [recentlyViewedId, setRecentlyViewsId] = useState<any>() 
 
 
 
@@ -59,13 +59,14 @@ const ProductTile: FC<IProductTile> = ({ product, savedItems, saveItem, removeSa
     setTopTwoPills(pills)
   }, [])
 
-  const isSaved = savedItems.find((item: SavedItem) => item.variantId === selectedVariant?.id)
+  const isSaved = savedVariants?.find((item: SavedVariant) => item.variantId === selectedVariant?.id)
 
   const handleSave = () => {
     if (isSaved) {
-      removeSavedItem(selectedVariant?.id)
+      removeSavedVariant(selectedVariant?.id)
+
     } else {
-      saveItem(selectedVariant?.id)
+      saveVariant(selectedVariant?.id)
     }
   }
 
@@ -74,25 +75,42 @@ const ProductTile: FC<IProductTile> = ({ product, savedItems, saveItem, removeSa
   }
 
 
+  function handleLogin(variantId: number, minimumPurchase: number) {
+    localStorage.setItem('variantId',variantId.toString())
+    localStorage.setItem('variantIdMinimumPurchase',minimumPurchase.toString())
+    isLoginModal()
+  }
 
-
-  const sampleTag = [
-    {
-      label:
-        '{"pill:shippedFromAbroad":{"pillColor":"#0B9378","pillBackground":"#EDFCF7","priority":"1","text":"shipped from abroad"}}',
-    },
-    { label: "luxury" },
-    { label: "new arrivals" },
-    {
-      label:
-        '{"pill:50%Off":{"pillColor":"#000000","pillBackground":"#D3D3D3","priority":"2","text":"50% off"}}',
-    },
-    {
-      label:
-        '{"pill:preOrder":{"pillColor":"#FFFFFF","pillBackground":"#800080","priority":"3","text":"pre-order"}}'
+  useEffect(() => {
+    if (recentlyViewedId && isAuthenticated) {
+      (async () => {
+        await productService.addRecentlyViewedVariants({
+          productVariantId: selectedVariant?.id,
+          type: 'view'
+        });
+      })();
     }
-  ]
+  }, [recentlyViewedId, isAuthenticated]);
 
+  useEffect(() => {
+    if (isAuthenticated) {  
+      const variantId = localStorage.getItem("variantId");
+      const variantIdMinimumPurchase = localStorage.getItem("variantIdMinimumPurchase");
+            if (variantId && variantIdMinimumPurchase) {
+                const parsedVariantId = parseInt(variantId, 10);
+                const parsedMinimumPurchase = parseInt(variantIdMinimumPurchase, 10);
+
+                if (!isNaN(parsedVariantId) && !isNaN(parsedMinimumPurchase)) {
+                    addToCart(parsedVariantId, parsedMinimumPurchase);
+                    console.log("Item added from localStorage to cart!");
+                }
+
+              
+                localStorage.removeItem("variantId");
+                localStorage.removeItem("variantIdMinimumPurchase");
+            }
+        }
+    }, [isAuthenticated]);
 
 
   return (
@@ -127,7 +145,7 @@ const ProductTile: FC<IProductTile> = ({ product, savedItems, saveItem, removeSa
           {onProductTileHover && product && (
             <div
               id="add to cart button"
-              className=" hidden l:block absolute b-0 l-0 ml-10 mb-10 l:mr-15 l:mb-15"
+              className=" hidden l:block absolute t-0 l-0 ml-10 mt-20 l:mr-15 l:mb-15"
               onClick={handleCloseProductModal}
             >
               <p className='bg-white radius-20 p-5 cursor-pointer text-12 flex a-items-center gap-5'>
@@ -155,7 +173,8 @@ const ProductTile: FC<IProductTile> = ({ product, savedItems, saveItem, removeSa
                       selectedVariant.id,
                       selectedVariant.minPurchaseQuantity || 1
                     ) 
-                    : isLoginModal();
+                    : handleLogin(selectedVariant.id,
+                      selectedVariant.minPurchaseQuantity || 1);
                 }}
                 disabled={!selectedImage}
                     className={classNames(
@@ -198,7 +217,7 @@ const ProductTile: FC<IProductTile> = ({ product, savedItems, saveItem, removeSa
       <div className="scroll-x no-scrollbar">
         <div
           id="product varients"
-          className="md:mt-16 mt-14 flex a-items-center md:gap-6 gap-4 w-fit whitespace-nowrap"
+          className="md:mt-16 mt-14 flex a-items-center md:gap-6 gap-4 w-200 overlow-auto whitespace-nowrap"
         >
           {product.variants.map((variant: any) =>
             variant?.media?.map((mediaItem: any) =>
@@ -215,6 +234,7 @@ const ProductTile: FC<IProductTile> = ({ product, savedItems, saveItem, removeSa
                   src={mediaItem?.url}
                   onClick={() => {
                     setSelectedVariant(variant);
+                    setRecentlyViewsId(variant.id)
                     setMediaType("image");
                     setSelectedImage(mediaItem?.url);
                   }}
@@ -276,7 +296,7 @@ const ProductTile: FC<IProductTile> = ({ product, savedItems, saveItem, removeSa
           )}
           {/* <span className="weight-300 l:text-15 text-10">{!!selectedVariant?.stockUnit && 'per'} {selectedVariant?.stockUnit}</span> */}
         </div>
-        <div className="flex flex-wrap gap-4">
+        {/* <div className="flex flex-wrap gap-4">
           {product?.tags?.map((tag: any, i: number) => (
             <span
               className="text-green md:text-12 text-10 inline-block radius-5 mx-2 my-1 pointer hover:underline lowercase"
@@ -285,7 +305,7 @@ const ProductTile: FC<IProductTile> = ({ product, savedItems, saveItem, removeSa
               {!tag.label.includes("pill:") && "#" + tag.label}
             </span>
           ))}
-        </div>
+        </div> */}
       </div>
       {openSingleProductModal && (
         <ProductDetailModal

@@ -20,6 +20,10 @@ class AuthService {
 
     signOut() {
         localStorage.removeItem('token')
+        localStorage.removeItem("variantId");
+        localStorage.removeItem("variantIdMinimumPurchase");
+        window.location.replace(paths.login)
+        
     }
 
     validateAuth(): Promise<User> {

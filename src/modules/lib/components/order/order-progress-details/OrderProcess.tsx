@@ -34,14 +34,14 @@ const OrderProgressCircle = ({
 }: OrderProgressProps) => (
   <div
     className={classNames(
-      `w-20 h-20 radius-20 z-1 border border-2 border-white  ${
+      `w-20 h-20 radius-20 z-2 border border-3 border-white  ${
         orderCartModal?.status === 'CANCELLED' &&
         text === 'Cancelled-Payment Unsuccessful' &&
         'bg-#D4280C'
       }`,
       {
         'bg-green': active,
-        'bg-#d9d9d9': !active
+        'bg-#d9d9d9 z-2': !active
       }
     )}
   ></div>
@@ -51,7 +51,7 @@ const OrderProgressCircle = ({
 const OrderProgressLine = ({ active, styles = '' }: OrderProgressProps) => (
   <div
     className={classNames(`p-1 absolute ${styles}`, {
-      'bg-green': active,
+      'bg-green z-1': active,
       'bg-#F3F3F3': !active
     })}
   ></div>
@@ -136,7 +136,7 @@ const OrderProcess = ({
         ) : (
           <>
             <OrderProgressLine
-              styles='b-10 h-70'
+              styles='h-150'
               active={active}
               orderCartModal={orderCartModal}
               text={text}

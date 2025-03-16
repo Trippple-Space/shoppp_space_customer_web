@@ -24,6 +24,7 @@ export interface ProductCategory {
 
 export interface Product {
   longDescription: string;
+  shortDescription: string;
   keywords: string[];
   id: number;
   slug: string;
@@ -88,4 +89,16 @@ export interface IFilters {
   price: { min: string; max: string };
   rating: { rateBy: string };
   showOffers: boolean;
+}
+
+
+
+export interface RecentlyViewed {
+  id: number;
+  productVariantId: number;
+  userId: number;
+  type: string;
+  productVariant: ProductVariant;
+  createdAt: string;
+  updatedAt: string;
 }

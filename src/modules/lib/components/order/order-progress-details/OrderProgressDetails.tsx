@@ -12,16 +12,16 @@ const OrderProgressDetails = ({
     setTimeline(prev => !prev)
   }
 
-  const statusOrder = [
+  const orderStatus = [
     'ONGOING',
     'PENDING_CONFIRMATION',
     'ACKNOWLEDGED',
     'WAITING_TO_BE_SHIPPED',
-    'SHIPPED',
+    'OUT_FOR_DELIVERY',
     'DELIVERED'
   ]
-  const currentStatusIndex = statusOrder.indexOf(
-    orderCartModal.delivery.status.toUpperCase()
+  const currentStatusIndex = orderStatus.indexOf(
+    orderCartModal.status.toUpperCase()
   )
 
   function getStatusText (status: string) {
@@ -31,7 +31,7 @@ const OrderProgressDetails = ({
       case 'PENDING_CONFIRMATION':
         return 'Pending Confirmation'
       case 'ACKNOWLEDGED':
-        return 'Your order has being received'
+        return 'Order received'
       case 'WAITING_TO_BE_SHIPPED':
         return 'Waiting to be shipped'
       case 'OUT_FOR_DELIVERY':
@@ -107,7 +107,7 @@ const OrderProgressDetails = ({
           <>
             <OrderProcess
               text='Order placed'
-              date={orderCartModal.delivery.deliveryWindowStart}
+              date={orderCartModal.delivery.dateCreated}
               active={true}
               styles='b-10 h-70 z-0'
               orderCartModal={orderCartModal}
@@ -129,14 +129,14 @@ const OrderProgressDetails = ({
           </>
         ) : (
           <>
-            {statusOrder.map((status, index) => (
+            {orderStatus.map((status, index) => (
               <OrderProcess
                 key={status}
                 text={getStatusText(status)}
                 date={orderCartModal.delivery.deliveryWindowStart}
                 active={index <= currentStatusIndex}
                 orderCartModal={orderCartModal}
-                styles={index === 0 ? 'b-10 h-70 z-0' : 't-0 h-70'}
+                styles={index === 0 ? 'b-1 z-0' : 't-0 h-70'}
               />
             ))}
           </>

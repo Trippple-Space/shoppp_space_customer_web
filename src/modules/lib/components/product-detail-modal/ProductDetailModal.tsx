@@ -16,14 +16,16 @@ interface ProductDetailModalProp {
   openSingleProductModal: boolean
   handleCloseProductModal: () => void
   product: Product | null
-  position: string
+  position: string;
+  variantSelectedImage?: string;
 }
 
 const ProductDetailModal = ({
   product,
   handleCloseProductModal,
   openSingleProductModal,
-  position
+  position,
+  variantSelectedImage
 }: ProductDetailModalProp) => {
   const {
     addToCart,
@@ -35,8 +37,7 @@ const ProductDetailModal = ({
   } = useCart()
 
   const [isHover, setIsHover] = useState(false)
-  const [selectedImage, setSelectedImage] = useState<any>(
-    product?.variants?.[0]?.media?.[0]?.url
+  const [selectedImage, setSelectedImage] = useState<any>( variantSelectedImage ? variantSelectedImage : product?.variants?.[0]?.media?.[0]?.url 
   )
   const [selectedVariant, setSelectedVariant] = useState(product?.variants?.[0])
   const selectedVariantItemInCart = cart.cartItems.find(
@@ -45,12 +46,12 @@ const ProductDetailModal = ({
 
 
   useEffect(() => {
-    setSelectedImage(product?.variants?.[0]?.media?.[0]?.url)
+    setSelectedImage(product?.variants?.[0]?.media?.[0]?.url || variantSelectedImage)
 
     if (product?.variants?.length) {
       const defaultVariant = product.variants[0]
       setSelectedVariant(defaultVariant)
-      setSelectedImage(defaultVariant?.media?.[0]?.url)
+      setSelectedImage(defaultVariant?.media?.[0]?.url || variantSelectedImage)
     }
   }, [product])
 
@@ -71,25 +72,28 @@ const ProductDetailModal = ({
 
 const handlePreviousImage = () => {
   if (!selectedVariant || !product?.variants?.length) return;
-
+  if (product.variants.length > 1) {
   const currentVariantIndex = product.variants.indexOf(selectedVariant);
   const previousIndex = currentVariantIndex > 0 ? currentVariantIndex - 1 : product.variants.length - 1; // Loop to last
 
   const previousVariant = product.variants[previousIndex];
   setSelectedVariant(previousVariant);
-  setSelectedImage(previousVariant?.media?.[0]?.url);
-};
+  setSelectedImage(previousVariant?.media?.[0]?.url || variantSelectedImage);
+}};
 
 const handleNextImage = () => {
   if (!selectedVariant || !product?.variants?.length) return;
 
+  if (product.variants.length > 1) {
   const currentVariantIndex = product.variants.indexOf(selectedVariant);
   const nextVariantIndex = (currentVariantIndex + 1) % product.variants.length; 
 
   const nextVariant = product.variants[nextVariantIndex];
   setSelectedVariant(nextVariant);
-  setSelectedImage(nextVariant?.media?.[0]?.url);
-};
+  setSelectedImage(nextVariant?.media?.[0]?.url || variantSelectedImage);
+}};
+
+  
 
   
  
@@ -135,7 +139,7 @@ const handleNextImage = () => {
                             <div className='relative' onMouseOver={() => setIsHover(true)}
                               onMouseOut={() => setIsHover(false)}
                               >
-                              {isHover && <div className='absolute z-10 b-45p bg-white l-20  p-15 radius-99 flex a-items-center j-content-center cursor-pointer icon-box-shadow' 
+                              {isHover  && <div className={`absolute z-10 b-45p ${product.variants.length > 1 ? 'bg-white color-black' : 'color-#A9A9A9 bg-#D3D3D3'} l-20  p-15 radius-99 flex a-items-center j-content-center cursor-pointer icon-box-shadow`} 
                                 onClick={handlePreviousImage}
                               >
                                 <MdArrowBackIos className='w-full relative l-3' />
@@ -149,11 +153,11 @@ const handleNextImage = () => {
                               />
                               </div>
                            
-                            {isHover &&  <div className='absolute z-10 b-45p bg-white r-20 p-15 radius-99 flex a-items-center j-content-center cursor-pointer   icon-box-shadow' onClick={handleNextImage}>
+                            {isHover  &&  <div className={`absolute z-10 b-45p ${product.variants.length > 1 ? 'bg-white color-black' : 'color-#A9A9A9 bg-#D3D3D3'} r-20 p-15 radius-99 flex a-items-center j-content-center cursor-pointer   icon-box-shadow `}onClick={handleNextImage}>
                                 <MdArrowForwardIos className='w-fit'/>
                             </div>}
                           </div>
-                            <div className='flex gap-10 py-5 overflow-x-auto a-items-center no-scrollbar'>
+                      {!variantSelectedImage &&  product.variants.length > 1 && <div className='flex gap-10 py-5 overflow-x-auto a-items-center no-scrollbar'>
                               {product?.variants?.map((variant, idx) =>
                           variant?.media?.map((mediaItem: any) => (
                             <div
@@ -180,7 +184,7 @@ const handleNextImage = () => {
                             </div>
                           ))
                         )}
-                            </div>
+                            </div>}
                           </div>
                         </div>
                       </div>
@@ -189,7 +193,7 @@ const handleNextImage = () => {
                         <div className='flex flex-col gap-10'>
                           <p className='weight-400'>{product.name} - {product.longDescription}</p>
                           <div>
-                            <p className='weight-400 text-grey-500 text-14'>507 sold | sold by {product.store.name} </p>
+                            <p className='weight-400 text-grey-500 text-14'> sold by {product.store.name} </p>
                           </div>
                             <p className='weight-400'> in {product.type} </p>
                             <p className='weight-600 text-30 text-black'> {formatNumberAsPrice(displayPrice || 0)} </p>
@@ -198,16 +202,19 @@ const handleNextImage = () => {
                            </div>
                    
                       <div className='mt-10 flex flex-col'>
-                        <p className='text-left text-14 weight-400'>
+                    { !variantSelectedImage &&
+                    <>
+                    
+                    <p className='text-left text-14 weight-400'>
                          Select color:
                         </p>
                         <div className='mt-10 flex gap-6 a-items-center'>
-                          {product.variants.map(variant => (
+                          { product.variants.map(variant => (
                             <div
                               key={variant.id}
                               onClick={() => {
                                 setSelectedVariant(variant)
-                                setSelectedImage(variant?.media?.[0]?.url)
+                                setSelectedImage(variant?.media?.[0]?.url || variantSelectedImage)
                               }}
                               style={{
                                 background: variant.properties?.['color']
@@ -216,12 +223,14 @@ const handleNextImage = () => {
                                 'w-30 h-30 flex round',
                                 {
                                   'outline outline-2 w-26 h-26':
-                                    variant.id === selectedVariant?.id
+                                  variant.id === selectedVariant?.id
                                 }
                               )}
-                            ></div>
-                          ))}
-                          </div> 
+                              ></div>
+                            ))}
+                                </div> 
+                            </>
+                          }
 
                         <div className='grid mt-20 mb-10 gap-10'>
                           {selectedVariantItemInCart ? (
@@ -361,7 +370,7 @@ export default ProductDetailModal
                               key={variant.id}
                               onClick={() => {
                                 setSelectedVariant(variant)
-                                setSelectedImage(variant?.media?.[0]?.url)
+                                setSelectedImage(variant?.media?.[0]?.url || variantSelectedImage)
                               }}
                               style={{
                                 background: variant.properties?.['color']

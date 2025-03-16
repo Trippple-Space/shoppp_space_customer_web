@@ -127,7 +127,7 @@ export const displayProductPill = (tags: any) => {
   const destringPills = (pills: { label: string }[]): PillableProp => {
     const pillable: PillableProp = {};
 
-    pills.forEach((pill) => {
+    pills?.forEach((pill) => {
       const destringedPill = JSON.parse(pill.label);
 
       for (const key in destringedPill) {
@@ -234,4 +234,4 @@ export const preventCopyPaste = (e: ClipboardEvent) => {
   e.stopPropagation();
 }
 
-export const passwordValidatorRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[^A-Za-z\d])[A-Za-z\d\W]{8,}$/;
+export const passwordValidatorRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[^A-Za-z\d])[A-Za-z\d\W]{8,}$/ 
