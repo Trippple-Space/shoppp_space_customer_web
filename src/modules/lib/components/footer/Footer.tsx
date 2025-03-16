@@ -38,7 +38,7 @@ const Footer = () => {
                   Follow
                 </p>
                 <div className='flex gap-10 py-15'>
-                  <div className='relative pointer l:w-40 l:h-40 w-30 h-30 round flex j-content-center items-center border border-1 border-light-grey'>
+                  {/* <div className='relative pointer l:w-40 l:h-40 w-30 h-30 round flex j-content-center items-center border border-1 border-light-grey'>
                     <BiLogoFacebook className='l:w-30 l:h-25 w-16 h-16' />
                   </div>
                   <div className='relative pointer l:w-40 l:h-40 w-30 h-30 round flex j-content-center items-center border border-1 border-light-grey'>
@@ -46,10 +46,10 @@ const Footer = () => {
                   </div>
                   <div className='relative pointer l:w-40 l:h-40 w-30 h-30 round flex j-content-center items-center border border-1 border-light-grey'>
                     <AiOutlineYoutube className='l:w-30 l:h-25 w-16 h-16' />
-                  </div>
-                  <div className='relative pointer l:w-40 l:h-40 w-30 h-30 round flex j-content-center items-center border border-1 border-light-grey'>
+                  </div> */}
+                  <a className='relative pointer l:w-40 l:h-40 w-30 h-30 round flex j-content-center items-center border border-1 border-light-grey' href='https://www.instagram.com/theasoebiafrica/' target='_blank'>
                     <AiOutlineInstagram className='l:w-30 l:h-25 w-16 h-16' />
-                  </div>
+                  </a>
                 </div>
                 <div className='text-light-grey text-14 font-inter weight-500'>
                   @asoebiafrica | #AsoebiAfrica
