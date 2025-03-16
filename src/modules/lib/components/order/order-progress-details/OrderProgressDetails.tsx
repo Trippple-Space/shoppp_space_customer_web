@@ -136,7 +136,7 @@ const OrderProgressDetails = ({
                 date={orderCartModal.delivery.deliveryWindowStart}
                 active={index <= currentStatusIndex}
                 orderCartModal={orderCartModal}
-                styles={index === 0 ? 'b-10 h-70 z-0' : 't-0 h-70'}
+                styles={index === 0 ? 'b-1 z-0' : 't-0 h-70'}
               />
             ))}
           </>
