@@ -5,11 +5,12 @@ import ProductTile from '@/modules/lib/components/product-tile/ProductTile'
 import { useProductListView } from '@/modules/lib/utility/hooks/views/use-product-list-view'
 import { DotsLoader } from '@/modules/lib/components/dots-loader/DotsLoader';
 import PuffLoader from '@/modules/lib/components/puff-loader/PuffLoader'
-import { useSavedItem } from '@/modules/lib/utility/hooks/use-saved-item';
+import { useSavedVariant } from '@/modules/lib/utility/hooks/use-saved-variants';
+
 
 const CentralArena = () => {
   const { products, type, ref, loading } = useProductListView()
-  const { saveItem, savedItems, removeSavedItem } = useSavedItem();
+  const { saveVariant, savedVariants, removeSavedVariant } = useSavedVariant();
   const renderedIds = new Set<number>();
 
 
@@ -60,9 +61,9 @@ const CentralArena = () => {
                     return <ProductTile
                       product={product}
                       key={product.id}
-                      savedItems={savedItems}
-                      saveItem={saveItem}
-                      removeSavedItem={removeSavedItem}
+                      savedVariants={savedVariants}
+                      saveVariant={saveVariant}
+                      removeSavedVariant={removeSavedVariant}
                     />;
                   })
                 }

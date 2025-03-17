@@ -23,20 +23,26 @@ const Modal: React.FC<ModalProps> = ({ isOpen, onClose, children, extraModalClas
     };
 
     if (isOpen) {
+      document.body.style.overflow = 'hidden'
       document.addEventListener('mousedown', handleClickOutside);
     }
 
     return () => {
+      document.body.style.overflow = 'auto'
       document.removeEventListener('mousedown', handleClickOutside);
     };
   }, [isOpen, onClose]);
 
   if (!isOpen) return null;
-
-
-
-
   if (!isOpen) return null;
+
+
+  if (isOpen) {
+    document.body.style.overflow = 'hidden'
+  } else {
+    document.body.style.overflow = 'auto'
+  }
+
 
   const modalStyle: React.CSSProperties = {
     display: 'flex',

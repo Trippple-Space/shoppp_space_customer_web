@@ -25,9 +25,45 @@ const OrderProgressCard = ({ orders }: OrderProgressProp) => {
     setOpenOrderProductDetails(prev => !prev)
     setOrderedProduct(order)
   }
+
+
+  
+  const orderStatus = [
+    'ONGOING',
+    'PENDING_CONFIRMATION',
+    'ACKNOWLEDGED',
+    'WAITING_TO_BE_SHIPPED',
+    'OUT_FOR_DELIVERY',
+    'DELIVERED'
+  ]
+  const currentStatusIndex = (order: Order) => orderStatus.indexOf(
+      order.status.toUpperCase()
+    )
+
+  function getStatusText (status: string) {
+    switch (status) {
+      case 'ONGOING':
+        return 'Order placed'
+      case 'PENDING_CONFIRMATION':
+        return 'Pending Confirmation'
+      case 'ACKNOWLEDGED':
+        return 'Order received'
+      case 'WAITING_TO_BE_SHIPPED':
+        return 'Waiting to be shipped'
+      case 'OUT_FOR_DELIVERY':
+        return 'Out for delivery'
+      case 'DELIVERED':
+        return 'Delivered'
+      default:
+        return ''
+    }
+  }
+
   return (
     <>
-      {orders.map(order => (
+      {orders.map(order => {
+        const statusIndex = currentStatusIndex(order)
+        return (
         <div key={order.id}>
           <div className='bg-white'>
             <div className='p-20 flex flex-col gap-20'>
@@ -93,7 +129,7 @@ const OrderProgressCard = ({ orders }: OrderProgressProp) => {
 
               <div className='l:flex grid gap-10 l:gap-0 a-items-center space-between border-b border-t border-t-#00000014 border-b-#00000014  py-15'>
                 <p className='text-14 weight-400 color-#00000099'>
-                  {formatDate(new Date(order.delivery.deliveryWindowStart))}
+                  {formatDate(new Date(order.delivery.dateCreated))}
                 </p>
                 <p className='text-14 weight-400 color-#00000099'>{order.id}</p>
               </div>
@@ -116,11 +152,13 @@ const OrderProgressCard = ({ orders }: OrderProgressProp) => {
                     </div>
                   </div>
                   <div className='flex gap-10 a-items-center'>
-                    <div className='p-5 radius-10 w-20p h-5 bg-#0B9378'></div>
+                      {orderStatus.map((status, index) =>
+                        <div className={`p-5 radius-10 w-20p h-5 ${ index <=statusIndex ? 'bg-#0B9378': 'bg-whitesmoke'}`}></div>)}
+                    {/* <div className='p-5 radius-10 w-20p h-5 bg-whitesmoke'></div>
                     <div className='p-5 radius-10 w-20p h-5 bg-whitesmoke'></div>
                     <div className='p-5 radius-10 w-20p h-5 bg-whitesmoke'></div>
                     <div className='p-5 radius-10 w-20p h-5 bg-whitesmoke'></div>
-                    <div className='p-5 radius-10 w-20p h-5 bg-whitesmoke'></div>
+                    <div className='p-5 radius-10 w-20p h-5 bg-whitesmoke'></div> */}
                   </div>
                 </>
               )}
@@ -133,9 +171,9 @@ const OrderProgressCard = ({ orders }: OrderProgressProp) => {
                 {order.status === 'ONGOING' && (
                   <p className='color-#00000099 text-14 weight-400'>
                     {formatTime(
-                      order.delivery.deliveryWindowStart
+                      order.delivery.deliveryDate
                     ).toLocaleLowerCase()}{' '}
-                    - Order Placed
+                    - {getStatusText(order.status)}
                   </p>
                 )}
                 <Link
@@ -148,7 +186,7 @@ const OrderProgressCard = ({ orders }: OrderProgressProp) => {
             </div>
           </div>
         </div>
-      ))}
+      )})}
       {openOrderProductDetails && (
         <OrderedProductModal
           handleOrderModal={handleOpenOrderProductDetail}

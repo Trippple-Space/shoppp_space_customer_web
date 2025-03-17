@@ -8,6 +8,7 @@ import GlobalArena from "@/modules/lib/components/global-arena/GlobalArena";
 import { BsInfo, BsInfoCircle } from "react-icons/bs";
 import { PHProvider } from './providers'
 import dynamic from 'next/dynamic'
+import '@smastrom/react-rating/style.css'
 
 
 const inter = Inter({
