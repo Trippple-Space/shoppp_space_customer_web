@@ -71,7 +71,7 @@ const VariantModal = ({variant, saveVariant, removeSavedVariant, savedVariants}:
   <div className='mt-30 l:mt-20 w-full'>
       <div
         id='image'
-        className='relative ratio-1 radius-10 g|overflow:hidden l:radius-15 w-full'
+        className='relative ratio-1 radius-10 g|overflow:hidden l:radius-15 l:w-250 w-200'
         onMouseOver={() => setOnProductTileHover(true)}
         onMouseOut={() => setOnProductTileHover(false)}
       >

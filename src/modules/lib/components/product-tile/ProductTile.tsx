@@ -77,13 +77,16 @@ const ProductTile: FC<IProductTile> = ({ product, savedVariants, saveVariant, re
   }
 
   useEffect(() => {
+console.log({selectedVariantId: selectedVariant?.id})
+
     if (recentlyViewedId && isAuthenticated) {
       (async () => {
         await productService.addRecentlyViewedVariants({
-          productVariantId: selectedVariant?.id,
+          productVariantId: recentlyViewedId,
           type: 'view'
         });
       })();
+    }
   }, [recentlyViewedId, isAuthenticated]);
 
   useEffect(() => {
