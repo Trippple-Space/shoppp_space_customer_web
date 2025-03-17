@@ -25,10 +25,6 @@ const ProductTile: FC<IProductTile> = ({ product, savedVariants, saveVariant, re
   const [onProductTileHover, setOnProductTileHover] = useState(false)
   const [openSingleProductModal, setOpenSingleProductModal] = useState(false)
   const [recentlyViewedId, setRecentlyViewsId] = useState<any>() 
-
-
-
-
   const [selectedImage, setSelectedImage] = useState(
     product?.variants?.[0]?.media?.[0]?.url
   );
@@ -74,7 +70,6 @@ const ProductTile: FC<IProductTile> = ({ product, savedVariants, saveVariant, re
     setOpenSingleProductModal(prev => !prev)    
   }
 
-
   function handleLogin(variantId: number, minimumPurchase: number) {
     localStorage.setItem('variantId',variantId.toString())
     localStorage.setItem('variantIdMinimumPurchase',minimumPurchase.toString())
@@ -89,7 +84,6 @@ const ProductTile: FC<IProductTile> = ({ product, savedVariants, saveVariant, re
           type: 'view'
         });
       })();
-    }
   }, [recentlyViewedId, isAuthenticated]);
 
   useEffect(() => {
@@ -111,7 +105,6 @@ const ProductTile: FC<IProductTile> = ({ product, savedVariants, saveVariant, re
             }
         }
     }, [isAuthenticated]);
-
 
   return (
     <div className='mt-30 l:mt-20 w-full overflow-hidden'>

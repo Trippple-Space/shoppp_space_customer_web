@@ -34,28 +34,24 @@ export function middleware(request: NextRequest) {
   });
 
   if (subdomain && subdomain !== "www" && subdomain !== "api") {
-    const pathname = `/${subdomain}${url.pathname}`;
+    const pathname = `/${subdomain}${url.pathname?.replace?.(/\/$/, '')}`;
     console.log('After if subdomain', {
+      subdomain,
       pathname,
-      URL: new URL(`https://${reconstructedHost}${pathname}`)
+      URL: `https://${reconstructedHost}${pathname}`
     });
-    return NextResponse.rewrite(new URL(`https://${reconstructedHost}${pathname}`));
-  }
-
-  // Avoid redirecting protected routes (e.g., already on login/dashboard)
-  if (pathname.startsWith('/dashboard') || pathname.startsWith('/login')) {
-    return NextResponse.next();
+    return NextResponse.rewrite(`https://${reconstructedHost}${pathname}`); // aznzee.asoebi.africa ==> https://asoebi.africa/aznzee
   }
 
   if (pathname === '/' && !subdomain) {
+    console.log('Redirecting to /wears', {
+      pathname,
+      subdomain
+    })
     return NextResponse.redirect(new URL('/wears', request.url))
   }
 
-  if (currentUser) {
-    return NextResponse.redirect(new URL('/dashboard', request.url));
-  }
-  
-  return NextResponse.redirect(new URL('/login', request.url));
+  return NextResponse.next();
 }
 
 export const config = {
