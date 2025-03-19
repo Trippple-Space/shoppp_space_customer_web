@@ -1,44 +1,44 @@
 @layer base, lo, hi, xhi;
 
-.text-right {    text-align: right;  } 
-.w-full {    width: 100%;  } 
-.mt-53 { margin-top: 53px; } 
-.mx-25 { margin-left: 25px; margin-right: 25px; } 
 .hidden {    display: none;  } 
 .text-green-700 { color:  #056A54; } 
 .pointer {    cursor: pointer;  } 
+.text-right {    text-align: right;  } 
 .relative {    position: relative;  } 
-.absolute {    position: absolute;  } 
-.r-0 { right: 0px; } 
-.z-index-1, .z-1 { z-index: 1; } 
 .cursor-pointer { cursor: pointer; } 
 .flex {    display: flex;  } 
 .h-100vh { height: 100vh; } 
-.m-15 { margin: 15px; } 
+.w-full {    width: 100%;  } 
+.p-15 { padding: 15px; } 
+.overflow-hidden {    overflow: hidden;  } 
 .bg-green { background-color: #0B9378; } 
 .flex-col {    flex-direction: column;  } 
 .h-100p { height: 100%; } 
 @layer base {.radius-15 { border-radius: 15px; } } 
-.overflow-hidden {    overflow: hidden;  } 
 .w-115 { width: 115px; } 
 .h-31 { height: 31px; } 
 .ml-40 { margin-left: 40px; } 
 .mt-20 { margin-top: 20px; } 
 .w-100p { width: 100%; } 
+.absolute {    position: absolute;  } 
 .h-95p { height: 95%; } 
 .w-fit {    width: fit-content;  } 
+.r-0 { right: 0px; } 
 .b-0 { bottom: 0px; } 
-.h-full {    height: 100%;  } 
-.items-center {    align-items: center;  } 
 .j-content-center { justify-content: center; } 
+.overflow-auto { overflow: auto; } 
+.mx-25 { margin-left: 25px; margin-right: 25px; } 
+.bg-yellow { background-color: #FACE33; } 
 .t-0 { top: 0px; } 
 .fixed {    position: fixed;  } 
 .w-100 { width: 100px; } 
 .h-30 { height: 30px; } 
 .my-20 { margin-top: 20px; margin-bottom: 20px; } 
+.m-15 { margin: 15px; } 
+.a-items-center { align-items: center; } 
+.bg-black { background-color: #000000; } 
 .mt-30 { margin-top: 30px; } 
 .j-content-between { justify-content: space-between; } 
-.a-items-center { align-items: center; } 
 .text-grey-800 { color: #59534E; } 
 @layer base {    .border {       border: 1px solid;     }  } 
 .border-\#00000014 { border-color: #00000014; } 
@@ -58,6 +58,7 @@
 .color-link { color: link; } 
 @layer lo { .\@lo\:weight-300 { font-weight: 300; } } 
 @layer lo { .\@lo\:text-dimgrey { color: #333333; } } 
+.h-full {    height: 100%;  } 
 .b-60 { bottom: 60px; } 
 .z-index-3, .z-3 { z-index: 3; } 
 .max-w-1000 { max-width: 1000px; } 
@@ -103,6 +104,7 @@
 .px-50 { padding-left: 50px; padding-right: 50px; } 
 .px-10 { padding-left: 10px; padding-right: 10px; } 
 .pb-30 { padding-bottom: 30px; } 
+.items-center {    align-items: center;  } 
 .border-lighter-grey { border-color: #D9D9D9; } 
 .gap-10 { gap: 10px; } 
 .w-110 { width: 110px; } 
@@ -154,7 +156,6 @@
 .w-25 { width: 25px; } 
 .h-25 { height: 25px; } 
 .w-55 { width: 55px; } 
-.p-15 { padding: 15px; } 
 .line-height-28 { line-height: 28px; } 
 .w-17 { width: 17px; } 
 .h-17 { height: 17px; } 
@@ -293,12 +294,10 @@
 .block {    display: block;  } 
 [class~='g|box-shadow:0px|_|-2px|_|10px|_|rgba(0,0,0,0.10);']{box-shadow:0px -2px 10px rgba(0,0,0,0.10);} 
 .py-13 { padding-top: 13px; padding-bottom: 13px; } 
-.overflow-auto { overflow: auto; } 
 .grid-1-cols-1fr { grid-template-columns: repeat(1, 1fr); } 
 .w-14 { width: 14px; } 
 .h-14 { height: 14px; } 
 .rotate-z-180 { transform: rotateZ(180deg); } 
-.bg-black { background-color: #000000; } 
 .gap-28 { gap: 28px; } 
 .gap-40 { gap: 40px; } 
 .flex-reverse { flex-wrap: wrap-reverse; } 
@@ -452,6 +451,7 @@
 .mt-85 { margin-top: 85px; } 
 .p-3 { padding: 3px; } 
 .t-75 { top: 75px; } 
+.z-index-1, .z-1 { z-index: 1; } 
 .mt-80 { margin-top: 80px; } 
 .mx-24 { margin-left: 24px; margin-right: 24px; } 
 @layer base {.radius-20 { border-radius: 20px; } } 
@@ -502,7 +502,6 @@
 .bg-\#FFE5E1 { background-color: #FFE5E1; } 
 .border-\#D4280C { border-color: #D4280C; } 
 .my-7 { margin-top: 7px; margin-bottom: 7px; } 
-.bg-yellow { background-color: #FACE33; } 
 .pt-56 { padding-top: 56px; } 
 .t-10 { top: 10px; } 
 .border-b-\#00000026 { border-bottom-color: #00000026; } 
@@ -1043,8 +1042,8 @@
 @media only screen and (min-width: 768px) { .m\:text-16 { font-size: 16px; } } 
 
 
-@media only screen and (min-width: 992px) { .l\:w-80p { width: 80%; } } 
 @media only screen and (min-width: 992px) { .l\:block {    display: block;  } } 
+@media only screen and (min-width: 992px) { .l\:w-80p { width: 80%; } } 
 @media only screen and (min-width: 992px) { .l\:w-50p { width: 50%; } } 
 @media only screen and (min-width: 992px) { .l\:hidden {    display: none;  } } 
 @media only screen and (min-width: 992px) { .l\:text-16 { font-size: 16px; } } 

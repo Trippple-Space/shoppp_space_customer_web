@@ -20,7 +20,7 @@ const layout: FC<ILayout> = ({ children }) => {
 
   const VendorSignUp = () => {
     return (
-      <div className="text-right w-full l:w-80p mt-53 mx-25 hidden l:block">
+      <div className="hidden l:block">
         <span>Not a vendor? </span>
         <Link href={paths.signup} className='text-green-700 pointer'>Sign up here instead</Link>
       </div>
@@ -28,13 +28,12 @@ const layout: FC<ILayout> = ({ children }) => {
   }
   
   const CustomerSignUp = () => {
-    return ( <div className="text-right relative w-full l:w-80p hidden l:block">
-        <div className="absolute r-0 mx-25 mt-53 z-1">
+    return (
+      <div className="text-right relative l:w-80p hidden l:block">
         <span>Do you want to sell? </span>
         <Link href={paths.vendor_signup} className="text-green-700 cursor-pointer">
           Join now
         </Link>
-          </div>
       </div>)
   }
 
@@ -45,8 +44,8 @@ const layout: FC<ILayout> = ({ children }) => {
 
 
   return (
-    <div className="flex h-100vh w-full">
-      <div className="l:w-50p hidden l:block m-15">
+    <div className="flex h-100vh w-full p-15 overflow-hidden">
+      <div className="l:w-50p hidden l:block">
         <div className="bg-green flex flex-col h-100p radius-15 overflow-hidden">
           <div>
             <Link href={'/'}>
@@ -67,11 +66,11 @@ const layout: FC<ILayout> = ({ children }) => {
           </div>
         </div>
       </div>
-      <div className="w-full l:w-50p h-full overflow-hidden">
+      <div className="w-full l:w-50p  flex flex-col j-content-center bg- overflow-auto h100vh">
         {pathName === paths.vendor_signup ?
           <VendorSignUp /> : <CustomerSignUp/>
          }
-      <div className="relative mx-25 flex-col flex h-full items-center j-content-center">
+      <div className="relative mx-25 flex-col flex aitems-center j-content-center  h-100vh bg-yellow overflow-auto">
         
        <div className="l:hidden w-full bg-green t-0 fixed">
           <Image
@@ -82,7 +81,9 @@ const layout: FC<ILayout> = ({ children }) => {
             />
         </div>
     
-        <div className="w-full xl:w-60p h-full flex flex-col j-content-center">
+          <div className="w-full xl:w-60p h-100vh relative  flex a-items-center overflow-">
+            <div className='bg-black h-100vh flex flex-col overflow-ato'>
+
             {pathName !== paths.vendor_signup && <AuthHeader activeTab={path} />}
             {children}
           <div className="mt-30">
@@ -104,6 +105,7 @@ const layout: FC<ILayout> = ({ children }) => {
                 </p>
           </div>
         </div>
+            </div>
           
       </div>
       </div>

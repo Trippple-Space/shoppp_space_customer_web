@@ -11,8 +11,10 @@ import { paths } from "@/modules/lib/utility/paths";
 const signUpValidationSchema = Yup.object().shape({
   fullname: Yup.string()
     .trim()
-    .min(3, "Can your fullname be that short? I'm not convinced")
-    .max(25, "Over 25 characters. Kilode. Na essay?")
+    .test("test-fullname", "Full name can only contain letters and spaces", (value) => {
+      const nameRegex = /^[a-zA-Z\s]+$/
+      return value ? nameRegex.test(value) : false
+    })
     .required("Required"),
   email: Yup.string()
     .trim()
