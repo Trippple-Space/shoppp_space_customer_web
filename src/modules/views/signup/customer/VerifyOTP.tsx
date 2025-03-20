@@ -73,7 +73,7 @@ const handlePaste = (e: React.ClipboardEvent<HTMLInputElement>) => {
 
 
   return (
-    <div className="w-full">
+    <div className="w-full overflow-auto">
       <div className="font-inter">
         <h3 className="text-center text-20 weight-500 mb-10 text-grey-900">Email Verification</h3>
         <p className="text-center text-14 text-grey-700">
