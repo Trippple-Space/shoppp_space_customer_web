@@ -13,7 +13,7 @@ const CreatePassword: FC = () => {
   const [confirmPassword, setConfirmPassword] = useState<string>('');
 
   return (
-    <div className='w-full'>
+    <div className='w-full overflow-auto'>
       <div className="font-inter">
         <h3 className="text-center text-20 weight-500 mb-10 text-grey-900">
           Secure your account
@@ -76,7 +76,7 @@ const CreatePassword: FC = () => {
           <button
             type="submit"
             className="btn text-center bg-green weight-500 text-16 l:btn-lg btn-lg font-inter mt-30 text-14"
-    
+
           >
             Create password
           </button>

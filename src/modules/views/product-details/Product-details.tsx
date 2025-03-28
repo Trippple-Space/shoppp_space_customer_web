@@ -101,10 +101,9 @@ const maxDisplayDescLength = 144
 function showLongDescElipsis(desc: string) {
   if (!showFullDescription) {
     return desc.split(' ').slice(0, maxDisplayDescLength).join(' ')
-    } return desc
-    
+  } return desc
 }
-  
+
 
   useEffect(() => {
     (async () => {
@@ -158,7 +157,11 @@ function showLongDescElipsis(desc: string) {
                   localStorage.removeItem("variantIdMinimumPurchase");
               }
           }
-      }, [isAuthenticated]);
+    }, [isAuthenticated]);
+
+  
+  
+
 
   
   return (
@@ -502,7 +505,7 @@ function showLongDescElipsis(desc: string) {
           </div>
 
         </div>
-      <div className='flex flex-col gap-12 pb-15 pt-20'>
+{  recentlyViewedVariants.length > 0 &&   <div className='flex flex-col gap-12 pb-15 pt-20'>
           <div className='flex a-items-center j-content-between'>
             <p className='text-16  weight-600'>
               Customers who viewed this also viewed
@@ -524,7 +527,7 @@ function showLongDescElipsis(desc: string) {
               )
             }
           </div>
-        </div>
+        </div>}
         <div className='flex flex-col gap-12 pt-15 mt-10 pb-100'>
           <div className=''>
             <p className='text-16  weight-600'>

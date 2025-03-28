@@ -26,7 +26,10 @@ const Login = () => {
   };
   return (
     <>
-      <div className="font-inter mb-30"> 
+      <div className='w-full overflow-auto'>
+
+
+            <div className="font-inter mb-30"> 
         <h3 className="text-center text-20 weight-500 mb-10 text-grey-900">Welcome back!</h3>
         <p className="text-center text-14 text-grey-700">Enter your details below to login.</p>
       </div>
@@ -73,6 +76,8 @@ const Login = () => {
           {loginFormHandler.isSubmitting ? 'Signing in' : 'Sign In'}
         </button>
       </form>
+</div>
+
     </>
   )
 }
