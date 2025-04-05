@@ -4,6 +4,7 @@ import { formatDate, formatNumberAsPrice } from '../../utility/utility'
 import { useCart } from '../../utility/hooks/use-cart'
 import QuantitySelector from '../quantity-selector/QuantitySelector'
 import { SavedVariant } from '../../utility/types/SavedVariant.interface'
+import classNames from 'classnames'
 
 interface SavedVariantProp {
    showRemove: boolean, savedVariant: SavedVariant, removeSavedVariant: (productVariantId: number) => void 
@@ -18,16 +19,25 @@ const SavedVariantsCard: React.FC<any> = ({ savedVariant, removeSavedVariant }: 
     )
   
   
+  const isOutOfStock = savedVariant.variant.status === 'OUT_OF_STOCK'
+  
+  
   return (
     <div className='l:flex space-between items-center'>
       <div className='flex w-100p l:w-50p gap-10 l:gap-30 items-center mb-10'>
-        <div className='l:w-115 l:h-115 w-70 w-70 '>
+        <div className='l:w-115 l:h-115 w-70 w-70 relative'>
+        
+            {isOutOfStock
+            && <div className="absolute w-100p h-100p text-white flex j-content-center a-items-center z-1 radius-6">
+            Out of stock
+          </div> }
         <Image
-          className='w-100p h-100p radius-5 l:radius-10'
+              className={` w-full h-full a-self-center radius-6 g|object-fit:cover pointer ${isOutOfStock  && 'out-of-stock'}`}
           src={savedVariant.variant.media[0].url}
           alt='product'
           type='image'
         />
+      
         </div>
         <div className='line-height-28'>
           <h2 className='text-16 l:text-18 weight-400 text-grey-900'>{savedVariant.variant.product?.name}</h2>
@@ -58,13 +68,22 @@ const SavedVariantsCard: React.FC<any> = ({ savedVariant, removeSavedVariant }: 
               increment={() => increment(selectedVariantInCart)}
               cartItem={selectedVariantInCart}
             />
-          ) : <button className='border-none bg-green text-white text-15 py-10 px-20 radius-5 weight-400 pointer h-full' onClick={() =>
-              addToCart(
+          ) : <button className={classNames('border-none bg-green text-white text-15 py-10 px-20 radius-5 weight-400 pointer h-full', {
+            "bg-#F3F3F3 disabled:bg-yellow-200 disabled:cursor-not-allowed pointer font-roboto text-grey-900 border-hidden ": isOutOfStock
+          }
+          )} onClick={() =>
+            {
+              if (!isOutOfStock) 
+              {
+                addToCart(
                 savedVariant.variantId,
                 savedVariant.variant.minPurchaseQuantity || 1
-              )}>
+                )
+              }
+            }
+            }>
           
-              Add to cart
+              {isOutOfStock ? "Out of stock": 'Add to cart'}
         
             </button>
           }

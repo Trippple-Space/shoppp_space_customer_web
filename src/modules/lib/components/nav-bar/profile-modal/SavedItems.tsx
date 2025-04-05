@@ -58,12 +58,6 @@ const SavedItemsModal: React.FC<ModalProps> = ({modalOpen, handleCloseModal}) =>
                     {selected(action)}
                 </div>
             </div>
-              <div className='border-t border-#00000014 fixed t-0'>
-            <div className='p-20 bg-red'>
-              hi
-              </div>
-          </div>
-
       </div>
         </div>
           <div className='border-t border-#00000014'>

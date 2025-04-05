@@ -25,11 +25,6 @@ const signUpValidationSchema = Yup.object().shape({
     .required("Required"),
 });
 
-const otpValidationSchema = Yup.object().shape({
-  otp: Yup.string().trim().required("OTP is required")
-});
-
-
 const passwordCreationSchema = Yup.object().shape({
   password: Yup.string()
     .min(8, "Minimum password length is 8 characters")
@@ -75,7 +70,6 @@ export const useSignUpView = () => {
     initialValues: {
       otp: ""
     },
-    validationSchema: otpValidationSchema,
     onSubmit: async (values: { otp: string }) => {
       const tokenFromUrl = searchParams.get("token") || "";
 

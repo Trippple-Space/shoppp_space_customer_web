@@ -77,7 +77,6 @@ const ProductTile: FC<IProductTile> = ({ product, savedVariants, saveVariant, re
   }
 
   useEffect(() => {
-console.log({selectedVariantId: selectedVariant?.id})
 
     if (recentlyViewedId && isAuthenticated) {
       (async () => {
@@ -99,7 +98,7 @@ console.log({selectedVariantId: selectedVariant?.id})
 
                 if (!isNaN(parsedVariantId) && !isNaN(parsedMinimumPurchase)) {
                     addToCart(parsedVariantId, parsedMinimumPurchase);
-                    console.log("Item added from localStorage to cart!");
+                
                 }
 
               
@@ -107,7 +106,9 @@ console.log({selectedVariantId: selectedVariant?.id})
                 localStorage.removeItem("variantIdMinimumPurchase");
             }
         }
-    }, [isAuthenticated]);
+  }, [isAuthenticated]);
+
+  const isOutOfStock = selectedVariant?.status === 'OUT_OF_STOCK'
 
   return (
     <div className='mt-30 l:mt-20 w-full overflow-hidden'>
@@ -119,11 +120,16 @@ console.log({selectedVariantId: selectedVariant?.id})
       >
         <Link href={`/products/${product.slug}`}>
           {mediaType === "image" ? (
+            <div className='relative w-full h-full'>
+        { isOutOfStock &&     <div className="absolute w-100p h-100p text-white flex j-content-center a-items-center z-1 l:text-22 radius-6">
+            Out of stock
+          </div> }
             <Image
-              className={`absolute w-full h-full a-self-center g|object-fit:cover pointer ${selectedVariant?.status === 'OUT_OF_STOCK' && 'greyscale'}`}
+              className={`absolute w-full h-full a-self-center g|object-fit:cover pointer ${isOutOfStock && 'out-of-stock'}`}
               src={selectedImage}
               alt="product-image"
-            />
+              />
+              </div>
           ) : (
             <VideoSrc
               className="absolute w-full h-full a-self-center g|object-fit:cover pointer"
@@ -267,12 +273,6 @@ console.log({selectedVariantId: selectedVariant?.id})
           className="md:text-16 text-15 weight-500 text-#000000E0 md:line-height-24 line-height-22 l:w-100p w-100 l:white-space-nowrap text-overflow-ellipsis flex flex-wrap a-items-center j-content-between"
         >
           <Link href={`/products/${product.slug}`}>{product.name}</Link>
-  
-         
-          {selectedVariant?.status === 'OUT_OF_STOCK'
-            && <div className="color-red text-12 text-left">
-            Out of stock
-          </div> }
         </div>
         <div className="flex a-items-center gap-10 l:gap-18 text-dimgrey py-6 border-y border-#00000014">
           <Link href={`/${product.store.slug}`} className="flex gap-6 a-items-center color-#00000099 capitalize">
@@ -307,8 +307,11 @@ console.log({selectedVariantId: selectedVariant?.id})
         <ProductDetailModal
           openSingleProductModal={openSingleProductModal}
           handleCloseProductModal={handleCloseProductModal}
-          position=""
-          product={product}
+          position="homepage"
+          variant={{
+            ...selectedVariant,
+            product
+          }}
         />
       )}
     </div>
