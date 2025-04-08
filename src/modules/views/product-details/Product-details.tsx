@@ -159,10 +159,48 @@ function showLongDescElipsis(desc: string) {
           }
     }, [isAuthenticated]);
 
-  
-  
 
 
+const addToCartBtn =() => {
+ return <div className='flex flex-col gap-16'>
+                  <p className='text-24 weight-600'>{formatNumberAsPrice(selectedVariant.price)}</p>
+                  
+                  {!selectedVariantItemInCart ?
+                    (
+                <button
+                  className={classNames(`text-white border-none l:px-24 l:py-12 py-15 w-100p radius-6 pointer ${selectedVariant && selectedVariant.status === 'OUT_OF_STOCK' ?'bg-gray-300' :  'bg-#0B9378'}`)}
+                  onClick={() => {
+                  if (isAuthenticated) {
+                    if (selectedVariant && selectedVariant.status !== 'OUT_OF_STOCK') {
+                    addToCart(
+                      selectedVariant?.id ?? 0,
+                      selectedVariant?.minPurchaseQuantity || 1
+                    )
+                    }
+                  } else {
+                    handleLogin(selectedVariant?.id ?? 0,
+                      selectedVariant?.minPurchaseQuantity || 1)
+                  }
+                  }}
+                >
+                  <div className='l:flex grid grid-2-cols-auto gap-10 items-center w-fit mx-auto'>
+                    {selectedVariant.status !== 'OUT_OF_STOCK' && <HiOutlineShoppingBag className='h-21' />}
+                  <div className={classNames(`whitespace-nowrap text-16 ${selectedVariant && selectedVariant.status === 'OUT_OF_STOCK' ? 'text-black' : 'text-white' }`)}>
+                    {selectedVariant && selectedVariant.status !== "OUT_OF_STOCK" ? 'Add to cart' : 'Out of stock'}
+                  </div>
+                  </div>
+                </button>
+                ) : <QuantitySelector
+                decrement={() => decrement(selectedVariantItemInCart)}
+                increment={() => increment(selectedVariantItemInCart)}
+                cartItem={selectedVariantItemInCart}
+              />}
+                </div>
+}
+
+
+  
+  
   
   return (
     <>
@@ -184,7 +222,7 @@ function showLongDescElipsis(desc: string) {
               <RxShare2 className='shadow w-20 h-20' />
               <span className='border-b hidden l:block'>Share</span>
             </p>
-            <p className='cursor-pointer flex a-items-center gap-8 text-15 weight-400 color-#00000099' onClick={handleSave}>
+            <p className='cursor-pointer flex a-items-center gap-8 text-15 weight-400 color-#00000099' onClick={isAuthenticated ? handleSave : () => isLoginModal()}>
                {isSaved ? <AiFillHeart/> : <AiOutlineHeart />}
               <span className='border-b hidden l:block'>Save</span>
             </p>
@@ -322,7 +360,7 @@ function showLongDescElipsis(desc: string) {
                           ))}
               </div>
               
-                 <div className='flex flex-col gap-12'>
+                 <div className='flex flex-col gap-12 mb-10'>
                   <div className='text-12 weight-400'>
                 Select size
               </div>
@@ -348,7 +386,8 @@ function showLongDescElipsis(desc: string) {
                   )
                 )}
                   </div> 
-                </div>
+              </div>
+              {addToCartBtn()}
             </div>
 
             <div className='flex flex-col gap-12 border-b  border-#00000014 pb-15 pt-15'>
@@ -403,7 +442,7 @@ function showLongDescElipsis(desc: string) {
             </div>
           </div>
 
-          <div className=' hidden l:block l:w-40p w-full'>
+          <div className='hidden l:block l:w-40p w-full'>
             <div className='w-full flex flex-col gap-12 bg-white p-24 border radius-12 border-#00000014
             'style={{boxShadow: '-4px -4px 8px 2px #EDFCF766'}}>
               <p className='weight-600 border-b border-#00000014 pb-10'>
@@ -464,41 +503,7 @@ function showLongDescElipsis(desc: string) {
                   </div>
                   
                 </div>
-                
-                <div className='flex flex-col gap-16'>
-                  <p className='text-24 weight-600'>{formatNumberAsPrice(selectedVariant.price)}</p>
-                  
-                  {!selectedVariantItemInCart ?
-                    (
-                <button
-                  className={classNames(`text-white border-none l:px-24 l:py-12 py-15 w-100p radius-6 pointer ${selectedVariant && selectedVariant.status === 'OUT_OF_STOCK' ?'bg-gray-300' :  'bg-#0B9378'}`)}
-                  onClick={() => {
-                  if (isAuthenticated) {
-                    if (selectedVariant && selectedVariant.status !== 'OUT_OF_STOCK') {
-                    addToCart(
-                      selectedVariant?.id ?? 0,
-                      selectedVariant?.minPurchaseQuantity || 1
-                    )
-                    }
-                  } else {
-                    handleLogin(selectedVariant?.id ?? 0,
-                      selectedVariant?.minPurchaseQuantity || 1)
-                  }
-                  }}
-                >
-                  <div className='l:flex grid grid-2-cols-auto gap-10 items-center w-fit mx-auto'>
-                    {selectedVariant.status !== 'OUT_OF_STOCK' && <HiOutlineShoppingBag className='h-21' />}
-                  <div className={classNames(`whitespace-nowrap text-16 ${selectedVariant && selectedVariant.status === 'OUT_OF_STOCK' ? 'text-black' : 'text-white' }`)}>
-                    {selectedVariant && selectedVariant.status !== "OUT_OF_STOCK" ? 'Add to cart' : 'Out of stock'}
-                  </div>
-                  </div>
-                </button>
-                ) : <QuantitySelector
-                decrement={() => decrement(selectedVariantItemInCart)}
-                increment={() => increment(selectedVariantItemInCart)}
-                cartItem={selectedVariantItemInCart}
-              />}
-                </div>
+                {addToCartBtn()}
 
             </div>
             </div>

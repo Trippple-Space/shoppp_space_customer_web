@@ -44,14 +44,14 @@ const layout: FC<ILayout> = ({ children }) => {
   return (
     <div className="flex h-100vh w-full overflow-hidden">
 
-      <div className="l:hidden w-full bg-green  t-0 fixed z-10">
+      <Link href={'/'} className="l:hidden w-full bg-green  t-0 fixed z-10">
         <Image
           className="w-100 h-30 my-20 m-15"
           src="new-asoebi-logo-white.svg"
           alt="logo"
           type="logo"
         />
-      </div>
+      </Link>
       <div className="l:w-50p hidden l:block p-15">
         <div className="bg-green flex flex-col h-100p radius-15">
           <div>
@@ -73,7 +73,7 @@ const layout: FC<ILayout> = ({ children }) => {
           </div>
         </div>
       </div>
-      <div className="w-full l:w-50p p-15 flex flex-col h-100p md:mt-70 mt-40 l:mt-0">
+      <div className="w-full l:w-50p p-15 flex flex-col h-100p md:mt-50 mt-20 l:mt-0">
 
         <div className="relative mx-5">
 

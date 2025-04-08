@@ -213,7 +213,7 @@ const VariantModal = ({variant, saveVariant, removeSavedVariant, savedVariants}:
       </div> */}
       <div
         id="product details"
-        className="md:mt-16 mt-20 flex text-ellipsis flex flex-col gap-8 whitespace-nowrap w-200 overflow-hidden"
+        className="md:mt-16 mt-20 flex text-ellipsis flex flex-col gap-8 whitespace-nowrap w-200 overflow-hidden l:w-full"
       >
         <div
           title={variant.productVariant.product?.name}
@@ -255,7 +255,7 @@ const VariantModal = ({variant, saveVariant, removeSavedVariant, savedVariants}:
           openSingleProductModal={openSingleProductModal}
           handleCloseProductModal={handleCloseProductModal}
           position=""
-            product={variant?.productVariant.product ?? null}
+            variant={variant.productVariant}
             variantSelectedImage= {selectedImage}
         />
       )}

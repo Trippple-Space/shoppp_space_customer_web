@@ -109,8 +109,8 @@ const handlePaste = (e: React.ClipboardEvent<HTMLInputElement>) => {
           }`}
           onClick={() => {
             const combinedOtp = otpDigits.join('');
+            formikOtp.setFieldValue("otp", combinedOtp);
             if (combinedOtp.length === 6) {
-              formikOtp.setFieldValue("otp", combinedOtp);
               formikOtp.handleSubmit();
             }
           }}

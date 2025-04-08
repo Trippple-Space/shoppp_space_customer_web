@@ -11,6 +11,7 @@ import QuantitySelector from '../quantity-selector/QuantitySelector'
 import { Product } from '../../utility/types/product.interface'
 import Image from '../image/Image'
 import Link from 'next/link'
+import { AnyAaaaRecord } from 'dns'
 
 const SearchModal = ({
   searchResults,
@@ -85,12 +86,14 @@ const SearchModal = ({
           </div>
         )}
       </div>
-      <ProductDetailModal
+    {product &&  <ProductDetailModal
         openSingleProductModal={openSingleProductModal}
         handleCloseProductModal={handleCloseProductModal}
         position=''
-        product={product}
-      />
+        variant={{
+          ...product.variants[0],
+          product }}
+      />}
     </>
   )
 }

@@ -2,7 +2,7 @@ import classNames from 'classnames'
 import React, { useEffect, useState } from 'react'
 import { IoMdClose } from 'react-icons/io'
 import Link from 'next/link'
-import { Product } from '../../utility/types/product.interface'
+import { Product, ProductVariant } from '../../utility/types/product.interface'
 import { useCart } from '../../utility/hooks/use-cart'
 import { useRouter } from 'next/navigation'
 import { cx, formatNumberAsPrice } from '../../utility/utility'
@@ -15,13 +15,13 @@ import { MdArrowBackIos, MdArrowForwardIos } from 'react-icons/md'
 interface ProductDetailModalProp {
   openSingleProductModal: boolean
   handleCloseProductModal: () => void
-  product: Product | null
+  variant: ProductVariant
   position: string;
   variantSelectedImage?: string;
 }
 
 const ProductDetailModal = ({
-  product,
+  variant,
   handleCloseProductModal,
   openSingleProductModal,
   position,
@@ -37,23 +37,12 @@ const ProductDetailModal = ({
   } = useCart()
 
   const [isHover, setIsHover] = useState(false)
-  const [selectedImage, setSelectedImage] = useState<any>( variantSelectedImage ? variantSelectedImage : product?.variants?.[0]?.media?.[0]?.url 
-  )
-  const [selectedVariant, setSelectedVariant] = useState(product?.variants?.[0])
+
+  const [selectedImage, setSelectedImage] = useState<any>( variantSelectedImage ? variantSelectedImage : variant.product?.variants?.[0]?.media?.[0]?.url || variantSelectedImage)
+  const [selectedVariant, setSelectedVariant] = useState(variant)
   const selectedVariantItemInCart = cart.cartItems.find(
     item => item.variant.id === selectedVariant?.id
   )
-
-
-  useEffect(() => {
-    setSelectedImage(product?.variants?.[0]?.media?.[0]?.url || variantSelectedImage)
-
-    if (product?.variants?.length) {
-      const defaultVariant = product.variants[0]
-      setSelectedVariant(defaultVariant)
-      setSelectedImage(defaultVariant?.media?.[0]?.url || variantSelectedImage)
-    }
-  }, [product])
 
   useEffect(() => {
     if (openSingleProductModal) {
@@ -67,35 +56,41 @@ const ProductDetailModal = ({
     }
   }, [openSingleProductModal])
 
-  const displayPrice = selectedVariant?.price || product?.price
+  const displayPrice = selectedVariant?.price || variant.product?.price
 
 
 const handlePreviousImage = () => {
-  if (!selectedVariant || !product?.variants?.length) return;
-  if (product.variants.length > 1) {
-  const currentVariantIndex = product.variants.indexOf(selectedVariant);
-  const previousIndex = currentVariantIndex > 0 ? currentVariantIndex - 1 : product.variants.length - 1; // Loop to last
+  if (!selectedVariant || !variant.product?.variants?.length) return;
+  if ((variant.product?.variants?.length || 0) > 1) {
+  const currentVariantIndex = variant.product.variants.indexOf(selectedVariant);
+  const previousIndex = currentVariantIndex > 0 ? currentVariantIndex - 1 : variant.product.variants.length - 1; // Loop to last
 
-  const previousVariant = product.variants[previousIndex];
+  const previousVariant = variant.product.variants[previousIndex];
   setSelectedVariant(previousVariant);
   setSelectedImage(previousVariant?.media?.[0]?.url || variantSelectedImage);
 }};
 
 const handleNextImage = () => {
-  if (!selectedVariant || !product?.variants?.length) return;
+  if (!selectedVariant || !variant.product?.variants?.length) return;
 
-  if (product.variants.length > 1) {
-  const currentVariantIndex = product.variants.indexOf(selectedVariant);
-  const nextVariantIndex = (currentVariantIndex + 1) % product.variants.length; 
+  if ((variant.product?.variants?.length ?? 0) > 1) {
+  const currentVariantIndex = variant.product.variants.indexOf(selectedVariant);
+  const nextVariantIndex = (currentVariantIndex + 1) % variant.product.variants.length; 
 
-  const nextVariant = product.variants[nextVariantIndex];
+  const nextVariant = variant.product.variants[nextVariantIndex];
   setSelectedVariant(nextVariant);
   setSelectedImage(nextVariant?.media?.[0]?.url || variantSelectedImage);
 }};
 
   
-
   
+  
+  const handleAddToCart = async (variant: ProductVariant, minPurchaseQua: number) => {
+     addToCart(variant.id, minPurchaseQua)
+  }
+
+
+  console.log({variant})
  
   return (
     <div>
@@ -105,12 +100,12 @@ const handleNextImage = () => {
             className='fixed inset-0 bg-#00000073 w-100p h-100p z-10 hidden l:block'
             onClick={handleCloseProductModal}
           >
-          {product && (
+          {variant ? (
             <>
                 <div className='relative no-scrollbar w-full h-full flex flex-col j-content-center a-items-center'
                   >
                 <div
-                  className={`fixed bg-white z-10 w-90p sm:w-80p l:w-65p  xl:w-50p  radius-8 no-scrollbar`}
+                  className={`fixed bg-white z-20 w-90p sm:w-80p l:w-65p  xl:w-50p  radius-8 no-scrollbar`}
                   style={{
                     height: 'fit-content',
                     maxHeight: 'calc(100vh - 80px)'
@@ -139,7 +134,7 @@ const handleNextImage = () => {
                             <div className='relative' onMouseOver={() => setIsHover(true)}
                               onMouseOut={() => setIsHover(false)}
                               >
-                              {isHover  && <div className={`absolute z-10 b-45p ${product.variants.length > 1 ? 'bg-white color-black' : 'color-#A9A9A9 bg-#D3D3D3'} l-20  p-15 radius-99 flex a-items-center j-content-center cursor-pointer icon-box-shadow`} 
+                              {isHover &&  position === 'homepage' && <div className={`absolute z-10 b-45p ${(variant.product?.variants?.length || 0) > 1 ? 'bg-white color-black' : 'color-#A9A9A9 bg-#D3D3D3'} l-20  p-15 radius-99 flex a-items-center j-content-center cursor-pointer icon-box-shadow`} 
                                 onClick={handlePreviousImage}
                               >
                                 <MdArrowBackIos className='w-full relative l-3' />
@@ -148,17 +143,17 @@ const handleNextImage = () => {
 
                             <Image
                               src={selectedImage}
-                              alt={product?.name}
+                              alt={variant?.product?.name || 'Product'}
                               className={`object-fit w-full h-full ${selectedVariant?.status === 'OUT_OF_STOCK' ? 'greyscale': ''}`}
                               />
                               </div>
                            
-                            {isHover  &&  <div className={`absolute z-10 b-45p ${product.variants.length > 1 ? 'bg-white color-black' : 'color-#A9A9A9 bg-#D3D3D3'} r-20 p-15 radius-99 flex a-items-center j-content-center cursor-pointer   icon-box-shadow `}onClick={handleNextImage}>
+                            {isHover && position === 'homepage' &&  <div className={`absolute z-10 b-45p ${ (variant.product?.variants?.length || 0) > 1 ? 'bg-white color-black' : 'color-#A9A9A9 bg-#D3D3D3'} r-20 p-15 radius-99 flex a-items-center j-content-center cursor-pointer   icon-box-shadow `}onClick={handleNextImage}>
                                 <MdArrowForwardIos className='w-fit'/>
                             </div>}
                           </div>
-                      {!variantSelectedImage &&  product.variants.length > 1 && <div className='flex gap-10 py-5 overflow-x-auto a-items-center no-scrollbar'>
-                              {product?.variants?.map((variant, idx) =>
+                      {!variantSelectedImage &&  (variant.product?.variants?.length ?? 0) > 1 && <div className='flex gap-10 py-5 overflow-x-auto a-items-center no-scrollbar'>
+                              {variant.product?.variants?.map((variant, idx) =>
                           variant?.media?.map((mediaItem: any) => (
                             <div
                               key={variant.id}
@@ -191,11 +186,11 @@ const handleNextImage = () => {
 
                       <div className='l:w-50p w-full'>
                         <div className='flex flex-col gap-10'>
-                          <p className='weight-400'>{product.name} - {product.longDescription}</p>
+                          <p className='weight-400'>{variant?.product?.name} - {variant?.product?.longDescription}</p>
                           <div>
-                            <p className='weight-400 text-grey-500 text-14'> sold by {product.store.name} </p>
+                            <p className='weight-400 text-grey-500 text-14'> sold by {variant?.product?.store.name} </p>
                           </div>
-                            <p className='weight-400'> in {product.type} </p>
+                            <p className='weight-400'> in {variant?.product?.type} </p>
                             <p className='weight-600 text-30 text-black'> {formatNumberAsPrice(displayPrice || 0)} </p>
                           <p className='weight-600 text-13 text-black'> Color:{' '}{selectedVariant?.properties.color} </p>
 
@@ -209,7 +204,7 @@ const handleNextImage = () => {
                          Select color:
                         </p>
                         <div className='mt-10 flex gap-6 a-items-center'>
-                          { product.variants.map(variant => (
+                          {variant?.product?.variants.map(variant => (
                             <div
                               key={variant.id}
                               onClick={() => {
@@ -234,7 +229,7 @@ const handleNextImage = () => {
 
                         <div className='grid mt-20 mb-10 gap-10'>
                           {selectedVariantItemInCart ? (
-                            <div className=''>
+                            <div className='mb-10'>
                               <QuantitySelector
                                 decrement={() =>
                                   decrement(selectedVariantItemInCart)
@@ -248,13 +243,10 @@ const handleNextImage = () => {
                           ) : (
                             <button
                               onClick={() => {
-                              if (isAuthenticated) {
-                                if (selectedVariant && selectedVariant.status === 'OUT_OF_STOCK') {
-                                addToCart(
-                                  selectedVariant?.id ?? 0,
-                                  selectedVariant?.minPurchaseQuantity || 1
-                                )
-                                }
+                                        if (isAuthenticated) {
+                                          if (selectedVariant && selectedVariant.status !== 'OUT_OF_STOCK') {
+                                            handleAddToCart(selectedVariant, selectedVariant?.minPurchaseQuantity || 1)
+                                          }
                               } else {
                                 isLoginModal()
                               }
@@ -279,8 +271,9 @@ const handleNextImage = () => {
                           </div>  
                              <div className='text-left text-12 flex a-items-center weight-400'>
                           <Link
-                            href={`/products/${product.slug}`}
-                            className='cursor-pointer flex a-items-center'
+                            href={`/products/${variant.product?.slug}`}
+                                  className='cursor-pointer flex a-items-center'
+                                  onClick={handleCloseProductModal}
                           >
                               All details
                               <MdArrowForwardIos className='w-fit' />
@@ -295,7 +288,7 @@ const handleNextImage = () => {
                 </div>
                 </div>
               </>
-          )}
+          ) : ""}
           </div>
         </>
       )}
