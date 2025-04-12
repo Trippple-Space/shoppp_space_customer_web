@@ -63,7 +63,7 @@ export default function RootLayout({
       className={`${inter.variable} ${roboto.variable} ${lora.variable} ${robotoMono.variable} bg-white font-inter h-full`}
     >
       <PHProvider >
-        <GlobalArena />
+        {/* <GlobalArena /> */}
         <PostHogPageView /> 
         <body className="@lo:weight-300 @lo:text-dimgrey h-full">
           {/* <div className="fixed w-full b-60 z-3">

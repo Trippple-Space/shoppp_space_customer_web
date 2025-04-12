@@ -15,7 +15,7 @@ interface OrderTabContentProps {
 
 const OrderTabContent = ({ status }: OrderTabContentProps) => {
   const { orders, singleOrder, fetching } = useOrders({
-    filters: { status: { In: [status] } }
+    filters: { status: { In: [status ==='ONGOING' ? "CONFIRMED": status] } }
   })
   const [orderCartModal, setOrderCartModal] = useState<Order | void>(
     singleOrder

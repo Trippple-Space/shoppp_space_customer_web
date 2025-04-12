@@ -147,7 +147,7 @@ const ProductTile: FC<IProductTile> = ({ product, savedVariants, saveVariant, re
           {onProductTileHover && product && (
             <div
               id="add to cart button"
-              className=" hidden l:block absolute t-0 l-0 ml-10 mt-20 l:mr-15 l:mb-15"
+              className=" hidden l:block absolute b-0 l-0 ml-10 mt-20 l:mr-15 l:mb-15"
               onClick={handleCloseProductModal}
             >
               <p className='bg-white radius-20 p-5 cursor-pointer text-12 flex a-items-center gap-5'>

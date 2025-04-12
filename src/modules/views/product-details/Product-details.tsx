@@ -80,7 +80,7 @@ let globalMediaIndex = 0;
     if (stockUnit?.toLowerCase() === 'yards') {
       return ['10', '20', '30', '100']
     } else {
-      return ['41', '42', '43', '44']
+      return []
     }
   }
   

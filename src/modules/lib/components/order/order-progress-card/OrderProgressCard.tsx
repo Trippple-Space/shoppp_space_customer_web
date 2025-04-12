@@ -3,7 +3,9 @@ import {
   formatDate,
   formatNumberAsPrice,
   formatTime,
-  getStoreNames
+  getStatusText,
+  getStoreNames,
+  onGoingOrderStatus
 } from '@/modules/lib/utility/utility'
 import classNames from 'classnames'
 import Link from 'next/link'
@@ -27,42 +29,17 @@ const OrderProgressCard = ({ orders }: OrderProgressProp) => {
   }
 
 
-  
-  const orderStatus = [
-    'ONGOING',
-    'PENDING_CONFIRMATION',
-    'ACKNOWLEDGED',
-    'WAITING_TO_BE_SHIPPED',
-    'OUT_FOR_DELIVERY',
-    'DELIVERED'
-  ]
-  const currentStatusIndex = (order: Order) => orderStatus.indexOf(
+  const currentStatusIndex = (order: Order) => onGoingOrderStatus.indexOf(
       order.status.toUpperCase()
     )
 
-  function getStatusText (status: string) {
-    switch (status) {
-      case 'ONGOING':
-        return 'Order placed'
-      case 'PENDING_CONFIRMATION':
-        return 'Pending Confirmation'
-      case 'ACKNOWLEDGED':
-        return 'Order received'
-      case 'WAITING_TO_BE_SHIPPED':
-        return 'Waiting to be shipped'
-      case 'OUT_FOR_DELIVERY':
-        return 'Out for delivery'
-      case 'DELIVERED':
-        return 'Delivered'
-      default:
-        return ''
-    }
-  }
+
 
   return (
     <>
       {orders.map(order => {
         const statusIndex = currentStatusIndex(order)
+        const isOngoing = order.status !== 'CANCELLED' && order.status !== 'DELIVERED' && order.status !== 'RETURNED'
         return (
         <div key={order.id}>
           <div className='bg-white'>
@@ -81,18 +58,15 @@ const OrderProgressCard = ({ orders }: OrderProgressProp) => {
                     className={classNames(
                       'text-12 px-10 py-5 color-white radius-4 font-inter',
                       {
-                        'bg-#1677FF':
-                          order.status == 'ONGOING',
+                        'bg-#1677FF': isOngoing,
                         'bg-#0B9378':
-                          order.status == 'CONFIRMED',
+                          order.status == 'DELIVERED',
                         'bg-#00000099':
                           order.status == 'CANCELLED'
                       }
                     )}
                   >
-                    {order.status.toLowerCase() === 'confirmed'
-                      ? 'Delivered'
-                      : order.status}
+                     {isOngoing ? 'ONGOING' : order.status}
                   </p>
                 </div>
                 <div
@@ -103,7 +77,8 @@ const OrderProgressCard = ({ orders }: OrderProgressProp) => {
                     'ml-55': order.cart.cartItems.length === 2,
                     'ml-40': order.cart.cartItems.length === 1
                   })}
-                >
+                  >
+                    
                   <div
                     className={classNames(
                       'text-12 flex a-items-center cursor-pointer h-full'
@@ -134,7 +109,7 @@ const OrderProgressCard = ({ orders }: OrderProgressProp) => {
                 <p className='text-14 weight-400 color-#00000099'>{order.id}</p>
               </div>
 
-              {order.status === 'ONGOING' && (
+              {isOngoing && (
                 <>
                   <div className='flex flex-col gap-10 l:flex-row l:a-items-center l:space-between'>
                     <p className='text-14 weight-400 flex a-items-center'>
@@ -152,24 +127,19 @@ const OrderProgressCard = ({ orders }: OrderProgressProp) => {
                     </div>
                   </div>
                   <div className='flex gap-10 a-items-center'>
-                      {orderStatus.map((status, index) =>
+                      {onGoingOrderStatus.map((status, index) =>
                         <div className={`p-5 radius-10 w-20p h-5 ${ index <=statusIndex ? 'bg-#0B9378': 'bg-whitesmoke'}`}></div>)}
-                    {/* <div className='p-5 radius-10 w-20p h-5 bg-whitesmoke'></div>
-                    <div className='p-5 radius-10 w-20p h-5 bg-whitesmoke'></div>
-                    <div className='p-5 radius-10 w-20p h-5 bg-whitesmoke'></div>
-                    <div className='p-5 radius-10 w-20p h-5 bg-whitesmoke'></div>
-                    <div className='p-5 radius-10 w-20p h-5 bg-whitesmoke'></div> */}
                   </div>
                 </>
               )}
               <div
                 className={classNames(
-                  'l:flex grid gap-10 l:gap-0 a-items-center space-between',
-                  { 'j-content-end': order.status !== 'ONGOING' }
+                  'l:flex flex-row gap-6 l:gap-0 a-items-center l:space-between',
+                  { 'j-content-end': isOngoing}
                 )}
               >
-                {order.status === 'ONGOING' && (
-                  <p className='color-#00000099 text-14 weight-400'>
+                { isOngoing && (
+                  <p className='color-#00000099 text-14 weight-400 mb-8 l:mb-0'>
                     {formatTime(
                       order.delivery.deliveryDate
                     ).toLocaleLowerCase()}{' '}

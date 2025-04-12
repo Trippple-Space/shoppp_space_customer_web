@@ -1,6 +1,7 @@
 import { Order } from '@/modules/lib/utility/types/order.interface'
 import OrderProcess from './OrderProcess'
 import { useState } from 'react'
+import { getStatusText, onGoingOrderStatus } from '@/modules/lib/utility/utility'
 
 const OrderProgressDetails = ({
   orderCartModal
@@ -12,41 +13,17 @@ const OrderProgressDetails = ({
     setTimeline(prev => !prev)
   }
 
-  const orderStatus = [
-    'ONGOING',
-    'PENDING_CONFIRMATION',
-    'ACKNOWLEDGED',
-    'WAITING_TO_BE_SHIPPED',
-    'OUT_FOR_DELIVERY',
-    'DELIVERED'
-  ]
-  const currentStatusIndex = orderStatus.indexOf(
+  const currentStatusIndex = onGoingOrderStatus.indexOf(
     orderCartModal.status.toUpperCase()
   )
 
-  function getStatusText (status: string) {
-    switch (status) {
-      case 'ONGOING':
-        return 'Order placed'
-      case 'PENDING_CONFIRMATION':
-        return 'Pending Confirmation'
-      case 'ACKNOWLEDGED':
-        return 'Order received'
-      case 'WAITING_TO_BE_SHIPPED':
-        return 'Waiting to be shipped'
-      case 'OUT_FOR_DELIVERY':
-        return 'Out for delivery'
-      case 'DELIVERED':
-        return 'Delivered'
-      default:
-        return ''
-    }
-  }
+  console.log({currentStatusIndex}, {sttus: orderCartModal.status})
+
 
   return (
     <>
       <div className='py-20 px-15 bg-white flex flex-col gap-25 a-items-center w-full overflow-hidden'>
-        {orderCartModal.status.toUpperCase() === 'CONFIRMED' ? (
+        {orderCartModal.status.toUpperCase() === 'DELIVERED' ? (
           <>
             <OrderProcess
               text='Order placed'
@@ -71,25 +48,25 @@ const OrderProgressDetails = ({
                   <OrderProcess
                     text='Pending Confirmation'
                     date={orderCartModal.delivery.deliveryWindowStart}
-                    active={orderCartModal.status === 'CONFIRMED'}
+                    active={orderCartModal.status === 'DELIVERED'}
                     orderCartModal={orderCartModal}
                   />
                 <OrderProcess
                   text='Your order has been recieved'
                   date={orderCartModal.delivery.deliveryWindowStart}
-                  active={orderCartModal.status === 'CONFIRMED'}
+                  active={orderCartModal.status === 'DELIVERED'}
                   orderCartModal={orderCartModal}
                 />
                 <OrderProcess
                   text='waiting to be shipped'
                   date={orderCartModal.delivery.deliveryWindowStart}
-                  active={orderCartModal.status === 'CONFIRMED'}
+                  active={orderCartModal.status === 'DELIVERED'}
                   orderCartModal={orderCartModal}
                 />
                 <OrderProcess
                   text='Out for delivery'
                   date={orderCartModal.delivery.deliveryWindowStart}
-                  active={orderCartModal.status === 'CONFIRMED'}
+                  active={orderCartModal.status === 'DELIVERED'}
                   orderCartModal={orderCartModal}
                 />
               </>
@@ -129,14 +106,14 @@ const OrderProgressDetails = ({
           </>
         ) : (
           <>
-            {orderStatus.map((status, index) => (
+            {onGoingOrderStatus.map((status, index) => (
               <OrderProcess
-                key={status}
+                key={index}
                 text={getStatusText(status)}
                 date={orderCartModal.delivery.deliveryWindowStart}
                 active={index <= currentStatusIndex}
                 orderCartModal={orderCartModal}
-                styles={index === 0 ? 'b-1 z-0' : 't-0 h-70'}
+                styles={index === 0 ? 'b-1 z-0' : 't-0 h-60'}
               />
             ))}
           </>

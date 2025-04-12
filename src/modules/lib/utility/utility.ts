@@ -235,3 +235,36 @@ export const preventCopyPaste = (e: ClipboardEvent) => {
 }
 
 export const passwordValidatorRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[^A-Za-z\d])[A-Za-z\d\W]{8,}$/ 
+
+
+
+ export const onGoingOrderStatus = [
+    'ONGOING',
+    'PENDING_CONFIRMATION',
+    'CONFIRMED',
+   'ACKNOWLEDGED',
+    'WAITING_TO_BE_SHIPPED',
+    'OUT_FOR_DELIVERY',
+    'DELIVERED'
+ ]
+  
+export function getStatusText(status: string) {    
+           switch (status) {
+       case 'ONGOING':
+         return 'Order placed'
+       case 'PENDING_CONFIRMATION':
+               return 'Pending Confirmation'
+             case 'CONFIRMED':
+               return 'Order confirmed'
+       case 'ACKNOWLEDGED':
+         return 'Order received'
+       case 'WAITING_TO_BE_SHIPPED':
+         return 'Waiting to be shipped'
+       case 'OUT_FOR_DELIVERY':
+         return 'Out for delivery'
+       case 'DELIVERED':
+         return 'Delivered'
+       default:
+         return ''
+     }
+   }

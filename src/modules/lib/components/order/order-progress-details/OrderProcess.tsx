@@ -72,7 +72,7 @@ const OrderProcess = ({
   const [selectedReason, setSelectedReason] = useState<string>('')
 
   const isTimelineView =
-    orderCartModal.status === 'CONFIRMED' && text === 'View all timelines'
+    orderCartModal.status === 'DELIVERED' && text === 'View all timelines'
 
   const handleCancelOrder = (id: number, reasons?: string) => {
     const finalReason = reasons || 'This order has been cancelled'
@@ -136,7 +136,7 @@ const OrderProcess = ({
         ) : (
           <>
             <OrderProgressLine
-              styles='h-150'
+              styles='h-100'
               active={active}
               orderCartModal={orderCartModal}
               text={text}

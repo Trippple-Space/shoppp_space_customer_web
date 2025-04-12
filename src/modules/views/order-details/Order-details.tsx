@@ -43,15 +43,30 @@ const OrderDetails = ({ orderId }: OrderDetailsProps) => {
   const [showDetails, setShowDetails] = useState(true)
 
   const getOrderImage = (status?: string) => {
-    switch (status) {
-      case 'ONGOING':
-        return 'order-placed.svg'
-      case 'CONFIRMED':
-        return 'order-delivered.svg'
-      default:
-        return 'order-cancelled.svg'
-    }
-  }
+    const statusImageMap: Record<string, string> = {
+      ONGOING: 'order-placed.svg',
+      PENDING_CONFIRMATION: 'pending-confirmation.svg',
+      CONFIRMED: 'waiting-to-be-shipped.svg',
+      ACKNOWLEDGED: 'waiting-to-be-shipped.svg',
+      WAITING_TO_BE_SHIPPED: 'waiting-to-be-shipped.svg',
+      OUT_FOR_DELIVERY: 'out-for-delivery.svg',
+      DELIVERED: 'order-delivered.svg',
+    };
+    return statusImageMap[status || ''] || 'order-cancelled.svg';
+  };
+
+  const orderReturnMessage = (status: string) => {
+    const statusMessageMap: Record<string, string> = {
+      ONGOING: 'Your order is being processed. Please wait for confirmation.',
+      PENDING_CONFIRMATION: 'Your order is awaiting confirmation. We will notify you soon.',
+      CONFIRMED: 'Your order has been confirmed. Thank you for shopping with Asoebi!',
+      ACKNOWLEDGED: 'We have acknowledged your order. It is being prepared.',
+      WAITING_TO_BE_SHIPPED: 'Your order is ready and waiting to be shipped.',
+      OUT_FOR_DELIVERY: 'Your order is on its way. It will reach you soon!',
+      DELIVERED: 'Your order has been successfully delivered. Enjoy!',
+    };
+    return statusMessageMap[status] || 'Unknown order status. Please contact support for more details.';
+  };
 
   const [openTotal, setOpenTotal] = useState(false)
   const [openOrderedProducts, setOpenOrderedProducts] = useState(false)
@@ -73,6 +88,7 @@ const OrderDetails = ({ orderId }: OrderDetailsProps) => {
   const buyAgain = async (cartItems: CartItem[]) => {
     await cartService.buyCartItemAgain(cartItems)
   }
+        const isOngoing = orderCartModal?.status !== 'CANCELLED' && orderCartModal?.status !== 'DELIVERED' && orderCartModal?.status !== 'RETURNED'
   
   return (
     <>
@@ -87,7 +103,7 @@ const OrderDetails = ({ orderId }: OrderDetailsProps) => {
           </Link>
           <span className='text-14 weight-400'>Orders</span>
         </div>
-        <OrderHeader orderStatus={orderCartModal?.status} />
+        <OrderHeader orderStatus={isOngoing ? "ONGOING" : orderCartModal?.status} />
         <div className='l:w-50p w-90p flex flex-col gap-50 pb-32'>
           {/* Default "Order Details" View */}
           {showDetails ? (
@@ -110,7 +126,7 @@ const OrderDetails = ({ orderId }: OrderDetailsProps) => {
                           Hi, {orderCartModal.user.profile.firstName}
                         </p>
                         <p className='text-14 weight-400 color-#00000099'>
-                          Your order will be confirmed shortly.
+                         {orderReturnMessage(orderCartModal.status)}
                         </p>
                       </div>
                       <div className='bg-whitesmoke p-12 radius-12 w-60 h-60'>
@@ -155,7 +171,7 @@ const OrderDetails = ({ orderId }: OrderDetailsProps) => {
                       )}
                     </div>
                     <div className='p-20 flex flex-col l:flex-row gap-15 l:gap-0 l:a-items-center space-between bg-white'>
-                      {orderCartModal.status === 'ONGOING' ? (
+                      {isOngoing ? (
                         <>
                           <div className='flex flex-col gap-5'>
                             <p className='color-#00000099 text-14'>
