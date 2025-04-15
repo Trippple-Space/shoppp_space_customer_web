@@ -23,7 +23,7 @@ export const PriceFilter: React.FC<IPriceFilter> = ({ setFilteredPrice }) => {
 
     const setPriceRange = (key: "min" | "max", value: string) => {
         setInputRange((prev: any) => ({ ...prev, [key]: value }));
-        console.log()
+        
         if (!isRadioChecked) {
             setFilteredPrice({ min: '', max: '' })
             if (key === 'min'){
