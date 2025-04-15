@@ -8,14 +8,17 @@ import Image from '../image/Image'
 import Link from 'next/link'
 import { useOrders } from '../../utility/hooks/use-orders'
 import PuffLoader from '../puff-loader/PuffLoader'
+import { onGoingOrderStatusQuery } from '../../utility/utility'
 
 interface OrderTabContentProps {
   status: any
 }
 
+
+
 const OrderTabContent = ({ status }: OrderTabContentProps) => {
   const { orders, singleOrder, fetching } = useOrders({
-    filters: { status: { In: [status ==='ONGOING' ? "CONFIRMED": status] } }
+    filters: { status: { In: status ==='ONGOING' ? onGoingOrderStatusQuery : status } }
   })
   const [orderCartModal, setOrderCartModal] = useState<Order | void>(
     singleOrder

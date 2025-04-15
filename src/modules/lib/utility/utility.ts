@@ -267,4 +267,6 @@ export function getStatusText(status: string) {
        default:
          return ''
      }
-   }
+}
+   
+export const onGoingOrderStatusQuery = 'ONGOING,PENDING_CONFIRMATION,CONFIRMED,ACKNOWLEDGED,WAITING_TO_BE_SHIPPED,OUT_FOR_DELIVERY'
