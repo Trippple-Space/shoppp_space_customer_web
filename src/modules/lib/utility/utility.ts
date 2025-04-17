@@ -241,6 +241,10 @@ export const preventCopyPaste = (e: ClipboardEvent) => {
 export const passwordValidatorRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[^A-Za-z\d])[A-Za-z\d\W]{8,}$/ 
 
 export const states = [
+  "Lagos"
+];
+/*
+[
   "Abia",
   "Adamawa",
   "Akwa Ibom",
@@ -275,4 +279,5 @@ export const states = [
   "Taraba",
   "Yobe",
   "Zamfara",
-];
+]
+*/
