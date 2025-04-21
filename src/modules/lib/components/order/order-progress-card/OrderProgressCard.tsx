@@ -16,7 +16,7 @@ import OrderedProductModal from '../../ordered-product/OrderedProductModal'
 
 interface OrderProgressProp {
   orders: Order[]
-  setOrderCartModal: (order: Order) => void
+  setSingleOrder: (order: Order) => void
 }
 
 const OrderProgressCard = ({ orders }: OrderProgressProp) => {
@@ -116,10 +116,10 @@ const OrderProgressCard = ({ orders }: OrderProgressProp) => {
                       <span>Share this code with your rider</span>
                     </p>
                     <div className='flex a-items-center gap-10'>
-                      {order.delivery.code.split('').map(str => (
+                      {order.delivery.code.split('').map((str, i) => (
                         <p
                           className='h-40 w-40 radius-5 weight-600 bg-whitesmoke text-center flex a-items-center j-content-center text-16'
-                          key={str}
+                          key={i}
                         >
                           {str.toLocaleUpperCase()}
                         </p>
@@ -128,7 +128,7 @@ const OrderProgressCard = ({ orders }: OrderProgressProp) => {
                   </div>
                   <div className='flex gap-10 a-items-center'>
                       {onGoingOrderStatus.map((status, index) =>
-                        <div className={`p-5 radius-10 w-20p h-5 ${ index <=statusIndex ? 'bg-#0B9378': 'bg-whitesmoke'}`}></div>)}
+                        <div key={index} className={`p-5 radius-10 w-20p h-5 ${ index <=statusIndex ? 'bg-#0B9378': 'bg-whitesmoke'}`}></div>)}
                   </div>
                 </>
               )}

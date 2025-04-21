@@ -23,23 +23,21 @@ import { cartService } from '@/modules/lib/utility/services/cart.service'
 import { orderService } from '@/modules/lib/utility/services/order.service'
 import OrderTabContent from '@/modules/lib/components/order/OrderTabContent'
 import PuffLoader from '@/modules/lib/components/puff-loader/PuffLoader'
+import { useOrders } from '@/modules/lib/utility/hooks/use-orders'
 
 interface OrderDetailsProps {
   orderId: number
 }
 
 const OrderDetails = ({ orderId }: OrderDetailsProps) => {
-  const [orderCartModal, setOrderCartModal] = useState<Order>()
+  const { fetchOrderById, singleOrder } = useOrders({})
    const router = useRouter()
 
   useEffect(() => {
-    async function fetchSingleOrder () {
-      const singleOrder = await orderService.fetchOrderById(orderId, {})
-      setOrderCartModal(singleOrder)
-    }
-    fetchSingleOrder()
-  }, [orderId])
-
+    fetchOrderById(orderId, {})
+    
+  }, [])
+  
   const [showDetails, setShowDetails] = useState(true)
 
   const getOrderImage = (status?: string) => {
@@ -83,12 +81,12 @@ const OrderDetails = ({ orderId }: OrderDetailsProps) => {
 
   useEffect(() => {
     setShowDetails(true)
-  }, [orderCartModal])
+  }, [singleOrder])
 
   const buyAgain = async (cartItems: CartItem[]) => {
     await cartService.buyCartItemAgain(cartItems)
   }
-        const isOngoing = orderCartModal?.status !== 'CANCELLED' && orderCartModal?.status !== 'DELIVERED' && orderCartModal?.status !== 'RETURNED'
+        const isOngoing = singleOrder?.status !== 'CANCELLED' && singleOrder?.status !== 'DELIVERED' && singleOrder?.status !== 'RETURNED'
   
   return (
     <>
@@ -103,12 +101,12 @@ const OrderDetails = ({ orderId }: OrderDetailsProps) => {
           </Link>
           <span className='text-14 weight-400'>Orders</span>
         </div>
-        <OrderHeader orderStatus={isOngoing ? "ONGOING" : orderCartModal?.status} />
+        <OrderHeader orderStatus={isOngoing ? "ONGOING" : singleOrder?.status} />
         <div className='l:w-50p w-90p flex flex-col gap-50 pb-32'>
           {/* Default "Order Details" View */}
           {showDetails ? (
             <>
-              {orderCartModal ? (
+              {singleOrder ? (
                 <div className='flex a-items-center gap-10 bg-#F5F5F5 p-5 radius-6 j-content-center'>
                   <div className='flex flex-col gap-10 w-100p p-10'>
                     <div
@@ -117,22 +115,22 @@ const OrderDetails = ({ orderId }: OrderDetailsProps) => {
                     >
                       <GoArrowLeft className='w-fit' />
                       <p className='weight-400 text-16'>
-                        Order #{orderCartModal.id}
+                        Order #{singleOrder.id}
                       </p>
                     </div>
                     <div className='bg-white p-25 flex a-items-center space-between'>
                       <div className='grid gap-5'>
                         <p className='text-18 weight-600'>
-                          Hi, {orderCartModal.user.profile.firstName}
+                          Hi, {singleOrder.user.profile.firstName}
                         </p>
                         <p className='text-14 weight-400 color-#00000099'>
-                         {orderReturnMessage(orderCartModal.status)}
+                         {orderReturnMessage(singleOrder.status)}
                         </p>
                       </div>
                       <div className='bg-whitesmoke p-12 radius-12 w-60 h-60'>
                         <Image
                           type='icon'
-                          src={getOrderImage(orderCartModal?.status) || ''}
+                          src={getOrderImage(singleOrder?.status) || ''}
                           alt='placed order icon'
                           className='w-fit'
                         />
@@ -147,7 +145,7 @@ const OrderDetails = ({ orderId }: OrderDetailsProps) => {
                           <p className='color-#00000099 text-12 weight-400 overflow-hidden text-ellipsis l:overflow'>
                             Order from:{' '}
                             <span className='weight-500 color-#000000E0 text-14 font-inter'>
-                              {getStoreNames(orderCartModal.cart.cartItems)}
+                              {getStoreNames(singleOrder.cart.cartItems)}
                             </span>
                           </p>
                         </div>
@@ -159,7 +157,7 @@ const OrderDetails = ({ orderId }: OrderDetailsProps) => {
                                 {}
                               )}
                             >
-                              <OverlappingImages orderItem={orderCartModal} />
+                              <OverlappingImages orderItem={singleOrder} />
                             </div>
 
                             <MdKeyboardArrowDown className='w-25 h-25 ml-5' />
@@ -167,7 +165,7 @@ const OrderDetails = ({ orderId }: OrderDetailsProps) => {
                         </div>
                       </div>
                       {openOrderedProducts && (
-                        <OrderedProductCard orderedProducts={orderCartModal} />
+                        <OrderedProductCard orderedProducts={singleOrder} />
                       )}
                     </div>
                     <div className='p-20 flex flex-col l:flex-row gap-15 l:gap-0 l:a-items-center space-between bg-white'>
@@ -182,7 +180,7 @@ const OrderDetails = ({ orderId }: OrderDetailsProps) => {
                             </p>
                           </div>
                           <div className='flex gap-10'>
-                            {orderCartModal.delivery.code
+                            {singleOrder.delivery.code
                               .split('')
                               .map((str: string) => (
                                 <p
@@ -197,13 +195,13 @@ const OrderDetails = ({ orderId }: OrderDetailsProps) => {
                       ) : (
                         <div className='flex w-100p a-items-center space-between'>
                           <p className='text-14 weight-500'>
-                            #{orderCartModal.id}
+                            #{singleOrder.id}
                           </p>
 
                           <button
                             className='flex gap-10 a-items-center px-10 py-7 radius-5 border border-#00000026 bg-none cursor-pointer'
                             onClick={() =>
-                              buyAgain(orderCartModal.cart.cartItems)
+                              buyAgain(singleOrder.cart.cartItems)
                             }
                           >
                             <PiArrowClockwise className='w-fit' />
@@ -213,7 +211,7 @@ const OrderDetails = ({ orderId }: OrderDetailsProps) => {
                       )}
                     </div>
                     <div>
-                      <OrderProgress orderCartModal={orderCartModal} />
+                      <OrderProgress singleOrder={singleOrder} />
                     </div>
                     <div>
                       <div className='bg-white p-20'>
@@ -235,7 +233,7 @@ const OrderDetails = ({ orderId }: OrderDetailsProps) => {
                                 </p>
                                 <p className='text-16'>
                                   {formatNumberAsPrice(
-                                    orderCartModal.cart.subTotal
+                                    singleOrder.cart.subTotal
                                   )}
                                 </p>
                               </div>
@@ -245,7 +243,7 @@ const OrderDetails = ({ orderId }: OrderDetailsProps) => {
                                 </p>
                                 <p className='text-16 weight-400'>
                                   {formatNumberAsPrice(
-                                    orderCartModal.deliveryFee
+                                    singleOrder.deliveryFee
                                   )}
                                 </p>
                               </div>
@@ -257,7 +255,7 @@ const OrderDetails = ({ orderId }: OrderDetailsProps) => {
                                 </p>
                                 <p className='text-16 weight-400'>
                                   {formatNumberAsPrice(
-                                    orderCartModal.totalAmount
+                                    singleOrder.totalAmount
                                   )}
                                 </p>
                               </div>
@@ -283,7 +281,7 @@ const OrderDetails = ({ orderId }: OrderDetailsProps) => {
               )}
             </>
           ) : (
-            <OrderTabContent status={orderCartModal?.status} />
+            <OrderTabContent status={singleOrder?.status} />
           )}
         </div>
       </div>

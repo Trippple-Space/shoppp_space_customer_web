@@ -31,6 +31,7 @@ export const useOrders = (initialQuery: IQueryParams) => {
                const order = await orderService.fetchOrderById(id, query);
                setSingleOrder(order);
                
+               
           } catch (err) {
                console.error("Error fetching order by ID:", err);
           } finally {
@@ -63,6 +64,7 @@ export const useOrders = (initialQuery: IQueryParams) => {
                fetchOrders(initialQuery);
           }
      }, [isAuthenticated, JSON.stringify(initialQuery)]);
+     
 
      return {
           orders,

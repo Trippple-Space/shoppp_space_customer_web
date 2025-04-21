@@ -13,7 +13,7 @@ interface OrderProcessProps {
   date: string
   active: boolean
   styles?: string
-  orderCartModal: Order
+  singleOrder: Order
   handleViewTimeline?: () => void
   viewTimeline?: boolean
 }
@@ -22,20 +22,19 @@ interface OrderProgressProps {
   active: boolean
   styles?: string
   text?: string
-  orderCartModal?: Order
+  singleOrder?: Order
 }
 
 // Reusable Progress Circle Component
 const OrderProgressCircle = ({
   active,
-  styles,
   text,
-  orderCartModal
+  singleOrder
 }: OrderProgressProps) => (
   <div
     className={classNames(
       `w-20 h-20 radius-20 z-2 border border-3 border-white  ${
-        orderCartModal?.status === 'CANCELLED' &&
+        singleOrder?.status === 'CANCELLED' &&
         text === 'Cancelled-Payment Unsuccessful' &&
         'bg-#D4280C'
       }`,
@@ -63,7 +62,7 @@ const OrderProcess = ({
   date,
   active,
   styles,
-  orderCartModal,
+  singleOrder,
   handleViewTimeline,
   viewTimeline
 }: OrderProcessProps) => {
@@ -72,7 +71,7 @@ const OrderProcess = ({
   const [selectedReason, setSelectedReason] = useState<string>('')
 
   const isTimelineView =
-    orderCartModal.status === 'DELIVERED' && text === 'View all timelines'
+    singleOrder.status === 'DELIVERED' && text === 'View all timelines'
 
   const handleCancelOrder = (id: number, reasons?: string) => {
     const finalReason = reasons || 'This order has been cancelled'
@@ -106,51 +105,52 @@ const OrderProcess = ({
             <OrderProgressLine
               styles='b-10 h-70 l-9'
               active={active}
-              orderCartModal={orderCartModal}
+              singleOrder={singleOrder}
               text={text}
             />
             <PiDotsThreeOutline className='w-20 h-20 radius-20 bg-white z-10' />
             <OrderProgressLine styles={styles} active={active} text={text} />
           </>
-        ) : orderCartModal.status === 'CANCELLED' ? (
+        ) : singleOrder.status === 'CANCELLED' ? (
           <>
             <OrderProgressLine
               styles='b-1 h-70'
               active={active}
-              orderCartModal={orderCartModal}
+              singleOrder={singleOrder}
               text={text}
             />
             <OrderProgressCircle
               styles={``}
               active={active}
-              orderCartModal={orderCartModal}
+              singleOrder={singleOrder}
               text={text}
             />
             <OrderProgressLine
               styles={`${styles}`}
               active={active}
-              orderCartModal={orderCartModal}
+              singleOrder={singleOrder}
               text={text}
             />
           </>
         ) : (
           <>
             <OrderProgressLine
-              styles='h-100'
+              styles='h-150'
               active={active}
-              orderCartModal={orderCartModal}
+              singleOrder={singleOrder}
               text={text}
             />
+            
             <OrderProgressCircle
               styles=''
               active={active}
-              orderCartModal={orderCartModal}
+              singleOrder={singleOrder}
               text={text}
             />
             <OrderProgressLine
               styles={styles}
               active={active}
-              orderCartModal={orderCartModal}
+              singleOrder={singleOrder}
               text={text}
             />
           </>
@@ -159,7 +159,7 @@ const OrderProcess = ({
 
       <div
         className={`flex flex-col ${
-          orderCartModal.status !== 'CONFIRMED' && 'gap-10'
+          singleOrder.status !== 'CONFIRMED' && 'gap-10'
         }  j-content-center`}
       >
         {isTimelineView || text === 'Close timelines' ? (
@@ -170,7 +170,7 @@ const OrderProcess = ({
             {viewTimeline ? 'Close all timelines' : text}
           </button>
         ) : text === 'Cancelled-Payment Unsuccessful' &&
-          orderCartModal.status === 'CANCELLED' ? (
+          singleOrder.status === 'CANCELLED' ? (
           <>
             <p
               className={classNames(
@@ -205,7 +205,7 @@ const OrderProcess = ({
           </p>
         )}
 
-        {orderCartModal.status === 'ONGOING' && text === 'Order placed' && (
+        {singleOrder.status === 'ONGOING' && text === 'Order placed' && (
           <>
             {
               <p
@@ -254,7 +254,7 @@ const OrderProcess = ({
                         <button
                           className='border-none px-20 py-8  radius-5 bg-#D4280C color-white cursor-pointer'
                           onClick={() =>
-                            handleCancelOrder(orderCartModal.id, selectedReason)
+                            handleCancelOrder(singleOrder.id, selectedReason)
                           }
                         >
                           Cancel order

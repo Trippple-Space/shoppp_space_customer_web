@@ -238,6 +238,13 @@ export const passwordValidatorRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[^A-Z
 
 
 
+  export const ellipseText = (text: string, isExpanded: boolean, limit: number) => {
+    if (isExpanded || text.length <= limit) {
+      return text 
+    }
+    return `${text.substring(0, limit)}...` 
+  }
+
  export const onGoingOrderStatus = [
     'ONGOING',
     'PENDING_CONFIRMATION',
