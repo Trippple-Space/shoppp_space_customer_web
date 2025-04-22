@@ -6,6 +6,7 @@ interface FilterStore {
   setSort: (sortBy: string) => void;
   setPrice: (price: { min: string; max: string }) => void;
   setRate: (rateBy: string) => void;
+  setLocation: (state: string) => void;
   setShowOffers: () => void;
   resetFilters: (field: keyof IFilters) => void;
 }
@@ -15,7 +16,8 @@ export const useFilterStore = create<FilterStore>((set) => ({
     sort: { sortBy: "" },
     price: { min: "", max: "" },
     rating: { rateBy: "" },
-    showOffers: false
+    showOffers: false,
+    location: {selectedState: ""}
   },
 
   setSort: (sortBy) => {
@@ -49,6 +51,15 @@ export const useFilterStore = create<FilterStore>((set) => ({
     }));
   },
 
+  setLocation: (selectedState) => {
+    return set((state) => ({
+      allFilters: {
+        ...state.allFilters,
+        location: { ...state.allFilters.location, selectedState }
+      }
+    }));
+  },
+
   setShowOffers: () => {
     return set((state) => ({
       allFilters: {
@@ -67,7 +78,9 @@ export const useFilterStore = create<FilterStore>((set) => ({
             ? { sortBy: "" }
             : field === "price"
             ? { min: "", max: "" }
-            : { rateBy: "" }
+            : field === "rating"
+            ? { rateBy: "" }
+            : {selectedState: ""}
       }
     }));
   }

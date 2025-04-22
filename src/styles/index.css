@@ -396,7 +396,6 @@
 .border-b-\#00000014 { border-bottom-color: #00000014; } 
 .py-5\.8625 { padding-top: 5.8625px; padding-bottom: 5.8625px; } 
 .max-w-1400\! { max-width: 1400px !important; } 
-.gap-26 { gap: 26px; } 
 .w-90p { width: 90%; } 
 .max-w-450 { max-width: 450px; } 
 .max-w-400 { max-width: 400px; } 
@@ -407,6 +406,8 @@
 .bg-\#00000014 { background-color: #00000014; } 
 .hover\:bg-\#00000014:hover { background-color: #00000014; } 
 .hover\:bg-\#FACE33:hover { background-color: #FACE33; } 
+.color-\#6A6A6A { color: #6A6A6A; } 
+.hover\:color-\#000000E0:hover { color: #000000E0; } 
 .w-10p { width: 10%; } 
 .w-20p { width: 20%; } 
 .w-70p { width: 70%; } 
@@ -422,8 +423,7 @@
 .r-12 { right: 12px; } 
 .b-12 { bottom: 12px; } 
 .color-\#00000026 { color: #00000026; } 
-.color-\#6A6A6A { color: #6A6A6A; } 
-.hover\:color-\#000000E0:hover { color: #000000E0; } 
+.gap-26 { gap: 26px; } 
 .grid-5-cols-auto { grid-template-columns: repeat(5, auto); } 
 .border-b-3 { border-bottom-width: 3px; } 
 .h-64 { height: 64px; } 
