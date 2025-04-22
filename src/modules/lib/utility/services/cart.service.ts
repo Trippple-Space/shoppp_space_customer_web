@@ -24,15 +24,15 @@ class CartService {
      addToCart(variantId: number, quantity: number): Promise<Cart> {
           
           return new Promise((resolve, reject) => {
-               // console.log({ variantId }, 'cart');
+               console.log({ variantId }, 'cart');
                     
                http.post(endpoints.CART, { variantId, quantity })
                     .then((response) => {
                          const cartData = response.data;
                          console.log({ cartData }, 'cartData')
-                         // cartData.cartItems = cartData.cartItems.sort(
-                         //      (a: CartItem, b: CartItem) => a.id - b.id
-                         // );
+                         cartData.cartItems = cartData.cartItems.sort(
+                              (a: CartItem, b: CartItem) => a.id - b.id
+                         );
                          this.fetchCart()
                               .then((updatedCartData) => {
                                    resolve(updatedCartData);
@@ -103,7 +103,7 @@ class CartService {
 
                for (let i = 0; i < itemsToAdd.length; i++){
                     this.addToCart(itemsToAdd[i].variant.id, itemsToAdd[i].quantity)
-                    // console.log({id: itemsToAdd[i].variant.id})
+                    console.log({id: itemsToAdd[i].variant.id})
                }
                window.location.href = "/checkout";  
                await Promise.all(
