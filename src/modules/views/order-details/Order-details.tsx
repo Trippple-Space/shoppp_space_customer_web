@@ -182,9 +182,9 @@ const OrderDetails = ({ orderId }: OrderDetailsProps) => {
                           <div className='flex gap-10'>
                             {singleOrder.delivery.code
                               .split('')
-                              .map((str: string) => (
+                              .map((str: string, i) => (
                                 <p
-                                  key={str}
+                                  key={i}
                                   className='w-40 h-40 p-10 radius-5 weight-600 bg-whitesmoke text-center'
                                 >
                                   {str.toLocaleUpperCase()}

@@ -24,31 +24,31 @@ class CartService {
      addToCart(variantId: number, quantity: number): Promise<Cart> {
           
           return new Promise((resolve, reject) => {
-               console.log({ variantId }, 'cart');
+               // console.log({ variantId }, 'cart');
                     
-               // http.post(endpoints.CART, { variantId, quantity })
-               //      .then((response) => {
-               //           const cartData = response.data;
-               //           console.log({ cartData }, 'cartData')
-               //           // cartData.cartItems = cartData.cartItems.sort(
-               //           //      (a: CartItem, b: CartItem) => a.id - b.id
-               //           // );
-               //           this.fetchCart()
-               //                .then((updatedCartData) => {
-               //                     resolve(updatedCartData);
-               //                })
-               //                .catch((error) => {
-               //                     console.error(
-               //                          "Error fetching updated cart:",
-               //                          error
-               //                     );
-               //                     reject(error);
-               //                });
-               //      })
-               //      .catch((error) => {
-               //           console.error("Error adding to cart:", error);
-               //           reject(error);
-               //      });
+               http.post(endpoints.CART, { variantId, quantity })
+                    .then((response) => {
+                         const cartData = response.data;
+                         console.log({ cartData }, 'cartData')
+                         // cartData.cartItems = cartData.cartItems.sort(
+                         //      (a: CartItem, b: CartItem) => a.id - b.id
+                         // );
+                         this.fetchCart()
+                              .then((updatedCartData) => {
+                                   resolve(updatedCartData);
+                              })
+                              .catch((error) => {
+                                   console.error(
+                                        "Error fetching updated cart:",
+                                        error
+                                   );
+                                   reject(error);
+                              });
+                    })
+                    .catch((error) => {
+                         console.error("Error adding to cart:", error);
+                         reject(error);
+                    });
           });
      }
 
@@ -103,14 +103,14 @@ class CartService {
 
                for (let i = 0; i < itemsToAdd.length; i++){
                     this.addToCart(itemsToAdd[i].variant.id, itemsToAdd[i].quantity)
-                    console.log({id: itemsToAdd[i].variant.id})
+                    // console.log({id: itemsToAdd[i].variant.id})
                }
-               // window.location.href = "/checkout";  
-               // await Promise.all(
-               //      itemsToAdd.map((cartItem) => 
-               //           this.addToCart(cartItem.variant.id, cartItem.quantity)
-               //      )
-               // );
+               window.location.href = "/checkout";  
+               await Promise.all(
+                    itemsToAdd.map((cartItem) => 
+                         this.addToCart(cartItem.variant.id, cartItem.quantity)
+                    )
+               );
 
           } catch (error) {
                console.error("Error processing buy again action:", error);
