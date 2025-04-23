@@ -1,12 +1,13 @@
 import { create } from "zustand";
 import { cartService } from "../services/cart.service";
-import { Cart } from "../types/cart.interface";
+import { BuyAgain, Cart, CartItem } from "../types/cart.interface";
 
 type CartStore = {
      cart: Cart;
      fetching: boolean;
      fetchCart: () => void;
      addToCart: (variantId: number, quantity: number) => void;
+     buyAgain: (buyAgainItems: BuyAgain[]) => void;
      incrementCartItem: (variantId: number, quantity: number) => void;
      decrementCartItem: (variantId: number, quantity: number) => void;
      removeFromCart: (variantId: number) => void;
@@ -35,6 +36,10 @@ export const useCartStore = create<CartStore>((set) => ({
      },
      addToCart: async (variantId: number, quantity: number = 1) => {
           const updatedCart = await cartService.addToCart(variantId, quantity);
+          set({ cart: updatedCart });
+     },
+     buyAgain: async (buyAgainItems: BuyAgain[]) => {
+          const updatedCart = await cartService.buyAgain(buyAgainItems);
           set({ cart: updatedCart });
      },
      incrementCartItem: async (variantId: number, quantity: number = 1) => {

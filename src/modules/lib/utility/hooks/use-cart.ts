@@ -10,6 +10,7 @@ export const useCart = () => {
           cart,
           fetchCart,
           addToCart,
+          buyAgain,
           fetching,
           removeFromCart,
           incrementCartItem,
@@ -35,6 +36,8 @@ export const useCart = () => {
           decrementCartItem(cartItem.variant.id, cartItem.variant.incrementBy);
      };
 
+
+
      useEffect(() => {
           if (!cart.id && isAuthenticated && !fetching) {
    
@@ -45,6 +48,7 @@ export const useCart = () => {
      return {
           cart,
           addToCart,
+          buyAgain,
           removeFromCart,
           increment,
           decrement,

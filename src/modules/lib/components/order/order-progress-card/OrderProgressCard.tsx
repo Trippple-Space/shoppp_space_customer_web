@@ -50,7 +50,7 @@ const OrderProgressCard = ({ orders }: OrderProgressProp) => {
                     <p className='color-#00000099 weight-400 text-12 overflow-hidden text-ellipsis l:overflow font-inter'>
                       Order from:{' '}
                       <span className='text-14 weight-500 color-#000000E0 '>
-                        {getStoreNames(order.cart.cartItems)}
+                        {getStoreNames(order?.cart?.cartItems)}
                       </span>
                     </p>
                   </div>
@@ -71,11 +71,11 @@ const OrderProgressCard = ({ orders }: OrderProgressProp) => {
                 </div>
                 <div
                   className={classNames('flex a-items-center space-between', {
-                    'ml-45': order.cart.cartItems.length > 4,
-                    'ml-80': order.cart.cartItems.length === 4,
-                    'ml-70': order.cart.cartItems.length === 3,
-                    'ml-55': order.cart.cartItems.length === 2,
-                    'ml-40': order.cart.cartItems.length === 1
+                    'ml-45': order.cart?.cartItems?.length > 4,
+                    'ml-80': order.cart?.cartItems?.length === 4,
+                    'ml-70': order.cart?.cartItems?.length === 3,
+                    'ml-55': order.cart?.cartItems?.length === 2,
+                    'ml-40': order.cart?.cartItems?.length === 1
                   })}
                   >
                     
@@ -96,7 +96,7 @@ const OrderProgressCard = ({ orders }: OrderProgressProp) => {
                       Total Amount
                     </p>
                     <p className='color-black text-right weight-600'>
-                      {formatNumberAsPrice(order.cart.total)}
+                      {formatNumberAsPrice(order?.cart?.total)}
                     </p>
                   </div>
                 </div>

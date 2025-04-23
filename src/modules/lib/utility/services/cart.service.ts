@@ -1,7 +1,8 @@
 import { AxiosResponse } from "axios";
 import endpoints from "../endpoints";
 import http from "../http";
-import { Cart, CartItem } from "../types/cart.interface";
+import { BuyAgain, Cart, CartItem } from "../types/cart.interface";
+import { toast } from "sonner";
 
 class CartService {
      fetchCart(): Promise<Cart> {
@@ -24,7 +25,7 @@ class CartService {
      addToCart(variantId: number, quantity: number): Promise<Cart> {
           
           return new Promise((resolve, reject) => {
-               console.log({ variantId }, 'cart');
+               console.log({ variantId, quantity }, 'cart');
                     
                http.post(endpoints.CART, { variantId, quantity })
                     .then((response) => {
@@ -49,6 +50,40 @@ class CartService {
                          console.error("Error adding to cart:", error);
                          reject(error);
                     });
+          });
+     }
+
+     buyAgain(buyAgainItems: BuyAgain[]): Promise<Cart> {
+          
+          return new Promise((resolve, reject) => {
+               console.log({items: buyAgainItems});
+               
+               http.post(endpoints.MULTIPLECART, {items: buyAgainItems})
+                    .then((response) => {
+                         const res = response.data;
+                         res.summary.failedItems.forEach((item: {productName: string, quantity: number, variantId: number}) => {
+                              toast.success(`${item.productName} is out of stock`, {duration: 2000})
+                         })
+
+                         console.log(res)
+                         this.fetchCart()
+                              .then((updatedCartData) => {
+                                   resolve(updatedCartData);
+                              })
+                              .catch((error) => {
+                                   console.error(
+                                        "Error fetching updated cart:",
+                                        error
+                                   );
+                                   reject(error);
+                              });
+                    })
+                    .catch((error) => {
+                         console.error("Error adding to cart:", error);
+                         reject(error);
+                    }).finally(() => {
+                         toast.success("Cart updated successfully", {duration: 2000})
+                    })
           });
      }
 
@@ -84,38 +119,6 @@ class CartService {
                          reject(error);
                     });
           });
-     }
-
-     async buyCartItemAgain(cartItems: CartItem[]): Promise<void> {
-          try {
-               const currentCart = await this.fetchCart();
-               const existingCartItemIds = new Set(
-                    currentCart.cartItems.map(
-                         (item: CartItem) => item.variant.id
-                    )
-               );
-
-               const itemsToAdd = cartItems.filter(
-                    (cartItem) => !existingCartItemIds.has(cartItem.variant.id)
-               );
-               console.log({itemsToAdd})
-
-
-               for (let i = 0; i < itemsToAdd.length; i++){
-                    this.addToCart(itemsToAdd[i].variant.id, itemsToAdd[i].quantity)
-                    console.log({id: itemsToAdd[i].variant.id})
-               }
-               window.location.href = "/checkout";  
-               await Promise.all(
-                    itemsToAdd.map((cartItem) => 
-                         this.addToCart(cartItem.variant.id, cartItem.quantity)
-                    )
-               );
-
-          } catch (error) {
-               console.error("Error processing buy again action:", error);
-               throw error;
-          }
      }
 }
 

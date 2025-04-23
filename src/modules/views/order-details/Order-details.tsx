@@ -17,13 +17,14 @@ import { Order } from '@/modules/lib/utility/types/order.interface'
 import { useRouter, useSearchParams } from 'next/navigation'
 import HomepageNavBar from '@/modules/lib/components/nav-bar/HomepageNavBar'
 import OrderHeader from '@/modules/lib/components/order/OrderHeader'
-import { CartItem } from '@/modules/lib/utility/types/cart.interface'
+import { BuyAgain, CartItem } from '@/modules/lib/utility/types/cart.interface'
 import Link from 'next/link'
 import { cartService } from '@/modules/lib/utility/services/cart.service'
 import { orderService } from '@/modules/lib/utility/services/order.service'
 import OrderTabContent from '@/modules/lib/components/order/OrderTabContent'
 import PuffLoader from '@/modules/lib/components/puff-loader/PuffLoader'
 import { useOrders } from '@/modules/lib/utility/hooks/use-orders'
+import { useCart } from '@/modules/lib/utility/hooks/use-cart'
 
 interface OrderDetailsProps {
   orderId: number
@@ -31,13 +32,14 @@ interface OrderDetailsProps {
 
 const OrderDetails = ({ orderId }: OrderDetailsProps) => {
   const { fetchOrderById, singleOrder } = useOrders({})
-   const router = useRouter()
+  const { buyAgain } = useCart()
+  const router = useRouter()
 
   useEffect(() => {
     fetchOrderById(orderId, {})
-    
+
   }, [])
-  
+
   const [showDetails, setShowDetails] = useState(true)
 
   const getOrderImage = (status?: string) => {
@@ -83,11 +85,19 @@ const OrderDetails = ({ orderId }: OrderDetailsProps) => {
     setShowDetails(true)
   }, [singleOrder])
 
-  const buyAgain = async (cartItems: CartItem[]) => {
-    await cartService.buyCartItemAgain(cartItems)
+  const buyOrdersAgain = async (cartItems: CartItem[]) => {
+    const buyAgainItems: BuyAgain[] = []
+    cartItems.map((cartItem) => {
+      const data = {
+        variantId: cartItem.variant.id,
+        quantity: cartItem.quantity
+      }
+      buyAgainItems.push(data)
+    })
+    buyAgain(buyAgainItems)
   }
-        const isOngoing = singleOrder?.status !== 'CANCELLED' && singleOrder?.status !== 'DELIVERED' && singleOrder?.status !== 'RETURNED'
-  
+  const isOngoing = singleOrder?.status !== 'CANCELLED' && singleOrder?.status !== 'DELIVERED' && singleOrder?.status !== 'RETURNED'
+
   return (
     <>
       <div>
@@ -124,7 +134,7 @@ const OrderDetails = ({ orderId }: OrderDetailsProps) => {
                           Hi, {singleOrder.user.profile.firstName}
                         </p>
                         <p className='text-14 weight-400 color-#00000099'>
-                         {orderReturnMessage(singleOrder.status)}
+                          {orderReturnMessage(singleOrder.status)}
                         </p>
                       </div>
                       <div className='bg-whitesmoke p-12 radius-12 w-60 h-60'>
@@ -201,7 +211,7 @@ const OrderDetails = ({ orderId }: OrderDetailsProps) => {
                           <button
                             className='flex gap-10 a-items-center px-10 py-7 radius-5 border border-#00000026 bg-none cursor-pointer'
                             onClick={() =>
-                              buyAgain(singleOrder.cart.cartItems)
+                              buyOrdersAgain(singleOrder.cart.cartItems)
                             }
                           >
                             <PiArrowClockwise className='w-fit' />

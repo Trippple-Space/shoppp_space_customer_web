@@ -13,6 +13,7 @@ const endpoints = {
   RECENTLY_VIEWED: "/recently-viewed-items",
   PRODUCT_REVIEW: "/product-review",
   CART: "/cart",
+  MULTIPLECART: "/cart/multiple",
   USER_ADDRESSES: "users/:userId/addresses",
   PAY_WITH_PAYSTACK: "payment/initialize/paystack",
   STORES: "stores",
