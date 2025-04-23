@@ -61,11 +61,17 @@ class CartService {
                http.post(endpoints.MULTIPLECART, {items: buyAgainItems})
                     .then((response) => {
                          const res = response.data;
+                        
+                         const cartData = response.data.cart;
+                         console.log({ cartData }, 'cartData')
+                         cartData.cartItems = cartData.cartItems.sort(
+                              (a: CartItem, b: CartItem) => a.id - b.id
+                         );
+
                          res.summary.failedItems.forEach((item: {productName: string, quantity: number, variantId: number}) => {
                               toast.success(`${item.productName} is out of stock`, {duration: 2000})
                          })
-
-                         console.log(res)
+                        
                          this.fetchCart()
                               .then((updatedCartData) => {
                                    resolve(updatedCartData);
