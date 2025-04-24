@@ -40,7 +40,6 @@ export const useCart = () => {
 
      useEffect(() => {
           if (!cart.id && isAuthenticated && !fetching) {
-   
                fetchCart();
           }
      },[isAuthenticated]);
@@ -52,6 +51,7 @@ export const useCart = () => {
           removeFromCart,
           increment,
           decrement,
+          fetching,
           isAuthenticated,
           isLoginModal,
           showLoginModal,

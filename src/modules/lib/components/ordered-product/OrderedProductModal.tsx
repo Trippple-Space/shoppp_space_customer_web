@@ -8,6 +8,7 @@ import { cartService } from '../../utility/services/cart.service'
 import classNames from 'classnames'
 import { useEffect, useState } from 'react'
 import { useCart } from '../../utility/hooks/use-cart'
+import PuffLoader from '../puff-loader/PuffLoader'
 
 
 const OrderedProductModal = ({
@@ -18,7 +19,7 @@ const OrderedProductModal = ({
   order: Order | undefined
 }) => {
   const [expandedId, setExpandedId] = useState<number | null>(null) // Tracks which text is expanded
-  const { buyAgain } = useCart()
+  const { buyAgain, fetching } = useCart()
 
   const handleTextClick = (id: number) => {
     setExpandedId(prevId => (prevId === id ? null : id))
@@ -34,7 +35,9 @@ const OrderedProductModal = ({
       buyAgainItems.push(data)
     })
     buyAgain(buyAgainItems)
+    handleOrderModal()
   }
+
 
   useEffect(() => {
     if (order?.id) {

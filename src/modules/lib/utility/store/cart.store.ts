@@ -39,8 +39,9 @@ export const useCartStore = create<CartStore>((set) => ({
           set({ cart: updatedCart });
      },
      buyAgain: async (buyAgainItems: BuyAgain[]) => {
+          set({fetching: true})
           const updatedCart = await cartService.buyAgain(buyAgainItems);
-          set({ cart: updatedCart });
+          set({ cart: updatedCart , fetching: false});
      },
      incrementCartItem: async (variantId: number, quantity: number = 1) => {
           const updatedCart = await cartService.addToCart(variantId, quantity);

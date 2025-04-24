@@ -159,6 +159,7 @@ const OrderProgressCard = ({ orders }: OrderProgressProp) => {
       )})}
       {openOrderProductDetails && (
         <OrderedProductModal
+          
           handleOrderModal={handleOpenOrderProductDetail}
           order={orderedProduct}
         />
