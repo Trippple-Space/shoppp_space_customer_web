@@ -54,7 +54,7 @@ export const buildEndpoint = (
 
 export const buildFilterParams = (filters: any) => {
   if (!filters) return {};
-  const { price, sort, rating, showOffers } = filters;
+  const { price, sort, rating, showOffers, location } = filters;
   let params: any = {};
 
   if (price?.min && price?.max) {
@@ -79,6 +79,10 @@ export const buildFilterParams = (filters: any) => {
 
   if (showOffers) {
     params["filters[showOffer]"] = "true";
+
+  if (location) {
+    params["filters[location]"] = location.selectedState
+  }  
   }*/
 
   return params;
@@ -235,3 +239,45 @@ export const preventCopyPaste = (e: ClipboardEvent) => {
 }
 
 export const passwordValidatorRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[^A-Za-z\d])[A-Za-z\d\W]{8,}$/ 
+
+export const states = [
+  "Lagos"
+];
+/*
+[
+  "Abia",
+  "Adamawa",
+  "Akwa Ibom",
+  "Anambra",
+  "Bauchi",
+  "Bayelsa",
+  "Benue",
+  "Borno",
+  "Cross River",
+  "Delta",
+  "Ebonyi",
+  "Edo",
+  "Ekiti",
+  "Enugu",
+  "Gombe",
+  "Imo",
+  "Jigawa",
+  "Kaduna",
+  "Kano",
+  "Kogi",
+  "Kwara",
+  "Lagos",
+  "Nasarawa",
+  "Niger",
+  "Ogun",
+  "Ondo",
+  "Osun",
+  "Oyo",
+  "Plateau",
+  "Rivers",
+  "Sokoto",
+  "Taraba",
+  "Yobe",
+  "Zamfara",
+]
+*/
