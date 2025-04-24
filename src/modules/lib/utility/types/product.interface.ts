@@ -88,6 +88,7 @@ export interface IFilters {
   sort: { sortBy: string };
   price: { min: string; max: string };
   rating: { rateBy: string };
+  location: { selectedState: string };
   showOffers: boolean;
 }
 

@@ -8,6 +8,7 @@ import { PriceFilter } from './PriceFilter';
 import { RatingFilter } from './RatingFilter';
 import { SortFilter } from './SortFilter';
 import { useFilterStore } from '@/modules/lib/utility/store/filter.store';
+import { LocationFilter } from './LocationFilter';
 interface ModalProps {
   modalOpen: boolean;
   handleCloseModal: () => void;
@@ -15,10 +16,11 @@ interface ModalProps {
 }
 
 const FilterModal: React.FC<ModalProps> = ({ modalOpen, handleCloseModal, filterBy }) => {
-  const { setSort, setRate, setPrice, resetFilters } = useFilterStore()
+  const { setSort, setRate, setPrice, setLocation, resetFilters } = useFilterStore()
   const [sortBy, setSortBy] = useState<string>('')
   const [rating, setRating] = useState<string>('')
   const [priceRange, setPriceRange] = useState<any>({ min: '', max: '' })
+  const [selectedState, setSelectedState] = useState<string>('')
 
   const applyFilter = (e: any) => {
     e.preventDefault()
@@ -29,6 +31,8 @@ const FilterModal: React.FC<ModalProps> = ({ modalOpen, handleCloseModal, filter
       setRate(rating)
     } else if (filterBy === 'Price') {
       setPrice(priceRange)
+    } else if (filterBy === 'Location') {
+      setLocation(selectedState)
     }
 
     handleCloseModal()
@@ -41,15 +45,23 @@ const FilterModal: React.FC<ModalProps> = ({ modalOpen, handleCloseModal, filter
           <h4 className='weight-600 text-16 line-height-24'>{filterBy} {filterBy === 'Price' && `(₦)`}</h4>
           <AiOutlineClose className='w-20 h-20 cursor-pointer' onClick={() => handleCloseModal()} />
         </div>
-        <div className='flex gap-26 flex-col p-24'>
-          {
-            filterBy === 'Price' ?
-              <PriceFilter filteredPrice={priceRange} setFilteredPrice={setPriceRange} /> :
-              filterBy === 'Rating' ?
-                <RatingFilter setRatingFilter={setRating} /> :
-                <SortFilter setSortFilter={setSortBy} />
-          }
-          <div className='flex gap-12 j-content-end pt-12'>
+        <div className='flex gap-10 flex-col p-24'>
+          <div className='overflow-hidden' style={{ height: 'fit-content', maxHeight: 'calc(100dvh - 500px)' }}>
+            <div className='overflow-auto' style={{ height: 'fit-content', maxHeight: 'calc(100dvh - 500px)' }}>
+              <div className='h-fit'>
+                {
+                  filterBy === 'Price' ?
+                    <PriceFilter filteredPrice={priceRange} setFilteredPrice={setPriceRange} /> :
+                    filterBy === 'Rating' ?
+                      <RatingFilter setRatingFilter={setRating} /> :
+                      filterBy === 'Sort' ?
+                        <SortFilter setSortFilter={setSortBy} /> :
+                        <LocationFilter setLocationFilter={setSelectedState} />
+                }
+              </div>
+            </div>
+          </div>
+          <div className='flex gap-12 j-content-end pt-12 bg-white border-t border-#00000014 mx--24 px-24'>
             <button type='button' onClick={() => { handleCloseModal(); resetFilters(filterBy.toLowerCase()) }} className={`bg-none border-2 color-#000000E0 py-10 l:py-12 px-20 w-fit radius-5 cursor-pointer text-13 l:text-14 font-inter g|transition:0.5s disabled:bg-grey`}>Reset</button>
             <Button type='submit' children={'Apply'} className='l:py-12' />
           </div>
