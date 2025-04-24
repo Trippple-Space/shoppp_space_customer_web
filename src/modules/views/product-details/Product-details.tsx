@@ -159,6 +159,7 @@ function showLongDescElipsis(desc: string) {
           }
     }, [isAuthenticated]);
 
+  const isOutOfStock = selectedVariant?.status === 'OUT_OF_STOCK';
 
 
 const addToCartBtn =() => {
@@ -236,10 +237,13 @@ const addToCartBtn =() => {
             <p className='text-14 weight-500'>Show all photos</p>
             </div>
             </div>}
-          <div className='w-full h-270 md:h-420 sm:h-350'>
+          <div className='w-full h-270 md:h-420 sm:h-350 relative'>
+               {isOutOfStock && <div className="absolute w-100p h-100p text-white flex j-content-center a-items-center z-1 l:text-22 radius-6">
+            Out of stock
+          </div> }
             <Image
               src={selectedImage}
-              className={`flex-grow-1 h-full radius-8 l:radius-t-l-16 l:radius-b-l-16 l:radius-b-r-0 l:radius-t-r-0   w-full h-full a-self-center object-fit-cover  pointer  ${selectedVariant.status  === 'OUT_OF_STOCK'? 'out' : ''}`}
+              className={`flex-grow-1 h-full radius-8 l:radius-t-l-16 l:radius-b-l-16 l:radius-b-r-0 l:radius-t-r-0   w-full h-full a-self-center object-fit-cover  pointer  ${isOutOfStock && 'out-of-stock'}`}
               alt={''}
               
             />
@@ -253,11 +257,10 @@ const addToCartBtn =() => {
                 return (
                   <div
                     key={index}
-                    style={{
-                      filter: variant.status === 'OUT_OF_STOCK' ? 'grayscale(100%)' : 'none'
-                    }}
-                    className='l:h-207'
+    
+                    className={`l:h-207 ${variant?.status === 'OUT_OF_STOCK' && 'out-of-stock'}  relative`}
                   >
+                 
 
                     <Image
                       src={mediaItem?.url}

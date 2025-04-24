@@ -121,7 +121,7 @@ const ProductTile: FC<IProductTile> = ({ product, savedVariants, saveVariant, re
         <Link href={`/products/${product.slug}`}>
           {mediaType === "image" ? (
             <div className='relative w-full h-full'>
-        { isOutOfStock &&     <div className="absolute w-100p h-100p text-white flex j-content-center a-items-center z-1 l:text-22 radius-6">
+        {isOutOfStock &&     <div className="absolute w-100p h-100p text-white flex j-content-center a-items-center z-1 l:text-22 radius-6">
             Out of stock
           </div> }
             <Image
@@ -226,7 +226,7 @@ const ProductTile: FC<IProductTile> = ({ product, savedVariants, saveVariant, re
               mediaItem?.type === "image" ? (
                 <Image
                   className={classNames(
-                    `l:w-35.2 l:h-35.2 w-31 h-31 pointer md:radius-4 radius-3 a-self-center g|object-fit:cover ${variant?.status === 'OUT_OF_STOCK' && 'greyscale'}`,
+                    `l:w-35.2 l:h-35.2 w-31 h-31 pointer md:radius-4 radius-3 a-self-center g|object-fit:cover ${variant?.status === 'OUT_OF_STOCK' && 'out-of-stock'}`,
                     {
                       "border border-2": selectedImage == mediaItem?.url,
                       [`border-${/*variant?.properties?.color?.toLocaleLowerCase() ||*/'#0B9378'}`]:
