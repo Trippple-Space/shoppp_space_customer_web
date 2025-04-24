@@ -51,17 +51,13 @@ export const useSignUpView = () => {
     },
     validationSchema: signUpValidationSchema,
       onSubmit: async (values: { fullname: string;  email: string}) => {
-      try {
-      
         const response = await authService.signUpInitial({
           fullname: values.fullname,
           email: values.email
         });
           toast.success("OTP sent. Please check your email.");
           router.push(`${paths.verify}?token=${response.token}`);
-      } catch (error: any) {
-        toast.error(error.response.data.message || "Something went wrong during sign-up");
-      }
+  
     }
   } as FormikConfig<Pick<{ fullname: string; email: string;}, "fullname" | "email">>);
 
@@ -72,18 +68,12 @@ export const useSignUpView = () => {
     },
     onSubmit: async (values: { otp: string }) => {
       const tokenFromUrl = searchParams.get("token") || "";
-
-       try {
         const response = await authService.verifyOtp({ token: tokenFromUrl, otp: values.otp });
         localStorage.setItem("create-password-token", response.createPasswordToken);
               setToken(response.createPasswordToken);
               toast.success("OTP verified successfully.");
               router.push(paths.create_password);
               setStep("createPassword");
-
-      } catch (error: any) {
-        toast.error(error.response.data.message || "OTP verification failed");
-      }
     }
   } as FormikConfig<{ otp: string }>);
 
@@ -98,16 +88,12 @@ export const useSignUpView = () => {
         authService
           .verifyOtp({ token: tokenFromUrl, otp: otpFromUrl })
             .then((response) => {
-
             localStorage.setItem("create-password-token", response.createPasswordToken);
             setToken(response.token);
             toast.success("OTP verified via link successfully.");
             setStep("createPassword");
             router.push(paths.create_password);
           })
-          .catch((error: any) => {
-            toast.error(error.message || "OTP verification via link failed");
-          });
       } else {
         setStep("verify");
       }

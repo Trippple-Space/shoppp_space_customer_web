@@ -1,66 +1,43 @@
 import { Order } from '@/modules/lib/utility/types/order.interface'
 import OrderProcess from './OrderProcess'
 import { useState } from 'react'
+import { getStatusText, onGoingOrderStatus } from '@/modules/lib/utility/utility'
 
 const OrderProgressDetails = ({
-  orderCartModal
+  singleOrder
 }: {
-  orderCartModal: Order
+  singleOrder: Order
 }) => {
   const [viewTimeline, setTimeline] = useState(false)
   const handleViewTimeline = () => {
     setTimeline(prev => !prev)
   }
 
-  const orderStatus = [
-    'ONGOING',
-    'PENDING_CONFIRMATION',
-    'ACKNOWLEDGED',
-    'WAITING_TO_BE_SHIPPED',
-    'OUT_FOR_DELIVERY',
-    'DELIVERED'
-  ]
-  const currentStatusIndex = orderStatus.indexOf(
-    orderCartModal.status.toUpperCase()
+  const currentStatusIndex = onGoingOrderStatus.indexOf(
+    singleOrder.status.toUpperCase()
   )
 
-  function getStatusText (status: string) {
-    switch (status) {
-      case 'ONGOING':
-        return 'Order placed'
-      case 'PENDING_CONFIRMATION':
-        return 'Pending Confirmation'
-      case 'ACKNOWLEDGED':
-        return 'Order received'
-      case 'WAITING_TO_BE_SHIPPED':
-        return 'Waiting to be shipped'
-      case 'OUT_FOR_DELIVERY':
-        return 'Out for delivery'
-      case 'DELIVERED':
-        return 'Delivered'
-      default:
-        return ''
-    }
-  }
+ 
+
 
   return (
     <>
       <div className='py-20 px-15 bg-white flex flex-col gap-25 a-items-center w-full overflow-hidden'>
-        {orderCartModal.status.toUpperCase() === 'CONFIRMED' ? (
+        {singleOrder.status.toUpperCase() === 'DELIVERED' ? (
           <>
             <OrderProcess
               text='Order placed'
-              date={orderCartModal.delivery.deliveryWindowStart}
+              date={singleOrder.delivery.deliveryWindowStart}
               active={true}
               styles='b-10 h-0 z-0'
-              orderCartModal={orderCartModal}
+              singleOrder={singleOrder}
             />
 
             <OrderProcess
               text={'View all timelines'}
               date=''
               active={true}
-              orderCartModal={orderCartModal}
+              singleOrder={singleOrder}
               styles=''
               handleViewTimeline={handleViewTimeline}
               viewTimeline={viewTimeline}
@@ -70,73 +47,73 @@ const OrderProgressDetails = ({
               <>
                   <OrderProcess
                     text='Pending Confirmation'
-                    date={orderCartModal.delivery.deliveryWindowStart}
-                    active={orderCartModal.status === 'CONFIRMED'}
-                    orderCartModal={orderCartModal}
+                    date={singleOrder.delivery.deliveryWindowStart}
+                    active={singleOrder.status === 'DELIVERED'}
+                    singleOrder={singleOrder}
                   />
                 <OrderProcess
                   text='Your order has been recieved'
-                  date={orderCartModal.delivery.deliveryWindowStart}
-                  active={orderCartModal.status === 'CONFIRMED'}
-                  orderCartModal={orderCartModal}
+                  date={singleOrder.delivery.deliveryWindowStart}
+                  active={singleOrder.status === 'DELIVERED'}
+                  singleOrder={singleOrder}
                 />
                 <OrderProcess
                   text='waiting to be shipped'
-                  date={orderCartModal.delivery.deliveryWindowStart}
-                  active={orderCartModal.status === 'CONFIRMED'}
-                  orderCartModal={orderCartModal}
+                  date={singleOrder.delivery.deliveryWindowStart}
+                  active={singleOrder.status === 'DELIVERED'}
+                  singleOrder={singleOrder}
                 />
                 <OrderProcess
                   text='Out for delivery'
-                  date={orderCartModal.delivery.deliveryWindowStart}
-                  active={orderCartModal.status === 'CONFIRMED'}
-                  orderCartModal={orderCartModal}
+                  date={singleOrder.delivery.deliveryWindowStart}
+                  active={singleOrder.status === 'DELIVERED'}
+                  singleOrder={singleOrder}
                 />
               </>
             )}
 
             <OrderProcess
               text='Delivered'
-              date={orderCartModal.delivery.deliveryWindowStart}
+              date={singleOrder.delivery.deliveryWindowStart}
               active={true}
               styles='t-0 h-50'
-              orderCartModal={orderCartModal}
+              singleOrder={singleOrder}
             />
           </>
-        ) : orderCartModal.status === 'CANCELLED' ? (
+        ) : singleOrder.status === 'CANCELLED' ? (
           <>
             <OrderProcess
               text='Order placed'
-              date={orderCartModal.delivery.dateCreated}
+              date={singleOrder.delivery.dateCreated}
               active={true}
               styles='b-10 h-70 z-0'
-              orderCartModal={orderCartModal}
+              singleOrder={singleOrder}
             />
             <OrderProcess
               text='Cancelled-Payment Unsuccessful'
-              date={orderCartModal.delivery.deliveryWindowStart}
+              date={singleOrder.delivery.deliveryWindowStart}
               active={true}
               styles='t-0 h-60 bg-#D4280C weight-600 overflow'
-              orderCartModal={orderCartModal}
+              singleOrder={singleOrder}
             />
             <div className='bg-#FFE5E1 w-100p px-10 py-20 radius-5 border border-2 border-#D4280C font-inter z-10'>
               <p className='text-danger text-14 weight-400 w-90p'>
-                {orderCartModal?.cancellationReason
-                  ? `Reason for cancellation: ${orderCartModal?.cancellationReason}`
+                {singleOrder?.cancellationReason
+                  ? `Reason for cancellation: ${singleOrder?.cancellationReason}`
                   : 'This order has been cancelled'}
               </p>
             </div>
           </>
         ) : (
           <>
-            {orderStatus.map((status, index) => (
+            {onGoingOrderStatus.map((status, index) => (
               <OrderProcess
-                key={status}
+                key={index}
                 text={getStatusText(status)}
-                date={orderCartModal.delivery.deliveryWindowStart}
+                date={singleOrder.delivery.deliveryWindowStart}
                 active={index <= currentStatusIndex}
-                orderCartModal={orderCartModal}
-                styles={index === 0 ? 'b-1 z-0' : 't-0 h-70'}
+                singleOrder={singleOrder}
+                styles={index === 0 ? 'b-1 z-0' : 't-0 h-80'}
               />
             ))}
           </>

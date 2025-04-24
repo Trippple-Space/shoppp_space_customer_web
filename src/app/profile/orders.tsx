@@ -15,13 +15,8 @@ interface ModalProps {
 
 const OrderModal: React.FC<ModalProps> = ({modalOpen, handleCloseModal, data}) => {
   const [tabVal, setTabVal] = useState('open');
-  const {orders, fetchOrders} = useOrders({})
 
-  const handleTabChange = (val: string) => {
-    setTabVal(val);
-  };
-
-
+  
   const getStatusGrid = (color: any, bgC: any, name: any) => (
     <p  className={`px-20 py-2 radius-5 text-${color} bg-${bgC}`}>
       {name}
@@ -41,9 +36,7 @@ const OrderModal: React.FC<ModalProps> = ({modalOpen, handleCloseModal, data}) =
 
 
 
-  useEffect(() => {
-    fetchOrders({})
-  }, [])
+
 
   const openOrderData = [
     {id: 45621, name: '24 Karat Gold Plated Ring', unit: 2, variation: 'Plated ring', price: '26,000', status: 'out'},

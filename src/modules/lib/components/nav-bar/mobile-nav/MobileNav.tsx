@@ -11,6 +11,7 @@ import Link from 'next/link'
 import { paths } from '@/modules/lib/utility/paths'
 import config from '../../../../../../env'
 import { useOrders } from '@/modules/lib/utility/hooks/use-orders'
+import { onGoingOrderStatus, onGoingOrderStatusQuery } from '@/modules/lib/utility/utility'
 
 
 interface IMobileNav {
@@ -28,8 +29,10 @@ const MobileNav: FC<IMobileNav> = ({
   const { user, signOut } = useNavbarView()
   const { isAuthenticated } = useUserStore()
 
+  const query:any = onGoingOrderStatusQuery;
+
   const { orders } = useOrders({
-    filters: { status: { In: ['ONGOING'] } }
+    filters: { status: { In: query } }
   })
 
 

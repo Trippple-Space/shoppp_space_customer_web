@@ -48,14 +48,14 @@ const OrderHeader = ({ orderStatus }: { orderStatus?: string }) => {
               className={classNames(
                 'w-100p cursor-pointer cursor-pointer p-10 radius-6 weight-400',
                 {
-                  'bg-white': activeTab === 'CONFIRMED'
+                  'bg-white': activeTab === 'DELIVERED'
                 }
               )}
-              onClick={() => handleTabChange('CONFIRMED')}
+              onClick={() => handleTabChange('DELIVERED')}
             >
               <p
                 className={classNames('text-center font-inter text-16', {
-                  'weight-600': activeTab === 'CONFIRMED'
+                  'weight-600': activeTab === 'DELIVERED'
                 })}
               >
                 Delivered

@@ -42,7 +42,7 @@ const StorefrontAbout = ({ store }: { store: Store }) => {
                         isFollowing ? unFollowStore() : followStore()
                         : isLoginModal()
                     }}>
-                      {isFollowing ? 'Following' : 'Follow'}
+                      {isFollowing ? 'Unsubscribe' : 'Subscribe'}
                     </span>
                   </p>
                 </div>

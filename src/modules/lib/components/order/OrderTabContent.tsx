@@ -8,17 +8,20 @@ import Image from '../image/Image'
 import Link from 'next/link'
 import { useOrders } from '../../utility/hooks/use-orders'
 import PuffLoader from '../puff-loader/PuffLoader'
+import { onGoingOrderStatusQuery } from '../../utility/utility'
 
 interface OrderTabContentProps {
   status: any
 }
 
+
+
 const OrderTabContent = ({ status }: OrderTabContentProps) => {
-  const { orders, singleOrder, fetching } = useOrders({
-    filters: { status: { In: [status] } }
+  const { orders, singleOrder: order, fetching } = useOrders({
+    filters: { status: { In: status ==='ONGOING' ? onGoingOrderStatusQuery : status } }
   })
-  const [orderCartModal, setOrderCartModal] = useState<Order | void>(
-    singleOrder
+  const [singleOrder, setSingleOrder] = useState<Order | void>(
+    order
   )
 
   if (fetching) {
@@ -35,12 +38,12 @@ const OrderTabContent = ({ status }: OrderTabContentProps) => {
     <>
       {orders.length > 0 ? (
         <div className='relative bg-whitesmoke p-15 w-full flex flex-col gap-15'>
-          {orderCartModal ? (
-            <OrderDetails orderId={orderCartModal.id} />
+          {singleOrder ? (
+            <OrderDetails orderId={singleOrder.id} />
           ) : (
             <OrderProgressCard
               orders={orders}
-              setOrderCartModal={setOrderCartModal}
+              setSingleOrder={setSingleOrder}
             />
           )}
         </div>

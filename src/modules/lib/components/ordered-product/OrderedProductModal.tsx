@@ -1,4 +1,4 @@
-import { formatNumberAsPrice } from '@/modules/lib/utility/utility'
+import { ellipseText, formatNumberAsPrice } from '@/modules/lib/utility/utility'
 import { IoMdClose } from 'react-icons/io'
 import Image from '../image/Image'
 import { PiArrowClockwise } from 'react-icons/pi'
@@ -17,21 +17,15 @@ const OrderedProductModal = ({
   order: Order | undefined
 }) => {
   const [expandedId, setExpandedId] = useState<number | null>(null) // Tracks which text is expanded
-  const limit = 30
 
-  const ellipseText = (text: string, isExpanded: boolean) => {
-    if (isExpanded || text.length <= limit) {
-      return text 
-    }
-    return `${text.substring(0, limit)}...` 
-  }
+
 
   const handleTextClick = (id: number) => {
     setExpandedId(prevId => (prevId === id ? null : id))
   }
 
-  const buyAgain = async (cartItems: CartItem[]) => {
-    await cartService.buyCartItemAgain(cartItems)
+  const buyAgain =  (cartItems: CartItem[]) => {
+     cartService.buyCartItemAgain(cartItems)
   }
 
   useEffect(() => {
@@ -93,13 +87,14 @@ const OrderedProductModal = ({
                     'flex flex-col gap-10 overflow-auto j-content-center no-scrollbar'
                   )}
                 >
-                  {order.cart.cartItems.map((item: CartItem) => (
-                    <>
+                  {order.cart.cartItems.map((item: CartItem, i) => (
+                   
                       <div
+
                         className={classNames(
                           'bg-whitesmoke radius-8 p-10 gap-5 flex flex-col  l:flex-row space-between a-items-start'
                         )}
-                        key={item.id}
+                        key={i}
                       >
                         <div className='flex gap-10 l:w-60p'>
                           <Image
@@ -115,7 +110,8 @@ const OrderedProductModal = ({
                               >
                                 {ellipseText(
                                   item.variant.product?.name ?? '',
-                                  expandedId === item.id
+                                  expandedId === item.id,
+                                  30
                                 )}
                               </div>
                               <p className='color-#0000008C text-10 w-fit'>
@@ -143,7 +139,7 @@ const OrderedProductModal = ({
                           </p>
                         </div>
                       </div>
-                    </>
+      
                   ))}
                 </div>
               </div>

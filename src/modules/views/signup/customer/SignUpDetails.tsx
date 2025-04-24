@@ -10,6 +10,8 @@ import { paths } from '@/modules/lib/utility/paths';
 
 const SignUpDetails: FC = () => {
   const { formikInitial } = useSignUpView();
+
+
   
   return (
     <div className="w-full overflow-auto ">
@@ -54,6 +56,7 @@ const SignUpDetails: FC = () => {
           inputClass={cx('', {
             "border-red": formikInitial.touched.email && formikInitial.errors.email,
           })}
+          
           after={
             <div
               className={cx(
@@ -67,6 +70,12 @@ const SignUpDetails: FC = () => {
               <span className="a-self-center">{formikInitial.errors.email}</span>
             </div>
           }
+          handleKeyDown={(e: React.KeyboardEvent<HTMLInputElement>) => {
+            if (e.key === 'Enter') {
+                 formikInitial.handleSubmit();
+            }
+          }}
+          
         />
         <div
           className="btn text-center bg-green weight-500 text-16 l:btn-lg btn-lg font-inter mt-30 text-14 cursor-pointer"

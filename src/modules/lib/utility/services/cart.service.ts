@@ -22,13 +22,17 @@ class CartService {
      }
 
      addToCart(variantId: number, quantity: number): Promise<Cart> {
+          
           return new Promise((resolve, reject) => {
+               // console.log({ variantId }, 'cart');
+                    
                http.post(endpoints.CART, { variantId, quantity })
                     .then((response) => {
                          const cartData = response.data;
-                         cartData.cartItems = cartData.cartItems.sort(
-                              (a: CartItem, b: CartItem) => a.id - b.id
-                         );
+                         console.log({ cartData }, 'cartData')
+                         // cartData.cartItems = cartData.cartItems.sort(
+                         //      (a: CartItem, b: CartItem) => a.id - b.id
+                         // );
                          this.fetchCart()
                               .then((updatedCartData) => {
                                    resolve(updatedCartData);
@@ -94,19 +98,20 @@ class CartService {
                const itemsToAdd = cartItems.filter(
                     (cartItem) => !existingCartItemIds.has(cartItem.variant.id)
                );
+               console.log({itemsToAdd})
 
-               if (itemsToAdd.length === 0) {
-                    window.location.href = "/checkout";
-                    return;
+
+               for (let i = 0; i < itemsToAdd.length; i++){
+                    this.addToCart(itemsToAdd[i].variant.id, itemsToAdd[i].quantity)
+                    // console.log({id: itemsToAdd[i].variant.id})
                }
-
+               window.location.href = "/checkout";  
                await Promise.all(
-                    itemsToAdd.map((cartItem) =>
+                    itemsToAdd.map((cartItem) => 
                          this.addToCart(cartItem.variant.id, cartItem.quantity)
                     )
                );
 
-               window.location.href = "/checkout";
           } catch (error) {
                console.error("Error processing buy again action:", error);
                throw error;
