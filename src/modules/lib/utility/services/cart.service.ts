@@ -65,48 +65,44 @@ buyAgain(buyAgainItems: BuyAgain[]): Promise<Cart> {
             .then((response) => {
                 const res = response.data;
                 const cartData = res.cart;
+
+
+
                 cartData.cartItems = cartData.cartItems.sort(
                     (a: CartItem, b: CartItem) => a.id - b.id
                 );
-                 console.log("cartData", {res});
 
                 res.summary.addedItems.forEach((item: { productName: string, quantity: number, variantId: number }) => {
                     addedItems.push(item);
                 });
-                
+
                 res.summary.failedItems.forEach((item: { productName: string, quantity: number, variantId: number, reason: string }) => {
-                     if (item.reason === 'Out of stock') {
-                          outOfStockItems.push(item);
-                         } else {
-                              otherFailedReasons.push(item);
-                         }
-                    });
-                    
-                    // Combine error messages into one toast
-                    const errorMessages = [];
-                    if (outOfStockItems.length > 0) {
-                         errorMessages.push(`${outOfStockItems.length} item(s) are out of stock`);
+                    if (item.reason === 'Out of stock') {
+                        outOfStockItems.push(item);
+                    } else {
+                        otherFailedReasons.push(item);
                     }
-                    if (otherFailedReasons.length > 0) {
-                         errorMessages.push(`${otherFailedReasons.length} item(s) failed to add to cart`);
-                    }
-                    if (errorMessages.length > 0) {
-                         toast.error(
-                              `${errorMessages.join(", ")}. ${addedItems.length} item(s) added to cart`,
-                              { duration: 2000 }
-                         );
-                    }
-                    this.fetchCart()
+                });
+
+                // Combine error messages into one toast
+                const errorMessages = [];
+                if (outOfStockItems.length > 0) {
+                    errorMessages.push(`${outOfStockItems.length} item(s) are out of stock`);
+                }
+                if (otherFailedReasons.length > 0) {
+                    errorMessages.push(`${otherFailedReasons.length} item(s) failed to add to cart`);
+                }
+                if (errorMessages.length > 0) {
+                    toast.error(
+                        `${errorMessages.join(", ")}. ${addedItems.length} item(s) added to cart`,
+                        { duration: 2000 }
+                    );
+                }
+
+           
+
+                this.fetchCart()
                     .then((updatedCartData) => {
-                         this.fetchCart()
-                      .then((updatedCartData) => {
-                          toast.success("Cart updated successfully", { duration: 2000 });
-                          resolve(updatedCartData);
-                      })
-                      .catch((error) => {
-                          console.error("Error fetching updated cart:", error);
-                          reject(error);
-                      });
                         toast.success("Cart updated successfully", { duration: 2000 });
                         resolve(updatedCartData);
                     })
