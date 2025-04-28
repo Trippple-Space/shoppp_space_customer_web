@@ -34,8 +34,6 @@ const CreatePassword: FC = () => {
             name="password"
             type="password"
             placeholder="********"
-            onCopy={(e: any) => preventCopyPaste(e)}
-            onPaste={(e: any) => preventCopyPaste(e)}
             className="l:mt-30 mt-18"
             handleChange={(e: any) => {
               setPassword(e.target.value);
@@ -54,8 +52,6 @@ const CreatePassword: FC = () => {
             name="confirmPassword"
             type="password"
             placeholder="********"
-            onCopy={(e: any) => preventCopyPaste(e)}
-            onPaste={(e: any) => preventCopyPaste(e)}
             className="l:mt-20 mt-18"
             handleChange={(e: any) => {
               setConfirmPassword(e.target.value);

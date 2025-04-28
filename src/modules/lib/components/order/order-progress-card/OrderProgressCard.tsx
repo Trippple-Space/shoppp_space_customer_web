@@ -3,7 +3,9 @@ import {
   formatDate,
   formatNumberAsPrice,
   formatTime,
-  getStoreNames
+  getStatusText,
+  getStoreNames,
+  onGoingOrderStatus
 } from '@/modules/lib/utility/utility'
 import classNames from 'classnames'
 import Link from 'next/link'
@@ -14,7 +16,7 @@ import OrderedProductModal from '../../ordered-product/OrderedProductModal'
 
 interface OrderProgressProp {
   orders: Order[]
-  setOrderCartModal: (order: Order) => void
+  setSingleOrder: (order: Order) => void
 }
 
 const OrderProgressCard = ({ orders }: OrderProgressProp) => {
@@ -27,42 +29,17 @@ const OrderProgressCard = ({ orders }: OrderProgressProp) => {
   }
 
 
-  
-  const orderStatus = [
-    'ONGOING',
-    'PENDING_CONFIRMATION',
-    'ACKNOWLEDGED',
-    'WAITING_TO_BE_SHIPPED',
-    'OUT_FOR_DELIVERY',
-    'DELIVERED'
-  ]
-  const currentStatusIndex = (order: Order) => orderStatus.indexOf(
+  const currentStatusIndex = (order: Order) => onGoingOrderStatus.indexOf(
       order.status.toUpperCase()
     )
 
-  function getStatusText (status: string) {
-    switch (status) {
-      case 'ONGOING':
-        return 'Order placed'
-      case 'PENDING_CONFIRMATION':
-        return 'Pending Confirmation'
-      case 'ACKNOWLEDGED':
-        return 'Order received'
-      case 'WAITING_TO_BE_SHIPPED':
-        return 'Waiting to be shipped'
-      case 'OUT_FOR_DELIVERY':
-        return 'Out for delivery'
-      case 'DELIVERED':
-        return 'Delivered'
-      default:
-        return ''
-    }
-  }
+
 
   return (
     <>
       {orders.map(order => {
         const statusIndex = currentStatusIndex(order)
+        const isOngoing = order.status !== 'CANCELLED' && order.status !== 'DELIVERED' && order.status !== 'RETURNED'
         return (
         <div key={order.id}>
           <div className='bg-white'>
@@ -73,7 +50,7 @@ const OrderProgressCard = ({ orders }: OrderProgressProp) => {
                     <p className='color-#00000099 weight-400 text-12 overflow-hidden text-ellipsis l:overflow font-inter'>
                       Order from:{' '}
                       <span className='text-14 weight-500 color-#000000E0 '>
-                        {getStoreNames(order.cart.cartItems)}
+                        {getStoreNames(order?.cart?.cartItems)}
                       </span>
                     </p>
                   </div>
@@ -81,29 +58,27 @@ const OrderProgressCard = ({ orders }: OrderProgressProp) => {
                     className={classNames(
                       'text-12 px-10 py-5 color-white radius-4 font-inter',
                       {
-                        'bg-#1677FF':
-                          order.status == 'ONGOING',
+                        'bg-#1677FF': isOngoing,
                         'bg-#0B9378':
-                          order.status == 'CONFIRMED',
+                          order.status == 'DELIVERED',
                         'bg-#00000099':
                           order.status == 'CANCELLED'
                       }
                     )}
                   >
-                    {order.status.toLowerCase() === 'confirmed'
-                      ? 'Delivered'
-                      : order.status}
+                     {isOngoing ? 'ONGOING' : order.status}
                   </p>
                 </div>
                 <div
                   className={classNames('flex a-items-center space-between', {
-                    'ml-45': order.cart.cartItems.length > 4,
-                    'ml-80': order.cart.cartItems.length === 4,
-                    'ml-70': order.cart.cartItems.length === 3,
-                    'ml-55': order.cart.cartItems.length === 2,
-                    'ml-40': order.cart.cartItems.length === 1
+                    'ml-45': order.cart?.cartItems?.length > 4,
+                    'ml-80': order.cart?.cartItems?.length === 4,
+                    'ml-70': order.cart?.cartItems?.length === 3,
+                    'ml-55': order.cart?.cartItems?.length === 2,
+                    'ml-40': order.cart?.cartItems?.length === 1
                   })}
-                >
+                  >
+                    
                   <div
                     className={classNames(
                       'text-12 flex a-items-center cursor-pointer h-full'
@@ -121,7 +96,7 @@ const OrderProgressCard = ({ orders }: OrderProgressProp) => {
                       Total Amount
                     </p>
                     <p className='color-black text-right weight-600'>
-                      {formatNumberAsPrice(order.cart.total)}
+                      {formatNumberAsPrice(order?.cart?.total)}
                     </p>
                   </div>
                 </div>
@@ -134,17 +109,17 @@ const OrderProgressCard = ({ orders }: OrderProgressProp) => {
                 <p className='text-14 weight-400 color-#00000099'>{order.id}</p>
               </div>
 
-              {order.status === 'ONGOING' && (
+              {isOngoing && (
                 <>
                   <div className='flex flex-col gap-10 l:flex-row l:a-items-center l:space-between'>
                     <p className='text-14 weight-400 flex a-items-center'>
                       <span>Share this code with your rider</span>
                     </p>
                     <div className='flex a-items-center gap-10'>
-                      {order.delivery.code.split('').map(str => (
+                      {order.delivery.code.split('').map((str, i) => (
                         <p
                           className='h-40 w-40 radius-5 weight-600 bg-whitesmoke text-center flex a-items-center j-content-center text-16'
-                          key={str}
+                          key={i}
                         >
                           {str.toLocaleUpperCase()}
                         </p>
@@ -152,24 +127,19 @@ const OrderProgressCard = ({ orders }: OrderProgressProp) => {
                     </div>
                   </div>
                   <div className='flex gap-10 a-items-center'>
-                      {orderStatus.map((status, index) =>
-                        <div className={`p-5 radius-10 w-20p h-5 ${ index <=statusIndex ? 'bg-#0B9378': 'bg-whitesmoke'}`}></div>)}
-                    {/* <div className='p-5 radius-10 w-20p h-5 bg-whitesmoke'></div>
-                    <div className='p-5 radius-10 w-20p h-5 bg-whitesmoke'></div>
-                    <div className='p-5 radius-10 w-20p h-5 bg-whitesmoke'></div>
-                    <div className='p-5 radius-10 w-20p h-5 bg-whitesmoke'></div>
-                    <div className='p-5 radius-10 w-20p h-5 bg-whitesmoke'></div> */}
+                      {onGoingOrderStatus.map((status, index) =>
+                        <div key={index} className={`p-5 radius-10 w-20p h-5 ${ index <=statusIndex ? 'bg-#0B9378': 'bg-whitesmoke'}`}></div>)}
                   </div>
                 </>
               )}
               <div
                 className={classNames(
-                  'l:flex grid gap-10 l:gap-0 a-items-center space-between',
-                  { 'j-content-end': order.status !== 'ONGOING' }
+                  'l:flex flex-row gap-6 l:gap-0 a-items-center l:space-between',
+                  { 'j-content-end': isOngoing}
                 )}
               >
-                {order.status === 'ONGOING' && (
-                  <p className='color-#00000099 text-14 weight-400'>
+                { isOngoing && (
+                  <p className='color-#00000099 text-14 weight-400 mb-8 l:mb-0'>
                     {formatTime(
                       order.delivery.deliveryDate
                     ).toLocaleLowerCase()}{' '}
@@ -189,6 +159,7 @@ const OrderProgressCard = ({ orders }: OrderProgressProp) => {
       )})}
       {openOrderProductDetails && (
         <OrderedProductModal
+          
           handleOrderModal={handleOpenOrderProductDetail}
           order={orderedProduct}
         />

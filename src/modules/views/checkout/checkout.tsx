@@ -21,6 +21,7 @@ import Link from "next/link";
 import DeliveryOptions from "@/modules/lib/components/delivery-options/DeliveryOptions";
 import DeliveryMessage from "@/modules/lib/components/delivery-in-lagos/DeliveryMessage";
 import { paths } from "@/modules/lib/utility/paths";
+import AddressModal from "@/modules/lib/components/address-modal/AddressModal";
 
 const CheckoutPage = () => {
   const [selectedDeliveryOption, setSelectedDeliveryOption] =
@@ -211,12 +212,12 @@ const CheckoutPage = () => {
                 Payment Summary
               </h2>
               <div className={`${showSummary ? 'block' : 'md:block hidden'}`}>
-                <OrderSummary
+                {/* <OrderSummary
                   subTotal={cart.subTotal}
                   extraSavings={cart.total - cart.subTotal}
                   shippingFee={selectedDeliveryOptionDetails.price}
                   total={cart.total + selectedDeliveryOptionDetails.price}
-                />
+                /> */}
               </div>
               <div className="flex sm:flex-row flex-col sm:gap-0 gap-20 space-between a-items-center">
                 <div className={`absolute t-0 sm:w-fit w-full sm:px-0 px-24 bg-#F5F5F5 pt-12 md:hidden block ${showSummary ? 'sm:b-10 sm:t-80p' : 'sm:t-10'}`}>
@@ -285,6 +286,8 @@ const CheckoutPage = () => {
       </div>
     </div>
     <Footer />
+
+    <AddressModal />
   </>);
 };
 

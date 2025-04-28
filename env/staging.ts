@@ -5,6 +5,7 @@
  */
 
 const stagingConfig = {
+//   API_HOST: 'http://localhost:80',
     API_HOST: 'https://api-staging.asoebi.africa',
     VENDOR_CENTER_HOST: 'https://vendor-staging.asoebi.africa',
 }

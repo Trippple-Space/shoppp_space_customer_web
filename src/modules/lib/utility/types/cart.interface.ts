@@ -15,3 +15,8 @@ export interface CartItem {
     variant: ProductVariant,
     totalPrice: number
 }
+
+export interface BuyAgain {
+    variantId: number
+    quantity: number
+}

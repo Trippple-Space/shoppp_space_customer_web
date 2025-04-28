@@ -1,7 +1,8 @@
 import { AxiosResponse } from "axios";
 import endpoints from "../endpoints";
 import http from "../http";
-import { Cart, CartItem } from "../types/cart.interface";
+import { BuyAgain, Cart, CartItem } from "../types/cart.interface";
+import { toast } from "sonner";
 
 class CartService {
      fetchCart(): Promise<Cart> {
@@ -22,10 +23,14 @@ class CartService {
      }
 
      addToCart(variantId: number, quantity: number): Promise<Cart> {
+          
           return new Promise((resolve, reject) => {
+           
+                    
                http.post(endpoints.CART, { variantId, quantity })
                     .then((response) => {
                          const cartData = response.data;
+                
                          cartData.cartItems = cartData.cartItems.sort(
                               (a: CartItem, b: CartItem) => a.id - b.id
                          );
@@ -47,6 +52,72 @@ class CartService {
                     });
           });
      }
+
+buyAgain(buyAgainItems: BuyAgain[]): Promise<Cart> {
+    const outOfStockItems: { productName: string; quantity: number; variantId: number }[] = [];
+    const otherFailedReasons: { productName: string; quantity: number; variantId: number; reason: string }[] = [];
+    const addedItems: { productName: string; quantity: number; variantId: number }[] = [];
+
+    return new Promise((resolve, reject) => {
+
+
+        http.post(endpoints.MULTIPLECART, { items: buyAgainItems })
+            .then((response) => {
+                const res = response.data;
+                const cartData = res.cart;
+
+
+
+                cartData.cartItems = cartData.cartItems.sort(
+                    (a: CartItem, b: CartItem) => a.id - b.id
+                );
+
+                res.summary.addedItems.forEach((item: { productName: string, quantity: number, variantId: number }) => {
+                    addedItems.push(item);
+                });
+
+                res.summary.failedItems.forEach((item: { productName: string, quantity: number, variantId: number, reason: string }) => {
+                    if (item.reason === 'Out of stock') {
+                        outOfStockItems.push(item);
+                    } else {
+                        otherFailedReasons.push(item);
+                    }
+                });
+
+                // Combine error messages into one toast
+                const errorMessages = [];
+                if (outOfStockItems.length > 0) {
+                    errorMessages.push(`${outOfStockItems.length} item(s) are out of stock`);
+                }
+                if (otherFailedReasons.length > 0) {
+                    errorMessages.push(`${otherFailedReasons.length} item(s) failed to add to cart`);
+                }
+                if (errorMessages.length > 0) {
+                    toast.error(
+                        `${errorMessages.join(", ")}. ${addedItems.length} item(s) added to cart`,
+                        { duration: 2000 }
+                    );
+                }
+
+           
+
+                this.fetchCart()
+                    .then((updatedCartData) => {
+                        toast.success("Cart updated successfully", { duration: 2000 });
+                        resolve(updatedCartData);
+                    })
+                    .catch((error) => {
+                        console.error("Error fetching updated cart:", error);
+                        reject(error);
+                    });
+            })
+            .catch((error) => {
+                console.error("Error adding to cart:", error);
+                reject(error);
+            });
+    });
+}
+
 
      removeFromCart(variantId: number): Promise<Cart> {
           return new Promise((resolve, reject) => {
@@ -80,37 +151,6 @@ class CartService {
                          reject(error);
                     });
           });
-     }
-
-     async buyCartItemAgain(cartItems: CartItem[]): Promise<void> {
-          try {
-               const currentCart = await this.fetchCart();
-               const existingCartItemIds = new Set(
-                    currentCart.cartItems.map(
-                         (item: CartItem) => item.variant.id
-                    )
-               );
-
-               const itemsToAdd = cartItems.filter(
-                    (cartItem) => !existingCartItemIds.has(cartItem.variant.id)
-               );
-
-               if (itemsToAdd.length === 0) {
-                    window.location.href = "/checkout";
-                    return;
-               }
-
-               await Promise.all(
-                    itemsToAdd.map((cartItem) =>
-                         this.addToCart(cartItem.variant.id, cartItem.quantity)
-                    )
-               );
-
-               window.location.href = "/checkout";
-          } catch (error) {
-               console.error("Error processing buy again action:", error);
-               throw error;
-          }
      }
 }
 

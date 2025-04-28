@@ -54,7 +54,7 @@ export const buildEndpoint = (
 
 export const buildFilterParams = (filters: any) => {
   if (!filters) return {};
-  const { price, sort, rating, showOffers } = filters;
+  const { price, sort, rating, showOffers, location } = filters;
   let params: any = {};
 
   if (price?.min && price?.max) {
@@ -79,6 +79,10 @@ export const buildFilterParams = (filters: any) => {
 
   if (showOffers) {
     params["filters[showOffer]"] = "true";
+
+  if (location) {
+    params["filters[location]"] = location.selectedState
+  }  
   }*/
 
   return params;
@@ -209,8 +213,7 @@ export function formatTime(timestamp: string): string {
 }
 
 export const getStoreNames = (cartItems: any) => {
-  const storeNames = cartItems
-    .map((item: any) => item.variant?.product?.store?.name)
+  const storeNames = cartItems?.map((item: any) => item.variant?.product?.store?.name)
     .filter(Boolean)
     .reduce((uniqueNames: any, name: any) => {
       if (!uniqueNames.includes(name)) {
@@ -219,14 +222,14 @@ export const getStoreNames = (cartItems: any) => {
       return uniqueNames;
     }, []);
 
-  if (storeNames.length > 2) {
+  if (storeNames?.length > 2) {
     const firstStore = storeNames[0];
     const secondStore = storeNames[1];
-    const remainingCount = storeNames.length - 2;
+    const remainingCount = storeNames?.length - 2;
     return `${firstStore}, ${secondStore} and ${remainingCount} more`;
   }
 
-  return storeNames.join(", ");
+  return storeNames?.join(", ");
 };
 
 export const preventCopyPaste = (e: ClipboardEvent) => {
@@ -235,3 +238,86 @@ export const preventCopyPaste = (e: ClipboardEvent) => {
 }
 
 export const passwordValidatorRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[^A-Za-z\d])[A-Za-z\d\W]{8,}$/ 
+
+
+
+  export const ellipseText = (text: string, isExpanded: boolean, limit: number) => {
+    if (isExpanded || text.length <= limit) {
+      return text 
+    }
+    return `${text.substring(0, limit)}...` 
+  }
+
+ export const onGoingOrderStatus = [
+    'ONGOING',
+    'PENDING_CONFIRMATION',
+    'CONFIRMED',
+   'ACKNOWLEDGED',
+    'WAITING_TO_BE_SHIPPED',
+    'OUT_FOR_DELIVERY',
+    'DELIVERED'
+ ]
+  
+export function getStatusText(status: string) {    
+           switch (status) {
+       case 'ONGOING':
+         return 'Order placed'
+       case 'PENDING_CONFIRMATION':
+               return 'Pending Confirmation'
+             case 'CONFIRMED':
+               return 'Order confirmed'
+       case 'ACKNOWLEDGED':
+         return 'Order received'
+       case 'WAITING_TO_BE_SHIPPED':
+         return 'Waiting to be shipped'
+       case 'OUT_FOR_DELIVERY':
+         return 'Out for delivery'
+       case 'DELIVERED':
+         return 'Delivered'
+       default:
+         return ''
+     }
+}
+   
+export const onGoingOrderStatusQuery = 'ONGOING,PENDING_CONFIRMATION,CONFIRMED,ACKNOWLEDGED,WAITING_TO_BE_SHIPPED,OUT_FOR_DELIVERY'
+export const states = [
+  "Lagos"
+];
+/*
+[
+  "Abia",
+  "Adamawa",
+  "Akwa Ibom",
+  "Anambra",
+  "Bauchi",
+  "Bayelsa",
+  "Benue",
+  "Borno",
+  "Cross River",
+  "Delta",
+  "Ebonyi",
+  "Edo",
+  "Ekiti",
+  "Enugu",
+  "Gombe",
+  "Imo",
+  "Jigawa",
+  "Kaduna",
+  "Kano",
+  "Kogi",
+  "Kwara",
+  "Lagos",
+  "Nasarawa",
+  "Niger",
+  "Ogun",
+  "Ondo",
+  "Osun",
+  "Oyo",
+  "Plateau",
+  "Rivers",
+  "Sokoto",
+  "Taraba",
+  "Yobe",
+  "Zamfara",
+]
+*/

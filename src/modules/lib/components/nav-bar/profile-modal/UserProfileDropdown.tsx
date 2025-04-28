@@ -8,6 +8,7 @@ import Link from 'next/link'
 import React, { FC } from 'react'
 import { useOrders } from '@/modules/lib/utility/hooks/use-orders'
 import { useSavedVariant } from '@/modules/lib/utility/hooks/use-saved-variants'
+import { onGoingOrderStatusQuery } from '@/modules/lib/utility/utility'
 
 
 interface IUserProfileDropdown {
@@ -21,8 +22,9 @@ const UserProfileDropdown: FC<IUserProfileDropdown> = ({
 }) => {
   const { user, signOut } = useNavbarView()
   const { isAuthenticated } = useUserStore()
+    const query:any = onGoingOrderStatusQuery;
   const { orders } = useOrders({
-    filters: { status: { In: ['ONGOING'] } }
+    filters: { status: { In: query } }
   })
 
   const { savedVariants } = useSavedVariant()
