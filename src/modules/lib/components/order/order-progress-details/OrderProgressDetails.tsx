@@ -86,7 +86,7 @@ const OrderProgressDetails = ({
               text='Order placed'
               date={singleOrder.delivery.dateCreated}
               active={true}
-              styles='b-10 h-70 z-0'
+              styles='b-10 h-200 z-0'
               singleOrder={singleOrder}
             />
             <OrderProcess
@@ -96,7 +96,7 @@ const OrderProgressDetails = ({
               styles='t-0 h-60 bg-#D4280C weight-600 overflow'
               singleOrder={singleOrder}
             />
-            <div className='bg-#FFE5E1 w-100p px-10 py-20 radius-5 border border-2 border-#D4280C font-inter z-10'>
+            <div className='bg-#FFE5E1 w-100p px-10 py-20 radius-5 border border-2 border-#D4280C font-inter z-1'>
               <p className='text-danger text-14 weight-400 w-90p'>
                 {singleOrder?.cancellationReason
                   ? `Reason for cancellation: ${singleOrder?.cancellationReason}`

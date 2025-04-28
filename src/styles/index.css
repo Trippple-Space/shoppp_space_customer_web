@@ -1206,7 +1206,6 @@
 @media only screen and (min-width: 992px) { .l\:py-18 { padding-top: 18px; padding-bottom: 18px; } } 
 @media only screen and (min-width: 992px) { .l\:max-w-1400 { max-width: 1400px; } } 
 @media only screen and (min-width: 992px) { [class~='l:g|max-height:480px']{max-height:480px} } 
-@media only screen and (min-width: 992px) { .l\:h-207 { height: 207px; } } 
 @media only screen and (min-width: 992px) { .l\:j-content-between { justify-content: space-between; } } 
 @media only screen and (min-width: 992px) { .l\:w-500 { width: 500px; } } 
 @media only screen and (min-width: 992px) { .l\:px-24 { padding-left: 24px; padding-right: 24px; } } 
@@ -1214,6 +1213,7 @@
 @media only screen and (min-width: 992px) { .l\:radius-b-l-16 { border-bottom-left-radius: 16px;  } } 
 @media only screen and (min-width: 992px) { .l\:radius-b-r-0 { border-bottom-right-radius: 0px;  } } 
 @media only screen and (min-width: 992px) { .l\:radius-t-r-0 { border-top-right-radius: 0px;  } } 
+@media only screen and (min-width: 992px) { .l\:h-207 { height: 207px; } } 
 @media only screen and (min-width: 992px) { .l\:h-full {    height: 100%;  } } 
 @media only screen and (min-width: 992px) { .l\:radius-t-l-0 { border-top-left-radius: 0px;  } } 
 @media only screen and (min-width: 992px) { .l\:radius-b-l-0 { border-bottom-left-radius: 0px;  } } 

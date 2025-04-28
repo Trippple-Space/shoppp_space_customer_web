@@ -21,6 +21,7 @@ import Link from "next/link";
 import DeliveryOptions from "@/modules/lib/components/delivery-options/DeliveryOptions";
 import DeliveryMessage from "@/modules/lib/components/delivery-in-lagos/DeliveryMessage";
 import { paths } from "@/modules/lib/utility/paths";
+import AddressModal from "@/modules/lib/components/address-modal/AddressModal";
 
 const CheckoutPage = () => {
   const [selectedDeliveryOption, setSelectedDeliveryOption] =
@@ -285,6 +286,8 @@ const CheckoutPage = () => {
       </div>
     </div>
     <Footer />
+
+    <AddressModal />
   </>);
 };
 

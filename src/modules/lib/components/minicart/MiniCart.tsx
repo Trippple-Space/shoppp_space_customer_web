@@ -32,6 +32,7 @@ const MiniCart: React.FC<ModalProps> = () => {
   const { signOut } = useNavbarView();
   const { isAuthenticated } = useUserStore();
 
+
   
   const checkoutCart = () => { 
     cart.cartItems

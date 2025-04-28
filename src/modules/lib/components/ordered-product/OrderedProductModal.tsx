@@ -3,10 +3,12 @@ import { IoMdClose } from 'react-icons/io'
 import Image from '../image/Image'
 import { PiArrowClockwise } from 'react-icons/pi'
 import { Order } from '../../utility/types/order.interface'
-import { CartItem } from '../../utility/types/cart.interface'
+import { BuyAgain, CartItem } from '../../utility/types/cart.interface'
 import { cartService } from '../../utility/services/cart.service'
 import classNames from 'classnames'
 import { useEffect, useState } from 'react'
+import { useCart } from '../../utility/hooks/use-cart'
+import PuffLoader from '../puff-loader/PuffLoader'
 
 
 const OrderedProductModal = ({
@@ -17,16 +19,25 @@ const OrderedProductModal = ({
   order: Order | undefined
 }) => {
   const [expandedId, setExpandedId] = useState<number | null>(null) // Tracks which text is expanded
-
-
+  const { buyAgain, fetching } = useCart()
 
   const handleTextClick = (id: number) => {
     setExpandedId(prevId => (prevId === id ? null : id))
   }
 
-  const buyAgain =  (cartItems: CartItem[]) => {
-     cartService.buyCartItemAgain(cartItems)
+  const buyOrdersAgain = async (cartItems: CartItem[]) => {
+    const buyAgainItems: BuyAgain[] = []
+    cartItems.map((cartItem) => {
+      const data = {
+        variantId: cartItem.variant.id,
+        quantity: cartItem.quantity
+      }
+      buyAgainItems.push(data)
+    })
+    buyAgain(buyAgainItems)
+    handleOrderModal()
   }
+
 
   useEffect(() => {
     if (order?.id) {
@@ -66,7 +77,7 @@ const OrderedProductModal = ({
                 <p className='text-14 weight-500'>#{order.id}</p>
                 <button
                   className='flex gap-10 a-items-center px-10 py-7 radius-5 border border-#00000026 bg-none cursor-pointer weight-500'
-                  onClick={() => buyAgain(order.cart.cartItems)}
+                  onClick={() => buyOrdersAgain(order.cart.cartItems)}
                 >
                   <PiArrowClockwise className='w-fit' />
                   Buy again
@@ -88,58 +99,58 @@ const OrderedProductModal = ({
                   )}
                 >
                   {order.cart.cartItems.map((item: CartItem, i) => (
-                   
-                      <div
 
-                        className={classNames(
-                          'bg-whitesmoke radius-8 p-10 gap-5 flex flex-col  l:flex-row space-between a-items-start'
-                        )}
-                        key={i}
-                      >
-                        <div className='flex gap-10 l:w-60p'>
-                          <Image
-                            src={item?.variant.media[0].url}
-                            alt={item.variant?.product?.name || ''}
-                            className='w-80 h-80 xl:w-70 xl:h-70 radius-8 object-fit-cover'
-                          />
-                          <div className='flex flex-col gap-6'>
-                            <div className='flex flex-col gap-3'>
-                              <div
-                                className='weight-600 text-12 xl:w-10 xl:white-space-nowrap text-overflow-ellipsis'
-                                onClick={() => handleTextClick(item.id)}
-                              >
-                                {ellipseText(
-                                  item.variant.product?.name ?? '',
-                                  expandedId === item.id,
-                                  30
-                                )}
-                              </div>
-                              <p className='color-#0000008C text-10 w-fit'>
-                                {item.variant.product?.store.name}
-                              </p>
+                    <div
+
+                      className={classNames(
+                        'bg-whitesmoke radius-8 p-10 gap-5 flex flex-col  l:flex-row space-between a-items-start'
+                      )}
+                      key={i}
+                    >
+                      <div className='flex gap-10 l:w-60p'>
+                        <Image
+                          src={item?.variant.media[0].url}
+                          alt={item.variant?.product?.name || ''}
+                          className='w-80 h-80 xl:w-70 xl:h-70 radius-8 object-fit-cover'
+                        />
+                        <div className='flex flex-col gap-6'>
+                          <div className='flex flex-col gap-3'>
+                            <div
+                              className='weight-600 text-12 xl:w-10 xl:white-space-nowrap text-overflow-ellipsis'
+                              onClick={() => handleTextClick(item.id)}
+                            >
+                              {ellipseText(
+                                item.variant.product?.name ?? '',
+                                expandedId === item.id,
+                                30
+                              )}
                             </div>
-                            <div className='flex flex-col gap-5'>
-                              {' '}
-                              <p className='color-#0000008C text-12 w-fit'>
-                                Size: {item.variant.product?.stockUnit}
-                              </p>
-                              <p className='color-#0000008C text-12 w-fit'>
-                                Color: {item.variant.properties.color}
-                              </p>
-                            </div>
+                            <p className='color-#0000008C text-10 w-fit'>
+                              {item.variant.product?.store.name}
+                            </p>
+                          </div>
+                          <div className='flex flex-col gap-5'>
+                            {' '}
+                            <p className='color-#0000008C text-12 w-fit'>
+                              Size: {item.variant.product?.stockUnit}
+                            </p>
+                            <p className='color-#0000008C text-12 w-fit'>
+                              Color: {item.variant.properties.color}
+                            </p>
                           </div>
                         </div>
-                        <div className='l:grid flex flex-col a-items-end w-100p l:w-fit gap-5 mt-10 l:mt-0'>
-                          <p className='text-14 weight-500'>
-                            {formatNumberAsPrice(item.totalPrice)}
-                          </p>
-                          <p className='text-12 weight-600 color-#0000008C text-right'>
-                            {' '}
-                            X {item.quantity}
-                          </p>
-                        </div>
                       </div>
-      
+                      <div className='l:grid flex flex-col a-items-end w-100p l:w-fit gap-5 mt-10 l:mt-0'>
+                        <p className='text-14 weight-500'>
+                          {formatNumberAsPrice(item.totalPrice)}
+                        </p>
+                        <p className='text-12 weight-600 color-#0000008C text-right'>
+                          {' '}
+                          X {item.quantity}
+                        </p>
+                      </div>
+                    </div>
+
                   ))}
                 </div>
               </div>

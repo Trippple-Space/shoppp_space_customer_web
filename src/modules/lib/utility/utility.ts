@@ -213,8 +213,7 @@ export function formatTime(timestamp: string): string {
 }
 
 export const getStoreNames = (cartItems: any) => {
-  const storeNames = cartItems
-    .map((item: any) => item.variant?.product?.store?.name)
+  const storeNames = cartItems?.map((item: any) => item.variant?.product?.store?.name)
     .filter(Boolean)
     .reduce((uniqueNames: any, name: any) => {
       if (!uniqueNames.includes(name)) {
@@ -223,14 +222,14 @@ export const getStoreNames = (cartItems: any) => {
       return uniqueNames;
     }, []);
 
-  if (storeNames.length > 2) {
+  if (storeNames?.length > 2) {
     const firstStore = storeNames[0];
     const secondStore = storeNames[1];
-    const remainingCount = storeNames.length - 2;
+    const remainingCount = storeNames?.length - 2;
     return `${firstStore}, ${secondStore} and ${remainingCount} more`;
   }
 
-  return storeNames.join(", ");
+  return storeNames?.join(", ");
 };
 
 export const preventCopyPaste = (e: ClipboardEvent) => {
