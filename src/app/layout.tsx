@@ -65,6 +65,7 @@ export default function RootLayout({
       <PHProvider >
         {/* <GlobalArena /> */}
         <PostHogPageView /> 
+        <Toaster position="top-right" />
         <body className="@lo:weight-300 @lo:text-dimgrey h-full">
           {/* <div className="fixed w-full b-60 z-3">
             <div className="max-w-1000 mx-auto flex text-14 l:text-16 bg-yellow-50 text-green p-10 max-w-1100 mx-auto ">
