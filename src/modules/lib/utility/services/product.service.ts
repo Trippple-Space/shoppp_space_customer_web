@@ -19,12 +19,10 @@ class ProductService {
      ) {
           const cacheKey = `product/categories_${type}_${label}_${storeId}`;
           const cachedData = this.getCachedCategories(cacheKey);
-
-          /*
+          
           if (cachedData) {
                return cachedData;
           }
-          */
 
           return new Promise((resolve) => {
                http.get(endpoints.PRODUCT_CATEGORIES, {
