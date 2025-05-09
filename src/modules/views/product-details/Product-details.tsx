@@ -29,6 +29,8 @@ import Modal from '@/modules/lib/components/modal/modal'
 import QuantitySelector from '@/modules/lib/components/quantity-selector/QuantitySelector'
 import VariantModal from '@/modules/lib/components/variant-modal/VariantModal'
 import useReviews from '@/modules/lib/utility/hooks/use-review'
+import { Comments } from './reviews/Comments'
+import MiniReview from './reviews/MiniReview'
 
 
 
@@ -295,12 +297,10 @@ const ProductDetails = ({ product }: { product: Product }) => {
                     itemStyles={{ itemShapes: Star, activeFillColor: '#f59e0b', inactiveFillColor: '#0000000F' }}
                     readOnly
                   />
-                  <span>{product.reviewRating}</span>
+                  <span>{reviewStat?.averageRating.toFixed(1) ?? 0}</span>
                   <p className='color-#000000B2 text-12 flex a-items-center gap-5'>
                     <span className='color-' style={{ color: '#D9D9D9B2' }}>|</span>
-                    <span className='border-b'>
-                      {reviewStat?.totalReviews ?? 0} {`Review${reviewStat?.totalReviews && reviewStat?.totalReviews > 1 ? 's' : ''}`}
-                    </span>
+                    <MiniReview id={product.id} />
                   </p>
                 </div>
 
@@ -527,17 +527,10 @@ const ProductDetails = ({ product }: { product: Product }) => {
         </div>}
         <div className='flex flex-col gap-12 pt-15 mt-10 pb-100'>
           <div className=''>
-            <p className='text-16  weight-600'>
-              Customer Reviews ({product.reviews?.length ?? 0})
+            <p className='text-20 weight-600'>
+              Customer Reviews ({reviewStat?.totalReviews ?? 0})
             </p>
-            <div className=''>{!product.reviews?.length ?
-              <div className='flex a-items-center flex-col'>
-                <Image type='image' src='empty-tray.png' alt='no comments' className='w-150 h-150' />
-                <p className='color-#00000073'>Customers who have bought this product</p>
-                <p className='color-#00000073'>have not yet posted comments</p>
-              </div>
-
-              : ""}</div>
+            <Comments reviews={reviews} />
           </div>
 
         </div>

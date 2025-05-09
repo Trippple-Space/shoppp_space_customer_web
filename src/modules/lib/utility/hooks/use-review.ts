@@ -1,9 +1,10 @@
 import { useCallback, useEffect, useState } from "react"
 import { reviewService } from "../services/reviews.service";
+import { IFetchedReview, IReview, IReviewStat } from "../types/review.interface";
 
 const useReviews = (productVariantId: number) => {
-    const [reviews, setReviews] = useState<IReview[]>([])
-    const [allReviews, setAllReviews] = useState<IReview[]>([])
+    const [reviews, setReviews] = useState<IFetchedReview[]>([])
+    const [allReviews, setAllReviews] = useState<IFetchedReview[]>([])
     const [reviewStat, setReviewStat] = useState<IReviewStat>()
     const [reviewStatDist, setReviewStatDist] = useState<any>()
 

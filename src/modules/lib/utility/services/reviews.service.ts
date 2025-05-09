@@ -2,6 +2,7 @@ import { AxiosResponse } from "axios"
 import endpoints from "../endpoints"
 import http from "../http"
 import { replaceParamInEndpoint } from "../utility"
+import { IReview } from "../types/review.interface"
 
 class ReviewService {
     getAllReviews() {
