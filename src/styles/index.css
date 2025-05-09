@@ -690,6 +690,10 @@
 .text-11 { font-size: 11px; } 
 .bg-light-green { background-color: #E2FFFACC; } 
 .m-2 { margin: 2px; } 
+.mb-1 { margin-bottom: 1px; } 
+.px-4 { padding-left: 4px; padding-right: 4px; } 
+.px-3 { padding-left: 3px; padding-right: 3px; } 
+.border-red-500 { border-color: #DE3838; } 
 .border-\#eeeeee { border-color: #eeeeee; } 
 .px-8 { padding-left: 8px; padding-right: 8px; } 
 .text-medium {    font-size: 0.875rem;  } 
@@ -734,7 +738,6 @@
 .mt-46 { margin-top: 46px; } 
 .gap-60 { gap: 60px; } 
 .mt-75 { margin-top: 75px; } 
-.px-3 { padding-left: 3px; padding-right: 3px; } 
 .py-14 { padding-top: 14px; padding-bottom: 14px; } 
 .radius-t-r-5 { border-top-right-radius: 5px;  } 
 .radius-b-r-5 { border-bottom-right-radius: 5px;  } 
@@ -757,7 +760,6 @@
 .border-yellow { border-color: #FACE33; } 
 .p-8 { padding: 8px; } 
 .mb-25 { margin-bottom: 25px; } 
-.px-4 { padding-left: 4px; padding-right: 4px; } 
 .w-130 { width: 130px; } 
 .r-5 { right: 5px; } 
 .t-5 { top: 5px; } 
@@ -1215,6 +1217,7 @@
 @media only screen and (min-width: 992px) { .l\:radius-b-l-0 { border-bottom-left-radius: 0px;  } } 
 @media only screen and (min-width: 992px) { .l\:radius-t-r-16 { border-top-right-radius: 16px;  } } 
 @media only screen and (min-width: 992px) { .l\:radius-b-r-16 { border-bottom-right-radius: 16px;  } } 
+@media only screen and (min-width: 992px) { @layer base {.l\:radius-0 { border-radius: 0px; } } } 
 @media only screen and (min-width: 992px) { 
 @layer base {
 .l\:btn-lg { padding-top: 15px; padding-bottom: 15px; width: 100%;  } 

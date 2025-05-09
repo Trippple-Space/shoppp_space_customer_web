@@ -28,12 +28,15 @@ export const useCategories = ({
       productService
         .fetchProductCategories(type, label, storeId)
         .then((cat: ProductCategory) => {
+          console.log(cat)
           setCategoriesCache(type, label, storeId, cat?.categories ?? []);
           setCurrentCategoryList(cat?.categories ?? [])
         });
     } else {
+      console.log(categoriesCache[`${type}_${label}_${storeId}`])
       setCurrentCategoryList(categoriesCache[`${type}_${label}_${storeId}`])
     }
+    console.log(currentCategoryList)
     console.log('EFFECT:', { type, storeId, label, len: currentCategoryList?.length })
   }, [type, storeId, label]);
 

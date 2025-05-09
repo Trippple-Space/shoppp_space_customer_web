@@ -6,7 +6,7 @@ const endpoints = {
   RESEND_OTP: '/auth/resend-otp',
   SIGN_UP_CREATE_PASSWORD: '/auth/create-password',
   VALIDATE_TOKEN: "/auth/validate",
-  PRODUCT_CATEGORIES: "product/categories",
+  PRODUCT_CATEGORIES: "/product-categories",
   PRODUCTS: "products",
   PRODUCT: "products/:slug",
   SEARCH_PRODUCTS: "products",
@@ -27,6 +27,11 @@ const endpoints = {
   LOG_VISIT: "/store-visit/log/:storeID",
   GET_VISIT: "/store-visit/:storeID?period=monthly",
   GET_PRODUCT_SOLD: "/orders/product-sold/:storeID",
+  GET_ALL_REVIEWS: "/product-review",
+  GET_PRODUCT_REVIEWS: "/product-review/product/:productVariantId",
+  CREATE_PRODUCT_REVIEW: "/product-review/create",
+  GET_REVIEW_STATS: "/product-review/stats/product/:productVariantId",
+  GET_REVIEW_STATS_DIST: "/product-review/stats/product/:productVariantId/distribution"
 };
 
 export default endpoints;
