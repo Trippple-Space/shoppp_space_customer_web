@@ -1,4 +1,4 @@
-import useReviews from '@/modules/lib/utility/hooks/use-review';
+import useReviews from '@/modules/lib/utility/hooks/use-reviews';
 import { Rating } from '@smastrom/react-rating';
 import React, { useState } from 'react';
 
@@ -19,8 +19,8 @@ const getRating = (rating: number) => {
     }
 };
 
-export const AddReview = ({ id, setOpenModal }: { id: number, setOpenModal: React.Dispatch<React.SetStateAction<boolean>> }) => {
-    const { createReview } = useReviews(id)
+export const AddReview = ({ id, setOpenModal, refresh }: { id: number, setOpenModal: React.Dispatch<React.SetStateAction<boolean>>, refresh: () => void }) => {
+    const { createReview } = useReviews()
     const [rating, setRating] = useState<number>(0);
     const [hoveredRating, setHoveredRating] = useState<number>(0);
     const [subject, setSubject] = useState<string>('');
@@ -69,20 +69,24 @@ export const AddReview = ({ id, setOpenModal }: { id: number, setOpenModal: Reac
             comment
         }).then(() => {
             setOpenModal(false)
+            refresh()
         })
     };
 
     return (
         <form onSubmit={handleSubmit} className="px-20 py-16">
             <div className='mb-20'>
-                <p className="mb-3 weight-500 text-16">Rate<span className='color-red'>*</span> : {hoveredRating ? getRating(hoveredRating) : getRating(rating)}</p>
+                <p className="mb-3 weight-500 text-16">Rate<span className='text-red'>*</span> : {hoveredRating ? getRating(hoveredRating) : getRating(rating)}</p>
                 <div style={{ maxWidth: 180, width: '100%' }}>
                     <Rating value={rating} onChange={setRating} onHoverChange={setHoveredRating} isRequired />
                 </div>
+                {
+                    touched.rate && !rating && <span className='text-12 weight-400 text-red'>Required</span>
+                }
             </div>
 
             <div className='mb-20'>
-                <p className="mb-10 weight-500 text-16">Review Subject<span className='color-red'>*</span> :</p>
+                <p className="mb-10 weight-500 text-16">Review Subject<span className='text-red'>*</span> :</p>
                 <input
                     type="text"
                     name="subject"
@@ -95,7 +99,7 @@ export const AddReview = ({ id, setOpenModal }: { id: number, setOpenModal: Reac
             </div>
 
             <div className='mb-24'>
-                <p className="mb-10 weight-500 text-16">Comment<span className='color-red'>*</span> :</p>
+                <p className="mb-10 weight-500 text-16">Comment<span className='text-red'>*</span> :</p>
                 <input
                     type="text"
                     name="comment"
@@ -110,7 +114,7 @@ export const AddReview = ({ id, setOpenModal }: { id: number, setOpenModal: Reac
             <div className='flex j-content-end'>
                 <button
                     type="submit"
-                    className="bg-#0B9378 border-none text-white radius-6 px-12 py-10 cursor-pointer weight-600"
+                    className="bg-#0B9378 border-none text-white radius-6 px-12 py-10 cursor-pointer weight-600 outline-none"
                 >
                     Publish Review
                 </button>

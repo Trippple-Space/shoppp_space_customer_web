@@ -20,7 +20,6 @@ import { RxShare2 } from 'react-icons/rx'
 import { SavedVariant } from '@/modules/lib/utility/types/SavedVariant.interface'
 import { useSavedVariant } from '@/modules/lib/utility/hooks/use-saved-variants'
 import { LuGrid2X2 } from 'react-icons/lu'
-import ProductTile from '@/modules/lib/components/product-tile/ProductTile'
 import { productService } from '@/modules/lib/utility/services/product.service'
 import { Rating, Star, StickerStar } from '@smastrom/react-rating'
 import { PiTruck, PiGlobeHemisphereEast } from 'react-icons/pi'
@@ -28,9 +27,10 @@ import Footer from '@/modules/lib/components/footer/Footer'
 import Modal from '@/modules/lib/components/modal/modal'
 import QuantitySelector from '@/modules/lib/components/quantity-selector/QuantitySelector'
 import VariantModal from '@/modules/lib/components/variant-modal/VariantModal'
-import useReviews from '@/modules/lib/utility/hooks/use-review'
 import { Comments } from './reviews/Comments'
 import MiniReview from './reviews/MiniReview'
+import useGetRatingStats from '@/modules/lib/utility/hooks/use-get-rating-stats'
+import useGetProductRating from '@/modules/lib/utility/hooks/use-get-review'
 
 
 
@@ -52,15 +52,14 @@ const ProductDetails = ({ product }: { product: Product }) => {
     isLoginModal,
     isAuthenticated
   } = useCart()
-  const { reviews, allReviews, reviewStat, reviewStatDist } = useReviews(product.id)
-  console.log(product)
-  console.log({ reviews }, { allReviews }, { reviewStat }, { reviewStatDist })
-
+  const { reviews } = useGetProductRating(product.id)
+  const { reviewStat } = useGetRatingStats(product.id)
 
   const [selectedSize, setSelectedSize] = useState('')
   const [showShareModal, setShowShareModal] = useState(false)
   const [showFullDescription, setShowFullDescription] = useState(false)
   const [showAllPhotos, setShowAllPhotos] = useState(false)
+  const [isOpen, setIsOpen] = useState<number | null>(null);
   const selectedVariantItemInCart = cart.cartItems.find(
     item => item.variant.id === selectedVariant?.id
   )
@@ -300,12 +299,12 @@ const ProductDetails = ({ product }: { product: Product }) => {
                   <span>{reviewStat?.averageRating.toFixed(1) ?? 0}</span>
                   <p className='color-#000000B2 text-12 flex a-items-center gap-5'>
                     <span className='color-' style={{ color: '#D9D9D9B2' }}>|</span>
-                    <MiniReview id={product.id} />
+                    <MiniReview id={product.id} isOpen={isOpen} setIsOpen={setIsOpen} reviews={reviews} slug={product.slug} />
                   </p>
                 </div>
 
                 <div className='flex'>
-                  <Link href={`/reviews/${product.id}`} className='color-#1677FF text-12 border-b'>Rate this product</Link>
+                  <Link href={`/products/${product.slug}/reviews/${product.id}`} className='color-#1677FF text-12 border-b'>Rate this product</Link>
                 </div>
               </div>
 
@@ -528,9 +527,9 @@ const ProductDetails = ({ product }: { product: Product }) => {
         <div className='flex flex-col gap-12 pt-15 mt-10 pb-100'>
           <div className=''>
             <p className='text-20 weight-600'>
-              Customer Reviews ({reviewStat?.totalReviews ?? 0})
+              Customer Reviews ({reviews.length ?? 0})
             </p>
-            <Comments reviews={reviews} />
+            <Comments reviews={reviews} isModal={false} limit={3} productId={product.id} slug={product.slug} />
           </div>
 
         </div>

@@ -3,12 +3,12 @@ import ReviewsViews from "@/modules/views/product-details/reviews/RatingsView"
 export default async function product_reviews({
     params
 }: {
-    params: { variantId: number }
+    params: { slug: string, variantId: number }
 }) {
     try {
         return (
             <div>
-                <ReviewsViews id={params.variantId} />
+                <ReviewsViews id={params.variantId} slug={params.slug} />
             </div>
         )
     } catch (error) {

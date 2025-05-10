@@ -15,14 +15,19 @@ import { PiShoppingCartFill, PiStorefront } from 'react-icons/pi'
 import { SavedVariant } from '../../utility/types/SavedVariant.interface'
 import { productService } from '../../utility/services/product.service'
 import MiniReview from '@/modules/views/product-details/reviews/MiniReview'
+import { IFetchedReview } from '../../utility/types/review.interface'
 
 interface IProductTile {
   product: Product
   saveVariant?: (variantId: number) => void
   removeSavedVariant?: (variantId: number) => void
   savedVariants?: SavedVariant[]
+  reviews: IFetchedReview[]
+  id: number,
+  isOpen: number | null,
+  setIsOpen: React.Dispatch<React.SetStateAction<number | null>>
 }
-const ProductTile: FC<IProductTile> = ({ product, savedVariants, saveVariant, removeSavedVariant }: any) => {
+const ProductTile: FC<IProductTile> = ({ product, savedVariants, saveVariant, removeSavedVariant, reviews, id, isOpen, setIsOpen }: any) => {
   const [onProductTileHover, setOnProductTileHover] = useState(false)
   const [openSingleProductModal, setOpenSingleProductModal] = useState(false)
   const [recentlyViewedId, setRecentlyViewsId] = useState<any>()
@@ -267,7 +272,7 @@ const ProductTile: FC<IProductTile> = ({ product, savedVariants, saveVariant, re
       </div>
       <div
         id="product details"
-        className="md:mt-16 mt-20 overflow-hidden white-space-nowrap text-overflow-ellipsis flex flex-col gap-8"
+        className="md:mt-16 mt-20 white-space-nowrap text-overflow-ellipsis flex flex-col gap-8"
       >
         <div
           title={product.name}
@@ -294,7 +299,7 @@ const ProductTile: FC<IProductTile> = ({ product, savedVariants, saveVariant, re
             )}
             {/* <span className="weight-300 l:text-15 text-10">{!!selectedVariant?.stockUnit && 'per'} {selectedVariant?.stockUnit}</span> */}
           </div>
-          <MiniReview id={product.id} />
+          <MiniReview id={id} slug={product.slug} isOpen={isOpen} setIsOpen={setIsOpen} reviews={reviews} />
         </div>
         {/* <div className="flex flex-wrap gap-4">
           {product?.tags?.map((tag: any, i: number) => (
