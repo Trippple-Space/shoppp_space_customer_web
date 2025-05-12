@@ -19,6 +19,7 @@ import Footer from "@/modules/lib/components/footer/Footer";
 import useUserStore from "@/modules/lib/utility/store/user.store";
 import { useGetIPAddress } from "@/modules/lib/utility/hooks/use-get-ip-address";
 import { useLogVisit } from "@/modules/lib/utility/hooks/use-log-visit";
+import useReviews from "@/modules/lib/utility/hooks/use-reviews";
 
 const StorefrontLayout: FC<{ store: Store; children: ReactNode }> = ({
   store,
@@ -29,11 +30,13 @@ const StorefrontLayout: FC<{ store: Store; children: ReactNode }> = ({
   const [selectedCategory, setSelectedCategory] =
     useState<ProductCategory | null>(null);
   const { products } = useStoreProductsView(selectedCategory);
+  const { allReviews } = useReviews()
   const { categories } = useStoreCategoryNavView({ storeId: store.id });
   const [filteredProducts, setFilteredProducts] = useState<Product[]>([]);
   const [newArrivals, setNewArrivals] = useState<Product[]>([]);
   const [dealsForYou, setDealsForYou] = useState<Product[]>([]);
   const [featuredProducts, setFeaturedProducts] = useState<Product[]>([]);
+  const [openReviewId, setOpenReviewId] = useState<number | null>(null);
 
   const updateFilters = (filteredProducts: Product[]) => {
     setFilteredProducts(filteredProducts);
@@ -190,7 +193,13 @@ const StorefrontLayout: FC<{ store: Store; children: ReactNode }> = ({
                             key={i}
                             className="l:w-238 md:w-230 sm:w-220 w-150 l:mt--20 mt--30"
                           >
-                            <ProductTile product={product} key={i} />
+                            <ProductTile
+                              product={product}
+                              key={i}
+                              reviews={allReviews.filter((review) => review.productVariantId === product.id)}
+                              id={product.id}
+                              isOpen={openReviewId}
+                              setIsOpen={setOpenReviewId} />
                           </div>
                         ))
                       ) : (
@@ -241,7 +250,14 @@ const StorefrontLayout: FC<{ store: Store; children: ReactNode }> = ({
                             key={i}
                             className="l:w-238 md:w-230 sm:w-220 w-150 l:mt--20 mt--30"
                           >
-                            <ProductTile product={product} key={i} />
+                            <ProductTile
+                              product={product}
+                              key={i}
+                              reviews={allReviews.filter((review) => review.productVariantId === product.id)}
+                              id={product.id}
+                              isOpen={openReviewId}
+                              setIsOpen={setOpenReviewId}
+                            />
                           </div>
                         ))
                       ) : (
@@ -282,7 +298,14 @@ const StorefrontLayout: FC<{ store: Store; children: ReactNode }> = ({
             {featuredProducts.length ? (
               featuredProducts.map((product, i) => (
                 <div key={i} className="l:mt--20 mt--30 w-full overflow-hidden">
-                  <ProductTile product={product} key={i} />
+                  <ProductTile
+                    product={product}
+                    key={i}
+                    reviews={allReviews.filter((review) => review.productVariantId === product.id)}
+                    id={product.id}
+                    isOpen={openReviewId}
+                    setIsOpen={setOpenReviewId}
+                  />
                 </div>
               ))
             ) : (
