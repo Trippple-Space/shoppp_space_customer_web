@@ -1,15 +1,12 @@
 // "use client"
 
-import { Toaster } from "sonner";
 import "../styles/styles.scss";
 import { Inter, Roboto, Lora, Roboto_Mono } from "next/font/google";
 // import { useAuthGuard } from '@/modules/lib/utility/hooks/use-auth-guard';
 import GlobalArena from "@/modules/lib/components/global-arena/GlobalArena";
-import { BsInfo, BsInfoCircle } from "react-icons/bs";
 import { PHProvider } from './providers'
 import dynamic from 'next/dynamic'
 import '@smastrom/react-rating/style.css'
-
 
 const inter = Inter({
   subsets: ["latin"],
@@ -63,7 +60,7 @@ export default function RootLayout({
       className={`${inter.variable} ${roboto.variable} ${lora.variable} ${robotoMono.variable} bg-white font-inter h-full`}
     >
       <PHProvider >
-        {/* <GlobalArena /> */}
+        <GlobalArena />
         <PostHogPageView /> 
         <body className="@lo:weight-300 @lo:text-dimgrey h-full">
           {/* <div className="fixed w-full b-60 z-3">

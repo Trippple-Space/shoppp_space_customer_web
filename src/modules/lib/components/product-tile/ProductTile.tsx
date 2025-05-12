@@ -14,17 +14,23 @@ import ProductDetailModal from '../product-detail-modal/ProductDetailModal'
 import { PiShoppingCartFill, PiStorefront } from 'react-icons/pi'
 import { SavedVariant } from '../../utility/types/SavedVariant.interface'
 import { productService } from '../../utility/services/product.service'
+import MiniReview from '@/modules/views/product-details/reviews/MiniReview'
+import { IFetchedReview } from '../../utility/types/review.interface'
 
 interface IProductTile {
   product: Product
   saveVariant?: (variantId: number) => void
   removeSavedVariant?: (variantId: number) => void
   savedVariants?: SavedVariant[]
+  reviews: IFetchedReview[]
+  id: number,
+  isOpen: number | null,
+  setIsOpen: React.Dispatch<React.SetStateAction<number | null>>
 }
-const ProductTile: FC<IProductTile> = ({ product, savedVariants, saveVariant, removeSavedVariant}: any) => {
+const ProductTile: FC<IProductTile> = ({ product, savedVariants, saveVariant, removeSavedVariant, reviews, id, isOpen, setIsOpen }: any) => {
   const [onProductTileHover, setOnProductTileHover] = useState(false)
   const [openSingleProductModal, setOpenSingleProductModal] = useState(false)
-  const [recentlyViewedId, setRecentlyViewsId] = useState<any>() 
+  const [recentlyViewedId, setRecentlyViewsId] = useState<any>()
   const [selectedImage, setSelectedImage] = useState(
     product?.variants?.[0]?.media?.[0]?.url
   );
@@ -67,12 +73,12 @@ const ProductTile: FC<IProductTile> = ({ product, savedVariants, saveVariant, re
   }
 
   const handleCloseProductModal = () => {
-    setOpenSingleProductModal(prev => !prev)    
+    setOpenSingleProductModal(prev => !prev)
   }
 
   function handleLogin(variantId: number, minimumPurchase: number) {
-    localStorage.setItem('variantId',variantId.toString())
-    localStorage.setItem('variantIdMinimumPurchase',minimumPurchase.toString())
+    localStorage.setItem('variantId', variantId.toString())
+    localStorage.setItem('variantIdMinimumPurchase', minimumPurchase.toString())
     isLoginModal()
   }
 
@@ -89,23 +95,23 @@ const ProductTile: FC<IProductTile> = ({ product, savedVariants, saveVariant, re
   }, [recentlyViewedId, isAuthenticated]);
 
   useEffect(() => {
-    if (isAuthenticated) {  
+    if (isAuthenticated) {
       const variantId = localStorage.getItem("variantId");
       const variantIdMinimumPurchase = localStorage.getItem("variantIdMinimumPurchase");
-            if (variantId && variantIdMinimumPurchase) {
-                const parsedVariantId = parseInt(variantId, 10);
-                const parsedMinimumPurchase = parseInt(variantIdMinimumPurchase, 10);
+      if (variantId && variantIdMinimumPurchase) {
+        const parsedVariantId = parseInt(variantId, 10);
+        const parsedMinimumPurchase = parseInt(variantIdMinimumPurchase, 10);
 
-                if (!isNaN(parsedVariantId) && !isNaN(parsedMinimumPurchase)) {
-                    addToCart(parsedVariantId, parsedMinimumPurchase);
-                
-                }
+        if (!isNaN(parsedVariantId) && !isNaN(parsedMinimumPurchase)) {
+          addToCart(parsedVariantId, parsedMinimumPurchase);
 
-              
-                localStorage.removeItem("variantId");
-                localStorage.removeItem("variantIdMinimumPurchase");
-            }
         }
+
+
+        localStorage.removeItem("variantId");
+        localStorage.removeItem("variantIdMinimumPurchase");
+      }
+    }
   }, [isAuthenticated]);
 
   const isOutOfStock = selectedVariant?.status === 'OUT_OF_STOCK'
@@ -121,15 +127,15 @@ const ProductTile: FC<IProductTile> = ({ product, savedVariants, saveVariant, re
         <Link href={`/products/${product.slug}`}>
           {mediaType === "image" ? (
             <div className='relative w-full h-full'>
-        {isOutOfStock &&     <div className="absolute w-100p h-100p text-white flex j-content-center a-items-center z-1 l:text-22 radius-6">
-            Out of stock
-          </div> }
-            <Image
-              className={`absolute w-full h-full a-self-center g|object-fit:cover pointer ${isOutOfStock && 'out-of-stock'}`}
-              src={selectedImage}
-              alt="product-image"
+              {isOutOfStock && <div className="absolute w-100p h-100p text-white flex j-content-center a-items-center z-1 l:text-22 radius-6">
+                Out of stock
+              </div>}
+              <Image
+                className={`absolute w-full h-full a-self-center g|object-fit:cover pointer ${isOutOfStock && 'out-of-stock'}`}
+                src={selectedImage}
+                alt="product-image"
               />
-              </div>
+            </div>
           ) : (
             <VideoSrc
               className="absolute w-full h-full a-self-center g|object-fit:cover pointer"
@@ -167,25 +173,25 @@ const ProductTile: FC<IProductTile> = ({ product, savedVariants, saveVariant, re
                 cartItem={selectedVariantItemInCart}
               />
             ) : (
-                <>
-             {selectedVariant?.status !== 'OUT_OF_STOCK' ? <button
-                onClick={() => {
-                  isAuthenticated
-                    ?  addToCart(
-                      selectedVariant.id,
-                      selectedVariant.minPurchaseQuantity || 1
-                    ) 
-                    : handleLogin(selectedVariant.id,
-                      selectedVariant.minPurchaseQuantity || 1);
-                }}
-                disabled={!selectedImage}
-                    className={classNames(
-                      "bg-#FACE33 shadow-0-4-8-0-#00000033 hover:shadow-0-8-8-0-#00000033 text-black! disabled:bg-gray-200 disabled:cursor-not-allowed hover:scale-1.06 g|transition:0.5s g|will-change:transform pointer font-roboto border-hidden outline-none s:p-14 p-12 round flex a-items-center j-items-center gap-10")}
-              >
-                <PiShoppingCartFill className="s:w-22 w-20 s:h-22 h-20" />
-              </button>: ''
-                  }
-            </>
+              <>
+                {selectedVariant?.status !== 'OUT_OF_STOCK' ? <button
+                  onClick={() => {
+                    isAuthenticated
+                      ? addToCart(
+                        selectedVariant.id,
+                        selectedVariant.minPurchaseQuantity || 1
+                      )
+                      : handleLogin(selectedVariant.id,
+                        selectedVariant.minPurchaseQuantity || 1);
+                  }}
+                  disabled={!selectedImage}
+                  className={classNames(
+                    "bg-#FACE33 shadow-0-4-8-0-#00000033 hover:shadow-0-8-8-0-#00000033 text-black! disabled:bg-gray-200 disabled:cursor-not-allowed hover:scale-1.06 g|transition:0.5s g|will-change:transform pointer font-roboto border-hidden outline-none s:p-14 p-12 round flex a-items-center j-items-center gap-10")}
+                >
+                  <PiShoppingCartFill className="s:w-22 w-20 s:h-22 h-20" />
+                </button> : ''
+                }
+              </>
             )}
           </div>
         </div>
@@ -193,7 +199,7 @@ const ProductTile: FC<IProductTile> = ({ product, savedVariants, saveVariant, re
           id='favorite icon'
           className='absolute t-0 r-0 mr-10 mt-10 l:mr-15 l:mt-15 text-24 l:text-34'
           onClick={isAuthenticated ? handleSave : () => isLoginModal()}
-          
+
         >
           <AiFillHeart
             color={isSaved ? '#ffffffee' : '#000000aa'}
@@ -266,7 +272,7 @@ const ProductTile: FC<IProductTile> = ({ product, savedVariants, saveVariant, re
       </div>
       <div
         id="product details"
-        className="md:mt-16 mt-20 overflow-hidden white-space-nowrap text-overflow-ellipsis flex flex-col gap-8"
+        className="md:mt-16 mt-20 white-space-nowrap text-overflow-ellipsis flex flex-col gap-8"
       >
         <div
           title={product.name}
@@ -286,11 +292,14 @@ const ProductTile: FC<IProductTile> = ({ product, savedVariants, saveVariant, re
             </div>
           )}
         </div>
-        <div className="md:text-16 text-12 weight-600 md:line-height-24 line-height-20">
-          {formatNumberAsPrice(
-            selectedVariant?.finalPrice || product.finalPrice
-          )}
-          {/* <span className="weight-300 l:text-15 text-10">{!!selectedVariant?.stockUnit && 'per'} {selectedVariant?.stockUnit}</span> */}
+        <div className='flex j-content-between'>
+          <div className="md:text-16 text-12 weight-600 md:line-height-24 line-height-20">
+            {formatNumberAsPrice(
+              selectedVariant?.finalPrice || product.finalPrice
+            )}
+            {/* <span className="weight-300 l:text-15 text-10">{!!selectedVariant?.stockUnit && 'per'} {selectedVariant?.stockUnit}</span> */}
+          </div>
+          <MiniReview id={id} slug={product.slug} isOpen={isOpen} setIsOpen={setIsOpen} reviews={reviews} />
         </div>
         {/* <div className="flex flex-wrap gap-4">
           {product?.tags?.map((tag: any, i: number) => (

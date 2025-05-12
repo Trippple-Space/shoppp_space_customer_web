@@ -19,7 +19,7 @@ class ProductService {
      ) {
           const cacheKey = `product/categories_${type}_${label}_${storeId}`;
           const cachedData = this.getCachedCategories(cacheKey);
-
+          
           if (cachedData) {
                return cachedData;
           }
@@ -37,6 +37,7 @@ class ProductService {
                     const fetchedCategories: ProductCategory =
                          response.data?.[0];
                     this.cacheCategories(cacheKey, fetchedCategories);
+                    console.log(fetchedCategories)
                     resolve(fetchedCategories);
                });
           });
