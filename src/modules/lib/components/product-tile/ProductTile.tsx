@@ -299,7 +299,9 @@ const ProductTile: FC<IProductTile> = ({ product, savedVariants, saveVariant, re
             )}
             {/* <span className="weight-300 l:text-15 text-10">{!!selectedVariant?.stockUnit && 'per'} {selectedVariant?.stockUnit}</span> */}
           </div>
-          <MiniReview id={id} slug={product.slug} isOpen={isOpen} setIsOpen={setIsOpen} reviews={reviews} />
+          <div className='text-11 text-grey'>
+            <MiniReview id={id} slug={product.slug} isOpen={isOpen} setIsOpen={setIsOpen} reviews={reviews} />
+          </div>
         </div>
         {/* <div className="flex flex-wrap gap-4">
           {product?.tags?.map((tag: any, i: number) => (

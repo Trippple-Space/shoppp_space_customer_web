@@ -550,6 +550,7 @@
 @layer base {    .border-y {       border-bottom: 1px solid;       border-top: 1px solid;    }  } 
 .line-height-12\.1 { line-height: 12.1px; } 
 .weight-300 { font-weight: 300; } 
+.text-11 { font-size: 11px; } 
 .mx-2 { margin-left: 2px; margin-right: 2px; } 
 .my-1 { margin-top: 1px; margin-bottom: 1px; } 
 .hover\:underline:hover { text-decoration: underline; } 
@@ -686,7 +687,6 @@
 .w-600 { width: 600px; } 
 .h-600 { height: 600px; } 
 .l-15 { left: 15px; } 
-.text-11 { font-size: 11px; } 
 .bg-light-green { background-color: #E2FFFACC; } 
 .m-2 { margin: 2px; } 
 .mb-3 { margin-bottom: 3px; } 
