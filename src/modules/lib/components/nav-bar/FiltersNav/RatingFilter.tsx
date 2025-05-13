@@ -14,7 +14,7 @@ export const RatingFilter: React.FC<IRatingsFilter> = ({ setRatingFilter }) => {
 
   return (
     (<div className='flex flex-col gap-26'>
-      <h5 className='weight-500 text-16 line-height-24'>Over 4</h5>
+      <h5 className='weight-500 text-16 line-height-24' style={{visibility: rate ? "visible" : "hidden"}}>Over {Number(rate.replace("+", "")).toFixed(1) || 0.0}</h5>
       <div className='grid grid-5-cols-auto gap-8'>
         {
           ratings.map((rating) => (

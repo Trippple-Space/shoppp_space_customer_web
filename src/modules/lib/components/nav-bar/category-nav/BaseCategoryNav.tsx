@@ -1,6 +1,6 @@
 import React, { FC, useState, useRef, useEffect } from "react";
 import cx from "classnames";
-import { ICategory, ProductCategory } from "@/modules/lib/utility/types/product.interface";
+import { ICategory } from "@/modules/lib/utility/types/product.interface";
 import ImageAlt from "../../image-alt/ImageAlt";
 import SkeletonLoader from "../../skeleton-loader/Skeleton";
 import ScrollButtons from "../../scroll-buttons/scrollButtons";
@@ -21,13 +21,15 @@ const BaseCategoryNav: FC<IBaseCategoryNav> = ({
   setSelectedCategory,
   page,
 }) => {
-  const [activeOption, setActiveOption] = useState('Random');
+  const [activeOption, setActiveOption] = useState('All');
   const scrollRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
-    setActiveOption(selectedCategory?.name || 'Random')
+    setActiveOption(selectedCategory?.name || 'All')
   }, [selectedCategory])
 
+
+  console.log(selectedCategory)
   return (
     <div
       className={`flex a-items-center w-full relative ${page === "home" && "j-content-center"

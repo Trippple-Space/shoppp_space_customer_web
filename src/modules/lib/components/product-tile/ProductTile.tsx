@@ -299,7 +299,7 @@ const ProductTile: FC<IProductTile> = ({ product, savedVariants, saveVariant, re
             )}
             {/* <span className="weight-300 l:text-15 text-10">{!!selectedVariant?.stockUnit && 'per'} {selectedVariant?.stockUnit}</span> */}
           </div>
-          <div className='text-11 text-grey'>
+          <div className='text-10 sm:text-11 text-grey'>
             <MiniReview id={id} slug={product.slug} isOpen={isOpen} setIsOpen={setIsOpen} reviews={reviews} />
           </div>
         </div>

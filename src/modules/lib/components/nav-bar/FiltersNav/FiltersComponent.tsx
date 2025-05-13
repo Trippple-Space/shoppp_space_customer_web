@@ -9,10 +9,10 @@ const Filters = () => {
   const { allFilters } = useFilter();
   const { setShowOffers } = useFilterStore()
   const filters = [
-    { name: 'Offers', downIcon: false, extraIcon: LiaTagSolid },
+    /*{ name: 'Offers', downIcon: false, extraIcon: LiaTagSolid }, */
     { name: 'Rating', downIcon: true, extraIcon: LiaStar },
     { name: 'Price', downIcon: true, extraIcon: null },
-    { name: 'Sort', downIcon: true, extraIcon: null },
+    /*{ name: 'Sort', downIcon: true, extraIcon: null }, */
     { name: 'Location', downIcon: true, extraIcon: HiOutlineLocationMarker }
   ]
 

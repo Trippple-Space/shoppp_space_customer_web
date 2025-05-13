@@ -3,7 +3,6 @@ import { User } from "./user.interface"
 export interface IReview {
     productVariantId: number,
     rating: number,
-    subject: string,
     comment: string,
     meta: {
         verifiedPurchase: boolean,

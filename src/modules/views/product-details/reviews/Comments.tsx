@@ -46,7 +46,7 @@ export const Comments = ({ reviews, limit, productId, slug, isModal }: { reviews
                                     </div>
                                     <div className='pt-8'>
                                         <p className={`capitalize text-14 weight-500 ${isModal ? 'sm:text-14 text-12' : 'text-13 sm:text-14'}`}>{review.subject}</p>
-                                        <p className={`capitalize ${isModal ? 'text-12' : 'text-13 sm:text-14'}`} style={{ whiteSpace: "wrap" }}>{review.comment}</p>
+                                        <p className={`capitalize ${isModal ? 'text-12' : 'text-13 sm:text-14'}`} style={{ whiteSpace: "pre-wrap" }}>{review.comment}</p>
                                     </div>
                                 </div>
                             ))
