@@ -2,12 +2,10 @@ import React, { useEffect, useRef, useState } from 'react'
 import { LiaAngleDownSolid, LiaStar, LiaTagSolid } from 'react-icons/lia'
 import FilterModal from './FilterModal'
 import { useFilterStore } from '@/modules/lib/utility/store/filter.store'
-import { useFilter } from '@/modules/lib/utility/hooks/use-filter'
 import { HiOutlineLocationMarker } from 'react-icons/hi'
 
 const Filters = () => {
-  const { allFilters } = useFilter();
-  const { setShowOffers } = useFilterStore()
+  const { setShowOffers, allFilters } = useFilterStore()
   const filters = [
     /*{ name: 'Offers', downIcon: false, extraIcon: LiaTagSolid }, */
     { name: 'Rating', downIcon: true, extraIcon: LiaStar },

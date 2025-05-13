@@ -23,13 +23,7 @@ const BaseCategoryNav: FC<IBaseCategoryNav> = ({
 }) => {
   const [activeOption, setActiveOption] = useState('All');
   const scrollRef = useRef<HTMLDivElement>(null);
-
-  useEffect(() => {
-    setActiveOption(selectedCategory?.name || 'All')
-  }, [selectedCategory])
-
-
-  console.log(selectedCategory)
+  
   return (
     <div
       className={`flex a-items-center w-full relative ${page === "home" && "j-content-center"
@@ -49,7 +43,9 @@ const BaseCategoryNav: FC<IBaseCategoryNav> = ({
               <div
                 onClick={() => {
                   setActiveOption(category?.name);
-                  setSelectedCategory(category);
+                  setSelectedCategory({
+                    ...category, filters: category.name
+                  });
                 }}
                 className="flex flex-col a-items-center gap-7 space-between w-fit cursor-pointer"
               >

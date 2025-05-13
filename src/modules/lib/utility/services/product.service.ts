@@ -67,9 +67,10 @@ class ProductService {
      fetchProducts(query: IQueryParams, filters = {}): Promise<Product[]> {
           return new Promise((resolve) => {
             const filterParams = buildFilterParams(filters);
-             
+            const {allFilters, ...queryWithoutAllFilters} = query
+           
             http.get(endpoints.PRODUCTS, {
-                    params: { ...query, ...filterParams } 
+                    params: { ...queryWithoutAllFilters, ...filterParams } 
                }).then((response: AxiosResponse) => {
                     resolve(response.data);
               });

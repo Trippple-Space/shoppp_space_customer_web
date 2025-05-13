@@ -47,7 +47,7 @@ const CentralArena = () => {
         {
           <>
             {
-              (!products.length && loading && reviewsLoading) ?
+              (!products.length && loading || reviewsLoading) ?
                 <div className='w-100p flex j-content-center mt-10'>
                   <DotsLoader />
                 </div>

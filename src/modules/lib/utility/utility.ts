@@ -54,7 +54,7 @@ export const buildEndpoint = (
 
 export const buildFilterParams = (filters: any) => {
   if (!filters) return {};
-  const { price, sort, rating, showOffers, location } = filters;
+  const { price, sort, rating, showOffers, location, tags } = filters;
   let params: any = {};
 
   if (price?.min && price?.max) {
@@ -69,12 +69,15 @@ export const buildFilterParams = (filters: any) => {
     params["filters[price][LessThanOrEqual]"] = price.max;
   }
 
+  if (tags){
+    params["filters[tags][label]"] = tags
+  } 
+
+  if (rating?.rateBy) {
+    params["filters[variants][averageRating][MoreThanOrEqual]"] = rating.rateBy;
+  }
   /*if (sort?.sortBy) {
     params["sort"] = sort.sortBy;
-  }
-
-  if (rating?.rating) {
-    params["filters[ratings]"] = rating.rateBy;
   }
 
   if (showOffers) {

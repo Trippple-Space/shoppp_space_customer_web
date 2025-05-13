@@ -90,6 +90,7 @@ export interface IFilters {
   rating: { rateBy: string };
   location: { selectedState: string };
   showOffers: boolean;
+  tags?: string
 }
 
 

@@ -3,11 +3,11 @@ import { usePathname } from "next/navigation";
 import { useInView } from "react-intersection-observer";
 import { useProducts } from "../use-products";
 import { useCategories } from "../use-categories";
-import { useFilter } from "../use-filter";
+import { useFilterStore } from "../../store/filter.store";
 
 export const useProductListView = () => {
   const { ref, inView } = useInView();
-  const [page, setPage] = useState(1);
+  const [page, setPage] = useState(0);
   const limit = 20;
 
   const pathname = usePathname();
@@ -18,20 +18,18 @@ export const useProductListView = () => {
     storeId: 0,
     label: "GLOBAL"
   });
-  const { allFilters } = useFilter();
+  const { allFilters } = useFilterStore();
 
-  const { products, setPagination, updateFilters, query, updateHomePageFilter, loading } = useProducts({
-    filters: { type, status: { In: ["ACTIVE", "OUT_OF_STOCK"] } }
+  const { products, setPagination, query, updateHomePageFilter, loading } = useProducts({
+    filters: { type, status: { In: ["ACTIVE", "OUT_OF_STOCK"] }}
   });
 
   useEffect(() => {
-    updateFilters(selectedCategory.filters);
-  }, [selectedCategory?.name]);
+    const updatedFilters = { ...allFilters, tags: selectedCategory.name === "All" ? "" : selectedCategory.name.toLowerCase() };
 
-  useEffect(() => {
-    updateHomePageFilter(allFilters)
-    setPagination({ page: 0, limit });
-  }, [allFilters, JSON.stringify(query.allFilters), JSON.stringify(query.filters)])
+    updateHomePageFilter(updatedFilters);
+    setPagination({ page: 0, limit: limit - 1 });
+  }, [allFilters, JSON.stringify(query.allFilters), JSON.stringify(query.filters), selectedCategory.name])
 
   useEffect(() => {
     if (inView) {

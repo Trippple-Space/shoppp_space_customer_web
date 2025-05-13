@@ -15,7 +15,6 @@ import {
   formatNumberAsPrice,
 } from "@/modules/lib/utility/utility";
 import { deliveryOptions } from "@/modules/lib/utility/constants";
-import OrderSummary from "@/modules/lib/components/order-summary/OrderSummary";
 import { PiCaretDown, PiCaretUp } from "react-icons/pi";
 import Link from "next/link";
 import DeliveryOptions from "@/modules/lib/components/delivery-options/DeliveryOptions";
@@ -95,6 +94,8 @@ const CheckoutPage = () => {
     window.addEventListener("resize", checkScreenWidth);
     return () => window.removeEventListener("resize", checkScreenWidth);
   }, []);
+
+  console.log(cartItemsByStore)
 
   return (<>
     <HomepageNavBar parent={"checkout"} />
