@@ -23,6 +23,10 @@ const BaseCategoryNav: FC<IBaseCategoryNav> = ({
 }) => {
   const [activeOption, setActiveOption] = useState('All');
   const scrollRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    setActiveOption(selectedCategory?.name || 'All')
+  }, [selectedCategory])
   
   return (
     <div
