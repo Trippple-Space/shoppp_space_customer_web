@@ -222,7 +222,6 @@ class ProductService {
         })
     }
      removeSavedVariant(productVariantId: number) {
-         console.log(productVariantId)
         return new Promise((resolve, reject) => {
             http.delete(`${endpoints.SAVED_VARIANT}/${productVariantId}`).then((response: AxiosResponse) => {
                  resolve(response.data);

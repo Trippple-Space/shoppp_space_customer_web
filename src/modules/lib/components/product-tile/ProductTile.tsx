@@ -4,7 +4,7 @@ import Image from '../image/Image'
 import { AiFillStar, AiOutlinePlus, AiFillHeart } from 'react-icons/ai'
 import classNames from 'classnames'
 import { Product } from '../../utility/types/product.interface'
-import { cx, displayProductPill, formatNumberAsPrice } from '../../utility/utility'
+import { cx, displayProductPill, formatNumberAsPrice, getDiscountedPrice } from '../../utility/utility'
 import { useCart } from '../../utility/hooks/use-cart'
 import QuantitySelector from '../quantity-selector/QuantitySelector'
 import Link from 'next/link'
@@ -115,6 +115,7 @@ const ProductTile: FC<IProductTile> = ({ product, savedVariants, saveVariant, re
   }, [isAuthenticated]);
 
   const isOutOfStock = selectedVariant?.status === 'OUT_OF_STOCK'
+  const discount = product?.discounts?.find((discount: any) => discount.discountType === "PRODUCT")
 
   return (
     <div className='mt-30 l:mt-20 w-full overflow-hidden'>
@@ -293,13 +294,27 @@ const ProductTile: FC<IProductTile> = ({ product, savedVariants, saveVariant, re
           )}
         </div>
         <div className='flex j-content-between'>
-          <div className="md:text-16 text-12 weight-600 md:line-height-24 line-height-20">
-            {formatNumberAsPrice(
-              selectedVariant?.finalPrice || product.finalPrice
-            )}
-            {/* <span className="weight-300 l:text-15 text-10">{!!selectedVariant?.stockUnit && 'per'} {selectedVariant?.stockUnit}</span> */}
+          <div className='flex md:gap-8 md:a-items-center md:flex-row flex-col'>
+            <p className="md:text-16 text-12 weight-600 md:line-height-24 line-height-20">
+              {
+                discount ? formatNumberAsPrice(
+                  getDiscountedPrice(selectedVariant?.finalPrice, discount.discountCalculationType, discount.value)
+                ) :
+                  formatNumberAsPrice(
+                    selectedVariant?.finalPrice || product.finalPrice
+                  )
+              }
+            </p>
+            {
+              discount &&
+              <p className="md:text-12 text-10 weight-400 md:line-height-20 color-#00000099 line-through">
+                {formatNumberAsPrice(
+                  selectedVariant?.finalPrice || product.finalPrice
+                )}
+              </p>
+            }
           </div>
-          <div className='text-10 sm:text-11 text-grey'>
+          <div className='text-9 sm:text-10 text-grey'>
             <MiniReview id={id} slug={product.slug} isOpen={isOpen} setIsOpen={setIsOpen} reviews={reviews} />
           </div>
         </div>

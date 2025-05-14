@@ -9,7 +9,8 @@ import { Product, RecentlyViewed } from '@/modules/lib/utility/types/product.int
 import './ProductDetails.scss'
 import {
   cx,
-  formatNumberAsPrice
+  formatNumberAsPrice,
+  getDiscountedPrice
 } from '@/modules/lib/utility/utility'
 import { HiOutlineShoppingBag } from 'react-icons/hi2'
 import { useCart } from '@/modules/lib/utility/hooks/use-cart'
@@ -152,7 +153,9 @@ const ProductDetails = ({ product }: { product: Product }) => {
   }, [isAuthenticated]);
 
   const isOutOfStock = selectedVariant?.status === 'OUT_OF_STOCK';
+  const discount = product?.discounts?.find((discount: any) => discount.discountType === "PRODUCT")
 
+  console.log(product)
 
   const addToCartBtn = () => {
     return <div className='flex flex-col gap-16'>
@@ -286,8 +289,26 @@ const ProductDetails = ({ product }: { product: Product }) => {
               </p>
             </div>
             <div className='flex flex-col gap-12 border-b  border-#00000014 pb-15'>
-              <p className='weight-400 text-28'>{formatNumberAsPrice(selectedVariant.price)}</p>
-              <p className='weight-400 text-16 color-#00000099 line-through'>{formatNumberAsPrice(selectedVariant.price)}</p>
+              <p className='weight-400 text-28'>
+                {
+                  discount ?
+                    formatNumberAsPrice(
+                      getDiscountedPrice(selectedVariant?.finalPrice, discount.discountCalculationType, discount.value)
+                    )
+                    :
+                    formatNumberAsPrice(
+                      selectedVariant?.finalPrice
+                    )
+                }
+              </p>
+              {
+                discount &&
+                <p className='weight-400 text-16 color-#00000099 line-through'>
+                  {formatNumberAsPrice(
+                    selectedVariant?.finalPrice
+                  )}
+                </p>
+              }
               <div className='flex flex-col l:flex-row l:a-items-center l:j-content-between gap-12 w-100p'>
                 <div className='flex a-items-center gap-12'>
                   <div className='flex gap-8 a-items-center'>

@@ -22,6 +22,23 @@ export interface ProductCategory {
   storeId: number;
 }
 
+interface Discount {
+  id: number,
+  title: string,
+  discountCode: string,
+  discountType: string,
+  discountCalculationType: string,
+  value: number,
+  activeStartDate: string,
+  activeEndDate: string,
+  status: string,
+  minOrderAmount: number | string,
+  minOrderQuantity: number | string,
+  channel: string[],
+  createdAt: string,
+  updatedAt: string
+}
+
 export interface Product {
   longDescription: string;
   shortDescription: string;
@@ -43,6 +60,7 @@ export interface Product {
   store: Store;
   availableUnit?: any[];
   tags: Tag[];
+  discounts: Discount[]
 }
 
 export interface ProductMedia {

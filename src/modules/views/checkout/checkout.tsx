@@ -21,6 +21,7 @@ import DeliveryOptions from "@/modules/lib/components/delivery-options/DeliveryO
 import DeliveryMessage from "@/modules/lib/components/delivery-in-lagos/DeliveryMessage";
 import { paths } from "@/modules/lib/utility/paths";
 import AddressModal from "@/modules/lib/components/address-modal/AddressModal";
+import OrderSummary from "@/modules/lib/components/order-summary/OrderSummary";
 
 const CheckoutPage = () => {
   const [selectedDeliveryOption, setSelectedDeliveryOption] =
@@ -95,7 +96,6 @@ const CheckoutPage = () => {
     return () => window.removeEventListener("resize", checkScreenWidth);
   }, []);
 
-  console.log(cartItemsByStore)
 
   return (<>
     <HomepageNavBar parent={"checkout"} />
@@ -206,19 +206,19 @@ const CheckoutPage = () => {
         </div>
 
         <div className="relative bg-#F5F5F5 l:w-45.8p md:w-50p">
-          <div className={`h-full overflow-auto no-scrollbar bg-#F5F5F5 md:pt-44 md:pb-85 xl:pl-80 l:pl-70 md:pl-40 xl:pr-80 l:pr-70 md:pr-60 flex flex-col gap-16 ${devOptions === 'smaller' ? 'fixed l-0 r-0 b-0 z-4' : ''}`}>
+          <div className={`m:h-full overflow-auto no-scrollbar bg-#F5F5F5 md:pt-44 md:pb-85 xl:pl-80 l:pl-70 md:pl-40 xl:pr-80 l:pr-70 md:pr-60 flex flex-col gap-16 ${devOptions === 'smaller' ? 'fixed l-0 r-0 b-0 z-4' : ''}`}>
             {devOptions === "larger" && <DeliveryOptions selectedDeliveryOption={selectedDeliveryOption} setSelectedDeliveryOption={setSelectedDeliveryOption} />}
             <div className="md:py-20 py-12 md:px-24 sm:px-40 px-24 md:border border-t border-#00000014 md:bg-white bg-#F5F5F5 md:radius-8 flex flex-col sm:gap-24 gap-20">
               <h2 className="color-#000000E0 text-20 line-height-28 weight-600 md:block hidden">
                 Payment Summary
               </h2>
               <div className={`${showSummary ? 'block' : 'md:block hidden'}`}>
-                {/* <OrderSummary
+                <OrderSummary
                   subTotal={cart.subTotal}
                   extraSavings={cart.total - cart.subTotal}
                   shippingFee={selectedDeliveryOptionDetails.price}
                   total={cart.total + selectedDeliveryOptionDetails.price}
-                /> */}
+                />
               </div>
               <div className="flex sm:flex-row flex-col sm:gap-0 gap-20 space-between a-items-center">
                 <div className={`absolute t-0 sm:w-fit w-full sm:px-0 px-24 bg-#F5F5F5 pt-12 md:hidden block ${showSummary ? 'sm:b-10 sm:t-80p' : 'sm:t-10'}`}>

@@ -28,12 +28,14 @@ export const useProductListView = () => {
     const updatedFilters = { ...allFilters, tags: selectedCategory.name === "All" ? "" : selectedCategory.name.toLowerCase() };
 
     updateHomePageFilter(updatedFilters);
-    setPagination({ page: 0, limit: limit - 1 });
+    setPagination({ page: 0, limit});
   }, [allFilters, JSON.stringify(query.allFilters), JSON.stringify(query.filters), selectedCategory.name])
 
   useEffect(() => {
     if (inView) {
-      setPage((prev) => prev + 1);
+      if (products.length > 20 && products.length % 20 === 0) {
+        setPage((prev) => prev + 1);
+      }
       setPagination({ page, limit });
     }
   }, [inView]);

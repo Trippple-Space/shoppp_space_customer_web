@@ -28,6 +28,20 @@ export const formatNumberAsPrice = (
   return formatted.replace(".00", "").replace("NGN", "₦");
 };
 
+export const getDiscountedPrice = (
+  totalPrice: number,
+  discountCalculationType: string,
+  value: number
+) => {
+  if (discountCalculationType === "PERCENTAGE"){
+    const discount = 10/100 * totalPrice
+
+    return totalPrice - discount
+  } else {
+    return totalPrice - value
+  }
+}
+
 export const getGreeting = () => {
   const currentTime = new Date().getHours();
 
@@ -111,8 +125,8 @@ export const scrollToTop = () => {
 };
 
 export function displayStockUnit(stockUnit: string): string {
-  if (stockUnit == "yard") return `per ${stockUnit}`;
-  else if (stockUnit == "unit") return stockUnit;
+  if (stockUnit == "yard" || stockUnit === "yards") return `yard`;
+  else if (stockUnit == "unit" || stockUnit === "units") return stockUnit;
   else return "piece";
 }
 
