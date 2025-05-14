@@ -28,20 +28,6 @@ export const formatNumberAsPrice = (
   return formatted.replace(".00", "").replace("NGN", "₦");
 };
 
-export const getDiscountedPrice = (
-  totalPrice: number,
-  discountCalculationType: string,
-  value: number
-) => {
-  if (discountCalculationType === "PERCENTAGE"){
-    const discount = 10/100 * totalPrice
-
-    return totalPrice - discount
-  } else {
-    return totalPrice - value
-  }
-}
-
 export const getGreeting = () => {
   const currentTime = new Date().getHours();
 

@@ -20,7 +20,7 @@ import Image from "../image/Image";
 import { useNavbarView } from "../../utility/hooks/views/use-navbar-view";
 import useUserStore from "../../utility/store/user.store";
 
-interface ModalProps {}
+interface ModalProps { }
 
 const MiniCart: React.FC<ModalProps> = () => {
   const [open, setOpen] = useState(false)
@@ -33,14 +33,19 @@ const MiniCart: React.FC<ModalProps> = () => {
   const { isAuthenticated } = useUserStore();
 
 
-  
-  const checkoutCart = () => { 
+
+  const checkoutCart = () => {
     cart.cartItems
       .filter(item => item.variant.status === 'OUT_OF_STOCK')
       .forEach(item => removeFromCart(item.id))
     router.push(paths.checkout)
   }
-
+  
+  const isValidDiscount = (cartItem: CartItem) => {
+    if (cartItem?.variant?.product?.discount?.activeEndDate) {
+      return new Date().setHours(0, 0, 0, 0) <= new Date(cartItem?.variant?.product?.discount?.activeEndDate).setHours(0, 0, 0, 0)
+    }
+  }
 
   return (
     <div className='w-fit'>
@@ -92,11 +97,10 @@ const MiniCart: React.FC<ModalProps> = () => {
 
                       <button
                         onClick={() => setOpen(false)}
-                        className={`g|transition:0.5s py-12 px-24 radius-6 line-height-19 text-center w-full weight-500 border border-none hover:pointer ${
-                          isAuthenticated
-                            ? 'bg-green hover:bg-darkgreen text-white'
-                            : 'bg-#F5F5F5 hover:bg-grey-300 text-#333333'
-                        }`}
+                        className={`g|transition:0.5s py-12 px-24 radius-6 line-height-19 text-center w-full weight-500 border border-none hover:pointer ${isAuthenticated
+                          ? 'bg-green hover:bg-darkgreen text-white'
+                          : 'bg-#F5F5F5 hover:bg-grey-300 text-#333333'
+                          }`}
                       >
                         Explore products
                       </button>
@@ -112,63 +116,76 @@ const MiniCart: React.FC<ModalProps> = () => {
                         <div className={`flex j-content-between gap-10 p-12 ${cartItem.variant.status === 'OUT_OF_STOCK' ? 'color-#00000099' : ''}`}>
                           <div className="flex gap-10">
 
-                          <Image
-                            src={cartItem.variant.media[0].url}
-                            alt='cart image'
-                            className={`sm:w-80 w-70 sm:h-80 h-70 radius-6 border border-#00000014 object-fit ${cartItem.variant.status == 'OUT_OF_STOCK' ? 'greyscale' : ''}`}
-                          />
-                          <div className='flex flex-col gap-6'>
-                            <p className='weight-600 sm:text-16 text-14 sm:line-height-24 line-height-22'>
-                              {cartItem?.variant?.product?.name}{' '}
-                            </p>
-                            <p className='weight-400 text-14 line-height-16.94'>
-                              Size:{' '}
-                              {`${cartItem?.quantity} ${displayStockUnit(
-                                cartItem.variant.stockUnit
-                              )}${cartItem?.quantity > 1 ? 's' : ''}`}
-                            </p>
-                            <p className='weight-400 text-14 line-height-16.94'>
-                              Color: {cartItem?.variant?.properties?.color}
-                            </p>
+                            <Image
+                              src={cartItem.variant.media[0].url}
+                              alt='cart image'
+                              className={`sm:w-80 w-70 sm:h-80 h-70 radius-6 border border-#00000014 object-fit ${cartItem.variant.status == 'OUT_OF_STOCK' ? 'greyscale' : ''}`}
+                            />
+                            <div className='flex flex-col gap-6'>
+                              <p className='weight-600 sm:text-16 text-14 sm:line-height-24 line-height-22'>
+                                {cartItem?.variant?.product?.name}{' '}
+                              </p>
+                              <p className='weight-400 text-14 line-height-16.94'>
+                                Size:{' '}
+                                {`${cartItem?.quantity} ${displayStockUnit(
+                                  cartItem.variant.stockUnit
+                                )}${cartItem?.quantity > 1 ? 's' : ''}`}
+                              </p>
+                              <p className='weight-400 text-14 line-height-16.94'>
+                                Color: {cartItem?.variant?.properties?.color}
+                              </p>
                             </div>
                           </div>
-                            
-    { <RxCross2 className="w-fit cursor-pointer color-red" onClick={() => removeFromCart(cartItem.id)}/>}
+
+                          {<RxCross2 className="w-fit cursor-pointer color-red" onClick={() => removeFromCart(cartItem.id)} />}
                         </div>
                         <div className='px-12 pb-12 flex space-between a-items-center'>
-                          <p className={`weight-600 md:text-20 sm:text-16 text-14 md:line-height-28 sm:line-height-24 line-height-22 ${cartItem.variant.status === 'OUT_OF_STOCK' ? 'color-#00000099' : ''}`}> 
-                            {formatNumberAsPrice(cartItem.totalPrice)} 
-                          </p>
+                          <div className="flex a-items-center gap-8">
+                            <p className={`weight-600 md:text-20 sm:text-16 text-14 md:line-height-28 sm:line-height-24 line-height-22 ${cartItem.variant.status === 'OUT_OF_STOCK' ? 'color-#00000099' : ''}`}>
+                              {
+                                isValidDiscount(cartItem) ?
+                                  formatNumberAsPrice(cartItem.variant.discountedPrice)
+                                  :
+                                  formatNumberAsPrice(cartItem.totalPrice)
+                              }
+                            </p>
+                            {
+                              isValidDiscount(cartItem) &&
+                              <p className={`weight-400 md:text-16 sm:text-12 text-10 md:line-height-24 sm:line-height-20 line-height-18 line-through color-#00000099  ${cartItem.variant.status === 'OUT_OF_STOCK' ? 'color-#00000099' : ''}`}>
+                                {formatNumberAsPrice(cartItem.totalPrice)}
+                              </p>
+                            }
+                          </div>
                           <div className='border border-#00000014 flex space-between a-items-center  p-4 radius-100 bg-#F5F5F5 w-150'>
                             {cartItem.variant.status === 'OUT_OF_STOCK' ?
-                         
+
                               <div className='text-14 grid weight-400 color-#00000099  w-full'>
                                 <span className="text-center">
-                                Out of stock
+                                  Out of stock
                                 </span>
                               </div>
                               :
-                               <>
-                           <span
-                              className='bg-white p-6 round flex flex-col a-items-center hover:pointer'
-                              onClick={() => decrement(cartItem)}
-                              >
-                              {cartItem?.quantity ===
-                              cartItem?.variant?.minPurchaseQuantity ? (
-                                <PiTrashSimple className='w-20 h-20 color-#00000099' />
-                              ) : (
-                                <PiMinus className='w-20 h-20 color-#00000099' />
-                              )}
-                            </span>
-                            <span className='grow weight-500 line-height-19.36 text-16'>
-                              {cartItem?.quantity}
-                            </span>
-                            <span
-                              className='bg-white p-6 round flex flex-col a-items-center hover:pointer'
-                              onClick={() => increment(cartItem)}
-                              >
-                              <PiPlus className='w-20 h-20 color-#00000099' />
-                              </span>
+                              <>
+                                <span
+                                  className='bg-white p-6 round flex flex-col a-items-center hover:pointer'
+                                  onClick={() => decrement(cartItem)}
+                                >
+                                  {cartItem?.quantity ===
+                                    cartItem?.variant?.minPurchaseQuantity ? (
+                                    <PiTrashSimple className='w-20 h-20 color-#00000099' />
+                                  ) : (
+                                    <PiMinus className='w-20 h-20 color-#00000099' />
+                                  )}
+                                </span>
+                                <span className='grow weight-500 line-height-19.36 text-16'>
+                                  {cartItem?.quantity}
+                                </span>
+                                <span
+                                  className='bg-white p-6 round flex flex-col a-items-center hover:pointer'
+                                  onClick={() => increment(cartItem)}
+                                >
+                                  <PiPlus className='w-20 h-20 color-#00000099' />
+                                </span>
                               </>
                             }
                           </div>

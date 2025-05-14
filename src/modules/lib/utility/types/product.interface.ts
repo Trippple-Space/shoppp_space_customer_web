@@ -60,7 +60,7 @@ export interface Product {
   store: Store;
   availableUnit?: any[];
   tags: Tag[];
-  discounts: Discount[]
+  discount: Discount
 }
 
 export interface ProductMedia {
@@ -76,6 +76,7 @@ export interface ProductVariant {
   stock: number;
   price: number;
   finalPrice: number;
+  discountedPrice: number
   minPurchaseQuantity: number;
   incrementBy: number;
   product?: Product;

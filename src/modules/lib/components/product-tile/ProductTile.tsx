@@ -4,7 +4,7 @@ import Image from '../image/Image'
 import { AiFillStar, AiOutlinePlus, AiFillHeart } from 'react-icons/ai'
 import classNames from 'classnames'
 import { Product } from '../../utility/types/product.interface'
-import { cx, displayProductPill, formatNumberAsPrice, getDiscountedPrice } from '../../utility/utility'
+import { cx, displayProductPill, formatNumberAsPrice } from '../../utility/utility'
 import { useCart } from '../../utility/hooks/use-cart'
 import QuantitySelector from '../quantity-selector/QuantitySelector'
 import Link from 'next/link'
@@ -115,8 +115,8 @@ const ProductTile: FC<IProductTile> = ({ product, savedVariants, saveVariant, re
   }, [isAuthenticated]);
 
   const isOutOfStock = selectedVariant?.status === 'OUT_OF_STOCK'
-  const discount = product?.discounts?.find((discount: any) => discount.discountType === "PRODUCT")
-
+  const isDiscounted = new Date().setHours(0, 0, 0, 0) <= new Date(product?.discount?.activeEndDate).setHours(0, 0, 0, 0)
+  
   return (
     <div className='mt-30 l:mt-20 w-full overflow-hidden'>
       <div
@@ -297,8 +297,8 @@ const ProductTile: FC<IProductTile> = ({ product, savedVariants, saveVariant, re
           <div className='flex md:gap-8 md:a-items-center md:flex-row flex-col'>
             <p className="md:text-16 text-12 weight-600 md:line-height-24 line-height-20">
               {
-                discount ? formatNumberAsPrice(
-                  getDiscountedPrice(selectedVariant?.finalPrice, discount.discountCalculationType, discount.value)
+                isDiscounted ? formatNumberAsPrice(
+                  selectedVariant?.discountedPrice
                 ) :
                   formatNumberAsPrice(
                     selectedVariant?.finalPrice || product.finalPrice
@@ -306,7 +306,7 @@ const ProductTile: FC<IProductTile> = ({ product, savedVariants, saveVariant, re
               }
             </p>
             {
-              discount &&
+              isDiscounted &&
               <p className="md:text-12 text-10 weight-400 md:line-height-20 color-#00000099 line-through">
                 {formatNumberAsPrice(
                   selectedVariant?.finalPrice || product.finalPrice

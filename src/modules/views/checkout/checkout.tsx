@@ -96,6 +96,8 @@ const CheckoutPage = () => {
     return () => window.removeEventListener("resize", checkScreenWidth);
   }, []);
 
+  console.log(cart)
+
 
   return (<>
     <HomepageNavBar parent={"checkout"} />

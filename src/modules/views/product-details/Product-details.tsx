@@ -10,7 +10,6 @@ import './ProductDetails.scss'
 import {
   cx,
   formatNumberAsPrice,
-  getDiscountedPrice
 } from '@/modules/lib/utility/utility'
 import { HiOutlineShoppingBag } from 'react-icons/hi2'
 import { useCart } from '@/modules/lib/utility/hooks/use-cart'
@@ -153,7 +152,7 @@ const ProductDetails = ({ product }: { product: Product }) => {
   }, [isAuthenticated]);
 
   const isOutOfStock = selectedVariant?.status === 'OUT_OF_STOCK';
-  const discount = product?.discounts?.find((discount: any) => discount.discountType === "PRODUCT")
+  const isDiscounted = new Date().setHours(0, 0, 0, 0) <= new Date(product?.discount?.activeEndDate).setHours(0, 0, 0, 0)
 
   console.log(product)
 
@@ -291,9 +290,9 @@ const ProductDetails = ({ product }: { product: Product }) => {
             <div className='flex flex-col gap-12 border-b  border-#00000014 pb-15'>
               <p className='weight-400 text-28'>
                 {
-                  discount ?
+                  isDiscounted ?
                     formatNumberAsPrice(
-                      getDiscountedPrice(selectedVariant?.finalPrice, discount.discountCalculationType, discount.value)
+                      selectedVariant?.discountedPrice
                     )
                     :
                     formatNumberAsPrice(
@@ -302,7 +301,7 @@ const ProductDetails = ({ product }: { product: Product }) => {
                 }
               </p>
               {
-                discount &&
+                isDiscounted &&
                 <p className='weight-400 text-16 color-#00000099 line-through'>
                   {formatNumberAsPrice(
                     selectedVariant?.finalPrice
