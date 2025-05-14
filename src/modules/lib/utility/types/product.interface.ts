@@ -22,7 +22,7 @@ export interface ProductCategory {
   storeId: number;
 }
 
-interface Discount {
+export interface Discount {
   id: number,
   title: string,
   discountCode: string,

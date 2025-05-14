@@ -31,6 +31,7 @@ const placeholderProduct: Product = {
     reviewRating: 0,
     reviews: undefined,
     comments: undefined,
+    discounts: [],
     variants: [
          {
               id: 0,
