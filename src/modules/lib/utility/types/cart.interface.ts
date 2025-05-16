@@ -7,6 +7,8 @@ export interface Cart {
     total: number;
   cartItems: CartItem[]
   totalDiscountedPrice: number;
+  discountValue: number;
+  discountedPrice: number;
   totalDiscountValue: number;
   meta: any | null;
   dateCreated: string;
@@ -33,6 +35,7 @@ export interface StoreGroupResponse {
   storeTotal: number;
   storeDiscountedTotal: number;
   storeDiscountValue: number;
+  
   discountCode: string | null;
   meta: any | null;
   dateCreated: string;

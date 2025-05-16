@@ -62,7 +62,7 @@ const MiniCart: React.FC<ModalProps> = () => {
         <div className='relative h-full g|overflow-y:hidden font-inter color-#000000E0'>
           <div className='md:py-26 py-20 px-24 text-16 weight-600 flex space-between border-b border-#00000014'>
             <p className='line-height-24'>
-              Shopping Cart ({"1"})
+              Shopping Cart ({cart.cartItems.length})
             </p>
             <RxCross1
               onClick={() => setOpen(false)}
@@ -147,10 +147,10 @@ const MiniCart: React.FC<ModalProps> = () => {
                           <div className="flex a-items-center gap-8">
                             <p className={`weight-600 md:text-20 sm:text-16 text-14 md:line-height-28 sm:line-height-24 line-height-22 ${cartItem.variant.status === 'OUT_OF_STOCK' ? 'color-#00000099' : ''}`}>
                               {
-                                isValidDiscount(cartItem) ?
-                                  formatNumberAsPrice(cartItem.variant.discountedPrice)
-                                  :
-                                  formatNumberAsPrice(cartItem.totalPrice)
+                                // isValidDiscount(cartItem) ?
+                                //   // formatNumberAsPrice()
+                                //   :
+                                //   formatNumberAsPrice(cartItem.totalPrice)
                               }
                             </p>
                             {

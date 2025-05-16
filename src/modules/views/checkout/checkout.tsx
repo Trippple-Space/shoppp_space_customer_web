@@ -24,6 +24,7 @@ import AddressModal from "@/modules/lib/components/address-modal/AddressModal";
 import OrderSummary from "@/modules/lib/components/order-summary/OrderSummary";
 import Input from "@/modules/lib/components/input/Input";
 import Button from "@/modules/lib/components/button/Button";
+import { CartItem } from "@/modules/lib/utility/types/cart.interface";
 
 const CheckoutPage = () => {
   const [selectedDeliveryOption, setSelectedDeliveryOption] =
@@ -137,6 +138,12 @@ if(group.id === storeGroupId) {
     }))
   }
 
+   const isValidDiscount = (cartItem: CartItem) => {
+      if (cartItem?.variant?.product?.discount?.activeEndDate) {
+        return new Date().setHours(0, 0, 0, 0) <= new Date(cartItem?.variant?.product?.discount?.activeEndDate).setHours(0, 0, 0, 0)
+      }
+    }
+
 
   return (<>
     <HomepageNavBar parent={"checkout"} />
@@ -232,9 +239,22 @@ if(group.id === storeGroupId) {
                       </p>
                     </div>
                     <div className="flex flex-col gap-10 a-items-end">
-                      <h3 className="weight-600 text-16 line-height-24">
-                        {formatNumberAsPrice(cartItem?.totalPrice)}
-                      </h3>
+                    <div className="flex a-items-center gap-8">
+                                               <p className={`weight-600 md:text-20 sm:text-16 text-14 md:line-height-28 sm:line-height-24 line-height-22 ${cartItem.variant.status === 'OUT_OF_STOCK' ? 'color-#00000099' : ''}`}>
+                                                 {
+                                                   isValidDiscount(cartItem) ?
+                                                     formatNumberAsPrice(cart.total) :
+                                                     formatNumberAsPrice(cartItem.totalPrice)
+                                        
+                                                 }
+                                               </p>
+                                               {
+                                                 isValidDiscount(cartItem) &&
+                                                 <p className={`weight-400 md:text-16 sm:text-12 text-10 md:line-height-24 sm:line-height-20 line-height-18 line-through color-#00000099  ${cartItem.variant.status === 'OUT_OF_STOCK' ? 'color-#00000099' : ''}`}>
+                                                   {formatNumberAsPrice(cartItem.totalPrice)}
+                                                 </p>
+                                               }
+                                             </div>
                       <p
                         className="weight-400 text-14 line-height-22 text-danger underline pointer"
                         onClick={() => removeFromCart(cartItem?.id)}
@@ -280,6 +300,7 @@ if(group.id === storeGroupId) {
                   subTotal={cart.subTotal}
                   extraSavings={cart.total - cart.subTotal}
                   shippingFee={selectedDeliveryOptionDetails.price}
+                  slashedPrice={cart.totalDiscountedPrice}
                   total={cart.total + selectedDeliveryOptionDetails.price}
                 />
               </div>
