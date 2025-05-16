@@ -28,8 +28,10 @@ export const useCartStore = create<CartStore>((set) => ({
        meta: undefined,
        dateCreated: "",
        lastUpdated: "",
-       storeGroups: []
-  },
+       storeGroups: [],
+       discountValue: 0,
+       discountedPrice: 0
+     },
   
      fetching: false,
      fetchCart: async () => {
