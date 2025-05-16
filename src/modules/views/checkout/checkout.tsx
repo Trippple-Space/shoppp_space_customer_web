@@ -22,70 +22,88 @@ import DeliveryMessage from "@/modules/lib/components/delivery-in-lagos/Delivery
 import { paths } from "@/modules/lib/utility/paths";
 import AddressModal from "@/modules/lib/components/address-modal/AddressModal";
 import OrderSummary from "@/modules/lib/components/order-summary/OrderSummary";
+import Input from "@/modules/lib/components/input/Input";
+import Button from "@/modules/lib/components/button/Button";
 
 const CheckoutPage = () => {
   const [selectedDeliveryOption, setSelectedDeliveryOption] =
     useState<keyof typeof deliveryOptions>("standard");
   const { user } = useUserStore();
-  const { cart, removeFromCart } = useCart();
+  const { cart, removeFromCart, applyDiscount } = useCart();
   const { openAddressModal, selectedAddress } = useAddress();
   const router = useRouter()
   const { fetchAddresses } = useAddressStore()
   const { loading: isPaymentLoading, payWithPaystack } = usePayment();
   const canProceedToPayment = !(!isPaymentLoading && selectedAddress && user);
   const selectedDeliveryOptionDetails = deliveryOptions[selectedDeliveryOption];
-  const [cartItemsByStore, setcartItemsByStore] = useState<any[]>([]);
   const [devOptions, setDevOptions] = useState<string>();
   const [showSummary, setshowSummary] = useState(true);
   const [devAddressError, setDevAddressError] = useState(false)
+  const [allCartItems, setAllCartItems] = 
+  useState({
+    ...cart,
+    storeGroups: cart.storeGroups.map((group) => {
+      return {
+        ...group,
+        visible: true,
+        showDiscountInput: false,
+        input: ''
+      }
+    }),
+            input: '',
+    visible: true,
+        showDiscountInput: false,
+  })
+
+  useEffect(() => { 
+    const updatedCart = {
+      ...cart,
+      storeGroups: cart.storeGroups.map((group) => {
+        return {
+          ...group,
+          visible: true,
+          showDiscountInput: false,
+                      input: ''
+        }
+      }),
+      visible: true,
+      showDiscountInput: false,
+              input: ''
+    }
+    setAllCartItems(updatedCart)
+  }, [cart]);
+  
 
   const setStoreAccordion = (i: number) => {
-    setcartItemsByStore((prevCartItems) =>
-      prevCartItems.map((item, index) =>
-        index === i
-          ? { ...item, visible: !item.visible }
-          : item
-      )
-    );
+    setAllCartItems((prevItems) => ({
+      ...prevItems,
+      storeGroups: prevItems.storeGroups.map((group, index) => { 
+        if(index === i) {
+          return {
+            ...group,
+            visible: !group.visible,
+          }
+        }
+        return group;
+      })
+    }))
   }
 
-  const getCartItemsByStore = () => {
-    const cartItems = cart.cartItems;
-    const stores: any[] = [];
-    if (cartItems.length !== 0) {
-      cartItems.forEach((item) => {
-        if (!stores.includes(item.variant.product?.store?.name)) {
-          stores.push(item.variant.product?.store?.name);
-        }
-      });
+  // const di
 
-      const storeCartItems: any[] = [];
-
-      stores.forEach((store) => {
-        const storeName = store;
-        const storeItems = cartItems.filter(
-          (item) => item.variant.product?.store?.name === storeName
-        );
-        const storeObject: { [key: string]: any } = {};
-        storeObject.name = storeName;
-        storeObject.visible = true;
-        storeObject.items = storeItems;
-
-        storeCartItems.push(storeObject);
-      });
-      setcartItemsByStore(storeCartItems);
-    }
-  };
-
+ 
   useEffect(() => {
-    getCartItemsByStore();
     if (user) {
       fetchAddresses(user?.id)
       if (cart.cartItems.length === 0) {
         router.push(paths.homepage)
       }
     }
+
+
   }, [cart]);
+
+
 
   useEffect(() => {
     const checkScreenWidth = () => {
@@ -96,7 +114,28 @@ const CheckoutPage = () => {
     return () => window.removeEventListener("resize", checkScreenWidth);
   }, []);
 
-  console.log(cart)
+
+
+  const handleApplyDiscount = (code: string, storeGroupId:number) => {
+    applyDiscount(code, storeGroupId);
+    // console.log("Apply discount code:", code, storeGroupId);
+  }
+
+
+  const handleInputChange = (storeGroupId: number, value: string) => {
+    setAllCartItems((prevItems) => ({
+      ...prevItems,
+      storeGroups: prevItems.storeGroups.map((group) => {
+if(group.id === storeGroupId) {
+          return {
+            ...group,
+            input: value,
+          };
+        }
+        return group;
+      })
+    }))
+  }
 
 
   return (<>
@@ -138,6 +177,7 @@ const CheckoutPage = () => {
                     )}
                   </div>
                 )}
+
                 <p
                   className="text-16 line-height-24 weight-500 color-#1677FF underline pointer w-fit"
                   onClick={() => { openAddressModal(); setDevAddressError(false) }}
@@ -151,21 +191,23 @@ const CheckoutPage = () => {
             }
           </div>
 
+          
           {devOptions === "smaller" && <DeliveryOptions selectedDeliveryOption={selectedDeliveryOption} setSelectedDeliveryOption={setSelectedDeliveryOption} />}
           <div className="flex flex-col gap-14">
-            {cartItemsByStore?.map((store, i: number) => (
+            {allCartItems.storeGroups?.map((store, i: number) => (
               <div className="flex flex-col gap-16" key={i}>
-                <div className="flex space-between a-items-center">
+                 
+                {store.items.length > 0 && <div className="flex space-between a-items-center">
                   <h6 className="text-14 weight-400 line-height-22 color-#00000099 pointer" onClick={() => { setStoreAccordion(i) }}>
-                    {store?.name}
+                    {store?.store.name}
                   </h6>
                   {store.visible ? (
                     <PiCaretDown className="w-18 h-18 pointer" onClick={() => setStoreAccordion(i)} />
                   ) : (
                     <PiCaretUp className="w-18 h-18 pointer" onClick={() => setStoreAccordion(i)} />
                   )}
-                </div>
-                {store.items.map((cartItem: any, j: number) => (
+                </div>}
+                {store.items.length > 0 && store.items.map((cartItem: any, j: number) => (
                   <div
                     className={`gap-12 ${store.visible ? "flex" : "hidden"}`}
                     key={j}
@@ -202,9 +244,28 @@ const CheckoutPage = () => {
                     </div>
                   </div>
                 ))}
+                    <div className="flex gap-8 j-content-end a-items-end">
+                  <Input placeholder="Enter discount code"
+                    inputClass={"h-15"}
+                    className=""
+              value={store.input}
+              handleChange={(e: React.ChangeEvent<HTMLInputElement>) => handleInputChange(store.id,e.target.value)}
+              
+            />
+            <div className=""
+              onClick={ () => 
+                handleApplyDiscount(store.input, store.id)
+               }
+            
+            >
+
+            <Button className="l:py-9">Apply</Button>
+            </div>
+          </div>
               </div>
             ))}
           </div>
+     
         </div>
 
         <div className="relative bg-#F5F5F5 l:w-45.8p md:w-50p">

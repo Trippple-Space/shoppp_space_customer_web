@@ -47,6 +47,10 @@ const MiniCart: React.FC<ModalProps> = () => {
     }
   }
 
+  
+
+
+
   return (
     <div className='w-fit'>
       <Modal
@@ -58,7 +62,7 @@ const MiniCart: React.FC<ModalProps> = () => {
         <div className='relative h-full g|overflow-y:hidden font-inter color-#000000E0'>
           <div className='md:py-26 py-20 px-24 text-16 weight-600 flex space-between border-b border-#00000014'>
             <p className='line-height-24'>
-              Shopping Cart ({cart.cartItems.length})
+              Shopping Cart ({"1"})
             </p>
             <RxCross1
               onClick={() => setOpen(false)}

@@ -12,17 +12,25 @@ type CartStore = {
      decrementCartItem: (variantId: number, quantity: number) => void;
      removeFromCart: (variantId: number) => void;
      isLoginModal: () => void;
-     showLoginModal: boolean;
+  showLoginModal: boolean;
+     applyDiscount: (code: string, storeGroupId: number) => void;
 };
 
 export const useCartStore = create<CartStore>((set) => ({
      cart: {
-          cartItems: [],
-          id: 0,
-          userId: 0,
-          subTotal: 0,
-          total: 0,
-     },
+       cartItems: [],
+       id: 0,
+       userId: 0,
+       subTotal: 0,
+       total: 0,
+       totalDiscountedPrice: 0,
+       totalDiscountValue: 0,
+       meta: undefined,
+       dateCreated: "",
+       lastUpdated: "",
+       storeGroups: []
+  },
+  
      fetching: false,
      fetchCart: async () => {
           try {
@@ -35,7 +43,7 @@ export const useCartStore = create<CartStore>((set) => ({
           }
      },
      addToCart: async (variantId: number, quantity: number = 1) => {
-          const updatedCart = await cartService.addToCart(variantId, quantity);
+       const updatedCart = await cartService.addToCart(variantId, quantity);
           set({ cart: updatedCart });
      },
      buyAgain: async (buyAgainItems: BuyAgain[]) => {
@@ -54,6 +62,10 @@ export const useCartStore = create<CartStore>((set) => ({
      removeFromCart: async (variantId: number) => {
           const updatedCart = await cartService.removeFromCart(variantId);
           set({ cart: updatedCart });
+  },
+  applyDiscount: async (code: string, storeGroupId: number) => {
+       const updatedCart = await cartService.applyDiscountCode(code, storeGroupId);
+       set({ cart: updatedCart });
      },
      showLoginModal: false,
      isLoginModal: () =>
