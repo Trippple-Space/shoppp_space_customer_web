@@ -22,70 +22,90 @@ import DeliveryMessage from "@/modules/lib/components/delivery-in-lagos/Delivery
 import { paths } from "@/modules/lib/utility/paths";
 import AddressModal from "@/modules/lib/components/address-modal/AddressModal";
 import OrderSummary from "@/modules/lib/components/order-summary/OrderSummary";
+import Input from "@/modules/lib/components/input/Input";
+import Button from "@/modules/lib/components/button/Button";
+import { CartItem } from "@/modules/lib/utility/types/cart.interface";
 
 const CheckoutPage = () => {
   const [selectedDeliveryOption, setSelectedDeliveryOption] =
     useState<keyof typeof deliveryOptions>("standard");
   const { user } = useUserStore();
-  const { cart, removeFromCart } = useCart();
+  const { cart, removeFromCart, applyDiscount } = useCart();
   const { openAddressModal, selectedAddress } = useAddress();
   const router = useRouter()
   const { fetchAddresses } = useAddressStore()
   const { loading: isPaymentLoading, payWithPaystack } = usePayment();
   const canProceedToPayment = !(!isPaymentLoading && selectedAddress && user);
   const selectedDeliveryOptionDetails = deliveryOptions[selectedDeliveryOption];
-  const [cartItemsByStore, setcartItemsByStore] = useState<any[]>([]);
   const [devOptions, setDevOptions] = useState<string>();
   const [showSummary, setshowSummary] = useState(true);
   const [devAddressError, setDevAddressError] = useState(false)
 
+  const [allCartItems, setAllCartItems] = 
+  useState({
+    ...cart,
+    storeGroups: cart.storeGroups.map((group) => {
+      return {
+        ...group,
+        visible: true,
+      }
+    }),
+     
+    visible: true,
+
+  })
+
+  useEffect(() => { 
+    const updatedCart = {
+      ...cart,
+      storeGroups: cart.storeGroups.map((group) => {
+        return {
+          ...group,
+          visible: true,
+        
+                
+        }
+      }),
+      visible: true,
+      showDiscountInput: false,
+      
+    }
+    setAllCartItems(updatedCart)
+  }, [cart]);
+  
+
   const setStoreAccordion = (i: number) => {
-    setcartItemsByStore((prevCartItems) =>
-      prevCartItems.map((item, index) =>
-        index === i
-          ? { ...item, visible: !item.visible }
-          : item
-      )
-    );
+    setAllCartItems((prevItems) => ({
+      ...prevItems,
+      storeGroups: prevItems.storeGroups.map((group, index) => { 
+        if(index === i) {
+          return {
+            ...group,
+            visible: !group.visible,
+          }
+        }
+        return group;
+      })
+    }))
   }
 
-  const getCartItemsByStore = () => {
-    const cartItems = cart.cartItems;
-    const stores: any[] = [];
-    if (cartItems.length !== 0) {
-      cartItems.forEach((item) => {
-        if (!stores.includes(item.variant.product?.store?.name)) {
-          stores.push(item.variant.product?.store?.name);
-        }
-      });
+  // const di
 
-      const storeCartItems: any[] = [];
-
-      stores.forEach((store) => {
-        const storeName = store;
-        const storeItems = cartItems.filter(
-          (item) => item.variant.product?.store?.name === storeName
-        );
-        const storeObject: { [key: string]: any } = {};
-        storeObject.name = storeName;
-        storeObject.visible = true;
-        storeObject.items = storeItems;
-
-        storeCartItems.push(storeObject);
-      });
-      setcartItemsByStore(storeCartItems);
-    }
-  };
-
+ 
   useEffect(() => {
-    getCartItemsByStore();
     if (user) {
       fetchAddresses(user?.id)
       if (cart.cartItems.length === 0) {
         router.push(paths.homepage)
       }
     }
+
+
   }, [cart]);
+
+  console.log({cart})
+
+
 
   useEffect(() => {
     const checkScreenWidth = () => {
@@ -96,7 +116,18 @@ const CheckoutPage = () => {
     return () => window.removeEventListener("resize", checkScreenWidth);
   }, []);
 
-  console.log(cart)
+
+
+ 
+
+
+
+
+   const isValidDiscount = (cartItem: CartItem) => {
+      if (cartItem?.variant?.product?.discount?.activeEndDate) {
+        return new Date().setHours(0, 0, 0, 0) <= new Date(cartItem?.variant?.product?.discount?.activeEndDate).setHours(0, 0, 0, 0)
+      }
+    }
 
 
   return (<>
@@ -120,6 +151,7 @@ const CheckoutPage = () => {
               <h2 className="color-#000000E0 md:text-20 text-16 weight-600 line-height-24">
                 Delivery address
               </h2>
+        
 
               <div className="flex l:flex-row md:flex-col sm:flex-row flex-col l:space-between md:j-content-start sm:space-between l:a-items-center md:a-items-start sm:a-items-center l:gap-0 md:gap-16 sm:gap-0 gap-16">
                 {selectedAddress && (
@@ -138,6 +170,7 @@ const CheckoutPage = () => {
                     )}
                   </div>
                 )}
+
                 <p
                   className="text-16 line-height-24 weight-500 color-#1677FF underline pointer w-fit"
                   onClick={() => { openAddressModal(); setDevAddressError(false) }}
@@ -151,21 +184,23 @@ const CheckoutPage = () => {
             }
           </div>
 
+                 
           {devOptions === "smaller" && <DeliveryOptions selectedDeliveryOption={selectedDeliveryOption} setSelectedDeliveryOption={setSelectedDeliveryOption} />}
           <div className="flex flex-col gap-14">
-            {cartItemsByStore?.map((store, i: number) => (
+            {allCartItems.storeGroups?.map((store, i: number) => (
               <div className="flex flex-col gap-16" key={i}>
-                <div className="flex space-between a-items-center">
+                 
+                {store.items.length > 0 && <div className="flex space-between a-items-center">
                   <h6 className="text-14 weight-400 line-height-22 color-#00000099 pointer" onClick={() => { setStoreAccordion(i) }}>
-                    {store?.name}
+                    {store?.store.name}
                   </h6>
                   {store.visible ? (
                     <PiCaretDown className="w-18 h-18 pointer" onClick={() => setStoreAccordion(i)} />
                   ) : (
                     <PiCaretUp className="w-18 h-18 pointer" onClick={() => setStoreAccordion(i)} />
                   )}
-                </div>
-                {store.items.map((cartItem: any, j: number) => (
+                </div>}
+                {store.items.length > 0 && store.items.map((cartItem: any, j: number) => (
                   <div
                     className={`gap-12 ${store.visible ? "flex" : "hidden"}`}
                     key={j}
@@ -190,9 +225,21 @@ const CheckoutPage = () => {
                       </p>
                     </div>
                     <div className="flex flex-col gap-10 a-items-end">
-                      <h3 className="weight-600 text-16 line-height-24">
-                        {formatNumberAsPrice(cartItem?.totalPrice)}
-                      </h3>
+                    <div className="flex a-items-center gap-8">
+                                               <p className={`weight-600 md:text-20 sm:text-16 text-14 md:line-height-28 sm:line-height-24 line-height-22 ${cartItem.variant.status === 'OUT_OF_STOCK' ? 'color-#00000099' : ''}`}>
+                                                 {
+                                                   isValidDiscount(cartItem) ?
+                                                     formatNumberAsPrice(store.items[i].quantity == 1 ? store.items[i].variant.discountedPrice : store.items[i].discountedPrice) :
+                                                     formatNumberAsPrice(cartItem.totalPrice)
+                                                 }
+                                               </p>
+                                               {
+                                                 isValidDiscount(cartItem) &&
+                                                 <p className={`weight-400 md:text-16 sm:text-12 text-10 md:line-height-24 sm:line-height-20 line-height-18 line-through color-#00000099  ${cartItem.variant.status === 'OUT_OF_STOCK' ? 'color-#00000099' : ''}`}>
+                                                   {formatNumberAsPrice(cartItem.totalPrice)}
+                                                 </p>
+                                               }
+                                             </div>
                       <p
                         className="weight-400 text-14 line-height-22 text-danger underline pointer"
                         onClick={() => removeFromCart(cartItem?.id)}
@@ -202,9 +249,11 @@ const CheckoutPage = () => {
                     </div>
                   </div>
                 ))}
+                   
               </div>
             ))}
           </div>
+     
         </div>
 
         <div className="relative bg-#F5F5F5 l:w-45.8p md:w-50p">
@@ -217,9 +266,13 @@ const CheckoutPage = () => {
               <div className={`${showSummary ? 'block' : 'md:block hidden'}`}>
                 <OrderSummary
                   subTotal={cart.subTotal}
-                  extraSavings={cart.total - cart.subTotal}
+                  discount={cart.totalDiscountValue}
                   shippingFee={selectedDeliveryOptionDetails.price}
-                  total={cart.total + selectedDeliveryOptionDetails.price}
+                  total={
+                  
+                    cart.totalDiscountedPrice != 0 ? cart.totalDiscountedPrice + selectedDeliveryOptionDetails.price
+                      : cart.total + selectedDeliveryOptionDetails.price
+                  }
                 />
               </div>
               <div className="flex sm:flex-row flex-col sm:gap-0 gap-20 space-between a-items-center">

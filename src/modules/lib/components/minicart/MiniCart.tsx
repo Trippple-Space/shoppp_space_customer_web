@@ -47,6 +47,13 @@ const MiniCart: React.FC<ModalProps> = () => {
     }
   }
 
+
+
+  const isSub =  cart.cartItems.filter(item => isValidDiscount(item)).reduce((acc, item) => acc + item.discountedPrice, 0)
+ 
+
+console.log({cart})
+
   return (
     <div className='w-fit'>
       <Modal
@@ -144,7 +151,8 @@ const MiniCart: React.FC<ModalProps> = () => {
                             <p className={`weight-600 md:text-20 sm:text-16 text-14 md:line-height-28 sm:line-height-24 line-height-22 ${cartItem.variant.status === 'OUT_OF_STOCK' ? 'color-#00000099' : ''}`}>
                               {
                                 isValidDiscount(cartItem) ?
-                                  formatNumberAsPrice(cartItem.variant.discountedPrice)
+                                  // JSON.stringify(cartItem.discountedPrice)
+                                  formatNumberAsPrice(cartItem.discountedPrice)
                                   :
                                   formatNumberAsPrice(cartItem.totalPrice)
                               }
@@ -196,15 +204,24 @@ const MiniCart: React.FC<ModalProps> = () => {
                 )}
               </div>
 
+
+              
+
               {!!cart.cartItems.length && (
                 <div className='border-t border-#00000014 flex flex-col p-24 gap-16 absolute b-0 left-0 w-full bg-white g|box-shadow:0px|_|-2px|_|4px|_|#494F5E1F;'>
                   <div className='flex flex-col gap-6'>
                     <p className='py-12 flex a-items-center space-between text-16 line-height-24'>
                       <span className='weight-400'>Subtotal</span>
                       <span className='weight-500'>
-                        {formatNumberAsPrice(cart?.cartItems
+                        {formatNumberAsPrice(cart.totalDiscountedPrice)}
+                        {/* {formatNumberAsPrice(cart?.cartItems
                           .filter(item => item.variant.status !== 'OUT_OF_STOCK')
-                          .reduce((acc, item) => acc + item.totalPrice, 0))}
+                          .reduce((acc, item) => acc + item.totalPrice, 0))} */}
+                        {
+   
+                     }
+                        
+
                       </span>
                     </p>
                     <p className='weight-400 text-14 line-height-22 color-#00000099'>
