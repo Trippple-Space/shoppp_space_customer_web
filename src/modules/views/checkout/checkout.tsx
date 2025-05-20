@@ -40,6 +40,7 @@ const CheckoutPage = () => {
   const [devOptions, setDevOptions] = useState<string>();
   const [showSummary, setshowSummary] = useState(true);
   const [devAddressError, setDevAddressError] = useState(false)
+
   const [allCartItems, setAllCartItems] = 
   useState({
     ...cart,
@@ -47,13 +48,11 @@ const CheckoutPage = () => {
       return {
         ...group,
         visible: true,
-        showDiscountInput: false,
-        input: ''
       }
     }),
-            input: '',
+     
     visible: true,
-        showDiscountInput: false,
+
   })
 
   useEffect(() => { 
@@ -63,13 +62,13 @@ const CheckoutPage = () => {
         return {
           ...group,
           visible: true,
-          showDiscountInput: false,
-                      input: ''
+        
+                
         }
       }),
       visible: true,
       showDiscountInput: false,
-              input: ''
+      
     }
     setAllCartItems(updatedCart)
   }, [cart]);
@@ -104,6 +103,8 @@ const CheckoutPage = () => {
 
   }, [cart]);
 
+  console.log({cart})
+
 
 
   useEffect(() => {
@@ -117,26 +118,10 @@ const CheckoutPage = () => {
 
 
 
-  const handleApplyDiscount = (code: string, storeGroupId:number) => {
-    applyDiscount(code, storeGroupId);
-    // console.log("Apply discount code:", code, storeGroupId);
-  }
+ 
 
 
-  const handleInputChange = (storeGroupId: number, value: string) => {
-    setAllCartItems((prevItems) => ({
-      ...prevItems,
-      storeGroups: prevItems.storeGroups.map((group) => {
-if(group.id === storeGroupId) {
-          return {
-            ...group,
-            input: value,
-          };
-        }
-        return group;
-      })
-    }))
-  }
+
 
    const isValidDiscount = (cartItem: CartItem) => {
       if (cartItem?.variant?.product?.discount?.activeEndDate) {
@@ -166,6 +151,7 @@ if(group.id === storeGroupId) {
               <h2 className="color-#000000E0 md:text-20 text-16 weight-600 line-height-24">
                 Delivery address
               </h2>
+        
 
               <div className="flex l:flex-row md:flex-col sm:flex-row flex-col l:space-between md:j-content-start sm:space-between l:a-items-center md:a-items-start sm:a-items-center l:gap-0 md:gap-16 sm:gap-0 gap-16">
                 {selectedAddress && (
@@ -198,7 +184,7 @@ if(group.id === storeGroupId) {
             }
           </div>
 
-          
+                 
           {devOptions === "smaller" && <DeliveryOptions selectedDeliveryOption={selectedDeliveryOption} setSelectedDeliveryOption={setSelectedDeliveryOption} />}
           <div className="flex flex-col gap-14">
             {allCartItems.storeGroups?.map((store, i: number) => (
@@ -243,9 +229,8 @@ if(group.id === storeGroupId) {
                                                <p className={`weight-600 md:text-20 sm:text-16 text-14 md:line-height-28 sm:line-height-24 line-height-22 ${cartItem.variant.status === 'OUT_OF_STOCK' ? 'color-#00000099' : ''}`}>
                                                  {
                                                    isValidDiscount(cartItem) ?
-                                                     formatNumberAsPrice(cart.total) :
+                                                     formatNumberAsPrice(store.items[i].quantity == 1 ? store.items[i].variant.discountedPrice : store.items[i].discountedPrice) :
                                                      formatNumberAsPrice(cartItem.totalPrice)
-                                        
                                                  }
                                                </p>
                                                {
@@ -264,24 +249,7 @@ if(group.id === storeGroupId) {
                     </div>
                   </div>
                 ))}
-                    <div className="flex gap-8 j-content-end a-items-end">
-                  <Input placeholder="Enter discount code"
-                    inputClass={"h-15"}
-                    className=""
-              value={store.input}
-              handleChange={(e: React.ChangeEvent<HTMLInputElement>) => handleInputChange(store.id,e.target.value)}
-              
-            />
-            <div className=""
-              onClick={ () => 
-                handleApplyDiscount(store.input, store.id)
-               }
-            
-            >
-
-            <Button className="l:py-9">Apply</Button>
-            </div>
-          </div>
+                   
               </div>
             ))}
           </div>
@@ -298,10 +266,13 @@ if(group.id === storeGroupId) {
               <div className={`${showSummary ? 'block' : 'md:block hidden'}`}>
                 <OrderSummary
                   subTotal={cart.subTotal}
-                  extraSavings={cart.total - cart.subTotal}
+                  discount={cart.totalDiscountValue}
                   shippingFee={selectedDeliveryOptionDetails.price}
-                  slashedPrice={cart.totalDiscountedPrice}
-                  total={cart.total + selectedDeliveryOptionDetails.price}
+                  total={
+                  
+                    cart.totalDiscountedPrice != 0 ? cart.totalDiscountedPrice + selectedDeliveryOptionDetails.price
+                      : cart.total + selectedDeliveryOptionDetails.price
+                  }
                 />
               </div>
               <div className="flex sm:flex-row flex-col sm:gap-0 gap-20 space-between a-items-center">

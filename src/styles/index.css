@@ -502,6 +502,8 @@
 .my-7 { margin-top: 7px; margin-bottom: 7px; } 
 .bg-yellow { background-color: #FACE33; } 
 .pt-56 { padding-top: 56px; } 
+.py-17 { padding-top: 17px; padding-bottom: 17px; } 
+@layer lo { .\@lo\:px-10 { padding-left: 10px; padding-right: 10px; } } 
 .t-10 { top: 10px; } 
 .border-b-\#00000026 { border-bottom-color: #00000026; } 
 .radius-t-r-8 { border-top-right-radius: 8px;  } 
@@ -585,7 +587,6 @@
 .min-w-0 { min-width: 0px; } 
 .bg-grey-200 { background-color: #F5F3F1; } 
 .px-27 { padding-left: 27px; padding-right: 27px; } 
-.py-17 { padding-top: 17px; padding-bottom: 17px; } 
 @layer base {.radius-30 { border-radius: 30px; } } 
 .t-10p { top: 10%; } 
 .l--10 { left: -10px; } 
@@ -1007,6 +1008,7 @@
 @media only screen and (min-width: 768px) { .md\:text-28 { font-size: 28px; } } 
 @media only screen and (min-width: 768px) { .md\:mx-60 { margin-left: 60px; margin-right: 60px; } } 
 @media only screen and (min-width: 768px) { .md\:hidden {    display: none;  } } 
+@media only screen and (min-width: 768px) { .md\:gap-15 { gap: 15px; } } 
 @media only screen and (min-width: 768px) { .md\:pb-0 { padding-bottom: 0px; } } 
 @media only screen and (min-width: 768px) { .md\:pt-0 { padding-top: 0px; } } 
 @media only screen and (min-width: 768px) { .md\:border-b-0 { border-bottom-width: 0px; } } 
@@ -1212,6 +1214,7 @@
 @media only screen and (min-width: 992px) { .l\:mb-0 { margin-bottom: 0px; } } 
 @media only screen and (min-width: 992px) { [class~='l:g|grid-template-columns:auto|_|1fr|_|auto']{grid-template-columns:auto 1fr auto} } 
 @media only screen and (min-width: 992px) { .l\:gap-40 { gap: 40px; } } 
+@media only screen and (min-width: 992px) { .l\:py-9 { padding-top: 9px; padding-bottom: 9px; } } 
 @media only screen and (min-width: 992px) { .l\:w-60p { width: 60%; } } 
 @media only screen and (min-width: 992px) { .l\:grid {    display: grid;  } } 
 @media only screen and (min-width: 992px) { .l\:w-40p { width: 40%; } } 
@@ -1242,7 +1245,6 @@
 @media only screen and (min-width: 992px) { .l\:w-54\.2p { width: 54.2%; } } 
 @media only screen and (min-width: 992px) { .l\:pl-70 { padding-left: 70px; } } 
 @media only screen and (min-width: 992px) { .l\:pr-70 { padding-right: 70px; } } 
-@media only screen and (min-width: 992px) { .l\:py-9 { padding-top: 9px; padding-bottom: 9px; } } 
 @media only screen and (min-width: 992px) { .l\:w-45\.8p { width: 45.8%; } } 
 @media only screen and (min-width: 992px) { .l\:float-right {    float: right;  } } 
 @media only screen and (min-width: 992px) { .l\:t-150 { top: 150px; } } 

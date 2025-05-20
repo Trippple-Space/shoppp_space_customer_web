@@ -207,11 +207,9 @@ buyAgain(buyAgainItems: BuyAgain[]): Promise<Cart> {
           });
      }
   
-  applyDiscountCode(code: string, storeGroupId: number): Promise<Cart> {
+  applyDiscountCode(code: string): Promise<Cart> {
     return new Promise((resolve, reject) => {
-      http.post(`${endpoints.CART}/apply-discount`, { 
-        
-        "storeGroupId": storeGroupId,
+      http.post(`${endpoints.CART}/apply-discount`, {
         "discountCode": code        
       })
             .then((response) => {

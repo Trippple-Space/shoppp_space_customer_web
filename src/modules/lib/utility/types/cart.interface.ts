@@ -19,9 +19,15 @@ export interface Cart {
 export interface CartItem {
     id: number,
     productId: string,
-    quantity: number,
-    variant: ProductVariant,
-    totalPrice: number
+quantity: number;
+variant: ProductVariant;
+totalPrice: number;
+discountedPrice: number;
+dateCreated: string;
+discountValue: number;
+lastUpdated: string;
+meta: any | null;
+  
 }
 
 export interface BuyAgain {
@@ -35,7 +41,6 @@ export interface StoreGroupResponse {
   storeTotal: number;
   storeDiscountedTotal: number;
   storeDiscountValue: number;
-  
   discountCode: string | null;
   meta: any | null;
   dateCreated: string;
