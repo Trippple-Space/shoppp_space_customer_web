@@ -14,6 +14,7 @@ type CartStore = {
      isLoginModal: () => void;
   showLoginModal: boolean;
      applyDiscount: (code: string) => void;
+     applyingCode: boolean
 };
 
 export const useCartStore = create<CartStore>((set) => ({
@@ -65,9 +66,15 @@ export const useCartStore = create<CartStore>((set) => ({
           const updatedCart = await cartService.removeFromCart(variantId);
           set({ cart: updatedCart });
   },
+  applyingCode: false,
   applyDiscount: async (code: string) => {
-       const updatedCart = await cartService.applyDiscountCode(code);
-       set({ cart: updatedCart });
+       try {
+          set({applyingCode: true})
+          const updatedCart = await cartService.applyDiscountCode(code);
+          set({ cart: updatedCart, applyingCode: false });
+       } catch (error) {
+          set({applyingCode: false})
+       }
      },
      showLoginModal: false,
      isLoginModal: () =>

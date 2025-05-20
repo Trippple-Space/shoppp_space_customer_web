@@ -17,7 +17,8 @@ export const useCart = () => {
           decrementCartItem,
           isLoginModal,
        showLoginModal,
-       applyDiscount
+       applyDiscount,
+       applyingCode
      } = useCartStore();
      const { isAuthenticated } = useUserStore();
 
@@ -56,6 +57,7 @@ export const useCart = () => {
        fetching,
        fetchCart,
           applyDiscount,
+          applyingCode,
           isAuthenticated,
           isLoginModal,
        showLoginModal,

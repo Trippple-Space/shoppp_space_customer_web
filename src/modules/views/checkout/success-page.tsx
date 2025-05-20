@@ -9,6 +9,7 @@ import Link from "next/link";
 const SuccessMessage = () => {
   const { orders } = useOrders({});
   const order = orders?.slice(-1)[0];
+  console.log(order)
 
   return (
     <>

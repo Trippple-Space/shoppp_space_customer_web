@@ -6,13 +6,14 @@ interface IButton {
     className?: string,
     children: ReactNode,
     type?: 'submit' | 'reset' | 'button'
+    disabled?: boolean
 }
 
-const Button: FC<IButton> = ({children, size = 'medium', theme = 'primary', className, type}) => {
+const Button: FC<IButton> = ({children, size = 'medium', theme = 'primary', className, type, disabled}) => {
   return (
-    (<button type={type} className={`bg-green text-white py-10 l:py-15 px-20 w-fit radius-5 border-none
+    (<button disabled={disabled} type={type} className={`bg-green text-white py-10 l:py-15 px-20 w-fit radius-5 border-none
                     hover:pointer text-13 l:text-14 font-inter 
-                hover:bg-darkgreen g|transition:0.5s disabled:bg-grey ${className}`}>
+                hover:bg-darkgreen g|transition:0.5s disabled:bg-grey disabled:cursor-not-allowed ${className}`}>
       {children}
     </button>)
   );
