@@ -140,7 +140,7 @@ const MiniCart: React.FC<ModalProps> = () => {
                           {<RxCross2 className="w-fit cursor-pointer color-red" onClick={() => removeFromCart(cartItem.id)} />}
                         </div>
                         <div className='px-12 pb-12 flex space-between a-items-center'>
-                          <div className="flex a-items-center gap-8">
+                          <div className="flex md:a-items-center md:gap-8 md:flex-row flex-col">
                             <p className={`weight-600 md:text-20 sm:text-16 text-14 md:line-height-28 sm:line-height-24 line-height-22 ${cartItem.variant.status === 'OUT_OF_STOCK' ? 'color-#00000099' : ''}`}>
                               {
                                 isValidDiscount(cartItem) ?

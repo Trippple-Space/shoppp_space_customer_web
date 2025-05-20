@@ -997,6 +997,9 @@
 @media only screen and (min-width: 768px) { .md\:text-16 { font-size: 16px; } } 
 @media only screen and (min-width: 768px) { .md\:line-height-24 { line-height: 24px; } } 
 @media only screen and (min-width: 768px) { .md\:py-26 { padding-top: 26px; padding-bottom: 26px; } } 
+@media only screen and (min-width: 768px) { .md\:a-items-center { align-items: center; } } 
+@media only screen and (min-width: 768px) { .md\:gap-8 { gap: 8px; } } 
+@media only screen and (min-width: 768px) { .md\:flex-row {    flex-direction: row;  } } 
 @media only screen and (min-width: 768px) { .md\:bg-transparent\! { background-color: transparent !important; } } 
 @media only screen and (min-width: 768px) { .z-index-1, .md\:z-1 { z-index: 1; } } 
 @media only screen and (min-width: 768px) { .md\:j-content-center { justify-content: center; } } 
@@ -1017,9 +1020,6 @@
 @media only screen and (min-width: 768px) { .md\:h-16 { height: 16px; } } 
 @media only screen and (min-width: 768px) { .md\:text-12 { font-size: 12px; } } 
 @media only screen and (min-width: 768px) { .md\:line-height-20 { line-height: 20px; } } 
-@media only screen and (min-width: 768px) { .md\:gap-8 { gap: 8px; } } 
-@media only screen and (min-width: 768px) { .md\:a-items-center { align-items: center; } } 
-@media only screen and (min-width: 768px) { .md\:flex-row {    flex-direction: row;  } } 
 @media only screen and (min-width: 768px) { @layer base {.md\:radius-4 { border-radius: 4px; } } } 
 @media only screen and (min-width: 768px) { .md\:block {    display: block;  } } 
 @media only screen and (min-width: 768px) { .md\:opacity-0 { opacity: 0%; } } 

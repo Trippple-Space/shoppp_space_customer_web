@@ -154,8 +154,6 @@ const ProductDetails = ({ product }: { product: Product }) => {
   const isOutOfStock = selectedVariant?.status === 'OUT_OF_STOCK';
   const isDiscounted = new Date().setHours(0, 0, 0, 0) <= new Date(product?.discount?.activeEndDate).setHours(0, 0, 0, 0)
 
-  console.log(product)
-
   const addToCartBtn = () => {
     return <div className='flex flex-col gap-16'>
       <p className='text-24 weight-600'>{formatNumberAsPrice(selectedVariant.price)}</p>
