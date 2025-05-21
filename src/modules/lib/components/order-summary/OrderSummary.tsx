@@ -5,6 +5,7 @@ import Input from '../input/Input'
 import Button from '../button/Button'
 import { useCart } from '../../utility/hooks/use-cart'
 import { toast } from 'sonner'
+import { AiOutlineTag } from 'react-icons/ai'
 interface IOrderSummary {
   subTotal: number
   discount?: number
@@ -52,20 +53,6 @@ const OrderSummary: FC<IOrderSummary> = ({
           </div>
         </div>
 
-        {!!discount && (
-          <div className='flex space-between'>
-            <div className=''>Discount</div>
-            <div className=''>-{formatNumberAsPrice(discount)}</div>
-          </div>
-        )}
-
-        {!!shippingFee && (
-          <div className='flex space-between'>
-            <div className=''>Delivery fee</div>
-            <div className=''>{formatNumberAsPrice(shippingFee)}</div>
-          </div>
-        )}
-
         <div className='flex space-between'>
           <div className=''>Promo Code</div>
           <div className='color-#1677FF underline pointer' onClick={() =>
@@ -75,36 +62,66 @@ const OrderSummary: FC<IOrderSummary> = ({
             {showDisCountInput ? "Close" : "Enter code"}
           </div>
         </div>
-      </div>
 
-      {
-        showDisCountInput && (
-          <>
+        {
+          showDisCountInput && (
+            <>
 
-            <div className="flex gap-8 a-items-center w-full">
-              <input placeholder="Enter discount code"
-                className="h-41 block font-inter px-10 w-full flex flex-col a-items-center pb-4
+              <div className="flex gap-8 a-items-center w-full">
+                <input placeholder="Enter discount code"
+                  className="h-41 block font-inter px-10 w-full flex flex-col a-items-center pb-4
             @lo:border-solid @lo:border-1 @lo:border-grey-300 @lo:weight-400 @lo:outline-none
             @lo:placeholder:text-grey-400 @lo:radius-6
             @lo:focus:border-green @lo:placeholder:text-12 flex-grow-1"
 
-                value={discountCode}
-                onChange={(e: React.ChangeEvent<HTMLInputElement>) => setDiscountCode(e.target.value)}
+                  value={discountCode}
+                  onChange={(e: React.ChangeEvent<HTMLInputElement>) => setDiscountCode(e.target.value)}
 
-              />
-              <div className=""
-                onClick={() =>
-                  handleApplyDiscount(discountCode)
-                }
-              >
-                <Button disabled={applyingCode} className="flex flex-col j-content-center a-items-center h-40">{applyingCode ? "Processing..." : "Apply"}</Button>
+                />
+                <div className=""
+                  onClick={() =>
+                    handleApplyDiscount(discountCode)
+                  }
+                >
+                  <Button disabled={applyingCode || discountCode.length <= 4} className="flex flex-col j-content-center a-items-center h-40">{applyingCode ? "Processing..." : "Apply"}</Button>
+                </div>
+              </div>
+
+            </>
+          )
+        }
+
+        {!!discount && (
+          <div className=''>
+            <div>
+              <div className=''>Discounts</div>
+              <div className='flex flex-col gap-3'>
+                <div className='flex space-between a-items-center text-15'>
+                  <p className='py-3 flex gap-3 a-items-center color-#00000099'>
+                    <AiOutlineTag className='w-16 h-16' />
+                    <span className=''>WERUYU10</span>
+                  </p>
+                  <p>-N{900}</p>
+                </div>
+                <div className='flex space-between a-items-center text-15'>
+                  <p className='py-3 flex gap-3 a-items-center color-#00000099'>
+                    <AiOutlineTag className='w-16 h-16' />
+                    <span className=''>WERUYU10</span>
+                  </p>
+                  <p>-N{900}</p>
+                </div>
               </div>
             </div>
+          </div>
+        )}
 
-          </>
-        )
-      }
-
+        {!!shippingFee && (
+          <div className='flex space-between'>
+            <div className=''>Delivery fee</div>
+            <div className=''>{formatNumberAsPrice(shippingFee)}</div>
+          </div>
+        )}
+      </div>
 
       {!!total && (
         <div className='flex space-between border-t md:border-b-0 border-b border-grey-300 sm:text-20 text-18 sm:line-height-28 line-height-24 weight-600 md:pt-24 pt-20 md:pb-0 pb-20'>

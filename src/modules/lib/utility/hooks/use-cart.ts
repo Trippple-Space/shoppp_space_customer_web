@@ -18,6 +18,7 @@ export const useCart = () => {
           isLoginModal,
        showLoginModal,
        applyDiscount,
+       removeDiscountCode,
        applyingCode
      } = useCartStore();
      const { isAuthenticated } = useUserStore();
@@ -58,6 +59,7 @@ export const useCart = () => {
        fetchCart,
           applyDiscount,
           applyingCode,
+          removeDiscountCode,
           isAuthenticated,
           isLoginModal,
        showLoginModal,

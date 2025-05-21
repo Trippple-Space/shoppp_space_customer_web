@@ -12,8 +12,9 @@ type CartStore = {
      decrementCartItem: (variantId: number, quantity: number) => void;
      removeFromCart: (variantId: number) => void;
      isLoginModal: () => void;
-  showLoginModal: boolean;
+     showLoginModal: boolean;
      applyDiscount: (code: string) => void;
+     removeDiscountCode: () => void;
      applyingCode: boolean
 };
 
@@ -66,14 +67,21 @@ export const useCartStore = create<CartStore>((set) => ({
           const updatedCart = await cartService.removeFromCart(variantId);
           set({ cart: updatedCart });
   },
-  applyingCode: false,
-  applyDiscount: async (code: string) => {
+     applyingCode: false,
+     applyDiscount: async (code: string) => {
+          try {
+               set({applyingCode: true})
+               const updatedCart = await cartService.applyDiscountCode(code);
+               set({ cart: updatedCart, applyingCode: false });
+          } catch (error) {
+               set({applyingCode: false})
+          }
+          },
+     removeDiscountCode: async () => {
        try {
-          set({applyingCode: true})
-          const updatedCart = await cartService.applyDiscountCode(code);
-          set({ cart: updatedCart, applyingCode: false });
+          await cartService.removeDiscountCodes()
        } catch (error) {
-          set({applyingCode: false})
+          console.log(error)
        }
      },
      showLoginModal: false,

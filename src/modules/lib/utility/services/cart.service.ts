@@ -242,6 +242,14 @@ buyAgain(buyAgainItems: BuyAgain[]): Promise<Cart> {
             });
     });
    }
+
+   removeDiscountCodes() {
+    return new Promise((resolve, reject) => {
+        http.post(`${endpoints.CART}/remove-discount`).then((response) => {
+            console.log(response.data)
+        })
+    })
+   }
   
 }
 

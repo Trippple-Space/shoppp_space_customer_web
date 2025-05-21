@@ -506,6 +506,7 @@
 .h-41 { height: 41px; } 
 .pb-4 { padding-bottom: 4px; } 
 @layer lo { @layer base {.\@lo\:radius-6 { border-radius: 6px; } } } 
+.py-3 { padding-top: 3px; padding-bottom: 3px; } 
 .a-items-start { align-items: flex-start; } 
 .object-fit-cover { object-fit: cover; } 
 .color-\#0000008C { color: #0000008C; } 
@@ -572,7 +573,6 @@
 .w-0 { width: 0px; } 
 .border-rgba\(245\,245\,245\,0\.9\) { border-color: rgba(245,245,245,0.9); } 
 .font-oblique {font-style: oblique; } 
-.py-3 { padding-top: 3px; padding-bottom: 3px; } 
 .b--18 { bottom: -18px; } 
 .bg-rgba\(245\,245\,245\,0\.9\) { background-color: rgba(245,245,245,0.9); } 
 .active\:bg-\#e8b915\!:active { background-color: #e8b915 !important; } 
