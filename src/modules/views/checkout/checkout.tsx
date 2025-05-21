@@ -273,7 +273,7 @@ const CheckoutPage = () => {
                 />
               </div>
               <div className="flex sm:flex-row flex-col sm:gap-0 gap-20 space-between a-items-center">
-                <div className={`absolute t-0 sm:w-fit w-full sm:px-0 px-24 bg-#F5F5F5 pt-12 md:hidden block ${showSummary ? 'sm:b-10 sm:t-80p pt-24' : 'sm:t-10'}`}>
+                <div className={`absolute t-0 sm:w-fit w-full sm:px-0 px-24 bg-#F5F5F5 pt-12 md:hidden block ${showSummary ? 'sm:b-20 sm:g|top:auto pt-22' : 'sm:t-10'}`}>
                   <p className={`md:hidden flex gap-12 a-items-center color-#00000099 sm:w-fit w-full space-between pointer ${showSummary && 'border-b border-b-#00000014 sm:border-b-#F5F5F5 pb-20 sm:pb-0'}`} onClick={() => setshowSummary(!showSummary)}>
                     <span className="text-16 weight-400 line-height-24">
                       {showSummary ? 'Hide payment summary' : 'Show payment summary'}

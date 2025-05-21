@@ -5,7 +5,7 @@ import Input from '../input/Input'
 import Button from '../button/Button'
 import { useCart } from '../../utility/hooks/use-cart'
 import { toast } from 'sonner'
-import { AiOutlineTag } from 'react-icons/ai'
+import { AiOutlineMinus, AiOutlineTag } from 'react-icons/ai'
 interface IOrderSummary {
   subTotal: number
   discount?: number
@@ -39,7 +39,7 @@ const OrderSummary: FC<IOrderSummary> = ({
     <div className='w-full flex flex-col md:gap-15 gap-20 md:pb-0 pb-12 md:pt-0 sm:pt-12 pt-56'>
 
       <div className='flex flex-col gap-16 text-16 line-height-24 weight-400 color-#000000E0'>
-        <div className='flex space-between'>
+        <div className='flex space-between sm:pt-0 pt-16'>
           <div className=''>Subtotal</div>
           <div className="flex a-items-center gap-8">
 
@@ -101,14 +101,14 @@ const OrderSummary: FC<IOrderSummary> = ({
                     <AiOutlineTag className='w-16 h-16' />
                     <span className=''>WERUYU10</span>
                   </p>
-                  <p>-N{900}</p>
+                  <p><AiOutlineMinus className='w-9 h-9' /> N{900}</p>
                 </div>
                 <div className='flex space-between a-items-center text-15'>
                   <p className='py-3 flex gap-3 a-items-center color-#00000099'>
                     <AiOutlineTag className='w-16 h-16' />
                     <span className=''>WERUYU10</span>
                   </p>
-                  <p>-N{900}</p>
+                  <p><AiOutlineMinus className='w-9 h-9' /> N{900}</p>
                 </div>
               </div>
             </div>
