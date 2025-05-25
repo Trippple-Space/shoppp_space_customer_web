@@ -5,20 +5,21 @@ import Input from '../input/Input'
 import Button from '../button/Button'
 import { useCart } from '../../utility/hooks/use-cart'
 import { toast } from 'sonner'
-import { AiOutlineMinus, AiOutlineTag } from 'react-icons/ai'
+import { AiOutlineTag } from 'react-icons/ai'
+import { Cart } from '../../utility/types/cart.interface'
 interface IOrderSummary {
   subTotal: number
-  discount?: number
   shippingFee?: number
   total: any
   slashedPrice?: number
+  cart: Cart
 }
 
 const OrderSummary: FC<IOrderSummary> = ({
   subTotal,
-  discount,
   shippingFee,
-  total
+  total,
+  cart
 }) => {
 
 
@@ -27,13 +28,18 @@ const OrderSummary: FC<IOrderSummary> = ({
   const [showDisCountInput, setShowDisCountInput] = React.useState(false)
   const [discountCode, setDiscountCode] = useState<string>("");
 
+  const orderDiscount = cart.systemDiscountCode || cart.storeGroups.find((store) => store.discountCode !== null)
+
   const handleApplyDiscount = (code: string) => {
     if (code.length <= 4) {
       toast.error("Invalid promo code")
     } else {
-      applyDiscount(code);
+      applyDiscount(code)
+      setDiscountCode("")
     }
   }
+
+  console.log(discountCode)
 
   return (
     <div className='w-full flex flex-col md:gap-15 gap-20 md:pb-0 pb-12 md:pt-0 sm:pt-12 pt-56'>
@@ -91,25 +97,33 @@ const OrderSummary: FC<IOrderSummary> = ({
           )
         }
 
-        {!!discount && (
+        {orderDiscount && (
           <div className=''>
             <div>
               <div className=''>Discounts</div>
               <div className='flex flex-col gap-3'>
-                <div className='flex space-between a-items-center text-15'>
-                  <p className='py-3 flex gap-3 a-items-center color-#00000099'>
-                    <AiOutlineTag className='w-16 h-16' />
-                    <span className=''>WERUYU10</span>
-                  </p>
-                  <p><AiOutlineMinus className='w-9 h-9' /> N{900}</p>
-                </div>
-                <div className='flex space-between a-items-center text-15'>
-                  <p className='py-3 flex gap-3 a-items-center color-#00000099'>
-                    <AiOutlineTag className='w-16 h-16' />
-                    <span className=''>WERUYU10</span>
-                  </p>
-                  <p><AiOutlineMinus className='w-9 h-9' /> N{900}</p>
-                </div>
+                {
+                  cart.storeGroups.map((store) => (
+                    store.discountCode &&
+                    <div key={store.id} className='flex space-between a-items-center text-15'>
+                      <p className='py-3 flex gap-3 a-items-center color-#00000099'>
+                        <AiOutlineTag className='w-16 h-16' />
+                        <span className=''>{store.discountCode}</span>
+                      </p>
+                      <p>- {formatNumberAsPrice(store.storeDiscountValue)}</p>
+                    </div>
+                  ))
+                }
+                {
+                  cart.systemDiscountCode &&
+                  <div className='flex space-between a-items-center text-15'>
+                    <p className='py-3 flex gap-3 a-items-center color-#00000099'>
+                      <AiOutlineTag className='w-16 h-16' />
+                      <span className=''>{cart.systemDiscountCode}</span>
+                    </p>
+                    <p>- {formatNumberAsPrice(cart.systemDiscountValue)}</p>
+                  </div>
+                }
               </div>
             </div>
           </div>

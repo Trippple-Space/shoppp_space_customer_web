@@ -14,6 +14,8 @@ export interface Cart {
   dateCreated: string;
   lastUpdated: string;
   storeGroups: StoreGroupResponse[];  
+  systemDiscountCode: string;
+  systemDiscountValue: number
 }
 
 export interface CartItem {

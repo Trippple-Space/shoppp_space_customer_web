@@ -244,7 +244,7 @@ buyAgain(buyAgainItems: BuyAgain[]): Promise<Cart> {
    }
 
    removeDiscountCodes() {
-    return new Promise((resolve, reject) => {
+    return new Promise(() => {
         http.post(`${endpoints.CART}/remove-discount`).then((response) => {
             console.log(response.data)
         })

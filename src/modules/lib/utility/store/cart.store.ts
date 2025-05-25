@@ -20,19 +20,21 @@ type CartStore = {
 
 export const useCartStore = create<CartStore>((set) => ({
      cart: {
-       cartItems: [],
-       id: 0,
-       userId: 0,
-       subTotal: 0,
-       total: 0,
-       totalDiscountedPrice: 0,
-       totalDiscountValue: 0,
-       meta: undefined,
-       dateCreated: "",
-       lastUpdated: "",
-       storeGroups: [],
-       discountValue: 0,
-       discountedPrice: 0
+          cartItems: [],
+          id: 0,
+          userId: 0,
+          subTotal: 0,
+          total: 0,
+          totalDiscountedPrice: 0,
+          totalDiscountValue: 0,
+          meta: undefined,
+          dateCreated: "",
+          lastUpdated: "",
+          storeGroups: [],
+          discountValue: 0,
+          discountedPrice: 0,
+          systemDiscountCode: "",
+          systemDiscountValue: 0
      },
   
      fetching: false,

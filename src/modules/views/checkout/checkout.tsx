@@ -263,13 +263,9 @@ const CheckoutPage = () => {
               <div className={`${showSummary ? 'block' : 'md:block hidden'}`}>
                 <OrderSummary
                   subTotal={cart.subTotal}
-                  discount={cart.totalDiscountValue}
                   shippingFee={selectedDeliveryOptionDetails.price}
-                  total={
-
-                    cart.totalDiscountedPrice != 0 ? cart.totalDiscountedPrice + selectedDeliveryOptionDetails.price
-                      : cart.total + selectedDeliveryOptionDetails.price
-                  }
+                  total={cart.total + selectedDeliveryOptionDetails.price}
+                  cart={cart}
                 />
               </div>
               <div className="flex sm:flex-row flex-col sm:gap-0 gap-20 space-between a-items-center">

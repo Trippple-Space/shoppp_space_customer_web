@@ -509,8 +509,6 @@
 .pb-4 { padding-bottom: 4px; } 
 @layer lo { @layer base {.\@lo\:radius-6 { border-radius: 6px; } } } 
 .py-3 { padding-top: 3px; padding-bottom: 3px; } 
-.w-9 { width: 9px; } 
-.h-9 { height: 9px; } 
 .a-items-start { align-items: flex-start; } 
 .object-fit-cover { object-fit: cover; } 
 .color-\#0000008C { color: #0000008C; } 
