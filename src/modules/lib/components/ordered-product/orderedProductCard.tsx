@@ -1,12 +1,13 @@
-import { formatNumberAsPrice } from '@/modules/lib/utility/utility'
+import { formatNumberAsPrice, getCartItems } from '@/modules/lib/utility/utility'
 import React from 'react'
 import Image from '../image/Image'
 
 function orderedProductCard ({ orderedProducts }: any) {
+  const cartItems = getCartItems(orderedProducts?.cart.storeGroups)
   return (
     <>
       <div className='flex flex-col gap-10'>
-        {orderedProducts?.cart.cartItems.map((item: any) => (
+        {cartItems.map((item: any) => (
           <>
             <div className='bg-whitesmoke radius-5 p-10 l:flex space-between a-items-start'>
               <div className='flex gap-10 l:w-60p w-90p'>

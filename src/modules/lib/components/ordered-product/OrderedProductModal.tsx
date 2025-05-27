@@ -1,4 +1,4 @@
-import { ellipseText, formatNumberAsPrice } from '@/modules/lib/utility/utility'
+import { ellipseText, formatNumberAsPrice, getCartItems } from '@/modules/lib/utility/utility'
 import { IoMdClose } from 'react-icons/io'
 import Image from '../image/Image'
 import { PiArrowClockwise } from 'react-icons/pi'
@@ -24,6 +24,8 @@ const OrderedProductModal = ({
   const handleTextClick = (id: number) => {
     setExpandedId(prevId => (prevId === id ? null : id))
   }
+
+  const cartItems = getCartItems(order?.cart.storeGroups || [])
 
   const buyOrdersAgain = async (cartItems: CartItem[]) => {
     const buyAgainItems: BuyAgain[] = []
@@ -77,7 +79,7 @@ const OrderedProductModal = ({
                 <p className='text-14 weight-500'>#{order.id}</p>
                 <button
                   className='flex gap-10 a-items-center px-10 py-7 radius-5 border border-#00000026 bg-none cursor-pointer weight-500'
-                  onClick={() => buyOrdersAgain(order.cart.cartItems)}
+                  onClick={() => buyOrdersAgain(cartItems)}
                 >
                   <PiArrowClockwise className='w-fit' />
                   Buy again
@@ -87,8 +89,8 @@ const OrderedProductModal = ({
                 className={classNames(
                   'px-25 overflow-auto j-content-center no-scrollbar mb-20 mt-20',
                   {
-                    'l:h-33vh': order.cart.cartItems.length > 2,
-                    'h-250': order.cart.cartItems.length > 2
+                    'l:h-33vh': cartItems.length > 2,
+                    'h-250': cartItems.length > 2
                   }
                 )}
                 key={order.id}
@@ -98,7 +100,7 @@ const OrderedProductModal = ({
                     'flex flex-col gap-10 overflow-auto j-content-center no-scrollbar'
                   )}
                 >
-                  {order.cart.cartItems.map((item: CartItem, i) => (
+                  {cartItems.map((item: CartItem, i) => (
 
                     <div
 

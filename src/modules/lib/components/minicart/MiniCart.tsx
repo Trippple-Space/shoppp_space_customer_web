@@ -6,7 +6,7 @@ import {
   formatNumberAsPrice,
 } from "@/modules/lib/utility/utility";
 import { useRouter } from "next/navigation";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { paths } from "../../utility/paths";
 import { CartItem } from "../../utility/types/cart.interface";
 import {
@@ -25,14 +25,17 @@ interface ModalProps { }
 const MiniCart: React.FC<ModalProps> = () => {
   const [open, setOpen] = useState(false)
 
-  const { cart, increment, decrement, removeFromCart } = useCart();
+  const { cart, increment, decrement, removeFromCart, removeDiscountCode, fetchCart, fetching } = useCart();
 
   const router = useRouter()
 
   const { signOut } = useNavbarView();
   const { isAuthenticated } = useUserStore();
 
-
+  useEffect(() => {
+    removeDiscountCode()
+    fetchCart()
+  }, [open])
 
   const checkoutCart = () => {
     cart.cartItems
@@ -40,19 +43,12 @@ const MiniCart: React.FC<ModalProps> = () => {
       .forEach(item => removeFromCart(item.id))
     router.push(paths.checkout)
   }
-  
+
   const isValidDiscount = (cartItem: CartItem) => {
     if (cartItem?.variant?.product?.discount?.activeEndDate) {
       return new Date().setHours(0, 0, 0, 0) <= new Date(cartItem?.variant?.product?.discount?.activeEndDate).setHours(0, 0, 0, 0)
     }
   }
-
-
-
-  const isSub =  cart.cartItems.filter(item => isValidDiscount(item)).reduce((acc, item) => acc + item.discountedPrice, 0)
- 
-
-console.log({cart})
 
   return (
     <div className='w-fit'>
@@ -205,22 +201,27 @@ console.log({cart})
               </div>
 
 
-              
+
 
               {!!cart.cartItems.length && (
                 <div className='border-t border-#00000014 flex flex-col p-24 gap-16 absolute b-0 left-0 w-full bg-white g|box-shadow:0px|_|-2px|_|4px|_|#494F5E1F;'>
                   <div className='flex flex-col gap-6'>
                     <p className='py-12 flex a-items-center space-between text-16 line-height-24'>
                       <span className='weight-400'>Subtotal</span>
-                      <span className='weight-500'>
-                        {formatNumberAsPrice(cart.totalDiscountedPrice)}
+                      <span className='weight-500' key={cart.id}>
+                        {
+                          fetching ?
+                            <div className="bg-#00000014 w-100 h-30 radius-6 animate-pulse"></div>
+                            :
+                            formatNumberAsPrice(cart.totalDiscountedPrice)
+                        }
                         {/* {formatNumberAsPrice(cart?.cartItems
                           .filter(item => item.variant.status !== 'OUT_OF_STOCK')
                           .reduce((acc, item) => acc + item.totalPrice, 0))} */}
                         {
-   
-                     }
-                        
+
+                        }
+
 
                       </span>
                     </p>

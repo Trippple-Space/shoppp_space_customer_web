@@ -2,13 +2,16 @@ import React from 'react'
 import Image from '../image/Image'
 import Button from '../button/Button'
 import { Order } from '../../utility/types/order.interface'
+import { getCartItems } from '../../utility/utility'
 
 const OrderCard = ({ order }: { order: Order }) => {
+  const cartItems = getCartItems(order?.cart?.storeGroups)
+
   return (
     <div className="grid items-center g|grid-template-columns:1fr|_|auto l:g|grid-template-columns:auto|_|1fr|_|auto gap-15 l:gap-40">
       
       {
-          order?.cart?.cartItems?.map(item => (
+          cartItems?.map(item => (
             <>
               <div className="">
                 <Image

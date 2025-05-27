@@ -360,6 +360,7 @@
 .p-6 { padding: 6px; } 
 .line-height-19\.36 { line-height: 19.36px; } 
 [class~='g|box-shadow:0px|_|-2px|_|4px|_|#494F5E1F;']{box-shadow:0px -2px 4px #494F5E1F;} 
+.bg-\#00000014 { background-color: #00000014; } 
 .w-70 { width: 70px; } 
 .px-5 { padding-left: 5px; padding-right: 5px; } 
 .color-white { color: white; } 
@@ -425,7 +426,6 @@
 .py-6 { padding-top: 6px; padding-bottom: 6px; } 
 [class~='g|transition:0.4s;']{transition:0.4s;} 
 @layer base {.radius-999 { border-radius: 999px; } } 
-.bg-\#00000014 { background-color: #00000014; } 
 .hover\:bg-\#00000014:hover { background-color: #00000014; } 
 .hover\:bg-\#FACE33:hover { background-color: #FACE33; } 
 .color-\#6A6A6A { color: #6A6A6A; } 

@@ -22,15 +22,13 @@ import DeliveryMessage from "@/modules/lib/components/delivery-in-lagos/Delivery
 import { paths } from "@/modules/lib/utility/paths";
 import AddressModal from "@/modules/lib/components/address-modal/AddressModal";
 import OrderSummary from "@/modules/lib/components/order-summary/OrderSummary";
-import Input from "@/modules/lib/components/input/Input";
-import Button from "@/modules/lib/components/button/Button";
 import { CartItem } from "@/modules/lib/utility/types/cart.interface";
 
 const CheckoutPage = () => {
   const [selectedDeliveryOption, setSelectedDeliveryOption] =
     useState<keyof typeof deliveryOptions>("standard");
   const { user } = useUserStore();
-  const { cart, removeFromCart, applyDiscount } = useCart();
+  const { cart, removeFromCart, removeDiscountCode, fetchCart } = useCart();
   const { openAddressModal, selectedAddress } = useAddress();
   const router = useRouter()
   const { fetchAddresses } = useAddressStore()
@@ -100,9 +98,7 @@ const CheckoutPage = () => {
 
   }, [cart]);
 
-  console.log({ cart })
-
-
+  console.log(cart)
 
   useEffect(() => {
     const checkScreenWidth = () => {
@@ -113,12 +109,10 @@ const CheckoutPage = () => {
     return () => window.removeEventListener("resize", checkScreenWidth);
   }, []);
 
-
-
-
-
-
-
+  useEffect(() => {
+    removeDiscountCode()
+    fetchCart()
+  }, [])
 
   const isValidDiscount = (cartItem: CartItem) => {
     if (cartItem?.variant?.product?.discount?.activeEndDate) {

@@ -1,4 +1,5 @@
 import classNames from "classnames";
+import { StoreGroupResponse } from "./types/cart.interface";
 
 export type ImageSrcFolder = "icons" | "logos" | "images";
 export const getImageDir = (folder: ImageSrcFolder, object: string) => {
@@ -215,8 +216,8 @@ export function formatTime(timestamp: string): string {
   return `${hours}:${minutesStr}${ampm}`;
 }
 
-export const getStoreNames = (cartItems: any) => {
-  const storeNames = cartItems?.map((item: any) => item.variant?.product?.store?.name)
+export const getStoreNames = (storeGroups: StoreGroupResponse[]) => {
+  const storeNames = storeGroups?.map((stores: any) => stores?.store?.name)
     .filter(Boolean)
     .reduce((uniqueNames: any, name: any) => {
       if (!uniqueNames.includes(name)) {
@@ -234,6 +235,12 @@ export const getStoreNames = (cartItems: any) => {
 
   return storeNames?.join(", ");
 };
+
+export const getCartItems = (storeGroups: StoreGroupResponse[]) => {
+  const cartItems = storeGroups.flatMap((group: StoreGroupResponse) => group.items) || []
+
+  return cartItems
+}
 
 export const preventCopyPaste = (e: ClipboardEvent) => {
   e.preventDefault();

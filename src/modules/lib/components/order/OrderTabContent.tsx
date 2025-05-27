@@ -24,6 +24,8 @@ const OrderTabContent = ({ status }: OrderTabContentProps) => {
     order
   )
 
+  console.log(orders)
+
   if (fetching) {
     return (
       <div className='relative w-100p h-250'>

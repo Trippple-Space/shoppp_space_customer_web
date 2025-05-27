@@ -3,6 +3,7 @@ import {
   formatDate,
   formatNumberAsPrice,
   formatTime,
+  getCartItems,
   getStatusText,
   getStoreNames,
   onGoingOrderStatus
@@ -28,18 +29,17 @@ const OrderProgressCard = ({ orders }: OrderProgressProp) => {
     setOrderedProduct(order)
   }
 
-
   const currentStatusIndex = (order: Order) => onGoingOrderStatus.indexOf(
-      order.status.toUpperCase()
-    )
-
-
+    order.status.toUpperCase()
+  )
 
   return (
     <>
       {orders.map(order => {
         const statusIndex = currentStatusIndex(order)
         const isOngoing = order.status !== 'CANCELLED' && order.status !== 'DELIVERED' && order.status !== 'RETURNED'
+        const cartItems = getCartItems(order?.cart?.storeGroups)
+
         return (
         <div key={order.id}>
           <div className='bg-white'>
@@ -50,7 +50,7 @@ const OrderProgressCard = ({ orders }: OrderProgressProp) => {
                     <p className='color-#00000099 weight-400 text-12 overflow-hidden text-ellipsis l:overflow font-inter'>
                       Order from:{' '}
                       <span className='text-14 weight-500 color-#000000E0 '>
-                        {getStoreNames(order?.cart?.cartItems)}
+                        {getStoreNames(order?.cart?.storeGroups)}
                       </span>
                     </p>
                   </div>
@@ -71,11 +71,11 @@ const OrderProgressCard = ({ orders }: OrderProgressProp) => {
                 </div>
                 <div
                   className={classNames('flex a-items-center space-between', {
-                    'ml-45': order.cart?.cartItems?.length > 4,
-                    'ml-80': order.cart?.cartItems?.length === 4,
-                    'ml-70': order.cart?.cartItems?.length === 3,
-                    'ml-55': order.cart?.cartItems?.length === 2,
-                    'ml-40': order.cart?.cartItems?.length === 1
+                    'ml-45': cartItems?.length > 4,
+                    'ml-80': cartItems?.length === 4,
+                    'ml-70': cartItems?.length === 3,
+                    'ml-55': cartItems?.length === 2,
+                    'ml-40': cartItems?.length === 1
                   })}
                   >
                     
