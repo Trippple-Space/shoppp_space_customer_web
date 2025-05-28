@@ -98,8 +98,6 @@ const CheckoutPage = () => {
 
   }, [cart]);
 
-  console.log(cart)
-
   useEffect(() => {
     const checkScreenWidth = () => {
       setDevOptions(window.innerWidth >= 768 ? "larger" : "smaller");
