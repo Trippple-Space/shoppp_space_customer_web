@@ -120,7 +120,6 @@ const CheckoutPage = () => {
     }
   }
 
-
   return (<>
     <HomepageNavBar parent={"checkout"} />
     <div className="md:pt-69.6 pt-64 sm:mb-60 mb-111 h-full">

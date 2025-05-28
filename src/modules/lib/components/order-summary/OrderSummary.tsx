@@ -6,7 +6,7 @@ import Button from '../button/Button'
 import { useCart } from '../../utility/hooks/use-cart'
 import { toast } from 'sonner'
 import { AiOutlineTag } from 'react-icons/ai'
-import { Cart } from '../../utility/types/cart.interface'
+import { Cart, StoreGroupResponse } from '../../utility/types/cart.interface'
 interface IOrderSummary {
   subTotal: number
   shippingFee?: number
@@ -29,6 +29,21 @@ const OrderSummary: FC<IOrderSummary> = ({
   const [discountCode, setDiscountCode] = useState<string>("");
 
   const orderDiscount = cart.systemDiscountCode || cart.storeGroups.find((store) => store.discountCode !== null)
+  const totalProductDiscounts = () => {
+    let total = 0
+    cart.cartItems.forEach(item => {
+      total += item.discountValue
+    });
+    return total
+  }
+
+  const getStoreProductsDiscounts = (store: StoreGroupResponse) => {
+    let total = 0
+    store.items.forEach(item => {
+      total += item.discountValue
+    });
+    return total
+  }
 
   const handleApplyDiscount = (code: string) => {
     if (code.length <= 4) {
@@ -38,8 +53,6 @@ const OrderSummary: FC<IOrderSummary> = ({
       setDiscountCode("")
     }
   }
-
-  console.log(discountCode)
 
   return (
     <div className='w-full flex flex-col md:gap-15 gap-20 md:pb-0 pb-12 md:pt-0 sm:pt-12 pt-56'>
@@ -52,7 +65,7 @@ const OrderSummary: FC<IOrderSummary> = ({
             {
 
               <p className={`weight-400`}>
-                {formatNumberAsPrice(subTotal)}
+                {formatNumberAsPrice(subTotal - totalProductDiscounts())}
               </p>
             }
 
@@ -110,7 +123,7 @@ const OrderSummary: FC<IOrderSummary> = ({
                         <AiOutlineTag className='w-16 h-16' />
                         <span className=''>{store.discountCode}</span>
                       </p>
-                      <p>- {formatNumberAsPrice(store.storeDiscountValue)}</p>
+                      <p>- {formatNumberAsPrice(store.storeDiscountValue - getStoreProductsDiscounts(store))}</p>
                     </div>
                   ))
                 }
