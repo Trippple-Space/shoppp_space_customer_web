@@ -41,7 +41,7 @@ const DeliveryOptions: FC<IDeliveryOptions> = ({
                       : "color-#000000E0 bg-#F5F5F5"
                       }`}
                   >
-                    {typeof (option.price) === 'string' ? option.price : formatNumberAsPrice(option.price)}
+                    {option.price === 0 ? 'Free' : formatNumberAsPrice(option.price)}
                   </p>
                 </div>
               }

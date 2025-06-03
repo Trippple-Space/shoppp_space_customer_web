@@ -255,7 +255,7 @@ const CheckoutPage = () => {
                 <OrderSummary
                   subTotal={cart.subTotal}
                   shippingFee={selectedDeliveryOptionDetails.price}
-                  total={typeof (selectedDeliveryOptionDetails.price) === 'string' ? cart.total : cart.total + selectedDeliveryOptionDetails.price}
+                  total={cart.total + selectedDeliveryOptionDetails.price}
                   cart={cart}
                 />
               </div>
@@ -274,7 +274,7 @@ const CheckoutPage = () => {
                   {
                     !showSummary && <span className="md:hidden sm:block hidden sm:weight-600 weight-700 sm:text-16 text-14 sm:line-height-22 line-height-19">
                       {formatNumberAsPrice(
-                        typeof (selectedDeliveryOptionDetails.price) === 'string' ? cart.total : cart.total + selectedDeliveryOptionDetails.price
+                        cart.total + selectedDeliveryOptionDetails.price
                       )}
                     </span>
                   }
@@ -298,7 +298,7 @@ const CheckoutPage = () => {
                         !showSummary && <span className="sm:hidden weight-700">
                           (
                           {formatNumberAsPrice(
-                            typeof (selectedDeliveryOptionDetails.price) === 'string' ? cart.total : cart.total + selectedDeliveryOptionDetails.price
+                            cart.total + selectedDeliveryOptionDetails.price
                           )}
                           )
                         </span>

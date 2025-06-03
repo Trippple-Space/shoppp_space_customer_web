@@ -15,6 +15,6 @@ export const deliveryOptions = {
         title: 'Pick Up',
         description: 'Pick up in stores close to you',
         etaInDays: '',
-        price: 'Free'
+        price: 0
     }
 }
