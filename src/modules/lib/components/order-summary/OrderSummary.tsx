@@ -9,7 +9,7 @@ import { AiOutlineTag } from 'react-icons/ai'
 import { Cart, StoreGroupResponse } from '../../utility/types/cart.interface'
 interface IOrderSummary {
   subTotal: number
-  shippingFee?: number
+  shippingFee?: number | string
   total: any
   slashedPrice?: number
   cart: Cart
@@ -145,7 +145,7 @@ const OrderSummary: FC<IOrderSummary> = ({
         {!!shippingFee && (
           <div className='flex space-between'>
             <div className=''>Delivery fee</div>
-            <div className=''>{formatNumberAsPrice(shippingFee)}</div>
+            <div className=''>{typeof(shippingFee) === 'string' ? shippingFee : formatNumberAsPrice(shippingFee)}</div>
           </div>
         )}
       </div>

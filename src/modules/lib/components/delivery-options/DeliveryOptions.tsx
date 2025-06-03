@@ -1,4 +1,4 @@
-import React, { FC, useState } from "react";
+import React, { FC } from "react";
 import { deliveryOptions } from "@/modules/lib/utility/constants";
 import BoxRadio from "../box-radio/BoxRadio";
 import { formatNumberAsPrice } from "../../utility/utility";
@@ -41,7 +41,7 @@ const DeliveryOptions: FC<IDeliveryOptions> = ({
                       : "color-#000000E0 bg-#F5F5F5"
                       }`}
                   >
-                    {formatNumberAsPrice(option.price)}
+                    {typeof (option.price) === 'string' ? option.price : formatNumberAsPrice(option.price)}
                   </p>
                 </div>
               }
