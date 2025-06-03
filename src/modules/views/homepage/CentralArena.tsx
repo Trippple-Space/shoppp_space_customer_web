@@ -16,6 +16,8 @@ const CentralArena = () => {
   const [openReviewId, setOpenReviewId] = useState<number | null>(null);
   const renderedIds = new Set<number>();
 
+  console.log(products)
+
   return (
     <>
       <section className='md:mt-32 mt-24 w-100p mb-150 pb-90'>

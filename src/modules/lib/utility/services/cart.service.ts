@@ -5,9 +5,9 @@ import { BuyAgain, Cart, CartItem, StoreGroupResponse } from "../types/cart.inte
 import { toast } from "sonner";
 
 class CartService {
-     fetchCart(): Promise<Cart> {
+     fetchCart(isCheckout?: boolean): Promise<Cart> {
           return new Promise((resolve, reject) => {
-               http.get(endpoints.CART)
+               http.get(isCheckout ? endpoints.CHECKOUTCART : endpoints.CART)
                  .then((response: AxiosResponse) => {
                       
                    const cartData = response.data;
@@ -227,7 +227,7 @@ buyAgain(buyAgainItems: BuyAgain[]): Promise<Cart> {
                     })),
                 };
                 toast.success("Discount code applied successfully", { duration: 2000 });
-              this.fetchCart().then((updatedCartData) => {
+              this.fetchCart(true).then((updatedCartData) => {
                     resolve(updatedCartData);
                     resolve(combinedCart);
                 }).catch((error) => {

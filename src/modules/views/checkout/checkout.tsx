@@ -109,12 +109,12 @@ const CheckoutPage = () => {
 
   useEffect(() => {
     removeDiscountCode()
-    fetchCart()
+    fetchCart(true)
   }, [])
 
   const isValidDiscount = (cartItem: CartItem) => {
     if (cartItem?.variant?.product?.discount?.activeEndDate) {
-      return new Date().setHours(0, 0, 0, 0) <= new Date(cartItem?.variant?.product?.discount?.activeEndDate).setHours(0, 0, 0, 0)
+      return new Date(cartItem?.variant?.product?.discount?.activeStartDate) <= new Date(new Date().setHours(new Date().getHours() + 1)) && new Date(new Date().setHours(new Date().getHours() + 1)) <= new Date(cartItem?.variant?.product?.discount?.activeEndDate)
     }
   }
 

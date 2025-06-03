@@ -152,7 +152,7 @@ const ProductDetails = ({ product }: { product: Product }) => {
   }, [isAuthenticated]);
 
   const isOutOfStock = selectedVariant?.status === 'OUT_OF_STOCK';
-  const isDiscounted = new Date().setHours(0, 0, 0, 0) <= new Date(product?.discount?.activeEndDate).setHours(0, 0, 0, 0)
+  const isDiscounted = new Date() <= new Date(product?.discount?.activeEndDate)
 
   const addToCartBtn = () => {
     return <div className='flex flex-col gap-16'>

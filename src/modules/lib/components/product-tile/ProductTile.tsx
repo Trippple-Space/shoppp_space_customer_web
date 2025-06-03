@@ -115,7 +115,7 @@ const ProductTile: FC<IProductTile> = ({ product, savedVariants, saveVariant, re
   }, [isAuthenticated]);
 
   const isOutOfStock = selectedVariant?.status === 'OUT_OF_STOCK'
-  const isDiscounted = new Date().setHours(0, 0, 0, 0) <= new Date(product?.discount?.activeEndDate).setHours(0, 0, 0, 0)
+  const isDiscounted = new Date(product?.discount?.activeStartDate) <= new Date(new Date().setHours(new Date().getHours() + 1)) && new Date(new Date().setHours(new Date().getHours() + 1)) <= new Date(product?.discount?.activeEndDate)
   
   return (
     <div className='mt-30 l:mt-20 w-full overflow-hidden'>

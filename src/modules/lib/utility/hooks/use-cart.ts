@@ -5,7 +5,7 @@ import { useAuthGuard } from "./use-auth-guard";
 import useUserStore from "../store/user.store";
 import { toast } from "sonner";
 
-export const useCart = () => {
+export const useCart = (isCheckout?: boolean) => {
      const {
           cart,
           fetchCart,
@@ -43,7 +43,7 @@ export const useCart = () => {
 
      useEffect(() => {
           if (!cart.id && isAuthenticated && !fetching) {
-            fetchCart();
+            fetchCart(isCheckout);
             
           }
      },[isAuthenticated]);

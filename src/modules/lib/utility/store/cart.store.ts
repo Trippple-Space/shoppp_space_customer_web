@@ -5,7 +5,7 @@ import { BuyAgain, Cart, CartItem } from "../types/cart.interface";
 type CartStore = {
      cart: Cart;
      fetching: boolean;
-     fetchCart: () => void;
+     fetchCart: (isCheckout?: boolean) => void;
      addToCart: (variantId: number, quantity: number) => void;
      buyAgain: (buyAgainItems: BuyAgain[]) => void;
      incrementCartItem: (variantId: number, quantity: number) => void;
@@ -38,10 +38,10 @@ export const useCartStore = create<CartStore>((set) => ({
      },
   
      fetching: false,
-     fetchCart: async () => {
+     fetchCart: async (isCheckout?: boolean) => {
           try {
                set({ fetching: true });
-               const cartData = await cartService.fetchCart();
+               const cartData = await cartService.fetchCart(isCheckout);
                set({ cart: cartData, fetching: false });
           } catch (error) {
                set({ fetching: false });
