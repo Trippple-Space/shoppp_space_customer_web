@@ -23,6 +23,7 @@ import { paths } from "@/modules/lib/utility/paths";
 import AddressModal from "@/modules/lib/components/address-modal/AddressModal";
 import OrderSummary from "@/modules/lib/components/order-summary/OrderSummary";
 import { CartItem } from "@/modules/lib/utility/types/cart.interface";
+import { useCalculatedeliveryFee } from "@/modules/lib/utility/hooks/use-calculate-deliveryFee";
 
 const CheckoutPage = () => {
   const [selectedDeliveryOption, setSelectedDeliveryOption] =
@@ -33,6 +34,7 @@ const CheckoutPage = () => {
   const router = useRouter()
   const { fetchAddresses } = useAddressStore()
   const { loading: isPaymentLoading, payWithPaystack } = usePayment();
+  const { loading: calculatingFee, deliveryFeeResponse, calculateFee } = useCalculatedeliveryFee()
   const canProceedToPayment = !(!isPaymentLoading && selectedAddress && user);
   const selectedDeliveryOptionDetails = deliveryOptions[selectedDeliveryOption];
   const [devOptions, setDevOptions] = useState<string>();
@@ -112,11 +114,26 @@ const CheckoutPage = () => {
     fetchCart(true)
   }, [])
 
+  useEffect(() => {
+    if (selectedAddress) {
+      console.log({
+        addressId: selectedAddress.id,
+        deliveryType: selectedDeliveryOption
+      })
+      calculateFee({
+        addressId: selectedAddress.id,
+        deliveryType: selectedDeliveryOption
+      })
+    }
+  }, [selectedAddress])
+
   const isValidDiscount = (cartItem: CartItem) => {
     if (cartItem?.variant?.product?.discount?.activeEndDate) {
       return new Date(cartItem?.variant?.product?.discount?.activeStartDate) <= new Date(new Date().setHours(new Date().getHours() + 1)) && new Date(new Date().setHours(new Date().getHours() + 1)) <= new Date(cartItem?.variant?.product?.discount?.activeEndDate)
     }
   }
+
+  console.log(selectedAddress)
 
   return (<>
     <HomepageNavBar parent={"checkout"} />
