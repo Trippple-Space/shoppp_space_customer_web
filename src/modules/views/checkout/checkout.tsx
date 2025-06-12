@@ -14,7 +14,6 @@ import {
   displayStockUnit,
   formatNumberAsPrice,
 } from "@/modules/lib/utility/utility";
-import { deliveryOptions } from "@/modules/lib/utility/constants";
 import { PiCaretDown, PiCaretUp } from "react-icons/pi";
 import Link from "next/link";
 import DeliveryOptions from "@/modules/lib/components/delivery-options/DeliveryOptions";
@@ -25,7 +24,29 @@ import OrderSummary from "@/modules/lib/components/order-summary/OrderSummary";
 import { CartItem } from "@/modules/lib/utility/types/cart.interface";
 import { useCalculatedeliveryFee } from "@/modules/lib/utility/hooks/use-calculate-deliveryFee";
 
+type DeliveryOptionKey = 'standard' | 'express';
+
 const CheckoutPage = () => {
+  const [deliveryOptions, setDeliveryOptions] = useState({
+    standard: {
+      title: 'Standard Delivery',
+      description: 'Arrives in 3 days',
+      etaInDays: 3,
+      price: 2500
+    },
+    express: {
+      title: 'Same Day Delivery',
+      description: 'Arrives within 24 hours',
+      etaInDays: 1,
+      price: 6500
+    },
+    pickup: {
+      title: 'Pick Up',
+      description: 'Pick up in stores close to you',
+      etaInDays: '',
+      price: 0
+    }
+  })
   const [selectedDeliveryOption, setSelectedDeliveryOption] =
     useState<keyof typeof deliveryOptions>("standard");
   const { user } = useUserStore();
@@ -34,8 +55,8 @@ const CheckoutPage = () => {
   const router = useRouter()
   const { fetchAddresses } = useAddressStore()
   const { loading: isPaymentLoading, payWithPaystack } = usePayment();
-  const { loading: calculatingFee, deliveryFeeResponse, calculateFee } = useCalculatedeliveryFee()
-  const canProceedToPayment = !(!isPaymentLoading && selectedAddress && user);
+  const { loading: calculatingFee, calculateFee } = useCalculatedeliveryFee()
+  const canProceedToPayment = !(!isPaymentLoading && selectedAddress && user && !calculatingFee);
   const selectedDeliveryOptionDetails = deliveryOptions[selectedDeliveryOption];
   const [devOptions, setDevOptions] = useState<string>();
   const [showSummary, setshowSummary] = useState(true);
@@ -116,10 +137,6 @@ const CheckoutPage = () => {
 
   useEffect(() => {
     if (selectedAddress) {
-      console.log({
-        addressId: selectedAddress.id,
-        deliveryType: selectedDeliveryOption
-      })
       calculateFee({
         addressId: selectedAddress.id,
         deliveryType: selectedDeliveryOption
@@ -127,13 +144,41 @@ const CheckoutPage = () => {
     }
   }, [selectedAddress])
 
+  useEffect(() => {
+    if (selectedAddress) {
+      const deliveryTypes: DeliveryOptionKey[] = ['standard', 'express'];
+
+      const updateFees = async () => {
+        const updatedOptions = { ...deliveryOptions };
+
+        for (const type of deliveryTypes) {
+          try {
+            const feeDetail = await calculateFee({
+              addressId: selectedAddress.id,
+              deliveryType: type,
+            });
+
+            updatedOptions[type] = {
+              ...updatedOptions[type],
+              price: feeDetail.fee,
+            };
+          } catch (error) {
+            console.error(`Failed to calculate fee for ${type}:`, error);
+          }
+        }
+
+        setDeliveryOptions(updatedOptions);
+      };
+
+      updateFees();
+    }
+  }, [selectedAddress]);
+
   const isValidDiscount = (cartItem: CartItem) => {
     if (cartItem?.variant?.product?.discount?.activeEndDate) {
       return new Date(cartItem?.variant?.product?.discount?.activeStartDate) <= new Date(new Date().setHours(new Date().getHours() + 1)) && new Date(new Date().setHours(new Date().getHours() + 1)) <= new Date(cartItem?.variant?.product?.discount?.activeEndDate)
     }
   }
-
-  console.log(selectedAddress)
 
   return (<>
     <HomepageNavBar parent={"checkout"} />
@@ -190,7 +235,7 @@ const CheckoutPage = () => {
           </div>
 
 
-          {devOptions === "smaller" && <DeliveryOptions selectedDeliveryOption={selectedDeliveryOption} setSelectedDeliveryOption={setSelectedDeliveryOption} />}
+          {devOptions === "smaller" && !calculatingFee && selectedAddress && <DeliveryOptions deliveryOptions={deliveryOptions} selectedDeliveryOption={selectedDeliveryOption} setSelectedDeliveryOption={setSelectedDeliveryOption} />}
           <div className="flex flex-col gap-14">
             {allCartItems.storeGroups?.map((store, i: number) => (
               <div className="flex flex-col gap-16" key={i}>
@@ -263,7 +308,7 @@ const CheckoutPage = () => {
 
         <div className="relative bg-#F5F5F5 l:w-45.8p md:w-50p max-w-661">
           <div className={`m:h-full overflow-auto no-scrollbar bg-#F5F5F5 md:pt-44 md:pb-85 xl:pl-80 l:pl-70 md:pl-40 xl:pr-80 l:pr-70 md:pr-60 flex flex-col gap-16 ${devOptions === 'smaller' ? 'fixed l-0 r-0 b-0 z-4' : ''}`}>
-            {devOptions === "larger" && <DeliveryOptions selectedDeliveryOption={selectedDeliveryOption} setSelectedDeliveryOption={setSelectedDeliveryOption} />}
+            {devOptions === "larger" && !calculatingFee && selectedAddress && <DeliveryOptions deliveryOptions={deliveryOptions} selectedDeliveryOption={selectedDeliveryOption} setSelectedDeliveryOption={setSelectedDeliveryOption} />}
             <div className="md:py-20 py-12 md:px-24 sm:px-40 px-24 md:border border-t border-#00000014 md:bg-white bg-#F5F5F5 md:radius-8 flex flex-col sm:gap-24 gap-20">
               <h2 className="color-#000000E0 text-20 line-height-28 weight-600 md:block hidden">
                 Payment Summary
@@ -274,6 +319,7 @@ const CheckoutPage = () => {
                   shippingFee={selectedDeliveryOptionDetails.price}
                   total={cart.total + selectedDeliveryOptionDetails.price}
                   cart={cart}
+                  loading={calculatingFee || !selectedAddress}
                 />
               </div>
               <div className="flex sm:flex-row flex-col sm:gap-0 gap-20 space-between a-items-center">
@@ -307,7 +353,8 @@ const CheckoutPage = () => {
                       }
                     }
                     }
-                    className={`md:w-full sm:w-fit w-full border-none bg-#0B9378 m:flex text-white md:text-16 text-14 weight-500 md:line-height-22 line-height-19 md:px-24 px-16 py-12 radius-6 pointer l:float-right j-content-center ${!showSummary && 'sm:mt-0 mt-56'}`}
+                    disabled={canProceedToPayment}
+                    className={`md:w-full sm:w-fit w-full border-none m:flex text-white md:text-16 text-14 weight-500 md:line-height-22 line-height-19 md:px-24 px-16 py-12 radius-6 l:float-right j-content-center ${!showSummary && 'sm:mt-0 mt-56'} ${canProceedToPayment ? 'bg-#0b9378ed cursor-not-allowed' : 'bg-#0B9378 pointer'}`}
                   >
                     <span className="">
                       Proceed to payment{" "}

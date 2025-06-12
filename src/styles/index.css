@@ -227,6 +227,7 @@
 .p-5 { padding: 5px; } 
 .outline-none {    outline: none;  } 
 .border-grey-300 { border-color: #E4E1DF; } 
+.bg-\#e4e1df1a\! { background-color: #e4e1df1a !important; } 
 .hover\:border-grey-500:hover { border-color: #A39F9C; } 
 [class~='g|:has(:checked)|border-color:#0B9378!']:has(:checked){border-color:#0B9378!important} 
 .p-14 { padding: 14px; } 
@@ -639,6 +640,7 @@
 .z-index-4, .z-4 { z-index: 4; } 
 .pt-22 { padding-top: 22px; } 
 .mt-56 { margin-top: 56px; } 
+.bg-\#0b9378ed { background-color: #0b9378ed; } 
 .my-3 { margin-top: 3px; margin-bottom: 3px; } 
 .my-100 { margin-top: 100px; margin-bottom: 100px; } 
 .grid-7-cols-1fr { grid-template-columns: repeat(7, 1fr); } 

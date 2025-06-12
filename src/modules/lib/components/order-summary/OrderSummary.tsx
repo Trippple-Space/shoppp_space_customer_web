@@ -13,13 +13,15 @@ interface IOrderSummary {
   total: any
   slashedPrice?: number
   cart: Cart
+  loading: boolean
 }
 
 const OrderSummary: FC<IOrderSummary> = ({
   subTotal,
   shippingFee,
   total,
-  cart
+  cart,
+  loading
 }) => {
 
 
@@ -145,7 +147,12 @@ const OrderSummary: FC<IOrderSummary> = ({
         {shippingFee !== undefined && (
           <div className='flex space-between'>
             <div className=''>Delivery fee</div>
-            <div className=''>{shippingFee === 0 ? 'Free' : formatNumberAsPrice(shippingFee)}</div>
+            {
+              loading ?
+                <div className="bg-#00000014 w-70 h-24 radius-6 animate-pulse"></div>
+                :
+                <div className=''>{shippingFee === 0 ? 'Free' : formatNumberAsPrice(shippingFee)}</div>
+            }
           </div>
         )}
       </div>
@@ -154,9 +161,14 @@ const OrderSummary: FC<IOrderSummary> = ({
         <div className='flex space-between border-t md:border-b-0 border-b border-grey-300 sm:text-20 text-18 sm:line-height-28 line-height-24 weight-600 md:pt-24 pt-20 md:pb-0 pb-20'>
           <div className=''>Total</div>
           <div className="flex a-items-center gap-8">
-            <p className={`weight-600`}>
-              {formatNumberAsPrice(total)}
-            </p>
+            {
+              loading ?
+                <div className="bg-#00000014 w-100 h-30 radius-6 animate-pulse"></div>
+                :
+                <p className={`weight-600`}>
+                  {formatNumberAsPrice(total)}
+                </p>
+            }
           </div>
         </div>
 

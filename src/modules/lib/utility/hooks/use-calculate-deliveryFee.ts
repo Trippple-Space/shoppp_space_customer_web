@@ -3,7 +3,7 @@ import { IDeliveryDetails } from '../types/delivery.interface'
 import { deliveryService } from '../services/delivery.service'
 
 export const useCalculatedeliveryFee = () => {
-    const [loading, setLoading] = useState<boolean>(false)
+    const [loading, setLoading] = useState<boolean>(true)
     const [deliveryFeeResponse, setDeliveryFeeResponse] = useState<any>()
 
     const calculateFee = async (deliveryDetails: IDeliveryDetails) => {

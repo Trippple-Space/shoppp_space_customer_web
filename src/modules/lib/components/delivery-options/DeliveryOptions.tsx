@@ -1,16 +1,18 @@
 import React, { FC } from "react";
-import { deliveryOptions } from "@/modules/lib/utility/constants";
 import BoxRadio from "../box-radio/BoxRadio";
 import { formatNumberAsPrice } from "../../utility/utility";
+import { DeliveryOption } from "../../utility/types/delivery.interface";
 
 interface IDeliveryOptions {
   selectedDeliveryOption: any;
   setSelectedDeliveryOption: any
+  deliveryOptions: DeliveryOption
+
 }
 
 const DeliveryOptions: FC<IDeliveryOptions> = ({
-  selectedDeliveryOption, setSelectedDeliveryOption
-
+  selectedDeliveryOption, setSelectedDeliveryOption,
+  deliveryOptions
 }) => {
 
   return (
@@ -35,17 +37,21 @@ const DeliveryOptions: FC<IDeliveryOptions> = ({
                       {option.description}
                     </p>
                   </div>
-                  <p
-                    className={`w-fit text-right px-10 py-2 h-fit radius-4 text-12 weight-400 line-height-20 ${selectedDeliveryOption === key
-                      ? "color-#0B9378 bg-#007B5D1F"
-                      : "color-#000000E0 bg-#F5F5F5"
-                      }`}
-                  >
-                    {option.price === 0 ? 'Free' : formatNumberAsPrice(option.price)}
-                  </p>
+                  {
+                    option.price !== null &&
+                    <p
+                      className={`w-fit text-right px-10 py-2 h-fit radius-4 text-12 weight-400 line-height-20 ${selectedDeliveryOption === key
+                        ? "color-#0B9378 bg-#007B5D1F"
+                        : "color-#000000E0 bg-#F5F5F5"
+                        }`}
+                    >
+                      {option.price === 0 ? 'Free' : formatNumberAsPrice(option.price)}
+                    </p>
+                  }
                 </div>
               }
               checked={selectedDeliveryOption === key}
+              disabled={option.price === null}
               onChange={() =>
                 setSelectedDeliveryOption(key as keyof typeof deliveryOptions)
               }

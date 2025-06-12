@@ -8,6 +8,7 @@ interface IBoxRadio {
   className?: string;
   checked?: boolean;
   onChange?: () => void;
+  disabled?: boolean
 }
 
 const BoxRadio: FC<IBoxRadio> = ({
@@ -18,10 +19,12 @@ const BoxRadio: FC<IBoxRadio> = ({
   className,
   checked,
   onChange,
+  disabled = false
 }) => {
+  
   return (
     (<label
-      className={`border-solid border-grey-300 g|transition:0.5s pointer hover:border-grey-500 g|:has(:checked)|border-color:#0B9378! ${className === "checkout" ? "p-14 l:g|border-width:2px! border-1 radius-8 w-full" : className === 'address' || className === 'filter' ? 'border-0 p-0 w-fit' : "border-1 py-25 px-16 radius-5 w-full"
+      className={`border-solid border-grey-300 g|transition:0.5s ${disabled ? 'not-allowed bg-#e4e1df1a!' : 'pointer hover:border-grey-500'} g|:has(:checked)|border-color:#0B9378! ${className === "checkout" ? "p-14 l:g|border-width:2px! border-1 radius-8 w-full" : className === 'address' || className === 'filter' ? 'border-0 p-0 w-fit' : "border-1 py-25 px-16 radius-5 w-full"
         }`}
     >
       <div className={`flex text-12 content-center ${className === 'checkout' ? 'gap-8 a-items-center' : className === 'filter' ? 'gap-12 items-center' : 'gap-16'}`}>
@@ -33,6 +36,7 @@ const BoxRadio: FC<IBoxRadio> = ({
           id={id || name}
           checked={checked}
           onChange={onChange}
+          disabled={disabled}
         />
         {
           className !== 'address' && <div className={`h-fit a-self-center w-full ${className === 'filter' ? 'weight-400 text-16 line-height-24' : ''}`}>{label}</div>
