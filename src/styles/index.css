@@ -199,6 +199,7 @@
 .border-\#6A6A6A4D { border-color: #6A6A6A4D; } 
 [class~='g|max-height:182px']{max-height:182px} 
 .px-12 { padding-left: 12px; padding-right: 12px; } 
+.j-items-center { justify-items: center; } 
 .hover\:bg-green:hover { background-color: #0B9378; } 
 .hover\:text-white:hover { color: #FFFFFF; } 
 [class~='g|transition:0.15s']{transition:0.15s} 
@@ -264,6 +265,7 @@
 .weight-700 { font-weight: 700; } 
 .gap-2 { gap: 2px; } 
 .capitalize {    text-transform: capitalize;  } 
+.w-50 { width: 50px; } 
 .color-\#0B9378 { color: #0B9378; } 
 .bg-\#007B5D1F { background-color: #007B5D1F; } 
 .color-\#000000E0 { color: #000000E0; } 
@@ -575,7 +577,6 @@
 .text-black\! { color: #000000 !important; } 
 .hover\:scale-1\.06:hover { scale: 1.06; } 
 [class~='g|will-change:transform']{will-change:transform} 
-.j-items-center { justify-items: center; } 
 .w-31 { width: 31px; } 
 .h-8 { height: 8px; } 
 .bg-lighter-grey { background-color: #D9D9D9; } 
@@ -615,7 +616,6 @@
 .h-60p { height: 60%; } 
 .h-80p { height: 80%; } 
 .j-content-start { justify-content: flex-start; } 
-.w-50 { width: 50px; } 
 .h-50 { height: 50px; } 
 .color-\#000000 { color: #000000; } 
 .bg-grey-300 { background-color: #E4E1DF; } 

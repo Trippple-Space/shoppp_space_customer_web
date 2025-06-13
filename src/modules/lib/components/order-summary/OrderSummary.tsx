@@ -147,12 +147,12 @@ const OrderSummary: FC<IOrderSummary> = ({
         {shippingFee !== undefined && (
           <div className='flex space-between'>
             <div className=''>Delivery fee</div>
-            {
+            <div className=''>{shippingFee === 0 ? <span>Free</span> :
               loading ?
                 <div className="bg-#00000014 w-70 h-24 radius-6 animate-pulse"></div>
                 :
-                <div className=''>{shippingFee === 0 ? 'Free' : formatNumberAsPrice(shippingFee)}</div>
-            }
+                <span>{formatNumberAsPrice(shippingFee)}</span>
+            }</div>
           </div>
         )}
       </div>

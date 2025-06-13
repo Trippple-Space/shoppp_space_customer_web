@@ -32,13 +32,13 @@ const CheckoutPage = () => {
       title: 'Standard Delivery',
       description: 'Arrives in 3 days',
       etaInDays: 3,
-      price: 2500
+      price: NaN
     },
     express: {
       title: 'Same Day Delivery',
       description: 'Arrives within 24 hours',
       etaInDays: 1,
-      price: 6500
+      price: NaN
     },
     pickup: {
       title: 'Pick Up',
@@ -55,7 +55,8 @@ const CheckoutPage = () => {
   const router = useRouter()
   const { fetchAddresses } = useAddressStore()
   const { loading: isPaymentLoading, payWithPaystack } = usePayment();
-  const { loading: calculatingFee, calculateFee } = useCalculatedeliveryFee()
+  const { calculateFee } = useCalculatedeliveryFee()
+  const [calculatingFee, setCalculatingFee] = useState<boolean>(true)
   const canProceedToPayment = !(!isPaymentLoading && selectedAddress && user && !calculatingFee);
   const selectedDeliveryOptionDetails = deliveryOptions[selectedDeliveryOption];
   const [devOptions, setDevOptions] = useState<string>();
@@ -151,6 +152,7 @@ const CheckoutPage = () => {
       const updateFees = async () => {
         const updatedOptions = { ...deliveryOptions };
 
+        setCalculatingFee(true)
         for (const type of deliveryTypes) {
           try {
             const feeDetail = await calculateFee({
@@ -164,6 +166,8 @@ const CheckoutPage = () => {
             };
           } catch (error) {
             console.error(`Failed to calculate fee for ${type}:`, error);
+          } finally {
+            setCalculatingFee(false)
           }
         }
 
@@ -179,6 +183,8 @@ const CheckoutPage = () => {
       return new Date(cartItem?.variant?.product?.discount?.activeStartDate) <= new Date(new Date().setHours(new Date().getHours() + 1)) && new Date(new Date().setHours(new Date().getHours() + 1)) <= new Date(cartItem?.variant?.product?.discount?.activeEndDate)
     }
   }
+
+  console.log(selectedDeliveryOption, selectedDeliveryOptionDetails)
 
   return (<>
     <HomepageNavBar parent={"checkout"} />
@@ -235,7 +241,7 @@ const CheckoutPage = () => {
           </div>
 
 
-          {devOptions === "smaller" && !calculatingFee && selectedAddress && <DeliveryOptions deliveryOptions={deliveryOptions} selectedDeliveryOption={selectedDeliveryOption} setSelectedDeliveryOption={setSelectedDeliveryOption} />}
+          {devOptions === "smaller" && <DeliveryOptions deliveryOptions={deliveryOptions} selectedDeliveryOption={selectedDeliveryOption} setSelectedDeliveryOption={setSelectedDeliveryOption} loading={!!(calculatingFee || !selectedAddress)} />}
           <div className="flex flex-col gap-14">
             {allCartItems.storeGroups?.map((store, i: number) => (
               <div className="flex flex-col gap-16" key={i}>
@@ -308,7 +314,7 @@ const CheckoutPage = () => {
 
         <div className="relative bg-#F5F5F5 l:w-45.8p md:w-50p max-w-661">
           <div className={`m:h-full overflow-auto no-scrollbar bg-#F5F5F5 md:pt-44 md:pb-85 xl:pl-80 l:pl-70 md:pl-40 xl:pr-80 l:pr-70 md:pr-60 flex flex-col gap-16 ${devOptions === 'smaller' ? 'fixed l-0 r-0 b-0 z-4' : ''}`}>
-            {devOptions === "larger" && !calculatingFee && selectedAddress && <DeliveryOptions deliveryOptions={deliveryOptions} selectedDeliveryOption={selectedDeliveryOption} setSelectedDeliveryOption={setSelectedDeliveryOption} />}
+            {devOptions === "larger" && <DeliveryOptions deliveryOptions={deliveryOptions} selectedDeliveryOption={selectedDeliveryOption} setSelectedDeliveryOption={setSelectedDeliveryOption} loading={!!(calculatingFee || !selectedAddress)} />}
             <div className="md:py-20 py-12 md:px-24 sm:px-40 px-24 md:border border-t border-#00000014 md:bg-white bg-#F5F5F5 md:radius-8 flex flex-col sm:gap-24 gap-20">
               <h2 className="color-#000000E0 text-20 line-height-28 weight-600 md:block hidden">
                 Payment Summary
@@ -319,7 +325,7 @@ const CheckoutPage = () => {
                   shippingFee={selectedDeliveryOptionDetails.price}
                   total={cart.total + selectedDeliveryOptionDetails.price}
                   cart={cart}
-                  loading={calculatingFee || !selectedAddress}
+                  loading={calculatingFee || !selectedAddress || isNaN(selectedDeliveryOptionDetails.price)}
                 />
               </div>
               <div className="flex sm:flex-row flex-col sm:gap-0 gap-20 space-between a-items-center">

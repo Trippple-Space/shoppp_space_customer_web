@@ -20,6 +20,7 @@ interface Suggestions {
   address: {
     name: string,
     county: string,
+    city: string,
     state: string,
     postcode: string,
     country: string,
@@ -102,7 +103,7 @@ const AddressForm: FC<AddressFormProps> = ({ closeAddressForm, type }) => {
       setShowSuggestions(false)
       setUserLocation({ latitude, longitude })
       formhandler.setFieldValue("address", suggestion?.address?.name || '');
-      formhandler.setFieldValue("city", suggestion?.address?.county || '');
+      formhandler.setFieldValue("city", suggestion?.address?.county || suggestion?.address?.city || '');
       //formhandler.setFieldValue("state", suggestion?.address?.state || '');
       formhandler.setFieldValue('meta', { 'location': { latitude, longitude } })
     } else {
@@ -119,7 +120,7 @@ const AddressForm: FC<AddressFormProps> = ({ closeAddressForm, type }) => {
           <div className={`radius-8 overflow-hidden relative h-100`}>
             <AddressMap location={{ lat: userLocation.latitude || 6.5480282, lng: userLocation.longitude || 3.1191456 }} />
             <div className='absolute bg-#00000073 t-0 b-0 w-full flex flex-col j-content-center'>
-              <UseCurrentLocationButton formhandler={formhandler} setUserLocation={setUserLocation} />
+              <UseCurrentLocationButton formhandler={formhandler} setUserLocation={setUserLocation} setSuggestionInputValue={setSuggestionInputValue} />
             </div>
           </div>
           <div className='grid sm:grid-4-rows-1fr grid-2-cols-1fr gap-16'>
@@ -162,7 +163,7 @@ const AddressForm: FC<AddressFormProps> = ({ closeAddressForm, type }) => {
                   <div className='absolute w-full bg-white border border-black z-10 top-0 mt-3 radius-6! border-#6A6A6A4D text-16 overflow-hidden h-fit g|max-height:182px overflow-auto'>
                     {
                       addressSuggestions.length === 0 ?
-                        <div className='py-8 px-12 flex a-items-center justify-center w-full'>no address found</div>
+                        <div className='py-8 px-12 flex a-items-center j-items-center w-full text-center'>no address found</div>
                         :
                         <div className='flex flex-col'>
                           {
@@ -192,7 +193,7 @@ const AddressForm: FC<AddressFormProps> = ({ closeAddressForm, type }) => {
                 label={<span>City <span className='color-#B3261E'>*</span></span>}
                 placeholder='Enter city'
                 handler={formhandler}
-                disabled={false}
+                disabled={true}
               />
             </div>
             <div className='grid-col-span-2'>
@@ -201,7 +202,7 @@ const AddressForm: FC<AddressFormProps> = ({ closeAddressForm, type }) => {
                 label={<span>Street address <span className='color-#B3261E'>*</span></span>}
                 placeholder='Enter street address'
                 handler={formhandler}
-                disabled={false}
+                disabled={true}
               />
             </div>
             <div className='sm:grid-col-span-1 grid-col-span-2'>

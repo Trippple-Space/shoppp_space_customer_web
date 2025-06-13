@@ -7,12 +7,14 @@ interface IDeliveryOptions {
   selectedDeliveryOption: any;
   setSelectedDeliveryOption: any
   deliveryOptions: DeliveryOption
+  loading?: boolean
 
 }
 
 const DeliveryOptions: FC<IDeliveryOptions> = ({
   selectedDeliveryOption, setSelectedDeliveryOption,
-  deliveryOptions
+  deliveryOptions,
+  loading
 }) => {
 
   return (
@@ -40,12 +42,17 @@ const DeliveryOptions: FC<IDeliveryOptions> = ({
                   {
                     option.price !== null &&
                     <p
-                      className={`w-fit text-right px-10 py-2 h-fit radius-4 text-12 weight-400 line-height-20 ${selectedDeliveryOption === key
+                      className={`w-fit text-right px-10 py-2 h-fit radius-4 text-12 weight-400 line-height-20 ${loading && option.price !== 0 && 'animate-pulse'} ${selectedDeliveryOption === key
                         ? "color-#0B9378 bg-#007B5D1F"
                         : "color-#000000E0 bg-#F5F5F5"
                         }`}
                     >
-                      {option.price === 0 ? 'Free' : formatNumberAsPrice(option.price)}
+                      {option.price === 0 ? <span>Free</span> :
+                        loading ?
+                          <div className="w-50 h-24 radius-6"></div>
+                          :
+                          <span>{formatNumberAsPrice(option.price)}</span>
+                      }
                     </p>
                   }
                 </div>

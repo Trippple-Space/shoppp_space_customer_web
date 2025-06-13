@@ -15,8 +15,6 @@ const AddressModal: React.FC<ModalProps> = () => {
   const [showAddressForm, setShowAddressForm] = useState(false)
   const [showEditAddressForm, setShowEditAddressForm] = useState(false)
 
-  console.log(addresses)
-
   return (
     <div>
       <Modal isOpen={isAddressModalOpen} onClose={() => { }} extraClass={{ overflow: 'auto' }} extraModalClass={{ backgroundColor: '#00000073' }} className="h-fit md:w-fit sm:w-90p w-98p no-scrollbar">
