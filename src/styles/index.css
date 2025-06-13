@@ -193,13 +193,21 @@
 .grid-2-cols-1fr { grid-template-columns: repeat(2, 1fr); } 
 .grid-col-span-2 { grid-column: span 2; } 
 .color-\#B3261E { color: #B3261E; } 
+.border-black { border-color: #000000; } 
+.mt-3 { margin-top: 3px; } 
+@layer base {.radius-6\! { border-radius: 6px !important; } } 
+.border-\#6A6A6A4D { border-color: #6A6A6A4D; } 
+[class~='g|max-height:182px']{max-height:182px} 
+.px-12 { padding-left: 12px; padding-right: 12px; } 
+.hover\:bg-green:hover { background-color: #0B9378; } 
+.hover\:text-white:hover { color: #FFFFFF; } 
+[class~='g|transition:0.15s']{transition:0.15s} 
 @layer lo { .\@lo\:text-grey-700 { color: #6B6662; } } 
 .line-height-22 { line-height: 22px; } 
 .accent-\#0B9378 { accent-color: #0B9378; } 
 .w-20 { width: 20px; } 
 .h-20 { height: 20px; } 
 @layer base {    .border-t {       border-top: 1px solid;     }  } 
-.border-black { border-color: #000000; } 
 .hover\:bg-red-100:hover { background-color: rgba(221, 75, 75, 0.2); } 
 .hover\:border-red:hover { border-color: #DE3838; } 
 .hover\:text-red:hover { color: #DE3838; } 
@@ -211,7 +219,6 @@
 .disabled\:bg-green-300:disabled { background-color: rgba(11, 147, 120, 0.6); } 
 .cursor-not-allowed { cursor: not-allowed; } 
 .object-fit {    object-fit: cover;  } 
-.px-12 { padding-left: 12px; padding-right: 12px; } 
 .bg-\#F5F5F5 { background-color: #F5F5F5; } 
 .w-98p { width: 98%; } 
 .no-scrollbar::-webkit-scrollbar {     width: 0px;      height: 0px;     display: none;  } 

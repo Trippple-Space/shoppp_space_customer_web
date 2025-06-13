@@ -1,4 +1,4 @@
-import useFetchAddress from "@/modules/lib/utility/hooks/use-fetch-address";
+import useFetchAddress from "@/modules/lib/utility/hooks/addresses/use-fetch-address";
 import { useState } from "react";
 import { SlLocationPin } from "react-icons/sl";
 import { toast } from "sonner";

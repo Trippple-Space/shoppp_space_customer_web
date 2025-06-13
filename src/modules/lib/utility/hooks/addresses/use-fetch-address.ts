@@ -37,7 +37,7 @@ const useFetchAddress = () => {
         toast.error("Unable to extract address details", { duration: 2000 });
       }
     } catch (err) {
-      toast.success("Failed to fetch address", { duration: 2000 });
+      toast.error("Failed to fetch address", { duration: 2000 });
       //console.log(err);
     }
   };
