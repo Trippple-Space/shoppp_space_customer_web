@@ -40,7 +40,7 @@ const DeliveryOptions: FC<IDeliveryOptions> = ({
                     </p>
                   </div>
                   {
-                    option.price !== null &&
+                    option.price !== null && !isNaN(option.price) &&
                     <p
                       className={`w-fit text-right px-10 py-2 h-fit radius-4 text-12 weight-400 line-height-20 ${loading && option.price !== 0 && 'animate-pulse'} ${selectedDeliveryOption === key
                         ? "color-#0B9378 bg-#007B5D1F"
@@ -58,7 +58,7 @@ const DeliveryOptions: FC<IDeliveryOptions> = ({
                 </div>
               }
               checked={selectedDeliveryOption === key}
-              disabled={option.price === null}
+              disabled={option.price === null || isNaN(option.price)}
               onChange={() =>
                 setSelectedDeliveryOption(key as keyof typeof deliveryOptions)
               }

@@ -23,11 +23,20 @@ import AddressModal from "@/modules/lib/components/address-modal/AddressModal";
 import OrderSummary from "@/modules/lib/components/order-summary/OrderSummary";
 import { CartItem } from "@/modules/lib/utility/types/cart.interface";
 import { useCalculatedeliveryFee } from "@/modules/lib/utility/hooks/use-calculate-deliveryFee";
+import { DeliveryOption } from "@/modules/lib/utility/types/delivery.interface";
 
 type DeliveryOptionKey = 'standard' | 'express';
+type addressDeliveryPrice = {
+  addressId: number,
+  deliveryOptions: DeliveryOption,
+  coordinates: {
+    lat: string,
+    lon: string
+  }
+}
 
 const CheckoutPage = () => {
-  const [deliveryOptions, setDeliveryOptions] = useState({
+  const [deliveryOptions, setDeliveryOptions] = useState<DeliveryOption>({
     standard: {
       title: 'Standard Delivery',
       description: 'Arrives in 3 days',
@@ -47,6 +56,7 @@ const CheckoutPage = () => {
       price: 0
     }
   })
+  const [allAddressDeliveryPrice, setAllAddressDeliveryPrice] = useState<addressDeliveryPrice[]>([])
   const [selectedDeliveryOption, setSelectedDeliveryOption] =
     useState<keyof typeof deliveryOptions>("standard");
   const { user } = useUserStore();
@@ -138,40 +148,79 @@ const CheckoutPage = () => {
 
   useEffect(() => {
     if (selectedAddress) {
-      calculateFee({
-        addressId: selectedAddress.id,
-        deliveryType: selectedDeliveryOption
-      })
-    }
-  }, [selectedAddress])
-
-  useEffect(() => {
-    if (selectedAddress) {
       const deliveryTypes: DeliveryOptionKey[] = ['standard', 'express'];
+      const getLatLon = (meta: any) => {
+        if (meta?.coordinates) {
+          return {
+            lat: meta.coordinates.lat,
+            lon: meta.coordinates.lon
+          };
+        } else if (meta?.location) {
+          return {
+            lat: meta.location.latitude,
+            lon: meta.location.longitude
+          };
+        }
+        return { lat: null, lon: null };
+      };
 
       const updateFees = async () => {
         const updatedOptions = { ...deliveryOptions };
+        const { lat, lon } = getLatLon(selectedAddress.meta);
 
-        setCalculatingFee(true)
-        for (const type of deliveryTypes) {
-          try {
-            const feeDetail = await calculateFee({
-              addressId: selectedAddress.id,
-              deliveryType: type,
-            });
+        const existingAddressPrice = allAddressDeliveryPrice.find(addressPrice => addressPrice.addressId === selectedAddress.id)
+        if (existingAddressPrice && (existingAddressPrice.coordinates.lat === lat && existingAddressPrice.coordinates.lon === lon)) {
+          setDeliveryOptions(existingAddressPrice.deliveryOptions)
+        } else {
+          setCalculatingFee(true)
+          for (const type of deliveryTypes) {
+            try {
+              const feeDetail = await calculateFee({
+                addressId: selectedAddress.id,
+                deliveryType: type,
+              })
 
-            updatedOptions[type] = {
-              ...updatedOptions[type],
-              price: feeDetail.fee,
-            };
-          } catch (error) {
-            console.error(`Failed to calculate fee for ${type}:`, error);
-          } finally {
-            setCalculatingFee(false)
+              updatedOptions[type] = {
+                ...updatedOptions[type],
+                price: feeDetail.fee,
+              };
+            } catch (error) {
+              console.error(`Failed to calculate fee for ${type}:`, error);
+            } finally {
+              setDeliveryOptions(updatedOptions);
+              setAllAddressDeliveryPrice(prev =>
+                prev.some(item => item.addressId === selectedAddress.id)
+                  ?
+                  prev.map(item =>
+                    item.addressId === selectedAddress.id
+                      ? {
+                        addressId: selectedAddress.id,
+                        deliveryOptions: updatedOptions,
+                        coordinates: {
+                          lat,
+                          lon
+                        }
+                      }
+                      : item
+                  )
+                  :
+                  [
+                    ...prev,
+                    {
+                      addressId: selectedAddress.id,
+                      deliveryOptions: updatedOptions,
+                      coordinates: {
+                        lat,
+                        lon
+                      }
+                    }
+                  ]
+              );
+
+              setCalculatingFee(false)
+            }
           }
         }
-
-        setDeliveryOptions(updatedOptions);
       };
 
       updateFees();
@@ -183,8 +232,6 @@ const CheckoutPage = () => {
       return new Date(cartItem?.variant?.product?.discount?.activeStartDate) <= new Date(new Date().setHours(new Date().getHours() + 1)) && new Date(new Date().setHours(new Date().getHours() + 1)) <= new Date(cartItem?.variant?.product?.discount?.activeEndDate)
     }
   }
-
-  console.log(selectedDeliveryOption, selectedDeliveryOptionDetails)
 
   return (<>
     <HomepageNavBar parent={"checkout"} />

@@ -11,7 +11,7 @@ export interface Address {
   secondaryContactNo: string;
   isDefault: boolean;
   notes: string;
-  meta: JSON;
+  meta: any;
   dateCreated: Date;
   lastUpdated: Date;
 }
