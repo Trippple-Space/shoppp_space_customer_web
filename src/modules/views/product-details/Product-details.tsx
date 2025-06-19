@@ -31,10 +31,12 @@ import { Comments } from './reviews/Comments'
 import MiniReview from './reviews/MiniReview'
 import useGetRatingStats from '@/modules/lib/utility/hooks/use-get-rating-stats'
 import useGetProductRating from '@/modules/lib/utility/hooks/use-get-review'
+import { toast } from 'sonner'
 
 
 
 const ProductDetails = ({ product }: { product: Product }) => {
+  console.log(product)
   let globalMediaIndex = 0;
 
   const [unitCounter, setUnitCounter] = useState<number>(1)
@@ -108,13 +110,7 @@ const ProductDetails = ({ product }: { product: Product }) => {
     })()
   }, [isAuthenticated])
 
-
-
-
-
   const isSaved = savedVariants.find((variant: SavedVariant) => selectedVariant.id === variant.variantId)
-
-
 
   const handleSave = () => {
     if (isSaved) {
@@ -143,8 +139,6 @@ const ProductDetails = ({ product }: { product: Product }) => {
           addToCart(parsedVariantId, parsedMinimumPurchase);
 
         }
-
-
         localStorage.removeItem("variantId");
         localStorage.removeItem("variantIdMinimumPurchase");
       }
@@ -153,6 +147,8 @@ const ProductDetails = ({ product }: { product: Product }) => {
 
   const isOutOfStock = selectedVariant?.status === 'OUT_OF_STOCK';
   const isDiscounted = new Date().setHours(0, 0, 0, 0) <= new Date(product?.discount?.activeEndDate).setHours(0, 0, 0, 0)
+  const hasUnits = product?.availableUnit && product?.availableUnit?.length > 0;
+  const hasSelectedSize = selectedSize !== "";
 
   const addToCartBtn = () => {
     return <div className='flex flex-col gap-16'>
@@ -165,10 +161,14 @@ const ProductDetails = ({ product }: { product: Product }) => {
             onClick={() => {
               if (isAuthenticated) {
                 if (selectedVariant && selectedVariant.status !== 'OUT_OF_STOCK') {
-                  addToCart(
-                    selectedVariant?.id ?? 0,
-                    selectedVariant?.minPurchaseQuantity || 1
-                  )
+                  if ((hasUnits && hasSelectedSize) || (!hasUnits && !hasSelectedSize)) {
+                    addToCart(
+                      selectedVariant?.id ?? 0,
+                      selectedVariant?.minPurchaseQuantity || 1
+                    );
+                  } else {
+                    toast.warning("Please select a size.");
+                  }
                 }
               } else {
                 handleLogin(selectedVariant?.id ?? 0,
@@ -346,35 +346,61 @@ const ProductDetails = ({ product }: { product: Product }) => {
               <p className='weight-600 border-b border-#00000014 pb-15 pt-15'>
                 VARIATIONS
               </p>
-              <p className='text-left text-12 weight-400 color-#000000B2'>
-                Select color:
-              </p>
-              <div className='flex gap-6 a-items-center'>
-                {product.variants.map(variant => (
-                  <div
-                    key={variant.id}
-                    onClick={() => {
-                      setSelectedVariant(variant)
-                      setSelectedImage(variant?.media?.[0]?.url)
-                    }}
-                    style={{
-                      background: variant.properties?.['color']
-                    }}
-                    className={classNames(
-                      'w-30 h-30 flex round',
-                      {
-                        'outline outline-2 w-27 h-27 flex':
-                          variant.id === selectedVariant?.id
-                      }
-                    )}
-                  ></div>
-                ))}
+              <div>
+                <p className='text-left text-12 weight-400 color-#000000B2'>
+                  Select color:
+                </p>
+                <div className='flex gap-6 a-items-center'>
+                  {product.variants.map(variant => (
+                    <div
+                      key={variant.id}
+                      onClick={() => {
+                        setSelectedVariant(variant)
+                        setSelectedImage(variant?.media?.[0]?.url)
+                      }}
+                      style={{
+                        background: variant.properties?.['color']
+                      }}
+                      className={classNames(
+                        'w-30 h-30 flex round',
+                        {
+                          'outline outline-2 w-27 h-27 flex':
+                            variant.id === selectedVariant?.id
+                        }
+                      )}
+                    ></div>
+                  ))}
+                </div>
               </div>
 
-              <div className='flex flex-col gap-12 mb-10'>
-                <div className='text-12 weight-400'>
-                  Select size
-                </div>
+              {
+                hasUnits && (
+                  <div className=''>
+                    <p className='text-left text-12 weight-400 color-#000000B2'>
+                      Select size:
+                    </p>
+                    <div className='flex gap-6 a-items-center'>
+                      {product?.availableUnit?.map((unit, idx)=> (
+                        <div 
+                          key={idx} 
+                          role='button' 
+                          className={
+                            cx('flex gap-8 text-12 bg-#F3F3F3 color-#726C6C px-10 py-7 radius-6 uppercase cursor-pointer',
+                              {
+                                'bg-green-100! text-green!': unit === selectedSize
+                              }
+                            )
+                          }
+                          onClick={() => setSelectedSize(unit)}
+                        >
+                          {unit}
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                )
+              }
+              {/* <div className='flex flex-col gap-12 mb-10'>
                 <div className='flex flex-wrap  gap-4'>
                   {productTypeRender(selectedVariant.stockUnit).map(
                     (text, i) => (
@@ -397,7 +423,7 @@ const ProductDetails = ({ product }: { product: Product }) => {
                     )
                   )}
                 </div>
-              </div>
+              </div> */}
               {addToCartBtn()}
             </div>
 
@@ -486,7 +512,34 @@ const ProductDetails = ({ product }: { product: Product }) => {
                     ))}
                   </div>
                 </div>
-                <div className='flex flex-col gap-12'>
+                {
+                  hasUnits && (
+                    <div className=''>
+                      <p className='text-left text-12 weight-400 color-#000000B2'>
+                        Select size:
+                      </p>
+                      <div className='flex gap-6 a-items-center'>
+                        {product?.availableUnit?.map((unit, idx)=> (
+                          <div 
+                            key={idx} 
+                            role='button' 
+                            className={
+                              cx('flex gap-8 text-14 bg-#F3F3F3 color-#726C6C px-10 py-7 radius-6 uppercase cursor-pointer',
+                                {
+                                  'bg-green-100! text-green!': unit === selectedSize
+                                }
+                              )
+                            }
+                            onClick={() => setSelectedSize(unit)}
+                          >
+                            {unit}
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+                  )
+                }
+                {/* <div className='flex flex-col gap-12'>
                   <div className='text-12 weight-400'>
                     Select size
                   </div>
@@ -513,9 +566,8 @@ const ProductDetails = ({ product }: { product: Product }) => {
                     )}
                   </div>
 
-                </div>
+                </div> */}
                 {addToCartBtn()}
-
               </div>
             </div>
           </div>
