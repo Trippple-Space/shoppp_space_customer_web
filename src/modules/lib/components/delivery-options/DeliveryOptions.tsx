@@ -39,7 +39,7 @@ const DeliveryOptions: FC<IDeliveryOptions> = ({
                         {option.title}
                       </h3>
                       {
-                        (isNaN(option.price) || option.price === null) && !loading ?
+                        ((isNaN(option.price) || option.price === null) && !loading) ?
                           <p className="weight-400 text-14 line-height-22 flex a-items-center j-content-center gap-3">
                             <span>This service is currently unavailable.</span>
                             <span className="underline cursor-pointer color-link" onClick={retry}>Retry</span>
@@ -69,7 +69,7 @@ const DeliveryOptions: FC<IDeliveryOptions> = ({
                   </div>
                 }
                 checked={selectedDeliveryOption === key}
-                disabled={option.price === null || isNaN(option.price)}
+                disabled={((isNaN(option.price) || option.price === null) && !loading)}
                 onChange={() =>
                   setSelectedDeliveryOption(key as keyof typeof deliveryOptions)
                 }

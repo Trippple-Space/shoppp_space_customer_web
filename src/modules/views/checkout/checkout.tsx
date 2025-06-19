@@ -174,9 +174,9 @@ const CheckoutPage = () => {
       if (existingAddressPrice && (existingAddressPrice.coordinates.lat === lat && existingAddressPrice.coordinates.lon === lon)) {
         setDeliveryOptions(existingAddressPrice.deliveryOptions)
       } else {
-        setCalculatingFee(true)
         for (const type of deliveryTypes) {
           try {
+            setCalculatingFee(true)
             const feeDetail = await calculateFee({
               addressId: selectedAddress.id,
               deliveryType: type,
@@ -218,7 +218,6 @@ const CheckoutPage = () => {
                   }
                 ]
             );
-
             setCalculatingFee(false)
           }
         }
