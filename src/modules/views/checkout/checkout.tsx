@@ -59,7 +59,7 @@ const CheckoutPage = () => {
   const [allAddressDeliveryPrice, setAllAddressDeliveryPrice] = useState<addressDeliveryPrice[]>([])
   const [selectedDeliveryOption, setSelectedDeliveryOption] =
     useState<keyof typeof deliveryOptions>("standard");
-  const { user } = useUserStore();
+  const { user, isAuthenticated } = useUserStore();
   const { cart, removeFromCart, removeDiscountCode, fetchCart } = useCart();
   const { openAddressModal, selectedAddress } = useAddress();
   const router = useRouter()
@@ -145,8 +145,10 @@ const CheckoutPage = () => {
   }, []);
 
   useEffect(() => {
-    removeDiscountCode()
-    fetchCart(true)
+    if (isAuthenticated) {
+      removeDiscountCode()
+      fetchCart(true)
+    }
   }, [])
 
   const updateFees = async () => {

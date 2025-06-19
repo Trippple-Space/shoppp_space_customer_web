@@ -44,7 +44,6 @@ export const useCart = (isCheckout?: boolean) => {
      useEffect(() => {
           if (!cart.id && isAuthenticated && !fetching) {
             fetchCart(isCheckout);
-            
           }
      },[isAuthenticated]);
 

@@ -33,8 +33,10 @@ const MiniCart: React.FC<ModalProps> = () => {
   const { isAuthenticated } = useUserStore();
 
   useEffect(() => {
-    removeDiscountCode()
-    fetchCart()
+    if (isAuthenticated) {
+      removeDiscountCode()
+      fetchCart()
+    }
   }, [open])
 
   const checkoutCart = () => {
