@@ -169,7 +169,6 @@ const CheckoutPage = () => {
 
       const updatedOptions = { ...deliveryOptions };
       const { lat, lon } = getLatLon(selectedAddress.meta);
-      console.log(allAddressDeliveryPrice)
 
       const existingAddressPrice = allAddressDeliveryPrice.find(addressPrice => addressPrice.addressId === selectedAddress.id)
       if (existingAddressPrice && (existingAddressPrice.coordinates.lat === lat && existingAddressPrice.coordinates.lon === lon)) {
@@ -301,7 +300,17 @@ const CheckoutPage = () => {
           </div>
 
 
-          {devOptions === "smaller" && <DeliveryOptions deliveryOptions={deliveryOptions} selectedDeliveryOption={selectedDeliveryOption} setSelectedDeliveryOption={setSelectedDeliveryOption} loading={!!(calculatingFee || !selectedAddress)} />}
+          {devOptions === "smaller" &&
+            <DeliveryOptions
+              deliveryOptions={deliveryOptions}
+              selectedDeliveryOption={selectedDeliveryOption}
+              setSelectedDeliveryOption={setSelectedDeliveryOption}
+              loading={!!(calculatingFee || !selectedAddress)}
+              retry={() => {
+                setAllAddressDeliveryPrice([])
+                setShouldUpdateFee(true);
+              }}
+            />}
           <div className="flex flex-col gap-14">
             {allCartItems.storeGroups?.map((store, i: number) => (
               <div className="flex flex-col gap-16" key={i}>
@@ -382,7 +391,18 @@ const CheckoutPage = () => {
 
         <div className="relative bg-#F5F5F5 l:w-45.8p md:w-50p max-w-661">
           <div className={`m:h-full overflow-auto no-scrollbar bg-#F5F5F5 md:pt-44 md:pb-85 xl:pl-80 l:pl-70 md:pl-40 xl:pr-80 l:pr-70 md:pr-60 flex flex-col gap-16 ${devOptions === 'smaller' ? 'fixed l-0 r-0 b-0 z-4' : ''}`}>
-            {devOptions === "larger" && <DeliveryOptions deliveryOptions={deliveryOptions} selectedDeliveryOption={selectedDeliveryOption} setSelectedDeliveryOption={setSelectedDeliveryOption} loading={!!(calculatingFee || !selectedAddress)} />}
+            {devOptions === "larger"
+              &&
+              <DeliveryOptions
+                deliveryOptions={deliveryOptions}
+                selectedDeliveryOption={selectedDeliveryOption}
+                setSelectedDeliveryOption={setSelectedDeliveryOption}
+                loading={!!(calculatingFee || !selectedAddress)}
+                retry={() => {
+                  setAllAddressDeliveryPrice([])
+                  setShouldUpdateFee(true);
+                }}
+              />}
             <div className="md:py-20 py-12 md:px-24 sm:px-40 px-24 md:border border-t border-#00000014 md:bg-white bg-#F5F5F5 md:radius-8 flex flex-col sm:gap-24 gap-20">
               <h2 className="color-#000000E0 text-20 line-height-28 weight-600 md:block hidden">
                 Payment Summary
