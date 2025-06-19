@@ -1,6 +1,6 @@
 "use client";
 import Image from "@/modules/lib/components/image/Image";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import HomepageNavBar from "@/modules/lib/components/nav-bar/HomepageNavBar";
 import { useRouter } from "next/navigation";
 import Footer from "@/modules/lib/components/footer/Footer";
@@ -72,6 +72,9 @@ const CheckoutPage = () => {
   const [devOptions, setDevOptions] = useState<string>();
   const [showSummary, setshowSummary] = useState(true);
   const [devAddressError, setDevAddressError] = useState(false)
+
+  const [shouldUpdateFee, setShouldUpdateFee] = useState(false);
+  const lastAddressRef = useRef<number | null>(null);
 
   const [allCartItems, setAllCartItems] =
     useState({
@@ -146,7 +149,7 @@ const CheckoutPage = () => {
     fetchCart(true)
   }, [])
 
-  useEffect(() => {
+  const updateFees = async () => {
     if (selectedAddress) {
       const deliveryTypes: DeliveryOptionKey[] = ['standard', 'express'];
       const getLatLon = (meta: any) => {
@@ -164,49 +167,36 @@ const CheckoutPage = () => {
         return { lat: null, lon: null };
       };
 
-      const updateFees = async () => {
-        const updatedOptions = { ...deliveryOptions };
-        const { lat, lon } = getLatLon(selectedAddress.meta);
+      const updatedOptions = { ...deliveryOptions };
+      const { lat, lon } = getLatLon(selectedAddress.meta);
+      console.log(allAddressDeliveryPrice)
 
-        const existingAddressPrice = allAddressDeliveryPrice.find(addressPrice => addressPrice.addressId === selectedAddress.id)
-        if (existingAddressPrice && (existingAddressPrice.coordinates.lat === lat && existingAddressPrice.coordinates.lon === lon)) {
-          setDeliveryOptions(existingAddressPrice.deliveryOptions)
-        } else {
-          setCalculatingFee(true)
-          for (const type of deliveryTypes) {
-            try {
-              const feeDetail = await calculateFee({
-                addressId: selectedAddress.id,
-                deliveryType: type,
-              })
+      const existingAddressPrice = allAddressDeliveryPrice.find(addressPrice => addressPrice.addressId === selectedAddress.id)
+      if (existingAddressPrice && (existingAddressPrice.coordinates.lat === lat && existingAddressPrice.coordinates.lon === lon)) {
+        setDeliveryOptions(existingAddressPrice.deliveryOptions)
+      } else {
+        setCalculatingFee(true)
+        for (const type of deliveryTypes) {
+          try {
+            const feeDetail = await calculateFee({
+              addressId: selectedAddress.id,
+              deliveryType: type,
+            })
 
-              updatedOptions[type] = {
-                ...updatedOptions[type],
-                price: feeDetail.fee,
-              };
-            } catch (error) {
-              console.error(`Failed to calculate fee for ${type}:`, error);
-            } finally {
-              setDeliveryOptions(updatedOptions);
-              setAllAddressDeliveryPrice(prev =>
-                prev.some(item => item.addressId === selectedAddress.id)
-                  ?
-                  prev.map(item =>
-                    item.addressId === selectedAddress.id
-                      ? {
-                        addressId: selectedAddress.id,
-                        deliveryOptions: updatedOptions,
-                        coordinates: {
-                          lat,
-                          lon
-                        }
-                      }
-                      : item
-                  )
-                  :
-                  [
-                    ...prev,
-                    {
+            updatedOptions[type] = {
+              ...updatedOptions[type],
+              price: feeDetail.fee,
+            };
+          } catch (error) {
+            console.error(`Failed to calculate fee for ${type}:`, error);
+          } finally {
+            setDeliveryOptions(updatedOptions);
+            setAllAddressDeliveryPrice(prev =>
+              prev.some(item => item.addressId === selectedAddress.id)
+                ?
+                prev.map(item =>
+                  item.addressId === selectedAddress.id
+                    ? {
                       addressId: selectedAddress.id,
                       deliveryOptions: updatedOptions,
                       coordinates: {
@@ -214,18 +204,41 @@ const CheckoutPage = () => {
                         lon
                       }
                     }
-                  ]
-              );
+                    : item
+                )
+                :
+                [
+                  ...prev,
+                  {
+                    addressId: selectedAddress.id,
+                    deliveryOptions: updatedOptions,
+                    coordinates: {
+                      lat,
+                      lon
+                    }
+                  }
+                ]
+            );
 
-              setCalculatingFee(false)
-            }
+            setCalculatingFee(false)
           }
         }
-      };
-
-      updateFees();
+      }
     }
-  }, [selectedAddress]);
+
+  };
+
+  useEffect(() => {
+    if (!selectedAddress) return;
+
+    const addressChanged = lastAddressRef.current !== selectedAddress.id;
+
+    if (addressChanged || shouldUpdateFee) {
+      lastAddressRef.current = selectedAddress.id;
+      updateFees();
+      if (shouldUpdateFee) setShouldUpdateFee(false);
+    }
+  }, [selectedAddress, shouldUpdateFee]);
 
   const isValidDiscount = (cartItem: CartItem) => {
     if (cartItem?.variant?.product?.discount?.activeEndDate) {
@@ -345,7 +358,15 @@ const CheckoutPage = () => {
                       </div>
                       <p
                         className="weight-400 text-14 line-height-22 text-danger underline pointer"
-                        onClick={() => removeFromCart(cartItem?.id)}
+                        onClick={async () => {
+                          try {
+                            await removeFromCart(cartItem?.id)
+                            setAllAddressDeliveryPrice([])
+                            setShouldUpdateFee(true);
+                          } catch (error) {
+                            console.error('Failed to remove from cart:', error);
+                          }
+                        }}
                       >
                         Remove
                       </p>
