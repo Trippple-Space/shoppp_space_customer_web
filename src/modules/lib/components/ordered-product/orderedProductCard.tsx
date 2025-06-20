@@ -3,7 +3,7 @@ import React from 'react'
 import Image from '../image/Image'
 
 function orderedProductCard ({ orderedProducts }: any) {
-  const cartItems = getCartItems(orderedProducts?.cart.storeGroups)
+  const cartItems = getCartItems(orderedProducts?.cart?.storeGroups)
   return (
     <>
       <div className='flex flex-col gap-10'>

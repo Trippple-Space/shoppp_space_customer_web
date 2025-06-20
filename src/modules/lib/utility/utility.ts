@@ -237,7 +237,7 @@ export const getStoreNames = (storeGroups: StoreGroupResponse[]) => {
 };
 
 export const getCartItems = (storeGroups: StoreGroupResponse[]) => {
-  const cartItems = storeGroups.flatMap((group: StoreGroupResponse) => group.items) || []
+  const cartItems = storeGroups?.flatMap((group: StoreGroupResponse) => group.items) || []
 
   return cartItems
 }

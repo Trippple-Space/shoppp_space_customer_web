@@ -192,7 +192,7 @@ const ProductDetails = ({ product }: { product: Product }) => {
   }
 
 
-
+  console.log(product)
 
 
   return (

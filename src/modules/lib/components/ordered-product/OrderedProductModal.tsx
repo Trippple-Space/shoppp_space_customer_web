@@ -25,7 +25,7 @@ const OrderedProductModal = ({
     setExpandedId(prevId => (prevId === id ? null : id))
   }
 
-  const cartItems = getCartItems(order?.cart.storeGroups || [])
+  const cartItems = getCartItems(order?.cart?.storeGroups || [])
 
   const buyOrdersAgain = async (cartItems: CartItem[]) => {
     const buyAgainItems: BuyAgain[] = []
@@ -161,7 +161,7 @@ const OrderedProductModal = ({
                   <div className='flex space-between'>
                     <p className='color-#000000E0 weight-400'>Subtotal</p>
                     <p className='text-16 weight-400'>
-                      {formatNumberAsPrice(order.cart.subTotal)}
+                      {formatNumberAsPrice(order.cart?.subTotal)}
                     </p>
                   </div>
                   <div className='flex space-between border-b border-b-#00000014 pb-10'>

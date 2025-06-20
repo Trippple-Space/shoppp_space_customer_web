@@ -13,7 +13,7 @@ class CartService {
                    const cartData = response.data;
                    let combinedItems: CartItem[] = [];
 
-                   combinedItems = cartData.storeGroups.flatMap((group: StoreGroupResponse) => group.items);
+                   combinedItems = cartData.storeGroups?.flatMap((group: StoreGroupResponse) => group.items);
 
                     const combinedCart: Cart = {
                           ...cartData,
@@ -79,7 +79,7 @@ buyAgain(buyAgainItems: BuyAgain[]): Promise<Cart> {
 
                    let combinedItems: CartItem[] = [];
                    
-                   combinedItems = cartData.storeGroups.flatMap((group: StoreGroupResponse) => group.items);
+                   combinedItems = cartData.storeGroups?.flatMap((group: StoreGroupResponse) => group.items);
 
                     const combinedCart: Cart = {
                           ...cartData,
@@ -146,7 +146,7 @@ buyAgain(buyAgainItems: BuyAgain[]): Promise<Cart> {
                          const cartData = response.data;
                    let combinedItems: CartItem[] = [];
                    
-                   combinedItems = cartData.storeGroups.flatMap((group: StoreGroupResponse) => group.items);
+                   combinedItems = cartData.storeGroups?.flatMap((group: StoreGroupResponse) => group.items);
 
                     const combinedCart: Cart = {
                           ...cartData,
@@ -185,7 +185,7 @@ buyAgain(buyAgainItems: BuyAgain[]): Promise<Cart> {
 
                    let combinedItems: CartItem[] = [];
                    
-                   combinedItems = cartData.storeGroups.flatMap((group: StoreGroupResponse) => group.items);
+                   combinedItems = cartData.storeGroups?.flatMap((group: StoreGroupResponse) => group.items);
 
                     const combinedCart: Cart = {
                           ...cartData,
@@ -216,7 +216,7 @@ buyAgain(buyAgainItems: BuyAgain[]): Promise<Cart> {
                 const cartData = response.data;
                 let combinedItems: CartItem[] = [];
 
-                combinedItems = cartData.storeGroups.flatMap((group: StoreGroupResponse) => group.items);
+                combinedItems = cartData.storeGroups?.flatMap((group: StoreGroupResponse) => group.items);
 
                 const combinedCart: Cart = {
                     ...cartData,

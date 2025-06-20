@@ -67,8 +67,8 @@ const CheckoutPage = () => {
   const { loading: isPaymentLoading, payWithPaystack } = usePayment();
   const { calculateFee } = useCalculatedeliveryFee()
   const [calculatingFee, setCalculatingFee] = useState<boolean>(true)
-  const canProceedToPayment = !(!isPaymentLoading && selectedAddress && user && !calculatingFee);
   const selectedDeliveryOptionDetails = deliveryOptions[selectedDeliveryOption];
+  const canProceedToPayment = !(!isPaymentLoading && selectedAddress && user && !calculatingFee && !isNaN(selectedDeliveryOptionDetails.price));
   const [devOptions, setDevOptions] = useState<string>();
   const [showSummary, setshowSummary] = useState(true);
   const [devAddressError, setDevAddressError] = useState(false)
