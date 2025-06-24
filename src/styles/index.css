@@ -703,6 +703,7 @@
 .pb-100 { padding-bottom: 100px; } 
 .w-27 { width: 27px; } 
 .h-27 { height: 27px; } 
+.uppercase {    text-transform: uppercase;  } 
 .w-600 { width: 600px; } 
 .h-600 { height: 600px; } 
 .l-15 { left: 15px; } 
@@ -813,7 +814,6 @@
 .l-10 { left: 10px; } 
 .grid-5-cols-1fr { grid-template-columns: repeat(5, 1fr); } 
 .mt-70 { margin-top: 70px; } 
-.uppercase {    text-transform: uppercase;  } 
 .t-20 { top: 20px; } 
 .bg-light-yellow { background-color: #FFE68BB2; } 
 .bg-grey-400 { background-color: #C8C6C3; } 

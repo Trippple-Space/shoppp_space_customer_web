@@ -1,48 +1,51 @@
 'use client'
-
+import Footer from '@/modules/lib/components/footer/Footer'
 import Image from '@/modules/lib/components/image/Image'
-import Link from 'next/link'
-import { useEffect, useState } from 'react'
+import Modal from '@/modules/lib/components/modal/modal'
+import { CSSProperties, useEffect, useState } from 'react'
 import { AiFillHeart, AiOutlineHeart } from 'react-icons/ai'
 import HomepageNavBar from '@/modules/lib/components/nav-bar/HomepageNavBar'
-import { Product, RecentlyViewed } from '@/modules/lib/utility/types/product.interface'
-import './ProductDetails.scss'
+import QuantitySelector from '@/modules/lib/components/quantity-selector/QuantitySelector'
+import VariantModal from '@/modules/lib/components/variant-modal/VariantModal'
+import { useCart } from '@/modules/lib/utility/hooks/use-cart'
+import { useSavedVariant } from '@/modules/lib/utility/hooks/use-saved-variants'
+import useTransformProduct from '@/modules/lib/utility/hooks/use-transform-product'
+import { productService } from '@/modules/lib/utility/services/product.service'
+import { Product, ProductVariant, RecentlyViewed } from '@/modules/lib/utility/types/product.interface'
+import { SavedVariant } from '@/modules/lib/utility/types/SavedVariant.interface'
 import {
   cx,
   formatNumberAsPrice,
 } from '@/modules/lib/utility/utility'
-import { HiOutlineShoppingBag } from 'react-icons/hi2'
-import { useCart } from '@/modules/lib/utility/hooks/use-cart'
-import ShareProductModal from './share-modal/shareProductModal'
+import { Rating, Star } from '@smastrom/react-rating'
 import classNames from 'classnames'
+import Link from 'next/link'
 import { GoHome } from 'react-icons/go'
-import { RxShare2 } from 'react-icons/rx'
-import { SavedVariant } from '@/modules/lib/utility/types/SavedVariant.interface'
-import { useSavedVariant } from '@/modules/lib/utility/hooks/use-saved-variants'
+import { HiOutlineShoppingBag } from 'react-icons/hi2'
 import { LuGrid2X2 } from 'react-icons/lu'
-import { productService } from '@/modules/lib/utility/services/product.service'
-import { Rating, Star, StickerStar } from '@smastrom/react-rating'
-import { PiTruck, PiGlobeHemisphereEast } from 'react-icons/pi'
-import Footer from '@/modules/lib/components/footer/Footer'
-import Modal from '@/modules/lib/components/modal/modal'
-import QuantitySelector from '@/modules/lib/components/quantity-selector/QuantitySelector'
-import VariantModal from '@/modules/lib/components/variant-modal/VariantModal'
+import { PiGlobeHemisphereEast, PiTruck } from 'react-icons/pi'
+import { RxShare2 } from 'react-icons/rx'
+import { toast } from 'sonner'
+import './ProductDetails.scss'
 import { Comments } from './reviews/Comments'
 import MiniReview from './reviews/MiniReview'
+import ShareProductModal from './share-modal/shareProductModal'
 import useGetRatingStats from '@/modules/lib/utility/hooks/use-get-rating-stats'
 import useGetProductRating from '@/modules/lib/utility/hooks/use-get-review'
 import colorNames from '@/modules/lib/utility/json-data/colors.json'
 
 const ProductDetails = ({ product }: { product: Product }) => {
-  let globalMediaIndex = 0;
+  const { groupedData, availableColors, productImages } = useTransformProduct(product)
 
-  const [unitCounter, setUnitCounter] = useState<number>(1)
+  console.log(groupedData)
+
+  let globalMediaIndex = 0;
   const [recentlyViewedVariants, setRecentlyViewedVariants] = useState<RecentlyViewed[]>([])
+  const [selectedVariant, setSelectedVariant] = useState(groupedData?.[availableColors[0]]?.[0])
   const [selectedImage, setSelectedImage] = useState(
-    product?.variants?.[0]?.media?.[0]?.url
+    groupedData?.[availableColors[0]]?.media?.[0]?.url
   )
   const { saveVariant, savedVariants, removeSavedVariant } = useSavedVariant();
-  const [selectedVariant, setSelectedVariant] = useState(product?.variants?.[0])
   const {
     addToCart,
     cart,
@@ -53,8 +56,7 @@ const ProductDetails = ({ product }: { product: Product }) => {
   } = useCart()
   const { reviews } = useGetProductRating(product.id)
   const { reviewStat } = useGetRatingStats(product.id)
-
-  const [selectedSize, setSelectedSize] = useState('')
+  const [selectedColor, setSelectedColor] = useState(availableColors[0])
   const [showShareModal, setShowShareModal] = useState(false)
   const [showFullDescription, setShowFullDescription] = useState(false)
   const [showAllPhotos, setShowAllPhotos] = useState(false)
@@ -63,20 +65,12 @@ const ProductDetails = ({ product }: { product: Product }) => {
     item => item.variant.id === selectedVariant?.id
   )
 
-
   useEffect(() => {
     setSelectedImage(product?.variants?.[0]?.media?.[0]?.url)
   }, [product])
 
 
   // const strikeOutPrice = (product?.finalPrice + product?.finalPrice * 0.05).toFixed(2) // TODO: implement proper strikeout price
-
-  const displayPrice = selectedVariant?.price || product?.price
-  const { address, state } = product.store.meta?.settings?.location || {}
-  const sanitizedAddress = address?.replace(/[.,]+$/, '')
-  const location = [sanitizedAddress, state].filter(Boolean).join('. ')
-
-
 
   function productTypeRender(stockUnit: string): string[] {
     if (stockUnit?.toLowerCase() === 'yards') {
@@ -98,8 +92,6 @@ const ProductDetails = ({ product }: { product: Product }) => {
 
   useEffect(() => {
     (async () => {
-
-
       if (isAuthenticated) {
         const response: RecentlyViewed[] = await productService.getRecentlyViewedVariants()
         setRecentlyViewedVariants(response)
@@ -107,18 +99,11 @@ const ProductDetails = ({ product }: { product: Product }) => {
     })()
   }, [isAuthenticated])
 
-
-
-
-
   const isSaved = savedVariants.find((variant: SavedVariant) => selectedVariant.id === variant.variantId)
-
-
 
   const handleSave = () => {
     if (isSaved) {
       removeSavedVariant(selectedVariant?.id)
-
     } else {
       saveVariant(selectedVariant?.id)
     }
@@ -142,16 +127,19 @@ const ProductDetails = ({ product }: { product: Product }) => {
           addToCart(parsedVariantId, parsedMinimumPurchase);
 
         }
-
-
         localStorage.removeItem("variantId");
         localStorage.removeItem("variantIdMinimumPurchase");
       }
     }
   }, [isAuthenticated]);
 
+  useEffect(() => {
+    setSelectedVariant(groupedData?.[selectedColor]?.[0])
+  }, [selectedColor])
+
   const isOutOfStock = selectedVariant?.status === 'OUT_OF_STOCK';
   const isDiscounted = new Date() <= new Date(product?.discount?.activeEndDate)
+  const hasSize = groupedData?.[selectedColor]?.length > 0
 
   const addToCartBtn = () => {
     return <div className='flex flex-col gap-16'>
@@ -167,7 +155,7 @@ const ProductDetails = ({ product }: { product: Product }) => {
                   addToCart(
                     selectedVariant?.id ?? 0,
                     selectedVariant?.minPurchaseQuantity || 1
-                  )
+                  );
                 }
               } else {
                 handleLogin(selectedVariant?.id ?? 0,
@@ -350,71 +338,73 @@ const ProductDetails = ({ product }: { product: Product }) => {
               <p className='weight-600 border-b border-#00000014 pb-15 pt-15'>
                 VARIATIONS
               </p>
-              <p className='text-left text-12 weight-400 color-#000000B2'>
-                Select color:
-              </p>
-              <div className='flex gap-6 a-items-center'>
-                {product.variants.map(variant => {
-                  const colorMap = Object.fromEntries(
-                    colorNames.map(color => [color.name.replaceAll(' ', '').toLowerCase(), color.hex])
-                  );
+              <div>
+                <p className='text-left text-12 weight-400 color-#000000B2'>
+                  Select color:
+                </p>
+                <div className='flex gap-6 a-items-center'>
+                  {
+                    availableColors?.map((each: string, idx: number) => {
+                      const colorMap = Object.fromEntries(
+                        colorNames.map(color => [color.name.replaceAll(' ', '').toLowerCase(), color.hex])
+                      );
 
-                  const getColorHex = (colorName: string) => {
-                    if (!colorName) return null;
-                    return colorMap[colorName.toLowerCase()] || null;
+                      const getColorHex = (colorName: string) => {
+                        if (!colorName) return null;
+                        return colorMap[colorName.toLowerCase()] || null;
+                      }
+                      const colorName = each.toString().replaceAll(' ', '')
+                      const colorHex = getColorHex(colorName);
+
+                      return (
+                        <div
+                          key={each}
+                          onClick={() => {
+                            setSelectedColor(each)
+                            setSelectedImage(productImages[idx])
+                          }}
+                          style={{
+                            background: colorHex || colorName || 'white',
+                            cursor: "pointer"
+                          }}
+                          className={classNames(
+                            'w-30 h-30 flex round cursor-pointer',
+                            {
+                              'outline outline-2 w-27 h-27 flex':
+                                selectedColor === each
+                            }
+                          )}
+                        ></div>
+                      )
+                    })
                   }
-
-                  const colorName = variant.properties?.['color'].toString().replaceAll(' ', '')
-                  const colorHex = getColorHex(colorName);
-
-                  return (
-                    <div
-                      key={variant.id}
-                      onClick={() => {
-                        setSelectedVariant(variant)
-                        setSelectedImage(variant?.media?.[0]?.url)
-                      }}
-                      style={{
-                        background: colorHex || colorName || 'white',
-                        cursor: "pointer"
-                      }}
-                      className={classNames(
-                        'w-30 h-30 flex round cursor-pointer',
-                        {
-                          'outline outline-2 w-27 h-27 flex':
-                            variant.id === selectedVariant?.id
-                        }
-                      )}
-                    ></div>
-                  )
-                })}
-              </div>
-
-              <div className='flex flex-col gap-12 mb-10'>
-                <div className='text-12 weight-400'>
-                  Select size
                 </div>
-                <div className='flex flex-wrap  gap-4'>
-                  {productTypeRender(selectedVariant.stockUnit).map(
-                    (text, i) => (
-                      <label
-                        className={cx(
-                          'flex gap-8 text-14 bg-#F3F3F3 color-#726C6C px-10 py-7 radius-6 cursor-pointer',
-                          {
-                            'bg-green-100! text-green!': text === selectedSize
+              </div>
+              <div className=''>
+                <p className='text-left text-12 weight-400 color-#000000B2'>
+                  Select size:
+                </p>
+                <div className='flex gap-6 a-items-center'>
+                  {
+                    groupedData?.[selectedColor]?.map((variant: ProductVariant) => (
+                      variant?.size && (
+                        <div
+                          key={variant?.id}
+                          role='button'
+                          className={
+                            cx('w-fit flex gap-8 text-12 bg-#F3F3F3 color-#726C6C px-10 py-7 radius-6 uppercase cursor-pointer',
+                              {
+                                'bg-green-100! text-green!': variant?.id === selectedVariant?.id
+                              }
+                            )
                           }
-                        )}
-                      >
-                        <input
-                          type='radio'
-                          name='size'
-                          onClick={() => setSelectedSize(text)}
-                          className={cx('accent-green')}
-                        />
-                        <span className='whitespace-nowrap text-12'>{text} yards</span>
-                      </label>
-                    )
-                  )}
+                          onClick={() => setSelectedVariant(variant)}
+                        >
+                          {variant?.size}
+                        </div>
+                      )
+                    ))
+                  }
                 </div>
               </div>
               {addToCartBtn()}
@@ -466,7 +456,7 @@ const ProductDetails = ({ product }: { product: Product }) => {
                 </div>
                 <div className='w-full flex a-items-center' style={{ border: '0.5px solid #00000014' }}>
                   <div className='w-40p py-10 mt-2 text-14 px-14 bg-#F5F5F5'>Brand name</div>
-                  <div className='w-60p pl-10 capitalize'>{selectedVariant.properties.origin}</div>
+                  <div className='w-60p pl-10 capitalize'>{selectedVariant?.properties?.origin}</div>
                 </div>
               </div>
             </div>
@@ -479,33 +469,77 @@ const ProductDetails = ({ product }: { product: Product }) => {
                 VARIATIONS
               </p>
               <div className='flex flex-col gap-28'>
-                <div className='mt-10 flex flex-col gap-12'>
-                  <p className='text-left text-12 weight-400'>
+                <div>
+                  <p className='text-left text-12 weight-400 color-#000000B2'>
                     Select color:
                   </p>
                   <div className='flex gap-6 a-items-center'>
-                    {product.variants.map(variant => (
-                      <div
-                        key={variant.id}
-                        onClick={() => {
-                          setSelectedVariant(variant)
-                          setSelectedImage(variant?.media?.[0]?.url)
-                        }}
-                        style={{
-                          background: variant.properties?.['color']
-                        }}
-                        className={classNames(
-                          'w-30 h-30 flex round',
-                          {
-                            'outline outline-2 w-27 h-27 flex':
-                              variant.id === selectedVariant?.id
-                          }
-                        )}
-                      ></div>
-                    ))}
+                    {
+                      availableColors?.map((each: string, idx: number) => {
+                        const colorMap = Object.fromEntries(
+                          colorNames.map(color => [color.name.replaceAll(' ', '').toLowerCase(), color.hex])
+                        );
+
+                        const getColorHex = (colorName: string) => {
+                          if (!colorName) return null;
+                          return colorMap[colorName.toLowerCase()] || null;
+                        }
+                        const colorName = each.toString().replaceAll(' ', '')
+                        const colorHex = getColorHex(colorName);
+
+                        return (
+                          <div
+                            key={each}
+                            onClick={() => {
+                              setSelectedColor(each)
+                              setSelectedImage(productImages[idx])
+                            }}
+                            style={{
+                              background: colorHex || colorName || 'white',
+                              cursor: "pointer"
+                            }}
+                            className={classNames(
+                              'w-30 h-30 flex round cursor-pointer',
+                              {
+                                'outline outline-2 w-27 h-27 flex':
+                                  selectedColor === each
+                              }
+                            )}
+                          ></div>
+                        )
+                      })
+                    }
                   </div>
                 </div>
-                <div className='flex flex-col gap-12'>
+                <div className=''>
+                  <p className='text-left text-12 weight-400 color-#000000B2'>
+                    Select size:
+                  </p>
+                  <div className='flex gap-6 a-items-center'>
+                    {
+                      groupedData?.[selectedColor]?.map((variant: ProductVariant) => (
+                        variant?.size && (
+                          <div
+                            key={variant?.id}
+                            role='button'
+                            className={
+                              cx('w-fit flex gap-8 text-12 bg-#F3F3F3 color-#726C6C px-10 py-7 radius-6 uppercase cursor-pointer',
+                                {
+                                  'bg-green-100! text-green!': variant?.id === selectedVariant?.id
+                                }
+                              )
+                            }
+                            onClick={() => setSelectedVariant(variant)}
+                          >
+                            {variant?.size}
+                          </div>
+                        )
+                      ))
+                    }
+                  </div>
+                </div>
+
+                {/* <div className='flex flex-col gap-12'>
                   <div className='text-12 weight-400'>
                     Select size:
                   </div>
@@ -532,9 +566,8 @@ const ProductDetails = ({ product }: { product: Product }) => {
                     )}
                   </div>
 
-                </div>
+                </div> */}
                 {addToCartBtn()}
-
               </div>
             </div>
           </div>
