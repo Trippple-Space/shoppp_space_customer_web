@@ -87,9 +87,9 @@ const ProductTile: FC<IProductTile> = ({ product, savedVariants, saveVariant, re
     isLoginModal()
   }
 
-  const {groupedData} = useTransformProduct(product)
+  //const {groupedData} = useTransformProduct(product)
 
-  console.log("groupedData >>> ",groupedData)
+  //console.log("groupedData >>> ",groupedData)
 
   useEffect(() => {
 

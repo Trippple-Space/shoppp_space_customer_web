@@ -165,8 +165,6 @@ const ProductDetails = ({ product }: { product: Product }) => {
         />}
     </div>
   }
-  console.log(product)
-  console.log(groupedData)
 
   return (
     <>
@@ -214,7 +212,7 @@ const ProductDetails = ({ product }: { product: Product }) => {
             />
           </div>
 
-          <div className='w-100p flex l:grid grid-2-cols-1fr l:grid-2-row-auto gap-6 no-scrollbar' style={{width: '100%', overflow: 'auto'}}>
+          <div className='w-100p flex l:grid grid-2-cols-1fr l:grid-2-row-auto gap-6 no-scrollbar' style={{ width: '100%', overflow: 'auto' }}>
             {product?.variants?.map((variant, idx) =>
               variant?.media?.map((mediaItem, index) => {
                 const currentIndex = globalMediaIndex++;
@@ -329,7 +327,7 @@ const ProductDetails = ({ product }: { product: Product }) => {
                 <p className='text-left text-12 weight-400 color-#000000B2 mb-12'>
                   Select color:
                 </p>
-                <div className='flex gap-6 a-items-center no-scrollbar' style={{width: '100%', overflow: 'auto'}}>
+                <div className='flex gap-6 a-items-center no-scrollbar' style={{ width: '100%', overflow: 'auto' }}>
                   {
                     availableColors?.map((each: string, idx: number) => {
                       const colorMap = Object.fromEntries(
@@ -392,6 +390,7 @@ const ProductDetails = ({ product }: { product: Product }) => {
                               onClick={() => setSelectedVariant(variant)}
                               className={cx('accent-#0B9378 pointer')}
                               checked={variant?.id === selectedVariant?.id}
+                              onChange={() => setSelectedVariant(variant)}
                             />
                             <span className={`whitespace-nowrap text-12`}>{variant?.size}</span>
                           </label>
@@ -467,7 +466,7 @@ const ProductDetails = ({ product }: { product: Product }) => {
                   <p className='text-left text-12 weight-400 color-#000000B2 mb-12'>
                     Select color:
                   </p>
-                  <div className='flex gap-6 a-items-center no-scrollbar' style={{width: '100%', overflow: 'auto'}}>
+                  <div className='flex gap-6 a-items-center no-scrollbar' style={{ width: '100%', overflow: 'auto' }}>
                     {
                       availableColors?.map((each: string, idx: number) => {
                         const colorMap = Object.fromEntries(
@@ -511,7 +510,7 @@ const ProductDetails = ({ product }: { product: Product }) => {
                     <p className='text-left text-12 weight-400 color-#000000B2 mb-12'>
                       Select size:
                     </p>
-                    <div className='flex gap-6 a-items-center no-scrollbar' style={{width: '100%', overflow: 'auto'}}>
+                    <div className='flex gap-6 a-items-center no-scrollbar' style={{ width: '100%', overflow: 'auto' }}>
                       {
                         groupedData?.[selectedColor]?.map((variant: ProductVariant) => (
                           variant?.size && (
@@ -530,6 +529,7 @@ const ProductDetails = ({ product }: { product: Product }) => {
                                 onClick={() => setSelectedVariant(variant)}
                                 className={cx('accent-#0B9378 pointer')}
                                 checked={variant?.id === selectedVariant?.id}
+                                onChange={() => setSelectedVariant(variant)}
                               />
                               <span className={`whitespace-nowrap text-12`}>{variant?.size}</span>
                             </label>
