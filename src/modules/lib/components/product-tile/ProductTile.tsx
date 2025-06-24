@@ -16,6 +16,7 @@ import { SavedVariant } from '../../utility/types/SavedVariant.interface'
 import { productService } from '../../utility/services/product.service'
 import MiniReview from '@/modules/views/product-details/reviews/MiniReview'
 import { IFetchedReview } from '../../utility/types/review.interface'
+import useTransformProduct from '../../utility/hooks/use-transform-product'
 
 interface IProductTile {
   product: Product
@@ -81,6 +82,10 @@ const ProductTile: FC<IProductTile> = ({ product, savedVariants, saveVariant, re
     localStorage.setItem('variantIdMinimumPurchase', minimumPurchase.toString())
     isLoginModal()
   }
+
+  const {groupedData} = useTransformProduct(product)
+
+  console.log("groupedData >>> ",groupedData)
 
   useEffect(() => {
 
