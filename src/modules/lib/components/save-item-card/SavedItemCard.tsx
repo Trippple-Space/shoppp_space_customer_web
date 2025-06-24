@@ -15,12 +15,11 @@ const SavedVariantsCard: React.FC<any> = ({ savedVariant, removeSavedVariant }: 
   const { addToCart, cart, decrement, increment } = useCart()
   
     const selectedVariantInCart = cart.cartItems.find(
-    item => item.variant.id === savedVariant?.variantId
+    item => item?.variant.id === savedVariant?.variantId
     )
   
   
-  const isOutOfStock = savedVariant.variant.status === 'OUT_OF_STOCK'
-  
+  const isOutOfStock = savedVariant?.variant.status === 'OUT_OF_STOCK'
   
   return (
     <div className='l:flex space-between items-center'>
@@ -33,19 +32,19 @@ const SavedVariantsCard: React.FC<any> = ({ savedVariant, removeSavedVariant }: 
           </div> }
         <Image
               className={` w-full h-full a-self-center radius-6 g|object-fit:cover pointer ${isOutOfStock  && 'out-of-stock'}`}
-          src={savedVariant.variant.media[0].url}
+          src={savedVariant?.variant.media[0].url}
           alt='product'
           type='image'
         />
       
         </div>
         <div className='line-height-28'>
-          <h2 className='text-16 l:text-18 weight-400 text-grey-900'>{savedVariant.variant.product?.name}</h2>
-          <h1 className='text-16 weight-400 text-grey-900'>{formatNumberAsPrice(savedVariant.variant.product?.price ?? 0) }</h1>
-          <p className='text-12'>{formatDate(new Date(savedVariant.savedAt))}</p>
+          <h2 className='text-16 l:text-18 weight-400 text-grey-900'>{savedVariant?.variant.product?.name}</h2>
+          <h1 className='text-16 weight-400 text-grey-900'>{formatNumberAsPrice(savedVariant?.variant.product?.price ?? 0) }</h1>
+          <p className='text-12'>{formatDate(new Date(savedVariant?.savedAt))}</p>
           
         
-            <div className='hidden l:flex gap-10 text-danger text-12 items-center pointer' onClick={() => removeSavedVariant(savedVariant.variantId)}>
+            <div className='hidden l:flex gap-10 text-danger text-12 items-center pointer' onClick={() => removeSavedVariant(savedVariant?.variantId)}>
               <Icon name='delete' className='w-17 h-17' />
               <p>Remove</p>
             </div>

@@ -5,17 +5,17 @@ import React, { useState } from 'react';
 const getRating = (rating: number) => {
     switch (rating) {
         case 1:
-            return 'Bad';
+            return "I hate it";
         case 2:
-            return 'Poor';
+            return "I don’t like it";
         case 3:
-            return 'Average';
+            return "It’s okay";
         case 4:
-            return 'Very good';
+            return "I like it";
         case 5:
-            return 'Excellent';
+            return "I love it!";
         default:
-            return '';
+            return "";
     }
 };
 

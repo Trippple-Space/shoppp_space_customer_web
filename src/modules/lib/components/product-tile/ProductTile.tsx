@@ -1,5 +1,5 @@
 'use client'
-import React, { FC, useEffect, useState } from 'react'
+import React, { FC, useEffect, useMemo, useState } from 'react'
 import Image from '../image/Image'
 import { AiFillStar, AiOutlinePlus, AiFillHeart } from 'react-icons/ai'
 import classNames from 'classnames'
@@ -16,6 +16,7 @@ import { SavedVariant } from '../../utility/types/SavedVariant.interface'
 import { productService } from '../../utility/services/product.service'
 import MiniReview from '@/modules/views/product-details/reviews/MiniReview'
 import { IFetchedReview } from '../../utility/types/review.interface'
+import useGetRatingStats from '../../utility/hooks/use-get-rating-stats'
 import useTransformProduct from '../../utility/hooks/use-transform-product'
 
 interface IProductTile {
@@ -23,12 +24,12 @@ interface IProductTile {
   saveVariant?: (variantId: number) => void
   removeSavedVariant?: (variantId: number) => void
   savedVariants?: SavedVariant[]
-  reviews: IFetchedReview[]
+  allReviews: IFetchedReview[]
   id: number,
   isOpen: number | null,
   setIsOpen: React.Dispatch<React.SetStateAction<number | null>>
 }
-const ProductTile: FC<IProductTile> = ({ product, savedVariants, saveVariant, removeSavedVariant, reviews, id, isOpen, setIsOpen }: any) => {
+const ProductTile: FC<IProductTile> = ({ product, savedVariants, saveVariant, removeSavedVariant, allReviews, isOpen, setIsOpen }: any) => {
   const [onProductTileHover, setOnProductTileHover] = useState(false)
   const [openSingleProductModal, setOpenSingleProductModal] = useState(false)
   const [recentlyViewedId, setRecentlyViewsId] = useState<any>()
@@ -47,6 +48,9 @@ const ProductTile: FC<IProductTile> = ({ product, savedVariants, saveVariant, re
     isAuthenticated,
     isLoginModal
   } = useCart()
+  const variantIds = useMemo(() => product.variants.map((v: any) => v.id), [product.variants]);
+  const { reviewStat, loading: statsLoading } = useGetRatingStats(variantIds);
+
   const selectedVariantItemInCart = cart.cartItems.find(
     (item) => item.variant.id === selectedVariant?.id
   );
@@ -121,7 +125,7 @@ const ProductTile: FC<IProductTile> = ({ product, savedVariants, saveVariant, re
 
   const isOutOfStock = selectedVariant?.status === 'OUT_OF_STOCK'
   const isDiscounted = new Date(product?.discount?.activeStartDate) <= new Date(new Date().setHours(new Date().getHours() + 1)) && new Date(new Date().setHours(new Date().getHours() + 1)) <= new Date(product?.discount?.activeEndDate)
-  
+
   return (
     <div className='mt-30 l:mt-20 w-full overflow-hidden'>
       <div
@@ -320,7 +324,11 @@ const ProductTile: FC<IProductTile> = ({ product, savedVariants, saveVariant, re
             }
           </div>
           <div className='text-9 sm:text-10 text-grey'>
-            <MiniReview id={id} slug={product.slug} isOpen={isOpen} setIsOpen={setIsOpen} reviews={reviews} />
+            <MiniReview id={selectedVariant.id} slug={product.slug} isOpen={isOpen} setIsOpen={setIsOpen}
+              reviews={allReviews.filter((review: any) => review.productVariantId === selectedVariant.id)}
+              reviewStat={reviewStat.find((stat: any) => stat.id === selectedVariant.id)?.reviewStat}
+              loading={statsLoading}
+            />
           </div>
         </div>
         {/* <div className="flex flex-wrap gap-4">

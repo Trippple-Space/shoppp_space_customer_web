@@ -66,7 +66,7 @@ const CentralArena = () => {
                           savedVariants={savedVariants}
                           saveVariant={saveVariant}
                           removeSavedVariant={removeSavedVariant}
-                          reviews={allReviews.filter((review) => review.productVariantId === product.id)}
+                          allReviews={allReviews}
                           id={product.id}
                           isOpen={openReviewId}
                           setIsOpen={setOpenReviewId}
