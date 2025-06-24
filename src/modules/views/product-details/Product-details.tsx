@@ -2,7 +2,7 @@
 
 import Image from '@/modules/lib/components/image/Image'
 import Link from 'next/link'
-import { useEffect, useState } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 import { AiFillHeart, AiOutlineHeart } from 'react-icons/ai'
 import HomepageNavBar from '@/modules/lib/components/nav-bar/HomepageNavBar'
 import { Product, RecentlyViewed } from '@/modules/lib/utility/types/product.interface'
@@ -51,8 +51,10 @@ const ProductDetails = ({ product }: { product: Product }) => {
     isLoginModal,
     isAuthenticated
   } = useCart()
-  const { reviews } = useGetProductRating(product.id)
-  const { reviewStat } = useGetRatingStats(product.id)
+
+  const variantIds = useMemo(() => product.variants.map(v => v.id), [product.variants]);
+  const { reviews } = useGetProductRating(variantIds);
+  const { reviewStat, loading: statsLoading } = useGetRatingStats(variantIds);
 
   const [selectedSize, setSelectedSize] = useState('')
   const [showShareModal, setShowShareModal] = useState(false)
@@ -62,12 +64,10 @@ const ProductDetails = ({ product }: { product: Product }) => {
   const selectedVariantItemInCart = cart.cartItems.find(
     item => item.variant.id === selectedVariant?.id
   )
-
-
+  
   useEffect(() => {
     setSelectedImage(product?.variants?.[0]?.media?.[0]?.url)
   }, [product])
-
 
   // const strikeOutPrice = (product?.finalPrice + product?.finalPrice * 0.05).toFixed(2) // TODO: implement proper strikeout price
 
@@ -75,8 +75,6 @@ const ProductDetails = ({ product }: { product: Product }) => {
   const { address, state } = product.store.meta?.settings?.location || {}
   const sanitizedAddress = address?.replace(/[.,]+$/, '')
   const location = [sanitizedAddress, state].filter(Boolean).join('. ')
-
-
 
   function productTypeRender(stockUnit: string): string[] {
     if (stockUnit?.toLowerCase() === 'yards') {
@@ -95,7 +93,6 @@ const ProductDetails = ({ product }: { product: Product }) => {
     } return desc
   }
 
-
   useEffect(() => {
     (async () => {
 
@@ -107,13 +104,7 @@ const ProductDetails = ({ product }: { product: Product }) => {
     })()
   }, [isAuthenticated])
 
-
-
-
-
   const isSaved = savedVariants.find((variant: SavedVariant) => selectedVariant.id === variant.variantId)
-
-
 
   const handleSave = () => {
     if (isSaved) {
@@ -152,6 +143,8 @@ const ProductDetails = ({ product }: { product: Product }) => {
 
   const isOutOfStock = selectedVariant?.status === 'OUT_OF_STOCK';
   const isDiscounted = new Date() <= new Date(product?.discount?.activeEndDate)
+
+  console.log(reviews)
 
   const addToCartBtn = () => {
     return <div className='flex flex-col gap-16'>
@@ -315,20 +308,23 @@ const ProductDetails = ({ product }: { product: Product }) => {
                   <div className='flex gap-8 a-items-center'>
                     <Rating
                       style={{ maxWidth: 130, maxHeight: 130, display: 'flex', gap: '8px' }}
-                      value={reviewStat?.averageRating ?? 0}
+                      value={reviewStat?.find(review => review.id === selectedVariant.id)?.reviewStat?.averageRating ?? 0}
                       itemStyles={{ itemShapes: Star, activeFillColor: '#f59e0b', inactiveFillColor: '#0000000F' }}
                       readOnly
                     />
-                    <span className='weight-500 text-14'>{reviewStat?.averageRating.toFixed(1) ?? 0}</span>
+                    <span className='weight-500 text-14'>{reviewStat?.find(review => review.id === selectedVariant.id)?.reviewStat?.averageRating.toFixed(1) ?? 0}</span>
                   </div>
                   <span className='color-' style={{ color: '#D9D9D9B2' }}>|</span>
                   <p className='color-#000000B2 text-12 flex a-items-center gap-5'>
-                    <MiniReview id={product.id} isOpen={isOpen} setIsOpen={setIsOpen} reviews={reviews} slug={product.slug} />
+                    <MiniReview id={selectedVariant.id} isOpen={isOpen} setIsOpen={setIsOpen} reviews={reviews.find(review => review.id === selectedVariant.id)?.reviews ?? []}
+                      reviewStat={reviewStat.find(stat => stat.id === selectedVariant.id)?.reviewStat}
+                      loading={statsLoading}
+                      slug={product.slug} />
                   </p>
                 </div>
 
                 <div className='flex'>
-                  <Link href={`/products/${product.slug}/reviews/${product.id}`} className='color-#1677FF text-12 border-b'>Rate this product</Link>
+                  <Link href={`/products/${product.slug}/reviews/${selectedVariant.id}`} className='color-#1677FF text-12 border-b'>Rate this product</Link>
                 </div>
               </div>
 
@@ -484,25 +480,40 @@ const ProductDetails = ({ product }: { product: Product }) => {
                     Select color:
                   </p>
                   <div className='flex gap-6 a-items-center'>
-                    {product.variants.map(variant => (
-                      <div
-                        key={variant.id}
-                        onClick={() => {
-                          setSelectedVariant(variant)
-                          setSelectedImage(variant?.media?.[0]?.url)
-                        }}
-                        style={{
-                          background: variant.properties?.['color']
-                        }}
-                        className={classNames(
-                          'w-30 h-30 flex round',
-                          {
-                            'outline outline-2 w-27 h-27 flex':
-                              variant.id === selectedVariant?.id
-                          }
-                        )}
-                      ></div>
-                    ))}
+                    {product.variants.map(variant => {
+                      const colorMap = Object.fromEntries(
+                        colorNames.map(color => [color.name.replaceAll(' ', '').toLowerCase(), color.hex])
+                      );
+
+                      const getColorHex = (colorName: string) => {
+                        if (!colorName) return null;
+                        return colorMap[colorName.toLowerCase()] || null;
+                      }
+
+                      const colorName = variant.properties?.['color'].toString().replaceAll(' ', '')
+                      const colorHex = getColorHex(colorName);
+
+                      return (
+                        <div
+                          key={variant.id}
+                          onClick={() => {
+                            setSelectedVariant(variant)
+                            setSelectedImage(variant?.media?.[0]?.url)
+                          }}
+                          style={{
+                            background: colorHex || colorName || 'white',
+                            cursor: "pointer"
+                          }}
+                          className={classNames(
+                            'w-30 h-30 flex round cursor-pointer',
+                            {
+                              'outline outline-2 w-27 h-27 flex':
+                                variant.id === selectedVariant?.id
+                            }
+                          )}
+                        ></div>
+                      )
+                    })}
                   </div>
                 </div>
                 <div className='flex flex-col gap-12'>
@@ -566,9 +577,9 @@ const ProductDetails = ({ product }: { product: Product }) => {
         <div className='flex flex-col gap-12 pt-15 mt-10 pb-100'>
           <div className=''>
             <p className='text-20 weight-600'>
-              Customer Reviews ({reviews.length ?? 0})
+              Customer Reviews ({reviews.flatMap((review) => review.reviews).length ?? 0})
             </p>
-            <Comments reviews={reviews} isModal={false} limit={3} productId={product.id} slug={product.slug} />
+            <Comments reviews={reviews.flatMap((review) => review.reviews)} isModal={false} limit={3} productId={selectedVariant.id} slug={product.slug} />
           </div>
 
         </div>
@@ -593,7 +604,7 @@ const ProductDetails = ({ product }: { product: Product }) => {
                   <Image
                     src={mediaItem?.url}
                     alt="product-image"
-                    className={cx('object-fit w-50 h-50 radius-4 l:radius-0 l:w-full  l:h-full', {
+                    className={cx('object-fit w-50 h-50 radius-4 l:radius-0 l:w-full pointer l:h-full', {
                       'border border-green border-2':
                         selectedImage == mediaItem?.url,
                       [`border-${mediaItem?.description?.toLocaleLowerCase()}`]:

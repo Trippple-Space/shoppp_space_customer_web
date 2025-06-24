@@ -51,10 +51,10 @@ const VariantModal = ({variant, saveVariant, removeSavedVariant, savedVariants}:
  const isSaved = savedVariants?.find((item: SavedVariant) => item.variantId === variant?.productVariantId)
       const handleSave = () => {
     if (isSaved) {
-      removeSavedVariant && removeSavedVariant(variant.productVariantId)
+      removeSavedVariant && removeSavedVariant(variant?.productVariantId)
 
     } else {
-      saveVariant && saveVariant(variant.productVariantId)
+      saveVariant && saveVariant(variant?.productVariantId)
     }
   }
 

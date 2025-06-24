@@ -196,7 +196,7 @@ const StorefrontLayout: FC<{ store: Store; children: ReactNode }> = ({
                             <ProductTile
                               product={product}
                               key={i}
-                              reviews={allReviews.filter((review) => review.productVariantId === product.id)}
+                              allReviews={allReviews}
                               id={product.id}
                               isOpen={openReviewId}
                               setIsOpen={setOpenReviewId} />
@@ -253,7 +253,7 @@ const StorefrontLayout: FC<{ store: Store; children: ReactNode }> = ({
                             <ProductTile
                               product={product}
                               key={i}
-                              reviews={allReviews.filter((review) => review.productVariantId === product.id)}
+                              allReviews={allReviews}
                               id={product.id}
                               isOpen={openReviewId}
                               setIsOpen={setOpenReviewId}
@@ -301,7 +301,7 @@ const StorefrontLayout: FC<{ store: Store; children: ReactNode }> = ({
                   <ProductTile
                     product={product}
                     key={i}
-                    reviews={allReviews.filter((review) => review.productVariantId === product.id)}
+                    allReviews={allReviews}
                     id={product.id}
                     isOpen={openReviewId}
                     setIsOpen={setOpenReviewId}

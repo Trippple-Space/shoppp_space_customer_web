@@ -56,7 +56,7 @@ const ProductDetailModal = ({
     }
   }, [openSingleProductModal])
 
-  const displayPrice = selectedVariant?.price || variant.product?.price
+  const displayPrice = selectedVariant?.finalPrice || variant.product?.finalPrice
 
 
 const handlePreviousImage = () => {
@@ -189,7 +189,7 @@ const handleNextImage = () => {
                           </div>
                             <p className='weight-400'> in {variant?.product?.type} </p>
                             <p className='weight-600 text-30 text-black'> {formatNumberAsPrice(displayPrice || 0)} </p>
-                          <p className='weight-600 text-13 text-black'> Color:{' '}{selectedVariant?.properties.color} </p>
+                          <p className='weight-600 text-13 text-black capitalize'> Color:{' '}{selectedVariant?.properties.color} </p>
 
                            </div>
                    
@@ -295,96 +295,3 @@ const handleNextImage = () => {
 }
 
 export default ProductDetailModal
-
-
-  {/* <div className='relative z-10'>
-                      <div className='fixed  w-100p bg-white border-b border-b-#00000014 p-10 l:p-20 flex a-items-center j-content-between '>
-                        <p className='text-left  weight-600'>Price details</p>
-                        <IoMdClose
-                          className='w-30 cursor-pointer'
-                          onClick={handleCloseProductModal}
-                        />
-                      </div>
-                    </div>
-
-                    <div className='p-20 flex flex-col gap-10 mt-60'>
-                      <div className='mt-5'>
-                        {selectedImage && (
-                          <div className=' '>
-                            <Image
-                              src={selectedImage}
-                              alt={product?.name}
-                              className={` radius-8 object-fit h-100p ${selectedVariant?.status === 'OUT_OF_STOCK' ? 'greyscale': ''}`}
-                            />
-                          </div>
-                        )}
-                      </div>
-                      <div className='flex gap-20'>
-                        {product?.variants?.map((variant, idx) =>
-                          variant?.media?.map((mediaItem: any) => (
-                            <div
-                              key={variant.id}
-                              className={cx(
-                                `l:w-40 l:h-45 w-45 h-30 overflow-hidden radius-3  ${variant.status ==='OUT_OF_STOCK' ? 'greyscale': ''}`,
-                                {
-                                  'border border-green border-2':
-                                    selectedImage == mediaItem?.url,
-                                  [`border-${mediaItem?.description?.toLocaleLowerCase()}`]:
-                                    selectedImage == mediaItem?.url
-                                }
-                              )}
-                            >
-                              <Image
-                                src={mediaItem?.url}
-                                alt='product-image'
-                                className=''
-                                onClick={() => {
-                                  setSelectedVariant(variant)
-                                  setSelectedImage(mediaItem?.url)
-                                }}
-                              />
-                            </div>
-                          ))
-                        )}
-                      </div>
-                      <div className='flex j-content-inital mt-10 weight-500 border-b border-b-#00000014  pb-20 '>
-                        VARIATIONS
-                      </div>
-                      <div className='mt-10'>
-                        <p className='color-#000000B2 text-left text-14 weight-400'>
-                          Choose a color:
-                        </p>
-                        <div className='mt-10 flex gap-12'>
-                          {product.variants.map(variant => (
-                            <div
-                              key={variant.id}
-                              onClick={() => {
-                                setSelectedVariant(variant)
-                                setSelectedImage(variant?.media?.[0]?.url || variantSelectedImage)
-                              }}
-                              style={{
-                                background: variant.properties?.['color']
-                              }}
-                              className={classNames(
-                                'w-30 h-30 round m-7 flex pointer',
-                                {
-                                  'outline outline-2':
-                                    variant.id === selectedVariant?.id
-                                }
-                              )}
-                            ></div>
-                          ))}
-                        </div>
-                      </div>
-                      <div className=''>
-                        <ProductStockUnit product={product} />
-
-                        <p className='text-left mt-20 weight-600 l:text-24 text-18'>
-                          {formatNumberAsPrice(displayPrice || 0)}
-                        </p>
-
-                      
-                     
-                        </div>
-                      </div>
-                    </div> */}
