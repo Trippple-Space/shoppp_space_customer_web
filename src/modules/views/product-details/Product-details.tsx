@@ -2,7 +2,7 @@
 import Footer from '@/modules/lib/components/footer/Footer'
 import Image from '@/modules/lib/components/image/Image'
 import Modal from '@/modules/lib/components/modal/modal'
-import { CSSProperties, useEffect, useState, useMemo } from 'react'
+import { useEffect, useState, useMemo } from 'react'
 import { AiFillHeart, AiOutlineHeart } from 'react-icons/ai'
 import HomepageNavBar from '@/modules/lib/components/nav-bar/HomepageNavBar'
 import QuantitySelector from '@/modules/lib/components/quantity-selector/QuantitySelector'
@@ -25,7 +25,6 @@ import { HiOutlineShoppingBag } from 'react-icons/hi2'
 import { LuGrid2X2 } from 'react-icons/lu'
 import { PiGlobeHemisphereEast, PiTruck } from 'react-icons/pi'
 import { RxShare2 } from 'react-icons/rx'
-import { toast } from 'sonner'
 import './ProductDetails.scss'
 import { Comments } from './reviews/Comments'
 import MiniReview from './reviews/MiniReview'
@@ -36,12 +35,13 @@ import colorNames from '@/modules/lib/utility/json-data/colors.json'
 
 const ProductDetails = ({ product }: { product: Product }) => {
   const { groupedData, availableColors, productImages } = useTransformProduct(product)
+  const uniqueVariantsFromProductImages = product?.variants.filter((variants) => productImages.find(image => image === variants.media[0].url))
 
   let globalMediaIndex = 0;
   const [recentlyViewedVariants, setRecentlyViewedVariants] = useState<RecentlyViewed[]>([])
   const [selectedVariant, setSelectedVariant] = useState(groupedData?.[availableColors[0]]?.[0])
   const [selectedImage, setSelectedImage] = useState(
-    groupedData?.[availableColors[0]]?.media?.[0]?.url
+    uniqueVariantsFromProductImages[0]?.media?.[0]?.url
   )
   const { saveVariant, savedVariants, removeSavedVariant } = useSavedVariant();
   const {
@@ -194,7 +194,7 @@ const ProductDetails = ({ product }: { product: Product }) => {
         </div>
 
         <div className='flex flex-col l:flex-row a-items-start j-content-between mt-20 gap-6 l:g|max-height:480px relative'>
-          {product.variants.length > 4 && <div className='hidden l:block absolute r-0 b-0 p-20 z-2 cursor-pointer'>
+          {uniqueVariantsFromProductImages.length > 4 && <div className='hidden l:block absolute r-0 b-0 p-20 z-2 cursor-pointer'>
             <div className='bg-white flex gap-8 radius-8  a-items-center border px-16 py-10' onClick={() => setShowAllPhotos(prev => !prev)}>
               <LuGrid2X2 className='w-fit flex' />
               <p className='text-14 weight-500'>Show all photos</p>
@@ -213,7 +213,7 @@ const ProductDetails = ({ product }: { product: Product }) => {
           </div>
 
           <div className='w-100p flex l:grid grid-2-cols-1fr l:grid-2-row-auto gap-6 no-scrollbar' style={{ width: '100%', overflow: 'auto' }}>
-            {product?.variants?.map((variant, idx) =>
+            {uniqueVariantsFromProductImages?.map((variant, idx) =>
               variant?.media?.map((mediaItem, index) => {
                 const currentIndex = globalMediaIndex++;
 
@@ -586,7 +586,7 @@ const ProductDetails = ({ product }: { product: Product }) => {
       />
       <Modal isOpen={showAllPhotos} onClose={() => setShowAllPhotos(false)}>
         <div className='l:w-500 h-70vh flex l:grid grid-2-cols-1fr l:grid-2-row-auto gap-6 p-20 overflow-auto no-scrollbar'>
-          {product?.variants?.map((variant, idx) =>
+          {uniqueVariantsFromProductImages.map((variant, idx) =>
             variant?.media?.map((mediaItem, index) => {
               return (
                 <div

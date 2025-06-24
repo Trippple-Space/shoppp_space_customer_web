@@ -48,9 +48,6 @@ const SearchModal = ({
     setProduct(null)
   }
 
-
-
-
   return (
     <>
       <div className='h-100p w-100p'>

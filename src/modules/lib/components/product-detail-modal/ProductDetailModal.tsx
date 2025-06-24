@@ -35,11 +35,12 @@ const ProductDetailModal = ({
     isLoginModal
   } = useCart()
   const { groupedData, availableColors, productImages } = variant?.product ? useTransformProduct(variant.product) : { groupedData: null };
+  const uniqueVariantsFromProductImages = variant?.product?.variants.filter((variants) => productImages?.find(image => image === variants.media[0].url))
 
   const [isHover, setIsHover] = useState(false)
   const [selectedVariant, setSelectedVariant] = useState(groupedData?.[availableColors[0]]?.[0])
   const [selectedImage, setSelectedImage] = useState(
-    groupedData?.[availableColors[0]]?.media?.[0]?.url
+    uniqueVariantsFromProductImages?.[0]?.media?.[0]?.url || groupedData?.[availableColors[0]]?.media?.[0]?.url
   )
   const [selectedColor, setSelectedColor] = useState(availableColors?.[0] ?? '')
 
@@ -159,14 +160,15 @@ const ProductDetailModal = ({
                                     <MdArrowForwardIos className='w-fit' />
                                   </div>}
                                 </div>
-                                {!variantSelectedImage && (variant.product?.variants?.length ?? 0) > 1 && <div className='flex gap-10 py-5 overflow-x-auto a-items-center no-scrollbar'>
-                                  {variant.product?.variants?.map((variant, idx) =>
+                                {!variantSelectedImage && (uniqueVariantsFromProductImages?.length ?? 0) > 1 && <div className='flex gap-10 py-5 overflow-x-auto a-items-center no-scrollbar'>
+                                  {uniqueVariantsFromProductImages?.map((variant, idx) =>
                                     variant?.media?.map((mediaItem: any) => (
                                       <div
                                         key={variant.id}
                                         onClick={() => {
                                           setSelectedVariant(variant)
                                           setSelectedImage(mediaItem?.url)
+                                          setSelectedColor(variant.properties.color)
                                         }}
                                         className='min-w-90 h-90'
                                       >
