@@ -3,7 +3,7 @@ import React, { FC, useEffect, useMemo, useState } from 'react'
 import Image from '../image/Image'
 import { AiFillStar, AiOutlinePlus, AiFillHeart } from 'react-icons/ai'
 import classNames from 'classnames'
-import { Product } from '../../utility/types/product.interface'
+import { Product, ProductVariant } from '../../utility/types/product.interface'
 import { cx, displayProductPill, formatNumberAsPrice } from '../../utility/utility'
 import { useCart } from '../../utility/hooks/use-cart'
 import QuantitySelector from '../quantity-selector/QuantitySelector'
@@ -30,9 +30,13 @@ interface IProductTile {
   setIsOpen: React.Dispatch<React.SetStateAction<number | null>>
 }
 const ProductTile: FC<IProductTile> = ({ product, savedVariants, saveVariant, removeSavedVariant, allReviews, isOpen, setIsOpen }: any) => {
+  const { groupedData, productImages, availableColors } = useTransformProduct(product)
+  const uniqueVariantsFromProductImages = product?.variants.filter((variants: ProductVariant) => productImages.find(image => image === variants.media[0].url))
+
   const [onProductTileHover, setOnProductTileHover] = useState(false)
   const [openSingleProductModal, setOpenSingleProductModal] = useState(false)
   const [recentlyViewedId, setRecentlyViewsId] = useState<any>()
+  const [selectedColor, setSelectedColor] = useState(availableColors[0])
   const [selectedImage, setSelectedImage] = useState(
     product?.variants?.[0]?.media?.[0]?.url
   );
@@ -87,10 +91,6 @@ const ProductTile: FC<IProductTile> = ({ product, savedVariants, saveVariant, re
     isLoginModal()
   }
 
-  //const {groupedData} = useTransformProduct(product)
-
-  //console.log("groupedData >>> ",groupedData)
-
   useEffect(() => {
 
     if (recentlyViewedId && isAuthenticated) {
@@ -125,6 +125,7 @@ const ProductTile: FC<IProductTile> = ({ product, savedVariants, saveVariant, re
 
   const isOutOfStock = selectedVariant?.status === 'OUT_OF_STOCK'
   const isDiscounted = new Date(product?.discount?.activeStartDate) <= new Date(new Date().setHours(new Date().getHours() + 1)) && new Date(new Date().setHours(new Date().getHours() + 1)) <= new Date(product?.discount?.activeEndDate)
+  const hasSize = groupedData?.[selectedColor][0].size !== null
 
   return (
     <div className='mt-30 l:mt-20 w-full overflow-hidden'>
@@ -178,8 +179,18 @@ const ProductTile: FC<IProductTile> = ({ product, savedVariants, saveVariant, re
           >
             {selectedVariantItemInCart ? (
               <QuantitySelector
-                decrement={() => decrement(selectedVariantItemInCart)}
-                increment={() => increment(selectedVariantItemInCart)}
+                decrement={() => {
+                  hasSize ?
+                    handleCloseProductModal()
+                    :
+                    decrement(selectedVariantItemInCart)
+                }}
+                increment={() => {
+                  hasSize ?
+                    handleCloseProductModal()
+                    :
+                    increment(selectedVariantItemInCart)
+                }}
                 cartItem={selectedVariantItemInCart}
               />
             ) : (
@@ -187,10 +198,14 @@ const ProductTile: FC<IProductTile> = ({ product, savedVariants, saveVariant, re
                 {selectedVariant?.status !== 'OUT_OF_STOCK' ? <button
                   onClick={() => {
                     isAuthenticated
-                      ? addToCart(
-                        selectedVariant.id,
-                        selectedVariant.minPurchaseQuantity || 1
-                      )
+                      ?
+                      hasSize ?
+                        handleCloseProductModal()
+                        :
+                        addToCart(
+                          selectedVariant.id,
+                          selectedVariant.minPurchaseQuantity || 1
+                        )
                       : handleLogin(selectedVariant.id,
                         selectedVariant.minPurchaseQuantity || 1);
                   }}
@@ -237,7 +252,7 @@ const ProductTile: FC<IProductTile> = ({ product, savedVariants, saveVariant, re
           id="product varients"
           className="md:mt-16 mt-14 flex a-items-center md:gap-6 gap-4 w-200 overlow-auto whitespace-nowrap"
         >
-          {product.variants.map((variant: any) =>
+          {uniqueVariantsFromProductImages.map((variant: any) =>
             variant?.media?.map((mediaItem: any) =>
               mediaItem?.type === "image" ? (
                 <Image
@@ -255,6 +270,7 @@ const ProductTile: FC<IProductTile> = ({ product, savedVariants, saveVariant, re
                     setRecentlyViewsId(variant.id)
                     setMediaType("image");
                     setSelectedImage(mediaItem?.url);
+                    setSelectedColor(variant?.properties?.color)
                   }}
                   alt="product-image"
                 />

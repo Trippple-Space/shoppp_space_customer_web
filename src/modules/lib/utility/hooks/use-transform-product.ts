@@ -4,7 +4,7 @@ const useTransformProduct = (product: Product) => {
   const groupedData: { [key: string]: any } = {};
   const productImages: string[] = []
 
-  product.variants.forEach((each) => {
+  product.variants.sort((a, b) => a.id - b.id).forEach((each) => {
     const color = each.properties.color;
     const hashArray = groupedData[color];
     if (!hashArray) {

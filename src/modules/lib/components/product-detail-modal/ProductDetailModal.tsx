@@ -38,11 +38,9 @@ const ProductDetailModal = ({
   const uniqueVariantsFromProductImages = variant?.product?.variants.filter((variants) => productImages?.find(image => image === variants.media[0].url))
 
   const [isHover, setIsHover] = useState(false)
-  const [selectedVariant, setSelectedVariant] = useState(groupedData?.[availableColors[0]]?.[0])
-  const [selectedImage, setSelectedImage] = useState(
-    uniqueVariantsFromProductImages?.[0]?.media?.[0]?.url || groupedData?.[availableColors[0]]?.media?.[0]?.url
-  )
-  const [selectedColor, setSelectedColor] = useState(availableColors?.[0] ?? '')
+  const [selectedVariant, setSelectedVariant] = useState(variant || groupedData?.[availableColors[0]]?.[0])
+  const [selectedImage, setSelectedImage] = useState(variant.media?.[0]?.url || uniqueVariantsFromProductImages?.[0]?.media?.[0]?.url || groupedData?.[availableColors[0]]?.media?.[0]?.url)
+  const [selectedColor, setSelectedColor] = useState(variant?.properties?.color || availableColors?.[0] || '')
 
   const selectedVariantItemInCart = cart.cartItems.find(
     item => item.variant.id === selectedVariant?.id
@@ -61,37 +59,39 @@ const ProductDetailModal = ({
   }, [openSingleProductModal])
 
   useEffect(() => {
-    setSelectedImage(variant.product?.variants?.[0]?.media?.[0]?.url)
+    setSelectedImage(variant?.media?.[0]?.url)
   }, [variant])
-
-  useEffect(() => {
-    setSelectedVariant(groupedData?.[selectedColor]?.[0])
-  }, [selectedColor])
 
   const displayPrice = selectedVariant?.finalPrice || variant.product?.finalPrice
 
   const handlePreviousImage = () => {
-    if (!selectedVariant || !variant.product?.variants?.length) return;
+    if (!selectedVariant || !uniqueVariantsFromProductImages?.length) return;
     if ((variant.product?.variants?.length || 0) > 1) {
-      const currentVariantIndex = variant.product.variants.indexOf(selectedVariant);
-      const previousIndex = currentVariantIndex > 0 ? currentVariantIndex - 1 : variant.product.variants.length - 1; // Loop to last
+      const currentVariantIndex = uniqueVariantsFromProductImages.findIndex(
+        variant => variant.id === selectedVariant?.id
+      );
+      const previousIndex = currentVariantIndex > 0 ? currentVariantIndex - 1 : uniqueVariantsFromProductImages.length - 1; // Loop to last
 
-      const previousVariant = variant.product.variants[previousIndex];
+      const previousVariant = uniqueVariantsFromProductImages[previousIndex];
       setSelectedVariant(previousVariant);
       setSelectedImage(previousVariant?.media?.[0]?.url || variantSelectedImage);
+       setSelectedColor(previousVariant?.properties?.color)
     }
   };
 
   const handleNextImage = () => {
-    if (!selectedVariant || !variant.product?.variants?.length) return;
+    if (!selectedVariant || !uniqueVariantsFromProductImages?.length) return;
 
-    if ((variant.product?.variants?.length ?? 0) > 1) {
-      const currentVariantIndex = variant.product.variants.indexOf(selectedVariant);
-      const nextVariantIndex = (currentVariantIndex + 1) % variant.product.variants.length;
+    if ((uniqueVariantsFromProductImages?.length ?? 0) > 1) {
+      const currentVariantIndex = uniqueVariantsFromProductImages.findIndex(
+        variant => variant.id === selectedVariant?.id
+      );
+      const nextVariantIndex = (currentVariantIndex + 1) % uniqueVariantsFromProductImages.length;
 
-      const nextVariant = variant.product.variants[nextVariantIndex];
+      const nextVariant = uniqueVariantsFromProductImages[nextVariantIndex];
       setSelectedVariant(nextVariant);
       setSelectedImage(nextVariant?.media?.[0]?.url || variantSelectedImage);
+      setSelectedColor(nextVariant?.properties?.color)
     }
   };
 
@@ -160,15 +160,15 @@ const ProductDetailModal = ({
                                     <MdArrowForwardIos className='w-fit' />
                                   </div>}
                                 </div>
-                                {!variantSelectedImage && (uniqueVariantsFromProductImages?.length ?? 0) > 1 && <div className='flex gap-10 py-5 overflow-x-auto a-items-center no-scrollbar'>
-                                  {uniqueVariantsFromProductImages?.map((variant, idx) =>
-                                    variant?.media?.map((mediaItem: any) => (
-                                      <div
-                                        key={variant.id}
+                                {!variantSelectedImage && (uniqueVariantsFromProductImages?.length ?? 0) > 1 && <div className='flex gap-10 py-5 overflow-x-auto a-items-center no-scrollbar w-full'>
+                                  {uniqueVariantsFromProductImages?.map((vari, idx) =>
+                                    vari?.media?.map((mediaItem: any) => {
+                                      return (<div
+                                        key={vari.id}
                                         onClick={() => {
-                                          setSelectedVariant(variant)
+                                          setSelectedVariant(vari)
                                           setSelectedImage(mediaItem?.url)
-                                          setSelectedColor(variant.properties.color)
+                                          setSelectedColor(vari.properties.color)
                                         }}
                                         className='min-w-90 h-90'
                                       >
@@ -176,17 +176,17 @@ const ProductDetailModal = ({
                                           src={mediaItem?.url}
                                           alt='product-image'
                                           className={cx(
-                                            `g|object-fit:cover w-full h-full overflow-hidden ${variant.status === 'OUT_OF_STOCK' ? 'greyscale' : ''}`,
+                                            `g|object-fit:cover w-full h-full overflow-hidden ${vari.status === 'OUT_OF_STOCK' ? 'greyscale' : ''}`,
                                             {
-                                              'outline outline-green outline-2':
+                                              'border border-green border-2':
                                                 selectedImage == mediaItem?.url,
                                               [`border-${mediaItem?.description?.toLocaleLowerCase()}`]:
                                                 selectedImage == mediaItem?.url
                                             }
                                           )}
                                         />
-                                      </div>
-                                    ))
+                                      </div>)
+                                    })
                                   )}
                                 </div>}
                               </div>
@@ -201,7 +201,7 @@ const ProductDetailModal = ({
                               </div>
                               <p className='weight-400'> in {variant?.product?.type} </p>
                               <p className='weight-600 text-30 text-black'> {formatNumberAsPrice(displayPrice || 0)} </p>
-                              <p className='weight-600 text-13 text-black capitalize'> Color:{' '}{selectedVariant?.properties.color} </p>
+                              <p className='weight-600 text-13 text-black capitalize'> Color:{' '}{selectedVariant?.properties?.color} </p>
 
                             </div>
 
@@ -231,6 +231,7 @@ const ProductDetailModal = ({
                                             onClick={() => {
                                               setSelectedColor(each)
                                               setSelectedImage(productImages?.[idx])
+                                              setSelectedVariant(groupedData?.[each]?.[0])
                                             }}
                                             style={{
                                               background: colorHex || colorName || 'white',
@@ -253,7 +254,7 @@ const ProductDetailModal = ({
 
                               {
                                 hasSize &&
-                                <div className=''>
+                                <div className='mt-10'>
                                   <p className='text-left text-12 weight-400 color-#000000B2 mb-12'>
                                     Select size:
                                   </p>
@@ -316,11 +317,13 @@ const ProductDetailModal = ({
                                         {selectedVariant && selectedVariant.status !== "OUT_OF_STOCK" ? 'Add to cart' : 'Out of stock'}
                                       </div>
                                     </button>
-                                  ) : <QuantitySelector
-                                    decrement={() => decrement(selectedVariantItemInCart)}
-                                    increment={() => increment(selectedVariantItemInCart)}
-                                    cartItem={selectedVariantItemInCart}
-                                  />}
+                                  ) : <div className='mb-10'>
+                                    <QuantitySelector
+                                      decrement={() => decrement(selectedVariantItemInCart)}
+                                      increment={() => increment(selectedVariantItemInCart)}
+                                      cartItem={selectedVariantItemInCart}
+                                    />
+                                  </div>}
                               </div>
                               <div className='text-left text-12 flex a-items-center weight-400'>
                                 <Link
