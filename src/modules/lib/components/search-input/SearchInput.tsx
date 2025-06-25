@@ -62,7 +62,7 @@ const SearchInput: FC<ISearchInput> = ({
       <div
         className={
           component === 'home'
-            ? 'flex w-100p relative'
+            ? 'flex w-100p relative a-items-center'
             : classNames(
                 'relative flex flex-row a-items-center j-content-between flex-grow-1 l:w-full md:w-320',
                 {
