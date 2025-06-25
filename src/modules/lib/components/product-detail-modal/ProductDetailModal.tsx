@@ -143,12 +143,12 @@ const ProductDetailModal = ({
                                 <div className='relative' onMouseOver={() => setIsHover(true)}
                                   onMouseOut={() => setIsHover(false)}
                                 >
-                                  {isHover && position === 'homepage' && <div className={`absolute z-10 b-45p ${(variant.product?.variants?.length || 0) > 1 ? 'bg-white color-black pointer' : 'color-#A9A9A9 bg-#D3D3D3 cursor-not-allowed'} l-20  p-15 radius-99 flex a-items-center j-content-center icon-box-shadow`}
+                                  {isHover && position === 'homepage' && !variantSelectedImage && <div className={`absolute z-10 b-45p ${(variant.product?.variants?.length || 0) > 1 ? 'bg-white color-black pointer' : 'color-#A9A9A9 bg-#D3D3D3 cursor-not-allowed'} l-20  p-15 radius-99 flex a-items-center j-content-center icon-box-shadow`}
                                     onClick={handlePreviousImage}
                                   >
                                     <MdArrowBackIos className='w-full relative l-3' />
                                   </div>}
-                                  <div className={`w-full ${variantSelectedImage ? 'h-450' : 'h-350'}`}>
+                                  <div className={`w-full ${variantSelectedImage ? 'l:h-450 h-250' : 'h-350'}`}>
 
                                     <Image
                                       src={selectedImage}
@@ -157,7 +157,7 @@ const ProductDetailModal = ({
                                     />
                                   </div>
 
-                                  {isHover && position === 'homepage' && <div className={`absolute z-10 b-45p ${(variant.product?.variants?.length || 0) > 1 ? 'bg-white color-black pointer' : 'color-#A9A9A9 bg-#D3D3D3 cursor-not-allowed'} r-20 p-15 radius-99 flex a-items-center j-content-center icon-box-shadow `} onClick={handleNextImage}>
+                                  {isHover && position === 'homepage' && !variantSelectedImage && <div className={`absolute z-10 b-45p ${(variant.product?.variants?.length || 0) > 1 ? 'bg-white color-black pointer' : 'color-#A9A9A9 bg-#D3D3D3 cursor-not-allowed'} r-20 p-15 radius-99 flex a-items-center j-content-center icon-box-shadow `} onClick={handleNextImage}>
                                     <MdArrowForwardIos className='w-fit' />
                                   </div>}
                                 </div>

@@ -547,7 +547,6 @@
 .bg-\#D3D3D3 { background-color: #D3D3D3; } 
 .l-20 { left: 20px; } 
 @layer base {.radius-99 { border-radius: 99px; } } 
-.h-450 { height: 450px; } 
 .h-350 { height: 350px; } 
 .r-20 { right: 20px; } 
 .w-32 { width: 32px; } 
@@ -700,7 +699,7 @@
 [class~='g|transition-duration:0.2s']{transition-duration:0.2s} 
 [class~='g|transition-timing-function:ease']{transition-timing-function:ease} 
 .h-21 { height: 21px; } 
-.mt-110 { margin-top: 110px; } 
+.mt-88 { margin-top: 88px; } 
 .h-270 { height: 270px; } 
 .text-28 { font-size: 28px; } 
 .h-43 { height: 43px; } 
@@ -747,9 +746,12 @@
 .h-6 { height: 6px; } 
 .radius-t-r-6 { border-top-right-radius: 6px;  } 
 .radius-b-r-6 { border-bottom-right-radius: 6px;  } 
+.mt-110 { margin-top: 110px; } 
+.max-w-61p { max-width: 61%; } 
 .text-40 { font-size: 40px; } 
 .max-w-120 { max-width: 120px; } 
 .mt-40 { margin-top: 40px; } 
+.w-95p { width: 95%; } 
 .ml-2 { margin-left: 2px; } 
 .border-\#eeeeee { border-color: #eeeeee; } 
 .text-medium {    font-size: 0.875rem;  } 
@@ -761,7 +763,6 @@
 .color-\#3b5998 { color: #3b5998; } 
 .t-30p { top: 30%; } 
 .r-50p { right: 50%; } 
-.w-95p { width: 95%; } 
 .pb-60 { padding-bottom: 60px; } 
 @layer base {.radius-0 { border-radius: 0px; } } 
 .mb-15 { margin-bottom: 15px; } 
@@ -953,6 +954,7 @@
 @media only screen and (min-width: 576px) { .sm\:border-b-\#F5F5F5 { border-bottom-color: #F5F5F5; } } 
 @media only screen and (min-width: 576px) { .sm\:pb-0 { padding-bottom: 0px; } } 
 @media only screen and (min-width: 576px) { .sm\:mt-0 { margin-top: 0px; } } 
+@media only screen and (min-width: 576px) { .sm\:mt-96 { margin-top: 96px; } } 
 @media only screen and (min-width: 576px) { .sm\:h-350 { height: 350px; } } 
 @media only screen and (min-width: 576px) { .sm\:gap-20 { gap: 20px; } } 
 @media only screen and (min-width: 576px) { .sm\:px-20 { padding-left: 20px; padding-right: 20px; } } 
@@ -970,7 +972,10 @@
 @media only screen and (min-width: 576px) { .sm\:w-160 { width: 160px; } } 
 @media only screen and (min-width: 576px) { .sm\:h-10 { height: 10px; } } 
 @media only screen and (min-width: 576px) { .sm\:px-12 { padding-left: 12px; padding-right: 12px; } } 
+@media only screen and (min-width: 576px) { .sm\:py-10 { padding-top: 10px; padding-bottom: 10px; } } 
 @media only screen and (min-width: 576px) { .sm\:gap-8 { gap: 8px; } } 
+@media only screen and (min-width: 576px) { .sm\:w-16 { width: 16px; } } 
+@media only screen and (min-width: 576px) { .sm\:h-16 { height: 16px; } } 
 @media only screen and (min-width: 576px) { .sm\:mt-40 { margin-top: 40px; } } 
 @media only screen and (min-width: 576px) { .sm\:gap-70 { gap: 70px; } } 
 @media only screen and (min-width: 576px) { .sm\:text-60 { font-size: 60px; } } 
@@ -1257,6 +1262,7 @@
 @media only screen and (min-width: 992px) { .l\:h-fit {    height: fit-content;  } } 
 @media only screen and (min-width: 992px) { .l\:h-33vh { height: 33vh; } } 
 @media only screen and (min-width: 992px) { .l\:w-65p { width: 65%; } } 
+@media only screen and (min-width: 992px) { .l\:h-450 { height: 450px; } } 
 @media only screen and (min-width: 992px) { .l\:px-22 { padding-left: 22px; padding-right: 22px; } } 
 @media only screen and (min-width: 992px) { .l\:mt-40 { margin-top: 40px; } } 
 @media only screen and (min-width: 992px) { .l\:mt-20 { margin-top: 20px; } } 

@@ -14,6 +14,7 @@ import HomepageNavBar from '@/modules/lib/components/nav-bar/HomepageNavBar';
 import Link from 'next/link';
 import { PiPlusBold } from 'react-icons/pi';
 import PuffLoader from '@/modules/lib/components/puff-loader/PuffLoader';
+import { useCart } from '@/modules/lib/utility/hooks/use-cart';
 
 const ProgressBar = ({ percentage }: { percentage: number }) => (
     <div className="w-80 sm:w-160 h-6 sm:h-10 bg-#0000000F radius-6 overflow-hidden">
@@ -25,6 +26,7 @@ const ProgressBar = ({ percentage }: { percentage: number }) => (
 );
 
 const ReviewsViews = ({ id, slug }: { id: number, slug: string }) => {
+    const { isAuthenticated } = useCart()
     const { reviews, refresh: refreshReview, loading: reviewLoading } = useGetProductRating(id)
     const { reviewStat, refresh: refreshStat, loading: statsLoading } = useGetRatingStats(id)
     const { reviewStatDist, refresh: refreshDist, loading: distLoading } = useGetRatingDist(id)
@@ -47,73 +49,76 @@ const ReviewsViews = ({ id, slug }: { id: number, slug: string }) => {
         <>
             <HomepageNavBar parent='' />
             <div className="mt-110 l:max-w-1400 w-full mx-auto xl:px-60 md:px-50 sm:px-40 px-16">
-                <div className='flex a-items-center j-content-between'>
-                    <div className='flex a-items-center gap-5'>
-                        <span className='text-14 color-#00000066 weight-500'>Review and Rating &gt;</span>
-                        <Link href={`/products/${slug}`} className='capitalize weight-500'>
-                            {slug}
-                        </Link>
-                    </div>
-
-                    <button
-                        onClick={() => setOpenModal(true)}
-                        className="bg-#0B9378 border-none text-white radius-6 px-10 sm:px-12 py-10 cursor-pointer weight-600 outline-none flex sm:gap-8 gap-4 w-fit sm:text-14 text-12"
-                    >
-                        <PiPlusBold className='w-16 h-16' />
-                        <span className='text-nowrap'>Add review</span>
-                    </button>
+                <div className='flex a-items-center j-content-between gap-10'>
+                    <div className='flex a-items-center gap-5 max-w-61p'>
+                        <span className='sm:text-14 text-12 color-#00000066 weight-500' style={{ textWrap: "nowrap" }}>Review and Rating &gt;</span>
+                        <Link href={`/products/${slug}`} className='capitalize weight-500 sm:text-14 text-12' style={{overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap"}}>
+                        {slug}
+                    </Link>
                 </div>
 
                 {
-                    loading ?
-                        <p className='w-100p flex j-content-center mt-10'>
-                            <PuffLoader />
-                        </p>
-                        :
-                        <div className="max-w-4xl mx-auto p-6">
-                            <div className='flex px-5 j-content-center a-items-center mt-20 sm:mt-40 l:mt-60 gap-34 sm:gap-70 l:gap-120'>
-                                <div className='flex flex-col gap-3'>
-                                    <div className="text-40 sm:text-60 weight-700 text-black">{averageRating.toFixed(1) ?? 0}</div>
-                                    <Rating
-                                        className='max-w-120 sm:max-w-150 max-h-120 sm:max-h-150 flex gap-8'
-                                        value={averageRating ?? 0}
-                                        itemStyles={{ itemShapes: Star, activeFillColor: '#f59e0b', inactiveFillColor: '#0000000F' }}
-                                        readOnly
-                                    />
-                                    <div className="color-gray text-14 sm:text-16 weight-400">{totalReviews ?? 0} {`Review${totalReviews && totalReviews > 1 ? 's' : ''}`}</div>
-                                </div>
-
-                                <div className='flex flex-col gap-4'>
-                                    {[5, 4, 3, 2, 1].map((star) => {
-                                        const count = reviewStatDist?.[`${star}`] ?? 0;
-                                        const percentage = totalReviews ? (count / totalReviews) * 100 : 0;
-
-                                        return (
-                                            <div key={star} className="flex items-center gap-6 sm:gap-10">
-                                                <span className={`sm:text-16 text-14 medium weight-500 inline-block ${star === 1 && 'ml-2'}`}>{star}</span>
-                                                <AiFillStar className='w-12 sm:w-14 h-12 sm:h-14' style={{ color: '#f59e0b' }} />
-                                                <span className='sm:text-16 text-14 color-gray weight-400'>({count})</span>
-                                                <div>
-                                                    <ProgressBar percentage={percentage} />
-                                                </div>
-                                            </div>
-                                        );
-                                    })}
-                                </div>
-                            </div>
-
-                            <div className='sm:100p l:95p xl:w-90p mx-auto l:px-20 mt-40 sm:mt-60 l:mt-80 mb-20'>
-                                <Comments reviews={reviews.flatMap((review) => review.reviews)} isModal={false} slug={slug} />
-                            </div>
-                        </div>
+                    isAuthenticated &&
+                    <button
+                        onClick={() => setOpenModal(true)}
+                        className="bg-#0B9378 border-none text-white radius-6 px-10 sm:px-12 sm:py-10 py-8 cursor-pointer weight-600 outline-none flex sm:gap-8 gap-4 w-fit sm:text-14 text-12"
+                    >
+                        <PiPlusBold className='sm:w-16 w-14 sm:h-16 h-14' />
+                        <span className='text-nowrap' style={{ textWrap: "nowrap" }}>Add review</span>
+                    </button>
                 }
             </div>
+
+            {
+                loading ?
+                    <p className='w-100p flex j-content-center mt-10'>
+                        <PuffLoader />
+                    </p>
+                    :
+                    <div className="max-w-4xl mx-auto p-6">
+                        <div className='flex px-5 j-content-center a-items-center mt-20 sm:mt-40 l:mt-60 gap-34 sm:gap-70 l:gap-120'>
+                            <div className='flex flex-col gap-3'>
+                                <div className="text-40 sm:text-60 weight-700 text-black">{averageRating.toFixed(1) ?? 0}</div>
+                                <Rating
+                                    className='max-w-120 sm:max-w-150 max-h-120 sm:max-h-150 flex gap-8'
+                                    value={averageRating ?? 0}
+                                    itemStyles={{ itemShapes: Star, activeFillColor: '#f59e0b', inactiveFillColor: '#0000000F' }}
+                                    readOnly
+                                />
+                                <div className="color-gray text-14 sm:text-16 weight-400">{totalReviews ?? 0} {`Review${totalReviews && totalReviews > 1 ? 's' : ''}`}</div>
+                            </div>
+
+                            <div className='flex flex-col gap-4'>
+                                {[5, 4, 3, 2, 1].map((star) => {
+                                    const count = reviewStatDist?.[`${star}`] ?? 0;
+                                    const percentage = totalReviews ? (count / totalReviews) * 100 : 0;
+
+                                    return (
+                                        <div key={star} className="flex items-center gap-6 sm:gap-10">
+                                            <span className={`sm:text-16 text-14 medium weight-500 inline-block ${star === 1 && 'ml-2'}`}>{star}</span>
+                                            <AiFillStar className='w-12 sm:w-14 h-12 sm:h-14' style={{ color: '#f59e0b' }} />
+                                            <span className='sm:text-16 text-14 color-gray weight-400'>({count})</span>
+                                            <div>
+                                                <ProgressBar percentage={percentage} />
+                                            </div>
+                                        </div>
+                                    );
+                                })}
+                            </div>
+                        </div>
+
+                        <div className='sm:100p l:95p xl:w-90p mx-auto l:px-20 mt-40 sm:mt-60 l:mt-80 mb-20'>
+                            <Comments reviews={reviews.flatMap((review) => review.reviews)} isModal={false} slug={slug} />
+                        </div>
+                    </div>
+            }
+        </div >
             <Modal
                 isOpen={openModal && !loading}
                 onClose={() => { setOpenModal(false) }}
                 extraClass={{ overflow: 'auto' }}
                 extraModalClass={{ backgroundColor: '#00000073' }}
-                className="h-fit md:w-fit sm:w-90p w-98p no-scrollbar"
+                className="h-fit md:w-fit sm:w-90p w-95p no-scrollbar"
             >
                 <div className='l:w-720 md:w-650 h-fit relative' style={{ maxHeight: 'calc(100dvh - 90px)' }}>
                     <div className='relative w-full'>

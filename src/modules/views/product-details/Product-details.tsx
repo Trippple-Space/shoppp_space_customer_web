@@ -23,7 +23,7 @@ import Link from 'next/link'
 import { GoHome } from 'react-icons/go'
 import { HiOutlineShoppingBag } from 'react-icons/hi2'
 import { LuGrid2X2 } from 'react-icons/lu'
-import { PiGlobeHemisphereEast, PiTruck } from 'react-icons/pi'
+import { PiGlobeHemisphereEast, PiStorefront, PiTruck } from 'react-icons/pi'
 import { RxShare2 } from 'react-icons/rx'
 import './ProductDetails.scss'
 import { Comments } from './reviews/Comments'
@@ -169,10 +169,10 @@ const ProductDetails = ({ product }: { product: Product }) => {
   return (
     <>
       <HomepageNavBar parent='' />
-      <div className="mt-110 l:max-w-1400 w-full mx-auto xl:px-60 md:px-50 sm:px-40 px-24">
-        <div className='flex a-items-center j-content-between'>
+      <div className="sm:mt-96 mt-88 l:max-w-1400 w-full mx-auto xl:px-60 md:px-50 sm:px-40 px-24">
+        <div className='flex a-items-center j-content-between gap-10'>
           <div className='flex a-items-center gap-5'>
-            <GoHome className='w-fit color-#00000066 w-15 h-15' />
+            <PiStorefront className='w-fit color-#00000066 w-15 h-15'/>
             <Link href={`/${product?.store?.slug}`} className='text-14 color-#00000066'>
               {product?.store?.name} /
             </Link>
@@ -187,7 +187,7 @@ const ProductDetails = ({ product }: { product: Product }) => {
               <span className='border-b hidden l:block'>Share</span>
             </p>
             <p className='cursor-pointer flex a-items-center gap-8 text-15 weight-400 color-#00000099' onClick={isAuthenticated ? handleSave : () => isLoginModal()}>
-              {isSaved ? <AiFillHeart /> : <AiOutlineHeart />}
+              {isSaved ? <AiFillHeart className='w-20 h-20' /> : <AiOutlineHeart className='w-20 h-20' />}
               <span className='border-b hidden l:block'>Save</span>
             </p>
           </div>
@@ -300,9 +300,12 @@ const ProductDetails = ({ product }: { product: Product }) => {
                   </p>
                 </div>
 
-                <div className='flex'>
-                  <Link href={`/products/${product.slug}/reviews/${selectedVariant.id}`} className='color-#1677FF text-12 border-b'>Rate this product</Link>
-                </div>
+                {
+                  isAuthenticated &&
+                  <div className='flex'>
+                    <Link href={`/products/${product.slug}/reviews/${selectedVariant.id}`} className='color-#1677FF text-12 border-b'>Rate this product</Link>
+                  </div>
+                }
               </div>
 
 
@@ -386,7 +389,7 @@ const ProductDetails = ({ product }: { product: Product }) => {
                           >
                             <input
                               type='radio'
-                              name={`size-${i}`}
+                              name={`size${i}`}
                               onClick={() => setSelectedVariant(variant)}
                               className={cx('accent-#0B9378 pointer')}
                               checked={variant?.id === selectedVariant?.id}
@@ -512,7 +515,7 @@ const ProductDetails = ({ product }: { product: Product }) => {
                     </p>
                     <div className='flex gap-6 a-items-center no-scrollbar' style={{ width: '100%', overflow: 'auto' }}>
                       {
-                        groupedData?.[selectedColor]?.map((variant: ProductVariant, i:number) => (
+                        groupedData?.[selectedColor]?.map((variant: ProductVariant, i: number) => (
                           variant?.size && (
                             <label
                               key={variant.id}

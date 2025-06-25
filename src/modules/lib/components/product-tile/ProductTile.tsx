@@ -1,10 +1,10 @@
 'use client'
 import React, { FC, useEffect, useMemo, useState } from 'react'
 import Image from '../image/Image'
-import { AiFillStar, AiOutlinePlus, AiFillHeart } from 'react-icons/ai'
+import { AiFillStar, AiFillHeart} from 'react-icons/ai'
 import classNames from 'classnames'
 import { Product, ProductVariant } from '../../utility/types/product.interface'
-import { cx, displayProductPill, formatNumberAsPrice } from '../../utility/utility'
+import { displayProductPill, formatNumberAsPrice } from '../../utility/utility'
 import { useCart } from '../../utility/hooks/use-cart'
 import QuantitySelector from '../quantity-selector/QuantitySelector'
 import Link from 'next/link'
@@ -131,8 +131,6 @@ const ProductTile: FC<IProductTile> = ({ product, savedVariants, saveVariant, re
   const isOutOfStock = selectedVariant?.status === 'OUT_OF_STOCK'
   const isDiscounted = new Date(product?.discount?.activeStartDate) <= new Date(new Date().setHours(new Date().getHours() + 1)) && new Date(new Date().setHours(new Date().getHours() + 1)) <= new Date(product?.discount?.activeEndDate)
   const hasSize = groupedData?.[selectedColor][0].size !== null
-
-  console.log(isToAddSize, selectedImage)
 
   return (
     <div className='mt-30 l:mt-20 w-full overflow-hidden'>
