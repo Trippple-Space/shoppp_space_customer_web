@@ -361,8 +361,8 @@
 .color-\#00000073 { color: #00000073; } 
 .w-320 { width: 320px; } 
 .w-250 { width: 250px; } 
-.gap-6 { gap: 6px; } 
-.line-height-16\.94 { line-height: 16.94px; } 
+.text-13\.5 { font-size: 13.5px; } 
+.line-height-16 { line-height: 16px; } 
 .color-red { color: red; } 
 .p-4 { padding: 4px; } 
 @layer base {.radius-100 { border-radius: 100px; } } 
@@ -370,6 +370,7 @@
 .p-6 { padding: 6px; } 
 .line-height-19\.36 { line-height: 19.36px; } 
 [class~='g|box-shadow:0px|_|-2px|_|4px|_|#494F5E1F;']{box-shadow:0px -2px 4px #494F5E1F;} 
+.gap-6 { gap: 6px; } 
 .bg-\#00000014 { background-color: #00000014; } 
 .w-70 { width: 70px; } 
 .px-5 { padding-left: 5px; padding-right: 5px; } 
@@ -379,7 +380,10 @@
 .h-18 { height: 18px; } 
 .hover\:bg-grey-300:hover { background-color: #E4E1DF; } 
 .p-12 { padding: 12px; } 
+.color-\#0000008C { color: #0000008C; } 
 .h-70 { height: 70px; } 
+.gap-2\.8 { gap: 2.8; } 
+.line-height-16\.94 { line-height: 16.94px; } 
 .line-height-18 { line-height: 18px; } 
 .line-through { text-decoration: line-through; } 
 .z-index-11, .z-11 { z-index: 11; } 
@@ -521,7 +525,6 @@
 .py-3 { padding-top: 3px; padding-bottom: 3px; } 
 .a-items-start { align-items: flex-start; } 
 .object-fit-cover { object-fit: cover; } 
-.color-\#0000008C { color: #0000008C; } 
 .t-10 { top: 10px; } 
 .border-b-\#00000026 { border-bottom-color: #00000026; } 
 .radius-t-r-8 { border-top-right-radius: 8px;  } 
@@ -904,9 +907,9 @@
 @media only screen and (min-width: 576px) { .sm\:min-w-416 { min-width: 416px; } } 
 @media only screen and (min-width: 576px) { .sm\:flex-grow-1 { flex-grow: 1; } } 
 @layer lo {  @media only screen and (min-width: 576px) { .\@lo\:placeholder\:sm\:text-16::placeholder { font-size: 16px; } }  } 
-@media only screen and (min-width: 576px) { .sm\:line-height-24 { line-height: 24px; } } 
 @media only screen and (min-width: 576px) { .sm\:w-80 { width: 80px; } } 
 @media only screen and (min-width: 576px) { .sm\:h-80 { height: 80px; } } 
+@media only screen and (min-width: 576px) { .sm\:line-height-24 { line-height: 24px; } } 
 @media only screen and (min-width: 576px) { .sm\:text-12 { font-size: 12px; } } 
 @media only screen and (min-width: 576px) { .sm\:line-height-20 { line-height: 20px; } } 
 @media only screen and (min-width: 576px) { .sm\:gap-24 { gap: 24px; } } 
