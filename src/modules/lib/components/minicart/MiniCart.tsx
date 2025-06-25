@@ -131,21 +131,21 @@ const MiniCart: React.FC<ModalProps> = () => {
                               <p className={`weight-600 sm:text-16 text-14 sm:line-height-24 line-height-22 ${cartItem.variant.status === 'OUT_OF_STOCK' ? 'color-#00000099' : 'color-#000000E0'}`}>
                                 {cartItem?.variant?.product?.name}{' '}
                               </p>
-                              {
-                                cartItem?.variant?.size &&
-                                <p className='weight-400 text-13.5 line-height-16'>
-                                  Size: {cartItem?.variant?.size}
-                                </p>
-                              }
                               <p className={`weight-400 ${cartItem?.variant?.size ? 'text-13.5 line-height-16' : 'text-14 line-height-16.94'}`}>
                                 Quantity:{' '}
                                 {`${cartItem?.quantity} ${displayStockUnit(
                                   cartItem.variant.stockUnit
                                 )}${cartItem?.quantity > 1 ? 's' : ''}`}
                               </p>
-                              <p className={`weight-400 ${cartItem?.variant?.size ? 'text-13.5 line-height-16' : 'text-14 line-height-16.94'}`}>
+                              <p className={`weight-400 capitalize ${cartItem?.variant?.size ? 'text-13.5 line-height-16' : 'text-14 line-height-16.94'}`}>
                                 Color: {cartItem?.variant?.properties?.color}
                               </p>
+                              {
+                                cartItem?.variant?.size &&
+                                <p className='weight-400 text-13.5 line-height-16'>
+                                  Size: {cartItem?.variant?.size}
+                                </p>
+                              }
                             </div>
                           </div>
 
