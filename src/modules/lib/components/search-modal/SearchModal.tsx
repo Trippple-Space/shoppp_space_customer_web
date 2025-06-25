@@ -79,7 +79,7 @@ const SearchModal = ({
     {product &&  <ProductDetailModal
         openSingleProductModal={openSingleProductModal}
         handleCloseProductModal={handleCloseProductModal}
-        position=''
+        position='homepage'
         variant={{
           ...product.variants[0],
           product }}

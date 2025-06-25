@@ -35,7 +35,7 @@ const ProductDetailModal = ({
     isLoginModal
   } = useCart()
   const { groupedData, availableColors, productImages } = variant?.product ? useTransformProduct(variant.product) : { groupedData: null };
-  const uniqueVariantsFromProductImages = variant?.product?.variants.filter((variants) => productImages?.find(image => image === variants.media[0].url))
+  const uniqueVariantsFromProductImages = variantSelectedImage ? [variant] : variant?.product?.variants.filter((variants) => productImages?.find(image => image === variants.media[0].url))
 
   const [isHover, setIsHover] = useState(false)
   const [selectedVariant, setSelectedVariant] = useState(variant || groupedData?.[availableColors[0]]?.[0])
@@ -99,7 +99,6 @@ const ProductDetailModal = ({
 
   const descriptionLength = variant?.product?.longDescription.split(' ').length || 0
   const maxDisplayDescLength = 20
-
   const hasSize = groupedData?.[selectedColor][0].size !== null
 
   return (
@@ -128,8 +127,8 @@ const ProductDetailModal = ({
                         maxHeight: 'calc(100vh - 80px)'
                       }}
                     >
-                      <div className='flex j-content-end text-right p-10 w-full cursor-pointer bg-white z-10 radius-6' onClick={handleCloseProductModal}>
-                        <IoMdClose className='sm:w-25 w-20 sm:h-25 h-20' />
+                      <div className='flex j-content-end text-right p-10 w-full bg-white z-10 radius-6'>
+                        <IoMdClose className='sm:w-25 w-20 sm:h-25 h-20 pointer' onClick={handleCloseProductModal}/>
                       </div>
                       <div className='overflow-auto no-scrollbar pb-20'
                         style={{
@@ -144,12 +143,12 @@ const ProductDetailModal = ({
                                 <div className='relative' onMouseOver={() => setIsHover(true)}
                                   onMouseOut={() => setIsHover(false)}
                                 >
-                                  {isHover && position === 'homepage' && <div className={`absolute z-10 b-45p ${(variant.product?.variants?.length || 0) > 1 ? 'bg-white color-black' : 'color-#A9A9A9 bg-#D3D3D3'} l-20  p-15 radius-99 flex a-items-center j-content-center cursor-pointer icon-box-shadow`}
+                                  {isHover && position === 'homepage' && <div className={`absolute z-10 b-45p ${(variant.product?.variants?.length || 0) > 1 ? 'bg-white color-black pointer' : 'color-#A9A9A9 bg-#D3D3D3 cursor-not-allowed'} l-20  p-15 radius-99 flex a-items-center j-content-center icon-box-shadow`}
                                     onClick={handlePreviousImage}
                                   >
                                     <MdArrowBackIos className='w-full relative l-3' />
                                   </div>}
-                                  <div className='w-full h-350'>
+                                  <div className={`w-full ${variantSelectedImage ? 'h-450' : 'h-350'}`}>
 
                                     <Image
                                       src={selectedImage}
@@ -158,7 +157,7 @@ const ProductDetailModal = ({
                                     />
                                   </div>
 
-                                  {isHover && position === 'homepage' && <div className={`absolute z-10 b-45p ${(variant.product?.variants?.length || 0) > 1 ? 'bg-white color-black' : 'color-#A9A9A9 bg-#D3D3D3'} r-20 p-15 radius-99 flex a-items-center j-content-center cursor-pointer   icon-box-shadow `} onClick={handleNextImage}>
+                                  {isHover && position === 'homepage' && <div className={`absolute z-10 b-45p ${(variant.product?.variants?.length || 0) > 1 ? 'bg-white color-black pointer' : 'color-#A9A9A9 bg-#D3D3D3 cursor-not-allowed'} r-20 p-15 radius-99 flex a-items-center j-content-center icon-box-shadow `} onClick={handleNextImage}>
                                     <MdArrowForwardIos className='w-fit' />
                                   </div>}
                                 </div>
@@ -275,7 +274,7 @@ const ProductDetailModal = ({
                                           >
                                             <input
                                               type='radio'
-                                              name='size'
+                                              name='size56'
                                               onClick={() => setSelectedVariant(variant)}
                                               className={cx('accent-#0B9378 pointer')}
                                               checked={variant?.id === selectedVariant?.id}
@@ -353,8 +352,7 @@ const ProductDetailModal = ({
         </>
       )}
     </div>
-
-  )
+  );
 }
 
 export default ProductDetailModal

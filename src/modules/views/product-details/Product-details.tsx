@@ -212,7 +212,7 @@ const ProductDetails = ({ product }: { product: Product }) => {
             />
           </div>
 
-          <div className='w-100p flex l:grid grid-2-cols-1fr l:grid-2-row-auto gap-6 no-scrollbar' style={{ width: '100%', overflow: 'auto' }}>
+          <div className='w-100p flex l:grid grid-2-cols-1fr l:grid-2-row-auto gap-6 no-scrollbar l:overflow-visible overflow-auto' style={{ width: '100%' }}>
             {uniqueVariantsFromProductImages?.map((variant, idx) =>
               variant?.media?.map((mediaItem, index) => {
                 const currentIndex = globalMediaIndex++;
@@ -373,7 +373,7 @@ const ProductDetails = ({ product }: { product: Product }) => {
                   </p>
                   <div className='flex gap-6 a-items-center'>
                     {
-                      groupedData?.[selectedColor]?.map((variant: ProductVariant) => (
+                      groupedData?.[selectedColor]?.map((variant: ProductVariant, i: number) => (
                         variant?.size && (
                           <label
                             key={variant.id}
@@ -386,7 +386,7 @@ const ProductDetails = ({ product }: { product: Product }) => {
                           >
                             <input
                               type='radio'
-                              name='size2'
+                              name={`size-${i}`}
                               onClick={() => setSelectedVariant(variant)}
                               className={cx('accent-#0B9378 pointer')}
                               checked={variant?.id === selectedVariant?.id}
@@ -512,7 +512,7 @@ const ProductDetails = ({ product }: { product: Product }) => {
                     </p>
                     <div className='flex gap-6 a-items-center no-scrollbar' style={{ width: '100%', overflow: 'auto' }}>
                       {
-                        groupedData?.[selectedColor]?.map((variant: ProductVariant) => (
+                        groupedData?.[selectedColor]?.map((variant: ProductVariant, i:number) => (
                           variant?.size && (
                             <label
                               key={variant.id}
@@ -525,7 +525,7 @@ const ProductDetails = ({ product }: { product: Product }) => {
                             >
                               <input
                                 type='radio'
-                                name='size'
+                                name={`size-${i}`}
                                 onClick={() => setSelectedVariant(variant)}
                                 className={cx('accent-#0B9378 pointer')}
                                 checked={variant?.id === selectedVariant?.id}

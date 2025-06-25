@@ -35,6 +35,7 @@ const ProductTile: FC<IProductTile> = ({ product, savedVariants, saveVariant, re
 
   const [onProductTileHover, setOnProductTileHover] = useState(false)
   const [openSingleProductModal, setOpenSingleProductModal] = useState(false)
+  const [isToAddSize, setIsToAddSize] = useState<boolean>(false)
   const [recentlyViewedId, setRecentlyViewsId] = useState<any>()
   const [selectedColor, setSelectedColor] = useState(availableColors[0])
   const [selectedImage, setSelectedImage] = useState(
@@ -83,6 +84,10 @@ const ProductTile: FC<IProductTile> = ({ product, savedVariants, saveVariant, re
 
   const handleCloseProductModal = () => {
     setOpenSingleProductModal(prev => !prev)
+
+    if (openSingleProductModal) {
+      setIsToAddSize(false)
+    }
   }
 
   function handleLogin(variantId: number, minimumPurchase: number) {
@@ -126,6 +131,8 @@ const ProductTile: FC<IProductTile> = ({ product, savedVariants, saveVariant, re
   const isOutOfStock = selectedVariant?.status === 'OUT_OF_STOCK'
   const isDiscounted = new Date(product?.discount?.activeStartDate) <= new Date(new Date().setHours(new Date().getHours() + 1)) && new Date(new Date().setHours(new Date().getHours() + 1)) <= new Date(product?.discount?.activeEndDate)
   const hasSize = groupedData?.[selectedColor][0].size !== null
+
+  console.log(isToAddSize, selectedImage)
 
   return (
     <div className='mt-30 l:mt-20 w-full overflow-hidden'>
@@ -180,16 +187,20 @@ const ProductTile: FC<IProductTile> = ({ product, savedVariants, saveVariant, re
             {selectedVariantItemInCart ? (
               <QuantitySelector
                 decrement={() => {
-                  hasSize ?
+                  if (hasSize) {
+                    setIsToAddSize(true)
                     handleCloseProductModal()
-                    :
+                  } else {
                     decrement(selectedVariantItemInCart)
+                  }
                 }}
                 increment={() => {
-                  hasSize ?
+                  if (hasSize) {
+                    setIsToAddSize(true)
                     handleCloseProductModal()
-                    :
+                  } else {
                     increment(selectedVariantItemInCart)
+                  }
                 }}
                 cartItem={selectedVariantItemInCart}
               />
@@ -197,9 +208,10 @@ const ProductTile: FC<IProductTile> = ({ product, savedVariants, saveVariant, re
               <>
                 {selectedVariant?.status !== 'OUT_OF_STOCK' ? <button
                   onClick={() => {
-                    hasSize ?
+                    if (hasSize) {
+                      setIsToAddSize(true)
                       handleCloseProductModal()
-                      :
+                    } else {
                       isAuthenticated
                         ?
                         addToCart(
@@ -208,6 +220,7 @@ const ProductTile: FC<IProductTile> = ({ product, savedVariants, saveVariant, re
                         )
                         : handleLogin(selectedVariant.id,
                           selectedVariant.minPurchaseQuantity || 1);
+                    }
                   }}
                   disabled={!selectedImage}
                   className={classNames(
@@ -363,6 +376,7 @@ const ProductTile: FC<IProductTile> = ({ product, savedVariants, saveVariant, re
           openSingleProductModal={openSingleProductModal}
           handleCloseProductModal={handleCloseProductModal}
           position="homepage"
+          variantSelectedImage={isToAddSize ? selectedImage : ''}
           variant={{
             ...selectedVariant,
             product
