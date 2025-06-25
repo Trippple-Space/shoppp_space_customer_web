@@ -62,6 +62,8 @@ const ProductDetailModal = ({
     setSelectedImage(variant?.media?.[0]?.url)
   }, [variant])
 
+
+
   const displayPrice = selectedVariant?.finalPrice || variant.product?.finalPrice
 
   const handlePreviousImage = () => {
@@ -75,7 +77,7 @@ const ProductDetailModal = ({
       const previousVariant = uniqueVariantsFromProductImages[previousIndex];
       setSelectedVariant(previousVariant);
       setSelectedImage(previousVariant?.media?.[0]?.url || variantSelectedImage);
-       setSelectedColor(previousVariant?.properties?.color)
+      setSelectedColor(previousVariant?.properties?.color)
     }
   };
 
@@ -105,7 +107,7 @@ const ProductDetailModal = ({
       {openSingleProductModal && (
         <>
           <div
-            className='fixed inset-0 bg-#00000073 w-100p h-100p z-10 hidden l:block'
+            className='fixed inset-0 bg-#00000073 w-100p h-100p z-10 block'
             onClick={handleCloseProductModal}
           >
             {variant ? (
@@ -113,7 +115,7 @@ const ProductDetailModal = ({
                 <div className='relative no-scrollbar w-full h-full flex flex-col j-content-center a-items-center'
                 >
                   <div
-                    className={`fixed bg-white z-20 w-90p sm:w-80p l:w-65p  xl:w-50p  radius-8 no-scrollbar`}
+                    className={`fixed bg-white z-20 w-94p sm:w-80p l:w-65p  xl:w-50p  radius-8 no-scrollbar`}
                     style={{
                       height: 'fit-content',
                       maxHeight: 'calc(100vh - 80px)'
@@ -127,7 +129,7 @@ const ProductDetailModal = ({
                       }}
                     >
                       <div className='flex j-content-end text-right p-10 w-full cursor-pointer bg-white z-10 radius-6' onClick={handleCloseProductModal}>
-                        <IoMdClose className='w-25 h-25 ' />
+                        <IoMdClose className='sm:w-25 w-20 sm:h-25 h-20' />
                       </div>
                       <div className='overflow-auto no-scrollbar pb-20'
                         style={{
@@ -135,7 +137,7 @@ const ProductDetailModal = ({
                           maxHeight: 'calc(100vh - 100px)'
                         }}
                       >
-                        <div className="l:flex grid  j-content-center gap-30 px-30 pb-30 overflow-auto">
+                        <div className="l:flex grid  j-content-center gap-30 sm:px-30 px-10 pb-30 overflow-auto">
                           <div className='l:w-50p w-full  overflow-hidden'>
                             <div className='w-100p'>
                               <div className='flex flex-col gap-20'>
@@ -309,6 +311,8 @@ const ProductDetailModal = ({
                                             );
                                           }
                                         } else {
+                                          localStorage.setItem('variantId', selectedVariant?.id.toString() ?? '0')
+                                          localStorage.setItem('variantIdMinimumPurchase', selectedVariant?.minPurchaseQuantity.toString() || '1')
                                           isLoginModal()
                                         }
                                       }}
@@ -331,8 +335,8 @@ const ProductDetailModal = ({
                                   className='cursor-pointer flex a-items-center'
                                   onClick={handleCloseProductModal}
                                 >
-                                  All details
-                                  <MdArrowForwardIos className='w-fit' />
+                                  <span>All details</span>
+                                  <MdArrowForwardIos className='w-fit mt-2' />
                                 </Link>
                               </div>
                             </div>

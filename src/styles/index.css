@@ -542,6 +542,7 @@
 .text-30 { font-size: 30px; } 
 .color-\#000000B2 { color: #000000B2; } 
 .mb-12 { margin-bottom: 12px; } 
+.w-94p { width: 94%; } 
 .b-45p { bottom: 45%; } 
 .color-\#A9A9A9 { color: #A9A9A9; } 
 .bg-\#D3D3D3 { background-color: #D3D3D3; } 
@@ -927,6 +928,9 @@
 @media only screen and (min-width: 576px) { .sm\:pt-0 { padding-top: 0px; } } 
 @media only screen and (min-width: 576px) { .sm\:text-20 { font-size: 20px; } } 
 @media only screen and (min-width: 576px) { .sm\:line-height-28 { line-height: 28px; } } 
+@media only screen and (min-width: 576px) { .sm\:w-25 { width: 25px; } } 
+@media only screen and (min-width: 576px) { .sm\:h-25 { height: 25px; } } 
+@media only screen and (min-width: 576px) { .sm\:px-30 { padding-left: 30px; padding-right: 30px; } } 
 @media only screen and (min-width: 576px) { .sm\:w-80p { width: 80%; } } 
 @media only screen and (min-width: 576px) { .sm\:text-10 { font-size: 10px; } } 
 @media only screen and (min-width: 576px) { .sm\:mb-60 { margin-bottom: 60px; } } 

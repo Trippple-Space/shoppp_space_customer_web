@@ -197,17 +197,17 @@ const ProductTile: FC<IProductTile> = ({ product, savedVariants, saveVariant, re
               <>
                 {selectedVariant?.status !== 'OUT_OF_STOCK' ? <button
                   onClick={() => {
-                    isAuthenticated
-                      ?
-                      hasSize ?
-                        handleCloseProductModal()
-                        :
+                    hasSize ?
+                      handleCloseProductModal()
+                      :
+                      isAuthenticated
+                        ?
                         addToCart(
                           selectedVariant.id,
                           selectedVariant.minPurchaseQuantity || 1
                         )
-                      : handleLogin(selectedVariant.id,
-                        selectedVariant.minPurchaseQuantity || 1);
+                        : handleLogin(selectedVariant.id,
+                          selectedVariant.minPurchaseQuantity || 1);
                   }}
                   disabled={!selectedImage}
                   className={classNames(
