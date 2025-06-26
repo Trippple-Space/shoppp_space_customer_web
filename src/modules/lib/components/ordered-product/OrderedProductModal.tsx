@@ -133,9 +133,12 @@ const OrderedProductModal = ({
                           </div>
                           <div className='flex flex-col gap-5'>
                             {' '}
-                            <p className='color-#0000008C text-12 w-fit'>
-                              Size: {item.variant.product?.stockUnit}
-                            </p>
+                            {item?.variant?.size ?
+                              <p className='color-#0000008C text-12 w-fit'>
+                                Size: {item?.variant?.size}
+                              </p>
+                              : null
+                            }
                             <p className='color-#0000008C text-12 w-fit'>
                               Color: {item.variant.properties.color}
                             </p>
@@ -164,6 +167,15 @@ const OrderedProductModal = ({
                       {formatNumberAsPrice(order.cart?.subTotal)}
                     </p>
                   </div>
+                  {order.cart?.totalDiscountValue ?
+                    <div className='flex space-between'>
+                      <p className='color-#000000E0 weight-400'>Discount</p>
+                      <p className='text-16 weight-400'>
+                        − {formatNumberAsPrice(order.cart?.totalDiscountValue)}
+                      </p>
+                    </div>
+                    : null
+                  }
                   <div className='flex space-between border-b border-b-#00000014 pb-10'>
                     <p className='color-#000000E0 weight-400'>Delivery</p>
                     <p className='text-16 weight-400'>

@@ -127,7 +127,7 @@ const ProductDetails = ({ product }: { product: Product }) => {
 
   const isOutOfStock = selectedVariant?.status === 'OUT_OF_STOCK';
   const isDiscounted = new Date() <= new Date(product?.discount?.activeEndDate)
-  const hasSize = groupedData?.[selectedColor][0].size !== null
+  const hasSize = !(groupedData?.[selectedColor][0].size === null || groupedData?.[selectedColor][0].size === '')
 
   const addToCartBtn = () => {
     return <div className='flex flex-col gap-16'>

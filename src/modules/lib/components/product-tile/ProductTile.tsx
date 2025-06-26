@@ -120,8 +120,7 @@ const ProductTile: FC<IProductTile> = ({ product, savedVariants, saveVariant, re
           addToCart(parsedVariantId, parsedMinimumPurchase);
 
         }
-
-
+        
         localStorage.removeItem("variantId");
         localStorage.removeItem("variantIdMinimumPurchase");
       }
@@ -130,7 +129,7 @@ const ProductTile: FC<IProductTile> = ({ product, savedVariants, saveVariant, re
 
   const isOutOfStock = selectedVariant?.status === 'OUT_OF_STOCK'
   const isDiscounted = new Date(product?.discount?.activeStartDate) <= new Date(new Date().setHours(new Date().getHours() + 1)) && new Date(new Date().setHours(new Date().getHours() + 1)) <= new Date(product?.discount?.activeEndDate)
-  const hasSize = groupedData?.[selectedColor][0].size !== null
+  const hasSize = !(groupedData?.[selectedColor][0].size === null || groupedData?.[selectedColor][0].size === '')
 
   return (
     <div className='mt-30 l:mt-20 w-full overflow-hidden'>

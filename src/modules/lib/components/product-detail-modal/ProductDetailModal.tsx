@@ -99,7 +99,7 @@ const ProductDetailModal = ({
 
   const descriptionLength = variant?.product?.longDescription.split(' ').length || 0
   const maxDisplayDescLength = 20
-  const hasSize = groupedData?.[selectedColor][0].size !== null
+  const hasSize = !(groupedData?.[selectedColor][0].size === null || groupedData?.[selectedColor][0].size === '')
 
   return (
     <div>
@@ -148,7 +148,7 @@ const ProductDetailModal = ({
                                   >
                                     <MdArrowBackIos className='w-full relative l-3' />
                                   </div>}
-                                  <div className={`w-full ${variantSelectedImage ? 'l:h-450 h-250' : 'h-350'}`}>
+                                  <div className={`w-full ${variantSelectedImage ? 'l:h-400 h-250' : 'h-350'}`}>
 
                                     <Image
                                       src={selectedImage}

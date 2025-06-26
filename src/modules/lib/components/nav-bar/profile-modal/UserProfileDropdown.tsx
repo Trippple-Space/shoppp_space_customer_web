@@ -22,7 +22,7 @@ const UserProfileDropdown: FC<IUserProfileDropdown> = ({
 }) => {
   const { user, signOut } = useNavbarView()
   const { isAuthenticated } = useUserStore()
-    const query:any = onGoingOrderStatusQuery;
+  const query: any = onGoingOrderStatusQuery;
   const { orders } = useOrders({
     filters: { status: { In: query } }
   })
@@ -32,9 +32,11 @@ const UserProfileDropdown: FC<IUserProfileDropdown> = ({
   const profileModals = [
     'orders',
     'saved items',
+    /*
     'ratings & reviews',
     'recently viewed',
     'recently searched'
+    */
   ]
 
   return (

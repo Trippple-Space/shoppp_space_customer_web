@@ -2,7 +2,7 @@ import { formatNumberAsPrice, getCartItems } from '@/modules/lib/utility/utility
 import React from 'react'
 import Image from '../image/Image'
 
-function orderedProductCard ({ orderedProducts }: any) {
+function orderedProductCard({ orderedProducts }: any) {
   const cartItems = getCartItems(orderedProducts?.cart?.storeGroups)
   return (
     <>
@@ -27,9 +27,12 @@ function orderedProductCard ({ orderedProducts }: any) {
                   </div>
                   <div className='flex flex-col gap-5'>
                     {' '}
-                    <p className='color-#0000008C text-14 w-fit'>
-                      Size: {item.variant.product?.stockUnit}
-                    </p>
+                    {item.variant.size ?
+                      <p className='color-#0000008C text-14 w-fit'>
+                        Size: {item.variant.size}
+                      </p>
+                      : null
+                    }
                     <p className='color-#0000008C text-14'>
                       Color: {item.variant.properties.color}
                     </p>

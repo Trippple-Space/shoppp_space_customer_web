@@ -1262,7 +1262,7 @@
 @media only screen and (min-width: 992px) { .l\:h-fit {    height: fit-content;  } } 
 @media only screen and (min-width: 992px) { .l\:h-33vh { height: 33vh; } } 
 @media only screen and (min-width: 992px) { .l\:w-65p { width: 65%; } } 
-@media only screen and (min-width: 992px) { .l\:h-450 { height: 450px; } } 
+@media only screen and (min-width: 992px) { .l\:h-400 { height: 400px; } } 
 @media only screen and (min-width: 992px) { .l\:px-22 { padding-left: 22px; padding-right: 22px; } } 
 @media only screen and (min-width: 992px) { .l\:mt-40 { margin-top: 40px; } } 
 @media only screen and (min-width: 992px) { .l\:mt-20 { margin-top: 20px; } } 

@@ -244,6 +244,20 @@ const OrderDetails = ({ orderId }: OrderDetailsProps) => {
                                   )}
                                 </p>
                               </div>
+                              {
+                                singleOrder.cart.totalDiscountValue ?
+                                <div className='flex space-between'>
+                                  <p className='color-#000000E0 weight-400'>
+                                    Discount
+                                  </p>
+                                  <p className='text-16'>
+                                    − {formatNumberAsPrice(
+                                      singleOrder.cart.totalDiscountValue
+                                    )}
+                                  </p>
+                                </div>
+                                : null
+                              }
                               <div className='flex space-between border-b border-b-#00000014 pb-10'>
                                 <p className='color-#000000E0 weight-400'>
                                   Delivery
