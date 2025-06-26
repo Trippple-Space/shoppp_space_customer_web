@@ -312,6 +312,7 @@ const CheckoutPage = () => {
                   setAllAddressDeliveryPrice([])
                   setShouldUpdateFee(true);
                 }}
+                selectedAddress={selectedAddress}
               />}
             <div className="flex flex-col gap-14">
               {allCartItems.storeGroups?.map((store, i: number) => (
@@ -410,6 +411,7 @@ const CheckoutPage = () => {
                     setAllAddressDeliveryPrice([])
                     setShouldUpdateFee(true);
                   }}
+                  selectedAddress={selectedAddress}
                 />}
               <div className="md:py-20 py-12 md:px-24 sm:px-40 px-24 md:border border-t border-#00000014 md:bg-white bg-#F5F5F5 md:radius-8 flex flex-col sm:gap-24 gap-20">
                 <h2 className="color-#000000E0 text-20 line-height-28 weight-600 md:block hidden">
@@ -418,8 +420,8 @@ const CheckoutPage = () => {
                 <div className={`${showSummary ? 'block' : 'md:block hidden'}`}>
                   <OrderSummary
                     subTotal={cart.subTotal}
-                    shippingFee={selectedDeliveryOptionDetails.price}
-                    total={cart.total + selectedDeliveryOptionDetails.price}
+                    shippingFee={selectedAddress ? selectedDeliveryOptionDetails.price : undefined}
+                    total={selectedAddress ? cart.total + selectedDeliveryOptionDetails.price : ''}
                     cart={cart}
                     loading={calculatingFee || !selectedAddress || isNaN(selectedDeliveryOptionDetails.price)}
                   />
