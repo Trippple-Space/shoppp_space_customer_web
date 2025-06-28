@@ -1,7 +1,8 @@
 import React from 'react'
 import Image from '../image/Image'
 import classNames from 'classnames'
-import { getCartItems } from '../../utility/utility'
+import { checkMediaType, getCartItems } from '../../utility/utility'
+import VideoSrc from '../video-src/VideoSrc'
 
 const OverlappingImages = ({ orderItem }: any) => {
   const cartItems = getCartItems(orderItem?.cart?.storeGroups)
@@ -11,6 +12,8 @@ const OverlappingImages = ({ orderItem }: any) => {
     <div className='flex gap-10 a-items-center relative'>
       {cartItems.slice(0, maxVisibleItems).map((variant: any, idx: number) => {
         const media = variant.variant.media?.[0]
+        const mediaType = checkMediaType(variant.variant.media?.[0].url) ?? 'image';
+
         return (
           media && (
             <div
@@ -23,12 +26,20 @@ const OverlappingImages = ({ orderItem }: any) => {
               }}
               key={idx}
             >
-              <Image
-                src={media.url}
-                alt={`image-${idx}`}
-                className='w-40 h-40 object-cover'
-                type={media.type}
-              />
+              {
+                mediaType === 'image' ?
+                  <Image
+                    src={media.url}
+                    alt={`image-${idx}`}
+                    className='w-40 h-40 object-cover'
+                    type={media.type}
+                  />
+                  :
+                  <VideoSrc
+                    className='w-40 h-40 object-cover'
+                    src={media.url}
+                  />
+              }
             </div>
           )
         )

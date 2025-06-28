@@ -1,10 +1,10 @@
 'use client'
 import React, { FC, useEffect, useMemo, useState } from 'react'
 import Image from '../image/Image'
-import { AiFillStar, AiFillHeart} from 'react-icons/ai'
+import { AiFillStar, AiFillHeart } from 'react-icons/ai'
 import classNames from 'classnames'
 import { Product, ProductVariant } from '../../utility/types/product.interface'
-import { displayProductPill, formatNumberAsPrice } from '../../utility/utility'
+import { checkMediaType, displayProductPill, formatNumberAsPrice } from '../../utility/utility'
 import { useCart } from '../../utility/hooks/use-cart'
 import QuantitySelector from '../quantity-selector/QuantitySelector'
 import Link from 'next/link'
@@ -30,8 +30,9 @@ interface IProductTile {
   setIsOpen: React.Dispatch<React.SetStateAction<number | null>>
 }
 const ProductTile: FC<IProductTile> = ({ product, savedVariants, saveVariant, removeSavedVariant, allReviews, isOpen, setIsOpen }: any) => {
-  const { groupedData, productImages, availableColors } = useTransformProduct(product)
-  const uniqueVariantsFromProductImages = product?.variants.filter((variants: ProductVariant) => productImages.find(image => image === variants.media[0].url))
+  const { groupedData, availableColors } = useTransformProduct(product)
+  const uniqueVariantsFromProductImages = availableColors.map((color) => groupedData?.[color][0])
+  //product?.variants.filter((variants: ProductVariant) => productImages.find(image => image === variants.media[0].url))
 
   const [onProductTileHover, setOnProductTileHover] = useState(false)
   const [openSingleProductModal, setOpenSingleProductModal] = useState(false)
@@ -44,7 +45,6 @@ const ProductTile: FC<IProductTile> = ({ product, savedVariants, saveVariant, re
   const [selectedVariant, setSelectedVariant] = useState(
     product?.variants?.[0]
   );
-  const [mediaType, setMediaType] = useState<string>("image");
   const {
     addToCart,
     cart,
@@ -72,6 +72,7 @@ const ProductTile: FC<IProductTile> = ({ product, savedVariants, saveVariant, re
   }, [])
 
   const isSaved = savedVariants?.find((item: SavedVariant) => item.variantId === selectedVariant?.id)
+  const mediaType = checkMediaType(selectedImage) ?? 'image';
 
   const handleSave = () => {
     if (isSaved) {
@@ -120,7 +121,7 @@ const ProductTile: FC<IProductTile> = ({ product, savedVariants, saveVariant, re
           addToCart(parsedVariantId, parsedMinimumPurchase);
 
         }
-        
+
         localStorage.removeItem("variantId");
         localStorage.removeItem("variantIdMinimumPurchase");
       }
@@ -153,7 +154,7 @@ const ProductTile: FC<IProductTile> = ({ product, savedVariants, saveVariant, re
             </div>
           ) : (
             <VideoSrc
-              className="absolute w-full h-full a-self-center g|object-fit:cover pointer"
+              className={`absolute w-full h-full a-self-center g|object-fit:cover pointer ${isOutOfStock && 'out-of-stock'}`}
               src={selectedImage}
             />
           )}
@@ -260,14 +261,14 @@ const ProductTile: FC<IProductTile> = ({ product, savedVariants, saveVariant, re
       <div className="scroll-x no-scrollbar">
         <div
           id="product varients"
-          className="md:mt-16 mt-14 flex a-items-center md:gap-6 gap-4 w-200 overlow-auto whitespace-nowrap"
+          className="md:mt-16 mt-14 flex a-items-center md:gap-6 gap-4 w-full overflow-auto whitespace-nowrap no-scrollbar"
         >
           {uniqueVariantsFromProductImages.map((variant: any) =>
             variant?.media?.map((mediaItem: any) =>
               mediaItem?.type === "image" ? (
                 <Image
                   className={classNames(
-                    `l:w-35.2 l:h-35.2 w-31 h-31 pointer md:radius-4 radius-3 a-self-center g|object-fit:cover ${variant?.status === 'OUT_OF_STOCK' && 'out-of-stock'}`,
+                    `l:w-35.2 l:min-w-35.2 l:h-35.2 w-31 min-w-31 h-31 pointer md:radius-4 radius-3 a-self-center g|object-fit:cover ${variant?.status === 'OUT_OF_STOCK' && 'out-of-stock'}`,
                     {
                       "border border-2": selectedImage == mediaItem?.url,
                       [`border-${/*variant?.properties?.color?.toLocaleLowerCase() ||*/'#0B9378'}`]:
@@ -278,7 +279,6 @@ const ProductTile: FC<IProductTile> = ({ product, savedVariants, saveVariant, re
                   onClick={() => {
                     setSelectedVariant(variant);
                     setRecentlyViewsId(variant.id)
-                    setMediaType("image");
                     setSelectedImage(mediaItem?.url);
                     setSelectedColor(variant?.properties?.color)
                   }}
@@ -287,7 +287,7 @@ const ProductTile: FC<IProductTile> = ({ product, savedVariants, saveVariant, re
               ) : (
                 <VideoSrc
                   className={classNames(
-                    "l:w-35.2 l:h-35.2 w-31 h-31 pointer md:radius-4 radius-3 a-self-center g|object-fit:cover",
+                    `l:w-35.2 l:min-w-35.2 l:h-35.2 w-31 min-w-31 h-31 pointer md:radius-4 radius-3 a-self-center g|object-fit:cover ${variant?.status === 'OUT_OF_STOCK' && 'out-of-stock'}`,
                     {
                       "border border-2": selectedImage == mediaItem?.url,
                       [`border-${/*variant?.properties?.color?.toLocaleLowerCase() ||*/'#0B9378'}`]:
@@ -296,7 +296,6 @@ const ProductTile: FC<IProductTile> = ({ product, savedVariants, saveVariant, re
                   )}
                   onClick={() => {
                     setSelectedVariant(variant);
-                    setMediaType("video");
                     setSelectedImage(mediaItem?.url);
                   }}
                   src={mediaItem?.url}

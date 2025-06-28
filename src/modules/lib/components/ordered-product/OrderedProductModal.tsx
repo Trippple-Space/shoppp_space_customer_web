@@ -1,4 +1,4 @@
-import { ellipseText, formatNumberAsPrice, getCartItems } from '@/modules/lib/utility/utility'
+import { checkMediaType, ellipseText, formatNumberAsPrice, getCartItems } from '@/modules/lib/utility/utility'
 import { IoMdClose } from 'react-icons/io'
 import Image from '../image/Image'
 import { PiArrowClockwise } from 'react-icons/pi'
@@ -9,6 +9,7 @@ import classNames from 'classnames'
 import { useEffect, useState } from 'react'
 import { useCart } from '../../utility/hooks/use-cart'
 import PuffLoader from '../puff-loader/PuffLoader'
+import VideoSrc from '../video-src/VideoSrc'
 
 
 const OrderedProductModal = ({
@@ -100,63 +101,73 @@ const OrderedProductModal = ({
                     'flex flex-col gap-10 overflow-auto j-content-center no-scrollbar'
                   )}
                 >
-                  {cartItems.map((item: CartItem, i) => (
+                  {cartItems.map((item: CartItem, i) => {
+                    const mediaType = checkMediaType(item?.variant.media[0].url) ?? 'image';
 
-                    <div
+                    return (
+                      <div
 
-                      className={classNames(
-                        'bg-whitesmoke radius-8 p-10 gap-5 flex flex-col  l:flex-row space-between a-items-start'
-                      )}
-                      key={i}
-                    >
-                      <div className='flex gap-10 l:w-60p'>
-                        <Image
-                          src={item?.variant.media[0].url}
-                          alt={item.variant?.product?.name || ''}
-                          className='w-80 h-80 xl:w-70 xl:h-70 radius-8 object-fit-cover'
-                        />
-                        <div className='flex flex-col gap-6'>
-                          <div className='flex flex-col gap-3'>
-                            <div
-                              className='weight-600 text-12 xl:w-10 xl:white-space-nowrap text-overflow-ellipsis'
-                              onClick={() => handleTextClick(item.id)}
-                            >
-                              {ellipseText(
-                                item.variant.product?.name ?? '',
-                                expandedId === item.id,
-                                30
-                              )}
-                            </div>
-                            <p className='color-#0000008C text-10 w-fit'>
-                              {item.variant.product?.store.name}
-                            </p>
-                          </div>
-                          <div className='flex flex-col gap-5'>
-                            {' '}
-                            {item?.variant?.size ?
-                              <p className='color-#0000008C text-12 w-fit'>
-                                Size: {item?.variant?.size}
+                        className={classNames(
+                          'bg-whitesmoke radius-8 p-10 gap-5 flex flex-col  l:flex-row space-between a-items-start'
+                        )}
+                        key={i}
+                      >
+                        <div className='flex gap-10 l:w-60p'>
+                          {
+                            mediaType === 'image' ?
+                              <Image
+                                src={item?.variant.media[0].url}
+                                alt={item.variant?.product?.name || ''}
+                                className='w-80 h-80 xl:w-70 xl:h-70 radius-8 object-fit-cover'
+                              />
+                              :
+                              <VideoSrc
+                                className='w-80 h-80 xl:w-70 xl:h-70 radius-8 object-fit-cover'
+                                src={item?.variant.media[0].url}
+                              />
+                          }
+                          <div className='flex flex-col gap-6'>
+                            <div className='flex flex-col gap-3'>
+                              <div
+                                className='weight-600 text-12 xl:w-10 xl:white-space-nowrap text-overflow-ellipsis'
+                                onClick={() => handleTextClick(item.id)}
+                              >
+                                {ellipseText(
+                                  item.variant.product?.name ?? '',
+                                  expandedId === item.id,
+                                  30
+                                )}
+                              </div>
+                              <p className='color-#0000008C text-10 w-fit'>
+                                {item.variant.product?.store.name}
                               </p>
-                              : null
-                            }
-                            <p className='color-#0000008C text-12 w-fit'>
-                              Color: {item.variant.properties.color}
-                            </p>
+                            </div>
+                            <div className='flex flex-col gap-5'>
+                              {' '}
+                              {item?.variant?.size ?
+                                <p className='color-#0000008C text-12 w-fit'>
+                                  Size: {item?.variant?.size}
+                                </p>
+                                : null
+                              }
+                              <p className='color-#0000008C text-12 w-fit'>
+                                Color: {item.variant.properties.color}
+                              </p>
+                            </div>
                           </div>
                         </div>
+                        <div className='l:grid flex flex-col a-items-end w-100p l:w-fit gap-5 mt-10 l:mt-0'>
+                          <p className='text-14 weight-500'>
+                            {formatNumberAsPrice(item.totalPrice)}
+                          </p>
+                          <p className='text-12 weight-600 color-#0000008C text-right'>
+                            {' '}
+                            X {item.quantity}
+                          </p>
+                        </div>
                       </div>
-                      <div className='l:grid flex flex-col a-items-end w-100p l:w-fit gap-5 mt-10 l:mt-0'>
-                        <p className='text-14 weight-500'>
-                          {formatNumberAsPrice(item.totalPrice)}
-                        </p>
-                        <p className='text-12 weight-600 color-#0000008C text-right'>
-                          {' '}
-                          X {item.quantity}
-                        </p>
-                      </div>
-                    </div>
-
-                  ))}
+                    )
+                  })}
                 </div>
               </div>
               <div className={classNames('px-25 pb-20 flex flex-col gap-10')}>

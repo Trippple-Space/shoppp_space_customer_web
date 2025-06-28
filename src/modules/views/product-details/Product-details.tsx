@@ -14,13 +14,13 @@ import { productService } from '@/modules/lib/utility/services/product.service'
 import { Product, ProductVariant, RecentlyViewed } from '@/modules/lib/utility/types/product.interface'
 import { SavedVariant } from '@/modules/lib/utility/types/SavedVariant.interface'
 import {
+  checkMediaType,
   cx,
   formatNumberAsPrice,
 } from '@/modules/lib/utility/utility'
 import { Rating, Star } from '@smastrom/react-rating'
 import classNames from 'classnames'
 import Link from 'next/link'
-import { GoHome } from 'react-icons/go'
 import { HiOutlineShoppingBag } from 'react-icons/hi2'
 import { LuGrid2X2 } from 'react-icons/lu'
 import { PiGlobeHemisphereEast, PiStorefront, PiTruck } from 'react-icons/pi'
@@ -32,10 +32,11 @@ import ShareProductModal from './share-modal/shareProductModal'
 import useGetRatingStats from '@/modules/lib/utility/hooks/use-get-rating-stats'
 import useGetProductRating from '@/modules/lib/utility/hooks/use-get-review'
 import colorNames from '@/modules/lib/utility/json-data/colors.json'
+import VideoSrc from '@/modules/lib/components/video-src/VideoSrc'
 
 const ProductDetails = ({ product }: { product: Product }) => {
   const { groupedData, availableColors, productImages } = useTransformProduct(product)
-  const uniqueVariantsFromProductImages = product?.variants.filter((variants) => productImages.find(image => image === variants.media[0].url))
+  const uniqueVariantsFromProductImages = availableColors.map((color) => groupedData?.[color][0])
 
   let globalMediaIndex = 0;
   const [recentlyViewedVariants, setRecentlyViewedVariants] = useState<RecentlyViewed[]>([])
@@ -88,6 +89,7 @@ const ProductDetails = ({ product }: { product: Product }) => {
   }, [isAuthenticated])
 
   const isSaved = savedVariants.find((variant: SavedVariant) => selectedVariant.id === variant.variantId)
+  const mediaType = checkMediaType(selectedImage) ?? 'image';
 
   const handleSave = () => {
     if (isSaved) {
@@ -172,7 +174,7 @@ const ProductDetails = ({ product }: { product: Product }) => {
       <div className="sm:mt-96 mt-88 l:max-w-1400 w-full mx-auto xl:px-60 md:px-50 sm:px-40 px-24">
         <div className='flex a-items-center j-content-between gap-10'>
           <div className='flex a-items-center gap-5'>
-            <PiStorefront className='w-fit color-#00000066 w-15 h-15'/>
+            <PiStorefront className='w-fit color-#00000066 w-15 h-15' />
             <Link href={`/${product?.store?.slug}`} className='text-14 color-#00000066'>
               {product?.store?.name} /
             </Link>
@@ -204,17 +206,25 @@ const ProductDetails = ({ product }: { product: Product }) => {
             {isOutOfStock && <div className="absolute w-100p h-100p text-white flex j-content-center a-items-center z-1 l:text-22 radius-6">
               Out of stock
             </div>}
-            <Image
-              src={selectedImage}
-              className={`flex-grow-1 h-full radius-8 l:radius-t-l-16 l:radius-b-l-16 l:radius-b-r-0 l:radius-t-r-0   w-full h-full a-self-center object-fit-cover ${isOutOfStock && 'out-of-stock'}`}
-              alt={''}
+            {
+              mediaType === 'image' ?
+                <Image
+                  src={selectedImage}
+                  className={`flex-grow-1 h-full radius-8 l:radius-t-l-16 l:radius-b-l-16 l:radius-b-r-0 l:radius-t-r-0   w-full h-full a-self-center object-fit-cover ${isOutOfStock && 'out-of-stock'}`}
+                  alt={''}
 
-            />
+                />
+                :
+                <VideoSrc
+                  className={`flex-grow-1 h-full radius-8 l:radius-t-l-16 l:radius-b-l-16 l:radius-b-r-0 l:radius-t-r-0   w-full h-full a-self-center object-fit-cover ${isOutOfStock && 'out-of-stock'}`}
+                  src={selectedImage}
+                />
+            }
           </div>
 
           <div className='w-100p flex l:grid grid-2-cols-1fr l:grid-2-row-auto gap-6 no-scrollbar l:overflow-visible overflow-auto' style={{ width: '100%' }}>
             {uniqueVariantsFromProductImages?.map((variant, idx) =>
-              variant?.media?.map((mediaItem, index) => {
+              variant?.media?.map((mediaItem: any, index: number) => {
                 const currentIndex = globalMediaIndex++;
 
                 return (
@@ -222,22 +232,41 @@ const ProductDetails = ({ product }: { product: Product }) => {
                     key={index}
                     className={`l:h-207 ${variant?.status === 'OUT_OF_STOCK' && 'out-of-stock'} relative ${idx <= 3 ? 'block' : 'l:hidden block'}`}
                   >
-                    <Image
-                      src={mediaItem?.url}
-                      alt="product-image"
-                      className={cx('object-fit w-50 h-50 radius-4 l:w-full l:h-full pointer l:radius-t-l-0 l:radius-b-l-0  l:radius-t-r-0 l:radius-b-r-0', {
-                        'border border-green border-2':
-                          selectedImage == mediaItem?.url,
-                        'l:radius-t-r-16': currentIndex === 1,
-                        'l:radius-b-r-16': currentIndex === 3,
+                    {
+                      mediaType === 'image' ?
+                        <Image
+                          src={mediaItem?.url}
+                          alt="product-image"
+                          className={cx('object-fit w-50 h-50 radius-4 l:w-full l:h-full pointer l:radius-t-l-0 l:radius-b-l-0  l:radius-t-r-0 l:radius-b-r-0', {
+                            'border border-green border-2':
+                              selectedImage == mediaItem?.url,
+                            'l:radius-t-r-16': currentIndex === 1,
+                            'l:radius-b-r-16': currentIndex === 3,
 
-                      })}
-                      onClick={() => {
-                        setSelectedVariant(variant);
-                        setSelectedImage(mediaItem?.url);
-                        setSelectedColor(variant.properties.color)
-                      }}
-                    />
+                          })}
+                          onClick={() => {
+                            setSelectedVariant(variant);
+                            setSelectedImage(mediaItem?.url);
+                            setSelectedColor(variant.properties.color)
+                          }}
+                        />
+                        :
+                        <VideoSrc
+                          className={cx('object-fit w-50 h-50 radius-4 l:w-full l:h-full pointer l:radius-t-l-0 l:radius-b-l-0  l:radius-t-r-0 l:radius-b-r-0', {
+                            'border border-green border-2':
+                              selectedImage == mediaItem?.url,
+                            'l:radius-t-r-16': currentIndex === 1,
+                            'l:radius-b-r-16': currentIndex === 3,
+
+                          })}
+                          src={mediaItem?.url}
+                          onClick={() => {
+                            setSelectedVariant(variant);
+                            setSelectedImage(mediaItem?.url);
+                            setSelectedColor(variant.properties.color)
+                          }}
+                        />
+                    }
                   </div>
                 );
               })
@@ -590,7 +619,7 @@ const ProductDetails = ({ product }: { product: Product }) => {
       <Modal isOpen={showAllPhotos} onClose={() => setShowAllPhotos(false)}>
         <div className='l:w-500 h-70vh flex l:grid grid-2-cols-1fr l:grid-2-row-auto gap-6 p-20 overflow-auto no-scrollbar'>
           {uniqueVariantsFromProductImages.map((variant, idx) =>
-            variant?.media?.map((mediaItem, index) => {
+            variant?.media?.map((mediaItem: any, index: number) => {
               return (
                 <div
                   key={index}

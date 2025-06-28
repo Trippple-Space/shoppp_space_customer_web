@@ -11,6 +11,7 @@ import useAddress from "@/modules/lib/utility/hooks/use-address";
 import usePayment from "@/modules/lib/utility/hooks/use-payment";
 import PuffLoader from "@/modules/lib/components/puff-loader/PuffLoader";
 import {
+  checkMediaType,
   displayStockUnit,
   formatNumberAsPrice,
 } from "@/modules/lib/utility/utility";
@@ -24,6 +25,7 @@ import OrderSummary from "@/modules/lib/components/order-summary/OrderSummary";
 import { CartItem } from "@/modules/lib/utility/types/cart.interface";
 import { useCalculatedeliveryFee } from "@/modules/lib/utility/hooks/use-calculate-deliveryFee";
 import { DeliveryOption } from "@/modules/lib/utility/types/delivery.interface";
+import VideoSrc from "@/modules/lib/components/video-src/VideoSrc";
 
 type DeliveryOptionKey = 'standard' | 'express';
 type addressDeliveryPrice = {
@@ -328,69 +330,81 @@ const CheckoutPage = () => {
                       <PiCaretUp className="w-18 h-18 pointer" onClick={() => setStoreAccordion(i)} />
                     )}
                   </div>}
-                  {store.items.length > 0 && store.items.map((cartItem: any, j: number) => (
-                    <div
-                      className={`gap-12 ${store.visible ? "flex a-items-center" : "hidden"}`}
-                      key={j}
-                    >
-                      <Image
-                        src={cartItem.variant.media?.[0].url}
-                        alt="order image"
-                        className="w-73 h-75 radius-6 border border-#00000014 object-fit"
-                      />
-                      <div className={`flex-grow-1 flex flex-col ${cartItem?.variant?.size ? 'gap-2.8' : 'gap-6'} overflow-hidden white-space-nowrap text-overflow-ellipsis`}>
-                        <p className="weight-600 text-14 line-height-22 color-#000000E0">
-                          {cartItem?.variant?.product?.name}
-                        </p>
-                        <p className={`weight-400 color-#0000008C ${cartItem?.variant?.size ? 'text-13.5 line-height-16' : 'text-14 line-height-16.94'}`}>
-                          Quantity:{' '}
-                          {`${cartItem?.quantity} ${displayStockUnit(
-                            cartItem.variant.stockUnit
-                          )}${cartItem?.quantity > 1 ? 's' : ''}`}
-                        </p>
-                        <p className={`weight-400 color-#0000008C capitalize ${cartItem?.variant?.size ? 'text-13.5 line-height-16' : 'text-14 line-height-16.94'}`}>
-                          Color: {cartItem?.variant?.properties?.color}
-                        </p>
+                  {store.items.length > 0 && store.items.map((cartItem: any, j: number) => {
+                    const mediaType = checkMediaType(cartItem.variant.media?.[0].url) ?? 'image';
+
+                    return (
+                      <div
+                        className={`gap-12 ${store.visible ? "flex a-items-center" : "hidden"}`}
+                        key={j}
+                      >
                         {
-                          cartItem?.variant?.size &&
-                          <p className='weight-400 text-13.5 line-height-16 color-#0000008C'>
-                            Size: {cartItem?.variant?.size}
-                          </p>
+                          mediaType === 'image' ?
+                            <Image
+                              src={cartItem.variant.media?.[0].url}
+                              alt="order image"
+                              className="w-73 h-75 radius-6 border border-#00000014 object-fit"
+                            />
+                            :
+                            <VideoSrc
+                              className="w-73 h-75 radius-6 border border-#00000014 object-fit"
+                              src={cartItem.variant.media?.[0].url}
+                            />
                         }
-                      </div>
-                      <div className="flex flex-col gap-10 a-items-end">
-                        <div className="flex a-items-center gap-8">
-                          <p className={`weight-600 md:text-20 sm:text-16 text-14 md:line-height-28 sm:line-height-24 line-height-22 ${cartItem.variant.status === 'OUT_OF_STOCK' ? 'color-#00000099' : ''}`}>
-                            {
-                              isValidDiscount(cartItem) ?
-                                formatNumberAsPrice(cartItem.discountedPrice) :
-                                formatNumberAsPrice(cartItem.totalPrice)
-                            }
+                        <div className={`flex-grow-1 flex flex-col ${cartItem?.variant?.size ? 'gap-2.8' : 'gap-6'} overflow-hidden white-space-nowrap text-overflow-ellipsis`}>
+                          <p className="weight-600 text-14 line-height-22 color-#000000E0">
+                            {cartItem?.variant?.product?.name}
+                          </p>
+                          <p className={`weight-400 color-#0000008C ${cartItem?.variant?.size ? 'text-13.5 line-height-16' : 'text-14 line-height-16.94'}`}>
+                            Quantity:{' '}
+                            {`${cartItem?.quantity} ${displayStockUnit(
+                              cartItem.variant.stockUnit
+                            )}${cartItem?.quantity > 1 ? 's' : ''}`}
+                          </p>
+                          <p className={`weight-400 color-#0000008C capitalize ${cartItem?.variant?.size ? 'text-13.5 line-height-16' : 'text-14 line-height-16.94'}`}>
+                            Color: {cartItem?.variant?.properties?.color}
                           </p>
                           {
-                            isValidDiscount(cartItem) &&
-                            <p className={`weight-400 md:text-16 sm:text-12 text-10 md:line-height-24 sm:line-height-20 line-height-18 line-through color-#00000099  ${cartItem.variant.status === 'OUT_OF_STOCK' ? 'color-#00000099' : ''}`}>
-                              {formatNumberAsPrice(cartItem.totalPrice)}
+                            cartItem?.variant?.size &&
+                            <p className='weight-400 text-13.5 line-height-16 color-#0000008C'>
+                              Size: {cartItem?.variant?.size}
                             </p>
                           }
                         </div>
-                        <p
-                          className="weight-400 text-14 line-height-22 text-danger underline pointer"
-                          onClick={async () => {
-                            try {
-                              await removeFromCart(cartItem?.id)
-                              setAllAddressDeliveryPrice([])
-                              setShouldUpdateFee(true);
-                            } catch (error) {
-                              console.error('Failed to remove from cart:', error);
+                        <div className="flex flex-col gap-10 a-items-end">
+                          <div className="flex a-items-center gap-8">
+                            <p className={`weight-600 md:text-20 sm:text-16 text-14 md:line-height-28 sm:line-height-24 line-height-22 ${cartItem.variant.status === 'OUT_OF_STOCK' ? 'color-#00000099' : ''}`}>
+                              {
+                                isValidDiscount(cartItem) ?
+                                  formatNumberAsPrice(cartItem.discountedPrice) :
+                                  formatNumberAsPrice(cartItem.totalPrice)
+                              }
+                            </p>
+                            {
+                              isValidDiscount(cartItem) &&
+                              <p className={`weight-400 md:text-16 sm:text-12 text-10 md:line-height-24 sm:line-height-20 line-height-18 line-through color-#00000099  ${cartItem.variant.status === 'OUT_OF_STOCK' ? 'color-#00000099' : ''}`}>
+                                {formatNumberAsPrice(cartItem.totalPrice)}
+                              </p>
                             }
-                          }}
-                        >
-                          Remove
-                        </p>
+                          </div>
+                          <p
+                            className="weight-400 text-14 line-height-22 text-danger underline pointer"
+                            onClick={async () => {
+                              try {
+                                await removeFromCart(cartItem?.id)
+                                setAllAddressDeliveryPrice([])
+                                setShouldUpdateFee(true);
+                              } catch (error) {
+                                console.error('Failed to remove from cart:', error);
+                              }
+                            }}
+                          >
+                            Remove
+                          </p>
+                        </div>
                       </div>
-                    </div>
-                  ))}
+                    )
+                  })}
 
                 </div>
               ))}

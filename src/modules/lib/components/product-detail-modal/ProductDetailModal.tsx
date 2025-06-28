@@ -4,12 +4,13 @@ import { IoMdClose } from 'react-icons/io'
 import Link from 'next/link'
 import { ProductVariant } from '../../utility/types/product.interface'
 import { useCart } from '../../utility/hooks/use-cart'
-import { cx, formatNumberAsPrice } from '../../utility/utility'
+import { checkMediaType, cx, formatNumberAsPrice } from '../../utility/utility'
 import QuantitySelector from '../quantity-selector/QuantitySelector'
 import Image from '../image/Image'
 import { MdArrowBackIos, MdArrowForwardIos } from 'react-icons/md'
 import useTransformProduct from '../../utility/hooks/use-transform-product'
 import colorNames from '@/modules/lib/utility/json-data/colors.json'
+import VideoSrc from '../video-src/VideoSrc'
 
 interface ProductDetailModalProp {
   openSingleProductModal: boolean
@@ -35,7 +36,7 @@ const ProductDetailModal = ({
     isLoginModal
   } = useCart()
   const { groupedData, availableColors, productImages } = variant?.product ? useTransformProduct(variant.product) : { groupedData: null };
-  const uniqueVariantsFromProductImages = variantSelectedImage ? [variant] : variant?.product?.variants.filter((variants) => productImages?.find(image => image === variants.media[0].url))
+  const uniqueVariantsFromProductImages = variantSelectedImage ? [variant] : availableColors?.map((color) => groupedData?.[color][0])
 
   const [isHover, setIsHover] = useState(false)
   const [selectedVariant, setSelectedVariant] = useState(variant || groupedData?.[availableColors[0]]?.[0])
@@ -97,6 +98,7 @@ const ProductDetailModal = ({
     }
   };
 
+  const mediaType = checkMediaType(selectedImage) ?? 'image';
   const descriptionLength = variant?.product?.longDescription.split(' ').length || 0
   const maxDisplayDescLength = 20
   const hasSize = !(groupedData?.[selectedColor][0].size === null || groupedData?.[selectedColor][0].size === '')
@@ -128,7 +130,7 @@ const ProductDetailModal = ({
                       }}
                     >
                       <div className='flex j-content-end text-right p-10 w-full bg-white z-10 radius-6'>
-                        <IoMdClose className='sm:w-25 w-20 sm:h-25 h-20 pointer' onClick={handleCloseProductModal}/>
+                        <IoMdClose className='sm:w-25 w-20 sm:h-25 h-20 pointer' onClick={handleCloseProductModal} />
                       </div>
                       <div className='overflow-auto no-scrollbar pb-20'
                         style={{
@@ -149,12 +151,20 @@ const ProductDetailModal = ({
                                     <MdArrowBackIos className='w-full relative l-3' />
                                   </div>}
                                   <div className={`w-full ${variantSelectedImage ? 'l:h-400 h-250' : 'h-350'}`}>
+                                    {
+                                      mediaType === 'image' ?
+                                        <Image
+                                          src={selectedImage}
+                                          alt={variant?.product?.name || 'Product'}
+                                          className={`object-fit w-full h-full ${selectedVariant?.status === 'OUT_OF_STOCK' ? 'greyscale' : ''}`}
+                                        />
+                                        :
+                                        <VideoSrc
+                                          className={`object-fit w-full h-full ${selectedVariant?.status === 'OUT_OF_STOCK' ? 'greyscale' : ''}`}
+                                          src={selectedImage}
+                                        />
+                                    }
 
-                                    <Image
-                                      src={selectedImage}
-                                      alt={variant?.product?.name || 'Product'}
-                                      className={`object-fit w-full h-full ${selectedVariant?.status === 'OUT_OF_STOCK' ? 'greyscale' : ''}`}
-                                    />
                                   </div>
 
                                   {isHover && position === 'homepage' && !variantSelectedImage && <div className={`absolute z-10 b-45p ${(variant.product?.variants?.length || 0) > 1 ? 'bg-white color-black pointer' : 'color-#A9A9A9 bg-#D3D3D3 cursor-not-allowed'} r-20 p-15 radius-99 flex a-items-center j-content-center icon-box-shadow `} onClick={handleNextImage}>
@@ -171,21 +181,37 @@ const ProductDetailModal = ({
                                           setSelectedImage(mediaItem?.url)
                                           setSelectedColor(vari.properties.color)
                                         }}
-                                        className='min-w-90 h-90'
+                                        className='w-90 min-w-90 h-90'
                                       >
-                                        <Image
-                                          src={mediaItem?.url}
-                                          alt='product-image'
-                                          className={cx(
-                                            `g|object-fit:cover w-full h-full overflow-hidden ${vari.status === 'OUT_OF_STOCK' ? 'greyscale' : ''}`,
-                                            {
-                                              'border border-green border-2':
-                                                selectedImage == mediaItem?.url,
-                                              [`border-${mediaItem?.description?.toLocaleLowerCase()}`]:
-                                                selectedImage == mediaItem?.url
-                                            }
-                                          )}
-                                        />
+                                        {
+                                          mediaType === 'image' ?
+                                            <Image
+                                              src={mediaItem?.url}
+                                              alt='product-image'
+                                              className={cx(
+                                                `g|object-fit:cover w-full h-full overflow-hidden ${vari.status === 'OUT_OF_STOCK' ? 'greyscale' : ''}`,
+                                                {
+                                                  'border border-green border-2':
+                                                    selectedImage == mediaItem?.url,
+                                                  [`border-${mediaItem?.description?.toLocaleLowerCase()}`]:
+                                                    selectedImage == mediaItem?.url
+                                                }
+                                              )}
+                                            />
+                                            :
+                                            <VideoSrc
+                                              className={cx(
+                                                `g|object-fit:cover w-full h-full overflow-hidden ${vari.status === 'OUT_OF_STOCK' ? 'greyscale' : ''}`,
+                                                {
+                                                  'border border-green border-2':
+                                                    selectedImage == mediaItem?.url,
+                                                  [`border-${mediaItem?.description?.toLocaleLowerCase()}`]:
+                                                    selectedImage == mediaItem?.url
+                                                }
+                                              )}
+                                              src={mediaItem?.url}
+                                            />
+                                        }
                                       </div>)
                                     })
                                   )}
