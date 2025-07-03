@@ -18,6 +18,7 @@ import MiniReview from '@/modules/views/product-details/reviews/MiniReview'
 import { IFetchedReview } from '../../utility/types/review.interface'
 import useGetRatingStats from '../../utility/hooks/use-get-rating-stats'
 import useTransformProduct from '../../utility/hooks/use-transform-product'
+import { useRecentlyViewedVariant } from '../../utility/hooks/use-recently-viewed'
 
 interface IProductTile {
   product: Product
@@ -55,6 +56,7 @@ const ProductTile: FC<IProductTile> = ({ product, savedVariants, saveVariant, re
   } = useCart()
   const variantIds = useMemo(() => product.variants.map((v: any) => v.id), [product.variants]);
   const { reviewStat, loading: statsLoading } = useGetRatingStats(variantIds);
+  const { addVariant } = useRecentlyViewedVariant()
 
   const selectedVariantItemInCart = cart.cartItems.find(
     (item) => item.variant.id === selectedVariant?.id
@@ -98,14 +100,8 @@ const ProductTile: FC<IProductTile> = ({ product, savedVariants, saveVariant, re
   }
 
   useEffect(() => {
-
     if (recentlyViewedId && isAuthenticated) {
-      (async () => {
-        await productService.addRecentlyViewedVariants({
-          productVariantId: recentlyViewedId,
-          type: 'view'
-        });
-      })();
+      addVariant(recentlyViewedId, "view");
     }
   }, [recentlyViewedId, isAuthenticated]);
 

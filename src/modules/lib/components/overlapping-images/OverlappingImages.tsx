@@ -36,7 +36,7 @@ const OverlappingImages = ({ orderItem }: any) => {
                   />
                   :
                   <VideoSrc
-                    className='w-40 h-40 object-cover'
+                    className='w-40 h-40 object-contain'
                     src={media.url}
                   />
               }

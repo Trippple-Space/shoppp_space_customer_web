@@ -241,11 +241,24 @@ class ProductService {
                http.get(`${endpoints.RECENTLY_VIEWED}/viewed`).then((response: AxiosResponse<RecentlyViewed[]>) => resolve(response.data))
           })
      }
+
+     getRecentlySearchedVariants(): Promise<RecentlyViewed[]> {   
+          return new Promise((resolve, reject) => {
+               http.get(`${endpoints.RECENTLY_VIEWED}/searched`).then((response: AxiosResponse<RecentlyViewed[]>) => resolve(response.data))
+          })
+     }
+
      addRecentlyViewedVariants(payload: { productVariantId: number, type?: string }) {     
           return new Promise((resolve, reject) => {
                http.post(endpoints.RECENTLY_VIEWED, payload).then((response) => resolve(response.data))
 
           })
+     }
+
+     clearRecentlyViewedVariants(payload: { type?: string }) {    
+          return http.delete(endpoints.RECENTLY_VIEWED, {
+               data: payload,
+          }).then((response: AxiosResponse) => response.data);
      }
 
      createProductReview(payload:

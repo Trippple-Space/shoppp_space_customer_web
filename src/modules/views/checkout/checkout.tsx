@@ -154,7 +154,7 @@ const CheckoutPage = () => {
   }, [])
 
   const updateFees = async () => {
-    if (selectedAddress) {
+    if (selectedAddress && allCartItems.cartItems.length > 0) {
       const deliveryTypes: DeliveryOptionKey[] = ['standard', 'express'];
       const getLatLon = (meta: any) => {
         if (meta?.coordinates) {

@@ -203,7 +203,7 @@ const OrderedProductModal = ({
                   </div>
                   <div className='flex space-between'>
                     <p className='color-#000000E0 weight-400'>Payment Method</p>
-                    <p className='text-16 weight-400'>Pay online</p>
+                    <p className='text-16 weight-400'>Paid online</p>
                   </div>
                 </div>
               </div>

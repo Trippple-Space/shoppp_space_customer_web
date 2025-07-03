@@ -199,7 +199,6 @@
 .border-\#6A6A6A4D { border-color: #6A6A6A4D; } 
 [class~='g|max-height:182px']{max-height:182px} 
 .px-12 { padding-left: 12px; padding-right: 12px; } 
-.j-items-center { justify-items: center; } 
 .hover\:bg-green:hover { background-color: #0B9378; } 
 .hover\:text-white:hover { color: #FFFFFF; } 
 [class~='g|transition:0.15s']{transition:0.15s} 
@@ -476,17 +475,13 @@
 .border-\#000000E0 { border-color: #000000E0; } 
 .text-grey-700 { color: #6B6662; } 
 .mt-12 { margin-top: 12px; } 
-.hover\:text-green:hover { color: #0B9378; } 
-[class~='g|grid-template-columns:1fr|_|auto']{grid-template-columns:1fr auto} 
-.gap-52 { gap: 52px; } 
+.ml--30 { margin-left: -30px; } 
 .px-48 { padding-left: 48px; padding-right: 48px; } 
-.text-grey-900 { color: #1F1B17; } 
-.h-500 { height: 500px; } 
 .bg-\#D4280C { background-color: #D4280C; } 
 .t-50 { top: 50px; } 
 .w-360 { width: 360px; } 
 .pb-64 { padding-bottom: 64px; } 
-[class~='g|max-height:540px;']{max-height:540px;} 
+[class~='g|max-height:500px;']{max-height:500px;} 
 .w-40 { width: 40px; } 
 .h-40 { height: 40px; } 
 .border-b-1 { border-bottom-width: 1px; } 
@@ -515,6 +510,8 @@
 .l-50p { left: 50%; } 
 [class~='g|transform:translate(-50%)']{transform:translate(-50%)} 
 .w-200 { width: 200px; } 
+[class~='g|grid-template-columns:1fr|_|auto']{grid-template-columns:1fr auto} 
+.text-grey-900 { color: #1F1B17; } 
 .my-7 { margin-top: 7px; margin-bottom: 7px; } 
 .bg-yellow { background-color: #FACE33; } 
 .pt-56 { padding-top: 56px; } 
@@ -580,6 +577,7 @@
 .text-black\! { color: #000000 !important; } 
 .hover\:scale-1\.06:hover { scale: 1.06; } 
 [class~='g|will-change:transform']{will-change:transform} 
+.j-items-center { justify-items: center; } 
 .w-31 { width: 31px; } 
 .min-w-31 { min-width: 31px; } 
 @layer base {.radius-3 { border-radius: 3px; } } 
@@ -788,6 +786,7 @@
 .mt-33 { margin-top: 33px; } 
 .gap-23 { gap: 23px; } 
 .w-117 { width: 117px; } 
+.hover\:text-green:hover { color: #0B9378; } 
 .max-w-60 { max-width: 60px; } 
 .mt-150 { margin-top: 150px; } 
 .mt-9 { margin-top: 9px; } 
@@ -1244,7 +1243,6 @@
 @media only screen and (min-width: 992px) { .l\:h-600 { height: 600px; } } 
 @media only screen and (min-width: 992px) { .l\:gap-52 { gap: 52px; } } 
 @media only screen and (min-width: 992px) { .l\:px-48 { padding-left: 48px; padding-right: 48px; } } 
-@media only screen and (min-width: 992px) { .l\:mt-60 { margin-top: 60px; } } 
 @media only screen and (min-width: 992px) { .l\:t-54 { top: 54px; } } 
 @media only screen and (min-width: 992px) { .l\:w-60 { width: 60px; } } 
 @media only screen and (min-width: 992px) { .l\:h-60 { height: 60px; } } 
@@ -1318,6 +1316,7 @@
 @media only screen and (min-width: 992px) { .l\:radius-t-r-16 { border-top-right-radius: 16px;  } } 
 @media only screen and (min-width: 992px) { .l\:radius-b-r-16 { border-bottom-right-radius: 16px;  } } 
 @media only screen and (min-width: 992px) { @layer base {.l\:radius-0 { border-radius: 0px; } } } 
+@media only screen and (min-width: 992px) { .l\:mt-60 { margin-top: 60px; } } 
 @media only screen and (min-width: 992px) { .l\:gap-120 { gap: 120px; } } 
 @media only screen and (min-width: 992px) { .l\:mt-80 { margin-top: 80px; } } 
 @media only screen and (min-width: 992px) { 
