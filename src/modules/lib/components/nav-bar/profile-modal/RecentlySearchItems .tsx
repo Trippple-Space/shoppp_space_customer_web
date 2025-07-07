@@ -20,7 +20,7 @@ const RecentlySearchItems: React.FC<ModalProps> = ({ modalOpen, handleCloseModal
     switch (option) {
       case 'open-orders':
         return (
-          <div className='text-16 weight-400 text-grey-700'>
+          <div className='text-16 weight-400 text-grey-700 h-full'>
             {
               recentSearched.length === 0 ?
                 <div className='flex flex-col a-items-center gap-8 py-16 h-full j-content-center'>
@@ -62,7 +62,7 @@ const RecentlySearchItems: React.FC<ModalProps> = ({ modalOpen, handleCloseModal
               </div>
             </div>
             <div className="p-20 overflow-auto no-scrollbar" style={{ height: "calc(100dvh - 230px)" }}>
-              <div className="">
+              <div className="h-full">
                 {selected(action)}
               </div>
             </div>

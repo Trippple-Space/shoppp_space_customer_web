@@ -22,7 +22,7 @@ export const useRecentVariantStore = create<RecentVariantStore>((set) => ({
     fetchRecentVariants: async () => {
         try {
             set({ fetching: true });
-            const recentVariants = await productService.getRecentlyViewedVariants();
+            const recentVariants = await productService.getRecentlyViewedVariants("view");
             set({ recentVariants, fetching: false });
         } catch (error) {   
             set({ fetching: false });
@@ -32,7 +32,7 @@ export const useRecentVariantStore = create<RecentVariantStore>((set) => ({
     fetchRecentSearched: async () => {
         try {
             set({ fetching: true });
-            const recentSearched = await productService.getRecentlySearchedVariants();
+            const recentSearched = await productService.getRecentlyViewedVariants("search");
             set({ recentSearched, fetching: false });
         } catch (error) {   
             set({ fetching: false });
@@ -44,7 +44,7 @@ export const useRecentVariantStore = create<RecentVariantStore>((set) => ({
                   productVariantId: productVariantId,
                   type: type
                 });
-        const recentVariants = await productService.getRecentlyViewedVariants();
+        const recentVariants = await productService.getRecentlyViewedVariants(type);
         set({ recentVariants });
     },
     clearRecentVariants: async (type: "view" | "search") => {

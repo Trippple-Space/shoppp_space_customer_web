@@ -236,22 +236,33 @@ class ProductService {
             })
         })
     }
-     getRecentlyViewedVariants(): Promise<RecentlyViewed[]> {   
+
+
+     getRecentlyViewedVariants(type?: string): Promise<RecentlyViewed[]> { 
+          const params: any = {};  
+          params["filters[type]"] = type;
+
           return new Promise((resolve, reject) => {
-               http.get(`${endpoints.RECENTLY_VIEWED}/viewed`).then((response: AxiosResponse<RecentlyViewed[]>) => resolve(response.data))
+               http.get(endpoints.RECENTLY_VIEWED, {
+                  params  
+               }).then((response: AxiosResponse<RecentlyViewed[]>) => resolve(response.data))
           })
      }
 
-     getRecentlySearchedVariants(): Promise<RecentlyViewed[]> {   
+     getAllRecentlyViewedVariants(): Promise<RecentlyViewed[]> { 
+          const params: any = {};  
+          params["filters[type]"] = "view";
+
           return new Promise((resolve, reject) => {
-               http.get(`${endpoints.RECENTLY_VIEWED}/searched`).then((response: AxiosResponse<RecentlyViewed[]>) => resolve(response.data))
+               http.get(endpoints.ALL_RECENTLY_VIEWED, {
+                  params  
+               }).then((response: AxiosResponse<RecentlyViewed[]>) => resolve(response.data))
           })
      }
 
      addRecentlyViewedVariants(payload: { productVariantId: number, type?: string }) {     
           return new Promise((resolve, reject) => {
                http.post(endpoints.RECENTLY_VIEWED, payload).then((response) => resolve(response.data))
-
           })
      }
 

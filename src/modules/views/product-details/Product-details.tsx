@@ -82,7 +82,7 @@ const ProductDetails = ({ product }: { product: Product }) => {
   useEffect(() => {
     (async () => {
       if (isAuthenticated) {
-        const response: RecentlyViewed[] = await productService.getRecentlyViewedVariants()
+        const response: RecentlyViewed[] = await productService.getAllRecentlyViewedVariants()
         setRecentlyViewedVariants(response)
       }
     })()
