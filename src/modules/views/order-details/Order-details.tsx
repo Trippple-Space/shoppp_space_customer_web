@@ -2,6 +2,7 @@
 
 import {
   formatNumberAsPrice,
+  getCartItems,
   getStoreNames
 } from '@/modules/lib/utility/utility'
 import React, { useEffect, useState } from 'react'
@@ -13,14 +14,11 @@ import OrderProgress from '../../lib/components/order/order-progress-details/Ord
 import { PiArrowClockwise } from 'react-icons/pi'
 import OverlappingImages from '../../lib/components/overlapping-images/OverlappingImages'
 import classNames from 'classnames'
-import { Order } from '@/modules/lib/utility/types/order.interface'
-import { useRouter, useSearchParams } from 'next/navigation'
+import { useRouter } from 'next/navigation'
 import HomepageNavBar from '@/modules/lib/components/nav-bar/HomepageNavBar'
 import OrderHeader from '@/modules/lib/components/order/OrderHeader'
 import { BuyAgain, CartItem } from '@/modules/lib/utility/types/cart.interface'
 import Link from 'next/link'
-import { cartService } from '@/modules/lib/utility/services/cart.service'
-import { orderService } from '@/modules/lib/utility/services/order.service'
 import OrderTabContent from '@/modules/lib/components/order/OrderTabContent'
 import PuffLoader from '@/modules/lib/components/puff-loader/PuffLoader'
 import { useOrders } from '@/modules/lib/utility/hooks/use-orders'
@@ -37,7 +35,6 @@ const OrderDetails = ({ orderId }: OrderDetailsProps) => {
 
   useEffect(() => {
     fetchOrderById(orderId, {})
-
   }, [])
 
   const [showDetails, setShowDetails] = useState(true)
@@ -155,7 +152,7 @@ const OrderDetails = ({ orderId }: OrderDetailsProps) => {
                           <p className='color-#00000099 text-12 weight-400 overflow-hidden text-ellipsis l:overflow'>
                             Order from:{' '}
                             <span className='weight-500 color-#000000E0 text-14 font-inter'>
-                              {getStoreNames(singleOrder.cart.cartItems)}
+                              {getStoreNames(singleOrder.cart.storeGroups)}
                             </span>
                           </p>
                         </div>
@@ -211,7 +208,7 @@ const OrderDetails = ({ orderId }: OrderDetailsProps) => {
                           <button
                             className='flex gap-10 a-items-center px-10 py-7 radius-5 border border-#00000026 bg-none cursor-pointer'
                             onClick={() =>
-                              buyOrdersAgain(singleOrder.cart.cartItems)
+                              buyOrdersAgain(getCartItems(singleOrder?.cart?.storeGroups))
                             }
                           >
                             <PiArrowClockwise className='w-fit' />

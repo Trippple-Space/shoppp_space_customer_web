@@ -8,9 +8,7 @@ export interface IProductFilters {
   index?: string;
   type?: string | null;
   tags?: any[];
-  category?:
-    | { [key: string | number]: string | number }
-    | { [key: string | number]: string | number }[];
+  category?: string;
   keywords?: string[];
   [key: string]: any;
   status?: { In: string[] };
@@ -35,7 +33,7 @@ export interface IQueryParams {
 
 export const useProducts = (initialQuery: IQueryParams) => {
   const [query, setQuery] = useState<IQueryParams>(initialQuery);
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState(false);
 
   const {
     productsCache,

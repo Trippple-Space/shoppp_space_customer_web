@@ -28,6 +28,11 @@ const ReviewsViews = ({ id, slug }: { id: number, slug: string }) => {
     const { reviews, refresh: refreshReview, loading: reviewLoading } = useGetProductRating(id)
     const { reviewStat, refresh: refreshStat, loading: statsLoading } = useGetRatingStats(id)
     const { reviewStatDist, refresh: refreshDist, loading: distLoading } = useGetRatingDist(id)
+
+    const reviewData = reviewStat?.find(review => review.id === id);
+    const totalReviews = reviewData?.reviewStat?.totalReviews ?? 0;
+    const averageRating = reviewData?.reviewStat?.averageRating ?? 0;
+
     const [openModal, setOpenModal] = useState<boolean>(false)
 
     const loading = reviewLoading || statsLoading || distLoading
@@ -68,20 +73,20 @@ const ReviewsViews = ({ id, slug }: { id: number, slug: string }) => {
                         <div className="max-w-4xl mx-auto p-6">
                             <div className='flex px-5 j-content-center a-items-center mt-20 sm:mt-40 l:mt-60 gap-34 sm:gap-70 l:gap-120'>
                                 <div className='flex flex-col gap-3'>
-                                    <div className="text-40 sm:text-60 weight-700 text-black">{reviewStat?.averageRating.toFixed(1) ?? 0}</div>
+                                    <div className="text-40 sm:text-60 weight-700 text-black">{averageRating.toFixed(1) ?? 0}</div>
                                     <Rating
                                         className='max-w-120 sm:max-w-150 max-h-120 sm:max-h-150 flex gap-8'
-                                        value={reviewStat?.averageRating ?? 0}
+                                        value={averageRating ?? 0}
                                         itemStyles={{ itemShapes: Star, activeFillColor: '#f59e0b', inactiveFillColor: '#0000000F' }}
                                         readOnly
                                     />
-                                    <div className="color-gray text-14 sm:text-16 weight-400">{reviewStat?.totalReviews ?? 0} {`Review${reviewStat?.totalReviews && reviewStat?.totalReviews > 1 ? 's' : ''}`}</div>
+                                    <div className="color-gray text-14 sm:text-16 weight-400">{totalReviews ?? 0} {`Review${totalReviews && totalReviews > 1 ? 's' : ''}`}</div>
                                 </div>
 
                                 <div className='flex flex-col gap-4'>
                                     {[5, 4, 3, 2, 1].map((star) => {
                                         const count = reviewStatDist?.[`${star}`] ?? 0;
-                                        const percentage = reviewStat?.totalReviews ? (count / reviewStat?.totalReviews) * 100 : 0;
+                                        const percentage = totalReviews ? (count / totalReviews) * 100 : 0;
 
                                         return (
                                             <div key={star} className="flex items-center gap-6 sm:gap-10">
@@ -98,7 +103,7 @@ const ReviewsViews = ({ id, slug }: { id: number, slug: string }) => {
                             </div>
 
                             <div className='sm:100p l:95p xl:w-90p mx-auto l:px-20 mt-40 sm:mt-60 l:mt-80 mb-20'>
-                                <Comments reviews={reviews} isModal={false} slug={slug} />
+                                <Comments reviews={reviews.flatMap((review) => review.reviews)} isModal={false} slug={slug} />
                             </div>
                         </div>
                 }

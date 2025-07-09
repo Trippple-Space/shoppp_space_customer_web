@@ -19,7 +19,7 @@ const QuantitySelector: FC<QuantitySelectorProps> = ({
   return (
     <div className='relative mb-10'>
       <div className='bg-#FACE33 text-black text-10 border border-rgba(245,245,245,0.9) weight-500 font-oblique w-fit px-10 py-3 radius-5 absolute s:l-18 l-20 s:b--20 b--18'>
-        {displayStockUnit(cartItem.variant.stockUnit)}(s)
+        {displayStockUnit(cartItem.variant.stockUnit)}{cartItem.quantity > 1 && "s"}
       </div>
       <div className='text-black bg-rgba(245,245,245,0.9) flex a-items-center relative w-fit s:p-4 p-3 gap-10 radius-999'>
         <button

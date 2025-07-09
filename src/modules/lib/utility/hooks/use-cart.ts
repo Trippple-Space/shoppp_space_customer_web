@@ -5,7 +5,7 @@ import { useAuthGuard } from "./use-auth-guard";
 import useUserStore from "../store/user.store";
 import { toast } from "sonner";
 
-export const useCart = () => {
+export const useCart = (isCheckout?: boolean) => {
      const {
           cart,
           fetchCart,
@@ -16,7 +16,10 @@ export const useCart = () => {
           incrementCartItem,
           decrementCartItem,
           isLoginModal,
-          showLoginModal,
+       showLoginModal,
+       applyDiscount,
+       removeDiscountCode,
+       applyingCode
      } = useCartStore();
      const { isAuthenticated } = useUserStore();
 
@@ -40,7 +43,7 @@ export const useCart = () => {
 
      useEffect(() => {
           if (!cart.id && isAuthenticated && !fetching) {
-               fetchCart();
+            fetchCart(isCheckout);
           }
      },[isAuthenticated]);
 
@@ -51,9 +54,14 @@ export const useCart = () => {
           removeFromCart,
           increment,
           decrement,
-          fetching,
+       fetching,
+       fetchCart,
+          applyDiscount,
+          applyingCode,
+          removeDiscountCode,
           isAuthenticated,
           isLoginModal,
-          showLoginModal,
+       showLoginModal,
+          
      };
 };

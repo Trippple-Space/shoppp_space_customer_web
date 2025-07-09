@@ -12,12 +12,10 @@ export interface Store {
 }
 
 interface StoreMeta {
-     heroImages: {
-          heroImage1: string;
+     heroImage1: string;
           heroImage2: string;
           heroImage3: string;
           heroImage4: string;
-     };
      settings: {
           firstName: string;
           lastName: string;

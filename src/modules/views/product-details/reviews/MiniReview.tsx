@@ -15,12 +15,9 @@ import {
 import React from 'react';
 import { Comments } from './Comments';
 import { Rating, Star } from '@smastrom/react-rating';
-import { IFetchedReview } from '@/modules/lib/utility/types/review.interface';
-import useGetRatingStats from '@/modules/lib/utility/hooks/use-get-rating-stats';
+import { IFetchedReview, IReviewStat } from '@/modules/lib/utility/types/review.interface';
 
-const MiniReview = ({ id, slug, isOpen, setIsOpen, reviews }: { id: number, slug: string, isOpen: number | null, setIsOpen: React.Dispatch<React.SetStateAction<number | null>>, reviews: IFetchedReview[] }) => {
-    const { reviewStat, loading } = useGetRatingStats(id)
-
+const MiniReview = ({ id, slug, isOpen, setIsOpen, reviews, reviewStat, loading }: { id: number, slug: string, isOpen: number | null, setIsOpen: React.Dispatch<React.SetStateAction<number | null>>, reviews: IFetchedReview[], reviewStat?: IReviewStat, loading: boolean }) => {
     const { refs, floatingStyles, context } = useFloating({
         open: isOpen === id,
         onOpenChange: (open) => setIsOpen(open ? id : null),

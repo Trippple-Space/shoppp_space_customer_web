@@ -5,17 +5,17 @@ import React, { useState } from 'react';
 const getRating = (rating: number) => {
     switch (rating) {
         case 1:
-            return 'Bad';
+            return "I hate it";
         case 2:
-            return 'Poor';
+            return "I don’t like it";
         case 3:
-            return 'Average';
+            return "It’s okay";
         case 4:
-            return 'Very good';
+            return "I like it";
         case 5:
-            return 'Excellent';
+            return "I love it!";
         default:
-            return '';
+            return "";
     }
 };
 
@@ -23,14 +23,12 @@ export const AddReview = ({ id, setOpenModal, refresh }: { id: number, setOpenMo
     const { createReview } = useReviews()
     const [rating, setRating] = useState<number>(0);
     const [hoveredRating, setHoveredRating] = useState<number>(0);
-    const [subject, setSubject] = useState<string>('');
     const [comment, setComment] = useState<string>('');
-    const [touched, setTouched] = useState<{ subject: boolean; comment: boolean, rate: boolean }>({ subject: false, comment: false, rate: false });
+    const [touched, setTouched] = useState<{ comment: boolean, rate: boolean }>({ comment: false, rate: false });
 
     const [formData, setFormData] = useState<{
         productVariantId: number;
         rating: number;
-        subject: string;
         comment: string;
         meta: {
             verifiedPurchase: boolean;
@@ -39,7 +37,6 @@ export const AddReview = ({ id, setOpenModal, refresh }: { id: number, setOpenMo
     }>({
         productVariantId: Number(id),
         rating: 0,
-        subject: '',
         comment: '',
         meta: {
             verifiedPurchase: true,
@@ -49,23 +46,21 @@ export const AddReview = ({ id, setOpenModal, refresh }: { id: number, setOpenMo
 
     const handleSubmit = (e: React.FormEvent) => {
         e.preventDefault();
-        setTouched({ subject: true, comment: true, rate: true });
+        setTouched({ comment: true, rate: true });
 
-        if (!subject.trim() || !comment.trim() || !rating) {
+        if (!comment.trim() || !rating) {
             return;
         }
 
         setFormData(prev => ({
             ...prev,
             rating,
-            subject,
             comment
         }));
 
         createReview({
             ...formData,
             rating,
-            subject,
             comment
         }).then(() => {
             setOpenModal(false)
@@ -85,29 +80,15 @@ export const AddReview = ({ id, setOpenModal, refresh }: { id: number, setOpenMo
                 }
             </div>
 
-            <div className='mb-20'>
-                <p className="mb-10 weight-500 text-16">Review Subject<span className='text-red'>*</span> :</p>
-                <input
-                    type="text"
-                    name="subject"
-                    id="subject"
-                    value={subject}
-                    onChange={(e) => setSubject(e.target.value)}
-                    onBlur={() => setTouched(t => ({ ...t, subject: true }))}
-                    className={`w-full border border-2 border-#00000014 radius-6 outline-none px-12 py-10 ${touched.subject && !subject.trim() ? 'border-red-500' : 'border-gray-300'} focus:border-#0B9378`}
-                />
-            </div>
-
             <div className='mb-24'>
                 <p className="mb-10 weight-500 text-16">Comment<span className='text-red'>*</span> :</p>
-                <input
-                    type="text"
+                <textarea
                     name="comment"
                     id="comment"
                     value={comment}
                     onChange={(e) => setComment(e.target.value)}
                     onBlur={() => setTouched(t => ({ ...t, comment: true }))}
-                    className={`w-full border border-2 border-#00000014 radius-6 outline-none px-12 py-10 ${touched.comment && !comment.trim() ? 'border-red-500' : 'border-gray-300'} focus:border-#0B9378`}
+                    className={`w-full border border-2 border-#00000014 radius-6 outline-none px-12 py-10 resize-none h-130 text-16 weight-300 ${touched.comment && !comment.trim() ? 'border-red-500' : 'border-gray-300'} focus:border-#0B9378`}
                 />
             </div>
 

@@ -17,7 +17,7 @@ export const useFilterStore = create<FilterStore>((set) => ({
     price: { min: "", max: "" },
     rating: { rateBy: "" },
     showOffers: false,
-    location: {selectedState: ""}
+    location: {selectedState: ""},
   },
 
   setSort: (sortBy) => {

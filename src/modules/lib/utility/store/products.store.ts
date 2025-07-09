@@ -31,6 +31,22 @@ const placeholderProduct: Product = {
     reviewRating: 0,
     reviews: undefined,
     comments: undefined,
+    discount: {
+        id: 0,
+        title: "",
+        discountCode: "",
+        discountType: "",
+        discountCalculationType: "",
+        value: 0,
+        activeStartDate: "",
+        activeEndDate: "",
+        status: "",
+        minOrderAmount: 0,
+        minOrderQuantity: 0,
+        channel: [],
+        createdAt: "",
+        updatedAt: ""
+    },
     variants: [
          {
               id: 0,
@@ -44,6 +60,7 @@ const placeholderProduct: Product = {
               stock: 0,
               price: 0,
               finalPrice: 0,
+              discountedPrice: 0,
               minPurchaseQuantity: 0,
               incrementBy: 0,
               meta: undefined,

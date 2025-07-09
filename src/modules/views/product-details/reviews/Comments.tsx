@@ -4,7 +4,6 @@ import { Rating, Star } from '@smastrom/react-rating'
 import Link from 'next/link'
 import React from 'react'
 import { FaUserCircle } from 'react-icons/fa'
-import { FaUser } from 'react-icons/fa6'
 
 export const Comments = ({ reviews, limit, productId, slug, isModal }: { reviews: IFetchedReview[], limit?: number, productId?: number, slug: string, isModal: boolean }) => {
     return (
@@ -27,7 +26,7 @@ export const Comments = ({ reviews, limit, productId, slug, isModal }: { reviews
                                 >
                                     <div className={`flex a-items-center border-b border-b-#F5F5F5 ${isModal ? 'gap-8' : 'gap-8 sm:gap-15'} pb-8`}>
                                         <FaUserCircle className='color-white w-34 h-34 border border-2 border-#C1C7D0 bg-#C1C7D0 round' />
-                                        <div className='flex-grow-1 flex j-content-between a-items-center'>
+                                        <div className={`flex-grow-1 flex j-content-between a-items-center ${isModal && 'gap-8'}`}>
                                             <p className={`flex flex-col ${isModal ? 'gap-1' : 'gap-1 sm:gap-3'}`}>
                                                 <span className={`weight-600 ${isModal ? 'text-12 sm:text-14' : 'text-14 sm:text-16'}`}>{review.user.profile.firstName} {review.user.profile.lastName}</span>
                                                 <span className={`weight-400 color-#0000008C ${isModal ? 'text-10 sm:text-12' : 'text-12 sm:text-14'}`}>{new Date(review.dateCreated).toLocaleDateString('en-GB', {
@@ -47,14 +46,14 @@ export const Comments = ({ reviews, limit, productId, slug, isModal }: { reviews
                                     </div>
                                     <div className='pt-8'>
                                         <p className={`capitalize text-14 weight-500 ${isModal ? 'sm:text-14 text-12' : 'text-13 sm:text-14'}`}>{review.subject}</p>
-                                        <p className={`capitalize ${isModal ? 'text-12' : 'text-13 sm:text-14'}`} style={{ whiteSpace: "wrap" }}>{review.comment}</p>
+                                        <p className={`${isModal ? 'text-12' : 'text-13 sm:text-14'}`} style={{ whiteSpace: "pre-wrap" }}>{review.comment}</p>
                                     </div>
                                 </div>
                             ))
                         }
                     </div>
                     {
-                        limit &&
+                        limit && reviews.length > limit &&
                         <p className='flex j-content-center mt-10'>
                             <Link href={`/products/${slug}/reviews/${productId}`} className='color-#1677FF text-12 border-b outline-none'>See more reviews</Link>
                         </p>
