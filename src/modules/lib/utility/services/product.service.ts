@@ -243,7 +243,7 @@ class ProductService {
           params["filters[type]"] = type;
 
           return new Promise((resolve, reject) => {
-               http.get(endpoints.RECENTLY_VIEWED, {
+               http.get(endpoints.GET_RECENTLY_VIEWED, {
                   params  
                }).then((response: AxiosResponse<RecentlyViewed[]>) => resolve(response.data))
           })
