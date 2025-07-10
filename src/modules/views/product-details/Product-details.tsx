@@ -3,7 +3,7 @@ import Footer from '@/modules/lib/components/footer/Footer'
 import Image from '@/modules/lib/components/image/Image'
 import Modal from '@/modules/lib/components/modal/modal'
 import { useEffect, useState, useMemo } from 'react'
-import { AiFillHeart, AiOutlineHeart } from 'react-icons/ai'
+import { AiFillHeart, AiOutlineClose, AiOutlineHeart } from 'react-icons/ai'
 import HomepageNavBar from '@/modules/lib/components/nav-bar/HomepageNavBar'
 import QuantitySelector from '@/modules/lib/components/quantity-selector/QuantitySelector'
 import VariantModal from '@/modules/lib/components/variant-modal/VariantModal'
@@ -33,6 +33,7 @@ import useGetRatingStats from '@/modules/lib/utility/hooks/use-get-rating-stats'
 import useGetProductRating from '@/modules/lib/utility/hooks/use-get-review'
 import colorNames from '@/modules/lib/utility/json-data/colors.json'
 import VideoSrc from '@/modules/lib/components/video-src/VideoSrc'
+import { AddReview } from './reviews/AddReview'
 
 const ProductDetails = ({ product }: { product: Product }) => {
   const { groupedData, availableColors, productImages } = useTransformProduct(product)
@@ -55,13 +56,14 @@ const ProductDetails = ({ product }: { product: Product }) => {
   } = useCart()
 
   const variantIds = useMemo(() => product.variants.map(v => v.id), [product.variants]);
-  const { reviews } = useGetProductRating(variantIds);
-  const { reviewStat, loading: statsLoading } = useGetRatingStats(variantIds);
+  const { reviews, loading: reviewsLoading, refresh: refreshReviews } = useGetProductRating(variantIds);
+  const { reviewStat, loading: statsLoading, refresh: refreshStats } = useGetRatingStats(variantIds);
   const [selectedColor, setSelectedColor] = useState(availableColors[0])
   const [showShareModal, setShowShareModal] = useState(false)
   const [showFullDescription, setShowFullDescription] = useState(false)
   const [showAllPhotos, setShowAllPhotos] = useState(false)
   const [isOpen, setIsOpen] = useState<number | null>(null);
+  const [isReviewModalOpen, setIsReviewModalOpen] = useState<boolean>(false)
   const selectedVariantItemInCart = cart.cartItems.find(
     item => item.variant.id === selectedVariant?.id
   )
@@ -325,16 +327,20 @@ const ProductDetails = ({ product }: { product: Product }) => {
                     <MiniReview id={selectedVariant.id} isOpen={isOpen} setIsOpen={setIsOpen} reviews={reviews.find(review => review.id === selectedVariant.id)?.reviews ?? []}
                       reviewStat={reviewStat.find(stat => stat.id === selectedVariant.id)?.reviewStat}
                       loading={statsLoading}
-                      slug={product.slug} />
+                      slug={product.slug}
+                      color={selectedColor}
+                    />
                   </p>
                 </div>
 
-                {
-                  isAuthenticated &&
-                  <div className='flex'>
-                    <Link href={`/products/${product.slug}/reviews/${selectedVariant.id}`} className='color-#1677FF text-12 border-b'>Rate this product</Link>
-                  </div>
-                }
+                <div className='flex'>
+                  <span
+                    className='color-#1677FF text-12 border-b cursor-pointer'
+                    onClick={() => { isAuthenticated ? setIsReviewModalOpen(true) : isLoginModal() }}
+                  >
+                    Rate this product
+                  </span>
+                </div>
               </div>
 
 
@@ -605,7 +611,7 @@ const ProductDetails = ({ product }: { product: Product }) => {
             <p className='text-20 weight-600'>
               Customer Reviews ({reviews.flatMap((review) => review.reviews).length ?? 0})
             </p>
-            <Comments reviews={reviews.flatMap((review) => review.reviews)} isModal={false} limit={3} productId={selectedVariant.id} slug={product.slug} />
+            <Comments reviews={reviews.flatMap((review) => review.reviews)} isModal={false} limit={3} slug={product.slug} />
           </div>
 
         </div>
@@ -646,6 +652,29 @@ const ProductDetails = ({ product }: { product: Product }) => {
               );
             })
           )}
+        </div>
+      </Modal>
+
+      <Modal
+        isOpen={isReviewModalOpen && !reviewsLoading && !statsLoading}
+        onClose={() => { setIsReviewModalOpen(false) }}
+        extraClass={{ overflow: 'auto' }}
+        extraModalClass={{ backgroundColor: '#00000073' }}
+        className="h-fit md:w-fit sm:w-90p w-95p no-scrollbar"
+      >
+        <div className='l:w-720 md:w-650 h-fit relative' style={{ maxHeight: 'calc(100dvh - 90px)' }}>
+          <div className='relative w-full'>
+            <div className='sticky z-3 t-0 l-0 r-0 bg-white flex space-between a-items-center py-12 px-24 border-solid border-b border-1 border-#00000014'>
+              <h5 className='text-16 weight-600 line-height-24'>Give a Review</h5>
+              <AiOutlineClose className='pointer w-20 h-20' onClick={() => {
+                setIsReviewModalOpen(false)
+              }} />
+            </div>
+            <AddReview id={selectedVariant.id} setOpenModal={setIsReviewModalOpen} refresh={() => {
+              refreshReviews();
+              refreshStats()
+            }} />
+          </div>
         </div>
       </Modal>
       <Footer />
