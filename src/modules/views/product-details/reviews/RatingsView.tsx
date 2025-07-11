@@ -10,6 +10,7 @@ import useGetProductRating from '@/modules/lib/utility/hooks/use-get-review';
 import Link from 'next/link';
 import PuffLoader from '@/modules/lib/components/puff-loader/PuffLoader';
 import Modal from '@/modules/lib/components/modal/modal';
+import { useReviewModalStore } from '@/modules/lib/utility/store/reviews.store';
 
 const ProgressBar = ({ percentage }: { percentage: number }) => (
     <div className="w-80 sm:w-160 h-6 sm:h-10 bg-#0000000F radius-6 overflow-hidden">
@@ -33,14 +34,13 @@ const ReviewsViews = ({ id, slug, color, openModal, setOpenModal, reviews }: IRe
     const { reviews: variantReviews, loading: reviewLoading } = useGetProductRating(id)
     const { reviewStat, loading: statsLoading } = useGetRatingStats(id)
     const { reviewStatDist, loading: distLoading } = useGetRatingDist(id)
+    const closeModal = useReviewModalStore().close;
 
     const reviewData = reviewStat?.find(review => review.id === id);
     const totalReviews = reviewData?.reviewStat?.totalReviews ?? 0;
     const averageRating = reviewData?.reviewStat?.averageRating ?? 0;
 
     const loading = reviewLoading || statsLoading || distLoading
-
-    console.log(reviews)
 
     return (
         <Modal
@@ -56,7 +56,7 @@ const ReviewsViews = ({ id, slug, color, openModal, setOpenModal, reviews }: IRe
                         <div className='sticky z-3 t-0 l-0 r-0 bg-white flex a-items-center j-content-between gap-10 border-b border-#00000014'>
                             <div className='flex a-items-center gap-5 max-w-100p px-15 sm:px-20 md:px-30 py-20'>
                                 <span className='sm:text-14 text-12 color-#00000066 weight-500' style={{ textWrap: "nowrap" }}>Review and Rating &gt;</span>
-                                <Link href={`/products/${slug}`} className='capitalize weight-500 sm:text-14 text-12' style={{ overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>
+                                <Link href={`/products/${slug}`} onClick={() => closeModal()} className='capitalize weight-500 sm:text-14 text-12' style={{ overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>
                                     {slug} {color && `- ${color}`}
                                 </Link>
                             </div>
