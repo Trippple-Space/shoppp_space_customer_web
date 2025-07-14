@@ -11,21 +11,10 @@ const StorefrontFooter:React.FC<{store: Store}> = ({store}) => {
         <div className="flex flex-col gap-20">
           <h6 className="weight-600 text-20">Contact us</h6>
           <p className="flex flex-col gap-14">
-            <Link href={`tel:+234801234567`} className="flex flex-row gap-8 w-fit">
+            <Link href={`tel:${store?.user?.mobile || store?.profile?.phoneNumbers?.[0]}`} className="flex flex-row gap-8 w-fit">
               <TbPhone className="w-24 h-24" />
               <span className="text-16">{store?.user?.mobile || store?.profile?.phoneNumbers?.[0]}</span>
             </Link>
-            {/* <Link
-              href="https://maps.app.goo.gl/ajQkV4cq99kZ9T86A"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="flex flex-row gap-8 w-fit"
-            >
-              <HiOutlineLocationMarker className="w-24 min-w-24 h-24" />
-              <span className="text-16">
-                {store?.meta?.settings?.location?.address || JSON.parse(store?.registrationProposal?.data)?.storeAddress}
-              </span>
-            </Link> */}
             <Link
               href={`https://maps.google.com/?q=${store?.meta?.settings?.location?.coordinates?.lat},${store?.meta?.settings?.location?.coordinates.lon}`}
               target="_blank"
@@ -37,7 +26,6 @@ const StorefrontFooter:React.FC<{store: Store}> = ({store}) => {
                 {store?.meta?.settings?.location?.address || JSON.parse(store?.registrationProposal?.data)?.storeAddress}
               </span>
             </Link>
-
           </p>
         </div>
         <div className="flex flex-col gap-12 l:w-461 sm:w-416 sm:min-w-416 w-full">
