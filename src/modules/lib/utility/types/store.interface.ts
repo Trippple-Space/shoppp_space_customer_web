@@ -9,9 +9,9 @@ export interface Store {
      heading: string;
      subHeading: string;
      meta: null | StoreMeta;
-     user: {[key:string]:any};
-     profile: {[key:string]:any};
-     registrationProposal: {[key:string]:any};
+     user?: {[key:string]:any};
+     profile?: {[key:string]:any};
+     registrationProposal?: {[key:string]:any};
 }
 
 interface StoreMeta {
