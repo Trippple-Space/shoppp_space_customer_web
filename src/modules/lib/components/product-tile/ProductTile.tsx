@@ -349,6 +349,7 @@ const ProductTile: FC<IProductTile> = ({ product, savedVariants, saveVariant, re
               reviews={allReviews.filter((review: any) => review.productVariantId === selectedVariant.id)}
               reviewStat={reviewStat.find((stat: any) => stat.id === selectedVariant.id)?.reviewStat}
               loading={statsLoading}
+              color={selectedColor}
             />
           </div>
         </div>

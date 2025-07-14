@@ -17,7 +17,7 @@ import { Comments } from './Comments';
 import { Rating, Star } from '@smastrom/react-rating';
 import { IFetchedReview, IReviewStat } from '@/modules/lib/utility/types/review.interface';
 
-const MiniReview = ({ id, slug, isOpen, setIsOpen, reviews, reviewStat, loading }: { id: number, slug: string, isOpen: number | null, setIsOpen: React.Dispatch<React.SetStateAction<number | null>>, reviews: IFetchedReview[], reviewStat?: IReviewStat, loading: boolean }) => {
+const MiniReview = ({ id, slug, isOpen, setIsOpen, reviews, reviewStat, loading, color }: { id: number, slug: string, isOpen: number | null, setIsOpen: React.Dispatch<React.SetStateAction<number | null>>, reviews: IFetchedReview[], reviewStat?: IReviewStat, loading: boolean, color?: string }) => {
     const { refs, floatingStyles, context } = useFloating({
         open: isOpen === id,
         onOpenChange: (open) => setIsOpen(open ? id : null),
@@ -78,7 +78,15 @@ const MiniReview = ({ id, slug, isOpen, setIsOpen, reviews, reviewStat, loading 
                                                 reviews.length > 0 &&
                                                 <div className='px-10 mt-8 sm:mt-16'>
                                                     <p className='text-14 sm:text-16 weight-600 mb-5'>Comments</p>
-                                                    <Comments reviews={reviews} limit={2} productId={id} isModal={true} slug={slug} />
+                                                    <Comments
+                                                        reviews={reviews}
+                                                        limit={2}
+                                                        productId={id}
+                                                        isModal={true}
+                                                        slug={slug}
+                                                        color={color}
+                                                        openMore={() => setIsOpen(null)}
+                                                    />
                                                 </div>
                                             }
                                         </>
