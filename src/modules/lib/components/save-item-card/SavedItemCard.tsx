@@ -57,8 +57,8 @@ const SavedVariantsCard: React.FC<any> = ({ savedVariant, removeSavedVariant, re
         </div>
       </div>
 
-      <div className='flex j-content-end gap-20 w-100p l:w-15p'>
-        {<button className='flex j-content-center l:hidden border-1 border-red bg-none text-danger text-16 py-10 px-20 radius-5 weight-400' onClick={() => removeSavedVariant(savedVariant.variantId)}>Remove</button>}
+      <div className='flex j-content-end a-items-center gap-20 w-100p l:w-15p'>
+        {showRemove && <button className='flex j-content-center l:hidden border-1 border-red bg-none text-danger text-16 py-10 px-20 radius-5 weight-400' onClick={() => removeSavedVariant(savedVariant.variantId)}>Remove</button>}
 
         <div>
 

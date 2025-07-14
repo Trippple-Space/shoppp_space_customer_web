@@ -86,6 +86,7 @@ const LoginModal = () => {
                     href={paths.signup}
                     className='text-green-700'
                     onClick={isLoginModal}
+                    target='_blank'
                   >
                     {' '}
                     Sign Up

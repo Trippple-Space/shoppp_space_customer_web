@@ -695,6 +695,7 @@
 .w-40p { width: 40%; } 
 .pl-10 { padding-left: 10px; } 
 .pb-100 { padding-bottom: 100px; } 
+.w-95p { width: 95%; } 
 .w-36 { width: 36px; } 
 .min-w-36 { min-width: 36px; } 
 .h-36 { height: 36px; } 
@@ -745,12 +746,10 @@
 .h-6 { height: 6px; } 
 .radius-t-r-6 { border-top-right-radius: 6px;  } 
 .radius-b-r-6 { border-bottom-right-radius: 6px;  } 
-.mt-110 { margin-top: 110px; } 
-.max-w-61p { max-width: 61%; } 
+.max-w-100p { max-width: 100%; } 
+.mb-40 { margin-bottom: 40px; } 
 .text-40 { font-size: 40px; } 
 .max-w-120 { max-width: 120px; } 
-.mt-40 { margin-top: 40px; } 
-.w-95p { width: 95%; } 
 .ml-2 { margin-left: 2px; } 
 .border-\#eeeeee { border-color: #eeeeee; } 
 .text-medium {    font-size: 0.875rem;  } 
@@ -785,7 +784,9 @@
 .mb-16 { margin-bottom: 16px; } 
 .mt-33 { margin-top: 33px; } 
 .gap-23 { gap: 23px; } 
+.mt-110 { margin-top: 110px; } 
 .w-117 { width: 117px; } 
+.mt-40 { margin-top: 40px; } 
 .hover\:text-green:hover { color: #0B9378; } 
 .max-w-60 { max-width: 60px; } 
 .mt-150 { margin-top: 150px; } 
@@ -804,7 +805,6 @@
 .border-dashed { border-style: dashed; } 
 .border-grey-500 { border-color: #A39F9C; } 
 .h-200 { height: 200px; } 
-.mb-40 { margin-bottom: 40px; } 
 .mt-42 { margin-top: 42px; } 
 .w-58 { width: 58px; } 
 .h-58 { height: 58px; } 
@@ -971,20 +971,15 @@
 @media only screen and (min-width: 576px) { .sm\:mt-16 { margin-top: 16px; } } 
 @media only screen and (min-width: 576px) { .sm\:w-160 { width: 160px; } } 
 @media only screen and (min-width: 576px) { .sm\:h-10 { height: 10px; } } 
-@media only screen and (min-width: 576px) { .sm\:px-12 { padding-left: 12px; padding-right: 12px; } } 
-@media only screen and (min-width: 576px) { .sm\:py-10 { padding-top: 10px; padding-bottom: 10px; } } 
-@media only screen and (min-width: 576px) { .sm\:gap-8 { gap: 8px; } } 
-@media only screen and (min-width: 576px) { .sm\:w-16 { width: 16px; } } 
-@media only screen and (min-width: 576px) { .sm\:h-16 { height: 16px; } } 
-@media only screen and (min-width: 576px) { .sm\:mt-40 { margin-top: 40px; } } 
 @media only screen and (min-width: 576px) { .sm\:gap-70 { gap: 70px; } } 
 @media only screen and (min-width: 576px) { .sm\:text-60 { font-size: 60px; } } 
 @media only screen and (min-width: 576px) { .sm\:w-14 { width: 14px; } } 
 @media only screen and (min-width: 576px) { .sm\:h-14 { height: 14px; } } 
-@media only screen and (min-width: 576px) { .sm\:mt-60 { margin-top: 60px; } } 
+@media only screen and (min-width: 576px) { .sm\:px-10 { padding-left: 10px; padding-right: 10px; } } 
 @media only screen and (min-width: 576px) { .sm\:text-32 { font-size: 32px; } } 
 @media only screen and (min-width: 576px) { .sm\:text-35 { font-size: 35px; } } 
 @media only screen and (min-width: 576px) { .sm\:gap-23 { gap: 23px; } } 
+@media only screen and (min-width: 576px) { .sm\:gap-8 { gap: 8px; } } 
 @media only screen and (min-width: 576px) { .sm\:gap-28 { gap: 28px; } } 
 @media only screen and (min-width: 576px) { .sm\:py-20 { padding-top: 20px; padding-bottom: 20px; } } 
 @media only screen and (min-width: 576px) { .sm\:text-24 { font-size: 24px; } } 
@@ -1124,6 +1119,8 @@
 @media only screen and (min-width: 768px) { .md\:mt-32 { margin-top: 32px; } } 
 @media only screen and (min-width: 768px) { .md\:px-50 { padding-left: 50px; padding-right: 50px; } } 
 @media only screen and (min-width: 768px) { .md\:h-420 { height: 420px; } } 
+@media only screen and (min-width: 768px) { .md\:px-30 { padding-left: 30px; padding-right: 30px; } } 
+@media only screen and (min-width: 768px) { .md\:px-20 { padding-left: 20px; padding-right: 20px; } } 
 @media only screen and (min-width: 768px) { .md\:h-125 { height: 125px; } } 
 @media only screen and (min-width: 768px) { .md\:gap-36 { gap: 36px; } } 
 @media only screen and (min-width: 768px) { .md\:w-230 { width: 230px; } } 
@@ -1317,8 +1314,8 @@
 @media only screen and (min-width: 992px) { @layer base {.l\:radius-0 { border-radius: 0px; } } } 
 @media only screen and (min-width: 992px) { [class~='l:g|max-height:67px']{max-height:67px} } 
 @media only screen and (min-width: 992px) { .l\:mt-60 { margin-top: 60px; } } 
+
 @media only screen and (min-width: 992px) { .l\:gap-120 { gap: 120px; } } 
-@media only screen and (min-width: 992px) { .l\:mt-80 { margin-top: 80px; } } 
 @media only screen and (min-width: 992px) { 
 @layer base {
 .l\:btn-lg { padding-top: 15px; padding-bottom: 15px; width: 100%;  } 
@@ -1348,6 +1345,7 @@
 @media only screen and (min-width: 992px) { .l\:mb-50 { margin-bottom: 50px; } } 
 @media only screen and (min-width: 992px) { .l\:mt-55 { margin-top: 55px; } } 
 @media only screen and (min-width: 992px) { .l\:grid-4-cols-1fr { grid-template-columns: repeat(4, 1fr); } } 
+@media only screen and (min-width: 992px) { .l\:mt-80 { margin-top: 80px; } } 
 @media only screen and (min-width: 992px) { .l\:text-48 { font-size: 48px; } } 
 @media only screen and (min-width: 992px) { .l\:letter-spacing-3 { letter-spacing: 3px; } } 
 @media only screen and (min-width: 992px) { .l\:line-height-70 { line-height: 70px; } } 
@@ -1385,5 +1383,4 @@
 @media only screen and (min-width: 1200px) { .xl\:pr-80 { padding-right: 80px; } } 
 @media only screen and (min-width: 1200px) { .xl\:grid-4-cols-1fr { grid-template-columns: repeat(4, 1fr); } } 
 @media only screen and (min-width: 1200px) { .xl\:px-60 { padding-left: 60px; padding-right: 60px; } } 
-@media only screen and (min-width: 1200px) { .xl\:w-90p { width: 90%; } } 
 @media only screen and (min-width: 1200px) { .xl\:px-200 { padding-left: 200px; padding-right: 200px; } } 
