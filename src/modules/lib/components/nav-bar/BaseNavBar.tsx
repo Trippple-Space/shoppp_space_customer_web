@@ -25,7 +25,7 @@ interface IBaseNavBar {
 }
 
 const BaseNavBar: FC<IBaseNavBar> = ({ links, parent }) => {
-  useAuthGuard() // TODO: refactor to rely on Next 13 auth middleware
+  useAuthGuard()  // TODO: refactor to rely on Next 13 auth middleware
   const [userProfileDropdown, setUserProfileDropdown] = useState<boolean>(false)
 
   const [profileModal, setProfileModal] = useState<string>('')

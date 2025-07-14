@@ -52,15 +52,27 @@ class AuthService {
             })
     }
 
-  signUpInitial(details: { fullname: string; email: string }): Promise<any> {
-      return http.post(endpoints.SIGN_UP_DETAILS, details).then((response: AxiosResponse) => {
-        return  response.data
-      });
-  }
+    signUpInitial(details: { fullname: string; email: string }): Promise<any> {
+      return http.post(endpoints.SIGN_UP_DETAILS, details)
+        .then((response: AxiosResponse) => {
+          return response.data;
+        })
+        .catch((error) => {
+          const message =
+            error.response?.data?.message || error.message || "An unknown error occurred.";
+          toast.error(message);
+          throw error;
+        });
+    }
 
     
-    verifyOtp(payload: { token: string; otp: string }): Promise<any> {
-    return http.post(endpoints.SIGN_UP_VERIFY_OTP, payload).then((response: AxiosResponse) => response.data);
+  verifyOtp(payload: { token: string; otp: string }): Promise<any> {
+      return http.post(endpoints.SIGN_UP_VERIFY_OTP, payload).then((response: AxiosResponse) => response.data).catch((error) => {
+        const message =  
+        error.response?.data?.message || error.message || "An unknown error occurred.";
+        toast.error(message);
+        throw error;
+    });
   }
 
 

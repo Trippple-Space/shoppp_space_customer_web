@@ -50,7 +50,7 @@ http.interceptors.response.use((response: any) => {
 }, (error) => {
 
     if (error?.response?.status.toString().indexOf('4') == 0) {
-        toast.error(error.response.data.message)
+      // toast.error(error.response.data.message)
     }
     else if (error.config.method === 'get' && (error?.response?.status == 504 || isAxiosTimeout(error))) {
 
