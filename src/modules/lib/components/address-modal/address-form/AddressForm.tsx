@@ -163,7 +163,7 @@ const AddressForm: FC<AddressFormProps> = ({ closeAddressForm, type }) => {
                   <div className='absolute w-full bg-white border border-black z-10 top-0 mt-3 radius-6! border-#6A6A6A4D text-16 overflow-hidden h-fit g|max-height:182px overflow-auto'>
                     {
                       addressSuggestions.length === 0 ?
-                        <div className='py-8 px-12 flex a-items-center j-items-center w-full text-center'>no address found</div>
+                        <div className='py-8 px-12 flex a-items-center j-content-center w-full text-center'>no address found</div>
                         :
                         <div className='flex flex-col'>
                           {
@@ -184,7 +184,6 @@ const AddressForm: FC<AddressFormProps> = ({ closeAddressForm, type }) => {
                 field='state'
                 label={<span>State <span className='color-#B3261E'>*</span></span>}
                 handler={formhandler}
-                disabled={true}
               />
             </div>
             <div className='sm:grid-col-span-1 grid-col-span-2'>
@@ -193,7 +192,6 @@ const AddressForm: FC<AddressFormProps> = ({ closeAddressForm, type }) => {
                 label={<span>City <span className='color-#B3261E'>*</span></span>}
                 placeholder='Enter city'
                 handler={formhandler}
-                disabled={true}
               />
             </div>
             <div className='grid-col-span-2'>
@@ -202,7 +200,6 @@ const AddressForm: FC<AddressFormProps> = ({ closeAddressForm, type }) => {
                 label={<span>Street address <span className='color-#B3261E'>*</span></span>}
                 placeholder='Enter street address'
                 handler={formhandler}
-                disabled={true}
               />
             </div>
             <div className='sm:grid-col-span-1 grid-col-span-2'>

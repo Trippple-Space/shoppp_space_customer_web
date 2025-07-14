@@ -11,6 +11,8 @@ const endpoints = {
   PRODUCT: "products/:slug",
   SEARCH_PRODUCTS: "products",
   RECENTLY_VIEWED: "/recently-viewed-items",
+  GET_RECENTLY_VIEWED: "/recently-viewed-items/viewed",
+  ALL_RECENTLY_VIEWED: "/recently-viewed-items/all-viewed",
   PRODUCT_REVIEW: "/product-review",
   CART: "/cart",
   CHECKOUTCART: "/cart/checkout",

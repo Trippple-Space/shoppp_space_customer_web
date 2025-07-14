@@ -78,11 +78,7 @@ const StorefrontAbout = ({ store }: { store: Store }) => {
                   <p className="h-24 w-1 bg-#00000014"></p>
                   <p className="flex flex-row a-items-center sm:gap-8 gap-5">
                     <span className="sm:text-16 text-14 weight-600">
-                      {productSold ? (
-                        productSold
-                      ) : (
-                        <div className="h-16 w-24 animate-pulse bg-#e3e3e3"></div>
-                      )}
+                      {productSold || 0}
                     </span>
                     <span>
                       {productSold && productSold > 1 ? "Products" : "Product"}{" "}

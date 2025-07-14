@@ -1,10 +1,10 @@
 'use client'
 import React, { FC, useEffect, useMemo, useState } from 'react'
 import Image from '../image/Image'
-import { AiFillStar, AiOutlinePlus, AiFillHeart } from 'react-icons/ai'
+import { AiFillStar, AiFillHeart } from 'react-icons/ai'
 import classNames from 'classnames'
-import { Product } from '../../utility/types/product.interface'
-import { cx, displayProductPill, formatNumberAsPrice } from '../../utility/utility'
+import { Product, ProductVariant } from '../../utility/types/product.interface'
+import { checkMediaType, displayProductPill, formatNumberAsPrice } from '../../utility/utility'
 import { useCart } from '../../utility/hooks/use-cart'
 import QuantitySelector from '../quantity-selector/QuantitySelector'
 import Link from 'next/link'
@@ -17,6 +17,8 @@ import { productService } from '../../utility/services/product.service'
 import MiniReview from '@/modules/views/product-details/reviews/MiniReview'
 import { IFetchedReview } from '../../utility/types/review.interface'
 import useGetRatingStats from '../../utility/hooks/use-get-rating-stats'
+import useTransformProduct from '../../utility/hooks/use-transform-product'
+import { useRecentlyViewedVariant } from '../../utility/hooks/use-recently-viewed'
 
 interface IProductTile {
   product: Product
@@ -29,16 +31,21 @@ interface IProductTile {
   setIsOpen: React.Dispatch<React.SetStateAction<number | null>>
 }
 const ProductTile: FC<IProductTile> = ({ product, savedVariants, saveVariant, removeSavedVariant, allReviews, isOpen, setIsOpen }: any) => {
+  const { groupedData, availableColors } = useTransformProduct(product)
+  const uniqueVariantsFromProductImages = availableColors.map((color) => groupedData?.[color][0])
+  //product?.variants.filter((variants: ProductVariant) => productImages.find(image => image === variants.media[0].url))
+
   const [onProductTileHover, setOnProductTileHover] = useState(false)
   const [openSingleProductModal, setOpenSingleProductModal] = useState(false)
+  const [isToAddSize, setIsToAddSize] = useState<boolean>(false)
   const [recentlyViewedId, setRecentlyViewsId] = useState<any>()
+  const [selectedColor, setSelectedColor] = useState(availableColors[0])
   const [selectedImage, setSelectedImage] = useState(
     product?.variants?.[0]?.media?.[0]?.url
   );
   const [selectedVariant, setSelectedVariant] = useState(
     product?.variants?.[0]
   );
-  const [mediaType, setMediaType] = useState<string>("image");
   const {
     addToCart,
     cart,
@@ -49,6 +56,7 @@ const ProductTile: FC<IProductTile> = ({ product, savedVariants, saveVariant, re
   } = useCart()
   const variantIds = useMemo(() => product.variants.map((v: any) => v.id), [product.variants]);
   const { reviewStat, loading: statsLoading } = useGetRatingStats(variantIds);
+  const { addVariant } = useRecentlyViewedVariant()
 
   const selectedVariantItemInCart = cart.cartItems.find(
     (item) => item.variant.id === selectedVariant?.id
@@ -66,6 +74,7 @@ const ProductTile: FC<IProductTile> = ({ product, savedVariants, saveVariant, re
   }, [])
 
   const isSaved = savedVariants?.find((item: SavedVariant) => item.variantId === selectedVariant?.id)
+  const mediaType = checkMediaType(selectedImage) ?? 'image';
 
   const handleSave = () => {
     if (isSaved) {
@@ -78,6 +87,10 @@ const ProductTile: FC<IProductTile> = ({ product, savedVariants, saveVariant, re
 
   const handleCloseProductModal = () => {
     setOpenSingleProductModal(prev => !prev)
+
+    if (openSingleProductModal) {
+      setIsToAddSize(false)
+    }
   }
 
   function handleLogin(variantId: number, minimumPurchase: number) {
@@ -87,14 +100,8 @@ const ProductTile: FC<IProductTile> = ({ product, savedVariants, saveVariant, re
   }
 
   useEffect(() => {
-
     if (recentlyViewedId && isAuthenticated) {
-      (async () => {
-        await productService.addRecentlyViewedVariants({
-          productVariantId: recentlyViewedId,
-          type: 'view'
-        });
-      })();
+      addVariant(recentlyViewedId, "view");
     }
   }, [recentlyViewedId, isAuthenticated]);
 
@@ -111,7 +118,6 @@ const ProductTile: FC<IProductTile> = ({ product, savedVariants, saveVariant, re
 
         }
 
-
         localStorage.removeItem("variantId");
         localStorage.removeItem("variantIdMinimumPurchase");
       }
@@ -120,6 +126,7 @@ const ProductTile: FC<IProductTile> = ({ product, savedVariants, saveVariant, re
 
   const isOutOfStock = selectedVariant?.status === 'OUT_OF_STOCK'
   const isDiscounted = new Date(product?.discount?.activeStartDate) <= new Date(new Date().setHours(new Date().getHours() + 1)) && new Date(new Date().setHours(new Date().getHours() + 1)) <= new Date(product?.discount?.activeEndDate)
+  const hasSize = !(groupedData?.[selectedColor][0].size === null || groupedData?.[selectedColor][0].size === '')
 
   return (
     <div className='mt-30 l:mt-20 w-full overflow-hidden'>
@@ -143,7 +150,7 @@ const ProductTile: FC<IProductTile> = ({ product, savedVariants, saveVariant, re
             </div>
           ) : (
             <VideoSrc
-              className="absolute w-full h-full a-self-center g|object-fit:cover pointer"
+              className={`absolute w-full h-full a-self-center g|object-fit:cover pointer ${isOutOfStock && 'out-of-stock'}`}
               src={selectedImage}
             />
           )}
@@ -173,21 +180,41 @@ const ProductTile: FC<IProductTile> = ({ product, savedVariants, saveVariant, re
           >
             {selectedVariantItemInCart ? (
               <QuantitySelector
-                decrement={() => decrement(selectedVariantItemInCart)}
-                increment={() => increment(selectedVariantItemInCart)}
+                decrement={() => {
+                  if (hasSize) {
+                    setIsToAddSize(true)
+                    handleCloseProductModal()
+                  } else {
+                    decrement(selectedVariantItemInCart)
+                  }
+                }}
+                increment={() => {
+                  if (hasSize) {
+                    setIsToAddSize(true)
+                    handleCloseProductModal()
+                  } else {
+                    increment(selectedVariantItemInCart)
+                  }
+                }}
                 cartItem={selectedVariantItemInCart}
               />
             ) : (
               <>
                 {selectedVariant?.status !== 'OUT_OF_STOCK' ? <button
                   onClick={() => {
-                    isAuthenticated
-                      ? addToCart(
-                        selectedVariant.id,
-                        selectedVariant.minPurchaseQuantity || 1
-                      )
-                      : handleLogin(selectedVariant.id,
-                        selectedVariant.minPurchaseQuantity || 1);
+                    if (hasSize) {
+                      setIsToAddSize(true)
+                      handleCloseProductModal()
+                    } else {
+                      isAuthenticated
+                        ?
+                        addToCart(
+                          selectedVariant.id,
+                          selectedVariant.minPurchaseQuantity || 1
+                        )
+                        : handleLogin(selectedVariant.id,
+                          selectedVariant.minPurchaseQuantity || 1);
+                    }
                   }}
                   disabled={!selectedImage}
                   className={classNames(
@@ -230,14 +257,14 @@ const ProductTile: FC<IProductTile> = ({ product, savedVariants, saveVariant, re
       <div className="scroll-x no-scrollbar">
         <div
           id="product varients"
-          className="md:mt-16 mt-14 flex a-items-center md:gap-6 gap-4 w-200 overlow-auto whitespace-nowrap"
+          className="md:mt-16 mt-14 flex a-items-center md:gap-6 gap-4 w-full overflow-auto whitespace-nowrap no-scrollbar"
         >
-          {product.variants.map((variant: any) =>
+          {uniqueVariantsFromProductImages.map((variant: any) =>
             variant?.media?.map((mediaItem: any) =>
               mediaItem?.type === "image" ? (
                 <Image
                   className={classNames(
-                    `l:w-35.2 l:h-35.2 w-31 h-31 pointer md:radius-4 radius-3 a-self-center g|object-fit:cover ${variant?.status === 'OUT_OF_STOCK' && 'out-of-stock'}`,
+                    `l:w-35.2 l:min-w-35.2 l:h-35.2 w-31 min-w-31 h-31 pointer md:radius-4 radius-3 a-self-center g|object-fit:cover ${variant?.status === 'OUT_OF_STOCK' && 'out-of-stock'}`,
                     {
                       "border border-2": selectedImage == mediaItem?.url,
                       [`border-${/*variant?.properties?.color?.toLocaleLowerCase() ||*/'#0B9378'}`]:
@@ -248,15 +275,15 @@ const ProductTile: FC<IProductTile> = ({ product, savedVariants, saveVariant, re
                   onClick={() => {
                     setSelectedVariant(variant);
                     setRecentlyViewsId(variant.id)
-                    setMediaType("image");
                     setSelectedImage(mediaItem?.url);
+                    setSelectedColor(variant?.properties?.color)
                   }}
                   alt="product-image"
                 />
               ) : (
                 <VideoSrc
                   className={classNames(
-                    "l:w-35.2 l:h-35.2 w-31 h-31 pointer md:radius-4 radius-3 a-self-center g|object-fit:cover",
+                    `l:w-35.2 l:min-w-35.2 l:h-35.2 w-31 min-w-31 h-31 pointer md:radius-4 radius-3 a-self-center g|object-fit:cover ${variant?.status === 'OUT_OF_STOCK' && 'out-of-stock'}`,
                     {
                       "border border-2": selectedImage == mediaItem?.url,
                       [`border-${/*variant?.properties?.color?.toLocaleLowerCase() ||*/'#0B9378'}`]:
@@ -265,7 +292,6 @@ const ProductTile: FC<IProductTile> = ({ product, savedVariants, saveVariant, re
                   )}
                   onClick={() => {
                     setSelectedVariant(variant);
-                    setMediaType("video");
                     setSelectedImage(mediaItem?.url);
                   }}
                   src={mediaItem?.url}
@@ -323,6 +349,7 @@ const ProductTile: FC<IProductTile> = ({ product, savedVariants, saveVariant, re
               reviews={allReviews.filter((review: any) => review.productVariantId === selectedVariant.id)}
               reviewStat={reviewStat.find((stat: any) => stat.id === selectedVariant.id)?.reviewStat}
               loading={statsLoading}
+              color={selectedColor}
             />
           </div>
         </div>
@@ -342,6 +369,7 @@ const ProductTile: FC<IProductTile> = ({ product, savedVariants, saveVariant, re
           openSingleProductModal={openSingleProductModal}
           handleCloseProductModal={handleCloseProductModal}
           position="homepage"
+          variantSelectedImage={isToAddSize ? selectedImage : ''}
           variant={{
             ...selectedVariant,
             product
