@@ -1,49 +1,50 @@
 'use client'
-
+import Footer from '@/modules/lib/components/footer/Footer'
 import Image from '@/modules/lib/components/image/Image'
-import Link from 'next/link'
-import { CSSProperties, useEffect, useState } from 'react'
+import Modal from '@/modules/lib/components/modal/modal'
+import { useEffect, useState, useMemo } from 'react'
 import { AiFillHeart, AiOutlineHeart } from 'react-icons/ai'
 import HomepageNavBar from '@/modules/lib/components/nav-bar/HomepageNavBar'
-import { Product, RecentlyViewed } from '@/modules/lib/utility/types/product.interface'
-import './ProductDetails.scss'
+import QuantitySelector from '@/modules/lib/components/quantity-selector/QuantitySelector'
+import VariantModal from '@/modules/lib/components/variant-modal/VariantModal'
+import { useCart } from '@/modules/lib/utility/hooks/use-cart'
+import { useSavedVariant } from '@/modules/lib/utility/hooks/use-saved-variants'
+import useTransformProduct from '@/modules/lib/utility/hooks/use-transform-product'
+import { productService } from '@/modules/lib/utility/services/product.service'
+import { Product, ProductVariant, RecentlyViewed } from '@/modules/lib/utility/types/product.interface'
+import { SavedVariant } from '@/modules/lib/utility/types/SavedVariant.interface'
 import {
+  checkMediaType,
   cx,
   formatNumberAsPrice,
 } from '@/modules/lib/utility/utility'
-import { HiOutlineShoppingBag } from 'react-icons/hi2'
-import { useCart } from '@/modules/lib/utility/hooks/use-cart'
-import ShareProductModal from './share-modal/shareProductModal'
+import { Rating, Star } from '@smastrom/react-rating'
 import classNames from 'classnames'
-import { GoHome } from 'react-icons/go'
-import { RxShare2 } from 'react-icons/rx'
-import { SavedVariant } from '@/modules/lib/utility/types/SavedVariant.interface'
-import { useSavedVariant } from '@/modules/lib/utility/hooks/use-saved-variants'
+import Link from 'next/link'
+import { HiOutlineShoppingBag } from 'react-icons/hi2'
 import { LuGrid2X2 } from 'react-icons/lu'
-import { productService } from '@/modules/lib/utility/services/product.service'
-import { Rating, Star, StickerStar } from '@smastrom/react-rating'
-import { PiTruck, PiGlobeHemisphereEast } from 'react-icons/pi'
-import Footer from '@/modules/lib/components/footer/Footer'
-import Modal from '@/modules/lib/components/modal/modal'
-import QuantitySelector from '@/modules/lib/components/quantity-selector/QuantitySelector'
-import VariantModal from '@/modules/lib/components/variant-modal/VariantModal'
+import { PiGlobeHemisphereEast, PiStorefront, PiTruck } from 'react-icons/pi'
+import { RxShare2 } from 'react-icons/rx'
+import './ProductDetails.scss'
 import { Comments } from './reviews/Comments'
 import MiniReview from './reviews/MiniReview'
+import ShareProductModal from './share-modal/shareProductModal'
 import useGetRatingStats from '@/modules/lib/utility/hooks/use-get-rating-stats'
 import useGetProductRating from '@/modules/lib/utility/hooks/use-get-review'
-
-
+import colorNames from '@/modules/lib/utility/json-data/colors.json'
+import VideoSrc from '@/modules/lib/components/video-src/VideoSrc'
 
 const ProductDetails = ({ product }: { product: Product }) => {
-  let globalMediaIndex = 0;
+  const { groupedData, availableColors, productImages } = useTransformProduct(product)
+  const uniqueVariantsFromProductImages = availableColors.map((color) => groupedData?.[color][0])
 
-  const [unitCounter, setUnitCounter] = useState<number>(1)
+  let globalMediaIndex = 0;
   const [recentlyViewedVariants, setRecentlyViewedVariants] = useState<RecentlyViewed[]>([])
+  const [selectedVariant, setSelectedVariant] = useState(groupedData?.[availableColors[0]]?.[0])
   const [selectedImage, setSelectedImage] = useState(
-    product?.variants?.[0]?.media?.[0]?.url
+    uniqueVariantsFromProductImages[0]?.media?.[0]?.url
   )
   const { saveVariant, savedVariants, removeSavedVariant } = useSavedVariant();
-  const [selectedVariant, setSelectedVariant] = useState(product?.variants?.[0])
   const {
     addToCart,
     cart,
@@ -52,10 +53,11 @@ const ProductDetails = ({ product }: { product: Product }) => {
     isLoginModal,
     isAuthenticated
   } = useCart()
-  const { reviews } = useGetProductRating(product.id)
-  const { reviewStat } = useGetRatingStats(product.id)
 
-  const [selectedSize, setSelectedSize] = useState('')
+  const variantIds = useMemo(() => product.variants.map(v => v.id), [product.variants]);
+  const { reviews } = useGetProductRating(variantIds);
+  const { reviewStat, loading: statsLoading } = useGetRatingStats(variantIds);
+  const [selectedColor, setSelectedColor] = useState(availableColors[0])
   const [showShareModal, setShowShareModal] = useState(false)
   const [showFullDescription, setShowFullDescription] = useState(false)
   const [showAllPhotos, setShowAllPhotos] = useState(false)
@@ -64,28 +66,9 @@ const ProductDetails = ({ product }: { product: Product }) => {
     item => item.variant.id === selectedVariant?.id
   )
 
-
   useEffect(() => {
     setSelectedImage(product?.variants?.[0]?.media?.[0]?.url)
   }, [product])
-
-
-  // const strikeOutPrice = (product?.finalPrice + product?.finalPrice * 0.05).toFixed(2) // TODO: implement proper strikeout price
-
-  const displayPrice = selectedVariant?.price || product?.price
-  const { address, state } = product.store.meta?.settings?.location || {}
-  const sanitizedAddress = address?.replace(/[.,]+$/, '')
-  const location = [sanitizedAddress, state].filter(Boolean).join('. ')
-
-
-
-  function productTypeRender(stockUnit: string): string[] {
-    if (stockUnit?.toLowerCase() === 'yards') {
-      return ['10', '20', '30', '100']
-    } else {
-      return []
-    }
-  }
 
   const descriptionLength = product.longDescription.split(' ').length
   const maxDisplayDescLength = 144
@@ -96,30 +79,21 @@ const ProductDetails = ({ product }: { product: Product }) => {
     } return desc
   }
 
-
   useEffect(() => {
     (async () => {
-
-
       if (isAuthenticated) {
-        const response: RecentlyViewed[] = await productService.getRecentlyViewedVariants()
+        const response: RecentlyViewed[] = await productService.getAllRecentlyViewedVariants()
         setRecentlyViewedVariants(response)
       }
     })()
   }, [isAuthenticated])
 
-
-
-
-
   const isSaved = savedVariants.find((variant: SavedVariant) => selectedVariant.id === variant.variantId)
-
-
+  const mediaType = checkMediaType(selectedImage) ?? 'image';
 
   const handleSave = () => {
     if (isSaved) {
       removeSavedVariant(selectedVariant?.id)
-
     } else {
       saveVariant(selectedVariant?.id)
     }
@@ -143,20 +117,23 @@ const ProductDetails = ({ product }: { product: Product }) => {
           addToCart(parsedVariantId, parsedMinimumPurchase);
 
         }
-
-
         localStorage.removeItem("variantId");
         localStorage.removeItem("variantIdMinimumPurchase");
       }
     }
   }, [isAuthenticated]);
 
+  useEffect(() => {
+    setSelectedVariant(groupedData?.[selectedColor]?.[0])
+  }, [selectedColor])
+
   const isOutOfStock = selectedVariant?.status === 'OUT_OF_STOCK';
   const isDiscounted = new Date() <= new Date(product?.discount?.activeEndDate)
+  const hasSize = !(groupedData?.[selectedColor][0].size === null || groupedData?.[selectedColor][0].size === '')
 
   const addToCartBtn = () => {
     return <div className='flex flex-col gap-16'>
-      <p className='text-24 weight-600'>{formatNumberAsPrice(selectedVariant.price)}</p>
+      <p className='text-24 weight-600'>{formatNumberAsPrice(selectedVariant.finalPrice)}</p>
 
       {!selectedVariantItemInCart ?
         (
@@ -168,7 +145,7 @@ const ProductDetails = ({ product }: { product: Product }) => {
                   addToCart(
                     selectedVariant?.id ?? 0,
                     selectedVariant?.minPurchaseQuantity || 1
-                  )
+                  );
                 }
               } else {
                 handleLogin(selectedVariant?.id ?? 0,
@@ -191,17 +168,13 @@ const ProductDetails = ({ product }: { product: Product }) => {
     </div>
   }
 
-
-  console.log(product)
-
-
   return (
     <>
       <HomepageNavBar parent='' />
-      <div className="mt-110 l:max-w-1400 w-full mx-auto xl:px-60 md:px-50 sm:px-40 px-24">
-        <div className='flex a-items-center j-content-between'>
+      <div className="sm:mt-96 mt-88 l:max-w-1400 w-full mx-auto xl:px-60 md:px-50 sm:px-40 px-24">
+        <div className='flex a-items-center j-content-between gap-10'>
           <div className='flex a-items-center gap-5'>
-            <GoHome className='w-fit color-#00000066 w-15 h-15' />
+            <PiStorefront className='w-fit color-#00000066 w-15 h-15' />
             <Link href={`/${product?.store?.slug}`} className='text-14 color-#00000066'>
               {product?.store?.name} /
             </Link>
@@ -216,14 +189,14 @@ const ProductDetails = ({ product }: { product: Product }) => {
               <span className='border-b hidden l:block'>Share</span>
             </p>
             <p className='cursor-pointer flex a-items-center gap-8 text-15 weight-400 color-#00000099' onClick={isAuthenticated ? handleSave : () => isLoginModal()}>
-              {isSaved ? <AiFillHeart /> : <AiOutlineHeart />}
+              {isSaved ? <AiFillHeart className='w-20 h-20' /> : <AiOutlineHeart className='w-20 h-20' />}
               <span className='border-b hidden l:block'>Save</span>
             </p>
           </div>
         </div>
 
         <div className='flex flex-col l:flex-row a-items-start j-content-between mt-20 gap-6 l:g|max-height:480px relative'>
-          {product.variants.length > 4 && <div className='hidden l:block absolute r-0 b-0 p-20 z-2 cursor-pointer'>
+          {uniqueVariantsFromProductImages.length > 4 && <div className='hidden l:block absolute r-0 b-0 p-20 z-2 cursor-pointer'>
             <div className='bg-white flex gap-8 radius-8  a-items-center border px-16 py-10' onClick={() => setShowAllPhotos(prev => !prev)}>
               <LuGrid2X2 className='w-fit flex' />
               <p className='text-14 weight-500'>Show all photos</p>
@@ -233,42 +206,67 @@ const ProductDetails = ({ product }: { product: Product }) => {
             {isOutOfStock && <div className="absolute w-100p h-100p text-white flex j-content-center a-items-center z-1 l:text-22 radius-6">
               Out of stock
             </div>}
-            <Image
-              src={selectedImage}
-              className={`flex-grow-1 h-full radius-8 l:radius-t-l-16 l:radius-b-l-16 l:radius-b-r-0 l:radius-t-r-0   w-full h-full a-self-center object-fit-cover  pointer  ${isOutOfStock && 'out-of-stock'}`}
-              alt={''}
+            {
+              mediaType === 'image' ?
+                <Image
+                  src={selectedImage}
+                  className={`flex-grow-1 h-full radius-8 l:radius-t-l-16 l:radius-b-l-16 l:radius-b-r-0 l:radius-t-r-0   w-full h-full a-self-center object-fit-cover ${isOutOfStock && 'out-of-stock'}`}
+                  alt={''}
 
-            />
+                />
+                :
+                <VideoSrc
+                  className={`flex-grow-1 h-full radius-8 l:radius-t-l-16 l:radius-b-l-16 l:radius-b-r-0 l:radius-t-r-0   w-full h-full a-self-center object-fit-cover ${isOutOfStock && 'out-of-stock'}`}
+                  src={selectedImage}
+                />
+            }
           </div>
 
-          <div className='w-100p flex l:grid grid-2-cols-1fr l:grid-2-row-auto gap-6'>
-            {product?.variants?.slice(0, 4).map((variant, idx) =>
-              variant?.media?.map((mediaItem, index) => {
+          <div className='w-100p flex l:grid grid-2-cols-1fr l:grid-2-row-auto gap-6 no-scrollbar l:overflow-visible overflow-auto' style={{ width: '100%' }}>
+            {uniqueVariantsFromProductImages?.map((variant, idx) =>
+              variant?.media?.map((mediaItem: any, index: number) => {
                 const currentIndex = globalMediaIndex++;
 
                 return (
                   <div
                     key={index}
-
-                    className={`l:h-207 ${variant?.status === 'OUT_OF_STOCK' && 'out-of-stock'}  relative`}
+                    className={`l:h-207 ${variant?.status === 'OUT_OF_STOCK' && 'out-of-stock'} relative ${idx <= 3 ? 'block' : 'l:hidden block'}`}
                   >
+                    {
+                      mediaType === 'image' ?
+                        <Image
+                          src={mediaItem?.url}
+                          alt="product-image"
+                          className={cx('object-fit w-50 h-50 radius-4 l:w-full l:h-full pointer l:radius-t-l-0 l:radius-b-l-0  l:radius-t-r-0 l:radius-b-r-0', {
+                            'border border-green border-2':
+                              selectedImage == mediaItem?.url,
+                            'l:radius-t-r-16': currentIndex === 1,
+                            'l:radius-b-r-16': currentIndex === 3,
 
+                          })}
+                          onClick={() => {
+                            setSelectedVariant(variant);
+                            setSelectedImage(mediaItem?.url);
+                            setSelectedColor(variant.properties.color)
+                          }}
+                        />
+                        :
+                        <VideoSrc
+                          className={cx('object-fit w-50 h-50 radius-4 l:w-full l:h-full pointer l:radius-t-l-0 l:radius-b-l-0  l:radius-t-r-0 l:radius-b-r-0', {
+                            'border border-green border-2':
+                              selectedImage == mediaItem?.url,
+                            'l:radius-t-r-16': currentIndex === 1,
+                            'l:radius-b-r-16': currentIndex === 3,
 
-                    <Image
-                      src={mediaItem?.url}
-                      alt="product-image"
-                      className={cx('object-fit w-50 h-50 radius-4 l:w-full l:h-full   l:radius-t-l-0 l:radius-b-l-0  l:radius-t-r-0 l:radius-b-r-0', {
-                        'border border-green border-2':
-                          selectedImage == mediaItem?.url,
-                        'l:radius-t-r-16': currentIndex === 1,
-                        'l:radius-b-r-16': currentIndex === 3,
-
-                      })}
-                      onClick={() => {
-                        setSelectedVariant(variant);
-                        setSelectedImage(mediaItem?.url);
-                      }}
-                    />
+                          })}
+                          src={mediaItem?.url}
+                          onClick={() => {
+                            setSelectedVariant(variant);
+                            setSelectedImage(mediaItem?.url);
+                            setSelectedColor(variant.properties.color)
+                          }}
+                        />
+                    }
                   </div>
                 );
               })
@@ -281,7 +279,12 @@ const ProductDetails = ({ product }: { product: Product }) => {
             <div className='flex flex-col gap-12 border-b  border-#00000014 pb-15'>
               <p className='weight-500 text-20'>{product.name}</p>
               <p className='text-14'>
-                Brand:{' '} <span className='color-#1677FF'> {selectedVariant.properties.origin} | </span>
+                {
+                  selectedVariant.properties.origin &&
+                  <>
+                    Brand:{' '} <span className='color-#1677FF capitalize'> {selectedVariant.properties.origin} | </span>
+                  </>
+                }
                 <Link href={'/fabrics'} className='color-#1677FF'>Similar Ankara Product</Link>
               </p>
             </div>
@@ -311,28 +314,34 @@ const ProductDetails = ({ product }: { product: Product }) => {
                   <div className='flex gap-8 a-items-center'>
                     <Rating
                       style={{ maxWidth: 130, maxHeight: 130, display: 'flex', gap: '8px' }}
-                      value={reviewStat?.averageRating ?? 0}
+                      value={reviewStat?.find(review => review.id === selectedVariant.id)?.reviewStat?.averageRating ?? 0}
                       itemStyles={{ itemShapes: Star, activeFillColor: '#f59e0b', inactiveFillColor: '#0000000F' }}
                       readOnly
                     />
-                    <span className='weight-500 text-14'>{reviewStat?.averageRating.toFixed(1) ?? 0}</span>
+                    <span className='weight-500 text-14'>{reviewStat?.find(review => review.id === selectedVariant.id)?.reviewStat?.averageRating.toFixed(1) ?? 0}</span>
                   </div>
                   <span className='color-' style={{ color: '#D9D9D9B2' }}>|</span>
                   <p className='color-#000000B2 text-12 flex a-items-center gap-5'>
-                    <MiniReview id={product.id} isOpen={isOpen} setIsOpen={setIsOpen} reviews={reviews} slug={product.slug} />
+                    <MiniReview id={selectedVariant.id} isOpen={isOpen} setIsOpen={setIsOpen} reviews={reviews.find(review => review.id === selectedVariant.id)?.reviews ?? []}
+                      reviewStat={reviewStat.find(stat => stat.id === selectedVariant.id)?.reviewStat}
+                      loading={statsLoading}
+                      slug={product.slug} />
                   </p>
                 </div>
 
-                <div className='flex'>
-                  <Link href={`/products/${product.slug}/reviews/${product.id}`} className='color-#1677FF text-12 border-b'>Rate this product</Link>
-                </div>
+                {
+                  isAuthenticated &&
+                  <div className='flex'>
+                    <Link href={`/products/${product.slug}/reviews/${selectedVariant.id}`} className='color-#1677FF text-12 border-b'>Rate this product</Link>
+                  </div>
+                }
               </div>
 
 
             </div>
             <div className='flex flex-col gap-12 border-b  border-#00000014 pb-15'>
               <div className='flex a-items-center py-15 gap-12'>
-                <div className='bg-black flex a-items-center j-content-center radius-999 color-white py-10 px-14'>
+                <div className='bg-black flex a-items-center j-content-center radius-999 color-white py-10 px-14 h-43 w-43'>
                   {product.store.name[0]}
                 </div>
                 <div className=''>
@@ -346,58 +355,83 @@ const ProductDetails = ({ product }: { product: Product }) => {
               <p className='weight-600 border-b border-#00000014 pb-15 pt-15'>
                 VARIATIONS
               </p>
-              <p className='text-left text-12 weight-400 color-#000000B2'>
-                Select color:
-              </p>
-              <div className='flex gap-6 a-items-center'>
-                {product.variants.map(variant => (
-                  <div
-                    key={variant.id}
-                    onClick={() => {
-                      setSelectedVariant(variant)
-                      setSelectedImage(variant?.media?.[0]?.url)
-                    }}
-                    style={{
-                      background: variant.properties?.['color']
-                    }}
-                    className={classNames(
-                      'w-30 h-30 flex round',
-                      {
-                        'outline outline-2 w-27 h-27 flex':
-                          variant.id === selectedVariant?.id
-                      }
-                    )}
-                  ></div>
-                ))}
-              </div>
+              <div>
+                <p className='text-left text-12 weight-400 color-#000000B2 mb-12'>
+                  Select color:
+                </p>
+                <div className='flex gap-6 a-items-center no-scrollbar' style={{ width: '100%', overflow: 'auto' }}>
+                  {
+                    availableColors?.map((each: string, idx: number) => {
+                      const colorMap = Object.fromEntries(
+                        colorNames.map(color => [color.name.replaceAll(' ', '').toLowerCase(), color.hex])
+                      );
 
-              <div className='flex flex-col gap-12 mb-10'>
-                <div className='text-12 weight-400'>
-                  Select size
-                </div>
-                <div className='flex flex-wrap  gap-4'>
-                  {productTypeRender(selectedVariant.stockUnit).map(
-                    (text, i) => (
-                      <label
-                        className={cx(
-                          'flex gap-8 text-14 bg-#F3F3F3 color-#726C6C px-10 py-7 radius-6',
-                          {
-                            'bg-green-100! text-green!': text === selectedSize
-                          }
-                        )}
-                      >
-                        <input
-                          type='radio'
-                          name='size'
-                          onClick={() => setSelectedSize(text)}
-                          className={cx('accent-green')}
-                        />
-                        <span className='whitespace-nowrap text-12'>{text} yards</span>
-                      </label>
-                    )
-                  )}
+                      const getColorHex = (colorName: string) => {
+                        if (!colorName) return null;
+                        return colorMap[colorName.toLowerCase()] || null;
+                      }
+                      const colorName = each.toString().replaceAll(' ', '')
+                      const colorHex = getColorHex(colorName);
+
+                      return (
+                        <div
+                          key={each}
+                          onClick={() => {
+                            setSelectedColor(each)
+                            setSelectedImage(productImages[idx])
+                          }}
+                          style={{
+                            background: colorHex || colorName || 'white',
+                            cursor: "pointer"
+                          }}
+                          className={classNames(
+                            'w-32 min-w-32 h-32 flex round cursor-pointer',
+                            {
+                              'border border-2.5 w-30 min-w-30 h-30 flex':
+                                selectedColor === each
+                            }
+                          )}
+                        ></div>
+                      )
+                    })
+                  }
                 </div>
               </div>
+              {
+                hasSize &&
+                <div className=''>
+                  <p className='text-left text-12 weight-400 color-#000000B2 mb-12'>
+                    Select size:
+                  </p>
+                  <div className='flex gap-6 a-items-center'>
+                    {
+                      groupedData?.[selectedColor]?.map((variant: ProductVariant, i: number) => (
+                        variant?.size && (
+                          <label
+                            key={variant.id}
+                            className={cx(
+                              'flex gap-8 text-14 bg-#F3F3F3 color-#000000CC px-10 py-7 radius-6 pointer',
+                              {
+                                'bg-#DEFFF9! color-#0B9378!': variant?.id === selectedVariant?.id
+                              }
+                            )}
+                          >
+                            <input
+                              type='radio'
+                              name={`size${i}`}
+                              onClick={() => setSelectedVariant(variant)}
+                              className={cx('accent-#0B9378 pointer')}
+                              checked={variant?.id === selectedVariant?.id}
+                              onChange={() => setSelectedVariant(variant)}
+                            />
+                            <span className={`whitespace-nowrap text-12`}>{variant?.size}</span>
+                          </label>
+                        )
+                      ))
+                    }
+                  </div>
+                </div>
+              }
               {addToCartBtn()}
             </div>
 
@@ -430,8 +464,8 @@ const ProductDetails = ({ product }: { product: Product }) => {
             <div className='flex flex-col gap-12 border-b  border-#00000014 pb-15 pt-15'>
               <p className="weight-500 text-16">Product Description</p>
               <p>{showLongDescElipsis(product.longDescription)}
-                {descriptionLength > maxDisplayDescLength ? <span onClick={() => setShowFullDescription(prev => !prev)}>...
-                  <span className='color-#1677FF border-b' style={{ fontStyle: 'italic' }}> {showFullDescription ? 'see more' : 'see less'}</span></span> : ''}
+                {descriptionLength > maxDisplayDescLength ? <span onClick={() => setShowFullDescription(prev => !prev)}>{!showFullDescription && '...'}
+                  <span className='color-#1677FF border-b cursor-pointer' style={{ fontStyle: 'italic' }}> {showFullDescription ? 'show less' : 'show more'}</span></span> : ''}
               </p>
             </div>
             <div className='flex flex-col gap-12  border-b  border-#00000014 pb-30 pt-15'>
@@ -439,15 +473,15 @@ const ProductDetails = ({ product }: { product: Product }) => {
               <div>
                 <div className='w-full  flex a-items-center' style={{ border: '0.5px solid #00000014' }}>
                   <div className='w-40p py-10 text-14 px-14 bg-#F5F5F5'>Type</div>
-                  <div className='w-60p pl-10'>{product.type}</div>
+                  <div className='w-60p pl-10 capitalize'>{product.type}</div>
                 </div>
                 <div className='w-full  flex a-items-center' style={{ border: '0.5px solid #00000014' }}>
                   <div className='w-40p py-10 mt-2 text-14 px-14 bg-#F5F5F5'>Material</div>
-                  <div className='w-60p pl-10'></div>
+                  <div className='w-60p pl-10 capitalize'></div>
                 </div>
                 <div className='w-full flex a-items-center' style={{ border: '0.5px solid #00000014' }}>
                   <div className='w-40p py-10 mt-2 text-14 px-14 bg-#F5F5F5'>Brand name</div>
-                  <div className='w-60p pl-10'>{selectedVariant.properties.origin}</div>
+                  <div className='w-60p pl-10 capitalize'>{selectedVariant?.properties?.origin}</div>
                 </div>
               </div>
             </div>
@@ -460,62 +494,84 @@ const ProductDetails = ({ product }: { product: Product }) => {
                 VARIATIONS
               </p>
               <div className='flex flex-col gap-28'>
-                <div className='mt-10 flex flex-col gap-12'>
-                  <p className='text-left text-12 weight-400'>
+                <div>
+                  <p className='text-left text-12 weight-400 color-#000000B2 mb-12'>
                     Select color:
                   </p>
-                  <div className='flex gap-6 a-items-center'>
-                    {product.variants.map(variant => (
-                      <div
-                        key={variant.id}
-                        onClick={() => {
-                          setSelectedVariant(variant)
-                          setSelectedImage(variant?.media?.[0]?.url)
-                        }}
-                        style={{
-                          background: variant.properties?.['color']
-                        }}
-                        className={classNames(
-                          'w-30 h-30 flex round',
-                          {
-                            'outline outline-2 w-27 h-27 flex':
-                              variant.id === selectedVariant?.id
-                          }
-                        )}
-                      ></div>
-                    ))}
-                  </div>
-                </div>
-                <div className='flex flex-col gap-12'>
-                  <div className='text-12 weight-400'>
-                    Select size
-                  </div>
-                  <div className='l:flex flex-wrap  gap-4'>
-                    {productTypeRender(selectedVariant.stockUnit).map(
-                      (text, i) => (
-                        <label
-                          className={cx(
-                            'flex gap-8 text-14 bg-#F3F3F3 color-#726C6C px-10 py-7 radius-6',
-                            {
-                              'bg-green-100! text-green!': text === selectedSize
-                            }
-                          )}
-                        >
-                          <input
-                            type='radio'
-                            name='size'
-                            onClick={() => setSelectedSize(text)}
-                            className={cx('accent-green')}
-                          />
-                          <span className='whitespace-nowrap text-12'>{text} yards</span>
-                        </label>
-                      )
-                    )}
-                  </div>
+                  <div className='flex gap-6 a-items-center no-scrollbar' style={{ width: '100%', overflow: 'auto' }}>
+                    {
+                      availableColors?.map((each: string, idx: number) => {
+                        const colorMap = Object.fromEntries(
+                          colorNames.map(color => [color.name.replaceAll(' ', '').toLowerCase(), color.hex])
+                        );
 
+                        const getColorHex = (colorName: string) => {
+                          if (!colorName) return null;
+                          return colorMap[colorName.toLowerCase()] || null;
+                        }
+                        const colorName = each.toString().replaceAll(' ', '')
+                        const colorHex = getColorHex(colorName);
+
+                        return (
+                          <div
+                            key={each}
+                            onClick={() => {
+                              setSelectedColor(each)
+                              setSelectedImage(productImages[idx])
+                            }}
+                            style={{
+                              background: colorHex || colorName || 'white',
+                              cursor: "pointer"
+                            }}
+                            className={classNames(
+                              'w-36 min-w-36 h-36 flex round cursor-pointer',
+                              {
+                                'border border-2.8 w-34 min-w-34 h-34 flex':
+                                  selectedColor === each
+                              }
+                            )}
+                          ></div>
+                        )
+                      })
+                    }
+                  </div>
                 </div>
+                {
+                  hasSize &&
+                  <div className=''>
+                    <p className='text-left text-12 weight-400 color-#000000B2 mb-12'>
+                      Select size:
+                    </p>
+                    <div className='flex gap-6 a-items-center no-scrollbar' style={{ width: '100%', overflow: 'auto' }}>
+                      {
+                        groupedData?.[selectedColor]?.map((variant: ProductVariant, i: number) => (
+                          variant?.size && (
+                            <label
+                              key={variant.id}
+                              className={cx(
+                                'flex gap-8 text-14 bg-#F3F3F3 color-#000000CC px-10 py-7 radius-6 pointer',
+                                {
+                                  'bg-#DEFFF9! color-#0B9378!': variant?.id === selectedVariant?.id
+                                }
+                              )}
+                            >
+                              <input
+                                type='radio'
+                                name={`size-${i}`}
+                                onClick={() => setSelectedVariant(variant)}
+                                className={cx('accent-#0B9378 pointer')}
+                                checked={variant?.id === selectedVariant?.id}
+                                onChange={() => setSelectedVariant(variant)}
+                              />
+                              <span className={`whitespace-nowrap text-12`}>{variant?.size}</span>
+                            </label>
+                          )
+                        ))
+                      }
+                    </div>
+                  </div>
+                }
                 {addToCartBtn()}
-
               </div>
             </div>
           </div>
@@ -547,9 +603,9 @@ const ProductDetails = ({ product }: { product: Product }) => {
         <div className='flex flex-col gap-12 pt-15 mt-10 pb-100'>
           <div className=''>
             <p className='text-20 weight-600'>
-              Customer Reviews ({reviews.length ?? 0})
+              Customer Reviews ({reviews.flatMap((review) => review.reviews).length ?? 0})
             </p>
-            <Comments reviews={reviews} isModal={false} limit={3} productId={product.id} slug={product.slug} />
+            <Comments reviews={reviews.flatMap((review) => review.reviews)} isModal={false} limit={3} productId={selectedVariant.id} slug={product.slug} />
           </div>
 
         </div>
@@ -562,8 +618,8 @@ const ProductDetails = ({ product }: { product: Product }) => {
       />
       <Modal isOpen={showAllPhotos} onClose={() => setShowAllPhotos(false)}>
         <div className='l:w-500 h-70vh flex l:grid grid-2-cols-1fr l:grid-2-row-auto gap-6 p-20 overflow-auto no-scrollbar'>
-          {product?.variants?.map((variant, idx) =>
-            variant?.media?.map((mediaItem, index) => {
+          {uniqueVariantsFromProductImages.map((variant, idx) =>
+            variant?.media?.map((mediaItem: any, index: number) => {
               return (
                 <div
                   key={index}
@@ -574,7 +630,7 @@ const ProductDetails = ({ product }: { product: Product }) => {
                   <Image
                     src={mediaItem?.url}
                     alt="product-image"
-                    className={cx('object-fit w-50 h-50 radius-4 l:radius-0 l:w-full  l:h-full', {
+                    className={cx('object-fit w-50 h-50 radius-4 l:radius-0 l:w-full pointer l:h-full', {
                       'border border-green border-2':
                         selectedImage == mediaItem?.url,
                       [`border-${mediaItem?.description?.toLocaleLowerCase()}`]:
@@ -583,6 +639,7 @@ const ProductDetails = ({ product }: { product: Product }) => {
                     onClick={() => {
                       setSelectedVariant(variant);
                       setSelectedImage(mediaItem?.url);
+                      setSelectedColor(variant.properties.color)
                     }}
                   />
                 </div>
@@ -591,10 +648,9 @@ const ProductDetails = ({ product }: { product: Product }) => {
           )}
         </div>
       </Modal>
-
       <Footer />
     </>
-  )
+  );
 }
 
 export default ProductDetails

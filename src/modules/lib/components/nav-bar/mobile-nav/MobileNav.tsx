@@ -48,10 +48,10 @@ const MobileNav: FC<IMobileNav> = ({
   const profileModals = [
     'orders',
     'saved items',
-    'ratings & reviews',
     'recently viewed',
     'recently searched'
   ]
+  {/*'ratings & reviews', */}
 
   return (
     <div className='md:hidden flex a-items-center'>

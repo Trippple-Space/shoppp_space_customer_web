@@ -236,6 +236,17 @@ export const getStoreNames = (storeGroups: StoreGroupResponse[]) => {
   return storeNames?.join(", ");
 };
 
+export const checkMediaType = (url: string) => {
+  const lowerUrl = url.toLowerCase();
+  if (/\.(jpg|jpeg|png|gif|webp)$/.test(lowerUrl)) {
+    return "image";
+  } else if (/\.(mp4|webm|mov|avi|mkv)$/.test(lowerUrl)) {
+    return "video";
+  }
+
+  return "unknown";
+}
+
 export const getCartItems = (storeGroups: StoreGroupResponse[]) => {
   const cartItems = storeGroups?.flatMap((group: StoreGroupResponse) => group.items) || []
 

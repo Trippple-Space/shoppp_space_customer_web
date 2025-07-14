@@ -28,7 +28,7 @@ export const Comments = ({ reviews, limit, productId, slug, isModal }: { reviews
                                         <FaUserCircle className='color-white w-34 h-34 border border-2 border-#C1C7D0 bg-#C1C7D0 round' />
                                         <div className={`flex-grow-1 flex j-content-between a-items-center ${isModal && 'gap-8'}`}>
                                             <p className={`flex flex-col ${isModal ? 'gap-1' : 'gap-1 sm:gap-3'}`}>
-                                                <span className={`weight-600 ${isModal ? 'text-12 sm:text-14' : 'text-14 sm:text-16'}`}>{review.user.profile.firstName} {review.user.profile.lastName}</span>
+                                                <span className={`weight-600 ${isModal ? 'text-12 sm:text-14' : 'text-14 sm:text-16'}`}>{review.user.profile.firstName || ''} {review.user.profile.lastName || ''}</span>
                                                 <span className={`weight-400 color-#0000008C ${isModal ? 'text-10 sm:text-12' : 'text-12 sm:text-14'}`}>{new Date(review.dateCreated).toLocaleDateString('en-GB', {
                                                     day: '2-digit',
                                                     month: 'short',
@@ -46,7 +46,7 @@ export const Comments = ({ reviews, limit, productId, slug, isModal }: { reviews
                                     </div>
                                     <div className='pt-8'>
                                         <p className={`capitalize text-14 weight-500 ${isModal ? 'sm:text-14 text-12' : 'text-13 sm:text-14'}`}>{review.subject}</p>
-                                        <p className={`capitalize ${isModal ? 'text-12' : 'text-13 sm:text-14'}`} style={{ whiteSpace: "pre-wrap" }}>{review.comment}</p>
+                                        <p className={`${isModal ? 'text-12' : 'text-13 sm:text-14'}`} style={{ whiteSpace: "pre-wrap" }}>{review.comment}</p>
                                     </div>
                                 </div>
                             ))

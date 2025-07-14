@@ -16,7 +16,17 @@ const StorefrontAbout = ({ store }: { store: Store }) => {
 
   const { productSold } = useProductSold(store?.id);
   const { visit } = useGetVisit(store?.id);
-  const { followersCount , isFollowing, followStore, unFollowStore } = useFollow(store?.id);
+  const { followersCount, isFollowing, followStore, unFollowStore } = useFollow(store?.id);
+
+  const meta = store.meta
+  let heroImages: string[] = [];
+
+  if (meta) {
+    heroImages = Object.entries(meta)
+      .filter(([key]) => key.startsWith("heroImage"))
+      .sort(([a, _], [b, __]) => a.localeCompare(b))
+      .map(([_, value]) => value as string);
+  }
 
   return (
     <>
@@ -68,11 +78,7 @@ const StorefrontAbout = ({ store }: { store: Store }) => {
                   <p className="h-24 w-1 bg-#00000014"></p>
                   <p className="flex flex-row a-items-center sm:gap-8 gap-5">
                     <span className="sm:text-16 text-14 weight-600">
-                      {productSold ? (
-                        productSold
-                      ) : (
-                        <div className="h-16 w-24 animate-pulse bg-#e3e3e3"></div>
-                      )}
+                      {productSold || 0}
                     </span>
                     <span>
                       {productSold && productSold > 1 ? "Products" : "Product"}{" "}
@@ -83,9 +89,9 @@ const StorefrontAbout = ({ store }: { store: Store }) => {
               </div>
             </div>
             <div className="l:grid hidden grid-2-cols-auto grid-2-rows-auto gap-12 h-fit">
-              {store.meta?.heroImages && (
+              {heroImages && (
                 <>
-                  {Object.values(store.meta.heroImages).map((image, index) => (
+                  {Object.values(heroImages).map((image, index) => (
                     <Image
                       key={index}
                       src={image}

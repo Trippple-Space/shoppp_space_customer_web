@@ -13,7 +13,7 @@ interface AddressFieldProps {
   inputClassName?: string;
   isEdit?: boolean;
   handler: any;
-  disabled: boolean
+  disabled?: boolean
 }
 
 const AddressField: FC<AddressFieldProps> = ({

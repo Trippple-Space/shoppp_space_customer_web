@@ -22,7 +22,7 @@ const UserProfileDropdown: FC<IUserProfileDropdown> = ({
 }) => {
   const { user, signOut } = useNavbarView()
   const { isAuthenticated } = useUserStore()
-    const query:any = onGoingOrderStatusQuery;
+  const query: any = onGoingOrderStatusQuery;
   const { orders } = useOrders({
     filters: { status: { In: query } }
   })
@@ -32,10 +32,10 @@ const UserProfileDropdown: FC<IUserProfileDropdown> = ({
   const profileModals = [
     'orders',
     'saved items',
-    'ratings & reviews',
     'recently viewed',
     'recently searched'
   ]
+  {/*'ratings & reviews', */}
 
   return (
     <>
@@ -50,7 +50,7 @@ const UserProfileDropdown: FC<IUserProfileDropdown> = ({
         className='absolute font-inter r-0 l:t-54 t-50 w-360 z-20 sm:block hidden pb-64'
         style={{ height: isAuthenticated ? 'calc(100dvh - 64px)' : '336px' }}
       >
-        <div className='bg-white g|box-shadow:0px|_|8px|_|16px|_|#494F5E1F; radius-8 border border-#00000014 color-#000000E0 h-full g|max-height:540px; scroll-y no-scrollbar'>
+        <div className='bg-white g|box-shadow:0px|_|8px|_|16px|_|#494F5E1F; radius-8 border border-#00000014 color-#000000E0 h-full g|max-height:500px; scroll-y no-scrollbar'>
           <div className=''>
             {isAuthenticated && (
               <>
@@ -64,7 +64,7 @@ const UserProfileDropdown: FC<IUserProfileDropdown> = ({
                   </div>
 
                   <div className=''>
-                    <p className='capitalize weight-600 text-14 line-height-22'>{`${user?.profile.firstName} ${user?.profile.lastName}`}</p>
+                    <p className='capitalize weight-600 text-14 line-height-22'>{`${user?.profile.firstName || ''} ${user?.profile.lastName || ''}`}</p>
                     <p className='text-12 line-height-20 color-#00000099 weight-400'>
                       {user?.email}
                     </p>
