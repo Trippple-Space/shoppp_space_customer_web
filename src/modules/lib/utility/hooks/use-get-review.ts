@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useState } from 'react'
+import { useCallback, useEffect, useState } from 'react'
 import { reviewService } from '../services/reviews.service';
 import { toast } from 'sonner';
 import { IFetchedReview } from '../types/review.interface';

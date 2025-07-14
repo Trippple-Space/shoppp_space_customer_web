@@ -12,6 +12,8 @@ import OrdersModal from "./profile-modal/OrdersModal";
 import RecentlySearchItems from "./profile-modal/RecentlySearchItems ";
 import RecentlyViewedItems from "./profile-modal/RecentlyViewedItems ";
 import SavedItemsModal from "./profile-modal/SavedItems";
+import Link from "next/link";
+import Image from "../image/Image";
 
 const StorefrontNavBar = ({ store }: { store?: Store }) => {
   const { user } = useNavbarView();
@@ -30,9 +32,21 @@ const StorefrontNavBar = ({ store }: { store?: Store }) => {
   return (
     <nav className="flex flex-row j-content-between a-items-center border border-0 border-b-1 border-b-#00000014 sm:py-14 py-12 l:px-80 md:px-60 sm:px-40 px-24 fixed w-100p bg-white z-10">
       <div className="md:flex-grow-0 flex-grow-1">
-        <h1 className="font-robotoMono weight-500 md:text-28 sm:text-26 text-22 w-fit">
+        {
+          /*
+          <h1 className="font-robotoMono weight-500 md:text-28 sm:text-26 text-22 w-fit">
           {store?.name}
         </h1>
+          */
+        }
+        <Link href={'/'} className='w-fit'>
+          <Image
+            className='w-70 l:w-100'
+            src='new-asoebi-logo.svg'
+            alt='logo'
+            type='logo'
+          />
+        </Link>
       </div>
 
       <SearchInput placeholder={"Search"} component={"store"} storeSlug={store?.slug} />

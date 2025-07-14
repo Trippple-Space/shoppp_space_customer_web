@@ -15,7 +15,7 @@ export const useOrders = (initialQuery: IQueryParams) => {
      const fetchOrders = async (query: IQueryParams) => {
           setFetching(true);
           try {
-               const fetchedOrders = await orderService.fetchOrders(query);
+               const fetchedOrders = await orderService.fetchOrders({...query, order: {id: 'desc'}});
                setOrders(fetchedOrders);
           } catch (err) {
                console.error("Error fetching orders:", err);
@@ -24,7 +24,7 @@ export const useOrders = (initialQuery: IQueryParams) => {
                setFetching(false);
           }
      };
-
+     
      const fetchOrderById = async (id: number, query: IQueryParams) => {
           setFetching(true);
           try {

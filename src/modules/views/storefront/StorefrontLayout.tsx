@@ -104,11 +104,9 @@ const StorefrontLayout: FC<{ store: Store; children: ReactNode }> = ({
   }, [filteredProducts]);
 
   useEffect(() => {
-    console.log("isAuthenticated", isAuthenticated);
     // Define the function to be triggered after 1 minute
     const triggerFunction = () => {
       if (isAuthenticated && hasScrolled && hasPerformedAction) {
-        console.log("Triggered");
         logVisit();
       }
     };
@@ -117,12 +115,10 @@ const StorefrontLayout: FC<{ store: Store; children: ReactNode }> = ({
 
     // Scroll event handler
     const handleScroll = () => {
-      console.log("Handle Scroll triggered");
       setHasScrolled(true);
     };
     // Click event handler
     const handleClick = () => {
-      console.log("Handle Click triggered");
       setHasPerformedAction(true);
     };
 
@@ -138,6 +134,8 @@ const StorefrontLayout: FC<{ store: Store; children: ReactNode }> = ({
       clearTimeout(timer);
     };
   }, [isAuthenticated, hasScrolled, hasPerformedAction]);
+
+  console.log(categories)
 
   return (
     <div>

@@ -1,12 +1,13 @@
 "use client";
 import Image from "@/modules/lib/components/image/Image";
 import StorefrontNavBar from "@/modules/lib/components/nav-bar/StorefrontNavBar";
-import React from "react";
-import { Store } from "@/modules/lib/utility/types/store.interface";
-import { useProductSold } from "@/modules/lib/utility/hooks/use-product-sold";
-import { useGetVisit } from "@/modules/lib/utility/hooks/use-get-visit";
 import { useCart } from "@/modules/lib/utility/hooks/use-cart";
 import useFollow from "@/modules/lib/utility/hooks/use-follows";
+import { useGetVisit } from "@/modules/lib/utility/hooks/use-get-visit";
+import { useProductSold } from "@/modules/lib/utility/hooks/use-product-sold";
+import { Store } from "@/modules/lib/utility/types/store.interface";
+import { IoIosNotifications } from "react-icons/io";
+import { MdOutlineNotificationsActive, MdOutlineNotificationsOff } from "react-icons/md";
 
 const StorefrontAbout = ({ store }: { store: Store }) => {
   const {
@@ -47,12 +48,26 @@ const StorefrontAbout = ({ store }: { store: Store }) => {
                   </h2>
                   <p className="flex flex-row a-items-center gap-12">
                     <span className="text-14 weight-400">{followersCount} followers</span>
-                    <span className="text-12 weight-600 bg-black text-white py-4 px-16 radius-999 pointer" onClick={() => {
-                      isAuthenticated ?
-                        isFollowing ? unFollowStore() : followStore()
-                        : isLoginModal()
-                    }}>
-                      {isFollowing ? 'Unsubscribe' : 'Subscribe'}
+                    <span 
+                      className="text-12 weight-600 bg-black text-white py-4 px-16 radius-999 pointer flex 
+                      flex-row a-items-center j-content-between gap-8" 
+                      onClick={() => {
+                        isAuthenticated ?
+                          isFollowing ? unFollowStore() : followStore()
+                          : isLoginModal()
+                      }}
+                    >
+                      {isFollowing ? (
+                        <>
+                          <span className="w-full" style={{textWrap:"nowrap"}}>Mute Notifications</span>
+                          <MdOutlineNotificationsOff className="w-fit" size={20} />
+                        </>
+                      ) : (
+                        <>
+                          <span className="w-full" style={{textWrap:"nowrap"}}>Get Notifications</span>
+                          <MdOutlineNotificationsActive size={20} />
+                        </>
+                      )}
                     </span>
                   </p>
                 </div>
@@ -78,11 +93,7 @@ const StorefrontAbout = ({ store }: { store: Store }) => {
                   <p className="h-24 w-1 bg-#00000014"></p>
                   <p className="flex flex-row a-items-center sm:gap-8 gap-5">
                     <span className="sm:text-16 text-14 weight-600">
-                      {productSold ? (
-                        productSold
-                      ) : (
-                        <div className="h-16 w-24 animate-pulse bg-#e3e3e3"></div>
-                      )}
+                      {productSold || 0}
                     </span>
                     <span>
                       {productSold && productSold > 1 ? "Products" : "Product"}{" "}

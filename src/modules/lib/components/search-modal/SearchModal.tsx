@@ -1,17 +1,12 @@
-import { useEffect, useState } from 'react'
+import { useState } from 'react'
 import ProductDetailModal from '../product-detail-modal/ProductDetailModal'
-import classNames from 'classnames'
 import { useRouter } from 'next/navigation'
-import { IoMdClose } from 'react-icons/io'
-import { useCart } from '../../utility/hooks/use-cart'
 import { productService } from '../../utility/services/product.service'
-import { formatNumberAsPrice, cx } from '../../utility/utility'
-import ProductStockUnit from '../product-stock-unit/ProductStockUnit'
-import QuantitySelector from '../quantity-selector/QuantitySelector'
+import { formatNumberAsPrice, cx, displayStockUnit } from '../../utility/utility'
 import { Product } from '../../utility/types/product.interface'
 import Image from '../image/Image'
-import Link from 'next/link'
-import { AnyAaaaRecord } from 'dns'
+import { useCart } from '../../utility/hooks/use-cart'
+import { useRecentlyViewedVariant } from '../../utility/hooks/use-recently-viewed'
 
 const SearchModal = ({
   searchResults,
@@ -23,8 +18,9 @@ const SearchModal = ({
   const [openSingleProductModal, setOpenSingleProductModal] = useState(false)
   const [product, setProduct] = useState<Product | null>(null)
   const [error, setError] = useState<string | null>(null)
+  const { isAuthenticated } = useCart()
+  const { addVariant } = useRecentlyViewedVariant()
 
-  
   const router = useRouter()
   const handleFetchProduct = async (slug: string) => {
     if (window.innerWidth >= 768) {
@@ -43,13 +39,10 @@ const SearchModal = ({
     }
   }
 
-  function handleCloseProductModal () {
+  function handleCloseProductModal() {
     setOpenSingleProductModal(false)
     setProduct(null)
   }
-
-
-
 
   return (
     <>
@@ -62,10 +55,15 @@ const SearchModal = ({
                 <div
                   key={product.slug}
                   className='flex j-content-start gap-20 cursor-pointer'
-                  onClick={() => handleFetchProduct(product.slug)}
+                  onClick={() => {
+                    if (isAuthenticated) {
+                      addVariant(product.variants[0].id, "search");
+                    }
+                    handleFetchProduct(product.slug)
+                  }}
                 >
                   <Image
-                    src={product?.variants?.[0]?.media?.[0]?.url}
+                    src={product?.variants?.[product?.variants?.length - 1 || 0]?.media?.[0]?.url}
                     alt={product.name}
                     className='w-50 h-50 radius-8 object-fit-cover'
                   />
@@ -73,10 +71,10 @@ const SearchModal = ({
                     <p className='color-#000000 text-left text-15 weight-500'>
                       {product.name}
                     </p>
-                    <p className='weight-500 flex gap-10 a-items-center text-12'>
-                      {formatNumberAsPrice(product?.variants?.[0]?.price)}
+                    <p className='weight-500 flex gap-3 a-items-center text-12'>
+                      {formatNumberAsPrice(product?.variants?.[product?.variants?.length - 1 || 0]?.finalPrice)}
                       <span className='color-#00000099 font-inter weight-400 text-10'>
-                        {product.stockUnit}
+                        / {displayStockUnit(product.stockUnit)}
                       </span>
                     </p>
                   </div>
@@ -86,13 +84,14 @@ const SearchModal = ({
           </div>
         )}
       </div>
-    {product &&  <ProductDetailModal
+      {product && <ProductDetailModal
         openSingleProductModal={openSingleProductModal}
         handleCloseProductModal={handleCloseProductModal}
-        position=''
+        position='homepage'
         variant={{
           ...product.variants[0],
-          product }}
+          product
+        }}
       />}
     </>
   )
