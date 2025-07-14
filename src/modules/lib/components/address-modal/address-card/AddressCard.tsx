@@ -52,11 +52,10 @@ const AddressCard: FC<AddressCardProps> = ({
       {!editMode && (
         <BoxRadio
           id={`${address.id}`}
-          name={`${address.id}`}
           checked={isAddressSelected}
           label=''
           className='address'
-          onChange={() => {}}
+          onChange={() => { }}
         />
       )}
       {editMode && showAddressForm ? (

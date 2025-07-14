@@ -36,7 +36,6 @@ export const useCategories = ({
       console.log(categoriesCache[`${type}_${label}_${storeId}`])
       setCurrentCategoryList(categoriesCache[`${type}_${label}_${storeId}`])
     }
-    console.log(currentCategoryList)
     console.log('EFFECT:', { type, storeId, label, len: currentCategoryList?.length })
   }, [type, storeId, label]);
 
@@ -44,6 +43,7 @@ export const useCategories = ({
   const setCat = (category: ICategory) => {
     setSelectedCategory(type, label, storeId, category) 
   }
+
   return { 
     // currentCategoryList: categoriesCache[`${type}_${label}_${storeId}`] ?? [], 
     currentCategoryList, 

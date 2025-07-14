@@ -22,6 +22,23 @@ export interface ProductCategory {
   storeId: number;
 }
 
+export interface Discount {
+  id: number,
+  title: string,
+  discountCode: string,
+  discountType: string,
+  discountCalculationType: string,
+  value: number,
+  activeStartDate: string,
+  activeEndDate: string,
+  status: string,
+  minOrderAmount: number | string,
+  minOrderQuantity: number | string,
+  channel: string[],
+  createdAt: string,
+  updatedAt: string
+}
+
 export interface Product {
   longDescription: string;
   shortDescription: string;
@@ -43,6 +60,7 @@ export interface Product {
   store: Store;
   availableUnit?: any[];
   tags: Tag[];
+  discount: Discount
 }
 
 export interface ProductMedia {
@@ -58,6 +76,7 @@ export interface ProductVariant {
   stock: number;
   price: number;
   finalPrice: number;
+  discountedPrice: number
   minPurchaseQuantity: number;
   incrementBy: number;
   product?: Product;
@@ -90,6 +109,7 @@ export interface IFilters {
   rating: { rateBy: string };
   location: { selectedState: string };
   showOffers: boolean;
+  tags?: string
 }
 
 

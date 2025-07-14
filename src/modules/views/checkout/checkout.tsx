@@ -1,6 +1,6 @@
 "use client";
 import Image from "@/modules/lib/components/image/Image";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import HomepageNavBar from "@/modules/lib/components/nav-bar/HomepageNavBar";
 import { useRouter } from "next/navigation";
 import Footer from "@/modules/lib/components/footer/Footer";
@@ -14,77 +14,125 @@ import {
   displayStockUnit,
   formatNumberAsPrice,
 } from "@/modules/lib/utility/utility";
-import { deliveryOptions } from "@/modules/lib/utility/constants";
-import OrderSummary from "@/modules/lib/components/order-summary/OrderSummary";
 import { PiCaretDown, PiCaretUp } from "react-icons/pi";
 import Link from "next/link";
 import DeliveryOptions from "@/modules/lib/components/delivery-options/DeliveryOptions";
 import DeliveryMessage from "@/modules/lib/components/delivery-in-lagos/DeliveryMessage";
 import { paths } from "@/modules/lib/utility/paths";
 import AddressModal from "@/modules/lib/components/address-modal/AddressModal";
+import OrderSummary from "@/modules/lib/components/order-summary/OrderSummary";
+import { CartItem } from "@/modules/lib/utility/types/cart.interface";
+import { useCalculatedeliveryFee } from "@/modules/lib/utility/hooks/use-calculate-deliveryFee";
+import { DeliveryOption } from "@/modules/lib/utility/types/delivery.interface";
+
+type DeliveryOptionKey = 'standard' | 'express';
+type addressDeliveryPrice = {
+  addressId: number,
+  deliveryOptions: DeliveryOption,
+  coordinates: {
+    lat: string,
+    lon: string
+  }
+}
 
 const CheckoutPage = () => {
+  const [deliveryOptions, setDeliveryOptions] = useState<DeliveryOption>({
+    standard: {
+      title: 'Standard Delivery',
+      description: 'Arrives in 3 days',
+      etaInDays: 3,
+      price: NaN
+    },
+    express: {
+      title: 'Same Day Delivery',
+      description: 'Arrives within 24 hours',
+      etaInDays: 1,
+      price: NaN
+    },
+    pickup: {
+      title: 'Pick Up',
+      description: 'Pick up in stores close to you',
+      etaInDays: '',
+      price: 0
+    }
+  })
+  const [allAddressDeliveryPrice, setAllAddressDeliveryPrice] = useState<addressDeliveryPrice[]>([])
   const [selectedDeliveryOption, setSelectedDeliveryOption] =
     useState<keyof typeof deliveryOptions>("standard");
-  const { user } = useUserStore();
-  const { cart, removeFromCart } = useCart();
+  const { user, isAuthenticated } = useUserStore();
+  const { cart, removeFromCart, removeDiscountCode, fetchCart } = useCart();
   const { openAddressModal, selectedAddress } = useAddress();
   const router = useRouter()
   const { fetchAddresses } = useAddressStore()
   const { loading: isPaymentLoading, payWithPaystack } = usePayment();
-  const canProceedToPayment = !(!isPaymentLoading && selectedAddress && user);
+  const { calculateFee } = useCalculatedeliveryFee()
+  const [calculatingFee, setCalculatingFee] = useState<boolean>(true)
   const selectedDeliveryOptionDetails = deliveryOptions[selectedDeliveryOption];
-  const [cartItemsByStore, setcartItemsByStore] = useState<any[]>([]);
+  const canProceedToPayment = !(!isPaymentLoading && selectedAddress && user && !calculatingFee && !isNaN(selectedDeliveryOptionDetails.price));
   const [devOptions, setDevOptions] = useState<string>();
   const [showSummary, setshowSummary] = useState(true);
   const [devAddressError, setDevAddressError] = useState(false)
 
-  const setStoreAccordion = (i: number) => {
-    setcartItemsByStore((prevCartItems) =>
-      prevCartItems.map((item, index) =>
-        index === i
-          ? { ...item, visible: !item.visible }
-          : item
-      )
-    );
-  }
+  const [shouldUpdateFee, setShouldUpdateFee] = useState(false);
+  const lastAddressRef = useRef<number | null>(null);
 
-  const getCartItemsByStore = () => {
-    const cartItems = cart.cartItems;
-    const stores: any[] = [];
-    if (cartItems.length !== 0) {
-      cartItems.forEach((item) => {
-        if (!stores.includes(item.variant.product?.store?.name)) {
-          stores.push(item.variant.product?.store?.name);
+  const [allCartItems, setAllCartItems] =
+    useState({
+      ...cart,
+      storeGroups: cart.storeGroups.map((group) => {
+        return {
+          ...group,
+          visible: true,
         }
-      });
+      }),
 
-      const storeCartItems: any[] = [];
+      visible: true,
 
-      stores.forEach((store) => {
-        const storeName = store;
-        const storeItems = cartItems.filter(
-          (item) => item.variant.product?.store?.name === storeName
-        );
-        const storeObject: { [key: string]: any } = {};
-        storeObject.name = storeName;
-        storeObject.visible = true;
-        storeObject.items = storeItems;
-
-        storeCartItems.push(storeObject);
-      });
-      setcartItemsByStore(storeCartItems);
-    }
-  };
+    })
 
   useEffect(() => {
-    getCartItemsByStore();
+    const updatedCart = {
+      ...cart,
+      storeGroups: cart.storeGroups.map((group) => {
+        return {
+          ...group,
+          visible: true,
+
+
+        }
+      }),
+      visible: true,
+      showDiscountInput: false,
+
+    }
+    setAllCartItems(updatedCart)
+  }, [cart]);
+
+
+  const setStoreAccordion = (i: number) => {
+    setAllCartItems((prevItems) => ({
+      ...prevItems,
+      storeGroups: prevItems.storeGroups.map((group, index) => {
+        if (index === i) {
+          return {
+            ...group,
+            visible: !group.visible,
+          }
+        }
+        return group;
+      })
+    }))
+  }
+
+  useEffect(() => {
     if (user) {
       fetchAddresses(user?.id)
       if (cart.cartItems.length === 0) {
         router.push(paths.homepage)
       }
     }
+
+
   }, [cart]);
 
   useEffect(() => {
@@ -96,12 +144,114 @@ const CheckoutPage = () => {
     return () => window.removeEventListener("resize", checkScreenWidth);
   }, []);
 
+  useEffect(() => {
+    if (isAuthenticated) {
+      removeDiscountCode()
+      fetchCart(true)
+    }
+  }, [])
+
+  const updateFees = async () => {
+    if (selectedAddress) {
+      const deliveryTypes: DeliveryOptionKey[] = ['standard', 'express'];
+      const getLatLon = (meta: any) => {
+        if (meta?.coordinates) {
+          return {
+            lat: meta.coordinates.lat,
+            lon: meta.coordinates.lon
+          };
+        } else if (meta?.location) {
+          return {
+            lat: meta.location.latitude,
+            lon: meta.location.longitude
+          };
+        }
+        return { lat: null, lon: null };
+      };
+
+      const updatedOptions = { ...deliveryOptions };
+      const { lat, lon } = getLatLon(selectedAddress.meta);
+
+      const existingAddressPrice = allAddressDeliveryPrice.find(addressPrice => addressPrice.addressId === selectedAddress.id)
+      if (existingAddressPrice && (existingAddressPrice.coordinates.lat === lat && existingAddressPrice.coordinates.lon === lon)) {
+        setDeliveryOptions(existingAddressPrice.deliveryOptions)
+      } else {
+        for (const type of deliveryTypes) {
+          try {
+            setCalculatingFee(true)
+            const feeDetail = await calculateFee({
+              addressId: selectedAddress.id,
+              deliveryType: type,
+            })
+
+            updatedOptions[type] = {
+              ...updatedOptions[type],
+              price: feeDetail.fee,
+            };
+          } catch (error) {
+            console.error(`Failed to calculate fee for ${type}:`, error);
+          } finally {
+            setDeliveryOptions(updatedOptions);
+            setAllAddressDeliveryPrice(prev =>
+              prev.some(item => item.addressId === selectedAddress.id)
+                ?
+                prev.map(item =>
+                  item.addressId === selectedAddress.id
+                    ? {
+                      addressId: selectedAddress.id,
+                      deliveryOptions: updatedOptions,
+                      coordinates: {
+                        lat,
+                        lon
+                      }
+                    }
+                    : item
+                )
+                :
+                [
+                  ...prev,
+                  {
+                    addressId: selectedAddress.id,
+                    deliveryOptions: updatedOptions,
+                    coordinates: {
+                      lat,
+                      lon
+                    }
+                  }
+                ]
+            );
+            setCalculatingFee(false)
+          }
+        }
+      }
+    }
+
+  };
+
+  useEffect(() => {
+    if (!selectedAddress) return;
+
+    const addressChanged = lastAddressRef.current !== selectedAddress.id;
+
+    if (addressChanged || shouldUpdateFee) {
+      lastAddressRef.current = selectedAddress.id;
+      updateFees();
+      if (shouldUpdateFee) setShouldUpdateFee(false);
+    }
+  }, [selectedAddress, shouldUpdateFee]);
+
+  const isValidDiscount = (cartItem: CartItem) => {
+    if (cartItem?.variant?.product?.discount?.activeEndDate) {
+      return new Date(cartItem?.variant?.product?.discount?.activeStartDate) <= new Date(new Date().setHours(new Date().getHours() + 1)) && new Date(new Date().setHours(new Date().getHours() + 1)) <= new Date(cartItem?.variant?.product?.discount?.activeEndDate)
+    }
+  }
+
   return (<>
     <HomepageNavBar parent={"checkout"} />
     <div className="md:pt-69.6 pt-64 sm:mb-60 mb-111 h-full">
       <DeliveryMessage />
       <div className="md:flex overflow-hidden" style={{ height: 'calc(100dvh - 128px)' }}>
-        <div className="l:w-54.2p md:w-50p h-full overflow-auto no-scrollbar md:pt-44 md:pb-90 sm:pt-32 sm:pb-99 pt-24 pb-147 xl:pl-80 l:pl-70 md:pl-60 sm:pl-40 pl-24 xl:pr-80 l:pr-70 sm:pr-40 pr-24 flex flex-col gap-28 bg-white">
+        <div className="flex-grow-1 l:w-54.2p md:w-50p h-full overflow-auto no-scrollbar md:pt-44 md:pb-90 sm:pt-32 sm:pb-99 pt-24 pb-147 xl:pl-80 l:pl-70 md:pl-60 sm:pl-40 pl-24 xl:pr-80 l:pr-70 sm:pr-40 pr-24 flex flex-col gap-28 bg-white">
           <div className="flex flex-col gap-6">
             <h1 className="weight-600 md:text-24 text-20 md:line-height-32 line-heigth-28">
               Order Summary
@@ -117,6 +267,7 @@ const CheckoutPage = () => {
               <h2 className="color-#000000E0 md:text-20 text-16 weight-600 line-height-24">
                 Delivery address
               </h2>
+
 
               <div className="flex l:flex-row md:flex-col sm:flex-row flex-col l:space-between md:j-content-start sm:space-between l:a-items-center md:a-items-start sm:a-items-center l:gap-0 md:gap-16 sm:gap-0 gap-16">
                 {selectedAddress && (
@@ -135,6 +286,7 @@ const CheckoutPage = () => {
                     )}
                   </div>
                 )}
+
                 <p
                   className="text-16 line-height-24 weight-500 color-#1677FF underline pointer w-fit"
                   onClick={() => { openAddressModal(); setDevAddressError(false) }}
@@ -148,21 +300,33 @@ const CheckoutPage = () => {
             }
           </div>
 
-          {devOptions === "smaller" && <DeliveryOptions selectedDeliveryOption={selectedDeliveryOption} setSelectedDeliveryOption={setSelectedDeliveryOption} />}
+
+          {devOptions === "smaller" &&
+            <DeliveryOptions
+              deliveryOptions={deliveryOptions}
+              selectedDeliveryOption={selectedDeliveryOption}
+              setSelectedDeliveryOption={setSelectedDeliveryOption}
+              loading={!!(calculatingFee || !selectedAddress)}
+              retry={() => {
+                setAllAddressDeliveryPrice([])
+                setShouldUpdateFee(true);
+              }}
+            />}
           <div className="flex flex-col gap-14">
-            {cartItemsByStore?.map((store, i: number) => (
+            {allCartItems.storeGroups?.map((store, i: number) => (
               <div className="flex flex-col gap-16" key={i}>
-                <div className="flex space-between a-items-center">
+
+                {store.items.length > 0 && <div className="flex space-between a-items-center">
                   <h6 className="text-14 weight-400 line-height-22 color-#00000099 pointer" onClick={() => { setStoreAccordion(i) }}>
-                    {store?.name}
+                    {store?.store.name}
                   </h6>
                   {store.visible ? (
                     <PiCaretDown className="w-18 h-18 pointer" onClick={() => setStoreAccordion(i)} />
                   ) : (
                     <PiCaretUp className="w-18 h-18 pointer" onClick={() => setStoreAccordion(i)} />
                   )}
-                </div>
-                {store.items.map((cartItem: any, j: number) => (
+                </div>}
+                {store.items.length > 0 && store.items.map((cartItem: any, j: number) => (
                   <div
                     className={`gap-12 ${store.visible ? "flex" : "hidden"}`}
                     key={j}
@@ -187,41 +351,75 @@ const CheckoutPage = () => {
                       </p>
                     </div>
                     <div className="flex flex-col gap-10 a-items-end">
-                      <h3 className="weight-600 text-16 line-height-24">
-                        {formatNumberAsPrice(cartItem?.totalPrice)}
-                      </h3>
+                      <div className="flex a-items-center gap-8">
+                        <p className={`weight-600 md:text-20 sm:text-16 text-14 md:line-height-28 sm:line-height-24 line-height-22 ${cartItem.variant.status === 'OUT_OF_STOCK' ? 'color-#00000099' : ''}`}>
+                          {
+                            isValidDiscount(cartItem) ?
+                              formatNumberAsPrice(cartItem.discountedPrice) :
+                              formatNumberAsPrice(cartItem.totalPrice)
+                          }
+                        </p>
+                        {
+                          isValidDiscount(cartItem) &&
+                          <p className={`weight-400 md:text-16 sm:text-12 text-10 md:line-height-24 sm:line-height-20 line-height-18 line-through color-#00000099  ${cartItem.variant.status === 'OUT_OF_STOCK' ? 'color-#00000099' : ''}`}>
+                            {formatNumberAsPrice(cartItem.totalPrice)}
+                          </p>
+                        }
+                      </div>
                       <p
                         className="weight-400 text-14 line-height-22 text-danger underline pointer"
-                        onClick={() => removeFromCart(cartItem?.id)}
+                        onClick={async () => {
+                          try {
+                            await removeFromCart(cartItem?.id)
+                            setAllAddressDeliveryPrice([])
+                            setShouldUpdateFee(true);
+                          } catch (error) {
+                            console.error('Failed to remove from cart:', error);
+                          }
+                        }}
                       >
                         Remove
                       </p>
                     </div>
                   </div>
                 ))}
+
               </div>
             ))}
           </div>
+
         </div>
 
-        <div className="relative bg-#F5F5F5 l:w-45.8p md:w-50p">
-          <div className={`h-full overflow-auto no-scrollbar bg-#F5F5F5 md:pt-44 md:pb-85 xl:pl-80 l:pl-70 md:pl-40 xl:pr-80 l:pr-70 md:pr-60 flex flex-col gap-16 ${devOptions === 'smaller' ? 'fixed l-0 r-0 b-0 z-4' : ''}`}>
-            {devOptions === "larger" && <DeliveryOptions selectedDeliveryOption={selectedDeliveryOption} setSelectedDeliveryOption={setSelectedDeliveryOption} />}
+        <div className="relative bg-#F5F5F5 l:w-45.8p md:w-50p max-w-661">
+          <div className={`m:h-full overflow-auto no-scrollbar bg-#F5F5F5 md:pt-44 md:pb-85 xl:pl-80 l:pl-70 md:pl-40 xl:pr-80 l:pr-70 md:pr-60 flex flex-col gap-16 ${devOptions === 'smaller' ? 'fixed l-0 r-0 b-0 z-4' : ''}`}>
+            {devOptions === "larger"
+              &&
+              <DeliveryOptions
+                deliveryOptions={deliveryOptions}
+                selectedDeliveryOption={selectedDeliveryOption}
+                setSelectedDeliveryOption={setSelectedDeliveryOption}
+                loading={!!(calculatingFee || !selectedAddress)}
+                retry={() => {
+                  setAllAddressDeliveryPrice([])
+                  setShouldUpdateFee(true);
+                }}
+              />}
             <div className="md:py-20 py-12 md:px-24 sm:px-40 px-24 md:border border-t border-#00000014 md:bg-white bg-#F5F5F5 md:radius-8 flex flex-col sm:gap-24 gap-20">
               <h2 className="color-#000000E0 text-20 line-height-28 weight-600 md:block hidden">
                 Payment Summary
               </h2>
               <div className={`${showSummary ? 'block' : 'md:block hidden'}`}>
-                {/* <OrderSummary
+                <OrderSummary
                   subTotal={cart.subTotal}
-                  extraSavings={cart.total - cart.subTotal}
                   shippingFee={selectedDeliveryOptionDetails.price}
                   total={cart.total + selectedDeliveryOptionDetails.price}
-                /> */}
+                  cart={cart}
+                  loading={calculatingFee || !selectedAddress || isNaN(selectedDeliveryOptionDetails.price)}
+                />
               </div>
               <div className="flex sm:flex-row flex-col sm:gap-0 gap-20 space-between a-items-center">
-                <div className={`absolute t-0 sm:w-fit w-full sm:px-0 px-24 bg-#F5F5F5 pt-12 md:hidden block ${showSummary ? 'sm:b-10 sm:t-80p' : 'sm:t-10'}`}>
-                  <p className={`md:hidden flex gap-12 a-items-center color-#00000099 sm:w-fit w-full space-between pointer ${showSummary && 'border-b border-b-#00000014 sm:border-b-#F5F5F5 pb-20'}`} onClick={() => setshowSummary(!showSummary)}>
+                <div className={`absolute t-0 sm:w-fit w-full sm:px-0 px-24 bg-#F5F5F5 pt-12 md:hidden block ${showSummary ? 'sm:b-20 sm:g|top:auto pt-22' : 'sm:t-10'}`}>
+                  <p className={`md:hidden flex gap-12 a-items-center color-#00000099 sm:w-fit w-full space-between pointer ${showSummary && 'border-b border-b-#00000014 sm:border-b-#F5F5F5 pb-20 sm:pb-0'}`} onClick={() => setshowSummary(!showSummary)}>
                     <span className="text-16 weight-400 line-height-24">
                       {showSummary ? 'Hide payment summary' : 'Show payment summary'}
                     </span>
@@ -232,7 +430,7 @@ const CheckoutPage = () => {
                 </div>
                 <div className="flex gap-14 a-items-center sm:j-content-end w-full">
                   {
-                    !showSummary && <span className="sm:block hidden sm:weight-600 weight-700 sm:text-16 text-14 sm:line-height-22 line-height-19">
+                    !showSummary && <span className="md:hidden sm:block hidden sm:weight-600 weight-700 sm:text-16 text-14 sm:line-height-22 line-height-19">
                       {formatNumberAsPrice(
                         cart.total + selectedDeliveryOptionDetails.price
                       )}
@@ -250,7 +448,8 @@ const CheckoutPage = () => {
                       }
                     }
                     }
-                    className={`md:w-full sm:w-fit w-full border-none bg-#0B9378 m:flex text-white md:text-16 text-14 weight-500 md:line-height-22 line-height-19 md:px-24 px-16 py-12 radius-6 pointer l:float-right j-content-center ${!showSummary && 'sm:mt-0 mt-56'}`}
+                    disabled={canProceedToPayment}
+                    className={`md:w-full sm:w-fit w-full border-none m:flex text-white md:text-16 text-14 weight-500 md:line-height-22 line-height-19 md:px-24 px-16 py-12 radius-6 l:float-right j-content-center ${!showSummary && 'sm:mt-0 mt-56'} ${canProceedToPayment ? 'bg-#0b9378ed cursor-not-allowed' : 'bg-#0B9378 pointer'}`}
                   >
                     <span className="">
                       Proceed to payment{" "}

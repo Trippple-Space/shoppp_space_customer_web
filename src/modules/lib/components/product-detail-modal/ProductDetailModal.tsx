@@ -88,9 +88,6 @@ const handleNextImage = () => {
   const handleAddToCart = async (variant: ProductVariant, minPurchaseQua: number) => {
      addToCart(variant.id, minPurchaseQua)
   }
-
-
-  console.log({variant})
  
   return (
     <div>

@@ -1,16 +1,22 @@
-import React, { FC, useState } from "react";
-import { deliveryOptions } from "@/modules/lib/utility/constants";
+import React, { FC } from "react";
 import BoxRadio from "../box-radio/BoxRadio";
 import { formatNumberAsPrice } from "../../utility/utility";
+import { DeliveryOption } from "../../utility/types/delivery.interface";
 
 interface IDeliveryOptions {
   selectedDeliveryOption: any;
   setSelectedDeliveryOption: any
+  deliveryOptions: DeliveryOption
+  loading?: boolean
+  retry?: () => void
+
 }
 
 const DeliveryOptions: FC<IDeliveryOptions> = ({
-  selectedDeliveryOption, setSelectedDeliveryOption
-
+  selectedDeliveryOption, setSelectedDeliveryOption,
+  deliveryOptions,
+  loading,
+  retry
 }) => {
 
   return (
@@ -18,39 +24,58 @@ const DeliveryOptions: FC<IDeliveryOptions> = ({
       <h2 className="md:text-20 text-16 md:line-height-28 line-height-24 weight-600">Delivery options</h2>
       <div className="">
         <div className="flex md:flex-col sm:flex-row flex-col gap-12">
-          {Object.entries(deliveryOptions).map(([key, option]) => (
-            <BoxRadio
-              id="delivery-type"
-              name="delivery-type"
-              key={key}
-              value={key}
-              className="checkout"
-              label={
-                <div className="flex gap-8">
-                  <div className="flex flex-col md:gap-4 gap-2">
-                    <h3 className="weight-600 md:text-16 text-14 md:line-height-24 line-height-22 capitalize">
-                      {option.title}
-                    </h3>
-                    <p className="weight-400 text-14 line-height-22">
-                      {option.description}
-                    </p>
+          {Object.entries(deliveryOptions).map(([key, option]) => {
+            return (
+              <BoxRadio
+                id="delivery-type"
+                name="delivery-type"
+                key={key}
+                value={key}
+                className="checkout"
+                label={
+                  <div className="flex gap-8">
+                    <div className="flex flex-col md:gap-4 gap-2">
+                      <h3 className="weight-600 md:text-16 text-14 md:line-height-24 line-height-22 capitalize">
+                        {option.title}
+                      </h3>
+                      {
+                        ((isNaN(option.price) || option.price === null) && !loading) ?
+                          <p className="weight-400 text-14 line-height-22 flex a-items-center j-content-center gap-3">
+                            <span>This service is currently unavailable.</span>
+                            <span className="underline cursor-pointer color-link" onClick={retry}>Retry</span>
+                          </p>
+                          :
+                          <p className="weight-400 text-14 line-height-22">
+                            {option.description}
+                          </p>
+                      }
+                    </div>
+                    {
+                      (loading || (option.price !== null && !isNaN(option.price))) &&
+                      <p
+                        className={`w-fit text-right px-10 py-2 h-fit radius-4 text-12 weight-400 line-height-20 ${loading && 'animate-pulse'} ${selectedDeliveryOption === key
+                          ? "color-#0B9378 bg-#007B5D1F"
+                          : "color-#000000E0 bg-#F5F5F5"
+                          }`}
+                      >
+                        {option.price === 0 ? <span>Free</span> :
+                          loading ?
+                            <div className="w-50 h-24 radius-6"></div>
+                            :
+                            <span>{formatNumberAsPrice(option.price)}</span>
+                        }
+                      </p>
+                    }
                   </div>
-                  <p
-                    className={`w-fit text-right px-10 py-2 h-fit radius-4 text-12 weight-400 line-height-20 ${selectedDeliveryOption === key
-                      ? "color-#0B9378 bg-#007B5D1F"
-                      : "color-#000000E0 bg-#F5F5F5"
-                      }`}
-                  >
-                    {formatNumberAsPrice(option.price)}
-                  </p>
-                </div>
-              }
-              checked={selectedDeliveryOption === key}
-              onChange={() =>
-                setSelectedDeliveryOption(key as keyof typeof deliveryOptions)
-              }
-            />
-          ))}
+                }
+                checked={selectedDeliveryOption === key}
+                disabled={((isNaN(option.price) || option.price === null) && !loading)}
+                onChange={() =>
+                  setSelectedDeliveryOption(key as keyof typeof deliveryOptions)
+                }
+              />
+            )
+          })}
         </div>
       </div>
     </div>

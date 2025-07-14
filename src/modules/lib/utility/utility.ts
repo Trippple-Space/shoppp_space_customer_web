@@ -1,4 +1,5 @@
 import classNames from "classnames";
+import { StoreGroupResponse } from "./types/cart.interface";
 
 export type ImageSrcFolder = "icons" | "logos" | "images";
 export const getImageDir = (folder: ImageSrcFolder, object: string) => {
@@ -54,7 +55,7 @@ export const buildEndpoint = (
 
 export const buildFilterParams = (filters: any) => {
   if (!filters) return {};
-  const { price, sort, rating, showOffers, location } = filters;
+  const { price, sort, rating, showOffers, location, tags } = filters;
   let params: any = {};
 
   if (price?.min && price?.max) {
@@ -69,12 +70,15 @@ export const buildFilterParams = (filters: any) => {
     params["filters[price][LessThanOrEqual]"] = price.max;
   }
 
+  if (tags){
+    params["filters[tags][label]"] = tags
+  } 
+
+  if (rating?.rateBy) {
+    params["filters[variants][averageRating][MoreThanOrEqual]"] = rating.rateBy;
+  }
   /*if (sort?.sortBy) {
     params["sort"] = sort.sortBy;
-  }
-
-  if (rating?.rating) {
-    params["filters[ratings]"] = rating.rateBy;
   }
 
   if (showOffers) {
@@ -108,8 +112,8 @@ export const scrollToTop = () => {
 };
 
 export function displayStockUnit(stockUnit: string): string {
-  if (stockUnit == "yard") return `per ${stockUnit}`;
-  else if (stockUnit == "unit") return stockUnit;
+  if (stockUnit == "yard" || stockUnit === "yards") return `yard`;
+  else if (stockUnit == "unit" || stockUnit === "units") return stockUnit;
   else return "piece";
 }
 
@@ -212,8 +216,8 @@ export function formatTime(timestamp: string): string {
   return `${hours}:${minutesStr}${ampm}`;
 }
 
-export const getStoreNames = (cartItems: any) => {
-  const storeNames = cartItems?.map((item: any) => item.variant?.product?.store?.name)
+export const getStoreNames = (storeGroups: StoreGroupResponse[]) => {
+  const storeNames = storeGroups?.map((stores: any) => stores?.store?.name)
     .filter(Boolean)
     .reduce((uniqueNames: any, name: any) => {
       if (!uniqueNames.includes(name)) {
@@ -231,6 +235,12 @@ export const getStoreNames = (cartItems: any) => {
 
   return storeNames?.join(", ");
 };
+
+export const getCartItems = (storeGroups: StoreGroupResponse[]) => {
+  const cartItems = storeGroups?.flatMap((group: StoreGroupResponse) => group.items) || []
+
+  return cartItems
+}
 
 export const preventCopyPaste = (e: ClipboardEvent) => {
   e.preventDefault();

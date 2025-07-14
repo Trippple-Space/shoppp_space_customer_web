@@ -115,7 +115,8 @@ const ProductTile: FC<IProductTile> = ({ product, savedVariants, saveVariant, re
   }, [isAuthenticated]);
 
   const isOutOfStock = selectedVariant?.status === 'OUT_OF_STOCK'
-
+  const isDiscounted = new Date(product?.discount?.activeStartDate) <= new Date(new Date().setHours(new Date().getHours() + 1)) && new Date(new Date().setHours(new Date().getHours() + 1)) <= new Date(product?.discount?.activeEndDate)
+  
   return (
     <div className='mt-30 l:mt-20 w-full overflow-hidden'>
       <div
@@ -293,13 +294,29 @@ const ProductTile: FC<IProductTile> = ({ product, savedVariants, saveVariant, re
           )}
         </div>
         <div className='flex j-content-between'>
-          <div className="md:text-16 text-12 weight-600 md:line-height-24 line-height-20">
-            {formatNumberAsPrice(
-              selectedVariant?.finalPrice || product.finalPrice
-            )}
-            {/* <span className="weight-300 l:text-15 text-10">{!!selectedVariant?.stockUnit && 'per'} {selectedVariant?.stockUnit}</span> */}
+          <div className='flex md:gap-8 md:a-items-center md:flex-row flex-col'>
+            <p className="md:text-16 text-12 weight-600 md:line-height-24 line-height-20">
+              {
+                isDiscounted ? formatNumberAsPrice(
+                  selectedVariant?.discountedPrice
+                ) :
+                  formatNumberAsPrice(
+                    selectedVariant?.finalPrice || product.finalPrice
+                  )
+              }
+            </p>
+            {
+              isDiscounted &&
+              <p className="md:text-12 text-10 weight-400 md:line-height-20 color-#00000099 line-through">
+                {formatNumberAsPrice(
+                  selectedVariant?.finalPrice || product.finalPrice
+                )}
+              </p>
+            }
           </div>
-          <MiniReview id={id} slug={product.slug} isOpen={isOpen} setIsOpen={setIsOpen} reviews={reviews} />
+          <div className='text-9 sm:text-10 text-grey'>
+            <MiniReview id={id} slug={product.slug} isOpen={isOpen} setIsOpen={setIsOpen} reviews={reviews} />
+          </div>
         </div>
         {/* <div className="flex flex-wrap gap-4">
           {product?.tags?.map((tag: any, i: number) => (

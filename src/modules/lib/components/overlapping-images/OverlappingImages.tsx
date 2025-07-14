@@ -1,9 +1,10 @@
 import React from 'react'
 import Image from '../image/Image'
 import classNames from 'classnames'
+import { getCartItems } from '../../utility/utility'
 
 const OverlappingImages = ({ orderItem }: any) => {
-  const cartItems = orderItem?.cart?.cartItems || []
+  const cartItems = getCartItems(orderItem?.cart?.storeGroups)
   const maxVisibleItems = 4
 
   return (

@@ -5,7 +5,7 @@ import { BuyAgain, Cart, CartItem } from "../types/cart.interface";
 type CartStore = {
      cart: Cart;
      fetching: boolean;
-     fetchCart: () => void;
+     fetchCart: (isCheckout?: boolean) => void;
      addToCart: (variantId: number, quantity: number) => void;
      buyAgain: (buyAgainItems: BuyAgain[]) => void;
      incrementCartItem: (variantId: number, quantity: number) => void;
@@ -13,6 +13,9 @@ type CartStore = {
      removeFromCart: (variantId: number) => void;
      isLoginModal: () => void;
      showLoginModal: boolean;
+     applyDiscount: (code: string) => void;
+     removeDiscountCode: () => void;
+     applyingCode: boolean
 };
 
 export const useCartStore = create<CartStore>((set) => ({
@@ -22,12 +25,23 @@ export const useCartStore = create<CartStore>((set) => ({
           userId: 0,
           subTotal: 0,
           total: 0,
+          totalDiscountedPrice: 0,
+          totalDiscountValue: 0,
+          meta: undefined,
+          dateCreated: "",
+          lastUpdated: "",
+          storeGroups: [],
+          discountValue: 0,
+          discountedPrice: 0,
+          systemDiscountCode: "",
+          systemDiscountValue: 0
      },
+  
      fetching: false,
-     fetchCart: async () => {
+     fetchCart: async (isCheckout?: boolean) => {
           try {
                set({ fetching: true });
-               const cartData = await cartService.fetchCart();
+               const cartData = await cartService.fetchCart(isCheckout);
                set({ cart: cartData, fetching: false });
           } catch (error) {
                set({ fetching: false });
@@ -35,7 +49,7 @@ export const useCartStore = create<CartStore>((set) => ({
           }
      },
      addToCart: async (variantId: number, quantity: number = 1) => {
-          const updatedCart = await cartService.addToCart(variantId, quantity);
+       const updatedCart = await cartService.addToCart(variantId, quantity);
           set({ cart: updatedCart });
      },
      buyAgain: async (buyAgainItems: BuyAgain[]) => {
@@ -54,6 +68,23 @@ export const useCartStore = create<CartStore>((set) => ({
      removeFromCart: async (variantId: number) => {
           const updatedCart = await cartService.removeFromCart(variantId);
           set({ cart: updatedCart });
+  },
+     applyingCode: false,
+     applyDiscount: async (code: string) => {
+          try {
+               set({applyingCode: true})
+               const updatedCart = await cartService.applyDiscountCode(code);
+               set({ cart: updatedCart, applyingCode: false });
+          } catch (error) {
+               set({applyingCode: false})
+          }
+          },
+     removeDiscountCode: async () => {
+       try {
+          await cartService.removeDiscountCodes()
+       } catch (error) {
+          console.log(error)
+       }
      },
      showLoginModal: false,
      isLoginModal: () =>

@@ -11,4 +11,10 @@ export const deliveryOptions = {
         etaInDays: 1,
         price: 6500
     },
+    pickup: {
+        title: 'Pick Up',
+        description: 'Pick up in stores close to you',
+        etaInDays: '',
+        price: 0
+    }
 }

@@ -11,7 +11,7 @@ import DeliveryMessage from '../delivery-in-lagos/DeliveryMessage';
 interface ModalProps { }
 
 const AddressModal: React.FC<ModalProps> = () => {
-  const { isAddressModalOpen, closeAddressModal, addresses } = useAddress();
+  const { isAddressModalOpen, closeAddressModal, addresses, setAddressToUpdateId } = useAddress();
   const [showAddressForm, setShowAddressForm] = useState(false)
   const [showEditAddressForm, setShowEditAddressForm] = useState(false)
 
@@ -26,6 +26,7 @@ const AddressModal: React.FC<ModalProps> = () => {
                 setShowAddressForm(false)
                 setShowEditAddressForm(false)
                 closeAddressModal()
+                setAddressToUpdateId(null)
               }} />
             </div>
             <DeliveryMessage />

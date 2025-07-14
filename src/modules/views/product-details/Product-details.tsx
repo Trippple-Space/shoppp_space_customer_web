@@ -9,7 +9,7 @@ import { Product, RecentlyViewed } from '@/modules/lib/utility/types/product.int
 import './ProductDetails.scss'
 import {
   cx,
-  formatNumberAsPrice
+  formatNumberAsPrice,
 } from '@/modules/lib/utility/utility'
 import { HiOutlineShoppingBag } from 'react-icons/hi2'
 import { useCart } from '@/modules/lib/utility/hooks/use-cart'
@@ -152,7 +152,7 @@ const ProductDetails = ({ product }: { product: Product }) => {
   }, [isAuthenticated]);
 
   const isOutOfStock = selectedVariant?.status === 'OUT_OF_STOCK';
-
+  const isDiscounted = new Date() <= new Date(product?.discount?.activeEndDate)
 
   const addToCartBtn = () => {
     return <div className='flex flex-col gap-16'>
@@ -192,7 +192,7 @@ const ProductDetails = ({ product }: { product: Product }) => {
   }
 
 
-
+  console.log(product)
 
 
   return (
@@ -223,7 +223,7 @@ const ProductDetails = ({ product }: { product: Product }) => {
         </div>
 
         <div className='flex flex-col l:flex-row a-items-start j-content-between mt-20 gap-6 l:g|max-height:480px relative'>
-          {product.variants.length > 4 && <div className='hidden l:block absolute r-0 b-0 p-20 cursor-pointer'>
+          {product.variants.length > 4 && <div className='hidden l:block absolute r-0 b-0 p-20 z-2 cursor-pointer'>
             <div className='bg-white flex gap-8 radius-8  a-items-center border px-16 py-10' onClick={() => setShowAllPhotos(prev => !prev)}>
               <LuGrid2X2 className='w-fit flex' />
               <p className='text-14 weight-500'>Show all photos</p>
@@ -286,19 +286,39 @@ const ProductDetails = ({ product }: { product: Product }) => {
               </p>
             </div>
             <div className='flex flex-col gap-12 border-b  border-#00000014 pb-15'>
-              <p className='weight-400 text-28'>{formatNumberAsPrice(selectedVariant.price)}</p>
-              <p className='weight-400 text-16 color-#00000099 line-through'>{formatNumberAsPrice(selectedVariant.price)}</p>
+              <p className='weight-400 text-28'>
+                {
+                  isDiscounted ?
+                    formatNumberAsPrice(
+                      selectedVariant?.discountedPrice
+                    )
+                    :
+                    formatNumberAsPrice(
+                      selectedVariant?.finalPrice
+                    )
+                }
+              </p>
+              {
+                isDiscounted &&
+                <p className='weight-400 text-16 color-#00000099 line-through'>
+                  {formatNumberAsPrice(
+                    selectedVariant?.finalPrice
+                  )}
+                </p>
+              }
               <div className='flex flex-col l:flex-row l:a-items-center l:j-content-between gap-12 w-100p'>
-                <div className='flex a-items-center'>
-                  <Rating
-                    style={{ maxWidth: 120, maxHeight: 120, display: 'flex', gap: '8px' }}
-                    value={reviewStat?.averageRating ?? 0}
-                    itemStyles={{ itemShapes: Star, activeFillColor: '#f59e0b', inactiveFillColor: '#0000000F' }}
-                    readOnly
-                  />
-                  <span>{reviewStat?.averageRating.toFixed(1) ?? 0}</span>
+                <div className='flex a-items-center gap-12'>
+                  <div className='flex gap-8 a-items-center'>
+                    <Rating
+                      style={{ maxWidth: 130, maxHeight: 130, display: 'flex', gap: '8px' }}
+                      value={reviewStat?.averageRating ?? 0}
+                      itemStyles={{ itemShapes: Star, activeFillColor: '#f59e0b', inactiveFillColor: '#0000000F' }}
+                      readOnly
+                    />
+                    <span className='weight-500 text-14'>{reviewStat?.averageRating.toFixed(1) ?? 0}</span>
+                  </div>
+                  <span className='color-' style={{ color: '#D9D9D9B2' }}>|</span>
                   <p className='color-#000000B2 text-12 flex a-items-center gap-5'>
-                    <span className='color-' style={{ color: '#D9D9D9B2' }}>|</span>
                     <MiniReview id={product.id} isOpen={isOpen} setIsOpen={setIsOpen} reviews={reviews} slug={product.slug} />
                   </p>
                 </div>
