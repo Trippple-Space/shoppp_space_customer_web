@@ -11,11 +11,13 @@ import { paths } from "../paths";
 class AuthService {
 
     signIn(credentials: LoginCredentials): Promise<{ token: string; user: User }> {
-        return http.post(endpoints.SIGN_IN, credentials)
-            .then((response: AxiosResponse) => {
-                this.storeAuthCredentials({ token: response.data.token })
-                return response.data
-            })
+      return http.post(endpoints.SIGN_IN, credentials)
+        .then((response: AxiosResponse) => {
+          this.storeAuthCredentials({ token: response.data.token })
+          return response.data
+        }).catch((error) => {
+          return toast.error(error.response.data.message)
+        });
     }
 
     signOut() {
@@ -77,7 +79,13 @@ class AuthService {
 
 
   setPassword(payload: { token: string, password: string }): Promise<any> {
-    return http.post(endpoints.SIGN_UP_CREATE_PASSWORD, payload).then((response: AxiosResponse) => response.data);
+    return http.post(endpoints.SIGN_UP_CREATE_PASSWORD, payload).then((response: AxiosResponse) => response.data).catch((error) => 
+    {
+    return  toast.error(error.response.data.message)
+    }).catch((error) => 
+      {
+      return  toast.error(error.response.data.message)
+      });
   }
     
 resendOtp(email: string) {
@@ -85,7 +93,10 @@ resendOtp(email: string) {
         .then((response) => {
             toast.success("An OTP has been sent to your email for verification");
             return response.data; // Return response so component can handle it
-        });
+        }).catch((error) => 
+          {
+          return  toast.error(error.response.data.message)
+          });
 }
 
 }
