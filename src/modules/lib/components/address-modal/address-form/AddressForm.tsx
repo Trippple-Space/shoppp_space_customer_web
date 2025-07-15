@@ -90,7 +90,7 @@ const AddressForm: FC<AddressFormProps> = ({ closeAddressForm, type }) => {
         setShowSuggestions(false)
       }
     } catch (err: any) {
-      toast.error(err.response.data.error, { duration: 2000 });
+      throw err;
     }
   }
 
