@@ -1,30 +1,29 @@
 import Link from "next/link";
 import React from "react";
-import Input from "../input/Input";
-import { TbMail, TbPhone } from "react-icons/tb";
 import { HiOutlineLocationMarker } from "react-icons/hi";
+import { TbMail, TbPhone } from "react-icons/tb";
+import { Store } from "../../utility/types/store.interface";
 
-export default function StorefrontFooter() {
+const StorefrontFooter:React.FC<{store: Store}> = ({store}) => {
   return (
     <footer className="bg-black py-20 sm:px-80 px-24 text-white font-inter flex flex-col sm:gap-35 gap-28">
       <div className="sm:py-40 py-24 gap-40 flex sm:flex-row sm:flex-nowrap flex-reverse space-between a-items-center">
         <div className="flex flex-col gap-20">
           <h6 className="weight-600 text-20">Contact us</h6>
           <p className="flex flex-col gap-14">
-            <Link href={"tel:+234801234567"} className="flex flex-row gap-8 w-fit">
+            <Link href={`tel:${store?.user?.mobile || store?.profile?.phoneNumbers?.[0]}`} className="flex flex-row gap-8 w-fit">
               <TbPhone className="w-24 h-24" />
-              <span className="text-16">0801234567</span>
+              <span className="text-16">{store?.user?.mobile || store?.profile?.phoneNumbers?.[0]}</span>
             </Link>
             <Link
-              href="https://maps.app.goo.gl/ajQkV4cq99kZ9T86A"
+              href={`https://maps.google.com/?q=${store?.meta?.settings?.location?.coordinates?.lat},${store?.meta?.settings?.location?.coordinates.lon}`}
               target="_blank"
               rel="noopener noreferrer"
               className="flex flex-row gap-8 w-fit"
             >
               <HiOutlineLocationMarker className="w-24 min-w-24 h-24" />
               <span className="text-16">
-                Great challenge road, iyanaschool, Lagos, Ojo. Lagos Nigeria.
-                102101
+                {store?.meta?.settings?.location?.address || JSON.parse(store?.registrationProposal?.data)?.storeAddress}
               </span>
             </Link>
           </p>
@@ -64,3 +63,5 @@ export default function StorefrontFooter() {
     </footer>
   );
 }
+
+export default StorefrontFooter

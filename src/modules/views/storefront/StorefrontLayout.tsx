@@ -1,25 +1,24 @@
 "use client";
-
-import React, { FC, ReactNode, useEffect, useRef, useState } from "react";
+import StorefrontFooter from "@/modules/lib/components/footer/StorefrontFooter";
 import FabricsCategoryNav from "@/modules/lib/components/nav-bar/category-nav/FabricsCategoryNav";
 import ProductTile from "@/modules/lib/components/product-tile/ProductTile";
-import { useStoreProductsView } from "@/modules/lib/utility/hooks/views/use-store-products-view";
+import ScrollButtons from "@/modules/lib/components/scroll-buttons/scrollButtons";
+import { useCategoryFilter } from "@/modules/lib/utility/hooks/use-category-filter";
+import { useGetIPAddress } from "@/modules/lib/utility/hooks/use-get-ip-address";
+import { useLogVisit } from "@/modules/lib/utility/hooks/use-log-visit";
+import useReviews from "@/modules/lib/utility/hooks/use-reviews";
 import { useStoreCategoryNavView } from "@/modules/lib/utility/hooks/views/use-category-nav-view";
+import { useStoreProductsView } from "@/modules/lib/utility/hooks/views/use-store-products-view";
+import useUserStore from "@/modules/lib/utility/store/user.store";
 import {
   Product,
   ProductCategory,
 } from "@/modules/lib/utility/types/product.interface";
-import { useCategoryFilter } from "@/modules/lib/utility/hooks/use-category-filter";
-import { MdChevronRight } from "react-icons/md";
-import { GoArrowRight } from "react-icons/go";
-import Link from "next/link";
-import ScrollButtons from "@/modules/lib/components/scroll-buttons/scrollButtons";
 import { Store } from "@/modules/lib/utility/types/store.interface";
-import Footer from "@/modules/lib/components/footer/Footer";
-import useUserStore from "@/modules/lib/utility/store/user.store";
-import { useGetIPAddress } from "@/modules/lib/utility/hooks/use-get-ip-address";
-import { useLogVisit } from "@/modules/lib/utility/hooks/use-log-visit";
-import useReviews from "@/modules/lib/utility/hooks/use-reviews";
+import Link from "next/link";
+import { FC, ReactNode, useEffect, useRef, useState } from "react";
+import { GoArrowRight } from "react-icons/go";
+import { MdChevronRight } from "react-icons/md";
 
 const StorefrontLayout: FC<{ store: Store; children: ReactNode }> = ({
   store,
@@ -134,8 +133,6 @@ const StorefrontLayout: FC<{ store: Store; children: ReactNode }> = ({
       clearTimeout(timer);
     };
   }, [isAuthenticated, hasScrolled, hasPerformedAction]);
-
-  console.log(categories)
 
   return (
     <div>
@@ -315,7 +312,7 @@ const StorefrontLayout: FC<{ store: Store; children: ReactNode }> = ({
         </section>
       </div>
       {/* <div className="h-screen"></div> */}
-      <Footer />
+      <StorefrontFooter store={store} />
     </div>
   );
 };

@@ -9,6 +9,9 @@ export interface Store {
      heading: string;
      subHeading: string;
      meta: null | StoreMeta;
+     user?: {[key:string]:any};
+     profile?: {[key:string]:any};
+     registrationProposal?: {[key:string]:any};
 }
 
 interface StoreMeta {
@@ -25,6 +28,11 @@ interface StoreMeta {
           location: {
                state: string;
                address: string;
+               coordinates:{
+                    lat:string;
+                    lon: string;
+                    source: string;
+               }
           };
      };
 }
