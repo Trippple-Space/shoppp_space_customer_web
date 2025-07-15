@@ -72,6 +72,16 @@ const handlePaste = (e: React.ClipboardEvent<HTMLInputElement>) => {
   };
 
 
+  function handleOtpSubmit() {
+      const combinedOtp = otpDigits.join('');
+      formikOtp.setFieldValue("otp", combinedOtp);
+      if (combinedOtp.length === 6) {
+        formikOtp.handleSubmit();
+      
+    }
+  }
+
+
   return (
     <div className="w-full overflow-auto">
       <div className="font-inter">
@@ -107,13 +117,7 @@ const handlePaste = (e: React.ClipboardEvent<HTMLInputElement>) => {
           className={`radius-5 cursor-pointer text-16 weight-500 p-15 text-center mt-30 ${
             otpDigits.join('').length < 6 ? 'bg-whitesmoke text-black' : 'bg-green text-white'
           }`}
-          onClick={() => {
-            const combinedOtp = otpDigits.join('');
-            formikOtp.setFieldValue("otp", combinedOtp);
-            if (combinedOtp.length === 6) {
-              formikOtp.handleSubmit();
-            }
-          }}
+          onClick={handleOtpSubmit}
         >
           Create Password
         </div>
