@@ -86,7 +86,7 @@ const Footer = () => {
               </div>
 
               <div className='text-dimgrey l:w-27p l:py-25 l:pb-0 pb-20'>
-                <h2 className='l:text-20 text-16 weight-600'>JOIN THE FAM</h2>
+                <h2 className='l:text-20 text-16 weight-600'>Subscribe to  Newsletter</h2>
                 <div className='text-18 weight-400 pt-15'>
                   <p className='text-grey-600 l:text-16 text-14'>
                     Sign up to get the latest on sales, new release and more...
