@@ -48,13 +48,13 @@ const SearchModal = ({
     <>
       <div className='h-100p w-100p'>
         {searchResults && (
-          <div className='p-20 l:mt-0 p-10 flex flex-col a-items-start w-100p h-80p md:h-100p gap-10'>
-            <p className='color-#00000099 text-left text-12'>Results</p>
+          <div className=' l:mt-0  flex flex-col a-items-start w-100p h-80p md:h-100p gap-10 '>
+            <p className='color-#00000099 text-left text-12 p-10'>Results</p>
             <div className='overflow-auto w-100p flex flex-col gap-15 no-scrollbar'>
               {searchResults.map(product => (
                 <div
                   key={product.slug}
-                  className='flex j-content-start gap-20 cursor-pointer'
+                  className='flex j-content-start gap-20 p-10 cursor-pointer'
                   onClick={() => {
                     if (isAuthenticated) {
                       addVariant(product.variants[0].id, "search");
@@ -62,6 +62,7 @@ const SearchModal = ({
                     handleFetchProduct(product.slug)
                   }}
                 >
+                  
                   <Image
                     src={product?.variants?.[product?.variants?.length - 1 || 0]?.media?.[0]?.url}
                     alt={product.name}
@@ -78,6 +79,7 @@ const SearchModal = ({
                       </span>
                     </p>
                   </div>
+
                 </div>
               ))}
             </div>

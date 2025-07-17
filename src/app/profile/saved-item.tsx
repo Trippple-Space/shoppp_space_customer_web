@@ -86,7 +86,7 @@ const SavedItemModal: React.FC<ModalProps> = ({modalOpen, handleCloseModal, data
 
               <div className='flex space-between gap-20 w-100p l:w-15p'>
                 <button className='flex j-content-center l:hidden w-50p l:w-100p border-1 border-red bg-none text-danger text-16 py-10 px-20 radius-5 weight-400'>Remove</button>
-                <button className='w-50p l:w-100p border-none bg-green text-white text-15 py-10 px-20 radius-5 weight-400'>Add to cart</button>
+                <button className='w-50p l:w-100p border-none bg-green text-white text-15 py-10 px-20 radius-5 weight-400  hover:bg-darkgreen'>Add to cart</button>
               </div>
           </div>
           ))}
