@@ -6,7 +6,6 @@ import useFollow from "@/modules/lib/utility/hooks/use-follows";
 import { useGetVisit } from "@/modules/lib/utility/hooks/use-get-visit";
 import { useProductSold } from "@/modules/lib/utility/hooks/use-product-sold";
 import { Store } from "@/modules/lib/utility/types/store.interface";
-import { IoIosNotifications } from "react-icons/io";
 import { MdOutlineNotificationsActive, MdOutlineNotificationsOff } from "react-icons/md";
 
 const StorefrontAbout = ({ store }: { store: Store }) => {
@@ -14,7 +13,6 @@ const StorefrontAbout = ({ store }: { store: Store }) => {
     isAuthenticated,
     isLoginModal,
   } = useCart();
-
   const { productSold } = useProductSold(store?.id);
   const { visit } = useGetVisit(store?.id);
   const { followersCount, isFollowing, followStore, unFollowStore } = useFollow(store?.id);
