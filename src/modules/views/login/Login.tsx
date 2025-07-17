@@ -10,7 +10,7 @@ import { paths } from '@/modules/lib/utility/paths'
 import { authService } from '@/modules/lib/utility/services/auth.service'
 import { cx } from '@/modules/lib/utility/utility'
 import { useRouter } from 'next/navigation'
-import React from 'react'
+import React, { useEffect } from 'react'
 import { toast } from 'sonner'
 
 const Login = () => {
@@ -25,7 +25,23 @@ const Login = () => {
     } catch (error) {
       toast.error("Failed to resend OTP");
     }
-  };
+   };
+  
+  
+
+
+  useEffect(() => {
+    const handleGlobalKeyDown = (e: KeyboardEvent) => {
+      if (e.key === 'Enter') {
+        e.preventDefault();
+        loginFormHandler.handleSubmit();
+      }
+    };
+
+    window.addEventListener('keydown', handleGlobalKeyDown);
+    return () => window.removeEventListener('keydown', handleGlobalKeyDown);
+  }, [loginFormHandler]);
+  
   return (
     <>
       <div className='w-full overflow-auto'>
@@ -78,7 +94,13 @@ const Login = () => {
                 errorMessage={loginFormHandler.errors.password}
               />
             }
-        />
+                  handleKeyDown={(e: React.KeyboardEvent<HTMLInputElement>) => {
+                      if (e.key === 'Enter') {
+                           loginFormHandler.handleSubmit();
+                      }
+                    }}
+          />
+          
 
         <div className="flex flex-col l:flex-row w-full j-content-between l:a-items-center text-grey-700 l:text-14 text-12">
           <div className="pointer color-link border-b my-10 w-fit">Forgotten password?</div>
@@ -94,7 +116,8 @@ const Login = () => {
           text-14 l:text-16 mt-20 hover:pointer font-inter
           hover:bg-darkgreen g|transition:0.5s disabled:bg-grey"
           type="submit"
-          disabled={loginFormHandler.isSubmitting}
+            disabled={loginFormHandler.isSubmitting}
+      
         >
           {loginFormHandler.isSubmitting ? 'Signing in' : 'Sign In'}
         </button>

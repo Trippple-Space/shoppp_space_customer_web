@@ -4,14 +4,40 @@ import Icon from '@/modules/lib/components/icon/Icon';
 import Input from '@/modules/lib/components/input/Input'
 import { useSignUpView } from '@/modules/lib/utility/hooks/use-signup';
 import { cx, passwordValidatorRegex, preventCopyPaste } from '@/modules/lib/utility/utility';
-import React, { FC, useState } from 'react'
+import React, { FC, useEffect, useState } from 'react'
 import PasswordStrengthMeter from '@/modules/lib/components/password-strength-meter/PasswordStrengthMeter';
+import { toast } from 'sonner';
 
 const CreatePassword: FC = () => {
   const { formikComplete } = useSignUpView();
   const [password, setPassword] = useState<string>('');
   const [confirmPassword, setConfirmPassword] = useState<string>('');
 
+
+
+
+      useEffect(() => {
+        const handleGlobalKeyDown = (e: KeyboardEvent) => {
+
+
+          if (e.key === 'Enter') {
+            if (password === confirmPassword) {        
+              e.preventDefault();
+              formikComplete.handleSubmit();
+            } else {
+              toast.error("Password must match");
+            }
+          }
+        };
+
+    
+          window.addEventListener('keydown', handleGlobalKeyDown);
+          return () => window.removeEventListener('keydown', handleGlobalKeyDown);
+         
+      }, [formikComplete]);
+
+  
+  
   return (
     <div className='w-full overflow-auto'>
       <div className="font-inter">
@@ -71,10 +97,10 @@ const CreatePassword: FC = () => {
           {/* Submit button - use type="submit" for a proper form submission */}
           <button
             type="submit"
-            className="btn text-center bg-green weight-500 text-16 l:btn-lg btn-lg font-inter mt-30 text-14"
-
+            className="btn text-center bg-green weight-500 text-16 l:btn-lg btn-lg font-inter mt-30 text-14 cursor-pointer   hover:bg-darkgreen g|transition:0.5s"
+           disabled = {formikComplete.isSubmitting}
           >
-            Create password
+            {formikComplete.isSubmitting ? "Securing account" : "Create Password"}
           </button>
         </form>
       </div>

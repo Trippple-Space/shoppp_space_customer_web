@@ -1,5 +1,5 @@
 'use client'
-import React, { FC } from 'react'
+import React, { FC, useEffect } from 'react'
 import Input from "@/modules/lib/components/input/Input";
 import InputAlert from "@/modules/lib/components/input/input-alert/InputAlert";
 import { useSignUpView } from '@/modules/lib/utility/hooks/use-signup';
@@ -12,7 +12,20 @@ const SignUpDetails: FC = () => {
   const { formikInitial } = useSignUpView();
 
 
+
+
+
+    useEffect(() => {
+      const handleGlobalKeyDown = (e: KeyboardEvent) => {
+        if (e.key === 'Enter') {
+          e.preventDefault();
+          formikInitial.handleSubmit();
+        }
+      };
   
+      window.addEventListener('keydown', handleGlobalKeyDown);
+      return () => window.removeEventListener('keydown', handleGlobalKeyDown);
+    }, [formikInitial]);
   return (
     <div className="w-full overflow-auto ">
       <div className="font-inter mb-30">
@@ -77,14 +90,15 @@ const SignUpDetails: FC = () => {
           }}
           
         />
-        <div
+        <button
           className="btn text-center bg-green weight-500 text-16 l:btn-lg btn-lg font-inter mt-30 text-14 cursor-pointer   hover:bg-darkgreen g|transition:0.5s disabled:bg-grey"
           onClick={() => {
             formikInitial.handleSubmit();
           }}
+          disabled={formikInitial.isSubmitting}
         >
-          Continue
-        </div>
+             {formikInitial.isSubmitting ? 'Sending OTP' : 'Continue'}
+        </button>
       </form>
     </div>
   )

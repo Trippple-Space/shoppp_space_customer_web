@@ -284,7 +284,7 @@ const ProductDetails = ({ product }: { product: Product }) => {
                 {
                   selectedVariant.properties.origin &&
                   <>
-                    Brand:{' '} <span className='color-#1677FF capitalize'> {selectedVariant.properties.origin} | </span>
+                    Links:{' '} <span className='color-#1677FF capitalize'> {selectedVariant.properties.origin} | </span>
                   </>
                 }
                 <Link href={'/fabrics'} className='color-#1677FF'>Similar Ankara Product</Link>
