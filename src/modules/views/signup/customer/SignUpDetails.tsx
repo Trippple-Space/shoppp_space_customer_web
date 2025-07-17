@@ -78,7 +78,7 @@ const SignUpDetails: FC = () => {
           
         />
         <div
-          className="btn text-center bg-green weight-500 text-16 l:btn-lg btn-lg font-inter mt-30 text-14 cursor-pointer"
+          className="btn text-center bg-green weight-500 text-16 l:btn-lg btn-lg font-inter mt-30 text-14 cursor-pointer   hover:bg-darkgreen g|transition:0.5s disabled:bg-grey"
           onClick={() => {
             formikInitial.handleSubmit();
           }}

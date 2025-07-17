@@ -8,20 +8,16 @@ import * as Yup from 'yup'
 import useUserStore from "@/store/user.store";
 import { User } from "../types/user.interface";
 import { useRouteGuard } from "./use-route-guard";
+import { emailRegex } from "../utility";
 
 const LoginValidationSchema = Yup.object().shape({
-    email: Yup.string().trim()
-        .test('test-username', 'Enter Valid Phone/Email',
-            (value) => {
-                const emailRegex = /^([a-zA-Z0-9_\\.-]+)([+][a-zA-Z0-9_\\.-]+)*@(([a-zA-Z0-9-])+\.)+([a-zA-Z0-9]{2,4})+$/;
-                const phoneRegex = /^\+?\d{7,}$/;
-                let isValidEmail = value ? emailRegex.test(value) : false;
-                let isValidPhone = value ? phoneRegex.test(value) : false;
-                if (!isValidEmail && !isValidPhone) {
-                    return false;
-                }
-                return true;
-            }),
+    email: Yup.string()
+        .trim()
+        .test("test-username", "Enter Valid Email", (value) => {
+      
+          return value ? emailRegex.test(value) : false;
+        })
+        .required("Required"),
     password: Yup.string().min(8, "Minimum password length is 8 characters").max(20, "Max password length is 20 characters").required("Required"),
 })
 
@@ -58,7 +54,10 @@ const formikLoginConfig = (
 export const useLoginView = (isLoginModal?: any) => {
     const router = useRouter()
     const { isAuthenticated, authenticateUser } = useUserStore()
-    const formHandler = useFormik(formikLoginConfig(router, (user) => { authenticateUser(user) }, isLoginModal))
+  const formHandler = useFormik(formikLoginConfig(router, (user) => {
+    authenticateUser(user)
+      
+     }, isLoginModal))
 
     useRouteGuard(!isLoginModal && isAuthenticated, paths.homepage)
 
