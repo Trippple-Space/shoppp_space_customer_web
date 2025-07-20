@@ -34,13 +34,23 @@ export function middleware(request: NextRequest) {
   });
 
   if (subdomain && subdomain !== "www" && subdomain !== "api") {
-    const pathname = `/${subdomain}${url.pathname?.replace?.(/\/$/, '')}`;
+    // If the path is for products, do NOT prepend the subdomain
+    if (pathname.startsWith('/products')) {
+      console.log('Products path detected, not prepending subdomain', {
+        subdomain,
+        pathname,
+        URL: `https://${reconstructedHost}${pathname}`
+      });
+      return NextResponse.rewrite(`https://${reconstructedHost}${pathname}`);
+    }
+
+    const newPathname = `/${subdomain}${url.pathname?.replace?.(/\/$/, '')}`;
     console.log('After if subdomain', {
       subdomain,
-      pathname,
-      URL: `https://${reconstructedHost}${pathname}`
+      pathname: newPathname,
+      URL: `https://${reconstructedHost}${newPathname}`
     });
-    return NextResponse.rewrite(`https://${reconstructedHost}${pathname}`); // aznzee.asoebi.africa ==> https://asoebi.africa/aznzee
+    return NextResponse.rewrite(`https://${reconstructedHost}${newPathname}`); // aznzee.asoebi.africa ==> https://asoebi.africa/aznzee
   }
 
   if (pathname === '/' && !subdomain) {
