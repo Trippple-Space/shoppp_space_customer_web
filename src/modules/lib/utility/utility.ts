@@ -304,6 +304,8 @@ export const onGoingOrderStatusQuery = 'ONGOING,PENDING_CONFIRMATION,CONFIRMED,A
 export const states = [
   "Lagos"
 ];
+
+export const contactEmail = "support@asoebi.africa"
 /*
 [
   "Abia",
