@@ -34,8 +34,8 @@ export function middleware(request: NextRequest) {
   });
 
   if (subdomain && subdomain !== "www" && subdomain !== "api") {
-    // If the path is for products, do NOT prepend the subdomain
-    if (pathname.startsWith('/products')) {
+    // all other 
+    if (pathname && pathname !== '/') {
       console.log('Products path detected, not prepending subdomain', {
         subdomain,
         pathname,
