@@ -53,11 +53,7 @@ const StorefrontFooter:React.FC<{store: Store}> = ({store}) => {
       <hr className="bg-#FFFFFF4D" />
       <div>
         <p className="text-16 text-center">
-          Powered by asoebi.africa |{" "}
-          <Link href={"/"} className="color-#1677FF underline">
-            Click here
-          </Link>{" "}
-          to create your own customized store now.
+          Powered by asoebi.africa
         </p>
       </div>
     </footer>
