@@ -469,7 +469,7 @@ const ProductDetails = ({ product }: { product: Product }) => {
 
             <div className='flex flex-col gap-12 border-b  border-#00000014 pb-15 pt-15'>
               <p className="weight-500 text-16">Product Description</p>
-              <p>{showLongDescElipsis(product.longDescription)}
+              <p style={{whiteSpace:"pre-line"}}>{showLongDescElipsis(product.longDescription)}
                 {descriptionLength > maxDisplayDescLength ? <span onClick={() => setShowFullDescription(prev => !prev)}>{!showFullDescription && '...'}
                   <span className='color-#1677FF border-b cursor-pointer' style={{ fontStyle: 'italic' }}> {showFullDescription ? 'show less' : 'show more'}</span></span> : ''}
               </p>
@@ -483,7 +483,7 @@ const ProductDetails = ({ product }: { product: Product }) => {
                 </div>
                 <div className='w-full  flex a-items-center' style={{ border: '0.5px solid #00000014' }}>
                   <div className='w-40p py-10 mt-2 text-14 px-14 bg-#F5F5F5'>Material</div>
-                  <div className='w-60p pl-10 capitalize'></div>
+                  <div className='w-60p pl-10 capitalize'>{selectedVariant?.properties?.material}</div>
                 </div>
                 <div className='w-full flex a-items-center' style={{ border: '0.5px solid #00000014' }}>
                   <div className='w-40p py-10 mt-2 text-14 px-14 bg-#F5F5F5'>Brand name</div>
