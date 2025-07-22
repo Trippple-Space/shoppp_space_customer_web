@@ -106,7 +106,7 @@ const OrderModal: React.FC<ModalProps> = ({modalOpen, handleCloseModal, data}) =
                 </div>
 
             <div className='w-100p w-15p'>
-              <button className='w-100p border-none bg-green text-white text-15 py-8 px-20 radius-5 weight-400'>Bay again</button>
+              <button className='w-100p border-none bg-green text-white text-15 py-8 px-20 radius-5 weight-400'>Buy again</button>
             </div>
           </div>
           ))}

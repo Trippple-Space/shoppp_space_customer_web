@@ -246,7 +246,7 @@ const MiniCart: React.FC<ModalProps> = () => {
                       </span>
                     </p>
                     <p className='weight-400 text-14 line-height-22 color-#00000099'>
-                      Shipping and taxes calculated at checkout.
+                      Shipping and taxes are calculated at checkout.
                     </p>
                   </div>
                   <button

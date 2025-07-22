@@ -53,7 +53,7 @@ const StorefrontFooter:React.FC<{store: Store}> = ({store}) => {
       <hr className="bg-#FFFFFF4D" />
       <div>
         <p className="text-16 text-center">
-          Powered by asoebi.africa |{" "}
+          Powered by Asoebi.Africa |{" "}
           <Link href={"/"} className="color-#1677FF underline">
             Click here
           </Link>{" "}

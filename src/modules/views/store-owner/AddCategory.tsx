@@ -14,9 +14,9 @@ const AddCategory = () => {
         </div>
         
         <div className="mt-22 text-14 l:text-16 text-grey-700 l:w-70p">
-            The most vital aspect in store editing is the category addition part. 
-            Make sure to add categories correctly by filling out all the required 
-            fields completely and following the rules for adding categories.
+        The most important part of editing your store is adding categories.
+        Make sure to add them correctly by filling out all required fields 
+        completely and following the category guidelines.
         </div>
         <div className="w-100p l:w-70p">
             <div className="mt-50 l:mt-70">
@@ -61,7 +61,7 @@ const AddCategory = () => {
                     <div className="grid l:flex gap-20 l:gap-90 mt-40">
                         <div className="">
                             <div className="weight-600">Upload category image <span className="text-red">*</span></div>
-                            <div className="weight-400 text-grey-700 text-14 mt-4">do not exceed 50 character when entering the category image.</div>
+                            <div className="weight-400 text-grey-700 text-14 mt-4">do not exceed 50 characters when entering the category image.</div>
                         </div>
                         <div className="text-center border-dashed border-1 border-grey-500 radius-8 l:w-250 h-200 relative">
                             <div className="take-to-center">
