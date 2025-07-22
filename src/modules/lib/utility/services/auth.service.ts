@@ -13,6 +13,7 @@ class AuthService {
     signIn(credentials: LoginCredentials): Promise<{ token: string; user: User }> {
       return http.post(endpoints.SIGN_IN, credentials)
         .then((response: AxiosResponse) => {
+          
           this.storeAuthCredentials({ token: response.data.token })
           return response.data
         }).catch((error) => {
@@ -24,7 +25,7 @@ class AuthService {
         localStorage.removeItem('token')
         localStorage.removeItem("variantId");
         localStorage.removeItem("variantIdMinimumPurchase");
-        window.location.replace(paths.login)
+        // window.location.replace(paths.login)
         
     }
 
@@ -57,19 +58,26 @@ class AuthService {
     signUpInitial(details: { fullname: string; email: string }): Promise<any> {
       return http.post(endpoints.SIGN_UP_DETAILS, details)
         .then((response: AxiosResponse) => {
+          toast.success("OTP sent. Please check your email.");
           return response.data;
         })
         .catch((error) => {
           const message =
             error.response?.data?.message || error.message || "An unknown error occurred.";
           toast.error(message);
-          throw error;
+          // throw error;
         });
     }
 
     
   verifyOtp(payload: { token: string; otp: string }): Promise<any> {
-      return http.post(endpoints.SIGN_UP_VERIFY_OTP, payload).then((response: AxiosResponse) => response.data).catch((error) => {
+    return http.post(endpoints.SIGN_UP_VERIFY_OTP, payload).then((response: AxiosResponse) =>
+    {
+      toast.success("OTP verified successfully.");
+
+      return response.data;
+      
+    }).catch((error) => {
         const message =  
         error.response?.data?.message || error.message || "An unknown error occurred.";
         toast.error(message);
@@ -79,7 +87,10 @@ class AuthService {
 
 
   setPassword(payload: { token: string, password: string }): Promise<any> {
-    return http.post(endpoints.SIGN_UP_CREATE_PASSWORD, payload).then((response: AxiosResponse) => response.data).catch((error) => 
+    return http.post(endpoints.SIGN_UP_CREATE_PASSWORD, payload).then((response: AxiosResponse) => {
+                toast.success(`Thank you for signing up with Asoebi.Africa. Have a wonderful time shopping`);
+     return response.data
+    }).catch((error) => 
     {
     return  toast.error(error.response.data.message)
     }).catch((error) => 
