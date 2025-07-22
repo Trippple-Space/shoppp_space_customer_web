@@ -6,9 +6,11 @@ import { BiLogoFacebook } from 'react-icons/bi'
 import { FiTwitter } from 'react-icons/fi'
 import { AiOutlineInstagram, AiOutlineYoutube } from 'react-icons/ai'
 import Image from '../image/Image'
+import Link from 'next/link'
 
 const Footer = () => {
   const [isFooterOpen, setIsFooterOpen] = useState(false)
+   const currentDate = new Date();
 
   const handleCloseFooter = () => {
     setIsFooterOpen(false)
@@ -18,22 +20,26 @@ const Footer = () => {
     <div className='fixed b-0 l-0 w-full z-index-2'>
       {isFooterOpen && (
         <div
-          className='fixed inset-0'
+          className='fixed inset-0 '
           onClick={handleCloseFooter}
         />
       )}
 
       <div
-        className={`flex g|transition:0.5s bg-white relative pointer w-full g|box-shadow:0px|_|-2px|_|10px|_|rgba(0,0,0,0.10); py-13`}
+        className={`flex g|transition:0.5s bg-white relative pointer w-full g|box-shadow:0px|_|-2px|_|10px|_|rgba(0,0,0,0.10); py-13 `}
+
+        onClick={() => setIsFooterOpen(prev => !prev)}
       >
         <div className='app-width'>
           {
             <div
               className={`l:h-30vh h-70vh no-scrollbar overflow-auto w-100p grid grid-1-cols-1fr l:flex mb-10 space-between container ${
                 isFooterOpen ? 'open' : ''
-              }`}
+                }`}
+                onClick={(e) => e.stopPropagation()} 
+
             >
-              <div className='py-25'>
+              <div className='py-25 '>
                 <p className='font-inter l:text-18 text-14 weight-600 text-dimgrey'>
                   Follow
                 </p>
@@ -70,7 +76,7 @@ const Footer = () => {
                   <p className='pt-15 pb-5 underline-on-hover'>ASOEBI WEARS</p>
                   <p className='pt-15 pb-5 underline-on-hover'>EXPLORE</p>
                 </div>
-              </div>
+              </div> 
 
               <div className='text-dimgrey py-25'>
                 <h2 className='l:text-20 text-16 weight-600'>USEFUL STUFF</h2>
@@ -78,9 +84,11 @@ const Footer = () => {
                   <p className='pt-15 pb-5 underline-on-hover'>CONTACT US</p>
                   <p className='pt-15 pb-5 underline-on-hover'>MY ACCOUNT</p>
                   <p className='pt-15 pb-5 underline-on-hover'>JOIN OUR TEAM</p>
+                    <Link href={'/legal-document'}>
                   <p className='pt-15 pb-5 underline-on-hover'>
                     PRIVACY AND COOKIES
                   </p>
+                    </Link>
                   <p className='pt-15 pb-5 underline-on-hover'>JOIN OUR TEAM</p>
                 </div>
               </div>
@@ -122,11 +130,11 @@ const Footer = () => {
 
           <div
             className='flex whitespace-nowrap weight-400 text-14 a-self-center'
-            onClick={() => setIsFooterOpen(prev => !prev)}
+            // onClick={() => setIsFooterOpen(prev => !prev)}
           >
             <div className='w-full flex'>
               <div className='w-fit flex gap-30 mx-0 l:mx-auto a-self-center '>
-                <span>@ 2023 asoebi all reserved.</span>
+                <span>@ {currentDate.getFullYear()} asoebi all reserved.</span>
                 <div className='w-fit hidden l:flex gap-30 mx-auto a-self-center'>
                   <span className='flex w-fit'>
                     {' '}
@@ -159,6 +167,7 @@ const Footer = () => {
               />
             </span>
           </div>
+       
         </div>
       </div>
     </div>
