@@ -102,7 +102,7 @@ const layout: FC<ILayout> = ({ children }) => {
               {/*     <span className="weight-500">Continue with Google</span> */}
               {/*   </div> */}
               {/* </div> */}
-              <p className="text-center text-14 pb-20 mt-20">By continuing, you agree to the Asoebi.africa <span className="color-link pointer">Terms & Conditions</span> and <span className="color-link pointer">
+              <p className="text-center text-14 pb-20 mt-20">By continuing, you agree to the Asoebi.Africa <span className="color-link pointer">Terms & Conditions</span> and <span className="color-link pointer">
                 Privacy Policy
               </span>
               </p>

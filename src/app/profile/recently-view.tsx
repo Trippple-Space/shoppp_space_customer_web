@@ -28,7 +28,7 @@ const RecentViewModal: React.FC<ModalProps> = ({modalOpen, handleCloseModal, dat
         <div className='flex space-between py-10 relative'>
          <div className='w-5p l:w-3p py-5 border-2 border-b border-faint-grey'></div>
          <div className='flex weight-500 w-50p l:w-17p space-between text-16 l:text-18 text-green'>
-            <p className='px-18 l:px-25 pt-10 pb-15 pointer border-3 border-b border-green'>Recently views</p>
+            <p className='px-18 l:px-25 pt-10 pb-15 pointer border-3 border-b border-green'>Recently viewied</p>
          </div>
          <div className='w-60p l:w-80p pt-5 pb-15 border-2 border-b border-faint-grey'></div>
          <div className='absolute flex gap-15 t-15 l:t-10 r-10 l:r-40 pointer' onClick={handleCloseModal}>

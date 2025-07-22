@@ -13,9 +13,9 @@ const AddProduct = () => {
         </div>
         
         <div className="mt-22 text-14 l:text-16 text-grey-700 l:w-70p">
-            The most important feature in store editing section is the product adding part.
-            when adding product here, do not ignore to fill all the required fields completely 
-            and follow the products adding rules.
+        The most important feature in the store editing section is product addition.
+        When adding products, make sure to fill out all required fields 
+        completely and follow the product submission guidelines.
         </div>
         <div className="grid l:g|grid-template-columns:auto|_|55% gap-20 l:gap-102 mt-30 l:mt-0!">
             <div className="grid l:block gap-20">

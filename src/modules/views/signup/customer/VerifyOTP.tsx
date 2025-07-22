@@ -87,7 +87,7 @@ const handlePaste = (e: React.ClipboardEvent<HTMLInputElement>) => {
       <div className="font-inter">
         <h3 className="text-center text-20 weight-500 mb-10 text-grey-900">Email Verification</h3>
         <p className="text-center text-14 text-grey-700">
-          Enter the 6-digit alphanumeric code you received in your email.
+        Enter the 6-character alphanumeric code you received in your email.
         </p>
         <div className="flex j-content-between  mt-30 w-full">
             {otpDigits.map((value: string, index: number) => (
