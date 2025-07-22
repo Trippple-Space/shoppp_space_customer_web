@@ -55,7 +55,6 @@ export const useSignUpView = () => {
           fullname: values.fullname,
           email: values.email
         });
-          toast.success("OTP sent. Please check your email.");
           router.push(`${paths.verify}?token=${response.token}`);
   
     }
@@ -71,7 +70,6 @@ export const useSignUpView = () => {
         const response = await authService.verifyOtp({ token: tokenFromUrl, otp: values.otp });
         localStorage.setItem("create-password-token", response.createPasswordToken);
               setToken(response.createPasswordToken);
-              toast.success("OTP verified successfully.");
               router.push(paths.create_password);
               setStep("createPassword");
     }
@@ -119,7 +117,7 @@ export const useSignUpView = () => {
           password: values.password
         };
         const res = await authService.setPassword(payload);
-          toast.success(`Thank you for signing up with Asoebi.Africa. Have a wonderful time shopping`);
+
           localStorage.removeItem('create-password-token')
         router.push(paths.login);
       } catch (error: any) {

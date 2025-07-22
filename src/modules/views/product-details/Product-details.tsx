@@ -140,7 +140,7 @@ const ProductDetails = ({ product }: { product: Product }) => {
       {!selectedVariantItemInCart ?
         (
           <button
-            className={classNames(`text-white border-none l:px-24 l:py-12 py-15 w-100p radius-6 pointer ${selectedVariant && selectedVariant.status === 'OUT_OF_STOCK' ? 'bg-gray-300' : 'bg-#0B9378'}`)}
+            className={classNames(`text-white border-none l:px-24 l:py-12 py-15 w-100p radius-6 pointer  hover:bg-darkgreen ${selectedVariant && selectedVariant.status === 'OUT_OF_STOCK' ? 'bg-gray-300' : 'bg-#0B9378'}`)}
             onClick={() => {
               if (isAuthenticated) {
                 if (selectedVariant && selectedVariant.status !== 'OUT_OF_STOCK') {
@@ -155,7 +155,7 @@ const ProductDetails = ({ product }: { product: Product }) => {
               }
             }}
           >
-            <div className='l:flex grid grid-2-cols-auto gap-10 items-center w-fit mx-auto'>
+            <div className='l:flex grid grid-2-cols-auto gap-10 items-center w-fit mx-auto '>
               {selectedVariant.status !== 'OUT_OF_STOCK' && <HiOutlineShoppingBag className='h-21' />}
               <div className={classNames(`whitespace-nowrap text-16 ${selectedVariant && selectedVariant.status === 'OUT_OF_STOCK' ? 'text-black' : 'text-white'}`)}>
                 {selectedVariant && selectedVariant.status !== "OUT_OF_STOCK" ? 'Add to cart' : 'Out of stock'}
@@ -284,7 +284,7 @@ const ProductDetails = ({ product }: { product: Product }) => {
                 {
                   selectedVariant.properties.origin &&
                   <>
-                    Brand:{' '} <span className='color-#1677FF capitalize'> {selectedVariant.properties.origin} | </span>
+                    Links:{' '} <span className='color-#1677FF capitalize'> {selectedVariant.properties.origin} | </span>
                   </>
                 }
                 <Link href={'/fabrics'} className='color-#1677FF'>Similar Ankara Product</Link>
