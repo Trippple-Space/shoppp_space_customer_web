@@ -20,7 +20,7 @@ import { IFetchedReview, IReviewStat } from '@/modules/lib/utility/types/review.
 const MiniReview = ({ id, slug, isOpen, setIsOpen, reviews, reviewStat, loading, color }: { id: number, slug: string, isOpen: number | null, setIsOpen: React.Dispatch<React.SetStateAction<number | null>>, reviews: IFetchedReview[], reviewStat?: IReviewStat, loading: boolean, color?: string }) => {
     const { refs, floatingStyles, context } = useFloating({
         open: isOpen === id,
-        onOpenChange: (open) => setIsOpen(open ? id : null),
+        onOpenChange: (open: any) => setIsOpen(open ? id : null),
         placement: 'top',
         middleware: [
             offset(10),
