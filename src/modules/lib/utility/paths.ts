@@ -12,6 +12,7 @@ export const paths = {
      asoebi_wears: "/wears",
      explore: "/explore",
      orders: "/orders",
+     legal_document: "/legal-document",
 };
 
 export const protectedPaths = [paths.checkout, paths.orders];
