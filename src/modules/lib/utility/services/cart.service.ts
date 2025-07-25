@@ -122,14 +122,15 @@ buyAgain(buyAgainItems: BuyAgain[]): Promise<Cart> {
 
                 this.fetchCart()
                     .then((updatedCartData) => {
-                      toast.success("Cart updated successfully", { duration: 2000 });
                    resolve(combinedCart);
                         resolve(updatedCartData);
                     })
                     .catch((error) => {
                         console.error("Error fetching updated cart:", error);
                         reject(error);
-                    });
+                    }).finally(() => {
+                        toast.success("Cart updated successfully", { duration: 2000 });
+                    })
             })
             .catch((error) => {
                 console.error("Error adding to cart:", error);
