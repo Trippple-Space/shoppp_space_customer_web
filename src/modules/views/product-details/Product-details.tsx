@@ -287,7 +287,7 @@ const ProductDetails = ({ product }: { product: Product }) => {
                     Links:{' '} <span className='color-#1677FF capitalize'> {selectedVariant.properties.origin} | </span>
                   </>
                 }
-                <Link href={'/fabrics'} className='color-#1677FF'>Similar Ankara Product</Link>
+                {/*<Link href={'/fabrics'} className='color-#1677FF'>Similar Ankara Product</Link> */}
               </p>
             </div>
             <div className='flex flex-col gap-12 border-b  border-#00000014 pb-15'>
