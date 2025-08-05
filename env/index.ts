@@ -32,7 +32,7 @@ if (!process.env.ENV) {
   currentEnv = (process.env.ENV as keyof typeof allConfigs) || "development";
 }
 
-currentEnv = "production";
+currentEnv = "staging";
 // currentEnv = "production";
 
 const resolvedConfigs = { ...allConfigs[currentEnv], ENV: currentEnv };
