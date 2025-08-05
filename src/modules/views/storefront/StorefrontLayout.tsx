@@ -49,6 +49,8 @@ const StorefrontLayout: FC<{ store: Store; children: ReactNode }> = ({
   const [hasPerformedAction, setHasPerformedAction] = useState(false);
   const { logVisit } = useLogVisit(store?.id, { ipAddress: ipAddress });
 
+  console.log(store)
+
   useEffect(() => {
     const filterProducts = () => {
       if (selectedCategory) {

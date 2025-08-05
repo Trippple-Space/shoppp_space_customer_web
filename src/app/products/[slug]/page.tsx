@@ -21,7 +21,7 @@ export async function generateMetadata ({
         description:
           `${product?.longDescription}` ||
           `${product?.name} - Check out this piece on Asoebi Africa`,
-        url: `https://staging.asoebi.africa/products/${params.slug}`,
+        url: `https://asoebi.africa/products/${params.slug}`,
         siteName: 'Asoebi Africa',
         images: [
           {
