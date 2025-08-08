@@ -10,7 +10,6 @@ class FollowService {
         return response.data;
       })
       .catch((error) => {
-        console.log(error);
         return 0;
       });
   }
@@ -22,7 +21,6 @@ class FollowService {
         return response.data;
       })
       .catch((error) => {
-        console.log(error);
         return false;
       });
   }

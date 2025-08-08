@@ -42,7 +42,7 @@ const SearchInput: FC<ISearchInput> = ({
               )
         setSearchResults(result)
       } catch (err) {
-        console.error(err)
+        //console.error(err)
       }
     }
     if (searchTerm) {

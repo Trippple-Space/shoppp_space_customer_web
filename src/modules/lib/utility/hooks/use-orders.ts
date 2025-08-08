@@ -18,7 +18,6 @@ export const useOrders = (initialQuery: IQueryParams) => {
                const fetchedOrders = await orderService.fetchOrders({...query, order: {id: 'desc'}});
                setOrders(fetchedOrders);
           } catch (err) {
-               console.error("Error fetching orders:", err);
                setError("Failed to fetch orders");
           } finally {
                setFetching(false);
@@ -33,7 +32,7 @@ export const useOrders = (initialQuery: IQueryParams) => {
                
                
           } catch (err) {
-               console.error("Error fetching order by ID:", err);
+               //console.error("Error fetching order by ID:", err);
           } finally {
                setFetching(false);
           }
@@ -53,7 +52,7 @@ export const useOrders = (initialQuery: IQueryParams) => {
                );
                setResponse(orderResponse);
           } catch (err) {
-               console.error("Error fetching order by ID:", err);
+               //console.error("Error fetching order by ID:", err);
           } finally {
                setFetching(false);
           }

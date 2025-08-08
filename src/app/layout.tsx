@@ -59,10 +59,10 @@ export default function RootLayout({
       lang="en"
       className={`${inter.variable} ${roboto.variable} ${lora.variable} ${robotoMono.variable} bg-white font-inter h-full`}
     >
-      <PHProvider >
-        <GlobalArena />
-        <PostHogPageView /> 
-        <body className="@lo:weight-300 @lo:text-dimgrey h-full">
+      <body className="@lo:weight-300 @lo:text-dimgrey h-full">
+        <PHProvider >
+          <PostHogPageView />
+          <GlobalArena />
           {/* <div className="fixed w-full b-60 z-3">
             <div className="max-w-1000 mx-auto flex text-14 l:text-16 bg-yellow-50 text-green p-10 max-w-1100 mx-auto ">
               <BsInfoCircle className="inline-block w-fit text-26 mr-10 mt--2" />
@@ -78,8 +78,8 @@ export default function RootLayout({
             </div>
           </div> */}
           {children}
-        </body>
-      </PHProvider>
+        </PHProvider>
+      </body>
     </html>
   );
 }

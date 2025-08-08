@@ -47,7 +47,6 @@ class OrderService {
                          resolve(response);
                     })
                     .catch((err) => {
-                         console.error("Error fetching order by ID:", err);
                          reject(err);
                     });
           });
@@ -102,7 +101,6 @@ class OrderService {
                          }
                     })
                     .catch((err) => {
-                         console.error("Error fetching order by ID:", err);
                          reject(err);
                     });
           });

@@ -26,7 +26,6 @@ export const useRecentVariantStore = create<RecentVariantStore>((set) => ({
             set({ recentVariants, fetching: false });
         } catch (error) {   
             set({ fetching: false });
-            console.error("Error fetching recent items:", error);
         }
     },
     fetchRecentSearched: async () => {
@@ -36,7 +35,6 @@ export const useRecentVariantStore = create<RecentVariantStore>((set) => ({
             set({ recentSearched, fetching: false });
         } catch (error) {   
             set({ fetching: false });
-            console.error("Error fetching recent items:", error);
         }
     },
     addVariant: async (productVariantId: number, type: "view" | "search") => {

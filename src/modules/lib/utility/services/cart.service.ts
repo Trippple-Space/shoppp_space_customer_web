@@ -29,7 +29,6 @@ class CartService {
                    resolve(combinedCart);
                     })
                     .catch((error) => {
-                         console.error("Error fetching cart:", error);
                          reject();
                     });
           });
@@ -49,15 +48,10 @@ class CartService {
                                    resolve(updatedCartData);
                               })
                               .catch((error) => {
-                                   console.error(
-                                        "Error fetching updated cart:",
-                                        error
-                                   );
                                    reject(error);
                               });
                     })
                     .catch((error) => {
-                         console.error("Error adding to cart:", error);
                          reject(error);
                     });
           });
@@ -126,14 +120,12 @@ buyAgain(buyAgainItems: BuyAgain[]): Promise<Cart> {
                         resolve(updatedCartData);
                     })
                     .catch((error) => {
-                        console.error("Error fetching updated cart:", error);
                         reject(error);
                     }).finally(() => {
                         toast.success("Cart updated successfully", { duration: 2000 });
                     })
             })
             .catch((error) => {
-                console.error("Error adding to cart:", error);
                 reject(error);
             });
     });
@@ -164,13 +156,11 @@ buyAgain(buyAgainItems: BuyAgain[]): Promise<Cart> {
                         resolve(updatedCartData);
                     })
                     .catch((error) => {
-                        console.error("Error fetching updated cart:", error);
                         reject(error);
                     });
                     
                     })
                     .catch((error) => {
-                         console.error("Error removing from cart:", error);
                          reject(error);
                     });
           });
@@ -202,7 +192,6 @@ buyAgain(buyAgainItems: BuyAgain[]): Promise<Cart> {
                    resolve(combinedCart);
                     })
                     .catch((error) => {
-                         console.error("Error updating item quantity:", error);
                          reject(error);
                     });
           });
@@ -232,13 +221,11 @@ buyAgain(buyAgainItems: BuyAgain[]): Promise<Cart> {
                     resolve(updatedCartData);
                     resolve(combinedCart);
                 }).catch((error) => {
-                    console.error("Error fetching updated cart:", error);
                     reject(error);
                 });
             })
 
             .catch((error) => {
-                console.error("Error applying discount code:", error);
                 reject(error);
             });
     });
@@ -247,7 +234,6 @@ buyAgain(buyAgainItems: BuyAgain[]): Promise<Cart> {
    removeDiscountCodes() {
     return new Promise(() => {
         http.post(`${endpoints.CART}/remove-discount`).then((response) => {
-            console.log(response.data)
         })
     })
    }

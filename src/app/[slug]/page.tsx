@@ -49,7 +49,7 @@ export async function generateMetadata({
       }
     }
   } catch (error) {
-    console.error('Error generating metadata:', error)
+    //console.error('Error generating metadata:', error)
     return {
       title: 'Store Not Found - Asoebi Africa',
       description: 'This store could not be found'

@@ -16,14 +16,14 @@ const extractMerchantSubdomainFromHost = (host: string) => {
 }
 
 export function middleware(request: NextRequest) {
-  console.log('In middleware')
-  const currentUser = request.cookies.get('currentUser')?.value ?? null;
+  //const currentUser = request.cookies.get('currentUser')?.value ?? null;
   const { pathname } = request.nextUrl;
   const url = request.nextUrl.clone();
   const host = request.headers.get("host") ?? ''; // e.g., merchant.yourdomain.com
   const subdomain = extractMerchantSubdomainFromHost(host);
   const reconstructedHost = host.replace(new RegExp(`^${subdomain}([.-])`), '')
 
+  /*
   console.log('Middleware details:', {
     currentUser,
     pathname,
@@ -32,32 +32,35 @@ export function middleware(request: NextRequest) {
     subdomain,
     reconstructedHost,
   });
+  */
 
   if (subdomain && subdomain !== "www" && subdomain !== "api") {
     // all other 
     if (pathname && pathname !== '/') {
+      /*
       console.log('Products path detected, not prepending subdomain', {
         subdomain,
         pathname,
         URL: `https://${reconstructedHost}${pathname}`
       });
+      */
       return NextResponse.rewrite(`https://${reconstructedHost}${pathname}`);
     }
 
     const newPathname = `/${subdomain}${url.pathname?.replace?.(/\/$/, '')}`;
-    console.log('After if subdomain', {
+    /* console.log('After if subdomain', {
       subdomain,
       pathname: newPathname,
       URL: `https://${reconstructedHost}${newPathname}`
-    });
+    }); */
     return NextResponse.rewrite(`https://${reconstructedHost}${newPathname}`); // aznzee.asoebi.africa ==> https://asoebi.africa/aznzee
   }
 
   if (pathname === '/' && !subdomain) {
-    console.log('Redirecting to /wears', {
+    /* console.log('Redirecting to /wears', {
       pathname,
       subdomain
-    })
+    }) */
     return NextResponse.redirect(new URL('/wears', request.url))
   }
 
