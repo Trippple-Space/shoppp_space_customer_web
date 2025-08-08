@@ -11,7 +11,7 @@ const VendorSignUpStep2: FC<IVendorSignUpStep> = ({ setCurrentStep }) => {
         <div>
             <div className='mt-33'>
                 <h3 className='text-20 weight-500 text-grey-900' >What would you like to sell?</h3>
-                <p className='text-14 mt-10'>You can select multiple choice. We’ll make sure you are set up to sell this products</p>
+                <p className='text-14 mt-10'>You can select multiple choices. We’ll make sure you are set up to sell this products</p>
             </div>
 
             <div className='mt-33 flex space-between gap-23 flex-col m:flex-row'>

@@ -58,7 +58,7 @@ const Footer = () => {
                   </a>
                 </div>
                 <div className='text-light-grey text-14 font-inter weight-500'>
-                  @asoebiafrica | #AsoebiAfrica
+                  @AsoebiAfrica | #AsoebiAfrica
                 </div>
                 <div className='w-fit l:mt-50 mt-30'>
                   <Image
@@ -96,7 +96,7 @@ const Footer = () => {
                 <h2 className='l:text-20 text-16 weight-600'>Subscribe to  Newsletter</h2>
                 <div className='text-18 weight-400 pt-15'>
                   <p className='text-grey-600 l:text-16 text-14'>
-                    Sign up to get the latest on sales, new release and more...
+                    Sign up to get the latest updates on sales, new releases and more...
                   </p>
 
                   <div className='flex w-100p gap-20 pt-20'>
@@ -141,7 +141,7 @@ const Footer = () => {
                   </span>
                   <span className='flex w-fit'>
                     {' '}
-                    <BsDot className='w-20 h-20' /> <span>About asoebi</span>{' '}
+                    <BsDot className='w-20 h-20' /> <span>About Asoebi</span>{' '}
                   </span>
                   <span className='flex w-fit'>
                     {' '}
