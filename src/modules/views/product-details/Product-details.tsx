@@ -170,8 +170,6 @@ const ProductDetails = ({ product }: { product: Product }) => {
     </div>
   }
 
-  console.log(product)
-
   return (
     <>
       <HomepageNavBar parent='' />
