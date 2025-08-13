@@ -3,7 +3,7 @@ import ProductDetails from '@/modules/views/product-details/Product-details'
 import React from 'react'
 import type { Metadata } from 'next'
 
-export async function generateMetadata ({
+export async function generateMetadata({
   params
 }: {
   params: { slug: string }
@@ -11,16 +11,36 @@ export async function generateMetadata ({
   try {
     const product = await productService.fetchProductBySlug(params.slug, {})
 
+    const extractSizesAndColors = () => {
+      const sizes = new Set<string>();
+      const colors = new Set<string>();
+
+      product.variants.forEach(variant => {
+        if (variant.size) {
+          sizes.add(variant.size);
+        }
+        if (variant.properties?.color) {
+          colors.add(variant.properties.color);
+        }
+      });
+
+      return {
+        sizes: Array.from(sizes),
+        colors: Array.from(colors)
+      };
+    }
+    const { sizes, colors } = extractSizesAndColors();
+
     return {
       title: `${product?.name} - Asoebi Africa`,
       description:
-        `${product?.longDescription}` ||
-        `${product?.name} - Check out this piece on Asoebi Africa`,
+        `${product?.longDescription}. Available sizes: ${sizes.join(", ")}. Available colors: ${colors.join(", ")}.` ||
+        `${product?.name}. Available sizes: ${sizes.join(", ")}. Available colors: ${colors.join(", ")}. - Check out this piece on Asoebi Africa`,
       openGraph: {
         title: `${product?.name} - Asoebi Africa`,
         description:
-          `${product?.longDescription}` ||
-          `${product?.name} - Check out this piece on Asoebi Africa`,
+          `${product?.longDescription}. Available sizes: ${sizes.join(", ")}. Available colors: ${colors.join(", ")}.` ||
+          `${product?.name}. Available sizes: ${sizes.join(", ")}. Available colors: ${colors.join(", ")}. - Check out this piece on Asoebi Africa`,
         url: `https://asoebi.africa/products/${params.slug}`,
         siteName: 'Asoebi Africa',
         images: [
@@ -37,8 +57,8 @@ export async function generateMetadata ({
         card: 'summary_large_image',
         title: `${product?.name} - Asoebi Africa`,
         description:
-          `${product?.longDescription}` ||
-          `${product?.name} - Check out this piece on Asoebi Africa`,
+          `${product?.longDescription}. Available sizes: ${sizes.join(", ")}. Available colors: ${colors.join(", ")}.` ||
+          `${product?.name}. Available sizes: ${sizes.join(", ")}. Available colors: ${colors.join(", ")}. - Check out this piece on Asoebi Africa`,
         images: [
           product?.variants?.[0]?.media?.[0]?.url || 'new-asoebi-logo.svg'
         ]
@@ -53,7 +73,7 @@ export async function generateMetadata ({
   }
 }
 
-export default async function product_details ({
+export default async function product_details({
   params
 }: {
   params: { slug: string }

@@ -170,6 +170,8 @@ const ProductDetails = ({ product }: { product: Product }) => {
     </div>
   }
 
+  console.log(product)
+
   return (
     <>
       <HomepageNavBar parent='' />
@@ -323,14 +325,14 @@ const ProductDetails = ({ product }: { product: Product }) => {
                     <span className='weight-500 text-14'>{reviewStat?.find(review => review.id === selectedVariant.id)?.reviewStat?.averageRating.toFixed(1) ?? 0}</span>
                   </div>
                   <span className='color-' style={{ color: '#D9D9D9B2' }}>|</span>
-                  <p className='color-#000000B2 text-12 flex a-items-center gap-5'>
+                  <div className='color-#000000B2 text-12 flex a-items-center gap-5'>
                     <MiniReview id={selectedVariant.id} isOpen={isOpen} setIsOpen={setIsOpen} reviews={reviews.find(review => review.id === selectedVariant.id)?.reviews ?? []}
                       reviewStat={reviewStat.find(stat => stat.id === selectedVariant.id)?.reviewStat}
                       loading={statsLoading}
                       slug={product.slug}
                       color={selectedColor}
                     />
-                  </p>
+                  </div>
                 </div>
 
                 <div className='flex'>
@@ -593,7 +595,7 @@ const ProductDetails = ({ product }: { product: Product }) => {
           <div className="flex gap-20 a-items-start overflow-auto w-full h-fit no-scrollbar">
             {
               recentlyViewedVariants.map((variant, i) =>
-                <div className=''>
+                <div className='' key={i}>
                   <VariantModal
                     variant={variant}
                     saveVariant={saveVariant}
