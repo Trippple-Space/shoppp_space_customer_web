@@ -103,7 +103,7 @@ const layout: FC<ILayout> = ({ children }) => {
               
               <p className="text-center text-14 pb-20 mt-20">
                 
-                By continuing, you agree to the Asoebi.africa <Link className="color-link pointer"  href={paths.legal_document}>Terms & Conditions</Link> and <span className="color-link pointer">
+                By continuing, you agree to the Asoebi.africa <Link className="color-link pointer" href={paths.legal_document}>Terms & Conditions</Link> and <span className="color-link pointer">
               <Link href={paths.legal_document}>
                 Privacy Policy
               </Link>
