@@ -82,6 +82,26 @@ const handlePaste = (e: React.ClipboardEvent<HTMLInputElement>) => {
   }
 
 
+
+      useEffect(() => {
+        const handleGlobalKeyDown = (e: KeyboardEvent) => {
+
+
+          if (e.key === 'Enter') {
+            if (otpDigits.every((item) => item != '')) {        
+              e.preventDefault();
+              formikOtp.handleSubmit();
+            }
+          }
+        };
+
+    
+          window.addEventListener('keydown', handleGlobalKeyDown);
+          return () => window.removeEventListener('keydown', handleGlobalKeyDown);
+         
+      }, [formikOtp]);
+
+
   return (
     <div className="w-full overflow-auto">
       <div className="font-inter">
@@ -108,19 +128,19 @@ const handlePaste = (e: React.ClipboardEvent<HTMLInputElement>) => {
                   paddingTop: 0,
                   paddingLeft: 15,
                   paddingBottom: 0,
-                  
                 }}
             />
             ))}
         </div>
-        <div
-          className={`radius-5 cursor-pointer text-16 weight-500 p-15 text-center mt-30 ${
-            otpDigits.join('').length < 6 ? 'bg-whitesmoke text-black' : 'bg-green text-white'
+        <button
+          className={`btn text-center bg-green weight-500 text-16 l:btn-lg btn-lg font-inter mt-30 text-14 cursor-pointer g|transition:0.5s disabled:bg-grey ${
+            otpDigits.join('').length < 6 ? 'bg-whitesmoke text-black' : 'bg-green text-white  hover:bg-darkgreen'
           }`}
           onClick={handleOtpSubmit}
+          disabled = {formikOtp.isSubmitting}
         >
-          Create Password
-        </div>
+          {formikOtp.isSubmitting ? "Verifying": "Verify"}
+        </button>
       </div>
     </div>
   );

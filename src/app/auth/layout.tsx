@@ -7,14 +7,11 @@ import { paths } from '@/modules/lib/utility/paths'
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 import { FC } from 'react'
+import config from '../../../env'
 
 const layout: FC<ILayout> = ({ children }) => {
   const pathName = usePathname()
   const path = pathName.split('/')[2]
-
-
-
-
 
   const VendorSignUp = () => {
     return (
@@ -29,7 +26,7 @@ const layout: FC<ILayout> = ({ children }) => {
     return (
       <div className="text-right relative hidden l:block">
         <span>Do you want to sell? </span>
-        <Link href={paths.vendor_signup} className="text-green-700 cursor-pointer">
+        <Link href={config.VENDOR_CENTER_HOST} target='_blank' className="text-green-700 cursor-pointer">
           Join now
         </Link>
       </div>)

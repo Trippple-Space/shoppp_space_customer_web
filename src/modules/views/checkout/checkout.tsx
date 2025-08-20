@@ -191,7 +191,6 @@ const CheckoutPage = () => {
               price: feeDetail.fee,
             };
           } catch (error) {
-            console.error(`Failed to calculate fee for ${type}:`, error);
           } finally {
             setDeliveryOptions(updatedOptions);
             setAllAddressDeliveryPrice(prev =>
@@ -395,7 +394,6 @@ const CheckoutPage = () => {
                                 setAllAddressDeliveryPrice([])
                                 setShouldUpdateFee(true);
                               } catch (error) {
-                                console.error('Failed to remove from cart:', error);
                               }
                             }}
                           >

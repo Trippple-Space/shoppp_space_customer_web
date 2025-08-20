@@ -21,7 +21,7 @@ export async function generateMetadata ({
         description:
           `${product?.longDescription}` ||
           `${product?.name} - Check out this piece on Asoebi Africa`,
-        url: `https://staging.asoebi.africa/products/${params.slug}`,
+        url: `https://asoebi.africa/products/${params.slug}`,
         siteName: 'Asoebi Africa',
         images: [
           {
@@ -45,7 +45,7 @@ export async function generateMetadata ({
       }
     }
   } catch (error) {
-    console.error('Error generating metadata:', error)
+    //console.error('Error generating metadata:', error)
     return {
       title: 'Product Not Found - Asoebi Africa',
       description: 'This product could not be found'
@@ -67,7 +67,7 @@ export default async function product_details ({
       </div>
     )
   } catch (error) {
-    console.error('Error fetching product details:', error)
+    //console.error('Error fetching product details:', error)
     return <div>Error fetching product details</div>
   }
 }

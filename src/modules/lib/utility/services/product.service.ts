@@ -37,7 +37,6 @@ class ProductService {
                     const fetchedCategories: ProductCategory =
                          response.data?.[0];
                     this.cacheCategories(cacheKey, fetchedCategories);
-                    console.log(fetchedCategories)
                     resolve(fetchedCategories);
                });
           });
@@ -105,7 +104,6 @@ class ProductService {
                          resolve(response);
                     })
                     .catch((err) => {
-                         console.error("Error fetching product by slug:", err);
                          reject(err);
                     });
           });
@@ -152,10 +150,6 @@ class ProductService {
                          resolve(data);
                     })
                     .catch((err) => {
-                         console.error(
-                              "Error fetching products by search:",
-                              err
-                         );
                          reject(err);
                     });
           });
@@ -189,10 +183,6 @@ class ProductService {
                          data;
                     })
                     .catch((err) => {
-                         console.error(
-                              "Error fetching products by search:",
-                              err
-                         );
                          reject(err);
                     });
           });

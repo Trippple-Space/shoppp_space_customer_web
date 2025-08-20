@@ -45,7 +45,6 @@ export const useCartStore = create<CartStore>((set) => ({
                set({ cart: cartData, fetching: false });
           } catch (error) {
                set({ fetching: false });
-               console.error("Error fetching cart:", error);
           }
      },
      addToCart: async (variantId: number, quantity: number = 1) => {
@@ -83,7 +82,6 @@ export const useCartStore = create<CartStore>((set) => ({
        try {
           await cartService.removeDiscountCodes()
        } catch (error) {
-          console.log(error)
        }
      },
      showLoginModal: false,

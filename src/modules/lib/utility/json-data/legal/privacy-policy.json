@@ -1,0 +1,64 @@
+{
+  "privacy_policy": {
+    "title": "Privacy Policy",
+    "1_introduction": "Asoebi.Africa is committed to protecting your personal data in compliance with the Nigeria Data Protection Regulation (NDPR). This Privacy Policy explains how we collect, use, share, and safeguard your personal information when you use our Platform.",
+    
+    "2_information_we_collect": {
+      "personal_identification_information": ["Name", "Email address", "Phone number", "Delivery address", "Billing address"],
+      "account_information": ["Username", "Password", "User preferences"],
+      "transaction_information": ["Purchase history", "Payment methods", "Order details"],
+      "device_and_technical_information": ["IP address", "Device type", "Operating system", "Browser type", "Geolocation"],
+      "cookies_and_usage_data": ["Login times", "Page visits", "Clicks", "Behavioral analytics"]
+    },
+
+    "3_purpose_of_data_collection": [
+      "To create and manage user accounts",
+      "To process transactions and deliver purchased products or services",
+      "To provide customer support",
+      "To personalize your user experience",
+      "To improve the functionality and performance of our platform",
+      "To comply with legal obligations"
+    ],
+
+    "4_legal_basis_for_processing": {
+      "consent": "For optional services and marketing communications",
+      "contract": "To fulfill our obligations in any agreement with you",
+      "legal_obligation": "Where processing is necessary for compliance with laws",
+      "legitimate_interest": "For platform security, fraud prevention, and service improvement"
+    },
+
+    "5_data_sharing_and_disclosure": {
+      "vendors_and_service_providers": "For payment processing, logistics, analytics, and customer support",
+      "third_party_sellers": "Where necessary to fulfill your orders",
+      "law_enforcement": "When required by law or to protect our legal rights",
+      "note": "We do not sell your personal information to third parties"
+    },
+
+    "6_data_retention": "We retain your personal data only as long as necessary for the purposes set out in this policy or to comply with legal obligations. After this period, your data will be securely deleted or anonymized.",
+
+    "7_data_subject_rights": {
+      "right_to_access": "You can request a copy of your personal data",
+      "right_to_rectification": "You can request correction of inaccurate data",
+      "right_to_erasure": "You can request deletion of your personal data",
+      "right_to_data_portability": "You can request your data in a machine-readable format",
+      "right_to_object": "You can object to certain types of data processing",
+      "right_to_withdraw_consent": "At any time, where applicable",
+      "contact": "[Insert contact email]"
+    },
+
+    "8_cookies_and_tracking_technologies": "Our app uses cookies and similar technologies to enhance user experience and collect analytical data. You can control cookie preferences through your device or browser settings.",
+
+    "9_data_security": "We implement appropriate technical and organizational security measures to protect your personal data from unauthorized access, alteration, disclosure, or destruction.",
+
+    "10_cross_border_data_transfers": "If your personal data is transferred outside Nigeria, we ensure that appropriate safeguards are in place, including adequate data protection agreements in accordance with NDPR requirements.",
+
+    "11_childrens_privacy": "Our platform is not intended for children under the age of 13. We do not knowingly collect personal data from children. If you believe we have collected such data, please contact us for immediate removal.",
+
+    "12_changes_to_this_privacy_policy": "We may update this Privacy Policy from time to time. Changes will be communicated via app notifications or email. Continued use of the platform implies acceptance of the updated policy.",
+
+    "13_contact_us": {
+      "address": "14b Ikosi road, KMS plaza",
+      "email": "[Insert contact email]"
+    }
+  }
+}

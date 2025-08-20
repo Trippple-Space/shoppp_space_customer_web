@@ -45,7 +45,7 @@ const StorefrontAbout = ({ store }: { store: Store }) => {
                     {store?.name}
                   </h2>
                   <p className="flex flex-row a-items-center gap-12">
-                    <span className="text-14 weight-400">{followersCount} followers</span>
+                    {/* <span className="text-14 weight-400">{followersCount} followers</span> */}
                     <span 
                       className="text-12 weight-600 bg-black text-white py-4 px-16 radius-999 pointer flex 
                       flex-row a-items-center j-content-between gap-8" 
@@ -72,13 +72,13 @@ const StorefrontAbout = ({ store }: { store: Store }) => {
               </div>
               <div className="flex flex-col gap-12 w-fit">
                 <h1 className="sm:text-35 text-24 weight-600">
-                  {store.heading || `About ${store.name}`}
+                  {store.heading}
                 </h1>
                 <p className="sm:text-16 text-14 weight-400">
                   {store?.subHeading}
                 </p>
                 <div className="text-14 weight-400 flex flex-row sm:gap-23 gap-8">
-                  <p className="flex flex-row a-items-center sm:gap-8 gap-5">
+                  {/* <p className="flex flex-row a-items-center sm:gap-8 gap-5">
                     <span className="sm:text-16 text-14 weight-600">
                       {visit ? (
                         visit?.totalCount
@@ -87,16 +87,16 @@ const StorefrontAbout = ({ store }: { store: Store }) => {
                       )}
                     </span>
                     <span>Monthly Visits</span>
-                  </p>
+                  </p> */}
                   <p className="h-24 w-1 bg-#00000014"></p>
                   <p className="flex flex-row a-items-center sm:gap-8 gap-5">
-                    <span className="sm:text-16 text-14 weight-600">
+                    {/* <span className="sm:text-16 text-14 weight-600">
                       {productSold || 0}
                     </span>
                     <span>
                       {productSold && productSold > 1 ? "Products" : "Product"}{" "}
                       Sold
-                    </span>
+                    </span> */}
                   </p>
                 </div>
               </div>

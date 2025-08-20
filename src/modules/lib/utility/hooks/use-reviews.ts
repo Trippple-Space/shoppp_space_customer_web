@@ -12,7 +12,7 @@ const useReviews = () => {
           const allReviews = await reviewService.getAllReviews();
           setAllReviews(allReviews)
         } catch (error) {
-          console.log(error);
+          //console.log(error);
         } finally {
           setAllLoading(false)
         }
@@ -22,7 +22,7 @@ const useReviews = () => {
         try {
             await reviewService.createReview(data)
         }catch (error) {
-          console.log(error);
+          //console.log(error);
         }
     }, [])
 

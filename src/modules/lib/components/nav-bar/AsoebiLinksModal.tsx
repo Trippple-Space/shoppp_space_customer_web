@@ -15,8 +15,6 @@ const AsoebiLinksModal = ({ sellOnAsoebi }: { sellOnAsoebi: boolean }) => {
 
   const pathname = usePathname()
 
-  console.log({ pathname })
-
   useEffect(() => {
     const getEnvironment = () => {
       if (origin.includes('asoebi.africa') && !origin.includes('staging')) {

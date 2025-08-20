@@ -6,9 +6,13 @@ import { BiLogoFacebook } from 'react-icons/bi'
 import { FiTwitter } from 'react-icons/fi'
 import { AiOutlineInstagram, AiOutlineYoutube } from 'react-icons/ai'
 import Image from '../image/Image'
+import Link from 'next/link'
+import config from '../../../../../env'
+import { paths } from '../../utility/paths'
 
 const Footer = () => {
   const [isFooterOpen, setIsFooterOpen] = useState(false)
+   const currentDate = new Date();
 
   const handleCloseFooter = () => {
     setIsFooterOpen(false)
@@ -18,22 +22,24 @@ const Footer = () => {
     <div className='fixed b-0 l-0 w-full z-index-2'>
       {isFooterOpen && (
         <div
-          className='fixed inset-0'
+          className='fixed inset-0 '
           onClick={handleCloseFooter}
         />
       )}
 
       <div
-        className={`flex g|transition:0.5s bg-white relative pointer w-full g|box-shadow:0px|_|-2px|_|10px|_|rgba(0,0,0,0.10); py-13`}
+        className={`flex g|transition:0.5s bg-white relative w-full g|box-shadow:0px|_|-2px|_|10px|_|rgba(0,0,0,0.10); py-13 `}
       >
         <div className='app-width'>
           {
             <div
               className={`l:h-30vh h-70vh no-scrollbar overflow-auto w-100p grid grid-1-cols-1fr l:flex mb-10 space-between container ${
                 isFooterOpen ? 'open' : ''
-              }`}
+                }`}
+                onClick={(e) => e.stopPropagation()} 
+
             >
-              <div className='py-25'>
+              <div className='py-25 '>
                 <p className='font-inter l:text-18 text-14 weight-600 text-dimgrey'>
                   Follow
                 </p>
@@ -67,26 +73,27 @@ const Footer = () => {
                 <h2 className='l:text-20 text-16 weight-600'>MENU</h2>
                 <div className='l:text-14 text-12 weight-400 font-inter l:pt-15'>
                   <p className='pt-15 pb-5 underline-on-hover'>ASOEBI</p>
-                  <p className='pt-15 pb-5 underline-on-hover'>ASOEBI WEARS</p>
+                  <Link href={paths.asoebi_wears} className='pt-15 pb-5 underline-on-hover inline-block'>ASOEBI WEARS</Link>
                   <p className='pt-15 pb-5 underline-on-hover'>EXPLORE</p>
                 </div>
-              </div>
+              </div> 
 
               <div className='text-dimgrey py-25'>
                 <h2 className='l:text-20 text-16 weight-600'>USEFUL STUFF</h2>
                 <div className='l:text-14 text-12 weight-400 font-inter l:pt-15'>
                   <p className='pt-15 pb-5 underline-on-hover'>CONTACT US</p>
                   <p className='pt-15 pb-5 underline-on-hover'>MY ACCOUNT</p>
-                  <p className='pt-15 pb-5 underline-on-hover'>JOIN OUR TEAM</p>
+                    <Link href={'/legal-document'}>
                   <p className='pt-15 pb-5 underline-on-hover'>
                     PRIVACY AND COOKIES
                   </p>
+                    </Link>
                   <p className='pt-15 pb-5 underline-on-hover'>JOIN OUR TEAM</p>
                 </div>
               </div>
 
               <div className='text-dimgrey l:w-27p l:py-25 l:pb-0 pb-20'>
-                <h2 className='l:text-20 text-16 weight-600'>JOIN THE FAM</h2>
+                <h2 className='l:text-20 text-16 weight-600'>Subscribe to  Newsletter</h2>
                 <div className='text-18 weight-400 pt-15'>
                   <p className='text-grey-600 l:text-16 text-14'>
                     Sign up to get the latest updates on sales, new releases and more...
@@ -122,11 +129,11 @@ const Footer = () => {
 
           <div
             className='flex whitespace-nowrap weight-400 text-14 a-self-center'
-            onClick={() => setIsFooterOpen(prev => !prev)}
+            // onClick={() => setIsFooterOpen(prev => !prev)}
           >
             <div className='w-full flex'>
               <div className='w-fit flex gap-30 mx-0 l:mx-auto a-self-center '>
-                <span>@ 2023 Asoebi all reserved.</span>
+                <span>@ {currentDate.getFullYear()} asoebi all reserved.</span>
                 <div className='w-fit hidden l:flex gap-30 mx-auto a-self-center'>
                   <span className='flex w-fit'>
                     {' '}
@@ -139,7 +146,7 @@ const Footer = () => {
                   <span className='flex w-fit'>
                     {' '}
                     <BsDot className='w-20 h-20' />{' '}
-                    <span>Own Asoebi store</span>{' '}
+                    <Link href={config.VENDOR_CENTER_HOST} target='_blank'>Own asoebi store</Link>{' '}
                   </span>
                   <span className='flex w-fit'>
                     {' '}
@@ -159,6 +166,7 @@ const Footer = () => {
               />
             </span>
           </div>
+       
         </div>
       </div>
     </div>

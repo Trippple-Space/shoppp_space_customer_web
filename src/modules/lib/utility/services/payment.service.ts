@@ -15,7 +15,6 @@ class PaymentService {
                     resolve(response.data);
                 })
                 .catch((error) => {
-                    console.error('Error processing Paystack payment:', error);
                     reject(error);
                 });
         });
@@ -29,7 +28,6 @@ class PaymentService {
                     resolve(response.data);
                 })
                 .catch((error) => {
-                    console.error('Error processing Flutterwave payment:', error);
                     reject(error);
                 });
         });

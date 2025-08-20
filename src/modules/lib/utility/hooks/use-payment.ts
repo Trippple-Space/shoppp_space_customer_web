@@ -27,7 +27,6 @@ const usePayment = () => {
       window.location.href = result.paymentLink;
     } catch (error) {
       toast.error("Error processing Paystack payment");
-      console.error("Paystack Payment Error:", error);
     } finally {
       setLoading(false);
     }
@@ -41,7 +40,6 @@ const usePayment = () => {
       const result = await paymentService.payWithFlutterwave(paymentDetails);
     } catch (error) {
       setError("Error processing Flutterwave payment");
-      console.error("Flutterwave Payment Error:", error);
     } finally {
       setLoading(false);
     }

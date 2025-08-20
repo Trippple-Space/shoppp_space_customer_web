@@ -20,7 +20,6 @@ export const useCategoryStore = create<CategoryStore>((set) => ({
     selectedCategory: {},
     products: {},
     setSelectedCategory: (type, label, storeId, category) => {
-        console.log('Hey', { type, label, storeId, category })
         return set((state) => ({
             selectedCategory: {
                 ...state.selectedCategory,
