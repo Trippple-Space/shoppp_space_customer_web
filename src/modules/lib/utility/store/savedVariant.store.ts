@@ -24,7 +24,6 @@ export const useSavedVariantStore = create<SavedVariantStore>((set) => ({
             set({ savedVariants, fetching: false });
         } catch (error) {   
             set({ fetching: false });
-            console.error("Error fetching saved items:", error);
         }
     },
     saveVariant: async (productVariantId: number) => {
@@ -39,7 +38,6 @@ export const useSavedVariantStore = create<SavedVariantStore>((set) => ({
 
             set({ savedVariants });
         } catch (error) {
-            console.error("Error removing saved variant:", error);
         }
     },
     clearSavedVariants: async () => {

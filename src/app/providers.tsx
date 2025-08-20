@@ -3,7 +3,6 @@
 import posthog from 'posthog-js'
 import { PostHogProvider } from 'posthog-js/react'
 import { useEffect } from 'react'
-import config from '../../env'
 
 export function PHProvider({
   children,

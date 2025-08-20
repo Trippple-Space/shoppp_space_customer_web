@@ -50,7 +50,7 @@ const AddSection = () => {
                     <div className="grid gap-10 l:flex l:items-center l:space-between mt-20">
                         <div className="">
                             <div className="weight-600">Section product <span className="text-red">*</span></div>
-                            <div className="weight-400 text-grey-700 text-14 mt-4">this are the list of products you have selected</div>
+                            <div className="weight-400 text-grey-700 text-14 mt-4">these are the list of products you have selected</div>
                         </div>
                         <Input
                             id='state'

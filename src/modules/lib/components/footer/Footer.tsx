@@ -7,6 +7,8 @@ import { FiTwitter } from 'react-icons/fi'
 import { AiOutlineInstagram, AiOutlineYoutube } from 'react-icons/ai'
 import Image from '../image/Image'
 import Link from 'next/link'
+import config from '../../../../../env'
+import { paths } from '../../utility/paths'
 
 const Footer = () => {
   const [isFooterOpen, setIsFooterOpen] = useState(false)
@@ -26,9 +28,7 @@ const Footer = () => {
       )}
 
       <div
-        className={`flex g|transition:0.5s bg-white relative pointer w-full g|box-shadow:0px|_|-2px|_|10px|_|rgba(0,0,0,0.10); py-13 `}
-
-        onClick={() => setIsFooterOpen(prev => !prev)}
+        className={`flex g|transition:0.5s bg-white relative w-full g|box-shadow:0px|_|-2px|_|10px|_|rgba(0,0,0,0.10); py-13 `}
       >
         <div className='app-width'>
           {
@@ -58,7 +58,7 @@ const Footer = () => {
                   </a>
                 </div>
                 <div className='text-light-grey text-14 font-inter weight-500'>
-                  @asoebiafrica | #AsoebiAfrica
+                  @AsoebiAfrica | #AsoebiAfrica
                 </div>
                 <div className='w-fit l:mt-50 mt-30'>
                   <Image
@@ -73,7 +73,7 @@ const Footer = () => {
                 <h2 className='l:text-20 text-16 weight-600'>MENU</h2>
                 <div className='l:text-14 text-12 weight-400 font-inter l:pt-15'>
                   <p className='pt-15 pb-5 underline-on-hover'>ASOEBI</p>
-                  <p className='pt-15 pb-5 underline-on-hover'>ASOEBI WEARS</p>
+                  <Link href={paths.asoebi_wears} className='pt-15 pb-5 underline-on-hover inline-block'>ASOEBI WEARS</Link>
                   <p className='pt-15 pb-5 underline-on-hover'>EXPLORE</p>
                 </div>
               </div> 
@@ -83,7 +83,6 @@ const Footer = () => {
                 <div className='l:text-14 text-12 weight-400 font-inter l:pt-15'>
                   <p className='pt-15 pb-5 underline-on-hover'>CONTACT US</p>
                   <p className='pt-15 pb-5 underline-on-hover'>MY ACCOUNT</p>
-                  <p className='pt-15 pb-5 underline-on-hover'>JOIN OUR TEAM</p>
                     <Link href={'/legal-document'}>
                   <p className='pt-15 pb-5 underline-on-hover'>
                     PRIVACY AND COOKIES
@@ -97,7 +96,7 @@ const Footer = () => {
                 <h2 className='l:text-20 text-16 weight-600'>Subscribe to  Newsletter</h2>
                 <div className='text-18 weight-400 pt-15'>
                   <p className='text-grey-600 l:text-16 text-14'>
-                    Sign up to get the latest on sales, new release and more...
+                    Sign up to get the latest updates on sales, new releases and more...
                   </p>
 
                   <div className='flex w-100p gap-20 pt-20'>
@@ -142,12 +141,12 @@ const Footer = () => {
                   </span>
                   <span className='flex w-fit'>
                     {' '}
-                    <BsDot className='w-20 h-20' /> <span>About asoebi</span>{' '}
+                    <BsDot className='w-20 h-20' /> <span>About Asoebi</span>{' '}
                   </span>
                   <span className='flex w-fit'>
                     {' '}
                     <BsDot className='w-20 h-20' />{' '}
-                    <span>Own asoebi store</span>{' '}
+                    <Link href={config.VENDOR_CENTER_HOST} target='_blank'>Own asoebi store</Link>{' '}
                   </span>
                   <span className='flex w-fit'>
                     {' '}

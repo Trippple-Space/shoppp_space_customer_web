@@ -108,7 +108,7 @@ const handler = async (req: NextRequest) => {
 
         return NextResponse.json(response, { status: responsePayload.statusCode });
     } catch (error) {
-        console.error('Error invoking Lambda function:', error);
+        //console.error('Error invoking Lambda function:', error);
         return NextResponse.json({ error: 'Failed to invoke Lambda function' }, { status: 500 });
     }
 };

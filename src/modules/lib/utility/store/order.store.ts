@@ -25,10 +25,8 @@ export const useOrderStore = create<OrderStore>((set) => ({
             set({ fetching: true })
             const orders = await orderService.fetchOrders(query)
             set({ orders, fetching: false })
-            console.log({orders})
         } catch (error) {
             set({fetching: false})
-             console.error("Error fetching Orders:", error);
         }
         
     },

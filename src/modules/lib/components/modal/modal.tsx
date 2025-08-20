@@ -71,7 +71,7 @@ const Modal: React.FC<ModalProps> = ({ isOpen, onClose, children, extraModalClas
   };
 
   return (
-    <div style={modalStyle} className={`${modalClassName === 'filter' ? 'm:absolute fixed m:t-40 t-0 md:bg-transparent! md:z-1 z-11' : 'fixed t-0 z-11'}`}>
+    <div style={modalStyle} className={`${modalClassName === 'filter' ? 'm:absolute fixed m:t-40 t-0 md:bg-transparent! md:z-2 z-11' : 'fixed t-0 z-11'}`}>
       <div ref={modalRef} className={className} style={modalContentStyle}>
         <div className='h-full'>{children}</div>
       </div>

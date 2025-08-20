@@ -12,7 +12,7 @@ export const useCalculatedeliveryFee = () => {
             setDeliveryFeeResponse(response)
             return response
         } catch (error) {
-            console.log(error);
+            //console.log(error);
         }
     }
   return {deliveryFeeResponse, calculateFee}

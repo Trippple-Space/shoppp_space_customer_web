@@ -10,12 +10,10 @@ export const useLogVisit = (
       await visitService
         .logVisit(storeID, ipAddress)
         .then((res: any) => {
-          console.log({ res });
           //   toast.success("Visit logged successfully!");
-          console.log("Visit logged successfully!");
         })
         .catch((error) => {
-          console.error("failed to log visit", error);
+          //console.error("failed to log visit", error);
           //   toast.error("failed to log visit!");
         });
     }

@@ -45,7 +45,6 @@ const useAddressStore = create<AddressStore>((set) => ({
       });
     } catch (error) {
       set({ addresses: [], selectedAddressId: null });
-      console.error("Error fetching addresses:", error);
     }
   },
 
@@ -88,7 +87,6 @@ const useAddressStore = create<AddressStore>((set) => ({
         addressToUpdateId: null,
       }));
     } catch (error) {
-      console.error("Error updating address:", error);
     }
   },
 
@@ -134,7 +132,6 @@ const useAddressStore = create<AddressStore>((set) => ({
         ),
       }));
     } catch (error) {
-      console.error("Error creating address:", error);
     }
   },
 }));

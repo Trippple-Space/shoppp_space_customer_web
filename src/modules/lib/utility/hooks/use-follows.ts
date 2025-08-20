@@ -13,7 +13,7 @@ const useFollow = (storeId: number) => {
       const count = await followService.fetchStoreFollowers(storeId);
       setFollowersCount(count);
     } catch (error) {
-      console.log(error);
+      //console.log(error);
     }
   }, [storeId]);
 
@@ -22,7 +22,7 @@ const useFollow = (storeId: number) => {
       const isFollowingStore = await followService.fetchStoreFollowing(storeId);
       setIsFollowing(isFollowingStore);
     } catch (error) {
-      console.log(error);
+      //console.log(error);
     }
   }, [storeId]);
 
@@ -32,7 +32,7 @@ const useFollow = (storeId: number) => {
       await getFollowersCount();
       setIsFollowing(true);
     } catch (error) {
-      console.log(error);
+      //console.log(error);
     }
   }, [storeId, getFollowersCount]);
 
@@ -42,7 +42,7 @@ const useFollow = (storeId: number) => {
       await getFollowersCount();
       setIsFollowing(false);
     } catch (error) {
-      console.log(error);
+      //console.log(error);
     }
   }, [storeId, getFollowersCount]);
 
