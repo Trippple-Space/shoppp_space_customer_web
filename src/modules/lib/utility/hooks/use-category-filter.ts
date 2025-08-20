@@ -56,7 +56,6 @@ export const useCategoryFilter = (
           if (selectedCategory !== null) {
                const filteredProducts: Product[] = [];
                if (selectedCategory?.name === "Random") {
-                    console.log(products)
                     updateFilters(products);
                } else {
                     products.forEach((product) => {

@@ -15,8 +15,6 @@ const AsoebiLinksModal = ({ sellOnAsoebi }: { sellOnAsoebi: boolean }) => {
 
   const pathname = usePathname()
 
-  console.log({ pathname })
-
   useEffect(() => {
     const getEnvironment = () => {
       if (origin.includes('asoebi.africa') && !origin.includes('staging')) {
@@ -112,7 +110,7 @@ const AsoebiLinksModal = ({ sellOnAsoebi }: { sellOnAsoebi: boolean }) => {
               <TbWorld className='w-28 h-28' />
             </div>
             <div className='flex flex-col gap-5 a-items-baseline cursor-pointer'>
-              <p className='weight-500'>Sell on asoebi.africa</p>
+              <p className='weight-500'>Sell on Asoebi.Africa</p>
               <p
                 className='color-#00000099;
               '

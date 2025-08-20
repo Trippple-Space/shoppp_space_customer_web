@@ -8,11 +8,10 @@ export const useGetVisit = (storeID: number) => {
       await visitService
         .getVisit(storeID)
         .then((res: any) => {
-          console.log({ res });
           setVisit(res);
         })
         .catch((error) => {
-          console.error("failed to get visit", error);
+          //console.error("failed to get visit", error);
         });
     };
     getVisit();

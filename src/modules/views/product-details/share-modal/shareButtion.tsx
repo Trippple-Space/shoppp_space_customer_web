@@ -39,7 +39,7 @@ const ShareButton: React.FC<ShareProps> = ({ mediaName, mediaLogo }) => {
         break;
 
       default:
-        console.warn("Unsupported sharing option:", mediaName);
+        //console.warn("Unsupported sharing option:", mediaName);
     }
   };
 

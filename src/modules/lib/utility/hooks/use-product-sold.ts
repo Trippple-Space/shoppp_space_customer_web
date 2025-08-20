@@ -12,7 +12,7 @@ export const useProductSold = (storeID: number) => {
           setProductSold(res);
         })
         .catch((error) => {
-          console.error("failed to get product sold", error);
+          //console.error("failed to get product sold", error);
         });
     }
   };

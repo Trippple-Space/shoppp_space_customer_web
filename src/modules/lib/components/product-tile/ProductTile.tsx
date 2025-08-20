@@ -242,7 +242,7 @@ const ProductTile: FC<IProductTile> = ({ product, savedVariants, saveVariant, re
         <div className="absolute w-fit h-fit t-0 l-0">
           {topTwoPills.map((pill, index) => (
             <div
-              key={index}
+              key={index + pill.text + pill.pillColor}
               className="mt-10 l:ml-15 l:mt-15 whitespace-nowrap w-fit h-20 radius-20 flex a-items-center j-content-center px-10 py-15 ml-5"
               style={{
                 backgroundColor: pill.pillBackground,
@@ -260,9 +260,10 @@ const ProductTile: FC<IProductTile> = ({ product, savedVariants, saveVariant, re
           className="md:mt-16 mt-14 flex a-items-center md:gap-6 gap-4 w-full overflow-auto whitespace-nowrap no-scrollbar"
         >
           {uniqueVariantsFromProductImages.map((variant: any) =>
-            variant?.media?.map((mediaItem: any) =>
+            variant?.media?.map((mediaItem: any, i: number) =>
               mediaItem?.type === "image" ? (
                 <Image
+                  key={`${variant.id}-${mediaItem.url}-${i}`}
                   className={classNames(
                     `l:w-35.2 l:min-w-35.2 l:h-35.2 w-31 min-w-31 h-31 pointer md:radius-4 radius-3 a-self-center g|object-fit:cover ${variant?.status === 'OUT_OF_STOCK' && 'out-of-stock'}`,
                     {
@@ -282,6 +283,7 @@ const ProductTile: FC<IProductTile> = ({ product, savedVariants, saveVariant, re
                 />
               ) : (
                 <VideoSrc
+                  key={`${variant.id}-${mediaItem.url}-${i}`}
                   className={classNames(
                     `l:w-35.2 l:min-w-35.2 l:h-35.2 w-31 min-w-31 h-31 pointer md:radius-4 radius-3 a-self-center g|object-fit:cover ${variant?.status === 'OUT_OF_STOCK' && 'out-of-stock'}`,
                     {

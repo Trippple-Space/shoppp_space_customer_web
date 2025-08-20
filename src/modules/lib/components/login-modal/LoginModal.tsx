@@ -63,10 +63,7 @@ const LoginModal = () => {
                       handleChange={loginFormHandler.handleChange}
                     />
                   </main>
-                  <div className='text-center text-10 text-green-500 pointer'>
-                    Forget Your Password?
-                  </div>
-
+                
                   <div className='px-16 mb-20'>
                     <button
                       className='bg-green text-white py-8 l:py-10 radius-8 w-full border 
@@ -77,11 +74,16 @@ const LoginModal = () => {
                       Sign In
                     </button>
                   </div>
+
+                  <div className='text-center text-10 text-green-500 pointer'>
+                    Forgot Your Password?
+                  </div>
+
                 </form>
 
                 <div className='border-t border-2 border-grey-200'></div>
                 <div className='weight-500 text-10 whitespace-nowrap p-16 text-center'>
-                  Alredy have an account?{' '}
+                  Already have an account?{' '}
                   <Link
                     href={paths.signup}
                     className='text-green-700'

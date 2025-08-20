@@ -231,7 +231,7 @@ const OrderProcess = ({
                         <p className='weight-600'>Cancel order</p>
                         <div className='flex flex-col gap-10'>
                           <p className='color-#6A6A6A text-14'>
-                            Why did you want to cancel this order?
+                            Why do you want to cancel this order?
                           </p>
 
                           <div className='bg-#F5F5F5 p-20 radius-5'>

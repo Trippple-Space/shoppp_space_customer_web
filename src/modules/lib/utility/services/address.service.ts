@@ -12,7 +12,6 @@ class AddressService {
           resolve(response.data);
         })
         .catch((error) => {
-          console.error('Error fetching addresses:', error);
           reject();
         });
     });
@@ -25,7 +24,6 @@ class AddressService {
           resolve(response.data);
         })
         .catch((error) => {
-          console.error('Error fetching address by ID:', error);
           reject();
         });
     });
@@ -38,7 +36,6 @@ class AddressService {
           resolve(response.data);
         })
         .catch((error) => {
-          console.error('Error creating address:', error);
           reject(error);
         });
     });
@@ -51,7 +48,6 @@ class AddressService {
           resolve(response.data);
         })
         .catch((error) => {
-          console.error('Error updating address:', error);
           reject(error);
         });
     });
@@ -64,7 +60,6 @@ class AddressService {
           resolve(response.data);
         })
         .catch((error) => {
-          console.error('Error deleting address:', error);
           reject(error);
         });
     });
