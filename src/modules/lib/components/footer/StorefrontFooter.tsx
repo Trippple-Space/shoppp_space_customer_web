@@ -23,7 +23,7 @@ const StorefrontFooter:React.FC<{store: Store}> = ({store}) => {
             >
               <HiOutlineLocationMarker className="w-24 min-w-24 h-24" />
               <span className="text-16">
-                {store?.meta?.settings?.location?.address || JSON.parse(store?.registrationProposal?.data)?.storeAddress}
+                {store?.meta?.settings?.location?.address || JSON.parse(store?.registrationProposal?.data ?? '{}')?.storeAddress}
               </span>
             </Link>
           </p>
