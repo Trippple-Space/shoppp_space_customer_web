@@ -15,19 +15,19 @@ import { buildEndpoint } from "@/modules/lib/utility/utility";
 async function getStore(slug: string) {
   try {
     const res = await  fetch(config.API_HOST + "/" + buildEndpoint(endpoints.STORE, { slug }), {
-        cache: "no-store", // Next.js-specific way to prevent caching
+        cache: "no-store", 
       })
 
     if (!res.ok) {
       return null;
     }
 
-    const text = await res.text(); // <-- read as text first
+    const text = await res.text(); 
     if (!text) {
-      return null; // empty response
+      return null; 
     }
 
-    return JSON.parse(text); // parse safely
+    return JSON.parse(text); 
   } catch (e) {
     console.error("Error fetching store:", e);
     return null;
