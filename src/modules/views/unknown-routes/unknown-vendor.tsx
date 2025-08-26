@@ -1,3 +1,5 @@
+'use client'
+
 import BaseNavBar from '@/modules/lib/components/nav-bar/BaseNavBar'
 import { paths } from '@/modules/lib/utility/paths'
 import Link from 'next/link'
