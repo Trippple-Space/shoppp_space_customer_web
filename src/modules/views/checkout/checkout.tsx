@@ -392,7 +392,7 @@ const CheckoutPage = () => {
                               try {
                                 await removeFromCart(cartItem?.id)
                                 setAllAddressDeliveryPrice([])
-                                setShouldUpdateFee(true);
+                                //setShouldUpdateFee(true);
                               } catch (error) {
                               }
                             }}

@@ -126,7 +126,7 @@ const ProductTile: FC<IProductTile> = ({ product, savedVariants, saveVariant, re
 
   const isOutOfStock = selectedVariant?.status === 'OUT_OF_STOCK'
   const isDiscounted = new Date(product?.discount?.activeStartDate) <= new Date(new Date().setHours(new Date().getHours() + 1)) && new Date(new Date().setHours(new Date().getHours() + 1)) <= new Date(product?.discount?.activeEndDate)
-  const hasSize = !(groupedData?.[selectedColor][0].size === null || groupedData?.[selectedColor][0].size === '')
+  const hasSize = !(groupedData?.[selectedColor]?.[0].size === null || groupedData?.[selectedColor]?.[0].size === '')
 
   return (
     <div className='mt-30 l:mt-20 w-full overflow-hidden'>
@@ -136,7 +136,7 @@ const ProductTile: FC<IProductTile> = ({ product, savedVariants, saveVariant, re
         onMouseOver={() => setOnProductTileHover(true)}
         onMouseOut={() => setOnProductTileHover(false)}
       >
-        <Link href={`/products/${product.slug}`}>
+        <Link href={`/products/${product?.slug}`}>
           {mediaType === "image" ? (
             <div className='relative w-full h-full'>
               {isOutOfStock && <div className="absolute w-100p h-100p text-white flex j-content-center a-items-center z-1 l:text-22 radius-6">
@@ -311,10 +311,10 @@ const ProductTile: FC<IProductTile> = ({ product, savedVariants, saveVariant, re
           title={product.name}
           className="md:text-16 text-15 weight-500 text-#000000E0 md:line-height-24 line-height-22 l:w-100p w-100 l:white-space-nowrap text-overflow-ellipsis flex flex-wrap a-items-center j-content-between"
         >
-          <Link href={`/products/${product.slug}`}>{product.name}</Link>
+          <Link href={`/products/${product?.slug}`}>{product.name}</Link>
         </div>
         <div className="flex a-items-center gap-10 l:gap-18 text-dimgrey py-6 border-y border-#00000014">
-          <Link href={`/${product.store.slug}`} className="flex gap-6 a-items-center color-#00000099 capitalize">
+          <Link href={`/${product.store?.slug}`} className="flex gap-6 a-items-center color-#00000099 capitalize">
             <PiStorefront className="md:w-16 w-14 md:h-16 h-14" />
             <p className="md:text-12 text-10 weight-400 md:line-height-20 line-height-12.1">{product?.store?.name}</p>
           </Link>
@@ -347,9 +347,9 @@ const ProductTile: FC<IProductTile> = ({ product, savedVariants, saveVariant, re
             }
           </div>
           <div className='text-9 sm:text-10 text-grey'>
-            <MiniReview id={selectedVariant.id} slug={product.slug} isOpen={isOpen} setIsOpen={setIsOpen}
-              reviews={allReviews.filter((review: any) => review.productVariantId === selectedVariant.id)}
-              reviewStat={reviewStat.find((stat: any) => stat.id === selectedVariant.id)?.reviewStat}
+            <MiniReview id={selectedVariant?.id} slug={product?.slug} isOpen={isOpen} setIsOpen={setIsOpen}
+              reviews={allReviews.filter((review: any) => review.productVariantId === selectedVariant?.id)}
+              reviewStat={reviewStat.find((stat: any) => stat.id === selectedVariant?.id)?.reviewStat}
               loading={statsLoading}
               color={selectedColor}
             />
