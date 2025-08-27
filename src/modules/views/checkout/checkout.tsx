@@ -59,8 +59,7 @@ const CheckoutPage = () => {
     }
   })
   const [allAddressDeliveryPrice, setAllAddressDeliveryPrice] = useState<addressDeliveryPrice[]>([])
-  const [selectedDeliveryOption, setSelectedDeliveryOption] =
-    useState<keyof typeof deliveryOptions>("standard");
+  const [selectedDeliveryOption, setSelectedDeliveryOption] = useState<keyof typeof deliveryOptions | null>(null);
   const { user, isAuthenticated } = useUserStore();
   const { cart, removeFromCart, removeDiscountCode, fetchCart } = useCart();
   const { openAddressModal, selectedAddress } = useAddress();
@@ -69,8 +68,8 @@ const CheckoutPage = () => {
   const { loading: isPaymentLoading, payWithPaystack } = usePayment();
   const { calculateFee } = useCalculatedeliveryFee()
   const [calculatingFee, setCalculatingFee] = useState<boolean>(true)
-  const selectedDeliveryOptionDetails = deliveryOptions[selectedDeliveryOption];
-  const canProceedToPayment = !(!isPaymentLoading && selectedAddress && user && !calculatingFee && !isNaN(selectedDeliveryOptionDetails.price));
+  const selectedDeliveryOptionDetails = selectedDeliveryOption ? deliveryOptions[selectedDeliveryOption] : null;
+  const canProceedToPayment = !(!isPaymentLoading && selectedAddress && user && !calculatingFee && selectedDeliveryOptionDetails !== null && !isNaN(selectedDeliveryOptionDetails.price));
   const [devOptions, setDevOptions] = useState<string>();
   const [showSummary, setshowSummary] = useState(true);
   const [devAddressError, setDevAddressError] = useState(false)
@@ -253,7 +252,7 @@ const CheckoutPage = () => {
       <div className="md:pt-69.6 pt-64 sm:mb-60 mb-111 h-full">
         <DeliveryMessage />
         <div className="md:flex overflow-hidden" style={{ height: 'calc(100dvh - 128px)' }}>
-          <div className="flex-grow-1 l:w-54.2p md:w-50p h-full overflow-auto no-scrollbar md:pt-44 md:pb-90 sm:pt-32 sm:pb-99 pt-24 pb-147 xl:pl-80 l:pl-70 md:pl-60 sm:pl-40 pl-24 xl:pr-80 l:pr-70 sm:pr-40 pr-24 flex flex-col gap-28 bg-white">
+          <div className={`flex-grow-1 l:w-54.2p md:w-50p h-full overflow-auto no-scrollbar md:pt-44 sm:pt-32 pt-24 xl:pl-80 l:pl-70 md:pl-60 sm:pl-40 pl-24 xl:pr-80 l:pr-70 sm:pr-40 pr-24 flex flex-col gap-28 bg-white md:pb-90 ${showSummary ? "sm:pb-299 pb-347" : "sm:pb-99 pb-147"}`}>
             <div className="flex flex-col gap-6">
               <h1 className="weight-600 md:text-24 text-20 md:line-height-32 line-heigth-28">
                 Order Summary
@@ -312,6 +311,7 @@ const CheckoutPage = () => {
                 retry={() => {
                   setAllAddressDeliveryPrice([])
                   setShouldUpdateFee(true);
+                  setSelectedDeliveryOption(null)
                 }}
                 selectedAddress={selectedAddress}
               />}
@@ -422,6 +422,7 @@ const CheckoutPage = () => {
                   retry={() => {
                     setAllAddressDeliveryPrice([])
                     setShouldUpdateFee(true);
+                    setSelectedDeliveryOption(null)
                   }}
                   selectedAddress={selectedAddress}
                 />}
@@ -432,10 +433,10 @@ const CheckoutPage = () => {
                 <div className={`${showSummary ? 'block' : 'md:block hidden'}`}>
                   <OrderSummary
                     subTotal={cart.subTotal}
-                    shippingFee={selectedAddress ? selectedDeliveryOptionDetails.price : undefined}
-                    total={selectedAddress ? cart.total + selectedDeliveryOptionDetails.price : ''}
+                    shippingFee={selectedAddress ? selectedDeliveryOptionDetails?.price : undefined}
+                    total={selectedAddress ? cart.total + (selectedDeliveryOptionDetails?.price ? selectedDeliveryOptionDetails?.price : 0) : ''}
                     cart={cart}
-                    loading={calculatingFee || !selectedAddress || isNaN(selectedDeliveryOptionDetails.price)}
+                    loading={calculatingFee || !selectedAddress || isNaN(selectedDeliveryOptionDetails?.price ?? 0)}
                   />
                 </div>
                 <div className="flex sm:flex-row flex-col sm:gap-0 gap-20 space-between a-items-center">
@@ -453,7 +454,7 @@ const CheckoutPage = () => {
                     {
                       !showSummary && <span className="md:hidden sm:block hidden sm:weight-600 weight-700 sm:text-16 text-14 sm:line-height-22 line-height-19">
                         {formatNumberAsPrice(
-                          cart.total + selectedDeliveryOptionDetails.price
+                          cart.total + (selectedDeliveryOptionDetails?.price ? selectedDeliveryOptionDetails?.price : 0)
                         )}
                       </span>
                     }
@@ -462,10 +463,12 @@ const CheckoutPage = () => {
                         if (canProceedToPayment) {
                           setDevAddressError(true)
                         } else {
-                          payWithPaystack({
-                            addressId: selectedAddress?.id,
-                            deliveryOption: selectedDeliveryOption,
-                          })
+                          if (selectedDeliveryOption !== null) {
+                            payWithPaystack({
+                              addressId: selectedAddress?.id,
+                              deliveryOption: selectedDeliveryOption,
+                            })
+                          }
                         }
                       }
                       }
@@ -478,7 +481,7 @@ const CheckoutPage = () => {
                           !showSummary && <span className="sm:hidden weight-700">
                             (
                             {formatNumberAsPrice(
-                              cart.total + selectedDeliveryOptionDetails.price
+                              cart.total + (selectedDeliveryOptionDetails?.price ? selectedDeliveryOptionDetails?.price : 0)
                             )}
                             )
                           </span>
