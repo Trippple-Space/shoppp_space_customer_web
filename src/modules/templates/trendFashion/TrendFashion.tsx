@@ -55,7 +55,7 @@ const TrendFashion: FC<{ store: Store; }> = ({
 
     return (
         <div className="trend-body font-inter">
-            <header className="relative">
+            <header className="relative pt-100">
                 <section className="navbar">
                     <div className="logo-container trend-flex">
                         <img src={store?.thumbnail || "/images/trend-fashion/images/logo.png"} alt="logo-img" className="logo-img" />
@@ -152,10 +152,10 @@ const TrendFashion: FC<{ store: Store; }> = ({
             <section className="features">
                 <div className="feature-images trend-flex">
                     <div>
-                        <img src="/images/trend-fashion/images/woman1.jpg" alt="woman" />
+                        <img src={products[0]?.variants[0]?.media[0].url || "/images/trend-fashion/images/woman1.jpg"} alt="woman" />
                     </div>
                     <div>
-                        <img src="/images/trend-fashion/images/woman2.jpg" alt="woman" />
+                        <img src={products[1]?.variants[0]?.media[0].url || products[0]?.variants[0]?.media[1].url || "/images/trend-fashion/images/woman2.jpg"} alt="woman" />
                     </div>
                 </div>
                 <div className="feature-text trend-flex">

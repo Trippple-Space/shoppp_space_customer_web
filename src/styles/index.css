@@ -639,6 +639,7 @@
 .border-pink { border-color: pink; } 
 .border-blue { border-color: blue; } 
 .border-lightgreen { border-color: #E2FFFA; } 
+.pt-100 { padding-top: 100px; } 
 .t-6 { top: 6px; } 
 .r-5p { right: 5%; } 
 .mt--30 { margin-top: -30px; } 
