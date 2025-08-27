@@ -27,7 +27,7 @@ const DeliveryOptions: FC<IDeliveryOptions> = ({
       {
         selectedAddress ?
           <div className="">
-            <div className="flex md:flex-col sm:flex-row flex-col gap-12">
+            <div className="flex flex-wrap md:flex-col sm:flex-row flex-col gap-12">
               {Object.entries(deliveryOptions).map(([key, option]) => {
                 return (
                   <BoxRadio
@@ -73,7 +73,7 @@ const DeliveryOptions: FC<IDeliveryOptions> = ({
                       </div>
                     }
                     checked={selectedDeliveryOption === key}
-                    disabled={((isNaN(option.price) || option.price === null) && !loading)}
+                    disabled={((isNaN(option.price) || option.price === null) || loading)}
                     onChange={() =>
                       setSelectedDeliveryOption(key as keyof typeof deliveryOptions)
                     }
