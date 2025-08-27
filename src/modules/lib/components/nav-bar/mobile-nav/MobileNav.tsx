@@ -17,19 +17,31 @@ import { onGoingOrderStatus, onGoingOrderStatusQuery } from '@/modules/lib/utili
 interface IMobileNav {
   handleCloseDropdown: () => void
   setProfileModal?: any
+  isOpen?: boolean
+  onOpenChange?: (open: boolean) => void
+  hideTrigger?: boolean
 }
 
 const MobileNav: FC<IMobileNav> = ({
   handleCloseDropdown,
-  setProfileModal
+  setProfileModal,
+  isOpen,
+  onOpenChange,
+  hideTrigger = false,
 }) => {
   useAuthGuard() // TODO: refactor to rely on Next 13 auth middleware
   const [asoebiMobileModal, setAsoebiMobileModal] = useState<boolean>(false)
-  const [hamburgerMenu, setHamburgerMenu] = useState<boolean>(false)
+  const [internalOpen, setInternalOpen] = useState(false);
+  const hamburgerMenu = isOpen !== undefined ? isOpen : internalOpen;
+  const setHamburgerMenu = (val: boolean) => {
+    if (onOpenChange) onOpenChange(val);
+    else setInternalOpen(val);
+  };
+  //const [hamburgerMenu, setHamburgerMenu] = useState<boolean>(false)
   const { user, signOut } = useNavbarView()
   const { isAuthenticated } = useUserStore()
 
-  const query:any = onGoingOrderStatusQuery;
+  const query: any = onGoingOrderStatusQuery;
 
   const { orders } = useOrders({
     filters: { status: { In: query } }
@@ -41,9 +53,9 @@ const MobileNav: FC<IMobileNav> = ({
     setAsoebiMobileModal(prev => !prev)
   }
 
-  const toogleHamburgerMenu = () => {
-    setHamburgerMenu(prev => !prev)
-  }
+  const toggleHamburgerMenu = () => {
+    setHamburgerMenu(!hamburgerMenu);
+  };
 
   const profileModals = [
     'orders',
@@ -51,16 +63,18 @@ const MobileNav: FC<IMobileNav> = ({
     'recently viewed',
     'recently searched'
   ]
-  {/*'ratings & reviews', */}
+  {/*'ratings & reviews', */ }
 
   return (
     <div className='md:hidden flex a-items-center'>
-      {hamburgerMenu ? (
-        <RxCross1 onClick={toogleHamburgerMenu} className='w-24 h-24' />
-      ) : (
-        <RxHamburgerMenu onClick={toogleHamburgerMenu} className='w-24 h-24' />
+      {!hideTrigger && (
+        hamburgerMenu ? (
+          <RxCross1 onClick={toggleHamburgerMenu} className="w-24 h-24" />
+        ) : (
+          <RxHamburgerMenu onClick={toggleHamburgerMenu} className="w-24 h-24" />
+        )
       )}
-
+      
       {hamburgerMenu && (
         <div
           className='md:hidden z-5 overflow-hidden bg-white r-0 w-100p t-64 fixed border-t border-1 border-#00000014 g|box-shadow:0px|_|8px|_|16px|_|#494F5E1F;'
@@ -88,9 +102,8 @@ const MobileNav: FC<IMobileNav> = ({
 
               {isAuthenticated && (
                 <div
-                  className={`${
-                    asoebiMobileModal && 'border-t border-1 border-#00000014'
-                  }`}
+                  className={`${asoebiMobileModal && 'border-t border-1 border-#00000014'
+                    }`}
                 >
                   {profileModals.map((modal, i) => (
                     <div
@@ -106,7 +119,7 @@ const MobileNav: FC<IMobileNav> = ({
                           href={'/orders'}
                           className='line-height-24 weight-400 capitalize w-full'
                         >
-                          Orders ({orders.length})  
+                          Orders ({orders.length})
                         </Link>
                       ) : (
                         <p className='line-height-24 weight-400 capitalize'>
@@ -128,10 +141,9 @@ const MobileNav: FC<IMobileNav> = ({
               )}
 
               <div
-                className={`flex flex-col pt-5 text-16 weight-400 line-height-24 ${
-                  (asoebiMobileModal || isAuthenticated) &&
+                className={`flex flex-col pt-5 text-16 weight-400 line-height-24 ${(asoebiMobileModal || isAuthenticated) &&
                   'border-t border-1 border-#00000014'
-                }`}
+                  }`}
               >
                 <Link
                   href={config.VENDOR_CENTER_HOST}

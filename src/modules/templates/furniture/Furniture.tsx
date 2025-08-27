@@ -1,7 +1,7 @@
 "use client"
 
 import { useState } from "react";
-import "./styles/furniture.css";
+import "../furniture/furniture.css";
 
 const Furniture = () => {
     const [showMobileNav, setShowMobileNav] = useState(false);

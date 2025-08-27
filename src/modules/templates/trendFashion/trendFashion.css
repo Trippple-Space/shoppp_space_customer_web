@@ -4,29 +4,29 @@
   box-sizing: border-box;
 }
 
-body {
-  font-family: "Inter", sans-serif;
+.trend-body {
   color: #111;
   background-color: #fff;
+  font-weight: 400;
 }
 
-a {
+.trend-body a {
   text-decoration: none;
   color: inherit;
 }
 
-.flex {
+.trend-body .trend-flex {
   display: flex;
   align-items: center;
 }
 
-header {
+.trend-body header {
   overflow: hidden;
   max-width: 1440px;
   margin: 0 auto;
 }
 
-.navbar {
+.trend-body .navbar {
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -43,6 +43,7 @@ header {
 .logo-img {
   width: 20px;
   height: 20px;
+  border-radius: 100%;
 }
 
 .logo {
@@ -118,14 +119,13 @@ header {
 
 .hero-text h1 {
   font-size: 60px;
-  font-weight: 900;
   line-height: 1.2;
   margin-bottom: 40px;
 }
 
 .hero-text p {
   font-size: 19px;
-  color: rgb(103, 103, 103);
+  color: #676767;
   margin-bottom: 40px;
 }
 
@@ -308,19 +308,20 @@ header {
 
 .exclusive {
   margin-top: 50px;
-  text-align: center;
   padding: 40px 90px;
 }
 
-.exclusive h2 {
+.exclusive .exclusive-header {
   font-size: 52px;
-  font-weight: 900;
   margin-bottom: 10px;
+  text-align: center;
 }
 
-.exclusive p {
+.exclusive .exclusive-subheader {
   font-size: 16px;
   color: rgb(103, 103, 103);
+  text-align: center;
+  margin-bottom: 40px;
 }
 
 .showNav {
@@ -608,18 +609,18 @@ header {
     padding: 30px 20px;
   }
 
-  .exclusive h2 {
+  .exclusive .exclusive-header {
     font-size: 30px;
     margin-bottom: 0px;
   }
 
-  .exclusive p {
+  .exclusive .exclusive-subheader {
     font-size: 14px;
   }
 }
 
 @media (max-width: 950px) {
-  .navbar {
+  .trend-body .navbar {
     padding: 20px 40px;
   }
 
@@ -685,6 +686,10 @@ header {
     display: none;
   }
 
+  .side-buttons {
+    margin-top: -40px;
+  }
+
   .side-buttons .side-button.first {
     margin-left: 60px;
   }
@@ -739,7 +744,7 @@ header {
 }
 
 @media (max-width: 540px) {
-  .navbar {
+  .trend-body .navbar {
     background-color: white;
     width: 100%;
     justify-content: space-between;
@@ -881,12 +886,12 @@ header {
     padding: 30px 20px;
   }
 
-  .exclusive h2 {
+  .exclusive .exclusive-header {
     font-size: 30px;
     margin-bottom: 0px;
   }
 
-  .exclusive p {
+  .exclusive .exclusive-subheader {
     font-size: 13px;
   }
 }

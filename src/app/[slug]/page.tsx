@@ -3,7 +3,7 @@ import StorefrontAbout from "@/modules/views/storefront/StorefrontAbout";
 import StorefrontLayout from "@/modules/views/storefront/StorefrontLayout";
 import React from "react";
 import type { Metadata } from 'next'
-import TrendFashion from "@/modules/templates/TrendFashion";
+import TrendFashion from "@/modules/templates/trendFashion/TrendFashion";
 
 export async function generateMetadata({
   params
@@ -67,7 +67,7 @@ export default async function storeFront({
   const store = await storeService.fetchStoreBySlug(params.slug, {});
   return (
     <>
-      <TrendFashion />
+      <TrendFashion store={store} />
       <StorefrontLayout store={store}>
         <StorefrontAbout store={store} />
       </StorefrontLayout>
