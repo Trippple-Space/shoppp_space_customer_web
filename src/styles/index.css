@@ -639,12 +639,12 @@
 .border-pink { border-color: pink; } 
 .border-blue { border-color: blue; } 
 .border-lightgreen { border-color: #E2FFFA; } 
-.pt-100 { padding-top: 100px; } 
 .t-6 { top: 6px; } 
 .r-5p { right: 5%; } 
 .mt--30 { margin-top: -30px; } 
 .mt-60 { margin-top: 60px; } 
 .grid-col-span-5 { grid-column: span 5; } 
+.pt-100 { padding-top: 100px; } 
 .pt-64 { padding-top: 64px; } 
 .mb-111 { margin-bottom: 111px; } 
 .pt-24 { padding-top: 24px; } 
@@ -1283,9 +1283,10 @@
 @media only screen and (min-width: 992px) { .l\:w-full {    width: 100%;  } } 
 @media only screen and (min-width: 992px) { .l\:text-15 { font-size: 15px; } } 
 @media only screen and (min-width: 992px) { .l\:mr-10 { margin-right: 10px; } } 
-@media only screen and (min-width: 992px) { .l\:r-7p { right: 7%; } } 
+@media only screen and (min-width: 992px) { .l\:r-60 { right: 60px; } } 
 @media only screen and (min-width: 992px) { .l\:grid-4-cols-1fr { grid-template-columns: repeat(4, 1fr); } } 
 @media only screen and (min-width: 992px) { .l\:mt--20 { margin-top: -20px; } } 
+@media only screen and (min-width: 992px) { .l\:r-7p { right: 7%; } } 
 @media only screen and (min-width: 992px) { .l\:w-54\.2p { width: 54.2%; } } 
 @media only screen and (min-width: 992px) { .l\:pl-70 { padding-left: 70px; } } 
 @media only screen and (min-width: 992px) { .l\:pr-70 { padding-right: 70px; } } 

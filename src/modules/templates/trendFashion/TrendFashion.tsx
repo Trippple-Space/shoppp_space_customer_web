@@ -151,12 +151,19 @@ const TrendFashion: FC<{ store: Store; }> = ({
 
             <section className="features">
                 <div className="feature-images trend-flex">
-                    <div>
-                        <img src={products[0]?.variants[0]?.media[0].url || "/images/trend-fashion/images/woman1.jpg"} alt="woman" />
-                    </div>
-                    <div>
-                        <img src={products[1]?.variants[0]?.media[0].url || products[0]?.variants[0]?.media[1].url || "/images/trend-fashion/images/woman2.jpg"} alt="woman" />
-                    </div>
+                    {
+                        store?.meta?.heroImage1 &&
+                        <div>
+                            <img src={store?.meta?.heroImage1} alt="woman" />
+                        </div>
+                    }
+
+                    {
+                        (store?.meta?.heroImage2) &&
+                        <div>
+                            <img src={store?.meta?.heroImage2} alt="woman" />
+                        </div>
+                    }
                 </div>
                 <div className="feature-text trend-flex">
                     <div className="feature">

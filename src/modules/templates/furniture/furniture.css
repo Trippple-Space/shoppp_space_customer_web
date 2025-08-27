@@ -1,69 +1,69 @@
-body {
+.furniture-body {
   font-family: "Nunito Sans", sans-serif;
   height: 100%;
   overflow-x: hidden;
   position: relative;
   display: flex;
   flex-direction: column;
-  gap: 7rem;
+  gap: 2rem;
 }
 
-.flex {
+.furniture-body .furniture-flex {
   display: flex;
   align-items: center;
 }
 
-header {
+.furniture-body header {
   display: flex;
   flex-direction: column;
   gap: 4rem;
   padding: 1rem 4rem;
 }
 
-nav {
+.furniture-body nav {
   justify-content: space-between;
 }
 
-nav a {
+.furniture-body nav a {
   color: black;
   text-decoration: none;
 }
 
-nav #icon-navs {
+.furniture-body nav #icon-navs {
   gap: 3.9rem;
 }
 
-nav #nav-logo {
+.furniture-body nav #nav-logo {
   width: 100px;
   height: 50px;
   object-fit: cover;
 }
 
-nav #nav-items-container ul {
+.furniture-body nav #nav-items-container ul {
   list-style-type: none;
   gap: 1.3rem;
   padding: 0;
 }
 
-nav #nav-items-container #nav-items .nav-item {
+.furniture-body nav #nav-items-container #nav-items .nav-item {
   font-size: 16px;
   text-transform: capitalize;
   cursor: pointer;
 }
 
-nav .nav-item:first-of-type {
+.furniture-body nav .nav-item:first-of-type {
   position: relative;
 }
 
-nav .nav-item:first-of-type img {
+.furniture-body nav .nav-item:first-of-type img {
   width: 17px;
 }
 
-nav .nav-item:first-of-type p {
+.furniture-body nav .nav-item:first-of-type p {
   gap: 8px;
 }
 
-nav .nav-item:first-of-type #nav-catergory-list {
+.furniture-body nav .nav-item:first-of-type #nav-catergory-list {
   display: none;
   position: absolute;
   border: 1px solid rgba(0, 0, 0, 0.15);
@@ -72,11 +72,11 @@ nav .nav-item:first-of-type #nav-catergory-list {
   width: 100%;
 }
 
-nav #search-icons {
+.furniture-body nav #search-icons {
   gap: 2rem;
 }
 
-nav #search-box {
+.furniture-body nav #search-box {
   border-bottom: 1px solid rgba(0, 0, 0, 0.15);
   padding: 8px 0;
   overflow: hidden;
@@ -84,47 +84,46 @@ nav #search-box {
   width: 280px;
 }
 
-nav #search-box img:nth-of-type(1) {
+.furniture-body nav #search-box img:nth-of-type(1) {
   width: 24px;
   height: 24px;
   display: block;
 }
 
-nav #search-box img:nth-of-type(2) {
+.furniture-body nav #search-box img:nth-of-type(2) {
   width: 23px;
   height: 23px;
   margin-top: -2px;
   display: none;
 }
 
-nav #search-box input {
+.furniture-body nav #search-box input {
   border: none;
   outline: none;
   width: 100%;
   font-size: 14px;
 }
 
-nav #search-box input::placeholder {
+.furniture-body nav #search-box input::placeholder {
   color: #8e8e8e;
 }
 
-nav #user-icons {
+.furniture-body nav #user-icons {
   gap: 1.5rem;
 }
 
-nav #user-icons img a {
+.furniture-body nav #user-icons img a {
   display: flex;
   align-items: center;
   justify-content: center;
 }
 
-nav #user-icons img {
+.furniture-body nav #user-icons img {
   width: 20px;
   height: 20px;
 }
 
-nav #user-icons img#menu-icon {
-  display: none;
+.furniture-body nav #user-icons img#menu-icon {
   cursor: pointer;
 }
 
@@ -426,33 +425,33 @@ nav #user-icons img#menu-icon {
 }
 
 @media only screen and (max-width: 1150px) {
-  body {
-    gap: 6rem;
+  .furniture-body {
+    gap: 2rem;
   }
 
-  header {
+  .furniture-body header {
     gap: 3rem;
   }
 
-  nav #search-icons {
+  .furniture-body nav #search-icons {
     gap: 3.5rem;
   }
 
-  nav #search-box {
+  .furniture-body nav #search-box {
     border-bottom: none;
     padding: 0;
     width: 20px;
   }
 
-  nav #search-box img:nth-of-type(1) {
+  .furniture-body nav #search-box img:nth-of-type(1) {
     display: none;
   }
 
-  nav #search-box img:nth-of-type(2) {
+  .furniture-body nav #search-box img:nth-of-type(2) {
     display: block;
   }
 
-  nav #search-box input {
+  .furniture-body nav #search-box input {
     display: none;
   }
 
@@ -494,51 +493,43 @@ nav #user-icons img#menu-icon {
 }
 
 @media only screen and (max-width: 1024px) {
-  body {
-    gap: 5rem;
+  .furniture-body {
+    gap: 2rem;
   }
 
-  header {
+  .furniture-body header {
     gap: 3.5rem;
     padding: 1rem 2.5rem;
   }
 
-  nav #nav-logo {
+  .furniture-body nav #nav-logo {
     width: 80px;
     height: 40px;
     object-fit: cover;
   }
 
-  nav #icon-navs {
+  .furniture-body nav #icon-navs {
     flex-grow: 1;
     justify-content: space-between;
   }
 
-  nav #search-icons {
+  .furniture-body nav #search-icons {
     gap: 1.5rem;
     flex-grow: 1;
     margin-left: 50px;
     justify-content: end;
   }
 
-  nav #search-box {
+  .furniture-body nav #search-box {
     display: none;
   }
 
-  nav #search-box input {
+  .furniture-body nav #search-box input {
     display: none;
   }
 
-  nav #user-icons a {
+  .furniture-body nav #user-icons a {
     display: none;
-  }
-
-  nav #user-icons #cartIcon {
-    display: flex;
-  }
-
-  nav #user-icons img#menu-icon {
-    display: block;
   }
 
   #hero-section {
@@ -554,6 +545,10 @@ nav #user-icons img#menu-icon {
     font-size: 18px;
     color: rgb(103, 103, 103);
     width: 80%;
+  }
+
+  #popular-section {
+    padding: 1rem 2.5rem;
   }
 
   #popular-section #popular-headings h2 {
@@ -640,11 +635,11 @@ nav #user-icons img#menu-icon {
 }
 
 @media only screen and (max-width: 768px) {
-  header {
+  .furniture-body header {
     gap: 3rem;
   }
 
-  nav #nav-items-container #nav-items .nav-item {
+  .furniture-body nav #nav-items-container #nav-items .nav-item {
     display: none;
   }
 
@@ -726,16 +721,16 @@ nav #user-icons img#menu-icon {
 }
 
 @media only screen and (max-width: 540px) {
-  body {
-    gap: 4rem;
+  .furniture-body {
+    gap: 1rem;
   }
 
-  header {
+  .furniture-body header {
     gap: 2rem;
     padding: 1rem;
   }
 
-  nav #nav-logo {
+  .furniture-body nav #nav-logo {
     width: 60px;
     height: 30px;
   }
@@ -752,6 +747,10 @@ nav #user-icons img#menu-icon {
   #hero-texts-container p {
     font-size: 16px;
     width: 90%;
+  }
+
+  #popular-section {
+    padding: 1rem;
   }
 
   #popular-section #popular-headings h2 {
@@ -821,8 +820,8 @@ nav #user-icons img#menu-icon {
 }
 
 @media only screen and (max-width: 425px) {
-  body {
-    gap: 3rem;
+  .furniture-body {
+    gap: 1rem;
   }
 
   #ctas {
