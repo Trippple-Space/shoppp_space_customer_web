@@ -1,10 +1,7 @@
 import { storeService } from "@/modules/lib/utility/services/store.service";
-import StorefrontAbout from "@/modules/views/storefront/StorefrontAbout";
-import StorefrontLayout from "@/modules/views/storefront/StorefrontLayout";
 import React from "react";
 import type { Metadata } from 'next'
-import TrendFashion from "@/modules/templates/trendFashion/TrendFashion";
-import Furniture from "@/modules/templates/furniture/Furniture";
+import { StorefrontParent } from "@/modules/views/storefront/StorefrontParent";
 
 export async function generateMetadata({
   params
@@ -65,32 +62,11 @@ export default async function storeFront({
 }: {
   params: { slug: string };
 }) {
-  const templateList = ['default', 'trend-fashion', 'furniture'];
-  let template: string = "default";
 
   const store = await storeService.fetchStoreBySlug(params.slug, {});
   return (
     <>
-      {
-        template && templateList.includes(template) ? (
-          template === 'trend-fashion' ? (
-            <TrendFashion store={store} />
-          ) : template === 'furniture' ? (
-            <Furniture store={store} />
-          ) : (
-            <StorefrontLayout store={store}>
-              <StorefrontAbout store={store} />
-            </StorefrontLayout>
-          )
-        ) : (
-          <StorefrontLayout store={store}>
-            <StorefrontAbout store={store} />
-          </StorefrontLayout>
-        )
-      }
-      {/* <StorefrontLayout store={store}>
-        <StorefrontAbout store={store} />
-      </StorefrontLayout> */}
+      <StorefrontParent store={store} />
     </>
   );
 }
