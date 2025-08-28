@@ -1371,6 +1371,7 @@
 @media only screen and (min-width: 992px) { .l\:mt--20 { margin-top: -20px; } } 
 @media only screen and (min-width: 992px) { .l\:line-height-40 { line-height: 40px; } } 
 @media only screen and (min-width: 992px) { .l\:pr-30 { padding-right: 30px; } } 
+@media only screen and (min-width: 992px) { .l\:h-50p { height: 50%; } } 
 
 @media only screen and (min-width: 1200px) { .xl\:mt-3 { margin-top: 3px; } } 
 @media only screen and (min-width: 1200px) { .xl\:mt-27 { margin-top: 27px; } } 
