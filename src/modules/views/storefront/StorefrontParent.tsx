@@ -62,6 +62,26 @@ export const StorefrontParent: FC<{ store: Store; }> = ({
                     template === 'trend-fashion' ? (
                         <TrendFashion
                             store={store}
+                            products={products}
+                            filteredProducts={filteredProducts}
+                            allReviews={allReviews}
+                            isNavOpen={isNavOpen}
+                            setIsNavOpen={setIsNavOpen}
+                            openReviewId={openReviewId}
+                            setOpenReviewId={setOpenReviewId}
+                            cartOpen={cartOpen}
+                            setCartOpen={setCartOpen}
+                            userProfileDropdown={userProfileDropdown}
+                            setUserProfileDropdown={setUserProfileDropdown}
+                            handleUserProfileDropdown={handleUserProfileDropdown}
+                            handleCloseDropdown={handleCloseDropdown}
+                            profileModal={profileModal}
+                            setProfileModal={setProfileModal}
+                            menuOpen={menuOpen}
+                            setMenuOpen={setMenuOpen}
+                            selectedCategory={selectedCategory}
+                            setSelectedCategory={setSelectedCategory}
+                            handleCategoryChange={handleCategoryChange}
                         />
                     ) : template === 'furniture' ? (
                         <Furniture
