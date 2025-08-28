@@ -1,6 +1,5 @@
 .furniture-body {
   font-family: "Nunito Sans", sans-serif;
-  height: 100%;
   overflow-x: hidden;
   position: relative;
   display: flex;
@@ -79,21 +78,22 @@
 .furniture-body nav #search-box {
   border-bottom: 1px solid rgba(0, 0, 0, 0.15);
   padding: 8px 0;
-  overflow: hidden;
+  overflow-y: visible;
+ /*  overflow-x: hidden; */
   gap: 0.5rem;
   width: 280px;
 }
 
-.furniture-body nav #search-box img:nth-of-type(1) {
+.furniture-body nav #search-box .img:nth-of-type(1) {
   width: 24px;
   height: 24px;
   display: block;
 }
 
-.furniture-body nav #search-box img:nth-of-type(2) {
+.furniture-body nav #search-box .img:nth-of-type(2) {
   width: 23px;
   height: 23px;
-  margin-top: -2px;
+  margin-top: -7px;
   display: none;
 }
 
@@ -437,24 +437,6 @@
     gap: 3.5rem;
   }
 
-  .furniture-body nav #search-box {
-    border-bottom: none;
-    padding: 0;
-    width: 20px;
-  }
-
-  .furniture-body nav #search-box img:nth-of-type(1) {
-    display: none;
-  }
-
-  .furniture-body nav #search-box img:nth-of-type(2) {
-    display: block;
-  }
-
-  .furniture-body nav #search-box input {
-    display: none;
-  }
-
   #hero-section {
     gap: 1rem 6%;
   }
@@ -518,18 +500,6 @@
     flex-grow: 1;
     margin-left: 50px;
     justify-content: end;
-  }
-
-  .furniture-body nav #search-box {
-    display: none;
-  }
-
-  .furniture-body nav #search-box input {
-    display: none;
-  }
-
-  .furniture-body nav #user-icons a {
-    display: none;
   }
 
   #hero-section {
@@ -640,6 +610,32 @@
   }
 
   .furniture-body nav #nav-items-container #nav-items .nav-item {
+    display: none;
+  }
+   
+  .furniture-body nav #search-box {
+    border-bottom: none;
+    padding: 0;
+    width: 20px;
+  }
+  
+  .furniture-body nav #search-box {
+    display: block;
+  }
+
+  .furniture-body nav #user-icons a {
+    display: none;
+  }
+
+  .furniture-body nav #search-box .img:nth-of-type(1) {
+    display: none;
+  }
+
+  .furniture-body nav #search-box .img:nth-of-type(2) {
+    display: block;
+  }
+
+  .furniture-body nav #search-box input {
     display: none;
   }
 
@@ -822,6 +818,10 @@
 @media only screen and (max-width: 425px) {
   .furniture-body {
     gap: 1rem;
+  }
+
+  .furniture-body nav #search-icons {
+    margin-left: 30px;
   }
 
   #ctas {

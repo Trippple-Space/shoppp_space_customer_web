@@ -65,14 +65,32 @@ export default async function storeFront({
 }: {
   params: { slug: string };
 }) {
+  const templateList = ['default', 'trend-fashion', 'furniture'];
+  let template: string = "default";
+
   const store = await storeService.fetchStoreBySlug(params.slug, {});
   return (
     <>
-      {/* <TrendFashion store={store} /> */}
-      {/* <Furniture store={store} /> */}
-      <StorefrontLayout store={store}>
+      {
+        template && templateList.includes(template) ? (
+          template === 'trend-fashion' ? (
+            <TrendFashion store={store} />
+          ) : template === 'furniture' ? (
+            <Furniture store={store} />
+          ) : (
+            <StorefrontLayout store={store}>
+              <StorefrontAbout store={store} />
+            </StorefrontLayout>
+          )
+        ) : (
+          <StorefrontLayout store={store}>
+            <StorefrontAbout store={store} />
+          </StorefrontLayout>
+        )
+      }
+      {/* <StorefrontLayout store={store}>
         <StorefrontAbout store={store} />
-      </StorefrontLayout>
+      </StorefrontLayout> */}
     </>
   );
 }

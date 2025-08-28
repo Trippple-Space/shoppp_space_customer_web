@@ -144,7 +144,7 @@
   transition: all 0.3s ease;
 }
 
-.hero-image {
+.hero .hero-image {
   position: absolute;
   top: 0;
   flex: 1;
@@ -153,14 +153,14 @@
   text-align: center;
 }
 
-.hero-image img {
+.hero .hero-image img {
   max-width: 100%;
   height: auto;
   position: relative;
   z-index: 2;
 }
 
-.hero-image .circle-bg {
+.hero .hero-image .circle-bg {
   width: 400px;
   height: 400px;
   background-color: whitesmoke;
@@ -491,7 +491,7 @@
     margin-bottom: 18px;
   }
 
-  .hero-image {
+  .hero .hero-image {
     position: relative;
     width: 100%;
     left: 0;
@@ -499,7 +499,7 @@
     margin-top: -20px;
   }
 
-  .hero-image .circle-bg {
+  .hero .hero-image .circle-bg {
     position: absolute;
     width: 250px;
     height: 250px;
@@ -783,7 +783,7 @@
     font-size: 15px;
   }
 
-  .hero-image .circle-bg {
+  .hero .hero-image .circle-bg {
     position: absolute;
     width: 100px;
     height: 100px;

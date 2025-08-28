@@ -11,6 +11,7 @@ import useReviews from "@/modules/lib/utility/hooks/use-reviews";
 import MiniCart from "@/modules/lib/components/minicart/MiniCart";
 import UserProfileDropdown from "@/modules/lib/components/nav-bar/profile-modal/UserProfileDropdown";
 import MobileNav from "@/modules/lib/components/nav-bar/mobile-nav/MobileNav";
+import StorefrontFooter from "@/modules/lib/components/footer/StorefrontFooter";
 
 const TrendFashion: FC<{ store: Store; }> = ({
     store,
@@ -57,9 +58,9 @@ const TrendFashion: FC<{ store: Store; }> = ({
         <div className="trend-body font-inter">
             <header className="relative pt-100">
                 <section className="navbar">
-                    <div className="logo-container trend-flex">
+                    <div className="logo-container trend-flex sm:max-w-100p max-w-69p">
                         <img src={store?.thumbnail || "/images/trend-fashion/images/logo.png"} alt="logo-img" className="logo-img" />
-                        <h1 className="logo">{store?.name || "Trend"}</h1>
+                        <h1 className="logo truncate">{store?.name || ""}</h1>
                     </div>
                     {/* <nav className="nav-links">
                         <a href="#">About us</a>
@@ -265,6 +266,8 @@ const TrendFashion: FC<{ store: Store; }> = ({
                     </div>
                 </nav>
             </div> */}
+
+            <StorefrontFooter store={store} />
         </div>
     );
 };

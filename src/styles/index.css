@@ -310,10 +310,11 @@
 .rotate-z-180 { transform: rotateZ(180deg); } 
 .bg-black { background-color: #000000; } 
 .gap-28 { gap: 28px; } 
-.gap-40 { gap: 40px; } 
+.max-w-1440 { max-width: 1440px; } 
 .flex-reverse { flex-wrap: wrap-reverse; } 
 .gap-14 { gap: 14px; } 
 .min-w-24 { min-width: 24px; } 
+.max-w-416 { max-width: 416px; } 
 .px-0 { padding-left: 0px; padding-right: 0px; } 
 @layer lo { .\@lo\:placeholder\:text-14::placeholder { font-size: 14px; } } 
 .bg-\#FACE33 { background-color: #FACE33; } 
@@ -460,6 +461,7 @@
 .color-\#00000026 { color: #00000026; } 
 .gap-26 { gap: 26px; } 
 .grid-5-cols-auto { grid-template-columns: repeat(5, auto); } 
+.gap-40 { gap: 40px; } 
 .border-b-3 { border-bottom-width: 3px; } 
 .border-b-\#0B9378 { border-bottom-color: #0B9378; } 
 .border-b-\#F5F5F5 { border-bottom-color: #F5F5F5; } 
@@ -644,7 +646,9 @@
 .mt--30 { margin-top: -30px; } 
 .mt-60 { margin-top: 60px; } 
 .grid-col-span-5 { grid-column: span 5; } 
+.min-w-200 { min-width: 200px; } 
 .pt-100 { padding-top: 100px; } 
+.max-w-69p { max-width: 69%; } 
 .pt-64 { padding-top: 64px; } 
 .mb-111 { margin-bottom: 111px; } 
 .pt-24 { padding-top: 24px; } 
@@ -908,12 +912,10 @@
 @media only screen and (min-width: 576px) { .sm\:h-24 { height: 24px; } } 
 @media only screen and (min-width: 576px) { .sm\:w-90p { width: 90%; } } 
 @media only screen and (min-width: 576px) { .sm\:flex-row {    flex-direction: row;  } } 
-@media only screen and (min-width: 576px) { .sm\:px-80 { padding-left: 80px; padding-right: 80px; } } 
+@media only screen and (min-width: 576px) { .sm\:px-40 { padding-left: 40px; padding-right: 40px; } } 
 @media only screen and (min-width: 576px) { .sm\:gap-35 { gap: 35px; } } 
 @media only screen and (min-width: 576px) { .sm\:py-40 { padding-top: 40px; padding-bottom: 40px; } } 
 @media only screen and (min-width: 576px) { .sm\:flex-nowrap { flex-wrap: nowrap; } } 
-@media only screen and (min-width: 576px) { .sm\:w-416 { width: 416px; } } 
-@media only screen and (min-width: 576px) { .sm\:min-w-416 { min-width: 416px; } } 
 @media only screen and (min-width: 576px) { .sm\:flex-grow-1 { flex-grow: 1; } } 
 @layer lo {  @media only screen and (min-width: 576px) { .\@lo\:placeholder\:sm\:text-16::placeholder { font-size: 16px; } }  } 
 @media only screen and (min-width: 576px) { .sm\:w-80 { width: 80px; } } 
@@ -926,7 +928,6 @@
 @media only screen and (min-width: 576px) { .sm\:px-36 { padding-left: 36px; padding-right: 36px; } } 
 @media only screen and (min-width: 576px) { .sm\:block {    display: block;  } } 
 @media only screen and (min-width: 576px) { .sm\:py-14 { padding-top: 14px; padding-bottom: 14px; } } 
-@media only screen and (min-width: 576px) { .sm\:px-40 { padding-left: 40px; padding-right: 40px; } } 
 @media only screen and (min-width: 576px) { .sm\:text-26 { font-size: 26px; } } 
 @media only screen and (min-width: 576px) { .sm\:flex {    display: flex;  } } 
 @media only screen and (min-width: 576px) { .sm\:hidden {    display: none;  } } 
@@ -940,6 +941,7 @@
 @media only screen and (min-width: 576px) { .sm\:w-80p { width: 80%; } } 
 @media only screen and (min-width: 576px) { .sm\:text-10 { font-size: 10px; } } 
 @media only screen and (min-width: 576px) { .sm\:grid-3-cols-1fr { grid-template-columns: repeat(3, 1fr); } } 
+@media only screen and (min-width: 576px) { .sm\:max-w-100p { max-width: 100%; } } 
 @media only screen and (min-width: 576px) { .sm\:mb-60 { margin-bottom: 60px; } } 
 @media only screen and (min-width: 576px) { .sm\:pt-32 { padding-top: 32px; } } 
 @media only screen and (min-width: 576px) { .sm\:pb-99 { padding-bottom: 99px; } } 
@@ -1103,6 +1105,9 @@
 @media only screen and (min-width: 768px) { .md\:mt-0 { margin-top: 0px; } } 
 @media only screen and (min-width: 768px) { .md\:t-60 { top: 60px; } } 
 @media only screen and (min-width: 768px) { .md\:h-100p { height: 100%; } } 
+@media only screen and (min-width: 768px) { .md\:bg-white { background-color: #FFFFFF; } } 
+@media only screen and (min-width: 768px) { .md\:border-\#00000014 { border-color: #00000014; } } 
+@media only screen and (min-width: 768px) { .md\:t-43 { top: 43px; } } 
 @media only screen and (min-width: 768px) { .md\:pt-69\.6 { padding-top: 69.6px; } } 
 @media only screen and (min-width: 768px) { .md\:pt-44 { padding-top: 44px; } } 
 @media only screen and (min-width: 768px) { .md\:pb-90 { padding-bottom: 90px; } } 
@@ -1114,7 +1119,6 @@
 @media only screen and (min-width: 768px) { .md\:gap-16 { gap: 16px; } } 
 @media only screen and (min-width: 768px) { .md\:py-20 { padding-top: 20px; padding-bottom: 20px; } } 
 @media only screen and (min-width: 768px) { .md\:px-24 { padding-left: 24px; padding-right: 24px; } } 
-@media only screen and (min-width: 768px) { .md\:bg-white { background-color: #FFFFFF; } } 
 @media only screen and (min-width: 768px) { .md\:pb-85 { padding-bottom: 85px; } } 
 @media only screen and (min-width: 768px) { .md\:pl-40 { padding-left: 40px; } } 
 @media only screen and (min-width: 768px) { .md\:pr-60 { padding-right: 60px; } } 
@@ -1143,6 +1147,7 @@
 @media only screen and (min-width: 768px) { .m\:text-14 { font-size: 14px; } } 
 @media only screen and (min-width: 768px) { .m\:text-16 { font-size: 16px; } } 
 
+@media only screen and (min-width: 992px) { .lg\:px-80 { padding-left: 80px; padding-right: 80px; } } 
 
 @media only screen and (min-width: 992px) { .l\:block {    display: block;  } } 
 @media only screen and (min-width: 992px) { .l\:hidden {    display: none;  } } 
@@ -1219,7 +1224,8 @@
 @media only screen and (min-width: 992px) { .l\:py-12 { padding-top: 12px; padding-bottom: 12px; } } 
 @media only screen and (min-width: 992px) { .l\:mx-auto {    margin-left: auto;    margin-right: auto;  } } 
 @media only screen and (min-width: 992px) { .l\:h-30vh { height: 30vh; } } 
-@media only screen and (min-width: 992px) { .l\:w-461 { width: 461px; } } 
+@media only screen and (min-width: 992px) { .l\:gap-40 { gap: 40px; } } 
+@media only screen and (min-width: 992px) { .l\:max-w-461 { max-width: 461px; } } 
 @media only screen and (min-width: 992px) { .l\:weight-400 { font-weight: 400; } } 
 @media only screen and (min-width: 992px) {  @layer lo { .l\:\@lo\:py-17 { padding-top: 17px; padding-bottom: 17px; } }  } 
 @layer lo {  @media only screen and (min-width: 992px) { .\@lo\:l\:text-16 { font-size: 16px; } }  } 
@@ -1255,7 +1261,6 @@
 @media only screen and (min-width: 992px) { .l\:mb-0 { margin-bottom: 0px; } } 
 @media only screen and (min-width: 992px) { .l\:w-250 { width: 250px; } } 
 @media only screen and (min-width: 992px) { [class~='l:g|grid-template-columns:auto|_|1fr|_|auto']{grid-template-columns:auto 1fr auto} } 
-@media only screen and (min-width: 992px) { .l\:gap-40 { gap: 40px; } } 
 @media only screen and (min-width: 992px) { .l\:w-60p { width: 60%; } } 
 @media only screen and (min-width: 992px) { .l\:grid {    display: grid;  } } 
 @media only screen and (min-width: 992px) { .l\:w-40p { width: 40%; } } 

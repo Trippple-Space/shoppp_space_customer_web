@@ -11,12 +11,12 @@ import MiniCart from "@/modules/lib/components/minicart/MiniCart";
 import MobileNav from "@/modules/lib/components/nav-bar/mobile-nav/MobileNav";
 import UserProfileDropdown from "@/modules/lib/components/nav-bar/profile-modal/UserProfileDropdown";
 import ProductTile from "@/modules/lib/components/product-tile/ProductTile";
+import StorefrontFooter from "@/modules/lib/components/footer/StorefrontFooter";
+import { ProductSearch } from "./ProductSearch";
 
 const Furniture: FC<{ store: Store; }> = ({
     store,
 }) => {
-    console.log(store)
-
     const [selectedCategory, setSelectedCategory] = useState<ProductCategory | null>(null);
     const { products } = useStoreProductsView(selectedCategory);
     const [isNavOpen, setIsNavOpen] = useState(false);
@@ -86,11 +86,9 @@ const Furniture: FC<{ store: Store; }> = ({
                     </div>
 
                     <div id="search-icons" className="furniture-flex">
-                        <div id="search-box" className="furniture-flex">
-                            <img src="/images/furniture/icons/search.png" alt="search-icon" />
-                            <img src="/images/furniture/icons/search-black.svg" alt="search-icon" />
-                            <input type="text" name="search" id="search" placeholder="Product Search" />
-                        </div>
+                        <ProductSearch
+                            storeSlug={store?.slug}
+                        />
                         <div id="user-icons" className="furniture-flex">
                             <span id="cartIcon" className="cursor-pointer" onClick={() => setCartOpen(true)}>
                                 <img className="user-icon" src="/images/furniture/icons/shopping-cart.svg" alt="cart-icon" />
@@ -160,13 +158,13 @@ const Furniture: FC<{ store: Store; }> = ({
                             <div className="hero-image furniture-flex" id="hero-image4">
                                 <div id="hero-image-users-images" className="furniture-flex">
                                     {
-                                        products[0]?.variants[0]?.media[0].url && <div><img src={products[0]?.variants[0]?.media[0].url} alt="user" /></div>
+                                        products[0]?.variants[0]?.media[0]?.url && <div><img src={products[0]?.variants[0]?.media[0].url} alt="user" /></div>
                                     }
                                     {
-                                        products[0]?.variants[0]?.media[1].url && <div><img src={products[0]?.variants[0]?.media[1].url} alt="user" /></div>
+                                        products[1]?.variants[0]?.media[0]?.url && <div><img src={products[1]?.variants[0]?.media[0]?.url} alt="user" /></div>
                                     }
                                     {
-                                        products[0]?.variants[1]?.media[0].url && <div><img src={products[0]?.variants[1]?.media[0].url} alt="user" /></div>
+                                        products[2]?.variants[0]?.media[0]?.url && <div><img src={products[2]?.variants[0]?.media[0]?.url} alt="user" /></div>
                                     }
                                 </div>
                                 <p id="items-sold">
@@ -293,6 +291,8 @@ const Furniture: FC<{ store: Store; }> = ({
                     )}
                 </div>
             </section>
+
+            <StorefrontFooter store={store} />
         </div>
     );
 };
