@@ -36,6 +36,7 @@ import VideoSrc from '@/modules/lib/components/video-src/VideoSrc'
 import { AddReview } from './reviews/AddReview'
 
 const ProductDetails = ({ product }: { product: Product }) => {
+
   const { groupedData, availableColors, productImages } = useTransformProduct(product)
   const uniqueVariantsFromProductImages = availableColors.map((color) => groupedData?.[color][0])
 

@@ -81,13 +81,15 @@ export default async function product_details({
   try {
     const product = await productService.fetchProductBySlug(params.slug, {})
 
+
+
     return (
       <div>
         <ProductDetails product={product} />
       </div>
     )
   } catch (error) {
-    //console.error('Error fetching product details:', error)
+    // console.error('Error fetching product details:', error)
     return <div>Error fetching product details</div>
   }
 }

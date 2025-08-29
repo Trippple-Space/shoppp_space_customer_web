@@ -43,8 +43,8 @@ class CartService {
                     .then((response) => {
                      
                      
-             this.fetchCart()
-                              .then((updatedCartData) => {
+                      this.fetchCart()
+                        .then((updatedCartData) => {
                                    resolve(updatedCartData);
                               })
                               .catch((error) => {
