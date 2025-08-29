@@ -234,7 +234,7 @@ const ProductTile: FC<IProductTile> = ({ product, savedVariants, saveVariant, re
           style={{
             // Add a subtle dark circular background to ensure visibility on white backgrounds
             background: isSaved ? 'rgba(0,0,0,0.25)' : 'rgba(255,255,255,0.7)',
-            borderRadius: '30%',
+            borderRadius: '50%',
             padding: '4px',
             boxShadow: '0 2px 8px rgba(0,0,0,0.11)',
             display: 'flex',
