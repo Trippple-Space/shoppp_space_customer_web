@@ -9,7 +9,8 @@ export const useCalculatedeliveryFee = () => {
        
         try {
             const response = await deliveryService.calculateDeliveryFee(deliveryDetails);
-            setDeliveryFeeResponse(response)
+          setDeliveryFeeResponse(response)
+          console.log({response});
             return response
         } catch (error) {
             //console.log(error);

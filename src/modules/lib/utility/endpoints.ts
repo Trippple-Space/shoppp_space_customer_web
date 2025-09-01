@@ -17,7 +17,7 @@ const endpoints = {
   CART: "/cart",
   CHECKOUTCART: "/cart/checkout",
   MULTIPLECART: "/cart/multiple",
-  USER_ADDRESSES: "users/:userId/addresses",
+  USER_ADDRESSES: "/user-addresses",
   CALCULATEDELIVERYFEE: "/order-delivery/calculate-fee",
   PAY_WITH_PAYSTACK: "payment/initialize/paystack",
   STORES: "stores",

@@ -19,7 +19,7 @@ class AddressService {
 
   getAddressById(userId: number, addressId: number): Promise<Address> {
     return new Promise((resolve, reject) => {
-      http.get(buildEndpoint(endpoints.USER_ADDRESSES, {userId}, `/${addressId}`))
+      http.get(buildEndpoint(endpoints.USER_ADDRESSES))
         .then((response: AxiosResponse) => {
           resolve(response.data);
         })

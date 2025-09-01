@@ -77,6 +77,9 @@ const CheckoutPage = () => {
   const [shouldUpdateFee, setShouldUpdateFee] = useState(false);
   const lastAddressRef = useRef<number | null>(null);
 
+
+
+
   const [allCartItems, setAllCartItems] =
     useState({
       ...cart,
@@ -185,6 +188,11 @@ const CheckoutPage = () => {
               deliveryType: type,
             })
 
+
+            console.log({ feeDetail })
+
+
+
             updatedOptions[type] = {
               ...updatedOptions[type],
               price: feeDetail.fee,
@@ -245,6 +253,8 @@ const CheckoutPage = () => {
       return new Date(cartItem?.variant?.product?.discount?.activeStartDate) <= new Date(new Date().setHours(new Date().getHours() + 1)) && new Date(new Date().setHours(new Date().getHours() + 1)) <= new Date(cartItem?.variant?.product?.discount?.activeEndDate)
     }
   }
+
+  console.log({ canProceedToPayment, selectedDeliveryOptionDetails, calculatingFee, selectedDeliveryOption, selectedAddress, isPaymentLoading, user });
 
   return (
     <>

@@ -40,9 +40,8 @@ class CartService {
            
                     
                http.post(endpoints.CART, { variantId, quantity })
-                    .then((response) => {
-                     
-                     
+                 .then((response) => {
+                      
                       this.fetchCart()
                         .then((updatedCartData) => {
                                    resolve(updatedCartData);
