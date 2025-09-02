@@ -41,21 +41,31 @@ const CheckoutPage = () => {
   const [deliveryOptions, setDeliveryOptions] = useState<DeliveryOption>({
     standard: {
       title: 'Standard Delivery',
+      available: true,
       description: 'Arrives in 3 days',
       etaInDays: 3,
-      price: NaN
+      price: NaN,
+      error: null,
+      message: null
+
     },
     express: {
       title: 'Same Day Delivery',
+      available: true,
       description: 'Arrives within 24 hours',
       etaInDays: 1,
-      price: NaN
+      price: NaN,
+           error: null,
+      message: null
     },
     pickup: {
       title: 'Pick Up',
+      available: true,
       description: 'Pick up in stores close to you',
       etaInDays: '',
-      price: 0
+      price: 0,
+      error: null,
+      message: null
     }
   })
   const [allAddressDeliveryPrice, setAllAddressDeliveryPrice] = useState<addressDeliveryPrice[]>([])
@@ -189,14 +199,20 @@ const CheckoutPage = () => {
             })
 
 
-            console.log({ feeDetail })
+            console.log( {omooo:feeDetail[type]} );
+            console.log({ feeDetail: feeDetail.fee, type });
 
 
 
             updatedOptions[type] = {
               ...updatedOptions[type],
-              price: feeDetail.fee,
+              ...feeDetail[type],
+              // price: feeDetail.fee,
             };
+
+
+            console.log({ updatedOptions: updatedOptions[type] });
+
           } catch (error) {
           } finally {
             setDeliveryOptions(updatedOptions);
