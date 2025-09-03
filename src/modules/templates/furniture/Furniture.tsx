@@ -11,6 +11,7 @@ import StorefrontFooter from "@/modules/lib/components/footer/StorefrontFooter";
 import { ProductSearch } from "./ProductSearch";
 import { Product, ProductCategory } from "@/modules/lib/utility/types/product.interface";
 import { IFetchedReview } from "@/modules/lib/utility/types/review.interface";
+import VideoSrc from "@/modules/lib/components/video-src/VideoSrc";
 
 const Furniture: FC<{
     store: Store;
@@ -59,14 +60,14 @@ const Furniture: FC<{
                     <nav className="furniture-flex">
                         <div id="icon-navs" className="furniture-flex">
                             <a href="#">
-                                <img src={store?.thumbnail || "/images/furniture/images/logo.png"} alt="logo" id="nav-logo" />
+                                <img src={store?.thumbnail || "/images/templates/minimal-template/images/logo.png"} alt="logo" id="nav-logo" />
                             </a>
                             {/* <div id="nav-items-container" className="furniture-flex">
                             <ul id="nav-items" className="furniture-flex">
                                 <li className="nav-item">
                                     <p className="furniture-flex">
                                         <span>Category</span>
-                                        <img src="/images/furniture/icons/down.png" alt="caret-down-icon" />
+                                        <img src="/images/templates/minimal-template/icons/down.png" alt="caret-down-icon" />
                                     </p>
                                     <div id="nav-catergory-list">
                                         <ul>
@@ -89,13 +90,13 @@ const Furniture: FC<{
                             />
                             <div id="user-icons" className="furniture-flex">
                                 <span id="cartIcon" className="cursor-pointer" onClick={() => setCartOpen(true)}>
-                                    <img className="user-icon" src="/images/furniture/icons/shopping-cart.svg" alt="cart-icon" />
+                                    <img className="user-icon" src="/images/templates/minimal-template/icons/shopping-cart.svg" alt="cart-icon" />
                                 </span>
                                 <span className="cursor-pointer">
-                                    <img className="user-icon" src="/images/furniture/icons/heart.svg" alt="fav-icon" />
+                                    <img className="user-icon" src="/images/templates/minimal-template/icons/heart.svg" alt="fav-icon" />
                                 </span>
                                 {/* <a href="#">
-                                <img className="user-icon" src="/images/furniture/icons/user.svg" alt="user-icon" />
+                                <img className="user-icon" src="/images/templates/minimal-template/icons/user.svg" alt="user-icon" />
                             </a> */}
                                 <span
                                     onClick={() => {
@@ -106,7 +107,7 @@ const Furniture: FC<{
                                     <img
                                         className="user-icon"
                                         id="menu-icon"
-                                        src="/images/furniture/icons/menu.svg"
+                                        src="/images/templates/minimal-template/icons/menu.svg"
                                         alt="menu-icon"
                                     />
                                 </span>
@@ -130,11 +131,11 @@ const Furniture: FC<{
                             </a>
                             <div className="other-offers furniture-flex">
                                 <button type="button" className="hero-cta furniture-flex" id="free-delivery">
-                                    <img src="/images/furniture/icons/delivery.png" alt="delivery-truck-icon" />
+                                    <img src="/images/templates/minimal-template/icons/delivery.png" alt="delivery-truck-icon" />
                                     <span>Free delivery</span>
                                 </button>
                                 <button type="button" className="hero-cta furniture-flex" id="time">
-                                    <img src="/images/furniture/icons/time.png" alt="clock-icon" />
+                                    <img src="/images/templates/minimal-template/icons/time.png" alt="clock-icon" />
                                     <span>Always on-time</span>
                                 </button>
                             </div>
@@ -142,11 +143,11 @@ const Furniture: FC<{
 
                         <div id="hero-images-container">
                             <div id="hero-images">
-                                <img className="hero-image" id="hero-image1" src={store?.meta?.heroImage1 || "/images/furniture/images/cushion.jpg"} alt="chair" />
-                                <img className="hero-image" id="hero-image2" src={store?.meta?.heroImage2 || "/images/furniture/images/flower-table.jpg"} alt="flower" />
+                                <img className="hero-image" id="hero-image1" src={store?.meta?.heroImage1 || "/images/templates/minimal-template/images/cushion.jpg"} alt="chair" />
+                                <img className="hero-image" id="hero-image2" src={store?.meta?.heroImage2 || "/images/templates/minimal-template/images/flower-table.jpg"} alt="flower" />
 
                                 <div className="hero-image" id="hero-image3">
-                                    <img src={store?.meta?.heroImage3 || "/images/furniture/images/manager.jpg"} alt="manager" />
+                                    <img src={store?.meta?.heroImage3 || "/images/templates/minimal-template/images/manager.jpg"} alt="manager" />
                                     <div id="agentInfo">
                                         <span>Nico Wiliams Jr</span>
                                         <span>Agent property</span>
@@ -155,15 +156,28 @@ const Furniture: FC<{
 
                                 <div className="hero-image furniture-flex" id="hero-image4">
                                     <div id="hero-image-users-images" className="furniture-flex">
-                                        {
-                                            products[0]?.variants[0]?.media[0]?.url && <div><img src={products[0]?.variants[0]?.media[0].url} alt="user" /></div>
-                                        }
-                                        {
-                                            products[1]?.variants[0]?.media[0]?.url && <div><img src={products[1]?.variants[0]?.media[0]?.url} alt="user" /></div>
-                                        }
-                                        {
-                                            products[2]?.variants[0]?.media[0]?.url && <div><img src={products[2]?.variants[0]?.media[0]?.url} alt="user" /></div>
-                                        }
+                                        {[0, 1, 2].map((i) => {
+                                            const media = products[i]?.variants[0]?.media[0];
+                                            if (!media?.url) return null;
+
+                                            const isVideo = media.url.match(/\.(mp4|webm|mov|avi|mkv)$/i);
+                                            <video src={media.url} controls width="300" />
+
+                                            return (
+                                                <div key={i}>
+                                                    {isVideo ? (
+                                                        <video
+                                                            src={media.url}
+                                                            muted
+                                                            autoPlay
+                                                            loop
+                                                        />
+                                                    ) : (
+                                                        <img src={media.url} alt={`media-${i}`} width="300" />
+                                                    )}
+                                                </div>
+                                            );
+                                        })}
                                     </div>
                                     <p id="items-sold">
                                         <span>120,000 +</span>
@@ -207,14 +221,14 @@ const Furniture: FC<{
                         <img
                             className="user-icon"
                             id="close-icon"
-                            src="/images/furniture/icons/x.svg"
+                            src="/images/templates/minimal-template/icons/x.svg"
                             alt="close-icon"
                             onClick={() => setShowMobileNav(false)}
                         />
                     </div>
                     <div>
                         <div id="mobile-search-box" className="furniture-flex">
-                            <img src="/images/furniture/icons/search.png" alt="search-icon" />
+                            <img src="/images/templates/minimal-template/icons/search.png" alt="search-icon" />
                             <input type="text" name="search" id="search2" placeholder="Product Search" />
                         </div>
                     </div>
@@ -224,7 +238,7 @@ const Furniture: FC<{
                             <li className="nav-item">
                                 <p className="furniture-flex">
                                     <span>Category</span>
-                                    <img src="/images/furniture/icons/down.png" alt="caret-down-icon" />
+                                    <img src="/images/templates/minimal-template/icons/down.png" alt="caret-down-icon" />
                                 </p>
                                 <div id="nav-catergory-list">
                                     <ul>
@@ -241,19 +255,19 @@ const Furniture: FC<{
                         <ul id="user-action-list">
                             <li className="furniture-flex">
                                 <a href="#" className="furniture-flex">
-                                    <img className="user-icon" src="/images/furniture/icons/shopping-cart.svg" alt="cart-icon" />
+                                    <img className="user-icon" src="/images/templates/minimal-template/icons/shopping-cart.svg" alt="cart-icon" />
                                     <span>Cart</span>
                                 </a>
                             </li>
                             <li className="furniture-flex">
                                 <a href="#" className="furniture-flex">
-                                    <img className="user-icon" src="/images/furniture/icons/heart.svg" alt="fav-icon" />
+                                    <img className="user-icon" src="/images/templates/minimal-template/icons/heart.svg" alt="fav-icon" />
                                     <span>Favorites</span>
                                 </a>
                             </li>
                             <li className="furniture-flex">
                                 <a href="#" className="furniture-flex">
-                                    <img className="user-icon" src="/images/furniture/icons/user.svg" alt="user-icon" />
+                                    <img className="user-icon" src="/images/templates/minimal-template/icons/user.svg" alt="user-icon" />
                                     <span>Profile</span>
                                 </a>
                             </li>

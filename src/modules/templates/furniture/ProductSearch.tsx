@@ -35,8 +35,8 @@ export const ProductSearch = ({ storeSlug }: { storeSlug: string }) => {
     return (
         <>
             <div id="search-box" className="furniture-flex relative">
-                <img className='img' src="/images/furniture/icons/search.png" alt="search-icon" onClick={handleOpenSearchModal} />
-                <img className='img' src="/images/furniture/icons/search-black.svg" alt="search-icon" onClick={handleOpenSearchModal} />
+                <img className='img' src="/images/templates/minimal-template/icons/search.png" alt="search-icon" onClick={handleOpenSearchModal} />
+                <img className='img' src="/images/templates/minimal-template/icons/search-black.svg" alt="search-icon" onClick={handleOpenSearchModal} />
                 <input
                     type="text"
                     name="search"

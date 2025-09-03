@@ -14,9 +14,6 @@ import useReviews from '@/modules/lib/utility/hooks/use-reviews';
 export const StorefrontParent: FC<{ store: Store; }> = ({
     store,
 }) => {
-    const templateList = ['default', 'trend-fashion', 'furniture'];
-    let template: string = "default";
-
     const [selectedCategory, setSelectedCategory] = useState<ProductCategory | null>(null);
     const { products } = useStoreProductsView(selectedCategory);
     const [filteredProducts, setFilteredProducts] = useState<Product[]>([]);
@@ -54,11 +51,14 @@ export const StorefrontParent: FC<{ store: Store; }> = ({
         setUserProfileDropdown(false);
     };
 
+    const templates = ["Default", "Minimal", "Bold"]
+    const template = store?.meta?.template
+
     return (
         <>
             {
-                template && templateList.includes(template) ? (
-                    template === 'trend-fashion' ? (
+                template && templates.includes(template) ? (
+                    template === 'Bold' ? (
                         <TrendFashion
                             store={store}
                             products={products}
@@ -80,7 +80,7 @@ export const StorefrontParent: FC<{ store: Store; }> = ({
                             setSelectedCategory={setSelectedCategory}
                             handleCategoryChange={handleCategoryChange}
                         />
-                    ) : template === 'furniture' ? (
+                    ) : template === 'Minimal' ? (
                         <Furniture
                             store={store}
                             products={products}

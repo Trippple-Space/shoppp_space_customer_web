@@ -57,14 +57,14 @@ const TrendFashion: FC<{
                 <header className="relative pt-100">
                     <section className="navbar">
                         <div className="logo-container trend-flex sm:max-w-100p max-w-69p">
-                            <img src={store?.thumbnail || "/images/trend-fashion/images/logo.png"} alt="logo-img" className="logo-img" />
+                            <img src={store?.thumbnail || "/images/templates/bold-template/images/logo.png"} alt="logo-img" className="logo-img" />
                             <h1 className="logo truncate">{store?.name || ""}</h1>
                         </div>
                         {/* <nav className="nav-links">
                         <a href="#">About us</a>
                         <div className="trend-flex">
                             <span>Products</span>
-                            <img src="/images/trend-fashion/icons/chevron-down.svg" alt="down" />
+                            <img src="/images/templates/bold-template/icons/chevron-down.svg" alt="down" />
                         </div>
                         <a href="#">Collection</a>
                         <a href="#">New</a>
@@ -72,13 +72,13 @@ const TrendFashion: FC<{
                     </nav> */}
                         <div className="icons trend-flex">
                             {/* <div className="trend-flex notification">
-                            <img src="/images/trend-fashion/icons/bell.svg" alt="notification-icon" />
+                            <img src="/images/templates/bold-template/icons/bell.svg" alt="notification-icon" />
                             <span></span>
                         </div> */}
-                            <img src="/images/trend-fashion/icons/shopping-cart.svg" alt="cart-icon" onClick={() => setCartOpen(true)} />
+                            <img src="/images/templates/bold-template/icons/shopping-cart.svg" alt="cart-icon" onClick={() => setCartOpen(true)} />
                             <img
                                 id="menu-icon"
-                                src="/images/trend-fashion/icons/menu.svg"
+                                src="/images/templates/bold-template/icons/menu.svg"
                                 alt="menu-icon"
                                 onClick={() => {
                                     setMenuOpen(!menuOpen)
@@ -90,7 +90,7 @@ const TrendFashion: FC<{
 
                     <section className="hero">
                         <div className="hero-image">
-                            <img src="/images/trend-fashion/images/hero-model.png" alt="Fashion Model" />
+                            <img src="/images/templates/bold-template/images/hero-model.png" alt="Fashion Model" />
                             <div className="circle-bg"></div>
                         </div>
 
@@ -105,19 +105,19 @@ const TrendFashion: FC<{
                         <div className="side-buttons">
                             <div className="side-button trend-flex first">
                                 <span className="side-button-img trend-flex first">
-                                    <img src="/images/trend-fashion/icons/star-solid.svg" alt="favorite" />
+                                    <img src="/images/templates/bold-template/icons/star-solid.svg" alt="favorite" />
                                 </span>
                                 <span>Favourite</span>
                             </div>
                             <div className="side-button trend-flex">
                                 <span className="side-button-img trend-flex">
-                                    <img src="/images/trend-fashion/icons/heart-solid.svg" alt="popular" />
+                                    <img src="/images/templates/bold-template/icons/heart-solid.svg" alt="popular" />
                                 </span>
                                 <span>Popular</span>
                             </div>{/*  */}
                             <div className="lifestyle-box">
                                 <span className="side-button-img trend-flex">
-                                    <img src="/images/trend-fashion/icons/camera-lens-fill.svg" alt="lifestyle" />
+                                    <img src="/images/templates/bold-template/icons/camera-lens-fill.svg" alt="lifestyle" />
                                 </span>
                                 <div>
                                     <p>Lifestyle</p>
@@ -222,7 +222,7 @@ const TrendFashion: FC<{
                         <img
                             className="user-icon"
                             id="close-icon"
-                            src="/images/trend-fashion/icons/x.svg"
+                            src="/images/templates/bold-template/icons/x.svg"
                             alt="close-icon"
                             onClick={() => setIsNavOpen(false)}
                         />
@@ -234,7 +234,7 @@ const TrendFashion: FC<{
                             <li className="nav-item">
                                 <p className="trend-flex">
                                     <span>Products</span>
-                                    <img src="/images/trend-fashion/icons/chevron-down.svg" alt="caret-down-icon" />
+                                    <img src="/images/templates/bold-template/icons/chevron-down.svg" alt="caret-down-icon" />
                                 </p>
                             </li>
                             <li className="nav-item"><a href="#">Collection</a></li>
@@ -244,19 +244,19 @@ const TrendFashion: FC<{
                         <ul id="user-action-list">
                             <li className="trend-flex">
                                 <a href="#" className="trend-flex">
-                                    <img className="user-icon" src="/images/trend-fashion/icons/shopping-cart.svg" alt="cart-icon" />
+                                    <img className="user-icon" src="/images/templates/bold-template/icons/shopping-cart.svg" alt="cart-icon" />
                                     <span>Nav 1</span>
                                 </a>
                             </li>
                             <li className="trend-flex">
                                 <a href="#" className="trend-flex">
-                                    <img className="user-icon" src="/images/trend-fashion/icons/shopping-cart.svg" alt="fav-icon" />
+                                    <img className="user-icon" src="/images/templates/bold-template/icons/shopping-cart.svg" alt="fav-icon" />
                                     <span>Nav 2</span>
                                 </a>
                             </li>
                             <li className="trend-flex">
                                 <a href="#" className="trend-flex">
-                                    <img className="user-icon" src="/images/trend-fashion/icons/shopping-cart.svg" alt="user-icon" />
+                                    <img className="user-icon" src="/images/templates/bold-template/icons/shopping-cart.svg" alt="user-icon" />
                                     <span>Nav 3</span>
                                 </a>
                             </li>

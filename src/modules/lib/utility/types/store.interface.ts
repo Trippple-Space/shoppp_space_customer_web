@@ -35,4 +35,5 @@ interface StoreMeta {
                }
           };
      };
+     template: string
 }
