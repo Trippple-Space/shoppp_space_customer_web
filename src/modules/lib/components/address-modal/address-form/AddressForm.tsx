@@ -7,6 +7,7 @@ import AddressMap from '../address-map/AddressMap';
 import UseCurrentLocationButton from '../address-map/UseCurrentLocationButton';
 import { toast } from 'sonner';
 import axios from 'axios';
+import { useDebounce } from '@/modules/lib/utility/hooks/use-debounce';
 
 interface AddressFormProps {
   closeAddressForm: (button: any) => void
@@ -40,6 +41,7 @@ const AddressForm: FC<AddressFormProps> = ({ closeAddressForm, type }) => {
   const formhandler = (type === 'edit') ? updateFormHandler : formHandler
 
   const locationiqApiKey = process.env.NEXT_PUBLIC_LOCATIONIQ_API;
+  const { debouncedValue: addressDebounce } = useDebounce(suggestionInputValue, 500);
 
   useEffect(() => {
     const emptyFields = Object.entries(formhandler.values).every(
@@ -74,25 +76,20 @@ const AddressForm: FC<AddressFormProps> = ({ closeAddressForm, type }) => {
     };
   }, [showSuggestions]);
 
-  const autoCompleteAddress = async (inputValue: string) => {
-    const encodedValue = encodeURIComponent(inputValue)
-    setSuggestionInputValue(inputValue)
+      const autoCompleteAddress = async (inputValue: string) => {
+        const encodedValue = encodeURIComponent(inputValue);
 
-    try {
-      if (inputValue.length > 2) {
-        setShowSuggestions(true)
-        const response = await axios.get(
-          `https://api.locationiq.com/v1/autocomplete?key=${locationiqApiKey}&q=${encodedValue}&limit=10&countrycodes=ng&dedupe=1&`
-        );
-        setAddressSuggestions(response.data)
-        setShowSuggestions(true)
-      } else {
-        setShowSuggestions(false)
-      }
-    } catch (err: any) {
-      throw err;
-    }
-  }
+        try {
+          const response = await axios.get(
+            `https://api.locationiq.com/v1/autocomplete?key=${locationiqApiKey}&q=${encodedValue}&limit=10&countrycodes=ng&dedupe=1&`
+          );
+          setAddressSuggestions(response.data);
+          setShowSuggestions(true);
+        } catch (err: any) {
+          console.error(err);
+        }
+      };
+
 
   const handleSelectAddress = (suggestion: Suggestions) => {
     if (suggestion.address.state.toLowerCase().includes("lagos")) {
@@ -112,6 +109,15 @@ const AddressForm: FC<AddressFormProps> = ({ closeAddressForm, type }) => {
       });
     }
   }
+
+  useEffect(() => {
+  if (addressDebounce.trim().length > 2) {
+    autoCompleteAddress(addressDebounce); 
+  } else {
+    setShowSuggestions(false);
+  }
+}, [addressDebounce]);
+
 
   return (
     (<div className="flex-col w-full">
@@ -143,20 +149,21 @@ const AddressForm: FC<AddressFormProps> = ({ closeAddressForm, type }) => {
               />
             </div>
             <div className='grid-col-span-2' ref={selectRef}>
-              <Input
-                label={<span className={`text-14 weight-400 line-height-19`}>Search Address</span>}
-                id={'searchAddress'}
-                name={'searchAddress'}
-                type={"text"}
-                value={suggestionInputValue}
-                placeholder={'Start typing an address..'}
-                handleChange={(e: any) => {
-                  autoCompleteAddress(e.target.value);
-                }}
-                handleFocus={() => { }}
-                className={'w-full'}
-                inputClass="radius-6! p-12 w-full border-#6A6A6A4D text-16"
-              />
+            <Input
+  label={<span className={`text-14 weight-400 line-height-19`}>Search Address</span>}
+  id={'searchAddress'}
+  name={'searchAddress'}
+  type={"text"}
+  value={suggestionInputValue}
+  placeholder={'Start typing an address..'}
+  handleChange={(e: any) => {
+    setSuggestionInputValue(e.target.value); // ✅ only update value
+  }}
+  handleFocus={() => { }}
+  className={'w-full'}
+  inputClass="radius-6! p-12 w-full border-#6A6A6A4D text-16"
+/>
+
               <div className='relative'>
                 {
                   showSuggestions &&

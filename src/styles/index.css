@@ -262,6 +262,7 @@
 .text-10 { font-size: 10px; } 
 .bg-\#1677FF { background-color: #1677FF; } 
 .weight-700 { font-weight: 700; } 
+.flex-wrap { flex-wrap: wrap; } 
 .gap-2 { gap: 2px; } 
 .capitalize {    text-transform: capitalize;  } 
 .gap-3 { gap: 3px; } 
@@ -566,7 +567,6 @@
 .accent-green { accent-color: green; } 
 .mt-14 { margin-top: 14px; } 
 .white-space-nowrap { white-space: nowrap; } 
-.flex-wrap { flex-wrap: wrap; } 
 @layer base {    .border-y {       border-bottom: 1px solid;       border-top: 1px solid;    }  } 
 .line-height-12\.1 { line-height: 12.1px; } 
 .text-9 { font-size: 9px; } 
@@ -651,14 +651,15 @@
 .max-w-69p { max-width: 69%; } 
 .pt-64 { padding-top: 64px; } 
 .mb-111 { margin-bottom: 111px; } 
-.pt-24 { padding-top: 24px; } 
-.pb-147 { padding-bottom: 147px; } 
-.pl-24 { padding-left: 24px; } 
-.pr-24 { padding-right: 24px; } 
 .w-73 { width: 73px; } 
 .h-75 { height: 75px; } 
 .max-w-661 { max-width: 661px; } 
 .mt-4 { margin-top: 4px; } 
+.pt-24 { padding-top: 24px; } 
+.pl-24 { padding-left: 24px; } 
+.pr-24 { padding-right: 24px; } 
+.pb-347 { padding-bottom: 347px; } 
+.pb-147 { padding-bottom: 147px; } 
 .z-index-4, .z-4 { z-index: 4; } 
 .pt-22 { padding-top: 22px; } 
 .mt-56 { margin-top: 56px; } 
@@ -943,16 +944,17 @@
 @media only screen and (min-width: 576px) { .sm\:grid-3-cols-1fr { grid-template-columns: repeat(3, 1fr); } } 
 @media only screen and (min-width: 576px) { .sm\:max-w-100p { max-width: 100%; } } 
 @media only screen and (min-width: 576px) { .sm\:mb-60 { margin-bottom: 60px; } } 
-@media only screen and (min-width: 576px) { .sm\:pt-32 { padding-top: 32px; } } 
-@media only screen and (min-width: 576px) { .sm\:pb-99 { padding-bottom: 99px; } } 
-@media only screen and (min-width: 576px) { .sm\:pl-40 { padding-left: 40px; } } 
-@media only screen and (min-width: 576px) { .sm\:pr-40 { padding-right: 40px; } } 
 @media only screen and (min-width: 576px) { .sm\:space-between {    justify-content: space-between;  } } 
 @media only screen and (min-width: 576px) { .sm\:a-items-center { align-items: center; } } 
 @media only screen and (min-width: 576px) { .sm\:gap-0 { gap: 0px; } } 
 @media only screen and (min-width: 576px) { .sm\:j-content-end { justify-content: flex-end; } } 
 @media only screen and (min-width: 576px) { .sm\:weight-600 { font-weight: 600; } } 
 @media only screen and (min-width: 576px) { .sm\:line-height-22 { line-height: 22px; } } 
+@media only screen and (min-width: 576px) { .sm\:pt-32 { padding-top: 32px; } } 
+@media only screen and (min-width: 576px) { .sm\:pl-40 { padding-left: 40px; } } 
+@media only screen and (min-width: 576px) { .sm\:pr-40 { padding-right: 40px; } } 
+@media only screen and (min-width: 576px) { .sm\:pb-299 { padding-bottom: 299px; } } 
+@media only screen and (min-width: 576px) { .sm\:pb-99 { padding-bottom: 99px; } } 
 @media only screen and (min-width: 576px) { .sm\:w-fit {    width: fit-content;  } } 
 @media only screen and (min-width: 576px) { .sm\:px-0 { padding-left: 0px; padding-right: 0px; } } 
 @media only screen and (min-width: 576px) { .sm\:b-20 { bottom: 20px; } } 
@@ -1109,9 +1111,6 @@
 @media only screen and (min-width: 768px) { .md\:border-\#00000014 { border-color: #00000014; } } 
 @media only screen and (min-width: 768px) { .md\:t-43 { top: 43px; } } 
 @media only screen and (min-width: 768px) { .md\:pt-69\.6 { padding-top: 69.6px; } } 
-@media only screen and (min-width: 768px) { .md\:pt-44 { padding-top: 44px; } } 
-@media only screen and (min-width: 768px) { .md\:pb-90 { padding-bottom: 90px; } } 
-@media only screen and (min-width: 768px) { .md\:pl-60 { padding-left: 60px; } } 
 @media only screen and (min-width: 768px) { .md\:text-24 { font-size: 24px; } } 
 @media only screen and (min-width: 768px) { .md\:line-height-32 { line-height: 32px; } } 
 @media only screen and (min-width: 768px) { .md\:j-content-start { justify-content: flex-start; } } 
@@ -1119,6 +1118,9 @@
 @media only screen and (min-width: 768px) { .md\:gap-16 { gap: 16px; } } 
 @media only screen and (min-width: 768px) { .md\:py-20 { padding-top: 20px; padding-bottom: 20px; } } 
 @media only screen and (min-width: 768px) { .md\:px-24 { padding-left: 24px; padding-right: 24px; } } 
+@media only screen and (min-width: 768px) { .md\:pt-44 { padding-top: 44px; } } 
+@media only screen and (min-width: 768px) { .md\:pl-60 { padding-left: 60px; } } 
+@media only screen and (min-width: 768px) { .md\:pb-90 { padding-bottom: 90px; } } 
 @media only screen and (min-width: 768px) { .md\:pb-85 { padding-bottom: 85px; } } 
 @media only screen and (min-width: 768px) { .md\:pl-40 { padding-left: 40px; } } 
 @media only screen and (min-width: 768px) { .md\:pr-60 { padding-right: 60px; } } 
@@ -1292,10 +1294,10 @@
 @media only screen and (min-width: 992px) { .l\:grid-4-cols-1fr { grid-template-columns: repeat(4, 1fr); } } 
 @media only screen and (min-width: 992px) { .l\:mt--20 { margin-top: -20px; } } 
 @media only screen and (min-width: 992px) { .l\:r-7p { right: 7%; } } 
+@media only screen and (min-width: 992px) { .l\:w-45\.8p { width: 45.8%; } } 
 @media only screen and (min-width: 992px) { .l\:w-54\.2p { width: 54.2%; } } 
 @media only screen and (min-width: 992px) { .l\:pl-70 { padding-left: 70px; } } 
 @media only screen and (min-width: 992px) { .l\:pr-70 { padding-right: 70px; } } 
-@media only screen and (min-width: 992px) { .l\:w-45\.8p { width: 45.8%; } } 
 @media only screen and (min-width: 992px) { .l\:float-right {    float: right;  } } 
 @media only screen and (min-width: 992px) { .l\:t-150 { top: 150px; } } 
 @media only screen and (min-width: 992px) { .l\:l-100 { left: 100px; } } 
@@ -1379,6 +1381,7 @@
 @media only screen and (min-width: 992px) { .l\:w-238 { width: 238px; } } 
 @media only screen and (min-width: 992px) { .l\:line-height-40 { line-height: 40px; } } 
 @media only screen and (min-width: 992px) { .l\:pr-30 { padding-right: 30px; } } 
+@media only screen and (min-width: 992px) { .l\:h-50p { height: 50%; } } 
 
 @media only screen and (min-width: 1200px) { .xl\:mt-3 { margin-top: 3px; } } 
 @media only screen and (min-width: 1200px) { .xl\:mt-27 { margin-top: 27px; } } 

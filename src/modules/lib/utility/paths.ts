@@ -10,8 +10,10 @@ export const paths = {
      homepage: "/",
      asoebi_fabrics: "/fabrics",
      asoebi_wears: "/wears",
-     explore: "/explore",
+  explore: "/explore",
+  vendor_link: "https://vendor.asoebi.africa/auth/signup",
      orders: "/orders",
+     legal_document: "/legal-document",
 };
 
 export const protectedPaths = [paths.checkout, paths.orders];
