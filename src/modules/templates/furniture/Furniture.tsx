@@ -16,8 +16,6 @@ const Furniture: FC<{
     store: Store;
     handleUserProfileDropdown: () => void;
     handleCloseDropdown: () => void;
-    isNavOpen: boolean;
-    setIsNavOpen: React.Dispatch<React.SetStateAction<boolean>>;
     openReviewId: number | null;
     filteredProducts: Product[];
     setOpenReviewId: React.Dispatch<React.SetStateAction<number | null>>;
@@ -38,8 +36,6 @@ const Furniture: FC<{
     store,
     handleUserProfileDropdown,
     handleCloseDropdown,
-    isNavOpen,
-    setIsNavOpen,
     filteredProducts,
     openReviewId,
     setOpenReviewId,
