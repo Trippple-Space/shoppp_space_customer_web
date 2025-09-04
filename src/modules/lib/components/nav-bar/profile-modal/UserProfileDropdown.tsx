@@ -9,6 +9,7 @@ import React, { FC } from 'react'
 import { useOrders } from '@/modules/lib/utility/hooks/use-orders'
 import { useSavedVariant } from '@/modules/lib/utility/hooks/use-saved-variants'
 import { onGoingOrderStatusQuery } from '@/modules/lib/utility/utility'
+import { useRouter } from 'next/navigation'
 
 
 interface IUserProfileDropdown {
@@ -23,6 +24,7 @@ const UserProfileDropdown: FC<IUserProfileDropdown> = ({
   const { user, signOut } = useNavbarView()
   const { isAuthenticated } = useUserStore()
   const query: any = onGoingOrderStatusQuery;
+     const router = useRouter()
   const { orders } = useOrders({
     filters: { status: { In: query } }
   })
@@ -112,7 +114,7 @@ const UserProfileDropdown: FC<IUserProfileDropdown> = ({
               <div className='flex flex-col gap-8 p-24 text-14'>
                 <button
                   className='bg-green text-white py-12 px-16 radius-6 line-height-19 border border-none weight-500 pointer w-full hover:bg-darkgreen g|transition:0.5s disabled:bg-grey'
-                  onClick={() => signOut()}
+                    onClick={() => {router.push(paths.login)}}
                 >
                   Login
                 </button>

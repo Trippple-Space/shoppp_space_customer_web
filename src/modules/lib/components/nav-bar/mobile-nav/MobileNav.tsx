@@ -12,6 +12,7 @@ import { paths } from '@/modules/lib/utility/paths'
 import config from '../../../../../../env'
 import { useOrders } from '@/modules/lib/utility/hooks/use-orders'
 import { onGoingOrderStatus, onGoingOrderStatusQuery } from '@/modules/lib/utility/utility'
+import { useRouter } from 'next/navigation'
 
 
 interface IMobileNav {
@@ -27,6 +28,7 @@ const MobileNav: FC<IMobileNav> = ({
   const [asoebiMobileModal, setAsoebiMobileModal] = useState<boolean>(false)
   const [hamburgerMenu, setHamburgerMenu] = useState<boolean>(false)
   const { user, signOut } = useNavbarView()
+    const router = useRouter()
   const { isAuthenticated } = useUserStore()
 
   const query:any = onGoingOrderStatusQuery;
@@ -167,7 +169,7 @@ const MobileNav: FC<IMobileNav> = ({
               <div className='flex flex-col gap-8 sm:px-36 px-24'>
                 <button
                   className='bg-green text-white py-12 px-16 border-none radius-6 w-full text-14 line-height-19 hover:pointer font-inter hover:bg-darkgreen g|transition:0.3s disabled:bg-grey weight-500'
-                  onClick={() => signOut()}
+                  onClick={() => {router.push(paths.login)}}
                 >
                   Login
                 </button>
