@@ -64,7 +64,9 @@ class ProductService {
      }
 
      fetchProducts(query: IQueryParams, filters = {}): Promise<Product[]> {
-          return new Promise((resolve) => {
+       return new Promise((resolve) => {
+            
+         
             const filterParams = buildFilterParams(filters);
             const {allFilters, ...queryWithoutAllFilters} = query
            
@@ -87,12 +89,13 @@ class ProductService {
                          slug,
                     })
                );
+          
                Object.keys(query).forEach((key) =>
                     url.searchParams.append(key, query[key])
                );
 
                fetch(url.toString())
-                    .then((res) => {
+                 .then((res) => {
                          if (!res.ok) {
                               throw new Error(
                                    `HTTP error! Status: ${res.status}`
@@ -101,7 +104,7 @@ class ProductService {
                          return res.json();
                     })
                     .then((response: any) => {
-                         resolve(response);
+                      resolve(response);
                     })
                     .catch((err) => {
                          reject(err);

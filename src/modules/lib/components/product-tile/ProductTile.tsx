@@ -231,7 +231,16 @@ const ProductTile: FC<IProductTile> = ({ product, savedVariants, saveVariant, re
           id='favorite icon'
           className='absolute t-0 r-0 mr-10 mt-10 l:mr-15 l:mt-15 text-24 l:text-34'
           onClick={isAuthenticated ? handleSave : () => isLoginModal()}
-
+          style={{
+            // Add a subtle dark circular background to ensure visibility on white backgrounds
+            background: isSaved ? 'rgba(0,0,0,0.25)' : 'rgba(255,255,255,0.7)',
+            borderRadius: '50%',
+            padding: '4px',
+            boxShadow: '0 2px 8px rgba(0,0,0,0.11)',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+          }}
         >
           <AiFillHeart
             color={isSaved ? '#ffffffee' : '#000000aa'}

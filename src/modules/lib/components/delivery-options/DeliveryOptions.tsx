@@ -21,6 +21,8 @@ const DeliveryOptions: FC<IDeliveryOptions> = ({
   selectedAddress
 }) => {
 
+  console.log({ selectedDeliveryOption, deliveryOptions });
+
   return (
     <div className="bg-white py-20 px-24 radius-8 border border-#00000014 flex flex-col md:gap-24 gap-16">
       <h2 className="md:text-20 text-16 md:line-height-28 line-height-24 weight-600">Delivery options</h2>
