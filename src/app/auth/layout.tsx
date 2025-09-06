@@ -44,7 +44,7 @@ const layout: FC<ILayout> = ({ children }) => {
       <Link href={'/'} className="l:hidden w-full bg-green  t-0 fixed z-10">
         <Image
           className="w-100 h-30 my-20 m-15"
-          src="new-asoebi-logo-white.svg"
+          src="asoebi-stacked-logo.svg"
           alt="logo"
           type="logo"
         />
@@ -54,8 +54,8 @@ const layout: FC<ILayout> = ({ children }) => {
           <div>
             <Link href={'/'}>
               <Image
-                className='w-115 h-31 ml-40 mt-20'
-                src='new-asoebi-logo-white.svg'
+                className='w-160 h-50 mt-20'
+                src='asoebi-stacked-logo.svg'
                 alt='logo'
                 type='logo'
               />
