@@ -21,7 +21,6 @@ const DeliveryOptions: FC<IDeliveryOptions> = ({
   selectedAddress
 }) => {
 
-  console.log({ selectedDeliveryOption, deliveryOptions });
 
   return (
     <div className="bg-white py-20 px-24 radius-8 border border-#00000014 flex flex-col md:gap-24 gap-16">
@@ -30,6 +29,8 @@ const DeliveryOptions: FC<IDeliveryOptions> = ({
         selectedAddress ?
           <div className="">
             <div className="flex flex-wrap md:flex-col sm:flex-row flex-col gap-12">
+              <p>Asoebi Africa Delivery</p>
+
               {Object.entries(deliveryOptions).map(([key, option]) => {
                 return (
                   <BoxRadio
@@ -82,6 +83,26 @@ const DeliveryOptions: FC<IDeliveryOptions> = ({
                   />
                 )
               })}
+            </div>
+            <div className="mt-12 p-12   radius-8  gap-8  w-fi">
+              <div className="flex a-items-center gap-8">
+
+              <p className="weight-400 text-14 line-height-22 flex a-items-center j-content-center gap-3 md:whitespace-nowrap">
+                Vendor’s Own Delivery (managed directly by the store)
+                </p>
+                <div className="w-full border border-#E7E7E7"></div>
+              </div>
+
+              <div className="mt-8">
+                <div className="flex j-content-between">
+                  <p className="weight-400 text-14 lg:text-16 line-height-22 flex a-items-center j-content-center gap-3">Amitex Store (1-6 working days)</p>
+                  <p>{formatNumberAsPrice(12222)}</p>
+               </div>
+              </div>
+            </div>
+
+            <div className="mt-12 p-12   radius-8 flex a-items-center gap-8 bg-#F5F5F5 w-fit">
+              <p className="text-14 text-center color-#00000099 " style={{ fontStyle: "italic" }}>Asoebi Africa is only responsible for deliveries handled through “Asoebi Africa Delivery.” For orders shipped via “Vendor’s Own Delivery,” please contact the store directly for delivery status or issues.</p>
             </div>
           </div>
           :

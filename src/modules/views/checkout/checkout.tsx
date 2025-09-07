@@ -42,7 +42,7 @@ const CheckoutPage = () => {
     standard: {
       title: 'Standard Delivery',
       available: true,
-      description: 'Arrives in 3 days',
+      description: '1-3 working days',
       etaInDays: 3,
       price: NaN,
       error: null,
@@ -52,7 +52,7 @@ const CheckoutPage = () => {
     express: {
       title: 'Same Day Delivery',
       available: true,
-      description: 'Arrives within 24 hours',
+      description: 'within 24 hours',
       etaInDays: 1,
       price: NaN,
            error: null,
