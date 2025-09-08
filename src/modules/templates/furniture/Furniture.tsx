@@ -33,6 +33,9 @@ const Furniture: FC<{
     selectedCategory: ProductCategory | null;
     setSelectedCategory: React.Dispatch<React.SetStateAction<ProductCategory | null>>;
     handleCategoryChange: (category: ProductCategory) => void;
+    extraFields: Record<string, any>;
+    scrollToProducts: () => void;
+    productsRef: React.RefObject<HTMLElement>;
 }> = ({
     store,
     handleUserProfileDropdown,
@@ -52,7 +55,10 @@ const Furniture: FC<{
     allReviews,
     selectedCategory,
     setSelectedCategory,
-    handleCategoryChange
+    handleCategoryChange,
+    extraFields,
+    scrollToProducts,
+    productsRef
 }) => {
         return (
             <div className="furniture-body">
@@ -126,9 +132,9 @@ const Furniture: FC<{
                         </div>
 
                         <div id="ctas" className="furniture-flex">
-                            <a href="#">
-                                <button type="button" className="hero-cta" id="shop-now">Shop now</button>
-                            </a>
+                            <span>
+                                <button type="button" className="hero-cta" id="shop-now" onClick={scrollToProducts}>Shop now</button>
+                            </span>
                             <div className="other-offers furniture-flex">
                                 <button type="button" className="hero-cta furniture-flex" id="free-delivery">
                                     <img src="/images/templates/minimal-template/icons/delivery.png" alt="delivery-truck-icon" />
@@ -276,10 +282,10 @@ const Furniture: FC<{
                 </nav>
             </div> */}
 
-                <section id="popular-section">
+                <section id="popular-section" ref={productsRef}>
                     <div id="popular-headings">
                         <h3>Popular</h3>
-                        <h2 className="">furniture sale now on!</h2>
+                        <h2 className="">{extraFields?.['section-0']?.Products_section_description || ""}</h2>
                     </div>
 
                     <div className="grid l:grid-4-cols-1fr sm:grid-3-cols-1fr grid-2-cols-1fr l:gap-20 sm:gap-10 gap-20 w-full mt-30">

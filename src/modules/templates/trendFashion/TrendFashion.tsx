@@ -31,6 +31,9 @@ const TrendFashion: FC<{
     selectedCategory: ProductCategory | null;
     setSelectedCategory: React.Dispatch<React.SetStateAction<ProductCategory | null>>;
     handleCategoryChange: (category: ProductCategory) => void;
+    extraFields: Record<string, any>;
+    scrollToProducts: () => void;
+    productsRef: React.RefObject<HTMLElement>;
 }> = ({
     store,
     handleUserProfileDropdown,
@@ -50,7 +53,10 @@ const TrendFashion: FC<{
     allReviews,
     selectedCategory,
     setSelectedCategory,
-    handleCategoryChange
+    handleCategoryChange,
+    extraFields,
+    scrollToProducts,
+    productsRef
 }) => {
         return (
             <div className="trend-body font-inter">
@@ -123,7 +129,7 @@ const TrendFashion: FC<{
                                     <p>Lifestyle</p>
                                     <span>Our brands follow process</span>
                                 </div>
-                                <button className="get-all">Get All</button>
+                                <button className="get-all" onClick={scrollToProducts}>Get All</button>
                             </div>
                         </div>
                     </section>
@@ -166,24 +172,24 @@ const TrendFashion: FC<{
                     </div>
                     <div className="feature-text trend-flex">
                         <div className="feature">
-                            <h4>Quality Product</h4>
-                            <p>Lorem ipsum dolor sit amet consectetur uruam.</p>
+                            <h4>{extraFields?.['section-0']?.Info_section_header || 'Quality Product'}</h4>
+                            <p>{extraFields?.['section-0']?.Content || ""}</p>
                         </div>
                         <div className="feature">
-                            <h4>Best Production</h4>
-                            <p>Lorem ipsum dolor sit amet consectetur uruam.</p>
+                            <h4>{extraFields?.['section-1']?.Info_section_header || 'Best Production'}</h4>
+                            <p>{extraFields?.['section-1']?.Content || ""}</p>
                         </div>
                         <div className="feature">
-                            <h4>100% Authentic</h4>
-                            <p>Lorem ipsum dolor sit amet consectetur uruam.</p>
+                            <h4>{extraFields?.['section-2']?.Info_section_header || '100% Authentic'}</h4>
+                            <p>{extraFields?.['section-2']?.Content || ""}</p>
                         </div>
                     </div>
                 </section>
 
-                <section className="exclusive">
+                <section className="exclusive" ref={productsRef}>
                     <h2 className="exclusive-header">Exclusive Products</h2>
                     <p className="exclusive-subheader">
-                        Shopping is a bit of a relaxing hobby for me, which is sometimes troubling.
+                        {extraFields?.['section-3']?.Product_list_description || ""}
                     </p>
 
                     <div className="grid l:grid-4-cols-1fr sm:grid-3-cols-1fr grid-2-cols-1fr l:gap-20 sm:gap-10 gap-20 w-full">
