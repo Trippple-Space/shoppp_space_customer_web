@@ -10,7 +10,7 @@ import { Product, ProductCategory } from '@/modules/lib/utility/types/product.in
 import { useStoreProductsView } from '@/modules/lib/utility/hooks/views/use-store-products-view';
 import { useCategoryFilter } from '@/modules/lib/utility/hooks/use-category-filter';
 import useReviews from '@/modules/lib/utility/hooks/use-reviews';
-import { templates } from '@/modules/lib/utility/constants';
+import { useProductSold } from '@/modules/lib/utility/hooks/use-product-sold';
 
 export const StorefrontParent: FC<{ store: Store; }> = ({
     store,
@@ -51,14 +51,9 @@ export const StorefrontParent: FC<{ store: Store; }> = ({
     const handleCloseDropdown = () => {
         setUserProfileDropdown(false);
     };
-    
-    const template = store?.meta?.template
-    const selectedTemplateObj = templates.find(t => t.name === template);
-    const extraFields =
-    selectedTemplateObj && selectedTemplateObj.extraFields.length > 0
-        ? store?.meta?.templateFields?.[template] || {}
-        : {};
-        
+      
+    const { productSold } = useProductSold(store?.id);
+    const template = store?.meta?.template;
     const productsRef = useRef<HTMLElement | null>(null);
 
     const scrollToProducts = () => {
@@ -70,8 +65,8 @@ export const StorefrontParent: FC<{ store: Store; }> = ({
     return (
         <>
             {
-                selectedTemplateObj ? (
-                    selectedTemplateObj.name === "Bold" ? (
+                template ? (
+                    template?.name === "Bold" ? (
                         <TrendFashion
                             store={store}
                             products={products}
@@ -92,11 +87,11 @@ export const StorefrontParent: FC<{ store: Store; }> = ({
                             selectedCategory={selectedCategory}
                             setSelectedCategory={setSelectedCategory}
                             handleCategoryChange={handleCategoryChange}
-                            extraFields={extraFields}
+                            template={template}
                             productsRef={productsRef}
                             scrollToProducts={scrollToProducts}
                         />
-                    ) : template === 'Minimal' ? (
+                    ) : template?.name === 'Minimal' ? (
                         <Furniture
                             store={store}
                             products={products}
@@ -117,9 +112,10 @@ export const StorefrontParent: FC<{ store: Store; }> = ({
                             selectedCategory={selectedCategory}
                             setSelectedCategory={setSelectedCategory}
                             handleCategoryChange={handleCategoryChange}
-                            extraFields={extraFields}
+                            template={template}
                             productsRef={productsRef}
                             scrollToProducts={scrollToProducts}
+                            productSold={productSold || 0}
                         />
                     ) : (
                         <StorefrontLayout store={store}>

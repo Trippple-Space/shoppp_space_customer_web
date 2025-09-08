@@ -31,7 +31,7 @@ const TrendFashion: FC<{
     selectedCategory: ProductCategory | null;
     setSelectedCategory: React.Dispatch<React.SetStateAction<ProductCategory | null>>;
     handleCategoryChange: (category: ProductCategory) => void;
-    extraFields: Record<string, any>;
+    template?: any;
     scrollToProducts: () => void;
     productsRef: React.RefObject<HTMLElement>;
 }> = ({
@@ -54,7 +54,7 @@ const TrendFashion: FC<{
     selectedCategory,
     setSelectedCategory,
     handleCategoryChange,
-    extraFields,
+    template,
     scrollToProducts,
     productsRef
 }) => {
@@ -101,9 +101,9 @@ const TrendFashion: FC<{
                         </div>
 
                         <div className="hero-text">
-                            <h1>{store?.heading || "Use Fashion Into Your All Collection"}</h1>
+                            <h1>{store?.heading || ""}</h1>
                             <p>
-                                {store?.subHeading || "Shopping is a bit of a relaxing hobby for me, which is sometimes troubling."}
+                                {store?.subHeading || ""}
                             </p>
                             <button>Learn More</button>
                         </div>
@@ -127,7 +127,7 @@ const TrendFashion: FC<{
                                 </span>
                                 <div>
                                     <p>Lifestyle</p>
-                                    <span>Our brands follow process</span>
+                                    <span>{template?.motto || 'Our brands follow process'}</span>
                                 </div>
                                 <button className="get-all" onClick={scrollToProducts}>Get All</button>
                             </div>
@@ -154,43 +154,37 @@ const TrendFashion: FC<{
                     </div>
                 </header>
 
-                <section className="features">
-                    <div className="feature-images trend-flex">
-                        {
-                            store?.meta?.heroImage1 &&
+                {store?.meta?.template?.features && store.meta.template.features.length > 0 && (
+                    <section className="features">
+                        <div className="feature-images trend-flex">
+                        {store?.meta?.heroImage1 && (
                             <div>
-                                <img src={store?.meta?.heroImage1} alt="woman" />
+                                <img src={store.meta.heroImage1} alt="hero 1" />
                             </div>
-                        }
+                        )}
+                        {store?.meta?.heroImage2 && (
+                            <div>
+                                <img src={store.meta.heroImage2} alt="hero 2" />
+                            </div>
+                        )}
+                        </div>
 
-                        {
-                            (store?.meta?.heroImage2) &&
-                            <div>
-                                <img src={store?.meta?.heroImage2} alt="woman" />
+                        <div className="feature-text trend-flex">
+                        {store.meta.template.features.slice(0, 3).map((feature: any, idx: number) => (
+                            <div key={idx} className="feature">
+                            <h4>{feature.header || `Store feature ${idx + 1}`}</h4>
+                            <p>{feature.content || ""}</p>
                             </div>
-                        }
-                    </div>
-                    <div className="feature-text trend-flex">
-                        <div className="feature">
-                            <h4>{extraFields?.['section-0']?.Info_section_header || 'Quality Product'}</h4>
-                            <p>{extraFields?.['section-0']?.Content || ""}</p>
+                        ))}
                         </div>
-                        <div className="feature">
-                            <h4>{extraFields?.['section-1']?.Info_section_header || 'Best Production'}</h4>
-                            <p>{extraFields?.['section-1']?.Content || ""}</p>
-                        </div>
-                        <div className="feature">
-                            <h4>{extraFields?.['section-2']?.Info_section_header || '100% Authentic'}</h4>
-                            <p>{extraFields?.['section-2']?.Content || ""}</p>
-                        </div>
-                    </div>
-                </section>
+                    </section>
+                )}
 
                 <section className="exclusive" ref={productsRef}>
-                    <h2 className="exclusive-header">Exclusive Products</h2>
-                    <p className="exclusive-subheader">
-                        {extraFields?.['section-3']?.Product_list_description || ""}
-                    </p>
+                    <h2 className="exclusive-header">{template?.productSectionHeading || "Exclusive Products"}</h2>
+                    {
+                        template?.productSectionSubHeading && <p className="exclusive-subheader">{template?.productSectionSubHeading}</p>
+                    }
 
                     <div className="grid l:grid-4-cols-1fr sm:grid-3-cols-1fr grid-2-cols-1fr l:gap-20 sm:gap-10 gap-20 w-full">
                         {filteredProducts.length ? (

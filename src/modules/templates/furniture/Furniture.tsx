@@ -33,9 +33,10 @@ const Furniture: FC<{
     selectedCategory: ProductCategory | null;
     setSelectedCategory: React.Dispatch<React.SetStateAction<ProductCategory | null>>;
     handleCategoryChange: (category: ProductCategory) => void;
-    extraFields: Record<string, any>;
+    template?: any;
     scrollToProducts: () => void;
     productsRef: React.RefObject<HTMLElement>;
+    productSold: number;
 }> = ({
     store,
     handleUserProfileDropdown,
@@ -56,9 +57,10 @@ const Furniture: FC<{
     selectedCategory,
     setSelectedCategory,
     handleCategoryChange,
-    extraFields,
+    template,
     scrollToProducts,
-    productsRef
+    productsRef,
+    productSold
 }) => {
         return (
             <div className="furniture-body">
@@ -124,9 +126,9 @@ const Furniture: FC<{
                     <div id="hero-section">
                         <div id="hero-texts-container">
                             <div id="hero-texts">
-                                <h1>{store?.heading || "Discover elegant & affordable furniture for every room"}</h1>
+                                <h1>{store?.heading || ""}</h1>
                                 <p>
-                                    {store?.subHeading || "Transform your furniture with sophisticated and stylish pieces, and create a serene inviting home"}
+                                    {store?.subHeading || ""}
                                 </p>
                             </div>
                         </div>
@@ -135,28 +137,30 @@ const Furniture: FC<{
                             <span>
                                 <button type="button" className="hero-cta" id="shop-now" onClick={scrollToProducts}>Shop now</button>
                             </span>
-                            <div className="other-offers furniture-flex">
-                                <button type="button" className="hero-cta furniture-flex" id="free-delivery">
-                                    <img src="/images/templates/minimal-template/icons/delivery.png" alt="delivery-truck-icon" />
-                                    <span>Free delivery</span>
-                                </button>
-                                <button type="button" className="hero-cta furniture-flex" id="time">
-                                    <img src="/images/templates/minimal-template/icons/time.png" alt="clock-icon" />
-                                    <span>Always on-time</span>
-                                </button>
-                            </div>
+                            {store?.meta?.template?.features && store.meta.template.features.length > 0 && (
+                                <div className="other-offers furniture-flex">
+                                    {store.meta.template.features.slice(0, 2).map((feature: any, idx: number) => (
+                                        <button key={idx + feature?.header} type="button" className="hero-cta furniture-flex" id="free-delivery">
+                                            {
+                                                feature?.icon && <img src={feature.icon} alt="feature-icon" />
+                                            }
+                                            <span>{feature?.header}</span>
+                                        </button>
+                                    ))}
+                                </div>  
+                            )}
                         </div>
 
                         <div id="hero-images-container">
                             <div id="hero-images">
-                                <img className="hero-image" id="hero-image1" src={store?.meta?.heroImage1 || "/images/templates/minimal-template/images/cushion.jpg"} alt="chair" />
-                                <img className="hero-image" id="hero-image2" src={store?.meta?.heroImage2 || "/images/templates/minimal-template/images/flower-table.jpg"} alt="flower" />
+                                {store?.meta?.heroImage1 && (<img className="hero-image" id="hero-image1" src={store?.meta?.heroImage1 || ""} alt="chair" />)}
+                                {store?.meta?.heroImage2 && (<img className="hero-image" id="hero-image2" src={store?.meta?.heroImage2 || ""} alt="flower" />)}
 
                                 <div className="hero-image" id="hero-image3">
-                                    <img src={store?.meta?.heroImage3 || "/images/templates/minimal-template/images/manager.jpg"} alt="manager" />
+                                    {store?.meta?.heroImage3 && <img src={store?.meta?.heroImage3 || ""} alt="manager" />}
                                     <div id="agentInfo">
-                                        <span>Nico Wiliams Jr</span>
-                                        <span>Agent property</span>
+                                        <span className="truncate">{store?.name}</span>
+                                        {template?.motto && <span className="truncate">{template?.motto || 'Our brands follow process'}</span>}
                                     </div>
                                 </div>
 
@@ -186,7 +190,7 @@ const Furniture: FC<{
                                         })}
                                     </div>
                                     <p id="items-sold">
-                                        <span>120,000 +</span>
+                                        <span>{productSold || '30'} +</span>
                                         <span>Items sold out</span>
                                     </p>
                                 </div>
@@ -284,8 +288,10 @@ const Furniture: FC<{
 
                 <section id="popular-section" ref={productsRef}>
                     <div id="popular-headings">
-                        <h3>Popular</h3>
-                        <h2 className="">{extraFields?.['section-0']?.Products_section_description || ""}</h2>
+                        <h3>{template?.productSectionHeading || "Exclusive Products"}</h3>
+                        {
+                            template?.productSectionSubHeading && <h2>{template?.productSectionSubHeading}</h2>
+                        }
                     </div>
 
                     <div className="grid l:grid-4-cols-1fr sm:grid-3-cols-1fr grid-2-cols-1fr l:gap-20 sm:gap-10 gap-20 w-full mt-30">

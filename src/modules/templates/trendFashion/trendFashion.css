@@ -158,6 +158,9 @@
   height: auto;
   position: relative;
   z-index: 2;
+  left: 50%;
+  transform: translateX(-50%);
+  object-position: right;
 }
 
 .hero .hero-image .circle-bg {
