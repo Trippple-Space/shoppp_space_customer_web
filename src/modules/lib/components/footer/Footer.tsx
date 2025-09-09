@@ -63,7 +63,7 @@ const Footer = () => {
                 <div className='w-fit l:mt-50 mt-30'>
                   <Image
                     className='l:w-150 w-100'
-                    src='asoebi-stacked-logo.svg'
+                    src='Main logo green.svg'
                     alt='logo'
                     type='logo'
                   />
