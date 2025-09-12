@@ -22,13 +22,32 @@ export interface DeliveryOption {
             error: string | null,
       message: string | null
     },
-    pickup: {
-      title: string,
-      available: boolean,
-      description: string,
-      etaInDays: number | string,
-      price: number,
-      error: string | null,
-      message: string | null
-    }
+    vendorManaged: {
+      title: string,  
+      pickup: Array<{
+    status: string | null;
+    storeId: number;
+    storeName: string;
+  }>;
+
+  vendorManaged: Array<{
+    fee: number;
+    status: string | null;
+    storeId: number;
+    storeName: string;
+    estimatedTime: string | null;
+  }>;
+
+  vendorManagedTotal: number;
+};
+
 }
+
+        // {
+                    // "fee": null,
+                    // "status": null,
+                    // "storeId": 2,
+                    // "storeName": "Ego",
+                    // "estimatedTime": null
+            
+            // }

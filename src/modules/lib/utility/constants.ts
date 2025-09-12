@@ -11,10 +11,26 @@ export const deliveryOptions = {
         etaInDays: 1,
         price: 6500
     },
-    pickup: {
-        title: 'Pick Up',
-        description: 'Pick up in stores close to you',
-        etaInDays: '',
-        price: 0
-    }
+  vendorManaged: {
+          title: 'Vendor Managed Delivery',
+
+            pickup: [
+                {
+                    "status": null,
+                    "storeId": 0,
+                    "storeName": ""
+                }
+            ],
+         
+            vendorManaged: [
+                {
+                    "fee": 0,
+                    "status": null,
+                    "storeId": 0,
+                    "storeName": "",
+                    "estimatedTime": null
+                }
+            ],
+            vendorManagedTotal: 0
+        }
 }

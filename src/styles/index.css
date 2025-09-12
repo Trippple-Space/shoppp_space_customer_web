@@ -1038,7 +1038,6 @@
 @media only screen and (min-width: 768px) { .md\:gap-4 { gap: 4px; } } 
 @media only screen and (min-width: 768px) { .md\:text-16 { font-size: 16px; } } 
 @media only screen and (min-width: 768px) { .md\:line-height-24 { line-height: 24px; } } 
-@media only screen and (min-width: 768px) { .md\:whitespace-nowrap {    white-space: nowrap;  } } 
 @media only screen and (min-width: 768px) { .md\:py-26 { padding-top: 26px; padding-bottom: 26px; } } 
 @media only screen and (min-width: 768px) { .md\:a-items-center { align-items: center; } } 
 @media only screen and (min-width: 768px) { .md\:gap-8 { gap: 8px; } } 
@@ -1144,7 +1143,9 @@
 @media only screen and (min-width: 768px) { .m\:text-14 { font-size: 14px; } } 
 @media only screen and (min-width: 768px) { .m\:text-16 { font-size: 16px; } } 
 
+@media only screen and (min-width: 992px) { .lg\:flex-nowrap { flex-wrap: nowrap; } } 
 @media only screen and (min-width: 992px) { .lg\:text-16 { font-size: 16px; } } 
+@media only screen and (min-width: 992px) { .lg\:text-14 { font-size: 14px; } } 
 
 @media only screen and (min-width: 992px) { .l\:block {    display: block;  } } 
 @media only screen and (min-width: 992px) { .l\:hidden {    display: none;  } } 
@@ -1378,6 +1379,7 @@
 
 @media only screen and (min-width: 1200px) { .xl\:mt-3 { margin-top: 3px; } } 
 @media only screen and (min-width: 1200px) { .xl\:mt-27 { margin-top: 27px; } } 
+@media only screen and (min-width: 1200px) { .xl\:block {    display: block;  } } 
 @media only screen and (min-width: 1200px) { .xl\:mx-200 { margin-left: 200px; margin-right: 200px; } } 
 @media only screen and (min-width: 1200px) { .xl\:w-70 { width: 70px; } } 
 @media only screen and (min-width: 1200px) { .xl\:h-70 { height: 70px; } } 
