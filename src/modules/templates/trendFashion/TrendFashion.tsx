@@ -62,41 +62,43 @@ const TrendFashion: FC<{
             <div className="trend-body font-inter">
                 <header className="relative pt-100">
                     <section className="navbar">
-                        <div className="logo-container trend-flex sm:max-w-100p max-w-69p">
-                            <img src={store?.thumbnail || "/images/templates/bold-template/images/logo.png"} alt="logo-img" className="logo-img" />
-                            <h1 className="logo truncate">{store?.name || ""}</h1>
-                        </div>
-                        {/* <nav className="nav-links">
-                        <a href="#">About us</a>
-                        <div className="trend-flex">
-                            <span>Products</span>
-                            <img src="/images/templates/bold-template/icons/chevron-down.svg" alt="down" />
-                        </div>
-                        <a href="#">Collection</a>
-                        <a href="#">New</a>
-                        <a href="#">Sales</a>
-                    </nav> */}
-                        <div className="icons trend-flex">
-                            {/* <div className="trend-flex notification">
-                            <img src="/images/templates/bold-template/icons/bell.svg" alt="notification-icon" />
-                            <span></span>
-                        </div> */}
-                            <img src="/images/templates/bold-template/icons/shopping-cart.svg" alt="cart-icon" onClick={() => setCartOpen(true)} />
-                            <img
-                                id="menu-icon"
-                                src="/images/templates/bold-template/icons/menu.svg"
-                                alt="menu-icon"
-                                onClick={() => {
-                                    setMenuOpen(!menuOpen)
-                                    handleUserProfileDropdown()
-                                }}
-                            />
+                        <div className="navbar-child">
+                            <div className="logo-container trend-flex sm:max-w-100p max-w-69p">
+                                <img src={store?.thumbnail || "/images/templates/bold-template/images/logo.png"} alt="logo-img" className="logo-img" />
+                                <h1 className="logo truncate">{store?.name || ""}</h1>
+                            </div>
+                            {/* <nav className="nav-links">
+                            <a href="#">About us</a>
+                            <div className="trend-flex">
+                                <span>Products</span>
+                                <img src="/images/templates/bold-template/icons/chevron-down.svg" alt="down" />
+                            </div>
+                            <a href="#">Collection</a>
+                            <a href="#">New</a>
+                            <a href="#">Sales</a>
+                        </nav> */}
+                            <div className="icons trend-flex">
+                                {/* <div className="trend-flex notification">
+                                <img src="/images/templates/bold-template/icons/bell.svg" alt="notification-icon" />
+                                <span></span>
+                            </div> */}
+                                <img src="/images/templates/bold-template/icons/shopping-cart.svg" alt="cart-icon" onClick={() => setCartOpen(true)} />
+                                <img
+                                    id="menu-icon"
+                                    src="/images/templates/bold-template/icons/menu.svg"
+                                    alt="menu-icon"
+                                    onClick={() => {
+                                        setMenuOpen(!menuOpen)
+                                        handleUserProfileDropdown()
+                                    }}
+                                />
+                            </div>
                         </div>
                     </section>
 
                     <section className="hero">
                         <div className="hero-image">
-                            <img src="/images/templates/bold-template/images/hero-model.png" alt="Fashion Model" />
+                            <img src="/images/templates/bold-template/images/hero-model2.png" alt="Fashion Model" />
                             <div className="circle-bg"></div>
                         </div>
 
