@@ -44,7 +44,7 @@ const VendorSignUp = () => {
           <div className="mb-43">
             <Image
               className='w-100 h-27 mb-16 a-self-left'
-              src='asoebi-logo-colored.png'
+              src='Main logo green.svg'
               alt='logo'
               type='logo'
             />

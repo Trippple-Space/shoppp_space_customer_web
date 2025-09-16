@@ -22,10 +22,24 @@ import { useNavbarView } from "../../utility/hooks/views/use-navbar-view";
 import useUserStore from "../../utility/store/user.store";
 import VideoSrc from "../video-src/VideoSrc";
 
-interface ModalProps { }
+interface ModalProps {
+  isOpen?: boolean;
+  onOpenChange?: (open: boolean) => void;
+  hideDefaultCart?: boolean;
+}
 
-const MiniCart: React.FC<ModalProps> = () => {
-  const [open, setOpen] = useState(false)
+const MiniCart: React.FC<ModalProps> = ({
+  isOpen,
+  onOpenChange,
+  hideDefaultCart = false,
+}) => {
+  const [internalOpen, setInternalOpen] = useState(false);
+
+  const open = isOpen !== undefined ? isOpen : internalOpen;
+  const setOpen = (val: boolean) => {
+    if (onOpenChange) onOpenChange(val);
+    else setInternalOpen(val);
+  };
 
   const { cart, increment, decrement, removeFromCart, removeDiscountCode, fetchCart, fetching } = useCart();
 
@@ -261,17 +275,21 @@ const MiniCart: React.FC<ModalProps> = () => {
           </div>
         </div>
       </Modal>
-      <div className=''>
-        <div
-          onClick={() => setOpen(true)}
-          className='relative pointer bg-#F3F3F3 flex a-items-center gap-8 w-70 radius-6 px-5 py-5'
-        >
-          <p className='h-30 w-30 flex a-items-center j-content-center bg-#0B9378 radius-6 color-white weight-500'>
-            <span>{cart.cartItems.length}</span>
-          </p>
-          <PiShoppingCartBold className='color-black  w-18 h-18' />
+
+      {
+        !hideDefaultCart &&
+        <div className=''>
+          <div
+            onClick={() => setOpen(true)}
+            className='relative pointer bg-#F3F3F3 flex a-items-center gap-8 w-70 radius-6 px-5 py-5'
+          >
+            <p className='h-30 w-30 flex a-items-center j-content-center bg-#0B9378 radius-6 color-white weight-500'>
+              <span>{cart.cartItems.length}</span>
+            </p>
+            <PiShoppingCartBold className='color-black  w-18 h-18' />
+          </div>
         </div>
-      </div>
+      }
     </div>
   );
 }

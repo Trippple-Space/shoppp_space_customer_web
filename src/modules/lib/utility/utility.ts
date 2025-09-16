@@ -237,7 +237,7 @@ export const getStoreNames = (storeGroups: StoreGroupResponse[]) => {
 };
 
 export const checkMediaType = (url: string) => {
-  const lowerUrl = url.toLowerCase();
+  const lowerUrl = url?.toLowerCase();
   if (/\.(jpg|jpeg|png|gif|webp)$/.test(lowerUrl)) {
     return "image";
   } else if (/\.(mp4|webm|mov|avi|mkv)$/.test(lowerUrl)) {

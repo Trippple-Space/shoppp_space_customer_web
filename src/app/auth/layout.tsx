@@ -41,21 +41,23 @@ const layout: FC<ILayout> = ({ children }) => {
   return (
     <div className="flex h-100vh w-full overflow-hidden">
 
-      <Link href={'/'} className="l:hidden w-full bg-green  t-0 fixed z-10">
-        <Image
-          className="w-100 h-30 my-20 m-15"
-          src="new-asoebi-logo-white.svg"
-          alt="logo"
-          type="logo"
-        />
-      </Link>
+      <p className='p-10 pt-12 l:hidden w-full bg-green  t-0 fixed z-10'>
+        <Link href={'/'} className="inline-block mt-1.75">
+          <Image
+            className="w-100 h-30"
+            src="Main logo white.svg"
+            alt="logo"
+            type="logo"
+          />
+        </Link>
+      </p>
       <div className="l:w-50p hidden l:block p-15">
         <div className="bg-green flex flex-col h-100p radius-15">
           <div>
             <Link href={'/'}>
               <Image
-                className='w-115 h-31 ml-40 mt-20'
-                src='new-asoebi-logo-white.svg'
+                className='w-160 h-50 mt-20 ml-20'
+                src='Main logo white.svg'
                 alt='logo'
                 type='logo'
               />

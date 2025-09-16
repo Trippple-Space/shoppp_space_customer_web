@@ -73,8 +73,8 @@ const BaseNavBar: FC<IBaseNavBar> = ({ links, parent }) => {
       >
         <Link href={'/'} className='w-fit'>
           <Image
-            className='w-70 l:w-100'
-            src='new-asoebi-logo.svg'
+            className='w-100 l:w-110'
+            src='Main logo green.svg'
             alt='logo'
             type='logo'
           />

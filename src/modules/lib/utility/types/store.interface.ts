@@ -35,4 +35,6 @@ interface StoreMeta {
                }
           };
      };
+     template: any
+     templateFields: {[key:string]:any};
 }
