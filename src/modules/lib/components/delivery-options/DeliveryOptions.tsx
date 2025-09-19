@@ -22,7 +22,6 @@ const DeliveryOptions: FC<IDeliveryOptions> = ({
   selectedAddress
 }) => {
 
-  // --- helper for “all active” check ---
   const isAllActive = (items?: {status: string | null}[]) =>
     Array.isArray(items) && items.length > 0 &&
     items.every(item => item.status === 'active');
@@ -116,7 +115,6 @@ const selectedVendorOptions =
             ))}
           </div>
 
-          {/* ▼▼ Sub-select for vendorManaged ▼▼ */}
           {showVendorSubSelect && (
             <div className="mt-12 p-12 radius-8 gap-8 w-fit">
               <div className="flex gap-8">

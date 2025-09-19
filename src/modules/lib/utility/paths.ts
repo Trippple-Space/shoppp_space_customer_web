@@ -2,6 +2,7 @@ export const paths = {
      login: "/auth/login",
      signup: "/auth/signup",
      verify: "/auth/verify",
+     google: "/auth/google",
      create_password: "/auth/create-password",
      vendor_signup: "/auth/signup/vendor",
      storefront_about: "$storefront/about",
