@@ -33,7 +33,7 @@ const formikLoginConfig = (
     },
     onSubmit: async (values: LoginCredentials, { setSubmitting, setErrors }) => {
         try {
-            const { user } = await authService.signIn(values);
+          const { user } = await authService.signIn(values);
             toast.success(`Welcome ${user.profile.firstName}`);
             callback?.(user);
             isLoginModal?.();

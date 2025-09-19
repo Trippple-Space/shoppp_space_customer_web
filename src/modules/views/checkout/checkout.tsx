@@ -218,17 +218,7 @@ const CheckoutPage = () => {
               addressId: selectedAddress.id,
               deliveryType: type,
             })
-
-
-            console.log( {omooo:feeDetail[type]} );
-            console.log({ feeDetail: feeDetail, type });
-
-
-
-
-            // setDeliveryOptions(
-     
-            // )
+            
             updatedOptions[type] = {
               ...updatedOptions[type],
               ...feeDetail[type],

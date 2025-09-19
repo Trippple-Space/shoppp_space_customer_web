@@ -15,7 +15,7 @@ class AuthService {
     signIn(credentials: LoginCredentials): Promise<{ token: string; user: User }> {
       return http.post(endpoints.SIGN_IN, credentials)
         .then((response: AxiosResponse) => {
-          
+          localStorage.removeItem("signup-email")
           this.storeAuthCredentials({ token: response.data.token })
           return response.data
         }).catch((error) => {
@@ -89,8 +89,8 @@ class AuthService {
 
 
   setPassword(payload: { token: string, password: string }): Promise<any> {
-    return http.post(endpoints.SIGN_UP_CREATE_PASSWORD, payload).then((response: AxiosResponse) => {
-                toast.success(`Thank you for signing up with Asoebi.Africa. Have a wonderful time shopping`);
+    return http.post(endpoints.SIGN_UP_CREATE_PASSWORD, payload).then(async (response: AxiosResponse) => {
+   toast.success(`Thank you for signing up with Asoebi.Africa. Have a wonderful time shopping`);
      return response.data
     }).catch((error) => 
     {
@@ -113,13 +113,8 @@ resendOtp(email: string) {
 }
   
   googleOauth() {
-    // console.log(); 
-    // console.log(`${envConfig.API_HOST}/${endpoints.GOOGLE_OAUTH_INITIALIZER}`);
     window.open(`${envConfig.API_HOST}/${endpoints.GOOGLE_OAUTH_INITIALIZER}`, '_blank', 'noopener,noreferrer')
-    // return http.get().then((response) => {
-    //   console.log(response);
-    //   return true;
-    // })
+
   }
 
 }
