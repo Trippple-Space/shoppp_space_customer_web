@@ -46,7 +46,7 @@ export async function generateMetadata({
         images: [
           {
             url:
-              product?.variants?.[0]?.media?.[0]?.url || 'new-asoebi-logo.svg',
+              product?.variants?.[0]?.media?.[0]?.url || 'asoebi-stacked-logo.svg',
             alt: product?.name,
             height: 630,
             width: 1200
@@ -60,7 +60,7 @@ export async function generateMetadata({
           `${product?.longDescription}. Available sizes: ${sizes.join(", ")}. Available colors: ${colors.join(", ")}.` ||
           `${product?.name}. Available sizes: ${sizes.join(", ")}. Available colors: ${colors.join(", ")}. - Check out this piece on Asoebi Africa`,
         images: [
-          product?.variants?.[0]?.media?.[0]?.url || 'new-asoebi-logo.svg'
+          product?.variants?.[0]?.media?.[0]?.url || 'asoebi-stacked-logo.svg'
         ]
       }
     }

@@ -99,7 +99,7 @@ const ProductDetailModal = ({
   };
 
   const mediaType = checkMediaType(selectedImage) ?? 'image';
-  const descriptionLength = variant?.product?.longDescription.split(' ').length || 0
+  const descriptionLength = variant?.product?.longDescription?.split(' ')?.length || 0
   const maxDisplayDescLength = 20
   const hasSize = !(groupedData?.[selectedColor][0].size === null || groupedData?.[selectedColor][0].size === '')
 
@@ -222,9 +222,9 @@ const ProductDetailModal = ({
 
                           <div className='l:w-50p w-full'>
                             <div className='flex flex-col gap-10'>
-                              <p className='weight-400'>{variant?.product?.name} - {variant?.product?.longDescription.split(' ').slice(0, maxDisplayDescLength).join(' ')}{descriptionLength > maxDisplayDescLength ? '...' : ''}</p>
+                              <p className='weight-400'>{variant?.product?.name} - {variant?.product?.longDescription?.split(' ')?.slice(0, maxDisplayDescLength).join(' ')}{descriptionLength > maxDisplayDescLength ? '...' : ''}</p>
                               <div>
-                                <p className='weight-400 text-grey-500 text-14'> sold by {variant?.product?.store.name} </p>
+                                <p className='weight-400 text-grey-500 text-14'> sold by {variant?.product?.store?.name} </p>
                               </div>
                               <p className='weight-400'> in {variant?.product?.type} </p>
                               <p className='weight-600 text-30 text-black'> {formatNumberAsPrice(displayPrice || 0)} </p>

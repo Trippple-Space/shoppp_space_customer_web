@@ -71,8 +71,8 @@ const Layout: FC<ILayout> = ({ children }) => {
           <div>
             <Link href="/">
               <Image
-                className="w-115 h-31 ml-40 mt-20"
-                src="new-asoebi-logo-white.svg"
+                className="w-160 h-50 mt-20 ml-20"
+                src="Main logo white.svg"
                 alt="logo"
                 type="logo"
               />
