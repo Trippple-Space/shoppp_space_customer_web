@@ -3,8 +3,11 @@ const endpoints = {
   SIGN_UP: "/auth/register",
   SIGN_UP_DETAILS: '/auth/register',
   SIGN_UP_VERIFY_OTP: '/auth/verify',
+
   RESEND_OTP: '/auth/resend-otp',
   SIGN_UP_CREATE_PASSWORD: '/auth/create-password',
+  GOOGLE_OAUTH_INITIALIZER: "auth/google",
+  GOOGLE_OAUTH_CALLBACK: "auth/google/callback",
   VALIDATE_TOKEN: "/auth/validate",
   PRODUCT_CATEGORIES: "/product-categories",
   PRODUCTS: "products",

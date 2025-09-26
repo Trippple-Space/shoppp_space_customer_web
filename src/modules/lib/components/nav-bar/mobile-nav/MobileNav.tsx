@@ -179,7 +179,7 @@ const MobileNav: FC<IMobileNav> = ({
                 <div className=''>
                   <img
                     className='w-60 h-60 border-solid border-0.5 border-#00000014 radius-50p'
-                    src={`https://api.dicebear.com/7.x/thumbs/svg?seed=${user?.username}`}
+                    src={`https://api.dicebear.com/7.x/thumbs/svg?seed=${user?.firstName}`}
                     alt='user'
                   />
                 </div>

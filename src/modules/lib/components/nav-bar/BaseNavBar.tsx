@@ -119,7 +119,7 @@ const BaseNavBar: FC<IBaseNavBar> = ({ links, parent }) => {
                 {user ? (
                   <Image
                     className='w-34 h-34 border-solid border-2 border-grey-300 radius-50p'
-                    src={`https://api.dicebear.com/7.x/thumbs/svg?seed=${user?.username}`}
+                    src={`https://api.dicebear.com/7.x/thumbs/svg?seed=${user?.firstName}`}
                     alt='user'
                   />
                 ) : (

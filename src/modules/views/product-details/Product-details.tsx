@@ -25,7 +25,6 @@ import { HiOutlineShoppingBag } from 'react-icons/hi2'
 import { LuGrid2X2 } from 'react-icons/lu'
 import { PiGlobeHemisphereEast, PiStorefront, PiTruck } from 'react-icons/pi'
 import { RxShare2 } from 'react-icons/rx'
-import './ProductDetails.scss'
 import { Comments } from './reviews/Comments'
 import MiniReview from './reviews/MiniReview'
 import ShareProductModal from './share-modal/shareProductModal'
@@ -39,6 +38,7 @@ const ProductDetails = ({ product }: { product: Product }) => {
 
   const { groupedData, availableColors, productImages } = useTransformProduct(product)
   const uniqueVariantsFromProductImages = availableColors.map((color) => groupedData?.[color][0])
+
 
   let globalMediaIndex = 0;
   const [recentlyViewedVariants, setRecentlyViewedVariants] = useState<RecentlyViewed[]>([])
@@ -107,6 +107,10 @@ const ProductDetails = ({ product }: { product: Product }) => {
     localStorage.setItem('variantIdMinimumPurchase', minimumPurchase.toString())
     isLoginModal()
   }
+ 
+
+  const allImages = product.variants.flatMap(variant => variant.media.map(media => media.url));
+
 
   useEffect(() => {
     if (isAuthenticated) {
@@ -199,7 +203,7 @@ const ProductDetails = ({ product }: { product: Product }) => {
         </div>
 
         <div className='flex flex-col l:flex-row a-items-start j-content-between mt-20 gap-6 l:g|max-height:480px relative'>
-          {uniqueVariantsFromProductImages.length > 4 && <div className='hidden l:block absolute r-0 b-0 p-20 z-2 cursor-pointer'>
+          {allImages.length > 4 && <div className='hidden l:block absolute r-0 b-0 p-20 z-2 cursor-pointer'>
             <div className='bg-white flex gap-8 radius-8  a-items-center border px-16 py-10' onClick={() => setShowAllPhotos(prev => !prev)}>
               <LuGrid2X2 className='w-fit flex' />
               <p className='text-14 weight-500'>Show all photos</p>
@@ -226,10 +230,63 @@ const ProductDetails = ({ product }: { product: Product }) => {
           </div>
 
           <div className='w-100p flex l:grid grid-2-cols-1fr l:grid-2-row-auto gap-6 no-scrollbar l:overflow-visible overflow-auto' style={{ width: '100%' }}>
-            {uniqueVariantsFromProductImages?.map((variant, idx) =>
-              variant?.media?.map((mediaItem: any, index: number) => {
-                const currentIndex = globalMediaIndex++;
 
+            {
+              allImages.slice(0, 4).map((image, idx) => {
+                const variant = product.variants.find(variant => variant.media.some(media => media.url === image));
+                if (!variant) return null; // Skip if no variant found
+                const mediaItem = variant.media.find(media => media.url === image);
+                const currentIndex = globalMediaIndex++;
+                 return (
+                  <div
+                    key={idx}
+                    className={`l:h-207 ${variant?.status === 'OUT_OF_STOCK' && 'out-of-stock'} relative ${idx <= 3 ? 'block' : 'l:hidden block'}`}
+                  >
+                    {
+                      mediaType === 'image' ?
+                        <Image
+                          src={mediaItem?.url ?? ''}
+                          alt="product-image"
+                          className={cx('object-fit w-50 h-50 radius-4 l:w-full l:h-full pointer l:radius-t-l-0 l:radius-b-l-0  l:radius-t-r-0 l:radius-b-r-0', {
+                            'border border-green border-2':
+                              selectedImage == mediaItem?.url,
+                            'l:radius-t-r-16': currentIndex === 1,
+                            'l:radius-b-r-16': currentIndex === 3,
+
+                          })}
+                          onClick={() => {
+                            setSelectedVariant(variant);
+                            setSelectedImage(mediaItem?.url);
+                            setSelectedColor(variant.properties.color)
+                          }}
+                        />
+                        :
+                        <VideoSrc
+                          className={cx('object-fit w-50 h-50 radius-4 l:w-full l:h-full pointer l:radius-t-l-0 l:radius-b-l-0  l:radius-t-r-0 l:radius-b-r-0', {
+                            'border border-green border-2':
+                              selectedImage == mediaItem?.url,
+                            'l:radius-t-r-16': currentIndex === 1,
+                            'l:radius-b-r-16': currentIndex === 3,
+
+                          })}
+                          src={mediaItem?.url ?? ''}
+                          onClick={() => {
+                            setSelectedVariant(variant);
+                            setSelectedImage(mediaItem?.url);
+                            setSelectedColor(variant.properties.color)
+                          }}
+                        />
+                    }
+                  </div>
+                );
+              })
+            }
+
+            {/* {uniqueVariantsFromProductImages.map((variant, idx) =>
+              variant?.media.map((mediaItem: any, index: number) => {
+                const currentIndex = globalMediaIndex++;
+                const constttt =  ""
+        
                 return (
                   <div
                     key={index}
@@ -273,7 +330,7 @@ const ProductDetails = ({ product }: { product: Product }) => {
                   </div>
                 );
               })
-            )}
+            )} */}
           </div>
         </div>
 

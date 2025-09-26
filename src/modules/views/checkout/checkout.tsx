@@ -27,7 +27,7 @@ import { useCalculatedeliveryFee } from "@/modules/lib/utility/hooks/use-calcula
 import { DeliveryOption } from "@/modules/lib/utility/types/delivery.interface";
 import VideoSrc from "@/modules/lib/components/video-src/VideoSrc";
 
-type DeliveryOptionKey = 'standard' | 'express';
+type DeliveryOptionKey = 'standard' | 'express' | 'vendorManaged';
 type addressDeliveryPrice = {
   addressId: number,
   deliveryOptions: DeliveryOption,
@@ -42,7 +42,7 @@ const CheckoutPage = () => {
     standard: {
       title: 'Standard Delivery',
       available: true,
-      description: 'Arrives in 3 days',
+      description: '1-3 working days',
       etaInDays: 3,
       price: NaN,
       error: null,
@@ -52,21 +52,34 @@ const CheckoutPage = () => {
     express: {
       title: 'Same Day Delivery',
       available: true,
-      description: 'Arrives within 24 hours',
+      description: 'within 24 hours',
       etaInDays: 1,
       price: NaN,
            error: null,
       message: null
     },
-    pickup: {
-      title: 'Pick Up',
-      available: true,
-      description: 'Pick up in stores close to you',
-      etaInDays: '',
-      price: 0,
-      error: null,
-      message: null
-    }
+    vendorManaged: {
+      title: 'Vendor Managed Delivery',
+     
+           pickup: [
+               {
+                   "status": null,
+                   "storeId": 0,
+                   "storeName": ""
+               }
+           ],
+        
+           vendorManaged: [
+               {
+                   "fee": 0,
+                   "status": null,
+                   "storeId": 0,
+                   "storeName": "",
+                   "estimatedTime": null
+               }
+           ],
+           vendorManagedTotal: 0
+       },
   })
   const [allAddressDeliveryPrice, setAllAddressDeliveryPrice] = useState<addressDeliveryPrice[]>([])
   const [selectedDeliveryOption, setSelectedDeliveryOption] = useState<keyof typeof deliveryOptions | null>(null);
@@ -79,7 +92,15 @@ const CheckoutPage = () => {
   const { calculateFee } = useCalculatedeliveryFee()
   const [calculatingFee, setCalculatingFee] = useState<boolean>(true)
   const selectedDeliveryOptionDetails = selectedDeliveryOption ? deliveryOptions[selectedDeliveryOption] : null;
-  const canProceedToPayment = !(!isPaymentLoading && selectedAddress && user && !calculatingFee && selectedDeliveryOptionDetails !== null && !isNaN(selectedDeliveryOptionDetails.price));
+  const canProceedToPayment = !(
+    !isPaymentLoading &&
+    selectedAddress &&
+    user &&
+    !calculatingFee &&
+    selectedDeliveryOptionDetails !== null &&
+    "price" in selectedDeliveryOptionDetails &&
+    !isNaN(selectedDeliveryOptionDetails.price)
+  );
   const [devOptions, setDevOptions] = useState<string>();
   const [showSummary, setshowSummary] = useState(true);
   const [devAddressError, setDevAddressError] = useState(false)
@@ -167,7 +188,7 @@ const CheckoutPage = () => {
 
   const updateFees = async () => {
     if (selectedAddress && allCartItems.cartItems.length > 0) {
-      const deliveryTypes: DeliveryOptionKey[] = ['standard', 'express'];
+      const deliveryTypes: DeliveryOptionKey[] = ['standard', 'express', 'vendorManaged'];
       const getLatLon = (meta: any) => {
         if (meta?.coordinates) {
           return {
@@ -197,21 +218,14 @@ const CheckoutPage = () => {
               addressId: selectedAddress.id,
               deliveryType: type,
             })
-
-
-            console.log( {omooo:feeDetail[type]} );
-            console.log({ feeDetail: feeDetail.fee, type });
-
-
-
+            
             updatedOptions[type] = {
               ...updatedOptions[type],
               ...feeDetail[type],
-              // price: feeDetail.fee,
+              price: feeDetail.fee || feeDetail[type].vendorManagedTotal ||feeDetail[type].fee || feeDetail[type].price,
             };
 
 
-            console.log({ updatedOptions: updatedOptions[type] });
 
           } catch (error) {
           } finally {
@@ -270,7 +284,7 @@ const CheckoutPage = () => {
     }
   }
 
-  console.log({ canProceedToPayment, selectedDeliveryOptionDetails, calculatingFee, selectedDeliveryOption, selectedAddress, isPaymentLoading, user });
+
 
   return (
     <>
@@ -459,10 +473,32 @@ const CheckoutPage = () => {
                 <div className={`${showSummary ? 'block' : 'md:block hidden'}`}>
                   <OrderSummary
                     subTotal={cart.subTotal}
-                    shippingFee={selectedAddress ? selectedDeliveryOptionDetails?.price : undefined}
-                    total={selectedAddress ? cart.total + (selectedDeliveryOptionDetails?.price ? selectedDeliveryOptionDetails?.price : 0) : ''}
+                    shippingFee={
+                      selectedAddress && selectedDeliveryOptionDetails && "price" in selectedDeliveryOptionDetails
+                        ? selectedDeliveryOptionDetails.price
+                        : undefined
+                    }
+                    total={
+                      selectedAddress
+                        ? cart.total +
+                          (selectedDeliveryOptionDetails &&
+                          "price" in selectedDeliveryOptionDetails &&
+                          typeof selectedDeliveryOptionDetails.price === "number"
+                            ? selectedDeliveryOptionDetails.price
+                            : 0)
+                        : ''
+                    }
                     cart={cart}
-                    loading={calculatingFee || !selectedAddress || isNaN(selectedDeliveryOptionDetails?.price ?? 0)}
+                    loading={
+                      calculatingFee ||
+                      !selectedAddress ||
+                      !(
+                        selectedDeliveryOptionDetails &&
+                        "price" in selectedDeliveryOptionDetails &&
+                        typeof selectedDeliveryOptionDetails.price === "number" &&
+                        !isNaN(selectedDeliveryOptionDetails.price)
+                      )
+                    }
                   />
                 </div>
                 <div className="flex sm:flex-row flex-col sm:gap-0 gap-20 space-between a-items-center">
@@ -480,7 +516,12 @@ const CheckoutPage = () => {
                     {
                       !showSummary && <span className="md:hidden sm:block hidden sm:weight-600 weight-700 sm:text-16 text-14 sm:line-height-22 line-height-19">
                         {formatNumberAsPrice(
-                          cart.total + (selectedDeliveryOptionDetails?.price ? selectedDeliveryOptionDetails?.price : 0)
+                          cart.total +
+                            (selectedDeliveryOptionDetails &&
+                              "price" in selectedDeliveryOptionDetails &&
+                              typeof selectedDeliveryOptionDetails.price === "number"
+                              ? selectedDeliveryOptionDetails.price
+                              : 0)
                         )}
                       </span>
                     }
@@ -507,7 +548,9 @@ const CheckoutPage = () => {
                           !showSummary && <span className="sm:hidden weight-700">
                             (
                             {formatNumberAsPrice(
-                              cart.total + (selectedDeliveryOptionDetails?.price ? selectedDeliveryOptionDetails?.price : 0)
+                              cart.total + (selectedDeliveryOptionDetails && "price" in selectedDeliveryOptionDetails && typeof selectedDeliveryOptionDetails.price === "number"
+                                ? selectedDeliveryOptionDetails.price
+                                : 0)
                             )}
                             )
                           </span>
@@ -538,6 +581,7 @@ const CheckoutPage = () => {
       <AddressModal />
     </>
   );
+
 };
 
 export default CheckoutPage;
