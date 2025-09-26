@@ -27,7 +27,7 @@ const nextConfig = {
         source: '/home',
         destination: '/',
         permanent: true,
-      }
+      },
     ];
   },
   env: {
@@ -35,6 +35,22 @@ const nextConfig = {
     AWS_ACCESS_KEY_ID: process.env.AWS_ACCESS_KEY_ID,
     AWS_SECRET_ACCESS_KEY: process.env.AWS_SECRET_ACCESS_KEY,
     LAMBDA_FUNCTION_NAME: process.env.LAMBDA_FUNCTION_NAME,
+  },
+  images: {
+    remotePatterns: [
+      {
+        protocol: 'https',
+        hostname: 'asoebi-vendor-products-staging.s3.amazonaws.com',
+        port: '',
+        pathname: '/**',
+      },
+      {
+        protocol: 'https',
+        hostname: 'asoebi-vendor-products-prod.s3.amazonaws.com',
+        port: '',
+        pathname: '/**',
+      },
+    ],
   },
 };
 

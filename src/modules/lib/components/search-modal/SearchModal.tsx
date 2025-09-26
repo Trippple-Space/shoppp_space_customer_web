@@ -48,7 +48,7 @@ const SearchModal = ({
     <>
       <div className='h-100p w-100p'>
         {searchResults && (
-          <div className=' l:mt-0  flex flex-col a-items-start w-100p h-80p md:h-100p gap-10 '>
+          <div className=' l:mt-0  flex flex-col a-items-start w-100p h-100p gap-10 '>
             <p className='color-#00000099 text-left text-12 p-10'>Results</p>
             <div className='overflow-auto w-100p flex flex-col gap-15 no-scrollbar'>
               {searchResults.map(product => (

@@ -2,7 +2,7 @@
 import { useAuthGuard } from '@/modules/lib/utility/hooks/use-auth-guard'
 import { useNavbarView } from '@/modules/lib/utility/hooks/views/use-navbar-view'
 import useUserStore from '@/modules/lib/utility/store/user.store'
-import React, { FC, useState } from 'react'
+import React, { FC, useEffect, useState } from 'react'
 import { PiStorefront } from 'react-icons/pi'
 import { RxCross1, RxHamburgerMenu } from 'react-icons/rx'
 import { SlArrowDown } from 'react-icons/sl'
@@ -21,6 +21,7 @@ interface IMobileNav {
   isOpen?: boolean
   onOpenChange?: (open: boolean) => void
   hideTrigger?: boolean
+  className?: string
 }
 
 const MobileNav: FC<IMobileNav> = ({
@@ -29,6 +30,7 @@ const MobileNav: FC<IMobileNav> = ({
   isOpen,
   onOpenChange,
   hideTrigger = false,
+  className,
 }) => {
   useAuthGuard() // TODO: refactor to rely on Next 13 auth middleware
   const [asoebiMobileModal, setAsoebiMobileModal] = useState<boolean>(false)
@@ -49,7 +51,20 @@ const MobileNav: FC<IMobileNav> = ({
     filters: { status: { In: query } }
   })
 
+  useEffect(() => {
+    if (hamburgerMenu) {
+      document.body.style.overflow = "hidden";
+      document.documentElement.style.overflow = "hidden";
+    } else {
+      document.body.style.overflow = "";
+      document.documentElement.style.overflow = "";
+    }
 
+    return () => {
+      document.body.style.overflow = "";
+      document.documentElement.style.overflow = "";
+    };
+  }, [hamburgerMenu]);
 
   const handleAsoebiMobileDropdown = () => {
     setAsoebiMobileModal(prev => !prev)
@@ -76,10 +91,9 @@ const MobileNav: FC<IMobileNav> = ({
           <RxHamburgerMenu onClick={toggleHamburgerMenu} className="w-24 h-24" />
         )
       )}
-      
       {hamburgerMenu && (
         <div
-          className='md:hidden z-5 overflow-hidden bg-white r-0 w-100p t-64 fixed border-t border-1 border-#00000014 g|box-shadow:0px|_|8px|_|16px|_|#494F5E1F;'
+          className={`md:hidden z-5 overflow-hidden bg-white r-0 w-100p t-64 fixed border-t border-1 border-#00000014 g|box-shadow:0px|_|8px|_|16px|_|#494F5E1F; ${className}`}
           style={{ height: 'calc(100dvh - 64px)' }}
         >
           <div className='scroll-y no-scrollbar flex flex-col space-between h-full py-24'>
@@ -171,7 +185,7 @@ const MobileNav: FC<IMobileNav> = ({
                 </div>
 
                 <div className=''>
-                  <p className='capitalize weight-600 text-14 line-height-22'>{`${user?.profile.firstName} ${user?.profile.lastName}`}</p>
+                  <p className='capitalize weight-600 text-14 line-height-22'>{`${user?.profile?.firstName} ${user?.profile?.lastName}`}</p>
                   <p className='text-12 line-height-20 color-#00000099 weight-400'>
                     {user?.email}
                   </p>
@@ -197,7 +211,7 @@ const MobileNav: FC<IMobileNav> = ({
         </div>
       )}
     </div>
-  )
+  );
 }
 
 export default MobileNav

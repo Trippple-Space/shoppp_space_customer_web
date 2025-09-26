@@ -64,7 +64,7 @@ const TrendFashion: FC<{
                     <section className="navbar">
                         <div className="navbar-child">
                             <div className="logo-container trend-flex sm:max-w-100p max-w-69p">
-                                <img src={store?.thumbnail || "/images/templates/bold-template/images/logo.png"} alt="logo-img" className="logo-img" />
+                                <img src={store?.thumbnail || ""} alt="logo-img" className="logo-img" />
                                 <h1 className="logo truncate">{store?.name || ""}</h1>
                             </div>
                             {/* <nav className="nav-links">
