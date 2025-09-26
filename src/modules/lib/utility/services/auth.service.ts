@@ -1,23 +1,28 @@
 import { AxiosResponse } from "axios";
 import { LoginCredentials, RegistrationDetails } from "../types/auth.interface";
-import { User } from "../types/user.interface";
+import { NewUser, User } from "../types/user.interface";
 import endpoints from "../endpoints";
 import http from "../http"
 import { useRouter, useSearchParams } from "next/navigation";
 import { toast } from "sonner";
 import router from "next/router";
 import { paths } from "../paths";
+    import envConfig from "env";
+import { convertUserResponse } from "../utility";
+
 
 class AuthService {
 
     signIn(credentials: LoginCredentials): Promise<{ token: string; user: User }> {
       return http.post(endpoints.SIGN_IN, credentials)
         .then((response: AxiosResponse) => {
-          
+          localStorage.removeItem("signup-email")
           this.storeAuthCredentials({ token: response.data.token })
-          return response.data
+
+          return {token: response.data.token, user: convertUserResponse(response.data.user)}
         }).catch((error) => {
-          return toast.error(error.response.data.message)
+          toast.error(error.response.data.message);
+          return Promise.reject(error);
         });
     }
 
@@ -29,11 +34,15 @@ class AuthService {
         
     }
 
-    validateAuth(): Promise<User> {
+  validateAuth(): Promise<User | null> {
+      
         return http.post(`${endpoints.VALIDATE_TOKEN}`)
             .then((response: AxiosResponse) => {
-                this.storeAuthCredentials({ token: response.data.token })
-                return response.data.user
+              this.storeAuthCredentials({ token: response.data.token })
+      
+
+              console.log('Validated user:', response.data.user);
+                return  convertUserResponse(response.data.user)
             })
             .catch((error) => {
                 return null
@@ -44,7 +53,7 @@ class AuthService {
         localStorage.setItem('token', token)
     }
 
-    getAuthCredentials() {
+  getAuthCredentials() {
         return localStorage.getItem('token')
     }
 
@@ -87,8 +96,8 @@ class AuthService {
 
 
   setPassword(payload: { token: string, password: string }): Promise<any> {
-    return http.post(endpoints.SIGN_UP_CREATE_PASSWORD, payload).then((response: AxiosResponse) => {
-                toast.success(`Thank you for signing up with Asoebi.Africa. Have a wonderful time shopping`);
+    return http.post(endpoints.SIGN_UP_CREATE_PASSWORD, payload).then(async (response: AxiosResponse) => {
+   toast.success(`Thank you for signing up with Asoebi.Africa. Have a wonderful time shopping`);
      return response.data
     }).catch((error) => 
     {
@@ -103,12 +112,17 @@ resendOtp(email: string) {
     return http.post(endpoints.RESEND_OTP, { email })
         .then((response) => {
             toast.success("An OTP has been sent to your email for verification");
-            return response.data; // Return response so component can handle it
+            return response.data; 
         }).catch((error) => 
           {
           return  toast.error(error.response.data.message)
           });
 }
+  
+  googleOauth() {
+    window.open(`${envConfig.API_HOST}/${endpoints.GOOGLE_OAUTH_INITIALIZER}?source=${window.location.href}`, '_blank', 'noopener,noreferrer')
+
+  }
 
 }
 

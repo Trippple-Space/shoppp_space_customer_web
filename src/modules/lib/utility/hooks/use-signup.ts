@@ -6,6 +6,9 @@ import * as Yup from "yup";
 import { authService } from "@/modules/lib/utility/services/auth.service";
 import { RegistrationDetails } from "@/modules/lib/utility/types/auth.interface";
 import { paths } from "@/modules/lib/utility/paths";
+import { useLoginView } from "./use-login";
+import useUserStore from "../store/user.store";
+import { useRouteGuard } from "./use-route-guard";
 
 
 const signUpValidationSchema = Yup.object().shape({
@@ -38,6 +41,8 @@ const passwordCreationSchema = Yup.object().shape({
 export const useSignUpView = () => {
   const router = useRouter();
   const searchParams = useSearchParams();
+  const { formHandler: loginFormHandler } = useLoginView()
+   const { isAuthenticated, authenticateUser } = useUserStore()
 
   const [step, setStep] = useState<"initial" | "verify" | "createPassword">("initial");
 
@@ -55,6 +60,7 @@ export const useSignUpView = () => {
           fullname: values.fullname,
           email: values.email
         });
+          localStorage.setItem('signup-email', values.email);
           router.push(`${paths.verify}?token=${response.token}`);
   
     }
@@ -98,6 +104,8 @@ export const useSignUpView = () => {
     }
   }, [router, searchParams]);
 
+  //STEP 3: CREATE PASSWORD
+
   const formikComplete = useFormik({
     initialValues: {
       password: "",
@@ -116,10 +124,17 @@ export const useSignUpView = () => {
           token: storedToken,
           password: values.password
         };
-        const res = await authService.setPassword(payload);
+        await authService.setPassword(payload);
+        localStorage.removeItem('create-password-token')
 
-          localStorage.removeItem('create-password-token')
-        router.push(paths.login);
+
+        const tempEmail = localStorage.getItem('signup-email');
+        authService.signIn({ email: tempEmail ?? '', password: payload.password }).then((response) => {
+    
+          authenticateUser(response.user); 
+          useRouteGuard(isAuthenticated, paths.homepage)
+        });
+
       } catch (error: any) {
         toast.error(error.response.data.message || "Registration failed");
       }
