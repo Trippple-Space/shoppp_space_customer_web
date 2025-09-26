@@ -66,7 +66,7 @@ const UserProfileDropdown: FC<IUserProfileDropdown> = ({
                   </div>
 
                   <div className=''>
-                    <p className='capitalize weight-600 text-14 line-height-22'>{`${user?.profile.firstName || ''} ${user?.profile.lastName || ''}`}</p>
+                    <p className='capitalize weight-600 text-14 line-height-22'>{`${user?.profile?.firstName || ''} ${user?.profile?.lastName || ''}`}</p>
                     <p className='text-12 line-height-20 color-#00000099 weight-400'>
                       {user?.email}
                     </p>

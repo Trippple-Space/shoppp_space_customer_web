@@ -7,7 +7,7 @@ import { Store } from "../../utility/types/store.interface";
 const StorefrontFooter: React.FC<{ store: Store }> = ({ store }) => {
   return (
     <footer className="bg-black">
-      <div className="py-20 lg:px-80 sm:px-40 px-24 text-white font-inter flex flex-col sm:gap-35 gap-28 max-w-1440 mx-auto">
+      <div className="py-20 lg:px-80 sm:px-40 px-24 text-white flex flex-col sm:gap-35 gap-28 max-w-1440 mx-auto">
         <div className="sm:py-40 py-24 l:gap-40 gap-30 flex sm:flex-row sm:flex-nowrap flex-reverse space-between a-items-center">
           <div className="flex flex-col gap-20">
             <h6 className="weight-600 text-20">Contact us</h6>

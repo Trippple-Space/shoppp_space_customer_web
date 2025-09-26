@@ -46,6 +46,7 @@ export interface Product {
   id: number;
   slug: string;
   price: number;
+  discountedPrice?: number
   finalPrice?: number;
   type: string;
   name: string;

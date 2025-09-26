@@ -63,6 +63,13 @@
   .font-lora {
     font-family: var(--font-lora);
   }
+  .font-robotoMono{
+    font-family: var(--font-robotoMono);
+  }
+ .font-dmSans{
+    font-family: var(--font-dmSans);
+  }
+
   .custom-progress {
     background-color: #EAEAEA;
     border-radius: 10px;

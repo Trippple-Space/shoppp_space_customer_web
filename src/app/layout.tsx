@@ -1,7 +1,7 @@
 // "use client"
 
 import "../styles/styles.scss";
-import { Inter, Roboto, Lora, Roboto_Mono } from "next/font/google";
+import { Inter, Roboto, Lora, Roboto_Mono, DM_Sans } from "next/font/google";
 // import { useAuthGuard } from '@/modules/lib/utility/hooks/use-auth-guard';
 import GlobalArena from "@/modules/lib/components/global-arena/GlobalArena";
 import { PHProvider } from './providers'
@@ -11,6 +11,12 @@ import '@smastrom/react-rating/style.css'
 const inter = Inter({
   subsets: ["latin"],
   variable: "--font-inter",
+  display: "swap",
+});
+
+const dmSans = DM_Sans({
+  subsets: ["latin"],
+  variable: "--font-dmSans",
   display: "swap",
 });
 
@@ -57,7 +63,7 @@ export default function RootLayout({
   return (
     <html
       lang="en"
-      className={`${inter.variable} ${roboto.variable} ${lora.variable} ${robotoMono.variable} bg-white font-inter h-full`}
+      className={`${inter.variable} ${roboto.variable} ${lora.variable} ${robotoMono.variable} ${dmSans.variable} bg-white font-inter h-full`}
     >
       <body className="@lo:weight-300 @lo:text-dimgrey h-full">
         <PHProvider >

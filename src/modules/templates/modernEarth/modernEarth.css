@@ -1,0 +1,390 @@
+.modernEarth__topbar {
+  display: flex;
+  background: #F6F4F2;
+  padding: 1rem 2rem;
+  font-size: 0.875rem;
+  color: #333;
+  gap: 0.5rem;
+}
+
+@media (max-width: 550px) {
+  .modernEarth__topbar {
+    padding: 1rem 1rem;
+  }
+}
+
+.modernEarth__address {
+  font-weight: 400;
+  display: none;
+}
+
+.modernEarth__topbar-right {
+  display: flex;
+  /* flex-direction: column; */
+  justify-content: space-between;
+  gap: 0.75rem;
+  width: 100%;
+}
+
+.modernEarth__search {
+  display: flex;
+  align-items: center;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  overflow: hidden;
+  width: 100%;
+  max-width: 400px;
+}
+
+.modernEarth__search select,
+.modernEarth__search input {
+  border: none;
+  outline: none;
+  padding: 0.4rem 0.6rem;
+  font-size: 0.875rem;
+}
+
+.modernEarth__search input {
+  flex: 1;
+}
+
+.modernEarth__search button {
+  background: white;
+  border: none;
+  padding: 0.4rem 0.6rem;
+  cursor: pointer;
+}
+
+.modernEarth__phone {
+  color: black;
+  font-weight: 500;
+  text-decoration: none;
+}
+
+@media (max-width: 400px) {
+  .modernEarth__phone {
+    display: none;
+  }
+}
+
+.modernEarth__phone:hover {
+  text-decoration: underline;
+}
+
+.modernEarth__nav {
+  display: flex;
+  /* flex-direction: column; */
+  justify-content: space-between;
+  align-items: center;
+  gap: 1rem;
+  padding: 1rem 2rem;
+  background: white;
+  border-bottom: 1px solid #e5e5e5;
+}
+
+@media (max-width: 550px) {
+  .modernEarth__nav {
+    padding: 1rem 1rem;
+  }
+}
+
+.modernEarth__logo {
+  font-weight: 600;
+  font-size: 1.125rem;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.modernEarth__links {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  font-weight: 500;
+  margin: 0;
+  padding: 0;
+}
+
+.modernEarth__links li {
+  cursor: pointer;
+}
+
+.modernEarth__links li:hover {
+  color: #9b7b60;
+}
+
+.modernEarth__menu-icon {
+ width: 24px;
+ height: 24px;
+ cursor: pointer; 
+ display: inline-block;
+}
+
+@media only screen and (min-width: 576px) {
+  .modernEarth__menu-icon {
+    display: none;
+  }
+}
+
+.modernEarth__icons {
+  gap: 1.5rem;
+  font-size: 1.25rem;
+  cursor: pointer;
+  display: none;
+}
+
+@media (max-width: 510px) {
+  .modernEarth__icons {
+    gap: 1rem;
+  }
+}
+
+@media only screen and (min-width: 576px) {
+  .modernEarth__icons {
+    display: flex;
+  }
+}
+
+.modernEarth__icons span:hover {
+  color: #9b7b60;
+}
+
+.modernEarth {
+  width: 100%;
+  background: linear-gradient(to right, rgba(0, 0, 0, 0.486), rgba(38, 38, 38, 0.882));
+  color: white;
+}
+
+.modernEarth__container {
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: 4rem 2rem;
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 6rem;
+  align-items: center;
+}
+
+@media (max-width: 768px) {
+  .modernEarth__container {
+    padding: 2rem 2rem;
+    gap: 5rem;
+  }
+}
+
+@media (min-width: 768px) {
+  .modernEarth__container {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+
+@media (min-width: 1200px) {
+  .modernEarth__container {
+    padding: 8rem 2rem;
+  }
+}
+
+@media (min-width: 844px) {
+  .modernEarth__topbar {
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  .modernEarth__topbar-right {
+    flex-direction: row;
+    align-items: center;
+    gap: 1.5rem;
+    width: 50%;
+  }
+
+  .modernEarth__address {
+    display: inline-block;
+  }
+
+  .modernEarth__nav {
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  .modernEarth__links {
+    flex-direction: row;
+    gap: 2rem;
+  }
+}
+
+.modernEarth__left {
+  display: flex;
+  flex-direction: column;
+  gap: 40px;
+}
+
+@media (max-width: 768px) {
+  .modernEarth__left {
+    gap: 20px;
+  }
+}
+
+.modernEarth__subtitle {
+  display: inline-block;
+  background: #171717;
+  color: white;
+  padding: 0.25rem 0.75rem;
+  border-radius: 4px;
+  font-size: 0.875rem;
+  font-weight: 500;
+}
+
+.modernEarth__title {
+  font-size: 3rem;
+  line-height: 3rem;
+  text-align: center;
+  font-weight: 600;
+  margin-top: 1rem;
+}
+
+.modernEarth__description {
+  margin-top: 1rem;
+  color: #d4d4d4;
+  font-size: 16px;
+  font-weight: 400;
+  text-align: center;
+}
+
+.modernEarth__buttons {
+  margin-top: 1.5rem;
+  display: flex;
+  gap: 1rem;
+  justify-content: center;
+}
+
+@media (min-width: 768px) {
+  .modernEarth__title {
+    font-size: 4rem;
+    line-height: 4rem;
+    text-align: start;
+  }
+
+  .modernEarth__description {
+    margin-top: 1rem;
+    color: #d4d4d4;
+    font-size: 16px;
+    font-weight: 400;
+    text-align: start;
+  }
+
+  .modernEarth__buttons {
+    margin-top: 1.5rem;
+    display: flex;
+    gap: 1rem;
+    justify-content: start;
+  }
+}
+
+.modernEarth__btn {
+  padding: 0.75rem 1.5rem;
+  font-size: 16px;
+  font-weight: 500;
+  border-radius: 4px;
+  transition: all 0.3s ease;
+  cursor: pointer;
+}
+
+.modernEarth__btn--primary {
+  background: #9b7b60;
+  color: white;
+  width: 180px;
+  height: 60px;
+}
+
+.modernEarth__btn--primary:hover {
+  opacity: 0.9;
+}
+
+.modernEarth__btn--secondary {
+  border: 1px solid white;
+  background: transparent;
+  color: white;
+}
+
+.modernEarth__btn--secondary:hover {
+  background: white;
+  color: black;
+}
+
+.modernEarth__grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 1.5rem;
+}
+
+@media (max-width: 420px) {
+  .modernEarth__grid {
+    display: none;
+  }
+}
+
+.modernEarth__offer {
+  position: relative;
+  height: 13rem;
+  background: white;
+  color: black;
+  font-weight: 600;
+  font-size: 1.125rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.modernEarth__offer--highlight {
+  background: #9b7b60;
+  padding: 0 10px;
+  color: white;
+  flex-direction: column;
+  text-align: center;
+}
+
+.modernEarth__price {
+  position: absolute;
+  z-index: 1;
+  background-color: #9b7b60;
+  color: white;
+  border: 2px solid white;
+  top: 0.5rem;
+  left: 0.5rem;
+  font-size: 0.75rem;
+  font-weight: light;
+  padding: 6px 0.75rem;
+  border-radius: 30px;
+}
+
+.modernEarth__offer-text {
+  font-size: 1.5rem;
+}
+
+.modernEarth__offer-sub {
+  font-size: 0.875rem;
+  font-weight: 400;
+}
+
+.modernEarth__image {
+  object-fit: cover;
+}
+
+.modernEarth_searchIcon {
+  width: calc(100% - 187px) !important;
+}
+
+@media (max-width: 652px) {
+  .modernEarth_searchIcon {
+    width: calc(100% - 176px) !important;
+  }
+}
+
+@media (max-width: 400px) {
+  .modernEarth_searchIcon {
+    width: 100% !important;
+  }
+}
