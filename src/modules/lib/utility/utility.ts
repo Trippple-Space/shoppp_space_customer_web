@@ -1,5 +1,6 @@
 import classNames from "classnames";
 import { StoreGroupResponse } from "./types/cart.interface";
+import { NewUser, User } from "./types/user.interface";
 
 export type ImageSrcFolder = "icons" | "logos" | "images";
 export const getImageDir = (folder: ImageSrcFolder, object: string) => {
@@ -308,6 +309,48 @@ export const states = [
 export const contactEmail = "support@asoebi.africa"
 
 export const emailRegex = /^([a-zA-Z0-9_.\-]+)([+][a-zA-Z0-9_.\-]+)*@(([a-zA-Z0-9-])+\.)+([a-zA-Z0-9]{2,4})+$/;
+
+
+export function convertUserResponse(data: NewUser): User {
+  const profile = data.customer.profile ?? {
+    id: 0,
+    firstName: "",
+    lastName: "",
+    gender: null,
+    phoneNumbers: [],
+    email: null,
+    meta: null,
+  };
+
+  return {
+    id: data.id,
+    username: data.username ?? "",
+    email: data.email ?? "",
+    mobile: data.mobile ?? "",
+    role: data.role,
+    status: data.status,
+    settings: data.settings ?? {},
+    meta: data.meta ?? null,
+    lastLoginAt: data.lastLoginAt ?? "",
+    dateCreated: data.customer.dateCreated,
+    lastUpdated: data.customer.lastUpdated,
+    profile: {
+      id: profile.id,
+      firstName: profile.firstName,
+      lastName: profile.lastName,
+      gender: profile.gender,
+      phoneNumbers: profile.phoneNumbers,
+      meta: profile.meta,
+    },
+    storeRoles: data.storeRoles ?? [],
+    workEmail: data.email ?? "",
+    personalEmail: profile.email ?? "",
+    firstName: profile.firstName,
+    lastName: profile.lastName,
+    phoneNumber: profile.phoneNumbers,
+    orderCount: data.orderCount,
+  };
+}
 
 /*
 [

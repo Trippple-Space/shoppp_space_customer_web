@@ -131,7 +131,7 @@ export const useSignUpView = () => {
         const tempEmail = localStorage.getItem('signup-email');
         authService.signIn({ email: tempEmail ?? '', password: payload.password }).then((response) => {
     
-          authenticateUser(response.user);
+          authenticateUser(response.user); 
           useRouteGuard(isAuthenticated, paths.homepage)
         });
 

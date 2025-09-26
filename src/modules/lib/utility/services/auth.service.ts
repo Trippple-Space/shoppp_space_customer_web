@@ -1,6 +1,6 @@
 import { AxiosResponse } from "axios";
 import { LoginCredentials, RegistrationDetails } from "../types/auth.interface";
-import { User } from "../types/user.interface";
+import { NewUser, User } from "../types/user.interface";
 import endpoints from "../endpoints";
 import http from "../http"
 import { useRouter, useSearchParams } from "next/navigation";
@@ -8,6 +8,7 @@ import { toast } from "sonner";
 import router from "next/router";
 import { paths } from "../paths";
     import envConfig from "env";
+import { convertUserResponse } from "../utility";
 
 
 class AuthService {
@@ -17,9 +18,11 @@ class AuthService {
         .then((response: AxiosResponse) => {
           localStorage.removeItem("signup-email")
           this.storeAuthCredentials({ token: response.data.token })
-          return response.data
+
+          return {token: response.data.token, user: convertUserResponse(response.data.user)}
         }).catch((error) => {
-          return toast.error(error.response.data.message)
+          toast.error(error.response.data.message);
+          return Promise.reject(error);
         });
     }
 
@@ -31,11 +34,15 @@ class AuthService {
         
     }
 
-    validateAuth(): Promise<User> {
+  validateAuth(): Promise<User | null> {
+      
         return http.post(`${endpoints.VALIDATE_TOKEN}`)
             .then((response: AxiosResponse) => {
               this.storeAuthCredentials({ token: response.data.token })
-                return response.data.user
+      
+
+              console.log('Validated user:', response.data.user);
+                return  convertUserResponse(response.data.user)
             })
             .catch((error) => {
                 return null
@@ -113,7 +120,7 @@ resendOtp(email: string) {
 }
   
   googleOauth() {
-    window.open(`${envConfig.API_HOST}/${endpoints.GOOGLE_OAUTH_INITIALIZER}`, '_blank', 'noopener,noreferrer')
+    window.open(`${envConfig.API_HOST}/${endpoints.GOOGLE_OAUTH_INITIALIZER}?source=${window.location.href}`, '_blank', 'noopener,noreferrer')
 
   }
 

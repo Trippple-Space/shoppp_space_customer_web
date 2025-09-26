@@ -9,9 +9,12 @@ import { motion, AnimatePresence } from 'framer-motion'
 import { useLoginView } from '../../utility/hooks/use-login'
 import Link from 'next/link'
 import { paths } from '../../utility/paths'
+import { FcGoogle } from 'react-icons/fc'
+import { useGoogleOauth } from '../../utility/hooks/use-google-oauth'
 
 const LoginModal = () => {
   const { showLoginModal, isLoginModal } = useCartStore()
+    const { googleOauthInitializer } = useGoogleOauth()
   const { formHandler: loginFormHandler } = useLoginView(isLoginModal)
 
 
@@ -73,7 +76,18 @@ const LoginModal = () => {
                     >
                       Sign In
                     </button>
+
+                        <div className="mb-20 mt-10" onClick={googleOauthInitializer}>
+                                    <div className="flex bg-whitesmoke a-items-center j-content-center p-5 gap-5 radius-5 cursor-pointer">
+                                      <FcGoogle className="w-24 h-24" />
+                                      <span className="weight-500">Continue with Google</span>
+                                    </div>
+                                  </div>
                   </div>
+
+
+
+                 
 
                   <div className='text-center text-10 text-green-500 pointer'>
                     Forgot Your Password?

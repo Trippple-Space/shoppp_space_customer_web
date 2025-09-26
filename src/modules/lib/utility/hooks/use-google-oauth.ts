@@ -5,11 +5,7 @@ export const useGoogleOauth = () => {
 
   const googleOauthInitializer = async () => {
    try {
-     const oauth = await authService.googleOauth();
-    //  if (oauth) {
-    //   //  console.lo
-    //  }
-
+      authService.googleOauth();
  } catch (error) {
   
  }
