@@ -238,7 +238,7 @@ export const StorefrontParent: FC<{ store: Store; }> = ({
                                 { price: formatNumberAsPrice(nextTwoDiscounts[1]?.discountedPrice || nextTwoDiscounts[1]?.finalPrice || products[2]?.variants[0]?.discountedPrice || products[2]?.variants[0]?.finalPrice), image: nextTwoDiscounts[1]?.variants[0]?.media[0]?.url || products[2]?.variants[0]?.media[0]?.url },
                             ]}
                         />
-                    ) : template?.name === "Lustre" ? (
+                    ) : template?.name === "UrbanEdge" ? (
                         <UrbanEdge 
                             store={store}
                             products={products}
