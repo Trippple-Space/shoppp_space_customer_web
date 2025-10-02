@@ -1,0 +1,257 @@
+.urbanEdge__wrapper {
+  color: #484848;
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 0 20px;
+}
+
+.urbanEdge__header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 20px 0;
+  position: relative;
+}
+
+.urbanEdge__logo {
+  font-size: 30px;
+  font-weight: normal;
+  color: #484848;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.urbanEdge__logo img {
+  width: 25px;
+  height: 25px;
+  border-radius: 100%;
+  object-fit: cover;
+}
+
+.urbanEgde__rightButtons {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+}
+
+.urbanEdge__signup {
+  background: black;
+  color: white;
+  padding: 15px 24px;
+  border: none;
+  cursor: pointer;
+  font-size: 14px;
+  font-weight: normal;
+  border-radius: 10px;
+  box-shadow: 0px 20px 35px 0 rgba(0, 0, 0, 0.15);
+}
+
+.urbanEdge__hero {
+  display: flex;
+  align-items: stretch;
+  gap: 30px;
+  margin-top: 40px;
+}
+
+.urbanEdge__hero-col {
+  flex: 1.2;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 756px;
+  border-radius: 10px;
+  overflow: hidden;
+}
+
+.urbanEdge__hero-col img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.urbanEdge__hero-center {
+  flex: 2;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  text-align: center;
+}
+
+.urbanEdge__top-img,
+.urbanEdge__bottom-img {
+  height: 150px;
+}
+
+.urbanEdge__top-img img,
+.urbanEdge__bottom-img img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: 10px;
+}
+
+.urbanEdge__sale-text h2 {
+  font-size: 51px;
+  font-weight: 500;
+  margin-bottom: 10px;
+}
+
+.urbanEdge__shop-btn {
+  background: black;
+  color: white;
+  font-size: 14px;
+  margin-top: 10px;
+  transition: 0.3s;
+  padding: 15px 24px;
+  border: none;
+  cursor: pointer;
+  font-weight: normal;
+  border-radius: 10px;
+  box-shadow: 0px 20px 35px 0 rgba(0, 0, 0, 0.15);
+}
+
+.urbanEdge__shop-btn:hover {
+  background: #333;
+}
+
+.urbanEdge__brands {
+  display: flex;
+  justify-content: center;
+  gap: 40px;
+  flex-wrap: wrap;
+  margin: 50px 0;
+  font-size: 18px;
+  font-weight: light;
+}
+
+.urbanEdge_product-headings h3 {
+  font-size: 40px;
+  font-weight: 500;
+  text-align: center;
+}
+
+.urbanEdge_product-headings h2 {
+  text-align: center;
+  font-size: 16px;
+  font-weight: 400;
+  color: #8A8A8A;
+  max-width: 620px;
+  margin: 10px auto 0 auto;
+}
+
+.urbanEdge__floating {
+  position: fixed;
+  right: 20px;
+  bottom: 40px;
+  display: flex;
+  gap: 20px;
+}
+
+.urbanEdge__floating-top {
+  background: white;
+  border: 1.75px solid black;
+  width: 56px;
+  height: 56px;
+  border-radius: 50%;
+  cursor: pointer;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.urbanEdge__floating-cart {
+  background: black;
+  color: white;
+  transition: 0.3s;
+  cursor: pointer;
+  border: 0.5px solid rgba(133, 131, 131, 0.463);
+  border-radius: 10px;
+  box-shadow: 0px 20px 35px 0 rgba(0, 0, 0, 0.15);
+  width: 56px;
+  height: 56px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+@media (max-width: 1024px) {
+  .urbanEdge__hero {
+    flex-direction: column;
+  }
+
+  .urbanEdge__hero-col {
+    display: none;
+  }
+
+  .urbanEdge__hero-center {
+    order: 1;
+  }
+
+  .urbanEdge__top-img,
+  .urbanEdge__bottom-img {
+    height: 200px;
+  }
+
+  .urbanEdge__sale-text {
+    margin-bottom: 40px;
+  }
+
+  .urbanEdge__sale-text h2 {
+    font-size: 41px;
+  }
+
+  .urbanEdge__brands {
+    font-size: 16px;
+    gap: 20px;
+  }
+
+  .urbanEdge_product-headings h3 {
+    font-size: 30px;
+  }
+
+  .urbanEdge_product-headings h2 {
+    font-size: 16px;
+  }
+}
+
+@media (max-width: 600px) {
+  .urbanEdge__logo {
+    font-size: 18px;
+  }
+
+  .urbanEdge__sale-text h2 {
+    font-size: 35px;
+    margin-top: 15px;
+  }
+
+  .urbanEdge__brands {
+    flex-direction: column;
+    align-items: center;
+    gap: 12px;
+  }
+
+  .urbanEdge__floating-top {
+    width: 50px;
+    height: 50px;
+  }
+
+  .urbanEdge__floating-cart {
+    width: 50px;
+    height: 50px;
+  }
+}
+
+@media (max-width: 400px) {
+  .urbanEdge__sale-text h2 {
+    font-size: 30px;
+  }
+
+  .urbanEdge_product-headings h3 {
+    font-size: 28px;
+  }
+
+  .urbanEdge_product-headings h2 {
+    font-size: 15px;
+  }
+}

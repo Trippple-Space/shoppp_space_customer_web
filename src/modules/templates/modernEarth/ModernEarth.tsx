@@ -138,7 +138,7 @@ const ModernEarth: React.FC<ModernEarthProps> = ({
                   isOpen={menuOpen}
                   onOpenChange={setMenuOpen}
                   hideTrigger={false}
-                  className={`${discountText ? "t-176 pb-100" : "t-137 pb-73"}`}
+                  className={`${discountText ? "t-176 pb-100" : "t-134 pb-73"}`}
               />
             </div>
 
