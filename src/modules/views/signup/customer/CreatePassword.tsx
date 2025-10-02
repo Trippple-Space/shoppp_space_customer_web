@@ -39,7 +39,7 @@ const CreatePassword: FC = () => {
   
   
   return (
-    <div className='w-full overflow-auto'>
+    <div className='w-full'>
       <div className="font-inter">
         <h3 className="text-center text-20 weight-500 mb-10 text-grey-900">
           Secure your account
