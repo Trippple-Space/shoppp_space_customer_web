@@ -107,11 +107,11 @@ const Layout: FC<ILayout> = ({ children }) => {
 
               {pathName !== paths.vendor_signup && (
                 <AuthHeader activeTab={path} />
-              )}
-
-              {children}
-
-              <>
+                )}
+                
+                <div className='w-full overflow-auto'>
+                {children}
+                    <>
                {pathName != paths.google &&  <div className="flex j-content-between a-items-center text-grey-800 mt-20 mb-20">
                   <div className="border border-#00000014 w-50p mr-10"></div>
                   <span style={{ fontStyle: 'italic' }}>or</span>
@@ -125,6 +125,11 @@ const Layout: FC<ILayout> = ({ children }) => {
                   </div>
                 </div>
               </>
+                </div>
+
+
+
+          
 
               <p className="text-center text-14 pb-20 mt-20">
                 By continuing, you agree to the Asoebi.africa{' '}
