@@ -27,7 +27,7 @@ const SignUpDetails: FC = () => {
       return () => window.removeEventListener('keydown', handleGlobalKeyDown);
     }, [formikInitial]);
   return (
-    <div className="w-full overflow-auto ">
+    <div className="w-full">
       <div className="font-inter mb-30">
         <h3 className="text-center text-20 weight-500 mb-10 text-grey-900">
           Welcome to Aseoebi.Africa

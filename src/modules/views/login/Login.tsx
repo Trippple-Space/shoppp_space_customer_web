@@ -44,7 +44,7 @@ const Login = () => {
   
   return (
     <>
-      <div className='w-full overflow-auto'>
+      <div className='w-full'>
 
 
             <div className="font-inter mb-30"> 
