@@ -70,6 +70,14 @@
     font-family: var(--font-dmSans);
   }
 
+  .font-volkhov{
+    font-family: var(--font-volkhov);
+  }
+
+  .font-poppins {
+    font-family: var(--font-poppins);
+  }
+
   .custom-progress {
     background-color: #EAEAEA;
     border-radius: 10px;

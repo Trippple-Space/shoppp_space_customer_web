@@ -68,7 +68,7 @@ const Furniture: FC<{
                     <nav className="furniture-flex">
                         <div id="icon-navs" className="furniture-flex">
                             <a href="#">
-                                <img src={store?.thumbnail || "/images/templates/minimal-template/images/logo.png"} alt="logo" id="nav-logo" />
+                                <img src={store?.thumbnail} alt="logo" id="nav-logo" />
                             </a>
                             {/* <div id="nav-items-container" className="furniture-flex">
                             <ul id="nav-items" className="furniture-flex">

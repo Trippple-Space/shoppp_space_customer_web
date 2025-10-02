@@ -12,6 +12,7 @@ export interface Store {
      user?: {[key:string]:any};
      profile?: {[key:string]:any};
      registrationProposal?: {[key:string]:any};
+     categories?: string[]
 }
 
 interface StoreMeta {
