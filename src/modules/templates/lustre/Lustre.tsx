@@ -57,7 +57,7 @@ const ModernLuxe: FC<{
   return (
     <div className="modernLuxe__page-wrapper">
       <div className="modernLuxe__header-wrapper">
-            <div style={{maxWidth: "1320px", margin: "auto"}}>
+            <div style={{maxWidth: "1440px", margin: "auto"}}>
                 <header className="modernLuxe__header">
                     <div className="modernLuxe__header-mini-wrapper">
                         <ProductSearch storeSlug={store?.slug} />
@@ -65,7 +65,7 @@ const ModernLuxe: FC<{
                         <div className="modernLuxe__logo">
                             <img src="/images/templates/lustre-template/rhombus-icon.svg" alt="icon" />
                             <p className="font-lora">{store?.name || ""}</p>
-                            <img src="/images/templates/lustre/rhombus-icon.svg" alt="icon" />
+                            <img src="/images/templates/lustre-template/rhombus-icon.svg" alt="icon" />
                         </div>
 
                         <div className="modernLuxe__header-right">
@@ -229,7 +229,7 @@ const ModernLuxe: FC<{
             </div>
         </section>
 
-        <section className="py-30 sm:py-40 md:py-50 l:py-60 px-20 sm:px-30 m:px-40 max-w-1200 mx-auto" ref={productsRef}>
+        <section className="py-30 sm:py-40 md:py-50 l:py-60 px-20 sm:px-30 m:px-40 max-w-1440 mx-auto" ref={productsRef}>
             <div className="modernLuxe_popular-headings">
                 <h3>{template?.productSectionHeading || "Exclusive Products"}</h3>
                 {
