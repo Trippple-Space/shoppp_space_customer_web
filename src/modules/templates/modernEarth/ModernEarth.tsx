@@ -122,11 +122,11 @@ const ModernEarth: React.FC<ModernEarthProps> = ({
                 <LuUser className="w-24 h-24" />
               </span>
               <span className="relative flex flex-col a-items-center j-content-center">
-                <span className="w-16 h-16 bg-black border border-white flex flex-col a-items-center j-content-center absolute r--7 t--3.5" style={{borderRadius: "100%", fontSize: "10px", color: "white", fontWeight: "bold"}}>{cart?.cartItems?.length}</span>
+                <span className="w-16 h-16 bg-black border border-white flex flex-col a-items-center j-content-center absolute r--7 t--3.5 font-inter" style={{borderRadius: "100%", fontSize: "10px", color: "white", fontWeight: "bold"}}>{savedVariant?.length}</span>
                 <TbHeart className="w-24 h-24" />
               </span>
               <span className="relative flex flex-col a-items-center j-content-center" onClick={() => setCartOpen(true)}>
-                <span className="w-16 h-16 bg-black border border-white flex flex-col a-items-center j-content-center absolute r--7 t--3.5" style={{borderRadius: "100%", fontSize: "10px", color: "white", fontWeight: "bold"}}>{savedVariant?.length}</span>
+                <span className="w-16 h-16 bg-black border border-white flex flex-col a-items-center j-content-center absolute r--7 t--3.5 font-inter" style={{borderRadius: "100%", fontSize: "10px", color: "white", fontWeight: "bold"}}>{cart?.cartItems?.length}</span>
                 <LuShoppingBag className="w-24 h-24" />
               </span>
             </div>
@@ -138,7 +138,7 @@ const ModernEarth: React.FC<ModernEarthProps> = ({
                   isOpen={menuOpen}
                   onOpenChange={setMenuOpen}
                   hideTrigger={false}
-                  className={`${discountText ? "t-176 pb-100" : "t-134 pb-73"}`}
+                  className={`${discountText ? "t-176 pb-100" : "t-133 pb-73"}`}
               />
             </div>
 

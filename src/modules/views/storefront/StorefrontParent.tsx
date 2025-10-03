@@ -17,6 +17,7 @@ import { useSavedVariant } from '@/modules/lib/utility/hooks/use-saved-variants'
 import { useCart } from '@/modules/lib/utility/hooks/use-cart';
 import ModernLuxe from '@/modules/templates/lustre/Lustre';
 import UrbanEdge from '@/modules/templates/urbanEdge/UrbanEdge';
+import SimpleFlow from '@/modules/templates/simpleFlow/SimpleFlow';
 
 export const StorefrontParent: FC<{ store: Store; }> = ({
     store,
@@ -112,7 +113,7 @@ export const StorefrontParent: FC<{ store: Store; }> = ({
         setDiscountText("");
         setNextTwoDiscounts(products.slice(1, 3));
         }
-    }, [products]);
+    }, []);
 
     return (
         <>
@@ -176,10 +177,10 @@ export const StorefrontParent: FC<{ store: Store; }> = ({
                             primaryBtnText="Shop now"
                             heroImage={store?.meta?.heroImage1 || ''}
                             offers={[
-                                { price: formatNumberAsPrice(firstDiscount?.discountedPrice || firstDiscount?.finalPrice || products[0]?.variants[0]?.discountedPrice || products[0]?.variants[0]?.finalPrice), image: firstDiscount?.variants[0]?.media[0]?.url || products[0]?.variants[0]?.media[0]?.url },
+                                {image: store?.meta?.heroImage2},
                                 { text: `${discountText}`, subText: `${discountText ? "on selected products": "Check back soon for upcoming deals!"}` },
-                                { price: formatNumberAsPrice(nextTwoDiscounts[0]?.discountedPrice || nextTwoDiscounts[0]?.finalPrice || products[1]?.variants[0]?.discountedPrice || products[1]?.variants[0]?.finalPrice), image: nextTwoDiscounts[0]?.variants[0]?.media[0]?.url || products[1]?.variants[0]?.media[0]?.url },
-                                { price: formatNumberAsPrice(nextTwoDiscounts[1]?.discountedPrice || nextTwoDiscounts[1]?.finalPrice || products[2]?.variants[0]?.discountedPrice || products[2]?.variants[0]?.finalPrice), image: nextTwoDiscounts[1]?.variants[0]?.media[0]?.url || products[2]?.variants[0]?.media[0]?.url },
+                                {image: store?.meta?.heroImage3},
+                                {image: store?.meta?.heroImage4}
                             ]}
                             discountText={discountText}
                             store={store}
@@ -264,7 +265,35 @@ export const StorefrontParent: FC<{ store: Store; }> = ({
                             scrollToProducts={scrollToProducts}
                             cart={cart}
                         />
-                    ) :  (
+                    ) : template?.name === "Simple-flow" ? (
+                        <SimpleFlow
+                            store={store}
+                            products={products}
+                            filteredProducts={filteredProducts}
+                            allReviews={allReviews}
+                            openReviewId={openReviewId}
+                            setOpenReviewId={setOpenReviewId}
+                            cartOpen={cartOpen}
+                            setCartOpen={setCartOpen}
+                            userProfileDropdown={userProfileDropdown}
+                            setUserProfileDropdown={setUserProfileDropdown}
+                            handleUserProfileDropdown={handleUserProfileDropdown}
+                            handleCloseDropdown={handleCloseDropdown}
+                            profileModal={profileModal}
+                            setProfileModal={setProfileModal}
+                            menuOpen={menuOpen}
+                            setMenuOpen={setMenuOpen}
+                            selectedCategory={selectedCategory}
+                            setSelectedCategory={setSelectedCategory}
+                            handleCategoryChange={handleCategoryChange}
+                            template={template}
+                            productsRef={productsRef}
+                            scrollToProducts={scrollToProducts}
+                            cart={cart}
+                        />
+                    )
+                    :
+                    (
                         <StorefrontLayout store={store}>
                             <StorefrontAbout store={store} />
                         </StorefrontLayout>

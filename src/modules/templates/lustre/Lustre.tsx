@@ -258,7 +258,7 @@ const ModernLuxe: FC<{
                 )}
             </div>
         </section>
-
+                
         <StorefrontFooter store={store} />
     </div>
   );

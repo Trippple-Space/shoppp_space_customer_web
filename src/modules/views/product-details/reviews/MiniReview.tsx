@@ -38,7 +38,7 @@ const MiniReview = ({ id, slug, isOpen, setIsOpen, reviews, reviewStat, loading,
     const { getReferenceProps, getFloatingProps } = useInteractions([click, dismiss, hover]);
 
     return (
-        <div className="relative bg-white outline-none">
+        <div className="relative outline-none">
             <span className='border-b cursor-pointer pb-1'
                 ref={refs.setReference}
                 {...getReferenceProps()}
