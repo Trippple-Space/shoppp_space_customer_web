@@ -1,7 +1,7 @@
 // "use client"
 
 import "../styles/styles.scss";
-import { Inter, Roboto, Lora, Roboto_Mono, DM_Sans, Volkhov, Poppins } from "next/font/google";
+import { Inter, Roboto, Lora, Roboto_Mono, DM_Sans, Volkhov, Poppins, Young_Serif } from "next/font/google";
 // import { useAuthGuard } from '@/modules/lib/utility/hooks/use-auth-guard';
 import GlobalArena from "@/modules/lib/components/global-arena/GlobalArena";
 import { PHProvider } from './providers'
@@ -32,6 +32,13 @@ const poppins = Poppins({
   variable: "--font-poppins",
   display: "swap",
   weight: ["100", "300", "400", "500", "700", "900"],
+});
+
+const youngSerif = Young_Serif({
+  subsets: ["latin"],
+  variable: "--font-youngSerif",
+  display: "swap",
+  weight: ["400"],
 });
 
 const roboto = Roboto({
@@ -77,7 +84,7 @@ export default function RootLayout({
   return (
     <html
       lang="en"
-      className={`${inter.variable} ${roboto.variable} ${lora.variable} ${robotoMono.variable} ${dmSans.variable} ${volkhov.variable} ${poppins.variable} bg-white font-inter h-full`}
+      className={`${inter.variable} ${roboto.variable} ${lora.variable} ${robotoMono.variable} ${dmSans.variable} ${volkhov.variable} ${poppins.variable} ${youngSerif.variable} bg-white font-inter h-full`}
     >
       <body className="@lo:weight-300 @lo:text-dimgrey h-full">
         <PHProvider >

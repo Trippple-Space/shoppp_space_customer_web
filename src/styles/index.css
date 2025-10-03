@@ -663,16 +663,18 @@
 .t-39\.2 { top: 39.2px; } 
 .t-176 { top: 176px; } 
 .pb-100 { padding-bottom: 100px; } 
-.t-134 { top: 134px; } 
+.t-133 { top: 133px; } 
 .pb-73 { padding-bottom: 73px; } 
 .text-20\! { font-size: 20px !important; } 
 .px-3 { padding-left: 3px; padding-right: 3px; } 
 .h-300 { height: 300px; } 
 .t-44 { top: 44px; } 
+.r-50 { right: 50px; } 
+.t-99 { top: 99px; } 
 .pt-100 { padding-top: 100px; } 
 .max-w-69p { max-width: 69%; } 
 .t-20 { top: 20px; } 
-.t-90 { top: 90px; } 
+.pb-0 { padding-bottom: 0px; } 
 .pt-64 { padding-top: 64px; } 
 .mb-111 { margin-bottom: 111px; } 
 .w-73 { width: 73px; } 
@@ -962,6 +964,7 @@
 @media only screen and (min-width: 576px) { .sm\:grid-3-cols-1fr { grid-template-columns: repeat(3, 1fr); } } 
 @media only screen and (min-width: 576px) { .sm\:px-25 { padding-left: 25px; padding-right: 25px; } } 
 @media only screen and (min-width: 576px) { .sm\:text-40 { font-size: 40px; } } 
+@media only screen and (min-width: 576px) { .sm\:flex\! {    display: flex !important;  } } 
 @media only screen and (min-width: 576px) { .sm\:max-w-100p { max-width: 100%; } } 
 @media only screen and (min-width: 576px) { .sm\:w-22 { width: 22px; } } 
 @media only screen and (min-width: 576px) { .sm\:mb-60 { margin-bottom: 60px; } } 

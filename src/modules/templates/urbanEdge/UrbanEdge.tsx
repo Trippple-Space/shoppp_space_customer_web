@@ -67,7 +67,7 @@ const UrbanEdge: FC<{
           
           <div className="urbanEgde__rightButtons">
             {
-              cart?.id ? "" : <button className="urbanEdge__signup">Sign In</button>
+              cart?.cartItems ? "" : <button className="urbanEdge__signup">Sign In</button>
             }
             <RiMenu2Fill 
               className={`w-24 h-24 cursor-pointer ${menuOpen ? "sm:block hidden" : "block"}`}  
@@ -101,7 +101,7 @@ const UrbanEdge: FC<{
                 isOpen={menuOpen}
                 onOpenChange={setMenuOpen}
                 hideTrigger={true}
-                className={`t-90 pb-30`}
+                className={`t-75 pb-0`}
             />
         </div>
         {/*mini-cart */}
@@ -206,7 +206,7 @@ const UrbanEdge: FC<{
         </div>
       </div>
 
-      <div>
+      <div className="font-poppins">
         <StorefrontFooter store={store} />
       </div>
     </>
