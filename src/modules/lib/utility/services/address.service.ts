@@ -5,7 +5,7 @@ import { Address } from '../types/address.interface';
 import { buildEndpoint } from '../utility';
 
 class AddressService {
-  fetchAddresses(userId: number): Promise<Address[]> {
+  fetchAddresses(userId: string): Promise<Address[]> {
     return new Promise((resolve, reject) => {
       http.get(buildEndpoint(endpoints.USER_ADDRESSES, {userId}))
         .then((response: AxiosResponse) => {
@@ -17,7 +17,7 @@ class AddressService {
     });
   }
 
-  getAddressById(userId: number, addressId: number): Promise<Address> {
+  getAddressById(userId: string, addressId: string): Promise<Address> {
     return new Promise((resolve, reject) => {
       http.get(buildEndpoint(endpoints.USER_ADDRESSES))
         .then((response: AxiosResponse) => {
@@ -29,7 +29,7 @@ class AddressService {
     });
   }
 
-  createAddress(userId: number, newAddress: Address): Promise<Address> {
+  createAddress(userId: string, newAddress: Address): Promise<Address> {
     return new Promise((resolve, reject) => {
       http.post(buildEndpoint(endpoints.USER_ADDRESSES, {userId}), newAddress)
         .then((response) => {
@@ -41,7 +41,7 @@ class AddressService {
     });
   }
 
-  updateAddress(userId: number, addressId: number, updatedData: Partial<Address>): Promise<Address> {
+  updateAddress(userId: string, addressId: string, updatedData: Partial<Address>): Promise<Address> {
     return new Promise((resolve, reject) => {
       http.patch(buildEndpoint(endpoints.USER_ADDRESSES, {userId}, `/${addressId}`), updatedData)
         .then((response) => {
@@ -53,7 +53,7 @@ class AddressService {
     });
   }
 
-  deleteAddress(userId: number, addressId: number): Promise<void> {
+  deleteAddress(userId: string, addressId: string): Promise<void> {
     return new Promise((resolve, reject) => {
       http.delete(buildEndpoint(endpoints.USER_ADDRESSES, {userId}, `/${addressId}`))
         .then((response) => {

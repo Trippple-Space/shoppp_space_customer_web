@@ -1,7 +1,7 @@
 import { User } from "./user.interface"
 
 export interface IReview {
-    productVariantId: number,
+    productVariantId: string,
     rating: number,
     comment: string,
     meta: {
@@ -11,8 +11,8 @@ export interface IReview {
 }
 
 export interface IFetchedReview {
-    id: number,
-    productVariantId: number,
+    id: string,
+    productVariantId: string,
     rating: number,
     subject: string,
     comment: string,
@@ -20,7 +20,7 @@ export interface IFetchedReview {
         verifiedPurchase: boolean,
         images: string[]
     }
-    dateCreated: string,
+    createAt: string,
     lastUpdated: string,
     user: User
 }

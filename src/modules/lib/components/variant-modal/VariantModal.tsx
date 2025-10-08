@@ -15,8 +15,8 @@ import { SavedVariant } from '../../utility/types/SavedVariant.interface';
 
 interface IVariantModal {
 variant: RecentlyViewed
-      saveVariant?: (variantId: number) => void
-      removeSavedVariant?: (variantId: number) => void
+      saveVariant?: (variantId: string) => void
+      removeSavedVariant?: (variantId: string) => void
       savedVariants?: SavedVariant[]
 }
 
@@ -58,7 +58,7 @@ const VariantModal = ({variant, saveVariant, removeSavedVariant, savedVariants}:
     }
   }
 
-      function handleLogin(variantId: number, minimumPurchase: number) {
+      function handleLogin(variantId: string, minimumPurchase: number) {
     localStorage.setItem('variantId',variantId.toString())
     localStorage.setItem('variantIdMinimumPurchase',minimumPurchase.toString())
     isLoginModal()

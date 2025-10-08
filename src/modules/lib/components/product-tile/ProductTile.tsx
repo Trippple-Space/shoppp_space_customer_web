@@ -22,15 +22,15 @@ import { useRecentlyViewedVariant } from '../../utility/hooks/use-recently-viewe
 
 interface IProductTile {
   product: Product
-  saveVariant?: (variantId: number) => void
-  removeSavedVariant?: (variantId: number) => void
+  saveVariant?: (variantId: string) => void
+  removeSavedVariant?: (variantId: string) => void
   savedVariants?: SavedVariant[]
   allReviews: IFetchedReview[]
-  id: number,
-  isOpen: number | null,
-  setIsOpen: React.Dispatch<React.SetStateAction<number | null>>
+  id: string,
+  isOpen: string | null,
+  setIsOpen: React.Dispatch<React.SetStateAction<string | null>>
 }
-const ProductTile: FC<IProductTile> = ({ product, savedVariants, saveVariant, removeSavedVariant, allReviews, isOpen, setIsOpen }: any) => {
+const ProductTile: FC<IProductTile> = ({ product, savedVariants, saveVariant, removeSavedVariant, allReviews, isOpen, setIsOpen }) => {
   const { groupedData, availableColors } = useTransformProduct(product)
   const uniqueVariantsFromProductImages = availableColors.map((color) => groupedData?.[color][0])
   //product?.variants.filter((variants: ProductVariant) => productImages.find(image => image === variants.media[0].url))
@@ -43,7 +43,7 @@ const ProductTile: FC<IProductTile> = ({ product, savedVariants, saveVariant, re
   const [selectedImage, setSelectedImage] = useState(
     product?.variants?.[0]?.media?.[0]?.url
   );
-  const [selectedVariant, setSelectedVariant] = useState(
+  const [selectedVariant, setSelectedVariant] = useState<ProductVariant>(
     product?.variants?.[0]
   );
   const {
@@ -78,10 +78,10 @@ const ProductTile: FC<IProductTile> = ({ product, savedVariants, saveVariant, re
 
   const handleSave = () => {
     if (isSaved) {
-      removeSavedVariant(selectedVariant?.id)
+       removeSavedVariant && removeSavedVariant(selectedVariant?.id)
 
     } else {
-      saveVariant(selectedVariant?.id)
+      saveVariant && saveVariant(selectedVariant?.id)
     }
   }
 
@@ -93,7 +93,7 @@ const ProductTile: FC<IProductTile> = ({ product, savedVariants, saveVariant, re
     }
   }
 
-  function handleLogin(variantId: number, minimumPurchase: number) {
+  function handleLogin(variantId: string, minimumPurchase: number) {
     localStorage.setItem('variantId', variantId.toString())
     localStorage.setItem('variantIdMinimumPurchase', minimumPurchase.toString())
     isLoginModal()
@@ -110,11 +110,10 @@ const ProductTile: FC<IProductTile> = ({ product, savedVariants, saveVariant, re
       const variantId = localStorage.getItem("variantId");
       const variantIdMinimumPurchase = localStorage.getItem("variantIdMinimumPurchase");
       if (variantId && variantIdMinimumPurchase) {
-        const parsedVariantId = parseInt(variantId, 10);
         const parsedMinimumPurchase = parseInt(variantIdMinimumPurchase, 10);
 
-        if (!isNaN(parsedVariantId) && !isNaN(parsedMinimumPurchase)) {
-          addToCart(parsedVariantId, parsedMinimumPurchase);
+        if (variantId && !isNaN(parsedMinimumPurchase)) {
+          addToCart(variantId, parsedMinimumPurchase);
 
         }
 
@@ -342,7 +341,7 @@ const ProductTile: FC<IProductTile> = ({ product, savedVariants, saveVariant, re
                   selectedVariant?.discountedPrice
                 ) :
                   formatNumberAsPrice(
-                    selectedVariant?.finalPrice || product.finalPrice
+                    selectedVariant?.finalPrice ?? product.finalPrice ?? 0
                   )
               }
             </p>
@@ -350,7 +349,7 @@ const ProductTile: FC<IProductTile> = ({ product, savedVariants, saveVariant, re
               isDiscounted &&
               <p className="md:text-12 text-10 weight-400 md:line-height-20 color-#00000099 line-through">
                 {formatNumberAsPrice(
-                  selectedVariant?.finalPrice || product.finalPrice
+                  (selectedVariant?.finalPrice ?? product.finalPrice ?? 0)
                 )}
               </p>
             }

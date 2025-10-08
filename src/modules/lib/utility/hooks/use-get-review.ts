@@ -3,8 +3,8 @@ import { reviewService } from '../services/reviews.service';
 import { toast } from 'sonner';
 import { IFetchedReview } from '../types/review.interface';
 
-const useGetProductRating = (productVariantId: number | number[]) => {
-  const [reviews, setReviews] = useState<{ id: number; reviews: IFetchedReview[] }[]>([]);
+const useGetProductRating = (productVariantId: string | string[]) => {
+  const [reviews, setReviews] = useState<{ id: string; reviews: IFetchedReview[] }[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
   const [refresh, setRefresh] = useState<boolean>(false);
 

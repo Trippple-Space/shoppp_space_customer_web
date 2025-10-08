@@ -19,10 +19,10 @@ const OrderedProductModal = ({
   handleOrderModal: () => void
   order: Order | undefined
 }) => {
-  const [expandedId, setExpandedId] = useState<number | null>(null) // Tracks which text is expanded
+  const [expandedId, setExpandedId] = useState<string | null>(null) // Tracks which text is expanded
   const { buyAgain, fetching } = useCart()
 
-  const handleTextClick = (id: number) => {
+  const handleTextClick = (id: string) => {
     setExpandedId(prevId => (prevId === id ? null : id))
   }
 

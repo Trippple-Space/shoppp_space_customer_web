@@ -2,7 +2,7 @@ import React, { useCallback, useEffect, useState } from 'react'
 import { reviewService } from '../services/reviews.service';
 import { toast } from 'sonner';
 
-const useGetRatingDist = (productVariantId: number) => {
+const useGetRatingDist = (productVariantId: string) => {
    const [reviewStatDist, setReviewStatDist] = useState<any>()
    const [loading, setLoading] = useState<boolean>(true)
    const [refresh, setRefresh] = useState<boolean>(false)

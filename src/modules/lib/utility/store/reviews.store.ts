@@ -2,11 +2,11 @@ import { create } from 'zustand';
 
 interface ReviewModalStore {
   isOpen: boolean;
-  productId: number | null;
+  productId: string | null;
   slug: string;
   reviews: any[]
   color?: string;
-  open: (id: number, slug: string, reviews: any[], color?: string) => void;
+  open: (id: string, slug: string, reviews: any[], color?: string) => void;
   close: () => void;
 }
 

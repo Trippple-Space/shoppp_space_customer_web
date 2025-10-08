@@ -29,7 +29,7 @@ import VideoSrc from "@/modules/lib/components/video-src/VideoSrc";
 
 type DeliveryOptionKey = 'standard' | 'express' | 'vendorManaged';
 type addressDeliveryPrice = {
-  addressId: number,
+  addressId: string,
   deliveryOptions: DeliveryOption,
   coordinates: {
     lat: string,

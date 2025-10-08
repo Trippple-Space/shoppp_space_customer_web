@@ -3,8 +3,8 @@ import { IReviewStat } from '../types/review.interface';
 import { reviewService } from '../services/reviews.service';
 import { toast } from 'sonner';
 
-const useGetRatingStats = (productVariantId: number | number[]) => {
-  const [reviewStat, setReviewStat] = useState<{ id: number; reviewStat: IReviewStat }[]>([]);
+const useGetRatingStats = (productVariantId: string | string[]) => {
+  const [reviewStat, setReviewStat] = useState<{ id: string; reviewStat: IReviewStat }[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
   const [refresh, setRefresh] = useState<boolean>(false);
 

@@ -131,13 +131,13 @@ const useAddress = () => {
     }
   };
 
-  const handleUpdateAddress = (addressId: number, newAddress: Address) => {
+  const handleUpdateAddress = (addressId: string, newAddress: Address) => {
     if (user?.id && selectedAddressId !== null) {
       updateAddress(user.id, addressId, newAddress);
     }
   };
 
-  const handleDeleteAddress = (addressId: number) => {
+  const handleDeleteAddress = (addressId: string) => {
     if (user?.id) {
       deleteAddress(user.id, addressId);
     }

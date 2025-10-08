@@ -25,7 +25,7 @@ import { useOrders } from '@/modules/lib/utility/hooks/use-orders'
 import { useCart } from '@/modules/lib/utility/hooks/use-cart'
 
 interface OrderDetailsProps {
-  orderId: number
+  orderId: string
 }
 
 const OrderDetails = ({ orderId }: OrderDetailsProps) => {

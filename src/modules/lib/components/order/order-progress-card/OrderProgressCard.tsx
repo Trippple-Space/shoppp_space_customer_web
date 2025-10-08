@@ -104,7 +104,7 @@ const OrderProgressCard = ({ orders }: OrderProgressProp) => {
 
               <div className='l:flex grid gap-10 l:gap-0 a-items-center space-between border-b border-t border-t-#00000014 border-b-#00000014  py-15'>
                 <p className='text-14 weight-400 color-#00000099'>
-                  {formatDate(new Date(order.delivery.dateCreated))}
+                  {formatDate(new Date(order.delivery.createAt))}
                 </p>
                 <p className='text-14 weight-400 color-#00000099'>{order.id}</p>
               </div>

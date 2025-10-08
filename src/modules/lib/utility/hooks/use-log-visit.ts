@@ -2,7 +2,7 @@ import { toast } from "sonner";
 import { visitService } from "../services/visit.service";
 
 export const useLogVisit = (
-  storeID: number,
+  storeID: string,
   ipAddress: { ipAddress: string }
 ) => {
   const logVisit = async () => {

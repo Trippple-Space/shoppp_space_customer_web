@@ -17,7 +17,7 @@ class OrderService {
           });
      }
 
-     fetchOrderById(id: number, query: IQueryParams | any): Promise<Order> {
+     fetchOrderById(id: string, query: IQueryParams | any): Promise<Order> {
           return new Promise((resolve, reject) => {
                const url = new URL(
                     buildEndpoint(
@@ -53,7 +53,7 @@ class OrderService {
      }
 
      cancelOrderById(
-          id: number,
+          id: string,
           reasons: string,
           query: IQueryParams | any
      ): Promise<Order> {

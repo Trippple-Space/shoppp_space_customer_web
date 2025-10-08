@@ -25,9 +25,9 @@ type ModernEarthProps = {
   store: Store;
   handleUserProfileDropdown: () => void;
   handleCloseDropdown: () => void;
-  openReviewId: number | null;
+  openReviewId: string | null;
   filteredProducts: Product[];
-  setOpenReviewId: React.Dispatch<React.SetStateAction<number | null>>;
+  setOpenReviewId: React.Dispatch<React.SetStateAction<string | null>>;
   cartOpen: boolean;
   setCartOpen: React.Dispatch<React.SetStateAction<boolean>>;
   userProfileDropdown: boolean;

@@ -19,7 +19,7 @@ const getRating = (rating: number) => {
     }
 };
 
-export const AddReview = ({ id, setOpenModal, refresh }: { id: number, setOpenModal: React.Dispatch<React.SetStateAction<boolean>>, refresh: () => void }) => {
+export const AddReview = ({ id, setOpenModal, refresh }: { id: string, setOpenModal: React.Dispatch<React.SetStateAction<boolean>>, refresh: () => void }) => {
     const { createReview } = useReviews()
     const [rating, setRating] = useState<number>(0);
     const [hoveredRating, setHoveredRating] = useState<number>(0);
@@ -27,7 +27,7 @@ export const AddReview = ({ id, setOpenModal, refresh }: { id: number, setOpenMo
     const [touched, setTouched] = useState<{ comment: boolean, rate: boolean }>({ comment: false, rate: false });
 
     const [formData, setFormData] = useState<{
-        productVariantId: number;
+        productVariantId: string;
         rating: number;
         comment: string;
         meta: {
@@ -35,7 +35,7 @@ export const AddReview = ({ id, setOpenModal, refresh }: { id: number, setOpenMo
             images: string[];
         };
     }>({
-        productVariantId: Number(id),
+        productVariantId: id,
         rating: 0,
         comment: '',
         meta: {

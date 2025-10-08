@@ -1,7 +1,7 @@
 
 // ---- Core system user response shape ----
 export interface User {
-  id: number;
+  id: string;
   username: string;
   email: string;
   mobile: string;
@@ -10,10 +10,10 @@ export interface User {
   settings: Record<string, unknown>;
   meta: Record<string, unknown> | null;
   lastLoginAt: string;
-  dateCreated: string;
+  createAt: string;
   lastUpdated: string;
   profile: {
-    id: number;
+    id: string;
     firstName: string;
     lastName: string;
     gender: string | null;
@@ -32,7 +32,7 @@ export interface User {
 
 // ---- API response shape ----
 export interface NewUser {
-  id: number;
+  id: string;
   username?: string;
   email: string | null;
   mobile?: string | null;
@@ -44,10 +44,10 @@ export interface NewUser {
   orderCount?: number;
   storeRoles?: unknown[];
   customer: {
-    dateCreated: string;
+    createAt: string;
     lastUpdated: string;
     profile?: {
-      id: number;
+      id: string;
       firstName: string;
       lastName: string;
       gender: string | null;

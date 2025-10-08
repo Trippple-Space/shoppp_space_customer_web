@@ -2,7 +2,7 @@ import { useState } from "react";
 import { visitService } from "../services/visit.service";
 import useUserStore from "../store/user.store";
 
-export const useProductSold = (storeID: number) => {
+export const useProductSold = (storeID: string) => {
   const [productSold, setProductSold] = useState();
   const getProductSold = async () => {
     if (storeID) {

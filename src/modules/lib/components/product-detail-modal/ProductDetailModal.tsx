@@ -331,7 +331,7 @@ const ProductDetailModal = ({
                                         if (isAuthenticated) {
                                           if (selectedVariant && selectedVariant.status !== 'OUT_OF_STOCK') {
                                             addToCart(
-                                              selectedVariant?.id ?? 0,
+                                              selectedVariant?.id ?? '0',
                                               selectedVariant?.minPurchaseQuantity || 1
                                             );
                                           }

@@ -332,7 +332,7 @@ export function convertUserResponse(data: NewUser): User {
     settings: data.settings ?? {},
     meta: data.meta ?? null,
     lastLoginAt: data.lastLoginAt ?? "",
-    dateCreated: data.customer.dateCreated,
+    createAt: data.customer.createAt,
     lastUpdated: data.customer.lastUpdated,
     profile: {
       id: profile.id,

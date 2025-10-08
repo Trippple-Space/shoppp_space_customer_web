@@ -22,7 +22,7 @@ const ProgressBar = ({ percentage }: { percentage: number }) => (
 );
 
 interface IReviewsView {
-    id: number,
+    id: string,
     slug: string
     color?: string
     openModal: boolean
