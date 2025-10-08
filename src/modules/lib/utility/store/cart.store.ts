@@ -22,7 +22,7 @@ export const useCartStore = create<CartStore>((set) => ({
      cart: {
           cartItems: [],
           id: "",
-          userId: 0,
+          userId: '',
           subTotal: 0,
           total: 0,
           totalDiscountedPrice: 0,

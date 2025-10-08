@@ -10,7 +10,7 @@ export default function ReviewsModal() {
 
     return (
         <ReviewsViews
-            id={productId ?? 0}
+            id={productId ?? '0'}
             slug={slug}
             openModal={isOpen}
             setOpenModal={close}

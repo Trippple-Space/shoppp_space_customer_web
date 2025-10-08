@@ -13,8 +13,8 @@ const CentralArena = () => {
   const { products, type, ref, loading } = useProductListView()
   const { allReviews, allLoading: reviewsLoading } = useReviews()
   const { saveVariant, savedVariants, removeSavedVariant } = useSavedVariant();
-  const [openReviewId, setOpenReviewId] = useState<number | null>(null);
-  const renderedIds = new Set<number>();
+  const [openReviewId, setOpenReviewId] = useState<string | null>(null);
+  const renderedIds = new Set<string>();
 
   return (
     <>

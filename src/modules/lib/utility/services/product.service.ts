@@ -15,7 +15,7 @@ class ProductService {
      async fetchProductCategories(
           type: "fabrics" | "wears" | null,
           label = "GLOBAL",
-          storeId = 0
+          storeId = ""
      ) {
           const cacheKey = `product/categories_${type}_${label}_${storeId}`;
           const cachedData = this.getCachedCategories(cacheKey);

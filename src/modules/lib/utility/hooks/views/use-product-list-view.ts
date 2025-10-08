@@ -15,7 +15,7 @@ export const useProductListView = () => {
 
   const { selectedCategory, setSelectedCategory } = useCategories({
     type,
-    storeId: 0,
+    storeId: '',
     label: "GLOBAL"
   });
   const { allFilters } = useFilterStore();

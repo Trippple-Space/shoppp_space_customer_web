@@ -313,7 +313,7 @@ export const emailRegex = /^([a-zA-Z0-9_.\-]+)([+][a-zA-Z0-9_.\-]+)*@(([a-zA-Z0-
 
 export function convertUserResponse(data: NewUser): User {
   const profile = data.customer.profile ?? {
-    id: 0,
+    id: '',
     firstName: "",
     lastName: "",
     gender: null,
