@@ -2,7 +2,7 @@ import { AxiosResponse } from "axios";
 import { Order } from "../types/order.interface";
 import endpoints from "../endpoints";
 import http from "../http";
-import { buildEndpoint } from "../utility";
+import { buildEndpoint, convertUserResponse } from "../utility";
 import config from "env";
 import { IQueryParams } from "../hooks/use-products";
 
@@ -44,7 +44,7 @@ class OrderService {
                          return res.json();
                     })
                     .then((response: any) => {
-                         resolve(response);
+                         resolve({...response, user: convertUserResponse(response) });
                     })
                     .catch((err) => {
                          reject(err);

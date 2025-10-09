@@ -4,6 +4,7 @@ import {
   formatNumberAsPrice,
   formatTime,
   getCartItems,
+  getLastFiveIdChars,
   getStatusText,
   getStoreNames,
   onGoingOrderStatus
@@ -33,12 +34,16 @@ const OrderProgressCard = ({ orders }: OrderProgressProp) => {
     order.status.toUpperCase()
   )
 
+
+  console.log(orders[0].delivery);
   return (
     <>
       {orders.map(order => {
         const statusIndex = currentStatusIndex(order)
         const isOngoing = order.status !== 'CANCELLED' && order.status !== 'DELIVERED' && order.status !== 'RETURNED'
         const cartItems = getCartItems(order?.cart?.storeGroups)
+
+
 
         return (
         <div key={order.id}>
@@ -104,9 +109,9 @@ const OrderProgressCard = ({ orders }: OrderProgressProp) => {
 
               <div className='l:flex grid gap-10 l:gap-0 a-items-center space-between border-b border-t border-t-#00000014 border-b-#00000014  py-15'>
                 <p className='text-14 weight-400 color-#00000099'>
-                  {formatDate(new Date(order.delivery.createAt))}
+                  {formatDate(new Date(order.delivery.deliveryWindowStart))}
                 </p>
-                <p className='text-14 weight-400 color-#00000099'>{order.id}</p>
+                <p className='text-14 weight-400 color-#00000099'>{getLastFiveIdChars(order.id)}</p>
               </div>
 
               {isOngoing && (

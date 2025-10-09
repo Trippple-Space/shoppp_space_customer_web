@@ -352,6 +352,13 @@ export function convertUserResponse(data: NewUser): User {
   };
 }
 
+export function getLastFiveIdChars(id: string): string {
+  if (id.length < 5) return id; 
+  return id.slice(-5).toLocaleUpperCase();
+}
+
+
+
 /*
 [
   "Abia",

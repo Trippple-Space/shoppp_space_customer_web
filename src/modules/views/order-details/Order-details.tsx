@@ -3,6 +3,7 @@
 import {
   formatNumberAsPrice,
   getCartItems,
+  getLastFiveIdChars,
   getStoreNames
 } from '@/modules/lib/utility/utility'
 import React, { useEffect, useState } from 'react'
@@ -122,7 +123,7 @@ const OrderDetails = ({ orderId }: OrderDetailsProps) => {
                     >
                       <GoArrowLeft className='w-fit' />
                       <p className='weight-400 text-16'>
-                        Order #{singleOrder.id}
+                        Order #{getLastFiveIdChars(singleOrder.id)}
                       </p>
                     </div>
                     <div className='bg-white p-25 flex a-items-center space-between'>
