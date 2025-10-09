@@ -2,9 +2,9 @@ import { CartItem } from "./cart.interface";
 import { ProductVariant } from "./product.interface";
 
 export interface SavedVariant {
-  id: number;
+  id: string;
   variant: ProductVariant;
   savedAt: string;
-  userId: number;
-  variantId: number;
+  userId: string;
+  variantId: string;
 }

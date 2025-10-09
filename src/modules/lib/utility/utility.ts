@@ -313,7 +313,7 @@ export const emailRegex = /^([a-zA-Z0-9_.\-]+)([+][a-zA-Z0-9_.\-]+)*@(([a-zA-Z0-
 
 export function convertUserResponse(data: NewUser): User {
   const profile = data.customer.profile ?? {
-    id: 0,
+    id: '',
     firstName: "",
     lastName: "",
     gender: null,
@@ -332,7 +332,7 @@ export function convertUserResponse(data: NewUser): User {
     settings: data.settings ?? {},
     meta: data.meta ?? null,
     lastLoginAt: data.lastLoginAt ?? "",
-    dateCreated: data.customer.dateCreated,
+    createAt: data.customer.createAt,
     lastUpdated: data.customer.lastUpdated,
     profile: {
       id: profile.id,
@@ -351,6 +351,13 @@ export function convertUserResponse(data: NewUser): User {
     orderCount: data.orderCount,
   };
 }
+
+export function getLastFiveIdChars(id: string): string {
+  if (id.length < 5) return id; 
+  return id.slice(-5).toLocaleUpperCase();
+}
+
+
 
 /*
 [

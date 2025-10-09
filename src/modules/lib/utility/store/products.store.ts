@@ -7,32 +7,32 @@ interface ProductStore {
     };
     productCacheIdempotencyTracker: {
         [x: string]: {
-            [x: number]: true
+            [x: string]: true
         }
     }
     setProductsCache: (cacheKey: string, products: Product[]) => void;
-    setProductsCacheIdempotencyTracker: (cacheKey: string, productIds: {[x:number]: true}) => void;
+    setProductsCacheIdempotencyTracker: (cacheKey: string, productIds: {[x:string]: true}) => void;
 }
 
 const placeholderProduct: Product = {
     longDescription: "",
     keywords: [],
     tags: [{ label: "" }],
-    id: 0,
+    id: "",
     slug: "",
     price: 0,
     name: "",
     type: "",
     stockUnit: "",
     status: 0,
-    dateCreated: "",
+    createAt: "",
     shortDescription: "",
     lastUpdated: "",
     reviewRating: 0,
     reviews: undefined,
     comments: undefined,
     discount: {
-        id: 0,
+        id: "",
         title: "",
         discountCode: "",
         discountType: "",
@@ -49,7 +49,7 @@ const placeholderProduct: Product = {
     },
     variants: [
          {
-              id: 0,
+              id: "",
               media: [
                    {
                         url: "",
@@ -67,7 +67,7 @@ const placeholderProduct: Product = {
               meta: undefined,
               properties: undefined,
               stockUnit: "",
-              dateCreated: "",
+              createAt: "",
               lastUpdated: "",
               preOrder: false,
          },
@@ -75,7 +75,7 @@ const placeholderProduct: Product = {
     store: {
         name: "",
         slug: "",
-        id: 0,
+        id: "",
         description: "",
         status: 'ACTIVE',
         type: "",
@@ -100,7 +100,7 @@ export const useProductStore = create<ProductStore>((set) => ({
                 [cacheKey]: products ?? [],
             },
         })),
-    setProductsCacheIdempotencyTracker: (cacheKey: string, productIds: {[x:number]: true}) =>
+    setProductsCacheIdempotencyTracker: (cacheKey: string, productIds: {[x:string]: true}) =>
         set((state) => ({
             productCacheIdempotencyTracker: {
                 ...state.productCacheIdempotencyTracker,

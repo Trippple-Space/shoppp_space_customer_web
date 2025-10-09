@@ -10,8 +10,8 @@ import { orderService } from '@/modules/lib/utility/services/order.service'
 const Page = () => {
   const params = useParams()
   const orderId = Array.isArray(params.id)
-    ? parseInt(params.id[0])
-    : parseInt(params.id)
+    ? params.id[0]
+    : params.id
 
   return <OrderDetails orderId={orderId} />
 }

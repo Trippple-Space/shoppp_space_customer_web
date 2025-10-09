@@ -12,8 +12,8 @@ type OrderStore = {
     showLoginModal: boolean;
      isLoginModal: () => void;
     fetchOrders: (query: IQueryParams) => Promise<void>
-    fetchOrderById: (id: number, query: IQueryParams | any) => Promise<void>
-    cancelOrderById: (id: number, reasons: string, query: IQueryParams | any) => Promise<void>
+    fetchOrderById: (id: string, query: IQueryParams | any) => Promise<void>
+    cancelOrderById: (id: string, reasons: string, query: IQueryParams | any) => Promise<void>
 }
 
 export const useOrderStore = create<OrderStore>((set) => ({

@@ -20,7 +20,7 @@ class CartService {
                           cartItems: combinedItems,
                           storeGroups: cartData.storeGroups.map((group: StoreGroupResponse) => ({
                                 ...group,
-                                items: group.items.sort((a, b) => a.id - b.id),
+                                items: group.items
                           })),
                     };
 
@@ -34,7 +34,7 @@ class CartService {
           });
      }
 
-     addToCart(variantId: number, quantity: number): Promise<Cart> {
+     addToCart(variantId: string, quantity: number): Promise<Cart> {
           
           return new Promise((resolve, reject) => {
            
@@ -57,9 +57,9 @@ class CartService {
      }
 
 buyAgain(buyAgainItems: BuyAgain[]): Promise<Cart> {
-    const outOfStockItems: { productName: string; quantity: number; variantId: number }[] = [];
-    const otherFailedReasons: { productName: string; quantity: number; variantId: number; reason: string }[] = [];
-    const addedItems: { productName: string; quantity: number; variantId: number }[] = [];
+    const outOfStockItems: { productName: string; quantity: number; variantId: string }[] = [];
+    const otherFailedReasons: { productName: string; quantity: number; variantId: string; reason: string }[] = [];
+    const addedItems: { productName: string; quantity: number; variantId: string }[] = [];
 
     return new Promise((resolve, reject) => {
 
@@ -79,16 +79,16 @@ buyAgain(buyAgainItems: BuyAgain[]): Promise<Cart> {
                           cartItems: combinedItems,
                           storeGroups: cartData.storeGroups.map((group: StoreGroupResponse) => ({
                                 ...group,
-                                items: group.items.sort((a, b) => a.id - b.id),
+                                items: group.items
                           })),
                     };
                    
 
-                res.summary.addedItems.forEach((item: { productName: string, quantity: number, variantId: number }) => {
+                res.summary.addedItems.forEach((item: { productName: string, quantity: number, variantId: string }) => {
                     addedItems.push(item);
                 });
 
-                res.summary.failedItems.forEach((item: { productName: string, quantity: number, variantId: number, reason: string }) => {
+                res.summary.failedItems.forEach((item: { productName: string, quantity: number, variantId: string, reason: string }) => {
                     if (item.reason === 'Out of stock') {
                         outOfStockItems.push(item);
                     } else {
@@ -131,7 +131,7 @@ buyAgain(buyAgainItems: BuyAgain[]): Promise<Cart> {
 }
 
 
-     removeFromCart(cartItemId: number): Promise<Cart> {
+     removeFromCart(cartItemId: string): Promise<Cart> {
           return new Promise((resolve, reject) => {
                http.delete(`${endpoints.CART}/remove/${cartItemId}`)
                     .then((response) => {
@@ -145,7 +145,7 @@ buyAgain(buyAgainItems: BuyAgain[]): Promise<Cart> {
                           cartItems: combinedItems,
                           storeGroups: cartData.storeGroups.map((group: StoreGroupResponse) => ({
                                 ...group,
-                                items: group.items.sort((a, b) => a.id - b.id),
+                                items: group.items
                           })),
                     };
           
@@ -165,7 +165,7 @@ buyAgain(buyAgainItems: BuyAgain[]): Promise<Cart> {
           });
      }
 
-     updateItemQuantity(variantId: number, quantity: number): Promise<Cart> {
+     updateItemQuantity(variantId: string, quantity: number): Promise<Cart> {
           return new Promise((resolve, reject) => {
                http.put(`${endpoints.CART}/${variantId}`, { quantity })
                     .then((response) => {
@@ -182,7 +182,7 @@ buyAgain(buyAgainItems: BuyAgain[]): Promise<Cart> {
                           cartItems: combinedItems,
                           storeGroups: cartData.storeGroups.map((group: StoreGroupResponse) => ({
                                 ...group,
-                                items: group.items.sort((a, b) => a.id - b.id),
+                                items: group.items
                           })),
                     };
 
@@ -212,7 +212,7 @@ buyAgain(buyAgainItems: BuyAgain[]): Promise<Cart> {
                     cartItems: combinedItems,
                     storeGroups: cartData.storeGroups.map((group: StoreGroupResponse) => ({
                         ...group,
-                        items: group.items.sort((a, b) => a.id - b.id),
+                        items: group.items
                     })),
                 };
                 toast.success("Discount code applied successfully", { duration: 2000 });

@@ -2,8 +2,8 @@ import { useState } from "react";
 import { useCategories } from "../use-categories";
 import { usePathname } from "next/navigation";
 
-export const useStoreCategoryNavView = ({ storeId = 0 } = { storeId: 0 }) => {
-  const label = storeId === 0 ? "GLOBAL" : "STORE";
+export const useStoreCategoryNavView = ({ storeId = '' } = { storeId: '' }) => {
+  const label = storeId === '' ? "GLOBAL" : "STORE";
   const pathname = usePathname();
   const isWearsRoute = pathname.includes("wears");
   const { currentCategoryList, selectedCategory, setSelectedCategory } =

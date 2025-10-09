@@ -73,7 +73,7 @@ const OrderProcess = ({
   const isTimelineView =
     singleOrder.status === 'DELIVERED' && text === 'View all timelines'
 
-  const handleCancelOrder = (id: number, reasons?: string) => {
+  const handleCancelOrder = (id: string , reasons?: string) => {
     const finalReason = reasons || 'This order has been cancelled'
     cancelOrderById(id, finalReason, {})
   }

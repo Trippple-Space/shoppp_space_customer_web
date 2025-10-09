@@ -15,15 +15,15 @@ export interface ICategory {
 
 export interface ProductCategory {
   name?: any;
-  id: number;
+  id: string;
   label: string;
   type: "wears" | "fabrics" | null;
   categories: ICategory[];
-  storeId: number;
+  storeId: string;
 }
 
 export interface Discount {
-  id: number,
+  id: string,
   title: string,
   discountCode: string,
   discountType: string,
@@ -43,7 +43,7 @@ export interface Product {
   longDescription: string;
   shortDescription: string;
   keywords: string[];
-  id: number;
+  id: string;
   slug: string;
   price: number;
   discountedPrice?: number
@@ -52,7 +52,7 @@ export interface Product {
   name: string;
   stockUnit: string;
   status: number;
-  dateCreated: string;
+  createAt: string;
   lastUpdated: string;
   reviewRating: number;
   reviews: any;
@@ -72,7 +72,7 @@ export interface ProductMedia {
 }
 
 export interface ProductVariant {
-  id: number;
+  id: string;
   media: ProductMedia[];
   stock: number;
   price: number;
@@ -86,7 +86,7 @@ export interface ProductVariant {
   meta: null | any;
   properties: null | any;
   stockUnit: string;
-  dateCreated: string;
+  createAt: string;
   lastUpdated: string;
   preOrder?: boolean;
 }
@@ -117,9 +117,9 @@ export interface IFilters {
 
 
 export interface RecentlyViewed {
-  id: number;
-  productVariantId: number;
-  userId: number;
+  id: string;
+  productVariantId: string;
+  userId: string;
   type: string;
   productVariant: ProductVariant;
   createdAt: string;

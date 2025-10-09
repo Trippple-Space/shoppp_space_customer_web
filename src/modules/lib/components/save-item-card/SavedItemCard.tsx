@@ -8,7 +8,7 @@ import classNames from 'classnames'
 import { RecentlyViewed } from '../../utility/types/product.interface'
 
 interface SavedVariantProp {
-  showRemove: boolean, savedVariant: SavedVariant, recentVariant: RecentlyViewed, removeSavedVariant: (productVariantId: number) => void
+  showRemove: boolean, savedVariant: SavedVariant, recentVariant: RecentlyViewed, removeSavedVariant: (productVariantId: string) => void
 }
 
 const SavedVariantsCard: React.FC<any> = ({ savedVariant, removeSavedVariant, recentVariant, showRemove = true }: SavedVariantProp) => {

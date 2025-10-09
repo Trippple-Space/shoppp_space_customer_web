@@ -63,7 +63,7 @@ const ProductDetails = ({ product }: { product: Product }) => {
   const [showShareModal, setShowShareModal] = useState(false)
   const [showFullDescription, setShowFullDescription] = useState(false)
   const [showAllPhotos, setShowAllPhotos] = useState(false)
-  const [isOpen, setIsOpen] = useState<number | null>(null);
+  const [isOpen, setIsOpen] = useState<string | null>(null);
   const [isReviewModalOpen, setIsReviewModalOpen] = useState<boolean>(false)
   const selectedVariantItemInCart = cart.cartItems.find(
     item => item.variant.id === selectedVariant?.id
@@ -102,7 +102,7 @@ const ProductDetails = ({ product }: { product: Product }) => {
     }
   }
 
-  function handleLogin(variantId: number, minimumPurchase: number) {
+  function handleLogin(variantId: string, minimumPurchase: number) {
     localStorage.setItem('variantId', variantId.toString())
     localStorage.setItem('variantIdMinimumPurchase', minimumPurchase.toString())
     isLoginModal()
@@ -117,11 +117,10 @@ const ProductDetails = ({ product }: { product: Product }) => {
       const variantId = localStorage.getItem("variantId");
       const variantIdMinimumPurchase = localStorage.getItem("variantIdMinimumPurchase");
       if (variantId && variantIdMinimumPurchase) {
-        const parsedVariantId = parseInt(variantId, 10);
         const parsedMinimumPurchase = parseInt(variantIdMinimumPurchase, 10);
 
-        if (!isNaN(parsedVariantId) && !isNaN(parsedMinimumPurchase)) {
-          addToCart(parsedVariantId, parsedMinimumPurchase);
+        if (variantId && !isNaN(parsedMinimumPurchase)) {
+          addToCart(variantId, parsedMinimumPurchase);
 
         }
         localStorage.removeItem("variantId");

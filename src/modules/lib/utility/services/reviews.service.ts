@@ -9,7 +9,7 @@ class ReviewService {
         return http.get(endpoints.GET_ALL_REVIEWS).then((response: AxiosResponse) => response.data)
     }
 
-    getProductReviews(productVariantId: number) {
+    getProductReviews(productVariantId: string) {
         return http.get(replaceParamInEndpoint(endpoints.GET_PRODUCT_REVIEWS, "productVariantId", productVariantId)).then((response: AxiosResponse) => response.data)
     }
 
@@ -17,11 +17,11 @@ class ReviewService {
         return http.post(endpoints.CREATE_PRODUCT_REVIEW, data).then((response: AxiosResponse) => response.data)
     }
 
-    getReviewStat(productVariantId: number) {
+    getReviewStat(productVariantId: string) {
         return http.get(replaceParamInEndpoint(endpoints.GET_REVIEW_STATS, "productVariantId", productVariantId)).then((response: AxiosResponse) => response.data)
     }
 
-    getReviewStatDist(productVariantId: number) {
+    getReviewStatDist(productVariantId: string) {
         return http.get(replaceParamInEndpoint(endpoints.GET_REVIEW_STATS_DIST, "productVariantId", productVariantId)).then((response: AxiosResponse) => response.data)
     }
 }

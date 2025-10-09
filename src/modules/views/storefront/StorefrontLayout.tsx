@@ -35,7 +35,7 @@ const StorefrontLayout: FC<{ store: Store; children: ReactNode }> = ({
   const [newArrivals, setNewArrivals] = useState<Product[]>([]);
   const [dealsForYou, setDealsForYou] = useState<Product[]>([]);
   const [featuredProducts, setFeaturedProducts] = useState<Product[]>([]);
-  const [openReviewId, setOpenReviewId] = useState<number | null>(null);
+  const [openReviewId, setOpenReviewId] = useState<string | null>(null);
 
   const updateFilters = (filteredProducts: Product[]) => {
     setFilteredProducts(filteredProducts);

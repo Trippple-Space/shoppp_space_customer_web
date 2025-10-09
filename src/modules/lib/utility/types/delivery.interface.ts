@@ -1,5 +1,5 @@
 export interface IDeliveryDetails {
-    addressId: number,
+    addressId: string,
     deliveryType: string
 }
 
@@ -26,14 +26,14 @@ export interface DeliveryOption {
       title: string,  
       pickup: Array<{
     status: string | null;
-    storeId: number;
+    storeId: string;
     storeName: string;
   }>;
 
   vendorManaged: Array<{
     fee: number;
     status: string | null;
-    storeId: number;
+    storeId: string;
     storeName: string;
     estimatedTime: string | null;
   }>;

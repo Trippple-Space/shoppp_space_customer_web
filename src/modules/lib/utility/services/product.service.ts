@@ -15,7 +15,7 @@ class ProductService {
      async fetchProductCategories(
           type: "fabrics" | "wears" | null,
           label = "GLOBAL",
-          storeId = 0
+          storeId = ""
      ) {
           const cacheKey = `product/categories_${type}_${label}_${storeId}`;
           const cachedData = this.getCachedCategories(cacheKey);
@@ -207,14 +207,14 @@ class ProductService {
           });
      }
     
-    saveVariant(productVariantId: number): Promise<SavedVariant> {
+    saveVariant(productVariantId: string): Promise<SavedVariant> {
         return new Promise((resolve, reject) => {
             http.post(`${endpoints.SAVED_VARIANT}/${productVariantId}`).then((response: AxiosResponse) => {
                 resolve(response.data);
             })
         })
     }
-     removeSavedVariant(productVariantId: number) {
+     removeSavedVariant(productVariantId: string) {
         return new Promise((resolve, reject) => {
             http.delete(`${endpoints.SAVED_VARIANT}/${productVariantId}`).then((response: AxiosResponse) => {
                  resolve(response.data);
@@ -253,7 +253,7 @@ class ProductService {
           })
      }
 
-     addRecentlyViewedVariants(payload: { productVariantId: number, type?: string }) {     
+     addRecentlyViewedVariants(payload: { productVariantId: string, type?: string }) {     
           return new Promise((resolve, reject) => {
                http.post(endpoints.RECENTLY_VIEWED, payload).then((response) => resolve(response.data))
           })
@@ -266,7 +266,7 @@ class ProductService {
      }
 
      createProductReview(payload:
-          { productVariantId: number, rating: number, comment: string }) {
+          { productVariantId: string, rating: number, comment: string }) {
           return new Promise((resolve, reject) => {
                http.post(`${endpoints.PRODUCT_REVIEW}/create`, payload).then((response) => 
                resolve(response.data)

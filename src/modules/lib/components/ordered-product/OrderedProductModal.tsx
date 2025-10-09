@@ -1,4 +1,4 @@
-import { checkMediaType, ellipseText, formatNumberAsPrice, getCartItems } from '@/modules/lib/utility/utility'
+import { checkMediaType, ellipseText, formatNumberAsPrice, getCartItems, getLastFiveIdChars } from '@/modules/lib/utility/utility'
 import { IoMdClose } from 'react-icons/io'
 import Image from '../image/Image'
 import { PiArrowClockwise } from 'react-icons/pi'
@@ -19,10 +19,10 @@ const OrderedProductModal = ({
   handleOrderModal: () => void
   order: Order | undefined
 }) => {
-  const [expandedId, setExpandedId] = useState<number | null>(null) // Tracks which text is expanded
+  const [expandedId, setExpandedId] = useState<string | null>(null) // Tracks which text is expanded
   const { buyAgain, fetching } = useCart()
 
-  const handleTextClick = (id: number) => {
+  const handleTextClick = (id: string) => {
     setExpandedId(prevId => (prevId === id ? null : id))
   }
 
@@ -77,7 +77,7 @@ const OrderedProductModal = ({
                 </div>
               </div>
               <div className='p-15 px-25 flex a-items-center space-between border-b border-b-10 border-b-whitesmoke mt-50'>
-                <p className='text-14 weight-500'>#{order.id}</p>
+                <p className='text-14 weight-500'>#{getLastFiveIdChars(order.id)}</p>
                 <button
                   className='flex gap-10 a-items-center px-10 py-7 radius-5 border border-#00000026 bg-none cursor-pointer weight-500'
                   onClick={() => buyOrdersAgain(cartItems)}

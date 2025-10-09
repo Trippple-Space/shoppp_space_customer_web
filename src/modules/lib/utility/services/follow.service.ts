@@ -3,7 +3,7 @@ import http from "../http";
 import { replaceParamInEndpoint } from "../utility";
 
 class FollowService {
-  fetchStoreFollowers(storeId: number): Promise<number> {
+  fetchStoreFollowers(storeId: string): Promise<number> {
     return http
       .get(replaceParamInEndpoint(endpoints.GET_FOLLOWERS, "storeId", storeId))
       .then((response) => {
@@ -14,7 +14,7 @@ class FollowService {
       });
   }
 
-  fetchStoreFollowing(storeId: number) {
+  fetchStoreFollowing(storeId: string) {
     return http
       .get(replaceParamInEndpoint(endpoints.GET_FOLLOWING, "storeId", storeId))
       .then((response) => {
@@ -25,7 +25,7 @@ class FollowService {
       });
   }
 
-  followStore(storeId: number) {
+  followStore(storeId: string) {
     return http
       .post(replaceParamInEndpoint(endpoints.FOLLOW_STORE, "storeId", storeId))
       .then((response) => {
@@ -33,7 +33,7 @@ class FollowService {
       });
   }
 
-  unFollowStore(storeId: number) {
+  unFollowStore(storeId: string) {
     return http
       .post(
         replaceParamInEndpoint(endpoints.UNFOLLOW_STORE, "storeId", storeId)

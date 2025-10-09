@@ -29,7 +29,7 @@ import VideoSrc from "@/modules/lib/components/video-src/VideoSrc";
 
 type DeliveryOptionKey = 'standard' | 'express' | 'vendorManaged';
 type addressDeliveryPrice = {
-  addressId: number,
+  addressId: string,
   deliveryOptions: DeliveryOption,
   coordinates: {
     lat: string,
@@ -64,7 +64,7 @@ const CheckoutPage = () => {
            pickup: [
                {
                    "status": null,
-                   "storeId": 0,
+                   "storeId": '',
                    "storeName": ""
                }
            ],
@@ -73,7 +73,7 @@ const CheckoutPage = () => {
                {
                    "fee": 0,
                    "status": null,
-                   "storeId": 0,
+                   "storeId": '',
                    "storeName": "",
                    "estimatedTime": null
                }
@@ -106,7 +106,7 @@ const CheckoutPage = () => {
   const [devAddressError, setDevAddressError] = useState(false)
 
   const [shouldUpdateFee, setShouldUpdateFee] = useState(false);
-  const lastAddressRef = useRef<number | null>(null);
+  const lastAddressRef = useRef<string | null>(null);
 
 
 

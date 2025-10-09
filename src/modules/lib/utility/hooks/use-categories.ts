@@ -6,11 +6,11 @@ import { useEffect, useState, useRef } from "react";
 
 export const useCategories = ({
   type = "fabrics",
-  storeId = 0,
+  storeId = "",
   label = "GLOBAL"
 }: {
   type: "fabrics" | "wears" | null;
-  storeId?: number,
+  storeId?: string,
   label: "GLOBAL" | "STORE"
 }) => {
   const {

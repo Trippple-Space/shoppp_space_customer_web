@@ -6,11 +6,11 @@ type CartStore = {
      cart: Cart;
      fetching: boolean;
      fetchCart: (isCheckout?: boolean) => void;
-     addToCart: (variantId: number, quantity: number) => void;
+     addToCart: (variantId: string, quantity: number) => void;
      buyAgain: (buyAgainItems: BuyAgain[]) => void;
-     incrementCartItem: (variantId: number, quantity: number) => void;
-     decrementCartItem: (variantId: number, quantity: number) => void;
-     removeFromCart: (variantId: number) => void;
+     incrementCartItem: (variantId: string, quantity: number) => void;
+     decrementCartItem: (variantId: string, quantity: number) => void;
+     removeFromCart: (variantId: string) => void;
      isLoginModal: () => void;
      showLoginModal: boolean;
      applyDiscount: (code: string) => void;
@@ -21,14 +21,14 @@ type CartStore = {
 export const useCartStore = create<CartStore>((set) => ({
      cart: {
           cartItems: [],
-          id: 0,
-          userId: 0,
+          id: "",
+          userId: '',
           subTotal: 0,
           total: 0,
           totalDiscountedPrice: 0,
           totalDiscountValue: 0,
           meta: undefined,
-          dateCreated: "",
+          createAt: "",
           lastUpdated: "",
           storeGroups: [],
           discountValue: 0,
@@ -47,7 +47,7 @@ export const useCartStore = create<CartStore>((set) => ({
                set({ fetching: false });
           }
      },
-     addToCart: async (variantId: number, quantity: number = 1) => {
+     addToCart: async (variantId: string, quantity: number = 1) => {
        const updatedCart = await cartService.addToCart(variantId, quantity);
           set({ cart: updatedCart });
      },
@@ -56,15 +56,15 @@ export const useCartStore = create<CartStore>((set) => ({
           const updatedCart = await cartService.buyAgain(buyAgainItems);
           set({ cart: updatedCart , fetching: false});
      },
-     incrementCartItem: async (variantId: number, quantity: number = 1) => {
+     incrementCartItem: async (variantId: string, quantity: number = 1) => {
           const updatedCart = await cartService.addToCart(variantId, quantity);
           set({ cart: updatedCart });
      },
-     decrementCartItem: async (variantId: number, quantity: number = 1) => {
+     decrementCartItem: async (variantId: string, quantity: number = 1) => {
           const updatedCart = await cartService.addToCart(variantId, -quantity);
           set({ cart: updatedCart });
      },
-     removeFromCart: async (variantId: number) => {
+     removeFromCart: async (variantId: string) => {
           const updatedCart = await cartService.removeFromCart(variantId);
           set({ cart: updatedCart });
   },
