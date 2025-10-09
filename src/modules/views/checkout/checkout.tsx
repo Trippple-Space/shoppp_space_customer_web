@@ -291,8 +291,8 @@ const CheckoutPage = () => {
       <HomepageNavBar parent={"checkout"} />
       <div className="md:pt-69.6 pt-64 sm:mb-60 mb-111 h-full">
         <DeliveryMessage />
-        <div className="md:flex overflow-hidden" style={{ height: 'calc(100dvh - 128px)' }}>
-          <div className={`flex-grow-1 l:w-54.2p md:w-50p h-full overflow-auto no-scrollbar md:pt-44 sm:pt-32 pt-24 xl:pl-80 l:pl-70 md:pl-60 sm:pl-40 pl-24 xl:pr-80 l:pr-70 sm:pr-40 pr-24 flex flex-col gap-28 bg-white md:pb-90 ${showSummary ? "sm:pb-299 pb-347" : "sm:pb-99 pb-147"}`}>
+        <div className="md:flex overflow-hidden" style={{ height: 'calc(100dvh - 146px)' }}>
+          <div className={`flex-grow-1 l:w-54.2p md:w-50p h-full overflow-auto no-scrollbar md:pt-44 sm:pt-32 pt-24 xl:pl-80 l:pl-70 md:pl-60 sm:pl-40 pl-24 xl:pr-80 l:pr-70 sm:pr-40 pr-24 flex flex-col gap-28 bg-white md:pb-90 ${showSummary ? `${selectedAddress ? "sm:pb-320 pb-370" : "sm:pb-200 pb-247"}` : "sm:pb-99 pb-147"}`}>
             <div className="flex flex-col gap-6">
               <h1 className="weight-600 md:text-24 text-20 md:line-height-32 line-heigth-28">
                 Order Summary
@@ -540,7 +540,8 @@ const CheckoutPage = () => {
                       }
                       }
                       disabled={canProceedToPayment}
-                      className={`md:w-full sm:w-fit w-full border-none m:flex text-white md:text-16 text-14 weight-500 md:line-height-22 line-height-19 md:px-24 px-16 py-12 radius-6 l:float-right j-content-center ${!showSummary && 'sm:mt-0 mt-56'} ${canProceedToPayment ? 'bg-#0b9378ed cursor-not-allowed' : 'bg-#0B9378 pointer'}`}
+                      className={`md:w-full sm:w-fit w-full border-none m:flex text-white md:text-16 text-14 weight-500 md:line-height-22 line-height-19 md:px-24 px-16 py-12 radius-6 l:float-right j-content-center ${!showSummary && 'sm:mt-0 mt-56'} ${canProceedToPayment ? 'bg-#D1D5DB opacity-80 g|box-shadow:inset|_|0px|_|2px|_|4px|_|#0000001A color-#6B7280 cursor-not-allowed' : 'bg-#0B9378 pointer'}`}
+                      title={selectedAddress ? "" : "Add an address to proceed to payment"}
                     >
                       <span className="">
                         Proceed to payment{" "}

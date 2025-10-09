@@ -32,7 +32,7 @@ const AddressField: FC<AddressFieldProps> = ({
     (<div className="flex">
       {
         field?.toLocaleLowerCase()?.includes('contact') && (
-          <div className={`py-12 px-14 bg-#F3F3F3 border @lo:radius-t-l-8 @lo:radius-b-l-8 color-#545F71 text-16 h-fit flex flex-col a-self-center ${!!(formHandler.touched[field] && formHandler.errors[field]) ? 'xl:mt-3 mt-2 border-red' : isFocused ? 'xl:mt-27 mt-26 border-green' : 'xl:mt-27 mt-26 border-#00000026'}`}>+234</div>
+          <div className={`py-12 px-14 bg-#F3F3F3 border @lo:radius-t-l-8 @lo:radius-b-l-8 color-#545F71 text-16 h-47.2 flex flex-col a-self-center ${!!(formHandler.touched[field] && formHandler.errors[field]) ? 'l:mt-5 mt-3 border-red' : isFocused ? 'l:mt-29 mt-27 border-green' : 'l:mt-29 mt-27 border-#00000026'}`}>+234</div>
         )
       }
       <Input
@@ -56,7 +56,7 @@ const AddressField: FC<AddressFieldProps> = ({
         className={cx("w-full", className)}
         disabled={disabled}
         inputClass={cx(
-          "radius-6! p-12 w-full border-#6A6A6A4D text-16",
+          "radius-r-6! p-12 w-full border border-1 text-16",
           {
             "border-red": formHandler.touched[field] && formHandler.errors[field],
           },

@@ -19,7 +19,7 @@ interface AddressStore {
     addressId: string,
     updatedData: Partial<Address>
   ) => Promise<void>;
-  createAddress: (userId: string, newAddress: Address) => Promise<void>;
+  createAddress: (userId: string, newAddress: Address) => Promise<Address | null>;
   deleteAddress: (userId: string, addressId: Address["id"]) => Promise<void>;
 }
 
@@ -118,8 +118,10 @@ const useAddressStore = create<AddressStore>((set) => ({
 
         return { addresses: updatedAddresses };
       });
+      return address;
     } catch (error: any) {
       toast.error(error.response.data.detail.message?.[0]);
+      return null;
     }
   },
 
