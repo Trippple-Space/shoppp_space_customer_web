@@ -1,10 +1,10 @@
 'use client'
-import React, { FC, useEffect, useMemo, useState } from 'react'
+import React, { FC, useEffect, useMemo, useRef, useState } from 'react'
 import Image from '../image/Image'
 import { AiFillStar, AiFillHeart } from 'react-icons/ai'
 import classNames from 'classnames'
 import { Product, ProductVariant } from '../../utility/types/product.interface'
-import { checkMediaType, displayProductPill, formatNumberAsPrice } from '../../utility/utility'
+import { checkMediaType, displayProductPill, formatNumberAsPrice, handleFlyToCart, onGoingOrderStatusQuery } from '../../utility/utility'
 import { useCart } from '../../utility/hooks/use-cart'
 import QuantitySelector from '../quantity-selector/QuantitySelector'
 import Link from 'next/link'
@@ -19,6 +19,8 @@ import { IFetchedReview } from '../../utility/types/review.interface'
 import useGetRatingStats from '../../utility/hooks/use-get-rating-stats'
 import useTransformProduct from '../../utility/hooks/use-transform-product'
 import { useRecentlyViewedVariant } from '../../utility/hooks/use-recently-viewed'
+import { useOrders } from '../../utility/hooks/use-orders'
+import Button from '../button/Button'
 
 interface IProductTile {
   product: Product
@@ -29,11 +31,28 @@ interface IProductTile {
   id: string,
   isOpen: string | null,
   setIsOpen: React.Dispatch<React.SetStateAction<string | null>>
+  index?: number 
 }
-const ProductTile: FC<IProductTile> = ({ product, savedVariants, saveVariant, removeSavedVariant, allReviews, isOpen, setIsOpen }) => {
+const ProductTile: FC<IProductTile> = ({ product, savedVariants, saveVariant, removeSavedVariant, allReviews, isOpen, setIsOpen, index }) => {
   const { groupedData, availableColors } = useTransformProduct(product)
   const uniqueVariantsFromProductImages = availableColors.map((color) => groupedData?.[color][0])
+      const { orders } = useOrders({
+      filters: { status: { In: `${onGoingOrderStatusQuery},DELIVERED` } }
+    })
   //product?.variants.filter((variants: ProductVariant) => productImages.find(image => image === variants.media[0].url))
+
+const [seenAddToCartIconOnBoarding] = useState<boolean>(() => {
+  if (typeof window !== "undefined") {
+    const stored = localStorage.getItem("seenAddToCartIcon");
+    return stored ? JSON.parse(stored) : false;
+  }
+  return false;
+});
+
+  
+  
+  
+
 
   const [onProductTileHover, setOnProductTileHover] = useState(false)
   const [openSingleProductModal, setOpenSingleProductModal] = useState(false)
@@ -46,6 +65,9 @@ const ProductTile: FC<IProductTile> = ({ product, savedVariants, saveVariant, re
   const [selectedVariant, setSelectedVariant] = useState<ProductVariant>(
     product?.variants?.[0]
   );
+
+
+  
   const {
     addToCart,
     cart,
@@ -54,6 +76,8 @@ const ProductTile: FC<IProductTile> = ({ product, savedVariants, saveVariant, re
     isAuthenticated,
     isLoginModal
   } = useCart()
+    const imgRef = useRef<HTMLImageElement>(null);
+
   const variantIds = useMemo(() => product.variants.map((v: any) => v.id), [product.variants]);
   const { reviewStat, loading: statsLoading } = useGetRatingStats(variantIds);
   const { addVariant } = useRecentlyViewedVariant()
@@ -67,10 +91,16 @@ const ProductTile: FC<IProductTile> = ({ product, savedVariants, saveVariant, re
     setSelectedVariant(product?.variants?.[0]);
   }, [product?.id]);
 
+
+
   const [topTwoPills, setTopTwoPills] = useState<any[]>([]);
   useEffect(() => {
     const pills = displayProductPill(product?.tags)
     setTopTwoPills(pills)
+
+    if (!seenAddToCartIconOnBoarding) {
+      localStorage.setItem("seenAddToCartIcon", "true");
+    }
   }, [])
 
   const isSaved = savedVariants?.find((item: SavedVariant) => item.variantId === selectedVariant?.id)
@@ -127,8 +157,46 @@ const ProductTile: FC<IProductTile> = ({ product, savedVariants, saveVariant, re
   const isDiscounted = new Date(product?.discount?.activeStartDate) <= new Date(new Date().setHours(new Date().getHours() + 1)) && new Date(new Date().setHours(new Date().getHours() + 1)) <= new Date(product?.discount?.activeEndDate)
   const hasSize = !(groupedData?.[selectedColor]?.[0].size === null || groupedData?.[selectedColor]?.[0].size === '')
 
+
+
+
+  
+  
+  /* IF SHOWONBOARDINGMODAL IS TRUE, USER HAS ALREADY SEEN THE ONBOARDING AND IF IT'S FALSE, USER HAS NOT. IF THE MODAL STATE IS TRUE, THE MODAL DOES NOT SHOW ELSE, IT DOES. */
+
+  /* THE INDEX IS TO TRACK JUST ONE PRODUCT, WITHOUT IT, IT RENDERS AS MANY TIMES AS WE HAVE PRODUCT IN THE MAP */
+
+  const [showonBoardingModal, setShowOnBoardingModal] = useState(seenAddToCartIconOnBoarding &&  orders.length == 0 && cart.cartItems.length == 0);
+  const indexCount = index == 0
+
+
+
+  useEffect(() => {
+    if (!showonBoardingModal) {
+      document.body.style.overflow = "hidden";
+    }
+    console.log(!showonBoardingModal)
+  },[])
+
+
   return (
     <div className='mt-30 l:mt-20 w-full overflow-hidden'>
+      {!showonBoardingModal && indexCount && <div
+                     onClick={(e) => e.stopPropagation()}
+        style={{
+          position: "fixed",
+          top: 0,
+             inset: 0,
+            left: 0,
+            width: "100vw",
+          height: "100vh",
+          overflow: "hidden",
+            backgroundColor: "rgba(0, 0, 0, 0.4)",
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+            zIndex: 100,
+          }} ></div>}
       <div
         id='image'
         className='relative ratio-1 radius-10 g|overflow:hidden l:radius-15 w-full'
@@ -142,6 +210,7 @@ const ProductTile: FC<IProductTile> = ({ product, savedVariants, saveVariant, re
                 Out of stock
               </div>}
               <Image
+                ref={imgRef}
                 className={`absolute w-full h-full a-self-center g|object-fit:cover pointer ${isOutOfStock && 'out-of-stock'}`}
                 src={selectedImage}
                 alt="product-image"
@@ -197,32 +266,65 @@ const ProductTile: FC<IProductTile> = ({ product, savedVariants, saveVariant, re
                 }}
                 cartItem={selectedVariantItemInCart}
               />
-            ) : (
-              <>
+            ) : ( 
+                <>
+                  
+                 {!showonBoardingModal && indexCount && <div
+                      onClick={(e) => e.stopPropagation()}
+                      className='l:w-200 w-100  l:p-10 p-5 l:mb-10 b-70p  r-20'
+                      style={{
+                        position: "absolute",
+                        background: "white",
+                        borderRadius: "10px",
+                        zIndex: 1000,
+                      }}>
+                    <p className='weight-400'>This  is to add an item to your cart</p>
+
+                    <div onClick={() => setShowOnBoardingModal(true)}>
+
+                <button  className='bg-green text-white mt- l:mt-10 l:py-10 l:px-20 w-full py-5  radius-5 border-none hover:pointer text-13 l:text-14 font-inter 
+                hover:bg-darkgreen g|transition:0.5s  text-center'>Close</button>
+                  </div>
+                    </div>
+                  }
+                
+                  <div style={{ zIndex: !showonBoardingModal && indexCount  ? 1000 : 1 }} className=' round relative'>
+
                 {selectedVariant?.status !== 'OUT_OF_STOCK' ? <button
-                  onClick={() => {
-                    if (hasSize) {
-                      setIsToAddSize(true)
-                      handleCloseProductModal()
-                    } else {
-                      isAuthenticated
-                        ?
+                      onClick={() => {
+                        
+                        if (hasSize) {
+                          setShowOnBoardingModal(true);
+                          setIsToAddSize(true)              
+                          handleCloseProductModal()
+                        } else {
+                          setShowOnBoardingModal(true);
+                          if (isAuthenticated) {
+                            if (!localStorage.getItem("seenMiniCart")) {        
+                              window.dispatchEvent(new Event("showMiniCartOnboarding"));
+                              localStorage.setItem("seenMiniCart", "true");
+                            }
                         addToCart(
                           selectedVariant.id,
-                          selectedVariant.minPurchaseQuantity || 1
-                        )
-                        : handleLogin(selectedVariant.id,
+                          selectedVariant.minPurchaseQuantity || 1)
+                      } else {
+                        handleLogin(selectedVariant.id,
                           selectedVariant.minPurchaseQuantity || 1);
+                      }
                     }
                   }}
                   disabled={!selectedImage}
                   className={classNames(
-                    "bg-#FACE33 shadow-0-4-8-0-#00000033 hover:shadow-0-8-8-0-#00000033 text-black! disabled:bg-gray-200 disabled:cursor-not-allowed hover:scale-1.06 g|transition:0.5s g|will-change:transform pointer font-roboto border-hidden outline-none s:p-14 p-12 round flex a-items-center j-items-center gap-10")}
+                    `bg-#FACE33 shadow-0-4-8-0-#00000033 hover:shadow-0-8-8-0-#00000033 text-black! disabled:bg-gray-200 disabled:cursor-not-allowed hover:scale-1.06 g|transition:0.5s g|will-change:transform pointer font-roboto border-hidden outline-none s:p-14 p-12 round flex a-items-center j-items-center gap-10`)}
                 >
                   <PiShoppingCartFill className="s:w-22 w-20 s:h-22 h-20" />
                 </button> : ''
-                }
-              </>
+                  }
+                  </div>
+                  </>
+                  
+
+
             )}
           </div>
         </div>

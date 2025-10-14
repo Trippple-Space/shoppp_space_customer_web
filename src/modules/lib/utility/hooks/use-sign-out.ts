@@ -11,7 +11,7 @@ export const useSignOut = () => {
     deAuthenticateUser();
     authService.signOut()
     window.location.reload()
-    // router.push(paths.login);
+   
   };
 
   return signOut;

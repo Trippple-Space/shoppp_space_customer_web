@@ -285,8 +285,10 @@ const MiniCart: React.FC<ModalProps> = ({
           >
             <p className='h-30 w-30 flex a-items-center j-content-center bg-#0B9378 radius-6 color-white weight-500'>
               <span>{cart.cartItems.length}</span>
-            </p>
+              </p>
+        <span className="cart-icon" style={{ position: "relative", display:"inline-block" }}>
             <PiShoppingCartBold className='color-black  w-18 h-18' />
+              </span>
           </div>
         </div>
       }

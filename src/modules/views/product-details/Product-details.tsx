@@ -2,7 +2,7 @@
 import Footer from '@/modules/lib/components/footer/Footer'
 import Image from '@/modules/lib/components/image/Image'
 import Modal from '@/modules/lib/components/modal/modal'
-import { useEffect, useState, useMemo } from 'react'
+import { useEffect, useState, useMemo, useRef } from 'react'
 import { AiFillHeart, AiOutlineClose, AiOutlineHeart } from 'react-icons/ai'
 import HomepageNavBar from '@/modules/lib/components/nav-bar/HomepageNavBar'
 import QuantitySelector from '@/modules/lib/components/quantity-selector/QuantitySelector'
@@ -17,6 +17,8 @@ import {
   checkMediaType,
   cx,
   formatNumberAsPrice,
+  handleFlyToCart,
+  onGoingOrderStatusQuery,
 } from '@/modules/lib/utility/utility'
 import { Rating, Star } from '@smastrom/react-rating'
 import classNames from 'classnames'
@@ -33,6 +35,7 @@ import useGetProductRating from '@/modules/lib/utility/hooks/use-get-review'
 import colorNames from '@/modules/lib/utility/json-data/colors.json'
 import VideoSrc from '@/modules/lib/components/video-src/VideoSrc'
 import { AddReview } from './reviews/AddReview'
+import { useOrders } from '@/modules/lib/utility/hooks/use-orders'
 
 const ProductDetails = ({ product }: { product: Product }) => {
 
@@ -68,6 +71,10 @@ const ProductDetails = ({ product }: { product: Product }) => {
   const selectedVariantItemInCart = cart.cartItems.find(
     item => item.variant.id === selectedVariant?.id
   )
+  const { orders } = useOrders({
+    filters: { status: { In: `${onGoingOrderStatusQuery},DELIVERED` } }
+  })
+     const imgRef = useRef<HTMLImageElement>(null);
 
   useEffect(() => {
     setSelectedImage(product?.variants?.[0]?.media?.[0]?.url)
@@ -147,6 +154,9 @@ const ProductDetails = ({ product }: { product: Product }) => {
             className={classNames(`text-white border-none l:px-24 l:py-12 py-15 w-100p radius-6 pointer  hover:bg-darkgreen ${selectedVariant && selectedVariant.status === 'OUT_OF_STOCK' ? 'bg-gray-300' : 'bg-#0B9378'}`)}
             onClick={() => {
               if (isAuthenticated) {
+                if (orders.length == 0 && cart.cartItems.length == 0) {
+                  handleFlyToCart(imgRef);
+                }
                 if (selectedVariant && selectedVariant.status !== 'OUT_OF_STOCK') {
                   addToCart(
                     selectedVariant?.id ?? 0,
@@ -218,6 +228,7 @@ const ProductDetails = ({ product }: { product: Product }) => {
                   src={selectedImage}
                   className={`flex-grow-1 h-full radius-8 l:radius-t-l-16 l:radius-b-l-16 l:radius-b-r-0 l:radius-t-r-0   w-full h-full a-self-center object-fit-cover ${isOutOfStock && 'out-of-stock'}`}
                   alt={''}
+                  ref={imgRef}
 
                 />
                 :

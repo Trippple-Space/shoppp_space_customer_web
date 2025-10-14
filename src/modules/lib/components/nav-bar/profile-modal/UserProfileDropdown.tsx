@@ -40,7 +40,7 @@ const UserProfileDropdown: FC<IUserProfileDropdown> = ({
   {/*'ratings & reviews', */}
 
 
-  console.log({user})
+
   return (
     <>
       {/* Overlay */}

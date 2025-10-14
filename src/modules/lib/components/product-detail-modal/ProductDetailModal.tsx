@@ -1,10 +1,10 @@
 import classNames from 'classnames'
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 import { IoMdClose } from 'react-icons/io'
 import Link from 'next/link'
 import { ProductVariant } from '../../utility/types/product.interface'
 import { useCart } from '../../utility/hooks/use-cart'
-import { checkMediaType, cx, formatNumberAsPrice } from '../../utility/utility'
+import { checkMediaType, cx, formatNumberAsPrice, handleFlyToCart } from '../../utility/utility'
 import QuantitySelector from '../quantity-selector/QuantitySelector'
 import Image from '../image/Image'
 import { MdArrowBackIos, MdArrowForwardIos } from 'react-icons/md'
@@ -103,6 +103,8 @@ const ProductDetailModal = ({
   const maxDisplayDescLength = 20
   const hasSize = !(groupedData?.[selectedColor][0].size === null || groupedData?.[selectedColor][0].size === '')
 
+      const imgRef = useRef<HTMLImageElement>(null);
+
   return (
     <div>
       {openSingleProductModal && (
@@ -154,6 +156,7 @@ const ProductDetailModal = ({
                                     {
                                       mediaType === 'image' ?
                                         <Image
+                                          ref={imgRef}
                                           src={selectedImage}
                                           alt={variant?.product?.name || 'Product'}
                                           className={`object-fit w-full h-full ${selectedVariant?.status === 'OUT_OF_STOCK' ? 'greyscale' : ''}`}
@@ -177,6 +180,7 @@ const ProductDetailModal = ({
                                       return (<div
                                         key={vari.id}
                                         onClick={() => {
+                                          
                                           setSelectedVariant(vari)
                                           setSelectedImage(mediaItem?.url)
                                           setSelectedColor(vari.properties.color)
@@ -329,6 +333,10 @@ const ProductDetailModal = ({
                                       disabled={selectedVariant && selectedVariant.status === 'OUT_OF_STOCK'}
                                       onClick={() => {
                                         if (isAuthenticated) {
+                                          if (!localStorage.getItem("seenMiniCart")) {        
+                              window.dispatchEvent(new Event("showMiniCartOnboarding"));
+                              localStorage.setItem("seenMiniCart", "true");
+                            }
                                           if (selectedVariant && selectedVariant.status !== 'OUT_OF_STOCK') {
                                             addToCart(
                                               selectedVariant?.id ?? '0',

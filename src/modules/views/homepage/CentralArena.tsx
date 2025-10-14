@@ -16,6 +16,7 @@ const CentralArena = () => {
   const [openReviewId, setOpenReviewId] = useState<string | null>(null);
   const renderedIds = new Set<string>();
 
+  
   return (
     <>
       <section className='md:mt-32 mt-24 w-100p mb-150 pb-90'>
@@ -55,7 +56,7 @@ const CentralArena = () => {
                 products.length ?
                   <div className='grid xxlgrid-5-cols xl:grid-4-cols-1fr s:grid-3-cols-1fr grid-2-cols-1fr flex-wrap gap-18 s:gap-20 md:gap-24 w-full relative'>
                     {
-                      products.map((product) => {
+                      products.map((product, index) => {
                         if (renderedIds.has(product.id)) {
                           return null;
                         }
@@ -70,6 +71,7 @@ const CentralArena = () => {
                           id={product.id}
                           isOpen={openReviewId}
                           setIsOpen={setOpenReviewId}
+                          index={index}
                         />;
                       })
                     }

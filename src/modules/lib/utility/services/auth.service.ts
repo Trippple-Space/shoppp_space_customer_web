@@ -26,12 +26,12 @@ class AuthService {
         });
     }
 
-    signOut() {
-        localStorage.removeItem('token')
-        localStorage.removeItem("variantId");
-        localStorage.removeItem("variantIdMinimumPurchase");
-
-        
+  signOut() {
+    localStorage.removeItem('token')
+    localStorage.removeItem("variantId");
+    localStorage.removeItem("variantIdMinimumPurchase");
+    // window.location.reload()
+    router.push(paths.homepage);
     }
 
   validateAuth(): Promise<User | null> {

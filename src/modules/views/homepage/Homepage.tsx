@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import FabricsCategoryNav from "@/modules/lib/components/nav-bar/category-nav/FabricsCategoryNav";
 import Footer from "@/modules/lib/components/footer/Footer";
 import HomepageNavBar from "@/modules/lib/components/nav-bar/HomepageNavBar";
@@ -11,6 +11,9 @@ import Filters from "@/modules/lib/components/nav-bar/FiltersNav/FiltersComponen
 const Homepage = () => {
   const { categories, setSelectedCategory, selectedCategory } =
     useStoreCategoryNavView();
+
+
+  
 
   return (
     <>

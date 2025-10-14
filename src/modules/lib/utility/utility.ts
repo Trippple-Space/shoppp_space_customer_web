@@ -359,6 +359,72 @@ export function getLastFiveIdChars(id: string): string {
 
 
 
+
+
+
+
+export const handleFlyToCart = (imgRef: React.RefObject<HTMLImageElement>) => {
+  if (typeof window === "undefined") return;
+
+  // Only run once
+  const hasSeen = localStorage.getItem("seenCartAnimation");
+  if (hasSeen) return;
+
+   const cartIcon = document.querySelector(".cart-icon") as HTMLElement | null;
+  const img = imgRef.current as HTMLImageElement | null;
+  if (!cartIcon || !img) return;
+
+  const imgRect = img.getBoundingClientRect();
+  const cartRect = cartIcon.getBoundingClientRect();
+
+  const scrollX = window.scrollX || document.documentElement.scrollLeft;
+  const scrollY = window.scrollY || document.documentElement.scrollTop;
+  const viewportOffsetY = window.visualViewport?.offsetTop || 0;
+
+  const imgX = imgRect.left + scrollX;
+  const imgY = imgRect.top + scrollY + viewportOffsetY;
+  const cartX = cartRect.left + scrollX;
+  const cartY = cartRect.top + scrollY + viewportOffsetY;
+
+  const clone = img.cloneNode(true) as HTMLImageElement;
+  Object.assign(clone.style, {
+    position: "fixed",
+    left: `${imgX}px`,
+    top: `${imgY}px`,
+    width: `${imgRect.width}px`,
+    height: `${imgRect.height}px`,
+    zIndex: "99999",
+    transition: "transform 0.8s cubic-bezier(0.2, 0.8, 0.2, 1), opacity 0.8s",
+    transform: "translate3d(0, 0, 0)",
+    pointerEvents: "none",
+  });
+  document.body.appendChild(clone);
+
+  const deltaX = cartX + cartRect.width / 2 - (imgX + imgRect.width / 2);
+  const deltaY = cartY + cartRect.height / 2 - (imgY + imgRect.height / 2);
+
+  requestAnimationFrame(() => {
+    clone.style.transform = `translate(${deltaX}px, ${deltaY}px) scale(0.2)`;
+    clone.style.opacity = "0.3";
+  });
+
+  clone.addEventListener("transitionend", () => {
+    clone.remove();
+    cartIcon.classList.remove("cart-bounce");
+    void cartIcon.offsetWidth;
+    cartIcon.classList.add("cart-bounce");
+    setTimeout(() => cartIcon.classList.remove("cart-bounce"), 300);
+  }, { once: true });
+
+
+
+
+
+
+  localStorage.setItem("seenCartAnimation", "true");
+};
+
+
 /*
 [
   "Abia",
@@ -397,3 +463,4 @@ export function getLastFiveIdChars(id: string): string {
   "Zamfara",
 ]
 */
+
