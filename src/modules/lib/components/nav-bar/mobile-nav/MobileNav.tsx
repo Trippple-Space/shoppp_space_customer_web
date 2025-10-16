@@ -162,7 +162,7 @@ const MobileNav: FC<IMobileNav> = ({
                   }`}
               >
                 <Link
-                  href={config.VENDOR_CENTER_HOST}
+                  href={config.VENDOR_CENTER_SIGNUP}
                   target='_blank'
                   className='py-10 hover:bg-grey-100 sm:px-36 px-24 g|transition:0.3s'
                 >
