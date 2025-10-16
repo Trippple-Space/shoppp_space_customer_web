@@ -49,6 +49,7 @@ const ProductDetails = ({ product }: { product: Product }) => {
   const [selectedImage, setSelectedImage] = useState(
     uniqueVariantsFromProductImages[0]?.media?.[0]?.url
   )
+  const [selectedSize, setSelectedSize] = useState<string | undefined>(undefined);
   const { saveVariant, savedVariants, removeSavedVariant } = useSavedVariant();
   const {
     addToCart,
@@ -140,15 +141,37 @@ const ProductDetails = ({ product }: { product: Product }) => {
     setSelectedVariant(groupedData?.[selectedColor]?.[0])
   }, [selectedColor])
 
+  useEffect(() => {
+    if (!selectedSize && groupedData && selectedColor && groupedData[selectedColor]?.length) {
+      const firstVariantWithSize = groupedData[selectedColor].find(
+        (v: ProductVariant) => v.size && v.size.length > 0
+      );
+
+      if (firstVariantWithSize) {
+        const firstAvailableSize = firstVariantWithSize.size.find(
+          (s: { size: string; isAvailable: boolean; quantity: number }) =>
+            s.isAvailable && s.quantity > 0
+        );
+
+        if (firstAvailableSize) {
+          setSelectedVariant(firstVariantWithSize);
+          setSelectedSize(firstAvailableSize.size);
+        }
+      }
+    }
+  }, [groupedData, selectedColor, selectedSize]);
+
   const isOutOfStock = selectedVariant?.status === 'OUT_OF_STOCK';
   const isDiscounted = new Date() <= new Date(product?.discount?.activeEndDate)
-  const hasSize = !(groupedData?.[selectedColor][0].size === null || groupedData?.[selectedColor][0].size === '')
+  const hasSize = (groupedData?.[selectedColor][0]?.size.length !== 0)
 
   const addToCartBtn = () => {
     return <div className='flex flex-col gap-16'>
       <p className='text-24 weight-600'>{formatNumberAsPrice(selectedVariant.finalPrice)}</p>
 
-      {!selectedVariantItemInCart ?
+      {
+        hasSize && !selectedSize ? "" 
+        : !selectedVariantItemInCart ?
         (
           <button
             className={classNames(`text-white border-none l:px-24 l:py-12 py-15 w-100p radius-6 pointer  hover:bg-darkgreen ${selectedVariant && selectedVariant.status === 'OUT_OF_STOCK' ? 'bg-gray-300' : 'bg-#0B9378'}`)}
@@ -180,7 +203,9 @@ const ProductDetails = ({ product }: { product: Product }) => {
           decrement={() => decrement(selectedVariantItemInCart)}
           increment={() => increment(selectedVariantItemInCart)}
           cartItem={selectedVariantItemInCart}
-        />}
+          selectedSize={selectedVariantItemInCart?.sizes?.find((size) => size.size === selectedSize)}
+        />
+      }
     </div>
   }
 
@@ -478,31 +503,42 @@ const ProductDetails = ({ product }: { product: Product }) => {
                     Select size:
                   </p>
                   <div className='flex gap-6 a-items-center'>
-                    {
-                      groupedData?.[selectedColor]?.map((variant: ProductVariant, i: number) => (
-                        variant?.size && (
+                    {groupedData?.[selectedColor]?.map((variant: ProductVariant, i: number) =>
+                      variant?.size?.map((v, idx) => {
+                        const isActive = selectedVariant?.id === variant.id && selectedSize === v.size;
+
+                        if (!v.isAvailable || v.quantity === 0) {
+                          return null
+                        }
+
+                        return (
                           <label
-                            key={variant.id}
+                            key={v.size + idx}
                             className={cx(
-                              'flex gap-8 text-14 bg-#F3F3F3 color-#000000CC px-10 py-7 radius-6 pointer',
+                              `flex gap-8 text-14 bg-#F3F3F3 color-#000000CC px-10 py-7 radius-6 ${!v.isAvailable || v.quantity === 0 ? "cursor-default" : "pointer"} transition-colors`,
                               {
-                                'bg-#DEFFF9! color-#0B9378!': variant?.id === selectedVariant?.id
-                              }
+                                'bg-#DEFFF9! color-#0B9378! border-#0B9378! border':
+                                  isActive,
+                              },
                             )}
+                            title={!v.isAvailable || v.quantity === 0 ? "This size is currently out of stock or unavailabe" : ""}
                           >
                             <input
-                              type='radio'
-                              name={`size${i}`}
-                              onClick={() => setSelectedVariant(variant)}
-                              className={cx('accent-#0B9378 pointer')}
-                              checked={variant?.id === selectedVariant?.id}
-                              onChange={() => setSelectedVariant(variant)}
+                              type="radio"
+                              name={`size-${idx}-${i}`}
+                              onChange={() => {
+                                setSelectedVariant(variant);
+                                setSelectedSize(v.size);
+                              }}
+                              className={cx('accent-#0B9378 pointer disabled:cursor-default')}
+                              checked={isActive}
+                              disabled={!v.isAvailable || v.quantity === 0}
                             />
-                            <span className={`whitespace-nowrap text-12`}>{variant?.size}</span>
+                            <span className="whitespace-nowrap text-12">{v.size}</span>
                           </label>
-                        )
-                      ))
-                    }
+                        );
+                      })
+                    )}
                   </div>
                 </div>
               }
@@ -617,31 +653,42 @@ const ProductDetails = ({ product }: { product: Product }) => {
                       Select size:
                     </p>
                     <div className='flex gap-6 a-items-center no-scrollbar' style={{ width: '100%', overflow: 'auto' }}>
-                      {
-                        groupedData?.[selectedColor]?.map((variant: ProductVariant, i: number) => (
-                          variant?.size && (
+                      {groupedData?.[selectedColor]?.map((variant: ProductVariant, i: number) =>
+                        variant?.size?.map((v, idx) => {
+                          const isActive = selectedVariant?.id === variant.id && selectedSize === v.size;
+
+                          if (!v.isAvailable || v.quantity === 0) {
+                            return null
+                          }
+
+                          return (
                             <label
-                              key={variant.id}
+                              key={v.size + idx}
                               className={cx(
-                                'flex gap-8 text-14 bg-#F3F3F3 color-#000000CC px-10 py-7 radius-6 pointer',
+                                `flex gap-8 text-14 bg-#F3F3F3 color-#000000CC px-10 py-7 radius-6 ${!v.isAvailable || v.quantity === 0 ? "cursor-default" : "pointer"} transition-colors`,
                                 {
-                                  'bg-#DEFFF9! color-#0B9378!': variant?.id === selectedVariant?.id
+                                  'bg-#DEFFF9! color-#0B9378! border-#0B9378! border':
+                                    isActive,
                                 }
                               )}
+                              title={!v.isAvailable || v.quantity === 0 ? "This size is currently out of stock or unavailabe" : ""}
                             >
                               <input
-                                type='radio'
+                                type="radio"
                                 name={`size-${i}`}
-                                onClick={() => setSelectedVariant(variant)}
-                                className={cx('accent-#0B9378 pointer')}
-                                checked={variant?.id === selectedVariant?.id}
-                                onChange={() => setSelectedVariant(variant)}
+                                onChange={() => {
+                                  setSelectedVariant(variant);
+                                  setSelectedSize(v.size);
+                                }}
+                                className={cx('accent-#0B9378 pointer disabled:cursor-default')}
+                                checked={isActive}
+                                disabled={!v.isAvailable || v.quantity === 0}
                               />
-                              <span className={`whitespace-nowrap text-12`}>{variant?.size}</span>
+                              <span className="whitespace-nowrap text-12">{v.size}</span>
                             </label>
-                          )
-                        ))
-                      }
+                          );
+                        })
+                      )}
                     </div>
                   </div>
                 }
@@ -722,7 +769,6 @@ const ProductDetails = ({ product }: { product: Product }) => {
           )}
         </div>
       </Modal>
-
       <Modal
         isOpen={isReviewModalOpen && !reviewsLoading && !statsLoading}
         onClose={() => { setIsReviewModalOpen(false) }}

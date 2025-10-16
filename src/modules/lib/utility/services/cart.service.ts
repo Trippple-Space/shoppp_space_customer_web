@@ -5,238 +5,238 @@ import { BuyAgain, Cart, CartItem, StoreGroupResponse } from "../types/cart.inte
 import { toast } from "sonner";
 
 class CartService {
-     fetchCart(isCheckout?: boolean): Promise<Cart> {
-          return new Promise((resolve, reject) => {
-               http.get(isCheckout ? endpoints.CHECKOUTCART : endpoints.CART)
-                 .then((response: AxiosResponse) => {
-                      
-                   const cartData = response.data;
-                   let combinedItems: CartItem[] = [];
+    fetchCart(isCheckout?: boolean): Promise<Cart> {
+        return new Promise((resolve, reject) => {
+            http.get(isCheckout ? endpoints.CHECKOUTCART : endpoints.CART)
+                .then((response: AxiosResponse) => {
 
-                   combinedItems = cartData.storeGroups?.flatMap((group: StoreGroupResponse) => group.items);
+                    const cartData = response.data;
+                    let combinedItems: CartItem[] = [];
 
-                    const combinedCart: Cart = {
-                          ...cartData,
-                          cartItems: combinedItems,
-                          storeGroups: cartData.storeGroups.map((group: StoreGroupResponse) => ({
-                                ...group,
-                                items: group.items
-                          })),
-                    };
-
-                   
-
-                   resolve(combinedCart);
-                    })
-                    .catch((error) => {
-                         reject();
-                    });
-          });
-     }
-
-     addToCart(variantId: string, quantity: number): Promise<Cart> {
-          
-          return new Promise((resolve, reject) => {
-           
-                    
-               http.post(endpoints.CART, { variantId, quantity })
-                 .then((response) => {
-                      
-                      this.fetchCart()
-                        .then((updatedCartData) => {
-                                   resolve(updatedCartData);
-                              })
-                              .catch((error) => {
-                                   reject(error);
-                              });
-                    })
-                    .catch((error) => {
-                         reject(error);
-                    });
-          });
-     }
-
-buyAgain(buyAgainItems: BuyAgain[]): Promise<Cart> {
-    const outOfStockItems: { productName: string; quantity: number; variantId: string }[] = [];
-    const otherFailedReasons: { productName: string; quantity: number; variantId: string; reason: string }[] = [];
-    const addedItems: { productName: string; quantity: number; variantId: string }[] = [];
-
-    return new Promise((resolve, reject) => {
-
-
-        http.post(endpoints.MULTIPLECART, { items: buyAgainItems })
-            .then((response) => {
-                const res = response.data;
-              const cartData = res.cart;
-              
-
-                   let combinedItems: CartItem[] = [];
-                   
-                   combinedItems = cartData.storeGroups?.flatMap((group: StoreGroupResponse) => group.items);
+                    combinedItems = cartData.storeGroups?.flatMap((group: StoreGroupResponse) => group.items);
 
                     const combinedCart: Cart = {
-                          ...cartData,
-                          cartItems: combinedItems,
-                          storeGroups: cartData.storeGroups.map((group: StoreGroupResponse) => ({
-                                ...group,
-                                items: group.items
-                          })),
-                    };
-                   
-
-                res.summary.addedItems.forEach((item: { productName: string, quantity: number, variantId: string }) => {
-                    addedItems.push(item);
-                });
-
-                res.summary.failedItems.forEach((item: { productName: string, quantity: number, variantId: string, reason: string }) => {
-                    if (item.reason === 'Out of stock') {
-                        outOfStockItems.push(item);
-                    } else {
-                        otherFailedReasons.push(item);
-                    }
-                });
-
-                // Combine error messages into one toast
-                const errorMessages = [];
-                if (outOfStockItems.length > 0) {
-                    errorMessages.push(`${outOfStockItems.length} item(s) are out of stock`);
-                }
-                if (otherFailedReasons.length > 0) {
-                    errorMessages.push(`${otherFailedReasons.length} item(s) failed to add to cart`);
-                }
-                if (errorMessages.length > 0) {
-                    toast.error(
-                        `${errorMessages.join(", ")}. ${addedItems.length} item(s) added to cart`,
-                        { duration: 2000 }
-                    );
-                }
-
-           
-
-                this.fetchCart()
-                    .then((updatedCartData) => {
-                   resolve(combinedCart);
-                        resolve(updatedCartData);
-                    })
-                    .catch((error) => {
-                        reject(error);
-                    }).finally(() => {
-                        toast.success("Cart updated successfully", { duration: 2000 });
-                    })
-            })
-            .catch((error) => {
-                reject(error);
-            });
-    });
-}
-
-
-     removeFromCart(cartItemId: string): Promise<Cart> {
-          return new Promise((resolve, reject) => {
-               http.delete(`${endpoints.CART}/remove/${cartItemId}`)
-                    .then((response) => {
-                         const cartData = response.data;
-                   let combinedItems: CartItem[] = [];
-                   
-                   combinedItems = cartData.storeGroups?.flatMap((group: StoreGroupResponse) => group.items);
-
-                    const combinedCart: Cart = {
-                          ...cartData,
-                          cartItems: combinedItems,
-                          storeGroups: cartData.storeGroups.map((group: StoreGroupResponse) => ({
-                                ...group,
-                                items: group.items
-                          })),
-                    };
-          
-                           this.fetchCart()
-                    .then((updatedCartData) => {
-                   resolve(combinedCart);
-                        resolve(updatedCartData);
-                    })
-                    .catch((error) => {
-                        reject(error);
-                    });
-                    
-                    })
-                    .catch((error) => {
-                         reject(error);
-                    });
-          });
-     }
-
-     updateItemQuantity(variantId: string, quantity: number): Promise<Cart> {
-          return new Promise((resolve, reject) => {
-               http.put(`${endpoints.CART}/${variantId}`, { quantity })
-                    .then((response) => {
-                         const cartData = response.data;
-      
-              
-
-                   let combinedItems: CartItem[] = [];
-                   
-                   combinedItems = cartData.storeGroups?.flatMap((group: StoreGroupResponse) => group.items);
-
-                    const combinedCart: Cart = {
-                          ...cartData,
-                          cartItems: combinedItems,
-                          storeGroups: cartData.storeGroups.map((group: StoreGroupResponse) => ({
-                                ...group,
-                                items: group.items
-                          })),
+                        ...cartData,
+                        cartItems: combinedItems,
+                        storeGroups: cartData.storeGroups.map((group: StoreGroupResponse) => ({
+                            ...group,
+                            items: group.items
+                        })),
                     };
 
-                   
 
-                   resolve(combinedCart);
-                    })
-                    .catch((error) => {
-                         reject(error);
-                    });
-          });
-     }
-  
-  applyDiscountCode(code: string): Promise<Cart> {
-    return new Promise((resolve, reject) => {
-      http.post(`${endpoints.CART}/apply-discount`, {
-        "discountCode": code        
-      })
-            .then((response) => {
-                const cartData = response.data;
-                let combinedItems: CartItem[] = [];
 
-                combinedItems = cartData.storeGroups?.flatMap((group: StoreGroupResponse) => group.items);
-
-                const combinedCart: Cart = {
-                    ...cartData,
-                    cartItems: combinedItems,
-                    storeGroups: cartData.storeGroups.map((group: StoreGroupResponse) => ({
-                        ...group,
-                        items: group.items
-                    })),
-                };
-                toast.success("Discount code applied successfully", { duration: 2000 });
-              this.fetchCart(true).then((updatedCartData) => {
-                    resolve(updatedCartData);
                     resolve(combinedCart);
-                }).catch((error) => {
+                })
+                .catch((error) => {
+                    reject();
+                });
+        });
+    }
+
+    addToCart(variantId: string, quantity: number, size?: string): Promise<Cart> {
+
+        return new Promise((resolve, reject) => {
+
+
+            http.post(endpoints.CART, { variantId, quantity, size })
+                .then((response) => {
+
+                    this.fetchCart()
+                        .then((updatedCartData) => {
+                            resolve(updatedCartData);
+                        })
+                        .catch((error) => {
+                            reject(error);
+                        });
+                })
+                .catch((error) => {
                     reject(error);
                 });
+        });
+    }
+
+    buyAgain(buyAgainItems: BuyAgain[]): Promise<Cart> {
+        const outOfStockItems: { productName: string; quantity: number; variantId: string }[] = [];
+        const otherFailedReasons: { productName: string; quantity: number; variantId: string; reason: string }[] = [];
+        const addedItems: { productName: string; quantity: number; variantId: string }[] = [];
+
+        return new Promise((resolve, reject) => {
+
+
+            http.post(endpoints.MULTIPLECART, { items: buyAgainItems })
+                .then((response) => {
+                    const res = response.data;
+                    const cartData = res.cart;
+
+
+                    let combinedItems: CartItem[] = [];
+
+                    combinedItems = cartData.storeGroups?.flatMap((group: StoreGroupResponse) => group.items);
+
+                    const combinedCart: Cart = {
+                        ...cartData,
+                        cartItems: combinedItems,
+                        storeGroups: cartData.storeGroups.map((group: StoreGroupResponse) => ({
+                            ...group,
+                            items: group.items
+                        })),
+                    };
+
+
+                    res.summary.addedItems.forEach((item: { productName: string, quantity: number, variantId: string }) => {
+                        addedItems.push(item);
+                    });
+
+                    res.summary.failedItems.forEach((item: { productName: string, quantity: number, variantId: string, reason: string }) => {
+                        if (item.reason === 'Out of stock') {
+                            outOfStockItems.push(item);
+                        } else {
+                            otherFailedReasons.push(item);
+                        }
+                    });
+
+                    // Combine error messages into one toast
+                    const errorMessages = [];
+                    if (outOfStockItems.length > 0) {
+                        errorMessages.push(`${outOfStockItems.length} item(s) are out of stock`);
+                    }
+                    if (otherFailedReasons.length > 0) {
+                        errorMessages.push(`${otherFailedReasons.length} item(s) failed to add to cart`);
+                    }
+                    if (errorMessages.length > 0) {
+                        toast.error(
+                            `${errorMessages.join(", ")}. ${addedItems.length} item(s) added to cart`,
+                            { duration: 2000 }
+                        );
+                    }
+
+
+
+                    this.fetchCart()
+                        .then((updatedCartData) => {
+                            resolve(combinedCart);
+                            resolve(updatedCartData);
+                        })
+                        .catch((error) => {
+                            reject(error);
+                        }).finally(() => {
+                            toast.success("Cart updated successfully", { duration: 2000 });
+                        })
+                })
+                .catch((error) => {
+                    reject(error);
+                });
+        });
+    }
+
+
+    removeFromCart(cartItemId: string): Promise<Cart> {
+        return new Promise((resolve, reject) => {
+            http.delete(`${endpoints.CART}/remove/${cartItemId}`)
+                .then((response) => {
+                    const cartData = response.data;
+                    let combinedItems: CartItem[] = [];
+
+                    combinedItems = cartData.storeGroups?.flatMap((group: StoreGroupResponse) => group.items);
+
+                    const combinedCart: Cart = {
+                        ...cartData,
+                        cartItems: combinedItems,
+                        storeGroups: cartData.storeGroups.map((group: StoreGroupResponse) => ({
+                            ...group,
+                            items: group.items
+                        })),
+                    };
+
+                    this.fetchCart()
+                        .then((updatedCartData) => {
+                            resolve(combinedCart);
+                            resolve(updatedCartData);
+                        })
+                        .catch((error) => {
+                            reject(error);
+                        });
+
+                })
+                .catch((error) => {
+                    reject(error);
+                });
+        });
+    }
+
+    updateItemQuantity(variantId: string, quantity: number, size: string): Promise<Cart> {
+        return new Promise((resolve, reject) => {
+            http.put(`${endpoints.CART}/${variantId}`, { quantity, size })
+                .then((response) => {
+                    const cartData = response.data;
+
+
+
+                    let combinedItems: CartItem[] = [];
+
+                    combinedItems = cartData.storeGroups?.flatMap((group: StoreGroupResponse) => group.items);
+
+                    const combinedCart: Cart = {
+                        ...cartData,
+                        cartItems: combinedItems,
+                        storeGroups: cartData.storeGroups.map((group: StoreGroupResponse) => ({
+                            ...group,
+                            items: group.items
+                        })),
+                    };
+
+
+
+                    resolve(combinedCart);
+                })
+                .catch((error) => {
+                    reject(error);
+                });
+        });
+    }
+
+    applyDiscountCode(code: string): Promise<Cart> {
+        return new Promise((resolve, reject) => {
+            http.post(`${endpoints.CART}/apply-discount`, {
+                "discountCode": code
             })
+                .then((response) => {
+                    const cartData = response.data;
+                    let combinedItems: CartItem[] = [];
 
-            .catch((error) => {
-                reject(error);
-            });
-    });
-   }
+                    combinedItems = cartData.storeGroups?.flatMap((group: StoreGroupResponse) => group.items);
 
-   removeDiscountCodes() {
-    return new Promise(() => {
-        http.post(`${endpoints.CART}/remove-discount`).then((response) => {
+                    const combinedCart: Cart = {
+                        ...cartData,
+                        cartItems: combinedItems,
+                        storeGroups: cartData.storeGroups.map((group: StoreGroupResponse) => ({
+                            ...group,
+                            items: group.items
+                        })),
+                    };
+                    toast.success("Discount code applied successfully", { duration: 2000 });
+                    this.fetchCart(true).then((updatedCartData) => {
+                        resolve(updatedCartData);
+                        resolve(combinedCart);
+                    }).catch((error) => {
+                        reject(error);
+                    });
+                })
+
+                .catch((error) => {
+                    reject(error);
+                });
+        });
+    }
+
+    removeDiscountCodes() {
+        return new Promise(() => {
+            http.post(`${endpoints.CART}/remove-discount`).then((response) => {
+            })
         })
-    })
-   }
-  
+    }
+
 }
 
 export const cartService = new CartService();
