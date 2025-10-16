@@ -1,13 +1,13 @@
 'use client'
 
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import ProductTile from '@/modules/lib/components/product-tile/ProductTile'
 import { useProductListView } from '@/modules/lib/utility/hooks/views/use-product-list-view'
 import { DotsLoader } from '@/modules/lib/components/dots-loader/DotsLoader';
 import PuffLoader from '@/modules/lib/components/puff-loader/PuffLoader'
 import { useSavedVariant } from '@/modules/lib/utility/hooks/use-saved-variants';
 import useReviews from '@/modules/lib/utility/hooks/use-reviews';
-
+import { toast } from 'sonner';
 
 const CentralArena = () => {
   const { products, type, ref, loading } = useProductListView()
@@ -16,7 +16,23 @@ const CentralArena = () => {
   const [openReviewId, setOpenReviewId] = useState<string | null>(null);
   const renderedIds = new Set<string>();
 
-  
+  // ✅ Run only in browser
+  useEffect(() => {
+    const handleGoogleLogin = () => {
+      toast.success("Login Successful");
+    };
+
+    if (typeof window !== 'undefined') {
+      window.addEventListener("googleLoginSuccessful", handleGoogleLogin);
+    }
+
+    return () => {
+      if (typeof window !== 'undefined') {
+        window.removeEventListener("googleLoginSuccessful", handleGoogleLogin);
+      }
+    };
+  }, []);
+
   return (
     <>
       <section className='md:mt-32 mt-24 w-100p mb-150 pb-90'>
@@ -25,65 +41,37 @@ const CentralArena = () => {
             Products
           </h3>
         </div>
-        {/* {
-          products.length ?
-            <PuffLoader /> :
-          <div className='grid xxlgrid-5-cols xl:grid-4-cols-1fr s:grid-3-cols-1fr grid-2-cols-1fr flex-wrap gap-18 s:gap-20 md:gap-24 w-full relative'>
-            {products.length ? (
-              products.map((product) => {
-                if (renderedIds.has(product.id)) {
-                  return null;
-                }
-                renderedIds.add(product.id);
-                return <ProductTile product={product} key={product.id} />;
-              })
-            ) : (
-              <div className='mt-60 bg-white grid-col-span-5 text-center'>
-                No products found for the selected filters
-              </div>
-            )}
+
+        {(!products.length && loading || reviewsLoading) ? (
+          <div className='w-100p flex j-content-center mt-10'>
+            <DotsLoader />
           </div>
-        } */}
-
-        {
-          <>
-            {
-              (!products.length && loading || reviewsLoading) ?
-                <div className='w-100p flex j-content-center mt-10'>
-                  <DotsLoader />
-                </div>
-                :
-                products.length ?
-                  <div className='grid xxlgrid-5-cols xl:grid-4-cols-1fr s:grid-3-cols-1fr grid-2-cols-1fr flex-wrap gap-18 s:gap-20 md:gap-24 w-full relative'>
-                    {
-                      products.map((product, index) => {
-                        if (renderedIds.has(product.id)) {
-                          return null;
-                        }
-                        renderedIds.add(product.id);
-                        return <ProductTile
-                          product={product}
-                          key={product.id}
-                          savedVariants={savedVariants}
-                          saveVariant={saveVariant}
-                          removeSavedVariant={removeSavedVariant}
-                          allReviews={allReviews}
-                          id={product.id}
-                          isOpen={openReviewId}
-                          setIsOpen={setOpenReviewId}
-                          index={index}
-                        />;
-                      })
-                    }
-                  </div>
-                  :
-                  <div className='mt-60 bg-white grid-col-span-5 text-center'>
-                    No products found for the selected filters
-                  </div>
-            }
-          </>
-        }
-
+        ) : products.length ? (
+          <div className='grid xxlgrid-5-cols xl:grid-4-cols-1fr s:grid-3-cols-1fr grid-2-cols-1fr flex-wrap gap-18 s:gap-20 md:gap-24 w-full relative'>
+            {products.map((product, index) => {
+              if (renderedIds.has(product.id)) return null;
+              renderedIds.add(product.id);
+              return (
+                <ProductTile
+                  product={product}
+                  key={product.id}
+                  savedVariants={savedVariants}
+                  saveVariant={saveVariant}
+                  removeSavedVariant={removeSavedVariant}
+                  allReviews={allReviews}
+                  id={product.id}
+                  isOpen={openReviewId}
+                  setIsOpen={setOpenReviewId}
+                  index={index}
+                />
+              );
+            })}
+          </div>
+        ) : (
+          <div className='mt-60 bg-white grid-col-span-5 text-center'>
+            No products found for the selected filters
+          </div>
+        )}
 
         <div ref={ref}>
           <p className='w-100p flex j-content-center mt-10'>

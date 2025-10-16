@@ -14,5 +14,5 @@ export const useSignOut = () => {
    
   };
 
-  return signOut;
+  return { signOut };
 };

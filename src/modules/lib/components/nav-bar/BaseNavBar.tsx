@@ -90,21 +90,34 @@ const [showonBoardingModal, setShowOnBoardingModal] = useState(false);
 //     return () => window.removeEventListener("showMiniCartOnboarding", handleShow);
 //   }, []);
 
-  useEffect(() => {
+useEffect(() => {
   const handleShow = () => {
+    const pathname = window.location.pathname;
+
+    if (pathname.includes('/checkout') || pathname.includes('/orders')) {
+      console.log("Onboarding blocked on checkout/orders page");
+      return;
+    }
+
     const seenAdd = localStorage.getItem("seenAddToCartIcon") === "true";
     const seenMini = localStorage.getItem("seenMiniCart") === "true";
 
-    // only show the mini-cart onboarding if the add-to-cart one is already seen
     if (seenAdd && !seenMini && orders.length === 0 && cart.cartItems.length === 0) {
       setShowOnBoardingModal(true);
     }
   };
 
-  window.addEventListener("showMiniCartOnboarding", handleShow);
-  return () => window.removeEventListener("showMiniCartOnboarding", handleShow);
-}, [orders.length, cart.cartItems.length]);
+  // 🧹 Always make sure no onboarding is visible on these pages
+  const pathname = window.location.pathname;
+  if (pathname.includes('/checkout') || pathname.includes('/orders')) {
+    setShowOnBoardingModal(false);
+  }
 
+  window.addEventListener("showMiniCartOnboarding", handleShow);
+  return () => {
+    window.removeEventListener("showMiniCartOnboarding", handleShow);
+  };
+}, [orders.length, cart.cartItems.length]);
 
 
   return (
@@ -113,7 +126,7 @@ const [showonBoardingModal, setShowOnBoardingModal] = useState(false);
         }`}
     >
 
-      {showonBoardingModal && parent !== 'checkout' && <div
+      {showonBoardingModal  && <div
         onClick={(e) => e.stopPropagation()}
         style={{
           position: "fixed",
@@ -180,7 +193,7 @@ const [showonBoardingModal, setShowOnBoardingModal] = useState(false);
             <div>
 
 
-              {parent !== 'checkout' &&
+              
               
                 
                 <>
@@ -213,7 +226,7 @@ const [showonBoardingModal, setShowOnBoardingModal] = useState(false);
           
                 </>
            
-              }
+              
             </div>
             <div
               className='md:flex hidden gap-12 a-items-center text-black cursor-pointer'
