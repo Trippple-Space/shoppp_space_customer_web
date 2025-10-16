@@ -85,7 +85,6 @@ const ProductDetailModal = ({
     }
   }, [groupedData, selectedColor, selectedSize]);
 
-
   const displayPrice = selectedVariant?.finalPrice || variant.product?.finalPrice
 
   const handlePreviousImage = () => {
@@ -340,6 +339,7 @@ const ProductDetailModal = ({
                                               onChange={() => {
                                                 setSelectedVariant(variant);
                                                 setSelectedSize(v.size);
+                                                console.log(v.size)
                                               }}
                                               className={cx('accent-#0B9378 pointer disabled:cursor-default')}
                                               checked={isActive}
@@ -357,7 +357,7 @@ const ProductDetailModal = ({
                               <div className='grid mt-19 mb-10 gap-10'>
                                 {
                                   hasSize && !selectedSize ? "" :
-                                  !selectedVariantItemInCart ?
+                                  !selectedVariantItemInCart || !selectedVariantItemInCart?.sizes?.find((size) => size.size === selectedSize) ?
                                   (
                                     <button
                                       className={classNames(

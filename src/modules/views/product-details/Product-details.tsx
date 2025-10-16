@@ -171,7 +171,7 @@ const ProductDetails = ({ product }: { product: Product }) => {
 
       {
         hasSize && !selectedSize ? "" 
-        : !selectedVariantItemInCart ?
+        : !selectedVariantItemInCart || !selectedVariantItemInCart?.sizes?.find((size) => size.size === selectedSize) ?
         (
           <button
             className={classNames(`text-white border-none l:px-24 l:py-12 py-15 w-100p radius-6 pointer  hover:bg-darkgreen ${selectedVariant && selectedVariant.status === 'OUT_OF_STOCK' ? 'bg-gray-300' : 'bg-#0B9378'}`)}

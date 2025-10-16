@@ -411,7 +411,7 @@ const CheckoutPage = () => {
                           {
                             cartItem?.sizes &&
                             <p className='weight-400 text-13.5 line-height-16 color-#0000008C'>
-                              {cartItem?.sizes?.length > 1 ? "Sizes:" : "Size:"} {cartItem?.sizes?.map((size: {quantity: number, size:string}) => (<span className="uppercase">{`${size.size}(${size.quantity})`}</span>))}
+                              {cartItem?.sizes?.length > 1 ? "Sizes:" : "Size:"} {cartItem?.sizes?.map((size: {quantity: number, size:string}) => (<span key={size.size + size.quantity} className="uppercase">{`${size.size}(${size.quantity})`}</span>))}
                             </p>
                           }
                         </div>

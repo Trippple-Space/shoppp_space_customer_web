@@ -39,7 +39,7 @@ export interface CartItem {
 export interface BuyAgain {
   variantId: string
   quantity: number
-  size?: string[]
+  size?: {size: string; quantity: number}[]
 }
 
 export interface StoreGroupResponse {
