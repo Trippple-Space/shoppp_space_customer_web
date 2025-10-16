@@ -5,7 +5,7 @@ import endpoints from "../endpoints";
 import http from "../http"
 import { useRouter, useSearchParams } from "next/navigation";
 import { toast } from "sonner";
-import router from "next/router";
+// import router from "next/navigation"; 
 import { paths } from "../paths";
     import envConfig from "env";
 import { convertUserResponse } from "../utility";
@@ -31,7 +31,7 @@ class AuthService {
     localStorage.removeItem("variantId");
     localStorage.removeItem("variantIdMinimumPurchase");
     // window.location.reload()
-    router.push(paths.homepage);
+    // router.redirect(paths.homepage);
     }
 
   validateAuth(): Promise<User | null> {
@@ -111,11 +111,12 @@ class AuthService {
 resendOtp(email: string) {
     return http.post(endpoints.RESEND_OTP, { email })
         .then((response) => {
-            toast.success("An OTP has been sent to your email for verification");
+          toast.success("An OTP has been sent to your email for verification");
+        
             return response.data; 
         }).catch((error) => 
           {
-          return  toast.error(error.response.data.message)
+          // return  toast.error(error.response.data.message)
           });
 }
   

@@ -1,30 +1,37 @@
 'use client'
 
-import SpinningLoader from '@/modules/lib/components/spinning-loader/spinning-loader'
+import { useEffect } from 'react'
+import { useSearchParams } from 'next/navigation'
+import { toast } from 'sonner'
 import { useAuthGuard } from '@/modules/lib/utility/hooks/use-auth-guard'
-import { usePathname, useSearchParams } from 'next/navigation'
-function page() {
+import { paths } from '@/modules/lib/utility/paths'
 
-
-  const searchParams = useSearchParams() 
-
-
+function Page() {
+  const searchParams = useSearchParams()
   const { user } = useAuthGuard()
- 
-  const token = searchParams.get('token')
-  const prevDest = searchParams.get("source");
 
-  if (token != null && token != '') {
-    localStorage.setItem('token', token)
-    if (prevDest?.includes("auth")) {
-      useAuthGuard();
-    } else {
-      window.location.replace(prevDest!)
+  useEffect(() => {
+    const token = searchParams.get('token')
+    const prevDest = searchParams.get('source')
+
+    if (token) {
+      localStorage.setItem('token', token)
+      toast.success('Login Successful')
+      window.dispatchEvent(new Event("googleLoginSuccessful"))
+
+      if (prevDest?.includes('auth')) {
+        setTimeout(() => {
+          window.location.replace(paths.homepage)
+        }, 1000)
+      } else if (prevDest) {
+        setTimeout(() => {
+          window.location.replace(prevDest)
+        }, 3000)
+      }
     }
-  }
-  return (
-    <></>
-  )
+  }, [searchParams])
+
+  return null
 }
 
-export default page
+export default Page

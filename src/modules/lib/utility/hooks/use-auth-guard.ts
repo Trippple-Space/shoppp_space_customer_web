@@ -1,4 +1,4 @@
-'use client';
+// 'use client';
 
 
 import { useLayoutEffect, useState } from 'react';
@@ -17,7 +17,7 @@ import { usePathname } from 'next/navigation';
  */
 export const useAuthGuard = () => {
     const { user, isAuthenticated, authenticateUser } = useUserStore();
-    const signOut = useSignOut()
+    const { signOut } = useSignOut()
   const pathname = usePathname()
     const [checking, setChecking] = useState(true) 
 

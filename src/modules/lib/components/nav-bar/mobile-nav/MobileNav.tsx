@@ -147,7 +147,7 @@ const MobileNav: FC<IMobileNav> = ({
 
                   <div
                     className='py-10 hover:bg-red-100 g|transition:0.5s pointer flex items-center gap-10 text-16 sm:px-36 px-24'
-                    onClick={() => signOut()}
+                    onClick={() =>  signOut()}
                   >
                     <p className='line-height-24 weight-400 color-#D4280C'>
                       Logout
