@@ -1,10 +1,10 @@
 'use client'
-import React, { FC, useEffect, useMemo, useState } from 'react'
+import React, { FC, useEffect, useMemo, useRef, useState } from 'react'
 import Image from '../image/Image'
 import { AiFillStar, AiFillHeart } from 'react-icons/ai'
 import classNames from 'classnames'
 import { Product, ProductVariant } from '../../utility/types/product.interface'
-import { checkMediaType, displayProductPill, formatNumberAsPrice } from '../../utility/utility'
+import { checkMediaType, displayProductPill, formatNumberAsPrice, handleFlyToCart, onGoingOrderStatusQuery } from '../../utility/utility'
 import { useCart } from '../../utility/hooks/use-cart'
 import QuantitySelector from '../quantity-selector/QuantitySelector'
 import Link from 'next/link'
@@ -13,12 +13,13 @@ import { FaEye } from 'react-icons/fa6'
 import ProductDetailModal from '../product-detail-modal/ProductDetailModal'
 import { PiShoppingCartFill, PiStorefront } from 'react-icons/pi'
 import { SavedVariant } from '../../utility/types/SavedVariant.interface'
-import { productService } from '../../utility/services/product.service'
 import MiniReview from '@/modules/views/product-details/reviews/MiniReview'
 import { IFetchedReview } from '../../utility/types/review.interface'
 import useGetRatingStats from '../../utility/hooks/use-get-rating-stats'
 import useTransformProduct from '../../utility/hooks/use-transform-product'
 import { useRecentlyViewedVariant } from '../../utility/hooks/use-recently-viewed'
+import { useOrders } from '../../utility/hooks/use-orders'
+import Button from '../button/Button'
 
 interface IProductTile {
   product: Product
@@ -26,68 +27,88 @@ interface IProductTile {
   removeSavedVariant?: (variantId: string) => void
   savedVariants?: SavedVariant[]
   allReviews: IFetchedReview[]
-  id: string,
-  isOpen: string | null,
+  id: string
+  isOpen: string | null
   setIsOpen: React.Dispatch<React.SetStateAction<string | null>>
+  index?: number
 }
-const ProductTile: FC<IProductTile> = ({ product, savedVariants, saveVariant, removeSavedVariant, allReviews, isOpen, setIsOpen }) => {
+
+const ProductTile: FC<IProductTile> = ({
+  product,
+  savedVariants,
+  saveVariant,
+  removeSavedVariant,
+  allReviews,
+  isOpen,
+  setIsOpen,
+  index,
+}) => {
+  const pathname = typeof window !== 'undefined' ? window.location.pathname : ''
   const { groupedData, availableColors } = useTransformProduct(product)
   const uniqueVariantsFromProductImages = availableColors.map((color) => groupedData?.[color][0])
-  //product?.variants.filter((variants: ProductVariant) => productImages.find(image => image === variants.media[0].url))
+  const { orders, fetching: orderFetching } = useOrders({
+    filters: { status: { In: `${onGoingOrderStatusQuery},DELIVERED` } },
+  })
+
+
+
+  const isCheckoutOrOrdersPage = pathname.includes('/checkout') || pathname.includes('/orders')
+
+  const [seenAddToCartIconOnBoarding] = useState<boolean>(() => {
+    if (typeof window !== 'undefined') {
+      const stored = localStorage.getItem('seenAddToCartIcon')
+      return stored ? JSON.parse(stored) : false
+    }
+    return false
+  })
 
   const [onProductTileHover, setOnProductTileHover] = useState(false)
   const [openSingleProductModal, setOpenSingleProductModal] = useState(false)
   const [isToAddSize, setIsToAddSize] = useState<boolean>(false)
   const [recentlyViewedId, setRecentlyViewsId] = useState<any>()
   const [selectedColor, setSelectedColor] = useState(availableColors[0])
-  const [selectedImage, setSelectedImage] = useState(
-    product?.variants?.[0]?.media?.[0]?.url
-  );
-  const [selectedVariant, setSelectedVariant] = useState<ProductVariant>(
-    product?.variants?.[0]
-  );
-  const {
-    addToCart,
-    cart,
-    increment,
-    decrement,
-    isAuthenticated,
-    isLoginModal
-  } = useCart()
-  const variantIds = useMemo(() => product.variants.map((v: any) => v.id), [product.variants]);
-  const { reviewStat, loading: statsLoading } = useGetRatingStats(variantIds);
+  const [selectedImage, setSelectedImage] = useState(product?.variants?.[0]?.media?.[0]?.url)
+  const [selectedVariant, setSelectedVariant] = useState<ProductVariant>(product?.variants?.[0])
+
+  const { addToCart, cart, increment, decrement, isAuthenticated, isLoginModal, fetching: cartFetching } = useCart()
+  const imgRef = useRef<HTMLImageElement>(null)
+
+  const variantIds = useMemo(() => product.variants.map((v: any) => v.id), [product.variants])
+  const { reviewStat, loading: statsLoading } = useGetRatingStats(variantIds)
   const { addVariant } = useRecentlyViewedVariant()
 
   const selectedVariantItemInCart = cart.cartItems.find(
     (item) => item.variant.id === selectedVariant?.id
-  );
+  )
 
   useEffect(() => {
-    setSelectedImage(product?.variants?.[0]?.media?.[0]?.url);
-    setSelectedVariant(product?.variants?.[0]);
-  }, [product?.id]);
+    setSelectedImage(product?.variants?.[0]?.media?.[0]?.url)
+    setSelectedVariant(product?.variants?.[0])
+  }, [product?.id])
 
-  const [topTwoPills, setTopTwoPills] = useState<any[]>([]);
+  const [topTwoPills, setTopTwoPills] = useState<any[]>([])
   useEffect(() => {
     const pills = displayProductPill(product?.tags)
     setTopTwoPills(pills)
+
+    if (!seenAddToCartIconOnBoarding) {
+      localStorage.setItem('seenAddToCartIcon', 'true')
+    }
   }, [])
 
   const isSaved = savedVariants?.find((item: SavedVariant) => item.variantId === selectedVariant?.id)
-  const mediaType = checkMediaType(selectedImage) ?? 'image';
+  const mediaType = checkMediaType(selectedImage) ?? 'image'
 
   const handleSave = () => {
     if (isSaved) {
-       removeSavedVariant && removeSavedVariant(selectedVariant?.id)
-
+      removeSavedVariant && removeSavedVariant(selectedVariant?.id)
     } else {
       saveVariant && saveVariant(selectedVariant?.id)
     }
   }
 
   const handleCloseProductModal = () => {
-    setOpenSingleProductModal(prev => !prev)
-
+    setOpenSingleProductModal((prev) => !prev)
     if (openSingleProductModal) {
       setIsToAddSize(false)
     }
@@ -101,137 +122,236 @@ const ProductTile: FC<IProductTile> = ({ product, savedVariants, saveVariant, re
 
   useEffect(() => {
     if (recentlyViewedId && isAuthenticated) {
-      addVariant(recentlyViewedId, "view");
+      addVariant(recentlyViewedId, 'view')
     }
-  }, [recentlyViewedId, isAuthenticated]);
+  }, [recentlyViewedId, isAuthenticated])
 
   useEffect(() => {
     if (isAuthenticated) {
-      const variantId = localStorage.getItem("variantId");
-      const variantIdMinimumPurchase = localStorage.getItem("variantIdMinimumPurchase");
+      const variantId = localStorage.getItem('variantId')
+      const variantIdMinimumPurchase = localStorage.getItem('variantIdMinimumPurchase')
       if (variantId && variantIdMinimumPurchase) {
-        const parsedMinimumPurchase = parseInt(variantIdMinimumPurchase, 10);
-
+        const parsedMinimumPurchase = parseInt(variantIdMinimumPurchase, 10)
         if (variantId && !isNaN(parsedMinimumPurchase)) {
-          addToCart(variantId, parsedMinimumPurchase);
-
+          addToCart(variantId, parsedMinimumPurchase)
         }
-
-        localStorage.removeItem("variantId");
-        localStorage.removeItem("variantIdMinimumPurchase");
+        localStorage.removeItem('variantId')
+        localStorage.removeItem('variantIdMinimumPurchase')
       }
     }
-  }, [isAuthenticated]);
+  }, [isAuthenticated])
 
   const isOutOfStock = selectedVariant?.status === 'OUT_OF_STOCK'
-  const isDiscounted = new Date(product?.discount?.activeStartDate) <= new Date(new Date().setHours(new Date().getHours() + 1)) && new Date(new Date().setHours(new Date().getHours() + 1)) <= new Date(product?.discount?.activeEndDate)
+  const isDiscounted =
+    new Date(product?.discount?.activeStartDate) <= new Date(new Date().setHours(new Date().getHours() + 1)) &&
+    new Date(new Date().setHours(new Date().getHours() + 1)) <= new Date(product?.discount?.activeEndDate)
   const hasSize = !(groupedData?.[selectedColor]?.[0].size === null || groupedData?.[selectedColor]?.[0].size === '')
 
+
+  const [showOnBoardingModal, setShowOnBoardingModal] = useState(false)
+  const indexCount = index === 0
+
+useEffect(() => {
+  // Combine your order and cart loading states
+  const isDataLoading = orderFetching || cartFetching;
+
+  // Wait until both are done loading before doing anything
+  if (isDataLoading) return;
+
+  // Now handle the logic only after data is ready
+  if (!seenAddToCartIconOnBoarding && !isCheckoutOrOrdersPage) {
+    const noOrders = (orders?.length ?? 0) === 0;
+    const emptyCart = (cart?.cartItems?.length ?? 0) === 0;
+
+    if (noOrders && emptyCart) {
+      setShowOnBoardingModal(true);
+    } else {
+      setShowOnBoardingModal(false);
+    }
+  } else {
+    setShowOnBoardingModal(false);
+  }
+}, [
+  orderFetching,
+  cartFetching,
+  orders,
+  cart,
+  seenAddToCartIconOnBoarding,
+  isCheckoutOrOrdersPage,
+]);
+
+
+  useEffect(() => {
+    document.body.style.overflow = showOnBoardingModal ? 'hidden' : 'auto'
+    return () => {
+      document.body.style.overflow = 'auto'
+    }
+  }, [showOnBoardingModal])
+
+  const handleOnboardingClose = () => {
+    setShowOnBoardingModal(false)
+    localStorage.setItem('seenAddToCartIcon', 'true')
+    if (!localStorage.getItem('seenMiniCart') && !isCheckoutOrOrdersPage) {
+      window.dispatchEvent(new Event('showMiniCartOnboarding'))
+      localStorage.setItem('seenMiniCart', 'true')
+    }
+  }
+
   return (
-    <div className='mt-30 l:mt-20 w-full overflow-hidden'>
+    <div className="mt-30 l:mt-20 w-full overflow-hidden">
+      {showOnBoardingModal && indexCount && (
+        <div
+          onClick={(e) => e.stopPropagation()}
+          style={{
+            position: 'fixed',
+            inset: 0,
+            width: '100vw',
+            height: '100vh',
+            backgroundColor: 'rgba(0, 0, 0, 0.4)',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            zIndex: 100,
+          }}
+        ></div>
+      )}
+
+      {/* IMAGE SECTION */}
       <div
-        id='image'
-        className='relative ratio-1 radius-10 g|overflow:hidden l:radius-15 w-full'
+        id="image"
+        className="relative ratio-1 radius-10 g|overflow:hidden l:radius-15 w-full"
         onMouseOver={() => setOnProductTileHover(true)}
         onMouseOut={() => setOnProductTileHover(false)}
       >
         <Link href={`/products/${product?.slug}`}>
-          {mediaType === "image" ? (
-            <div className='relative w-full h-full'>
-              {isOutOfStock && <div className="absolute w-100p h-100p text-white flex j-content-center a-items-center z-1 l:text-22 radius-6">
-                Out of stock
-              </div>}
+          {mediaType === 'image' ? (
+            <div className="relative w-full h-full">
+              {isOutOfStock && (
+                <div className="absolute w-100p h-100p text-white flex j-content-center a-items-center z-1 l:text-22 radius-6">
+                  Out of stock
+                </div>
+              )}
               <Image
-                className={`absolute w-full h-full a-self-center g|object-fit:cover pointer ${isOutOfStock && 'out-of-stock'}`}
+                ref={imgRef}
+                className={`absolute w-full h-full a-self-center g|object-fit:cover pointer ${
+                  isOutOfStock && 'out-of-stock'
+                }`}
                 src={selectedImage}
                 alt="product-image"
               />
             </div>
           ) : (
             <VideoSrc
-              className={`absolute w-full h-full a-self-center g|object-fit:cover pointer ${isOutOfStock && 'out-of-stock'}`}
+              className={`absolute w-full h-full a-self-center g|object-fit:cover pointer ${
+                isOutOfStock && 'out-of-stock'
+              }`}
               src={selectedImage}
             />
           )}
         </Link>
-        <div
-          className="skelly-rectangle w-full h-full pulsing-multi-color-bg text-white flex"
-          data-width="100%"
-          data-radius="100%"
-        ></div>
 
-        <div className="">
-          {onProductTileHover && product && (
-            <div
-              id="add to cart button"
-              className=" hidden l:block absolute z-1 b-0 l-0 ml-10 mt-20 l:mr-15 l:mb-15"
-              onClick={handleCloseProductModal}
-            >
-              <p className='bg-white radius-20 p-5 cursor-pointer text-12 flex a-items-center gap-5'>
-                <FaEye className='w-fit' />
-                Quick look
-              </p>
-            </div>
-          )}
+        {/* QUICK LOOK BUTTON */}
+        {onProductTileHover && product && (
           <div
             id="add to cart button"
-            className="absolute b-0 r-0 mr-10 mb-10 l:mr-15 l:mb-15"
+            className="hidden l:block absolute z-1 b-0 l-0 ml-10 mt-20 l:mr-15 l:mb-15"
+            onClick={handleCloseProductModal}
           >
-            {selectedVariantItemInCart ? (
-              <QuantitySelector
-                decrement={() => {
-                  if (hasSize) {
-                    setIsToAddSize(true)
-                    handleCloseProductModal()
-                  } else {
-                    decrement(selectedVariantItemInCart)
-                  }
-                }}
-                increment={() => {
-                  if (hasSize) {
-                    setIsToAddSize(true)
-                    handleCloseProductModal()
-                  } else {
-                    increment(selectedVariantItemInCart)
-                  }
-                }}
-                cartItem={selectedVariantItemInCart}
-              />
-            ) : (
-              <>
-                {selectedVariant?.status !== 'OUT_OF_STOCK' ? <button
-                  onClick={() => {
-                    if (hasSize) {
-                      setIsToAddSize(true)
-                      handleCloseProductModal()
-                    } else {
-                      isAuthenticated
-                        ?
-                        addToCart(
-                          selectedVariant.id,
-                          selectedVariant.minPurchaseQuantity || 1
-                        )
-                        : handleLogin(selectedVariant.id,
-                          selectedVariant.minPurchaseQuantity || 1);
-                    }
-                  }}
-                  disabled={!selectedImage}
-                  className={classNames(
-                    "bg-#FACE33 shadow-0-4-8-0-#00000033 hover:shadow-0-8-8-0-#00000033 text-black! disabled:bg-gray-200 disabled:cursor-not-allowed hover:scale-1.06 g|transition:0.5s g|will-change:transform pointer font-roboto border-hidden outline-none s:p-14 p-12 round flex a-items-center j-items-center gap-10")}
-                >
-                  <PiShoppingCartFill className="s:w-22 w-20 s:h-22 h-20" />
-                </button> : ''
-                }
-              </>
-            )}
+            <p className="bg-white radius-20 p-5 cursor-pointer text-12 flex a-items-center gap-5">
+              <FaEye className="w-fit" />
+              Quick look
+            </p>
           </div>
+        )}
+
+        {/* ADD TO CART / ONBOARDING */}
+        <div id="add to cart button" className="absolute b-0 r-0 mr-10 mb-10 l:mr-15 l:mb-15">
+          {selectedVariantItemInCart ? (
+            <QuantitySelector
+              decrement={() => {
+                if (hasSize) {
+
+                  setIsToAddSize(true)
+                  handleCloseProductModal()
+                } else {
+                  decrement(selectedVariantItemInCart)
+                }
+              }}
+              increment={() => {
+                if (hasSize) {
+                  setIsToAddSize(true)
+                  handleCloseProductModal()
+                } else {
+                  increment(selectedVariantItemInCart)
+                }
+              }}
+              cartItem={selectedVariantItemInCart}
+            />
+          ) : (
+            <>
+              {showOnBoardingModal && indexCount && !isCheckoutOrOrdersPage && (
+                <div
+                  onClick={(e) => e.stopPropagation()}
+                  className="l:w-200 w-100 l:p-10 p-5 l:mb-10 b-70p r-20"
+                  style={{
+                    position: 'absolute',
+                    background: 'white',
+                    borderRadius: '10px',
+                    zIndex: 1000,
+                  }}
+                >
+                  <p className="weight-400">Tap this button to add an item to your cart</p>
+                  <div onClick={handleOnboardingClose}>
+                    <button className="bg-green text-white mt-2 l:mt-10 l:py-10 l:px-20 w-full py-5 radius-5 border-none hover:pointer text-13 l:text-14 font-inter hover:bg-darkgreen transition-0.5s text-center">
+                      Close
+                    </button>
+                  </div>
+                </div>
+              )}
+
+              <div style={{ zIndex: showOnBoardingModal && indexCount ? 1000 : 0 }} className="round relative">
+                {selectedVariant?.status !== 'OUT_OF_STOCK' && (
+                  <button
+                    onClick={() => {
+                      if (hasSize) {
+                        setShowOnBoardingModal(false)
+                        setIsToAddSize(true)
+                        handleCloseProductModal()
+                      } else {
+                        setShowOnBoardingModal(false)
+                        if (isAuthenticated) {
+                          if (!localStorage.getItem('seenMiniCart')) {
+                            window.dispatchEvent(new Event('showMiniCartOnboarding'))
+                            localStorage.setItem('seenMiniCart', 'true')
+                          }
+                          addToCart(selectedVariant.id, selectedVariant.minPurchaseQuantity || 1)
+                        } else {
+                          handleLogin(selectedVariant.id, selectedVariant.minPurchaseQuantity || 1)
+                        }
+                      }
+                    }}
+                    disabled={!selectedImage}
+                    className={classNames(
+                      `bg-#FACE33 shadow-0-4-8-0-#00000033 hover:shadow-0-8-8-0-#00000033 text-black! 
+                      disabled:bg-gray-200 disabled:cursor-not-allowed hover:scale-1.06 
+                      g|transition:0.5s g|will-change:transform pointer font-roboto 
+                      border-hidden outline-none s:p-14 p-12 round flex a-items-center j-items-center gap-10`
+                    )}
+                  >
+                    <PiShoppingCartFill className="s:w-22 w-20 s:h-22 h-20" />
+                  </button>
+                )}
+              </div>
+            </>
+          )}
         </div>
+
+        {/* FAVORITE ICON */}
         <div
-          id='favorite icon'
-          className='absolute t-0 r-0 mr-10 mt-10 l:mr-15 l:mt-15 text-24 l:text-34'
+          id="favorite icon"
+          className="absolute t-0 r-0 mr-10 mt-10 l:mr-15 l:mt-15 text-24 l:text-34"
           onClick={isAuthenticated ? handleSave : () => isLoginModal()}
           style={{
-            // Add a subtle dark circular background to ensure visibility on white backgrounds
             background: isSaved ? 'rgba(0,0,0,0.25)' : 'rgba(255,255,255,0.7)',
             borderRadius: '50%',
             padding: '4px',
@@ -241,12 +361,10 @@ const ProductTile: FC<IProductTile> = ({ product, savedVariants, saveVariant, re
             justifyContent: 'center',
           }}
         >
-          <AiFillHeart
-            color={isSaved ? '#ffffffee' : '#000000aa'}
-            className='shadow'
-          />
+          <AiFillHeart color={isSaved ? '#ffffffee' : '#000000aa'} className="shadow" />
         </div>
 
+        {/* PILLS */}
         <div className="absolute w-fit h-fit t-0 l-0">
           {topTwoPills.map((pill, index) => (
             <div
@@ -262,7 +380,8 @@ const ProductTile: FC<IProductTile> = ({ product, savedVariants, saveVariant, re
           ))}
         </div>
       </div>
-      <div className="scroll-x no-scrollbar">
+
+        <div className="scroll-x no-scrollbar">
         <div
           id="product varients"
           className="md:mt-16 mt-14 flex a-items-center md:gap-6 gap-4 w-full overflow-auto whitespace-nowrap no-scrollbar"
@@ -387,7 +506,7 @@ const ProductTile: FC<IProductTile> = ({ product, savedVariants, saveVariant, re
         />
       )}
     </div>
-  );
-};
+  )
+}
 
-export default ProductTile;
+export default ProductTile

@@ -55,7 +55,7 @@ const OrderSummary: FC<IOrderSummary> = ({
       setDiscountCode("")
     }
   }
-
+  
   return (
     <div className='w-full flex flex-col md:gap-15 gap-20 md:pb-0 pb-12 md:pt-0 sm:pt-12 pt-56'>
 

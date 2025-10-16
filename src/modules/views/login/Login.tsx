@@ -18,17 +18,14 @@ const Login = () => {
     const router = useRouter();
 
    const handleResendOtp = async () => {
-    try {
-      const { token } = await authService.resendOtp(loginFormHandler.values.email);
-      toast.success("An OTP has been sent to your email for verification");
+     const token = await authService.resendOtp(loginFormHandler.values.email)
+    if (token) {
       router.push(`${paths.verify}?token=${token}`);
-    } catch (error) {
+    } else {
       toast.error("Failed to resend OTP");
-    }
-   };
-  
-  
+     }
 
+   };
 
   useEffect(() => {
     const handleGlobalKeyDown = (e: KeyboardEvent) => {

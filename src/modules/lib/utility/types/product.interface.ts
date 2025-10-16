@@ -76,7 +76,11 @@ export interface ProductVariant {
   media: ProductMedia[];
   stock: number;
   price: number;
-  size: string;
+  size: {
+    size: string;
+    quantity: number | string;
+    isAvailable: boolean
+  }[];
   finalPrice: number;
   discountedPrice: number
   minPurchaseQuantity: number;

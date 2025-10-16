@@ -166,9 +166,9 @@ const MiniCart: React.FC<ModalProps> = ({
                                   Color: {cartItem?.variant?.properties?.color}
                                 </p>
                                 {
-                                  cartItem?.variant?.size &&
+                                  cartItem?.sizes &&
                                   <p className='weight-400 text-13.5 line-height-16'>
-                                    Size: {cartItem?.variant?.size}
+                                    {cartItem?.sizes?.length > 1 ? "Sizes:" : "Size:"} {cartItem?.sizes?.map((size) => (<span key={size.size +  size.quantity} className="uppercase">{`${size.size}(${size.quantity})`}</span>))}
                                   </p>
                                 }
                               </div>
@@ -285,8 +285,10 @@ const MiniCart: React.FC<ModalProps> = ({
           >
             <p className='h-30 w-30 flex a-items-center j-content-center bg-#0B9378 radius-6 color-white weight-500'>
               <span>{cart.cartItems.length}</span>
-            </p>
+              </p>
+        <span className="cart-icon" style={{ position: "relative", display:"inline-block" }}>
             <PiShoppingCartBold className='color-black  w-18 h-18' />
+              </span>
           </div>
         </div>
       }

@@ -38,7 +38,7 @@ const formikLoginConfig = (
             callback?.(user);
             isLoginModal?.();
         } catch (err: any) {
-            if (err.response?.data?.message === 'Your password has not been set' || err.response?.data?.message === 'Account not verified' ) {
+            if (err.response?.data?.message === 'Your password has not been set' || err.response?.data?.message === 'Account not verified' || err.response?.data?.message === 'Password not set') {
                 setErrors({ password: 'You have not completed sign up process.' });
             } else {
                 return

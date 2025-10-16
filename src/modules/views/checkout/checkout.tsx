@@ -26,6 +26,7 @@ import { CartItem } from "@/modules/lib/utility/types/cart.interface";
 import { useCalculatedeliveryFee } from "@/modules/lib/utility/hooks/use-calculate-deliveryFee";
 import { DeliveryOption } from "@/modules/lib/utility/types/delivery.interface";
 import VideoSrc from "@/modules/lib/components/video-src/VideoSrc";
+import { toast } from "sonner";
 
 type DeliveryOptionKey = 'standard' | 'express' | 'vendorManaged';
 type addressDeliveryPrice = {
@@ -107,9 +108,8 @@ const CheckoutPage = () => {
 
   const [shouldUpdateFee, setShouldUpdateFee] = useState(false);
   const lastAddressRef = useRef<string | null>(null);
-
-
-
+  const leftScrollRef = useRef<HTMLDivElement>(null);
+  const rightScrollRef = useRef<HTMLDivElement>(null);
 
   const [allCartItems, setAllCartItems] =
     useState({
@@ -284,6 +284,11 @@ const CheckoutPage = () => {
     }
   }
 
+  useEffect(() => {
+    if (!isAuthenticated) {
+      router.push(paths.homepage);
+    }
+  },[])
 
 
   return (
@@ -291,8 +296,8 @@ const CheckoutPage = () => {
       <HomepageNavBar parent={"checkout"} />
       <div className="md:pt-69.6 pt-64 sm:mb-60 mb-111 h-full">
         <DeliveryMessage />
-        <div className="md:flex overflow-hidden" style={{ height: 'calc(100dvh - 128px)' }}>
-          <div className={`flex-grow-1 l:w-54.2p md:w-50p h-full overflow-auto no-scrollbar md:pt-44 sm:pt-32 pt-24 xl:pl-80 l:pl-70 md:pl-60 sm:pl-40 pl-24 xl:pr-80 l:pr-70 sm:pr-40 pr-24 flex flex-col gap-28 bg-white md:pb-90 ${showSummary ? "sm:pb-299 pb-347" : "sm:pb-99 pb-147"}`}>
+        <div className="md:flex overflow-hidden" style={{ height: 'calc(100dvh - 146px)' }}>
+          <div ref={rightScrollRef} className={`flex-grow-1 l:w-54.2p md:w-50p h-full overflow-auto no-scrollbar md:pt-44 sm:pt-32 pt-24 xl:pl-80 l:pl-70 md:pl-60 sm:pl-40 pl-24 xl:pr-80 l:pr-70 sm:pr-40 pr-24 flex flex-col gap-28 bg-white md:pb-90 ${showSummary ? `${selectedAddress ? "sm:pb-320 pb-350" : "sm:pb-200 pb-247"}` : "sm:pb-99 pb-147"}`}>
             <div className="flex flex-col gap-6">
               <h1 className="weight-600 md:text-24 text-20 md:line-height-32 line-heigth-28">
                 Order Summary
@@ -404,9 +409,9 @@ const CheckoutPage = () => {
                             Color: {cartItem?.variant?.properties?.color}
                           </p>
                           {
-                            cartItem?.variant?.size &&
+                            cartItem?.sizes &&
                             <p className='weight-400 text-13.5 line-height-16 color-#0000008C'>
-                              Size: {cartItem?.variant?.size}
+                              {cartItem?.sizes?.length > 1 ? "Sizes:" : "Size:"} {cartItem?.sizes?.map((size: {quantity: number, size:string}) => (<span key={size.size + size.quantity} className="uppercase">{`${size.size}(${size.quantity})`}</span>))}
                             </p>
                           }
                         </div>
@@ -451,7 +456,7 @@ const CheckoutPage = () => {
           </div>
 
           <div className="relative bg-#F5F5F5 l:w-45.8p md:w-50p max-w-661">
-            <div className={`m:h-full overflow-auto no-scrollbar bg-#F5F5F5 md:pt-44 md:pb-85 xl:pl-80 l:pl-70 md:pl-40 xl:pr-80 l:pr-70 md:pr-60 flex flex-col gap-16 ${devOptions === 'smaller' ? 'fixed l-0 r-0 b-0 z-4' : ''}`}>
+            <div ref={leftScrollRef} className={`m:h-full overflow-auto no-scrollbar bg-#F5F5F5 md:pt-44 md:pb-85 xl:pl-80 l:pl-70 md:pl-40 xl:pr-80 l:pr-70 md:pr-60 flex flex-col gap-16 ${devOptions === 'smaller' ? 'fixed l-0 r-0 b-0 z-4' : ''}`}>
               {devOptions === "larger"
                 &&
                 <DeliveryOptions
@@ -490,14 +495,7 @@ const CheckoutPage = () => {
                     }
                     cart={cart}
                     loading={
-                      calculatingFee ||
-                      !selectedAddress ||
-                      !(
-                        selectedDeliveryOptionDetails &&
-                        "price" in selectedDeliveryOptionDetails &&
-                        typeof selectedDeliveryOptionDetails.price === "number" &&
-                        !isNaN(selectedDeliveryOptionDetails.price)
-                      )
+                      calculatingFee 
                     }
                   />
                 </div>
@@ -528,7 +526,15 @@ const CheckoutPage = () => {
                     <button
                       onClick={() => {
                         if (canProceedToPayment) {
-                          setDevAddressError(true)
+                          if (!selectedAddress) {
+                            setDevAddressError(true)
+                            rightScrollRef.current?.scrollTo({ top: 0, behavior: "smooth" });
+                            toast.error("You need to add a delivery address to continue to payment.")
+                          } else if (!selectedDeliveryOption) {
+                            leftScrollRef.current?.scrollTo({ top: 0, behavior: "smooth" });
+                            rightScrollRef.current?.scrollTo({ top: 300, behavior: "smooth" });
+                            toast.error("You need to select a delivery option to continue to payment.")
+                          }
                         } else {
                           if (selectedDeliveryOption !== null) {
                             payWithPaystack({
@@ -539,8 +545,8 @@ const CheckoutPage = () => {
                         }
                       }
                       }
-                      disabled={canProceedToPayment}
-                      className={`md:w-full sm:w-fit w-full border-none m:flex text-white md:text-16 text-14 weight-500 md:line-height-22 line-height-19 md:px-24 px-16 py-12 radius-6 l:float-right j-content-center ${!showSummary && 'sm:mt-0 mt-56'} ${canProceedToPayment ? 'bg-#0b9378ed cursor-not-allowed' : 'bg-#0B9378 pointer'}`}
+                      className={`md:w-full sm:w-fit w-full border-none m:flex text-white md:text-16 text-14 weight-500 md:line-height-22 line-height-19 md:px-24 px-16 py-12 radius-6 l:float-right j-content-center ${!showSummary && 'sm:mt-0 mt-56'} ${canProceedToPayment ? 'bg-#D1D5DB opacity-80 g|box-shadow:inset|_|0px|_|2px|_|4px|_|#0000001A color-#6B7280 cursor-not-allowed' : 'bg-#0B9378 pointer'}`}
+                      title={selectedAddress ? "" : "Add an address to proceed to payment"}
                     >
                       <span className="">
                         Proceed to payment{" "}

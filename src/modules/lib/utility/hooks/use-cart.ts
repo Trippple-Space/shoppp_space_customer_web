@@ -16,36 +16,55 @@ export const useCart = (isCheckout?: boolean) => {
           incrementCartItem,
           decrementCartItem,
           isLoginModal,
-       showLoginModal,
-       applyDiscount,
-       removeDiscountCode,
-       applyingCode
+          showLoginModal,
+          applyDiscount,
+          removeDiscountCode,
+          applyingCode
      } = useCartStore();
      const { isAuthenticated } = useUserStore();
 
-     const increment = (cartItem: CartItem) => {
-          if (cartItem.quantity >= cartItem.variant.stock) {
-               return toast.error('You’ve reached the maximum quantity available for this item.');   
+     const increment = (cartItem: CartItem, size?: string) => {
+          const selectedSize = cartItem.sizes?.find((s) => s.size === size)
+          const sizeInCart = cartItem.variant.size.find((s) => s.size === size)
+          if (size && selectedSize) {
+               if (selectedSize?.quantity >= Number(sizeInCart?.quantity)) {
+                    return toast.error('You’ve reached the maximum quantity available for this item.');
+               } else {
+                    incrementCartItem(cartItem.variant.id, cartItem.variant.incrementBy, size);
+               }
           } else {
-          incrementCartItem(cartItem.variant.id, cartItem.variant.incrementBy);
+               if (cartItem.quantity >= cartItem.variant.stock) {
+                    return toast.error('You’ve reached the maximum quantity available for this item.');
+               } else {
+                    incrementCartItem(cartItem.variant.id, cartItem.variant.incrementBy);
+               }
           }
      };
 
-     const decrement = (cartItem: CartItem) => {
-          if (cartItem.quantity <= cartItem.variant.minPurchaseQuantity) {
-               return removeFromCart(cartItem.id);
+     const decrement = (cartItem: CartItem, size?: string) => {
+          if (size) {
+               const selectedSize = cartItem.sizes?.find((s) => s.size === size)
+               console.log(selectedSize)
+               if (selectedSize) {
+                    //return removeFromCart(cartItem.id);
+                    decrementCartItem(cartItem.variant.id, cartItem.variant.incrementBy, size);
+               }
+          } else {
+               if (cartItem.quantity <= cartItem.variant.minPurchaseQuantity) {
+                    return removeFromCart(cartItem.id);
+               } else {
+                    decrementCartItem(cartItem.variant.id, cartItem.variant.incrementBy);
+               }
           }
-
-          decrementCartItem(cartItem.variant.id, cartItem.variant.incrementBy);
      };
 
 
 
      useEffect(() => {
           if (!cart.id && isAuthenticated && !fetching) {
-            fetchCart(isCheckout);
+               fetchCart(isCheckout);
           }
-     },[isAuthenticated]);
+     }, [isAuthenticated]);
 
      return {
           cart,
@@ -54,14 +73,14 @@ export const useCart = (isCheckout?: boolean) => {
           removeFromCart,
           increment,
           decrement,
-       fetching,
-       fetchCart,
+          fetching,
+          fetchCart,
           applyDiscount,
           applyingCode,
           removeDiscountCode,
           isAuthenticated,
           isLoginModal,
-       showLoginModal,
-          
+          showLoginModal,
+
      };
 };

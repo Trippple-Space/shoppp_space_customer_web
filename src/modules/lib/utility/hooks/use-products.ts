@@ -11,7 +11,7 @@ export interface IProductFilters {
   category?: string;
   keywords?: string[];
   [key: string]: any;
-  status?: { In: string[] };
+  status?: { In: string };
 }
 
 export interface IOrderBy {

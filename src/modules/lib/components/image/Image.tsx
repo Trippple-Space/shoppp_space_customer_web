@@ -1,38 +1,34 @@
 'use client'
 
 import NextImage from 'next/image'
-import { FC, useState } from 'react'
+import React, { useState } from 'react'
 import { ImageSrcFolder, getImageDir } from '../../utility/utility'
 
-export interface IImage {
+export interface IImageProps {
   src: string
   alt: string
   className?: string
   type?: 'image' | 'logo' | 'icon'
-  onClick?: Function
+  onClick?: () => void
 }
 
-const Image: FC<IImage> = ({
-  className,
-  src,
-  alt,
-  type = 'image',
-  onClick
-}) => {
-  const [hidden, setHidden] = useState(true)
-  return src ? (
-    <img
-      className={className}
-      src={getImageDir((type + 's') as ImageSrcFolder, src)}
-      alt={alt}
-      // hidden={hidden}
-      onClick={() => onClick?.()}
-      loading='lazy'
-      onLoad={() => setHidden(false)}
-    />
-  ) : (
-    <></>
-  )
-}
+const Image = React.forwardRef<HTMLImageElement, IImageProps>(
+  ({ className, src, alt, type = 'image', onClick }, ref) => {
+    const [hidden, setHidden] = useState(true)
 
+    return src ? (
+      <img
+        ref={ref}
+        className={className}
+        src={getImageDir((type + 's') as ImageSrcFolder, src)}
+        alt={alt}
+        onClick={onClick}
+        loading='lazy'
+        onLoad={() => setHidden(false)}
+      />
+    ) : null
+  }
+)
+
+Image.displayName = 'Image'
 export default Image

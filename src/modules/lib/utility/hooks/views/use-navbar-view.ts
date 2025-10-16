@@ -4,7 +4,7 @@ import { useSignOut } from "../use-sign-out"
 
 export const useNavbarView = () => {
     const { user } = useUserStore()
-    const signOut = useSignOut()
+    const { signOut } = useSignOut()
     const { openAddressModal } = useAddressStore()
 
 

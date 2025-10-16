@@ -129,12 +129,19 @@ const VariantModal = ({variant, saveVariant, removeSavedVariant, savedVariants}:
                 <>
              {variant.productVariant.status !== 'OUT_OF_STOCK' ? <button
                 onClick={() => {
-                  isAuthenticated
-                    ?  addToCart(
-                      variant.productVariantId,
-                      1
-                    ) 
-                    : handleLogin( variant.productVariantId,1);
+                  if (isAuthenticated)
+                  {
+
+                     if (!localStorage.getItem("seenMiniCart")) {        
+                              window.dispatchEvent(new Event("showMiniCartOnboarding"));
+                              localStorage.setItem("seenMiniCart", "true");
+                            }
+                   addToCart(
+                     variant.productVariantId,
+                     1
+                   )
+                 }
+                    else {handleLogin( variant.productVariantId,1);}
                 }}
                 disabled={!selectedImage}
                     className={classNames(
