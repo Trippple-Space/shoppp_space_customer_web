@@ -41,7 +41,7 @@ const UseCurrentLocationButton = ({ formhandler, setUserLocation, setSuggestionI
                         toast.error("The request to get user location timed out", { duration: 2000 });
                         break;
                     default:
-                        toast.error("An error occurred", { duration: 2000 });
+                        toast.error(geoError.message, { duration: 2000 });
                 }
             }
         );
