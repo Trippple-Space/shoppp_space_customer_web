@@ -110,9 +110,13 @@ const ProductDetails = ({ product }: { product: Product }) => {
     }
   }
 
-  function handleLogin(variantId: string, minimumPurchase: number) {
+  function handleLogin(variantId: string, minimumPurchase: number, size?: string) {
     localStorage.setItem('variantId', variantId.toString())
     localStorage.setItem('variantIdMinimumPurchase', minimumPurchase.toString())
+    
+    if (size) {
+      localStorage.setItem('selectedVariantSize', size)
+    }
     isLoginModal()
   }
  
@@ -124,12 +128,20 @@ const ProductDetails = ({ product }: { product: Product }) => {
     if (isAuthenticated) {
       const variantId = localStorage.getItem("variantId");
       const variantIdMinimumPurchase = localStorage.getItem("variantIdMinimumPurchase");
+      const selectedVariantSize = localStorage.getItem('selectedVariantSize')
+
       if (variantId && variantIdMinimumPurchase) {
         const parsedMinimumPurchase = parseInt(variantIdMinimumPurchase, 10);
 
-        if (variantId && !isNaN(parsedMinimumPurchase)) {
-          addToCart(variantId, parsedMinimumPurchase);
-
+        if (selectedVariantSize) {
+          if (variantId && !isNaN(parsedMinimumPurchase)) {
+            addToCart(variantId, parsedMinimumPurchase, selectedVariantSize);
+          }
+          localStorage.removeItem('selectedVariantSize')
+        } else {
+          if (variantId && !isNaN(parsedMinimumPurchase)) {
+            addToCart(variantId, parsedMinimumPurchase);
+          }
         }
         localStorage.removeItem("variantId");
         localStorage.removeItem("variantIdMinimumPurchase");
@@ -187,8 +199,7 @@ const ProductDetails = ({ product }: { product: Product }) => {
                   );
                 }
               } else {
-                handleLogin(selectedVariant?.id ?? 0,
-                  selectedVariant?.minPurchaseQuantity || 1)
+                handleLogin(selectedVariant?.id ?? 0, selectedVariant?.minPurchaseQuantity || 1, selectedSize)
               }
             }}
           >

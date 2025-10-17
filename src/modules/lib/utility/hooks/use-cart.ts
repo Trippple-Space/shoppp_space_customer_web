@@ -44,7 +44,6 @@ export const useCart = (isCheckout?: boolean) => {
      const decrement = (cartItem: CartItem, size?: string) => {
           if (size) {
                const selectedSize = cartItem.sizes?.find((s) => s.size === size)
-               console.log(selectedSize)
                if (selectedSize) {
                     //return removeFromCart(cartItem.id);
                     decrementCartItem(cartItem.variant.id, cartItem.variant.incrementBy, size);
