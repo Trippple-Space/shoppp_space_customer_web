@@ -130,11 +130,22 @@ const ProductTile: FC<IProductTile> = ({
     if (isAuthenticated) {
       const variantId = localStorage.getItem('variantId')
       const variantIdMinimumPurchase = localStorage.getItem('variantIdMinimumPurchase')
+      const selectedVariantSize = localStorage.getItem('selectedVariantSize')
+      
       if (variantId && variantIdMinimumPurchase) {
         const parsedMinimumPurchase = parseInt(variantIdMinimumPurchase, 10)
-        if (variantId && !isNaN(parsedMinimumPurchase)) {
-          addToCart(variantId, parsedMinimumPurchase)
+
+        if (selectedVariantSize) {
+          if (variantId && !isNaN(parsedMinimumPurchase)) {
+            addToCart(variantId, parsedMinimumPurchase, selectedVariantSize);
+          }
+          localStorage.removeItem('selectedVariantSize')
+        } else {
+          if (variantId && !isNaN(parsedMinimumPurchase)) {
+            addToCart(variantId, parsedMinimumPurchase);
+          }
         }
+        
         localStorage.removeItem('variantId')
         localStorage.removeItem('variantIdMinimumPurchase')
       }
