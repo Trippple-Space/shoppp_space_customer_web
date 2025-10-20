@@ -19,6 +19,7 @@ import {
   formatNumberAsPrice,
   handleFlyToCart,
   onGoingOrderStatusQuery,
+  saveVariantToLocalStorage,
 } from '@/modules/lib/utility/utility'
 import { Rating, Star } from '@smastrom/react-rating'
 import classNames from 'classnames'
@@ -111,9 +112,7 @@ const ProductDetails = ({ product }: { product: Product }) => {
   }
 
   function handleLogin(variantId: string, minimumPurchase: number, size?: string) {
-    localStorage.setItem('variantId', variantId.toString())
-    localStorage.setItem('variantIdMinimumPurchase', minimumPurchase.toString())
-    
+           saveVariantToLocalStorage(variantId, minimumPurchase.toString())
     if (size) {
       localStorage.setItem('selectedVariantSize', size)
     }

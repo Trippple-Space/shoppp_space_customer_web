@@ -85,11 +85,6 @@ const LoginModal = () => {
                                       </div>
                                     </div>
                     </div>
-
-
-
-                  
-
                     <div className='text-center text-14 mb-16 text-green-500 pointer w-fit mx-auto'>
                       Forgot Your Password?
                     </div>

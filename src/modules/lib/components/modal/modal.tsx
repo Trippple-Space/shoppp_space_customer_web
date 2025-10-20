@@ -1,5 +1,6 @@
 "use client"
 import { useRef, useEffect, useState } from 'react';
+import { paths } from '../../utility/paths';
 
 interface ModalProps {
   isOpen: boolean;
@@ -12,6 +13,13 @@ interface ModalProps {
 }
 
 const Modal: React.FC<ModalProps> = ({ isOpen, onClose, children, extraModalClass, extraClass, className, modalClassName }) => {
+ const [isOnCheckoutPage, setIsOnCheckoutPage] = useState(false);
+
+  useEffect(() => {
+    if (typeof window !== "undefined") {
+      setIsOnCheckoutPage(window.location.pathname === paths.checkout);
+    }
+  }, []);
 
   const modalRef = useRef<HTMLDivElement>(null);
 
@@ -66,7 +74,7 @@ const Modal: React.FC<ModalProps> = ({ isOpen, onClose, children, extraModalClas
     msOverflowStyle: "none",
     // maxHeight: '90vh',
     // height: '100%',
-    position: 'absolute',
+    position: !isOnCheckoutPage ? 'absolute' : 'relative',
     ...extraClass
   };
 

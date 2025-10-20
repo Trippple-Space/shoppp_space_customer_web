@@ -9,7 +9,7 @@ import { useCart } from '../../utility/hooks/use-cart';
 import { PiShoppingCartFill, PiStorefront } from 'react-icons/pi';
 import classNames from 'classnames';
 import { AiFillHeart, AiFillStar, AiOutlineHeart } from 'react-icons/ai';
-import { formatNumberAsPrice } from '../../utility/utility';
+import { formatNumberAsPrice, saveVariantToLocalStorage } from '../../utility/utility';
 import ProductDetailModal from '../product-detail-modal/ProductDetailModal';
 import { SavedVariant } from '../../utility/types/SavedVariant.interface';
 
@@ -58,9 +58,8 @@ const VariantModal = ({variant, saveVariant, removeSavedVariant, savedVariants}:
     }
   }
 
-      function handleLogin(variantId: string, minimumPurchase: number) {
-    localStorage.setItem('variantId',variantId.toString())
-    localStorage.setItem('variantIdMinimumPurchase',minimumPurchase.toString())
+  function handleLogin(variantId: string, minimumPurchase: number) {
+    saveVariantToLocalStorage(variantId, minimumPurchase.toString())
     isLoginModal()
   }
 
