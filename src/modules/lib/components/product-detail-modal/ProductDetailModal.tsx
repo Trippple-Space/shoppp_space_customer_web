@@ -4,7 +4,7 @@ import { IoMdClose } from 'react-icons/io'
 import Link from 'next/link'
 import { ProductVariant } from '../../utility/types/product.interface'
 import { useCart } from '../../utility/hooks/use-cart'
-import { checkMediaType, cx, formatNumberAsPrice, handleFlyToCart } from '../../utility/utility'
+import { checkMediaType, cx, formatNumberAsPrice, handleFlyToCart, saveVariantToLocalStorage } from '../../utility/utility'
 import QuantitySelector from '../quantity-selector/QuantitySelector'
 import Image from '../image/Image'
 import { MdArrowBackIos, MdArrowForwardIos } from 'react-icons/md'
@@ -379,8 +379,7 @@ const ProductDetailModal = ({
                                             );
                                           }
                                         } else {
-                                          localStorage.setItem('variantId', selectedVariant?.id.toString() ?? '0')
-                                          localStorage.setItem('variantIdMinimumPurchase', selectedVariant?.minPurchaseQuantity.toString() || '1')
+                                          saveVariantToLocalStorage(selectedVariant?.id.toString(), selectedVariant?.minPurchaseQuantity.toString())
                                           if (selectedSize) {
                                             localStorage.setItem('selectedVariantSize', selectedSize)
                                           }
