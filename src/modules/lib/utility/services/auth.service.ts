@@ -120,6 +120,29 @@ resendOtp(email: string) {
           });
 }
   
+forgotPassword(email: string) {
+    return http.post(endpoints.FORGOT_PASSWORD, { email })
+        .then((response) => {
+          toast.success("A reset link has been sent to your email");
+        
+            return response.data; 
+        }).catch((error) => 
+          {
+          return  toast.error(error.response.data.message)
+          });
+}
+resetPassword({ token, password, confirmPassword }: { token: string; password: string; confirmPassword: string }) {
+    return http.post(endpoints.RESET_PASSWORD, { token, password, confirmPassword })
+        .then((response) => {
+          toast.success("Your password has been reset successfully. Login to continue.");
+        
+            return response.data; 
+        }).catch((error) => 
+          {
+          return  toast.error(error.response.data.message)
+          });
+}
+  
   googleOauth() {
     window.open(`${envConfig.API_HOST}/${endpoints.GOOGLE_OAUTH_INITIALIZER}?source=${window.location.href}`, '_blank', 'noopener,noreferrer')
 
