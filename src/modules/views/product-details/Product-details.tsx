@@ -195,8 +195,7 @@ const ProductDetails = ({ product }: { product: Product }) => {
                 if (selectedVariant && selectedVariant.status !== 'OUT_OF_STOCK') {
                   addToCart(
                     selectedVariant?.id ?? 0,
-                    selectedVariant?.minPurchaseQuantity || 1,
-                    selectedSize
+                    selectedVariant?.minPurchaseQuantity || 1
                   );
                 }
               } else {
@@ -212,8 +211,8 @@ const ProductDetails = ({ product }: { product: Product }) => {
             </div>
           </button>
         ) : <QuantitySelector
-          decrement={() => decrement(selectedVariantItemInCart, selectedSize)}
-          increment={() => increment(selectedVariantItemInCart, selectedSize)}
+          decrement={() => decrement(selectedVariantItemInCart)}
+          increment={() => increment(selectedVariantItemInCart)}
           cartItem={selectedVariantItemInCart}
           selectedSize={selectedVariantItemInCart?.sizes?.find((size) => size.size === selectedSize)}
         />
