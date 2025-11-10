@@ -10,9 +10,9 @@ type CartStore = {
   showLoginModal: boolean;
   pendingRequests: Record<string, number>;
   fetchCart: (isCheckout?: boolean) => void;
-  addToCart: (variantId: string, quantity?: number, size?: string) => void;
-  incrementCartItem: (variantId: string, quantity?: number, size?: string) => void;
-  decrementCartItem: (variantId: string, quantity?: number, size?: string) => void;
+  addToCart: (variantId: string, quantity?: number) => void;
+  incrementCartItem: (variantId: string, quantity?: number) => void;
+  decrementCartItem: (variantId: string, quantity?: number) => void;
   removeFromCart: (variantId: string) => void;
   buyAgain: (buyAgainItems: BuyAgain[]) => void;
   applyDiscount: (code: string) => void;
@@ -56,9 +56,9 @@ export const useCartStore = create<CartStore>((set, get) => ({
   },
 
   // Add to cart (non-optimistic, waits for backend)
-  addToCart: async (variantId, quantity = 1, size) => {
+  addToCart: async (variantId, quantity = 1) => {
     try {
-      const updatedCart = await cartService.addToCart(variantId, quantity, size);
+      const updatedCart = await cartService.addToCart(variantId, quantity);
       set({ cart: updatedCart });
     } catch {
       toast.error("Failed to add item to cart.");
@@ -66,7 +66,7 @@ export const useCartStore = create<CartStore>((set, get) => ({
   },
 
   // Increment item quantity (optimistic)
-  incrementCartItem: async (variantId, quantity = 1, size) => {
+  incrementCartItem: async (variantId, quantity = 1) => {
     const prevCart = get().cart;
 
     // Immediately reflect UI changes
@@ -74,7 +74,7 @@ export const useCartStore = create<CartStore>((set, get) => ({
       ...prevCart,
       cartItems: prevCart.cartItems.map((item) =>
         item.variant.id === variantId
-          ? { ...item, quantity: item.quantity + quantity, size }
+          ? { ...item, quantity: item.quantity + quantity }
           : item
       ),
     };
@@ -87,7 +87,7 @@ export const useCartStore = create<CartStore>((set, get) => ({
     }));
 
     try {
-      const updatedCart = await cartService.addToCart(variantId, quantity, size);
+      const updatedCart = await cartService.addToCart(variantId, quantity);
       const latest = get().pendingRequests[variantId];
       if (latest === requestId) {
         set({ cart: updatedCart });
@@ -99,7 +99,7 @@ export const useCartStore = create<CartStore>((set, get) => ({
   },
 
   // Decrement item quantity (optimistic)
-  decrementCartItem: async (variantId, quantity = 1, size) => {
+  decrementCartItem: async (variantId, quantity = 1) => {
     const prevCart = get().cart;
 
     // Update UI immediately
@@ -108,7 +108,7 @@ export const useCartStore = create<CartStore>((set, get) => ({
       cartItems: prevCart.cartItems
         .map((item) =>
           item.variant.id === variantId
-            ? { ...item, quantity: Math.max(item.quantity - quantity, 0), size }
+            ? { ...item, quantity: Math.max(item.quantity - quantity, 0) }
             : item
         )
         .filter((item) => item.quantity > 0),
@@ -121,7 +121,7 @@ export const useCartStore = create<CartStore>((set, get) => ({
     }));
 
     try {
-      const updatedCart = await cartService.addToCart(variantId, -quantity, size);
+      const updatedCart = await cartService.addToCart(variantId, -quantity);
       const latest = get().pendingRequests[variantId];
       if (latest === requestId) {
         set({ cart: updatedCart });
@@ -177,7 +177,7 @@ export const useCartStore = create<CartStore>((set, get) => ({
   removeDiscountCode: async () => {
     try {
       await cartService.removeDiscountCodes();
-    } catch { }
+    } catch {}
   },
 
   // Toggle login modal

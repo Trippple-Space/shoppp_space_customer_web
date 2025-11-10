@@ -39,9 +39,9 @@ function orderedProductCard({ orderedProducts }: any) {
                     </div>
                     <div className='flex flex-col gap-5'>
                       {' '}
-                      {item?.sizes ?
+                      {item.variant.size ?
                         <p className='color-#0000008C text-14 w-fit'>
-                          {item?.sizes?.length > 1 ? "Sizes:" : "Size:"} {item?.sizes?.map((size: {quantity: number, size:string}) => (<span className="uppercase">{`${size.size}(${size.quantity})`}</span>))}
+                          Size: {item.variant.size}
                         </p>
                         : null
                       }

@@ -166,9 +166,9 @@ const MiniCart: React.FC<ModalProps> = ({
                                   Color: {cartItem?.variant?.properties?.color}
                                 </p>
                                 {
-                                  cartItem?.sizes &&
+                                  cartItem?.variant?.size &&
                                   <p className='weight-400 text-13.5 line-height-16'>
-                                    {cartItem?.sizes?.length > 1 ? "Sizes:" : "Size:"} {cartItem?.sizes?.map((size) => (<span key={size.size +  size.quantity} className="uppercase">{`${size.size}(${size.quantity})`}</span>))}
+                                    Size: {cartItem?.variant?.size}
                                   </p>
                                 }
                               </div>

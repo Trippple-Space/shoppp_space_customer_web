@@ -1,10 +1,10 @@
 import { ProductVariant } from "./product.interface";
 
 export interface Cart {
-  id: string;
-  userId: string;
-  subTotal: number;
-  total: number;
+    id: string;
+    userId: string;
+    subTotal: number;
+    total: number;
   cartItems: CartItem[]
   totalDiscountedPrice: number;
   discountValue: number;
@@ -13,33 +13,28 @@ export interface Cart {
   meta: any | null;
   createAt: string;
   lastUpdated: string;
-  storeGroups: StoreGroupResponse[];
+  storeGroups: StoreGroupResponse[];  
   systemDiscountCode: string;
   systemDiscountValue: number
 }
 
 export interface CartItem {
-  id: string,
-  productId: string,
-  quantity: number;
-  sizes?: {
-    quantity: number;
-    size: string
-  }[];
-  variant: ProductVariant;
-  totalPrice: number;
-  discountedPrice: number;
-  createAt: string;
-  discountValue: number;
-  lastUpdated: string;
-  meta: any | null;
-
+    id: string,
+    productId: string,
+quantity: number;
+variant: ProductVariant;
+totalPrice: number;
+discountedPrice: number;
+createAt: string;
+discountValue: number;
+lastUpdated: string;
+meta: any | null;
+  
 }
 
 export interface BuyAgain {
-  variantId: string
-  quantity: number
-  size?: {size: string; quantity: number}[]
+    variantId: string
+    quantity: number
 }
 
 export interface StoreGroupResponse {

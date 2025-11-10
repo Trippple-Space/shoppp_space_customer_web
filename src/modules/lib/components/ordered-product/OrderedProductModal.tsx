@@ -33,8 +33,7 @@ const OrderedProductModal = ({
     cartItems.map((cartItem) => {
       const data = {
         variantId: cartItem.variant.id,
-        quantity: cartItem.quantity,
-        size: cartItem.sizes?.flatMap((size) => ({size: size.size, quantity: size.quantity}))
+        quantity: cartItem.quantity
       }
       buyAgainItems.push(data)
     })
@@ -145,9 +144,9 @@ const OrderedProductModal = ({
                             </div>
                             <div className='flex flex-col gap-5'>
                               {' '}
-                              {item?.sizes ?
+                              {item?.variant?.size ?
                                 <p className='color-#0000008C text-12 w-fit'>
-                                  {item?.sizes?.length > 1 ? "Sizes:" : "Size:"} {item?.sizes?.map((size) => (<span className="uppercase">{`${size.size}(${size.quantity})`}</span>))}
+                                  Size: {item?.variant?.size}
                                 </p>
                                 : null
                               }

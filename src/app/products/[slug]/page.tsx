@@ -12,12 +12,12 @@ export async function generateMetadata({
     const product = await productService.fetchProductBySlug(params.slug, {})
 
     const extractSizesAndColors = () => {
-      const sizes = new Set<string[]>();
+      const sizes = new Set<string>();
       const colors = new Set<string>();
 
       product.variants.forEach(variant => {
         if (variant.size) {
-          sizes.add(variant?.size.flatMap((s) => s.size));
+          sizes.add(variant.size);
         }
         if (variant.properties?.color) {
           colors.add(variant.properties.color);

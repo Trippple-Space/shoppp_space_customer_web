@@ -23,37 +23,19 @@ export const useCart = (isCheckout?: boolean) => {
      } = useCartStore();
      const { isAuthenticated } = useUserStore();
 
-     const increment = (cartItem: CartItem, size?: string) => {
-          const selectedSize = cartItem.sizes?.find((s) => s.size === size)
-          const sizeInCart = cartItem.variant.size.find((s) => s.size === size)
-          if (size && selectedSize) {
-               if (selectedSize?.quantity >= Number(sizeInCart?.quantity)) {
-                    return toast.error('You’ve reached the maximum quantity available for this item.');
-               } else {
-                    incrementCartItem(cartItem.variant.id, cartItem.variant.incrementBy, size);
-               }
+     const increment = (cartItem: CartItem) => {
+          if (cartItem.quantity >= cartItem.variant.stock) {
+               return toast.error('You’ve reached the maximum quantity available for this item.');
           } else {
-               if (cartItem.quantity >= cartItem.variant.stock) {
-                    return toast.error('You’ve reached the maximum quantity available for this item.');
-               } else {
-                    incrementCartItem(cartItem.variant.id, cartItem.variant.incrementBy);
-               }
+               incrementCartItem(cartItem.variant.id, cartItem.variant.incrementBy);
           }
      };
 
-     const decrement = (cartItem: CartItem, size?: string) => {
-          if (size) {
-               const selectedSize = cartItem.sizes?.find((s) => s.size === size)
-               if (selectedSize) {
-                    //return removeFromCart(cartItem.id);
-                    decrementCartItem(cartItem.variant.id, cartItem.variant.incrementBy, size);
-               }
+     const decrement = (cartItem: CartItem) => {
+          if (cartItem.quantity <= cartItem.variant.minPurchaseQuantity) {
+               return removeFromCart(cartItem.id);
           } else {
-               if (cartItem.quantity <= cartItem.variant.minPurchaseQuantity) {
-                    return removeFromCart(cartItem.id);
-               } else {
-                    decrementCartItem(cartItem.variant.id, cartItem.variant.incrementBy);
-               }
+               decrementCartItem(cartItem.variant.id, cartItem.variant.incrementBy)
           }
      };
 
