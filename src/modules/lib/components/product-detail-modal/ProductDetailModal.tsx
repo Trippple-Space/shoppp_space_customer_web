@@ -125,6 +125,9 @@ const ProductDetailModal = ({
 
       const imgRef = useRef<HTMLImageElement>(null);
 
+      console.log(cart)
+      console.log(selectedVariantItemInCart)
+
   return (
     <div>
       {openSingleProductModal && (
@@ -381,9 +384,6 @@ const ProductDetailModal = ({
                                         } else {
                                           localStorage.setItem('variantId', selectedVariant?.id.toString() ?? '0')
                                           localStorage.setItem('variantIdMinimumPurchase', selectedVariant?.minPurchaseQuantity.toString() || '1')
-                                          if (selectedSize) {
-                                            localStorage.setItem('selectedVariantSize', selectedSize)
-                                          }
                                           isLoginModal()
                                         }
                                       }}
