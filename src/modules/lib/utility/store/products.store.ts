@@ -56,13 +56,7 @@ const placeholderProduct: Product = {
                         type: "image",
                    },
             ],
-            size:[
-                {
-                    size: "",
-                    quantity: 0,
-                    isAvailable: false
-                }
-            ],
+            size:'',
               status:'',
               stock: 0,
               price: 0,

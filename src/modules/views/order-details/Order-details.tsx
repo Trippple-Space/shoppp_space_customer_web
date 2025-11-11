@@ -88,8 +88,7 @@ const OrderDetails = ({ orderId }: OrderDetailsProps) => {
     cartItems.map((cartItem) => {
       const data = {
         variantId: cartItem.variant.id,
-        quantity: cartItem.quantity,
-        sizes: cartItem.sizes?.flatMap((size) => ({size: size.size, quantity: size.quantity}))
+        quantity: cartItem.quantity
       }
       buyAgainItems.push(data)
     })

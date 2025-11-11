@@ -39,7 +39,6 @@ const ProductDetailModal = ({
   const uniqueVariantsFromProductImages = variantSelectedImage ? [variant] : availableColors?.map((color) => groupedData?.[color][0])
 
   const [isHover, setIsHover] = useState(false)
-  const [selectedSize, setSelectedSize] = useState<string | undefined>(undefined);
   const [selectedVariant, setSelectedVariant] = useState(variant || groupedData?.[availableColors[0]]?.[0])
   const [selectedImage, setSelectedImage] = useState(variant.media?.[0]?.url || uniqueVariantsFromProductImages?.[0]?.media?.[0]?.url || groupedData?.[availableColors[0]]?.media?.[0]?.url)
   const [selectedColor, setSelectedColor] = useState(variant?.properties?.color || availableColors?.[0] || '')
@@ -65,25 +64,6 @@ const ProductDetailModal = ({
   }, [variant])
 
 
-  useEffect(() => {
-    if (!selectedSize && groupedData && selectedColor && groupedData[selectedColor]?.length) {
-      const firstVariantWithSize = groupedData[selectedColor].find(
-        (v: ProductVariant) => v.size && v.size.length > 0
-      );
-
-      if (firstVariantWithSize) {
-        const firstAvailableSize = firstVariantWithSize.size.find(
-          (s: { size: string; isAvailable: boolean; quantity: number }) =>
-            s.isAvailable && s.quantity > 0
-        );
-
-        if (firstAvailableSize) {
-          setSelectedVariant(firstVariantWithSize);
-          setSelectedSize(firstAvailableSize.size);
-        }
-      }
-    }
-  }, [groupedData, selectedColor, selectedSize]);
 
   const displayPrice = selectedVariant?.finalPrice || variant.product?.finalPrice
 
@@ -121,7 +101,7 @@ const ProductDetailModal = ({
   const mediaType = checkMediaType(selectedImage) ?? 'image';
   const descriptionLength = variant?.product?.longDescription?.split(' ')?.length || 0
   const maxDisplayDescLength = 20
-  const hasSize = (groupedData?.[selectedColor][0]?.size.length !== 0)
+  const hasSize = !(groupedData?.[selectedColor][0].size === null || groupedData?.[selectedColor][0].size === '')
 
       const imgRef = useRef<HTMLImageElement>(null);
 
@@ -310,51 +290,37 @@ const ProductDetailModal = ({
                                     Select size:
                                   </p>
                                   <div className='flex gap-6 a-items-center no-scrollbar' style={{ width: '100%', overflow: 'auto' }}>
-                                    {groupedData?.[selectedColor]?.map((variant: ProductVariant, i: number) =>
-                                      variant?.size?.map((v, idx) => {
-                                        const isActive = selectedVariant?.id === variant.id && selectedSize === v.size;
-
-                                        if (!v.isAvailable || v.quantity === 0) {
-                                          return null
-                                        }
-
-                                        return (
+                                    {
+                                      groupedData?.[selectedColor]?.map((variant: ProductVariant) => (
+                                        variant?.size && (
                                           <label
-                                            key={v.size + idx}
+                                            key={variant.id}
                                             className={cx(
-                                              `flex gap-8 text-14 bg-#F3F3F3 color-#000000CC px-10 py-7 radius-6 pointer transition-colors`,
+                                              'flex gap-8 text-14 bg-#F3F3F3 color-#000000CC px-10 py-7 radius-6 pointer',
                                               {
-                                                'bg-#DEFFF9! color-#0B9378! border-#0B9378! border':
-                                                  isActive,
+                                                'bg-#DEFFF9! color-#0B9378!': variant?.id === selectedVariant?.id
                                               }
                                             )}
-                                            title={!v.isAvailable || v.quantity === 0 ? "This size is currently out of stock or unavailabe" : ""}
                                           >
                                             <input
-                                              type="radio"
-                                              name={`size-${idx}-${i}`}
-                                              onChange={() => {
-                                                setSelectedVariant(variant);
-                                                setSelectedSize(v.size);
-                                                console.log(v.size)
-                                              }}
-                                              className={cx('accent-#0B9378 pointer disabled:cursor-default')}
-                                              checked={isActive}
-                                              disabled={!v.isAvailable || v.quantity === 0}
+                                              type='radio'
+                                              name='size56'
+                                              onClick={() => setSelectedVariant(variant)}
+                                              className={cx('accent-#0B9378 pointer')}
+                                              checked={variant?.id === selectedVariant?.id}
+                                              onChange={() => setSelectedVariant(variant)}
                                             />
-                                            <span className="whitespace-nowrap text-12">{v.size}</span>
+                                            <span className={`whitespace-nowrap text-12`}>{variant?.size}</span>
                                           </label>
-                                        );
-                                      })
-                                    )}
+                                        )
+                                      ))
+                                    }
                                   </div>
                                 </div>
                               }
 
-                              <div className='grid mt-19 mb-10 gap-10'>
-                                {
-                                  hasSize && !selectedSize ? "" :
-                                  !selectedVariantItemInCart || !selectedVariantItemInCart?.sizes?.find((size) => size.size === selectedSize) ?
+                              <div className='grid mt-20 mb-10 gap-10'>
+                                {!selectedVariantItemInCart ?
                                   (
                                     <button
                                       className={classNames(
@@ -374,15 +340,12 @@ const ProductDetailModal = ({
                                           if (selectedVariant && selectedVariant.status !== 'OUT_OF_STOCK') {
                                             addToCart(
                                               selectedVariant?.id ?? '0',
-                                              selectedVariant?.minPurchaseQuantity || 1,
-                                              selectedSize
+                                              selectedVariant?.minPurchaseQuantity || 1
                                             );
                                           }
                                         } else {
-                                          saveVariantToLocalStorage(selectedVariant?.id.toString(), selectedVariant?.minPurchaseQuantity.toString())
-                                          if (selectedSize) {
-                                            localStorage.setItem('selectedVariantSize', selectedSize)
-                                          }
+                                          localStorage.setItem('variantId', selectedVariant?.id.toString() ?? '0')
+                                          localStorage.setItem('variantIdMinimumPurchase', selectedVariant?.minPurchaseQuantity.toString() || '1')
                                           isLoginModal()
                                         }
                                       }}
@@ -393,13 +356,11 @@ const ProductDetailModal = ({
                                     </button>
                                   ) : <div className='mb-10'>
                                     <QuantitySelector
-                                      decrement={() => decrement(selectedVariantItemInCart, selectedSize)}
-                                      increment={() => increment(selectedVariantItemInCart, selectedSize)}
+                                      decrement={() => decrement(selectedVariantItemInCart)}
+                                      increment={() => increment(selectedVariantItemInCart)}
                                       cartItem={selectedVariantItemInCart}
-                                      selectedSize={selectedVariantItemInCart?.sizes?.find((size) => size.size === selectedSize)}
                                     />
-                                  </div>
-                                }
+                                  </div>}
                               </div>
                               <div className='text-left text-12 flex a-items-center weight-400'>
                                 <Link
