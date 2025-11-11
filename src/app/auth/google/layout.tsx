@@ -26,18 +26,12 @@ export default function GoogleLayout({
     if (isAuthenticated) {
       const variantId = localStorage.getItem("variantId")
       const variantIdMinimumPurchase = localStorage.getItem("variantIdMinimumPurchase")
-      const selectedVariantSize = localStorage.getItem('selectedVariantSize')
 
       if (variantId && variantIdMinimumPurchase) {
         const parsedMinimumPurchase = parseInt(variantIdMinimumPurchase, 10)
 
         if (!isNaN(parsedMinimumPurchase)) {
-          if (selectedVariantSize) {
-            addToCart(variantId, parsedMinimumPurchase, selectedVariantSize)
-            localStorage.removeItem('selectedVariantSize')
-          } else {
-            addToCart(variantId, parsedMinimumPurchase)
-          }
+          addToCart(variantId, parsedMinimumPurchase)
         }
 
         localStorage.removeItem("variantId")
