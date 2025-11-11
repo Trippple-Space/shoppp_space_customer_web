@@ -21,6 +21,8 @@ import Image from "../image/Image";
 import { useNavbarView } from "../../utility/hooks/views/use-navbar-view";
 import useUserStore from "../../utility/store/user.store";
 import VideoSrc from "../video-src/VideoSrc";
+import ProductDetailModal from "../product-detail-modal/ProductDetailModal";
+import { ProductVariant } from "../../utility/types/product.interface";
 
 interface ModalProps {
   isOpen?: boolean;
@@ -34,6 +36,8 @@ const MiniCart: React.FC<ModalProps> = ({
   hideDefaultCart = false,
 }) => {
   const [internalOpen, setInternalOpen] = useState(false);
+  const [openSingleProductModal, setOpenSingleProductModal] = useState(false)
+  const [selectedVariant, setSelectedVariant] = useState<ProductVariant>()
 
   const open = isOpen !== undefined ? isOpen : internalOpen;
   const setOpen = (val: boolean) => {
@@ -66,6 +70,10 @@ const MiniCart: React.FC<ModalProps> = ({
     if (cartItem?.variant?.product?.discount?.activeEndDate) {
       return new Date(cartItem?.variant?.product?.discount?.activeStartDate) <= new Date(new Date().setHours(new Date().getHours() + 1)) && new Date(new Date().setHours(new Date().getHours() + 1)) <= new Date(cartItem?.variant?.product?.discount?.activeEndDate)
     }
+  }
+
+  const handleCloseProductModal = () => {
+    setOpenSingleProductModal((prev) => !prev)
   }
 
   return (
@@ -205,7 +213,14 @@ const MiniCart: React.FC<ModalProps> = ({
                                 <>
                                   <span
                                     className='bg-white p-6 round flex flex-col a-items-center hover:pointer'
-                                    onClick={() => decrement(cartItem)}
+                                    onClick={() => {
+                                      if (cartItem.sizes?.length === 1) {
+                                        decrement(cartItem, cartItem.sizes[0].size)
+                                      } else {
+                                        setSelectedVariant(cartItem.variant)
+                                        setOpenSingleProductModal(true)
+                                      }
+                                    }}
                                   >
                                     {cartItem?.quantity ===
                                       cartItem?.variant?.minPurchaseQuantity ? (
@@ -219,7 +234,14 @@ const MiniCart: React.FC<ModalProps> = ({
                                   </span>
                                   <span
                                     className='bg-white p-6 round flex flex-col a-items-center hover:pointer'
-                                    onClick={() => increment(cartItem)}
+                                    onClick={() => {
+                                      if (cartItem.sizes?.length === 1) {
+                                        increment(cartItem, cartItem.sizes[0].size)
+                                      } else {
+                                        setSelectedVariant(cartItem.variant)
+                                        setOpenSingleProductModal(true)
+                                      }
+                                    }}
                                   >
                                     <PiPlus className='w-20 h-20 color-#00000099' />
                                   </span>
@@ -274,6 +296,15 @@ const MiniCart: React.FC<ModalProps> = ({
             </div>
           </div>
         </div>
+
+        {openSingleProductModal && selectedVariant && (
+          <ProductDetailModal
+            openSingleProductModal={openSingleProductModal}
+            handleCloseProductModal={handleCloseProductModal}
+            position="homepage"
+            variant={selectedVariant}
+          />
+        )}
       </Modal>
 
       {

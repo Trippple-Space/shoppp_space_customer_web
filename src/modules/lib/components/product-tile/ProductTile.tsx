@@ -4,7 +4,7 @@ import Image from '../image/Image'
 import { AiFillStar, AiFillHeart } from 'react-icons/ai'
 import classNames from 'classnames'
 import { Product, ProductVariant } from '../../utility/types/product.interface'
-import { checkMediaType, displayProductPill, formatNumberAsPrice, handleFlyToCart, onGoingOrderStatusQuery } from '../../utility/utility'
+import { checkMediaType, displayProductPill, formatNumberAsPrice, handleFlyToCart, onGoingOrderStatusQuery, saveVariantToLocalStorage } from '../../utility/utility'
 import { useCart } from '../../utility/hooks/use-cart'
 import QuantitySelector from '../quantity-selector/QuantitySelector'
 import Link from 'next/link'
@@ -115,8 +115,7 @@ const ProductTile: FC<IProductTile> = ({
   }
 
   function handleLogin(variantId: string, minimumPurchase: number) {
-    localStorage.setItem('variantId', variantId.toString())
-    localStorage.setItem('variantIdMinimumPurchase', minimumPurchase.toString())
+           saveVariantToLocalStorage(variantId, minimumPurchase.toString())
     isLoginModal()
   }
 
