@@ -41,7 +41,7 @@ const ProductDetailModal = ({
   const [isHover, setIsHover] = useState(false)
   const [selectedVariant, setSelectedVariant] = useState(variant || groupedData?.[availableColors[0]]?.[0])
   const [selectedImage, setSelectedImage] = useState(variant.media?.[0]?.url || uniqueVariantsFromProductImages?.[0]?.media?.[0]?.url || groupedData?.[availableColors[0]]?.media?.[0]?.url)
-  const [selectedColor, setSelectedColor] = useState(variant?.properties?.color || availableColors?.[0] || '')
+  const [selectedColor, setSelectedColor] = useState(variant?.properties?.color.toLowerCase() || availableColors?.[0].toLowerCase() || '')
 
   const selectedVariantItemInCart = cart.cartItems.find(
     item => item.variant.id === selectedVariant?.id
@@ -78,7 +78,7 @@ const ProductDetailModal = ({
       const previousVariant = uniqueVariantsFromProductImages[previousIndex];
       setSelectedVariant(previousVariant);
       setSelectedImage(previousVariant?.media?.[0]?.url || variantSelectedImage);
-      setSelectedColor(previousVariant?.properties?.color)
+      setSelectedColor(previousVariant?.properties?.color.toLowerCase())
     }
   };
 
@@ -94,14 +94,16 @@ const ProductDetailModal = ({
       const nextVariant = uniqueVariantsFromProductImages[nextVariantIndex];
       setSelectedVariant(nextVariant);
       setSelectedImage(nextVariant?.media?.[0]?.url || variantSelectedImage);
-      setSelectedColor(nextVariant?.properties?.color)
+      setSelectedColor(nextVariant?.properties?.color.toLowerCase())
     }
   };
 
   const mediaType = checkMediaType(selectedImage) ?? 'image';
   const descriptionLength = variant?.product?.longDescription?.split(' ')?.length || 0
   const maxDisplayDescLength = 20
-  const hasSize = !(groupedData?.[selectedColor][0].size === null || groupedData?.[selectedColor][0].size === '')
+  const hasSize = !(groupedData?.[selectedColor.toLowerCase()][0].size === null || groupedData?.[selectedColor.toLowerCase()][0].size === '')
+
+  console.log(groupedData?.[selectedColor])
 
       const imgRef = useRef<HTMLImageElement>(null);
 
@@ -183,7 +185,7 @@ const ProductDetailModal = ({
                                           
                                           setSelectedVariant(vari)
                                           setSelectedImage(mediaItem?.url)
-                                          setSelectedColor(vari.properties.color)
+                                          setSelectedColor(vari.properties.color.toLowerCase())
                                         }}
                                         className='w-90 min-w-90 h-90'
                                       >
@@ -260,7 +262,7 @@ const ProductDetailModal = ({
                                           <div
                                             key={each}
                                             onClick={() => {
-                                              setSelectedColor(each)
+                                              setSelectedColor(each.toLowerCase())
                                               setSelectedImage(productImages?.[idx])
                                               setSelectedVariant(groupedData?.[each]?.[0])
                                             }}

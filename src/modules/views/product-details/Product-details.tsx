@@ -63,7 +63,7 @@ const ProductDetails = ({ product }: { product: Product }) => {
   const variantIds = useMemo(() => product.variants.map(v => v.id), [product.variants]);
   const { reviews, loading: reviewsLoading, refresh: refreshReviews } = useGetProductRating(variantIds);
   const { reviewStat, loading: statsLoading, refresh: refreshStats } = useGetRatingStats(variantIds);
-  const [selectedColor, setSelectedColor] = useState(availableColors[0])
+  const [selectedColor, setSelectedColor] = useState(availableColors[0].toLowerCase())
   const [showShareModal, setShowShareModal] = useState(false)
   const [showFullDescription, setShowFullDescription] = useState(false)
   const [showAllPhotos, setShowAllPhotos] = useState(false)
@@ -118,7 +118,7 @@ const ProductDetails = ({ product }: { product: Product }) => {
  
 
   const allImages = product.variants.flatMap(variant => variant.media.map(media => media.url));
-
+  const uniqueImages = Array.from(new Set(allImages));
 
   useEffect(() => {
     if (isAuthenticated) {
@@ -143,7 +143,7 @@ const ProductDetails = ({ product }: { product: Product }) => {
 
   const isOutOfStock = selectedVariant?.status === 'OUT_OF_STOCK';
   const isDiscounted = new Date() <= new Date(product?.discount?.activeEndDate)
-  const hasSize = !(groupedData?.[selectedColor][0].size === null || groupedData?.[selectedColor][0].size === '')
+  const hasSize = !(groupedData?.[selectedColor.toLowerCase()][0].size === null || groupedData?.[selectedColor.toLowerCase()][0].size === '')
 
   const addToCartBtn = () => {
     return <div className='flex flex-col gap-16'>
@@ -243,7 +243,7 @@ const ProductDetails = ({ product }: { product: Product }) => {
           <div className='w-100p flex l:grid grid-2-cols-1fr l:grid-2-row-auto gap-6 no-scrollbar l:overflow-visible overflow-auto' style={{ width: '100%' }}>
 
             {
-              allImages.slice(0, 4).map((image, idx) => {
+              uniqueImages.slice(0, 4).map((image, idx) => {
                 const variant = product.variants.find(variant => variant.media.some(media => media.url === image));
                 if (!variant) return null; // Skip if no variant found
                 const mediaItem = variant.media.find(media => media.url === image);
@@ -268,7 +268,7 @@ const ProductDetails = ({ product }: { product: Product }) => {
                           onClick={() => {
                             setSelectedVariant(variant);
                             setSelectedImage(mediaItem?.url);
-                            setSelectedColor(variant.properties.color)
+                            setSelectedColor(variant.properties.color.toLowerCase())
                           }}
                         />
                         :
@@ -284,7 +284,7 @@ const ProductDetails = ({ product }: { product: Product }) => {
                           onClick={() => {
                             setSelectedVariant(variant);
                             setSelectedImage(mediaItem?.url);
-                            setSelectedColor(variant.properties.color)
+                            setSelectedColor(variant.properties.color.toLowerCase())
                           }}
                         />
                     }
@@ -349,15 +349,15 @@ const ProductDetails = ({ product }: { product: Product }) => {
           <div className='l:w-40p flex flex-col gap-12'>
             <div className='flex flex-col gap-12 border-b  border-#00000014 pb-15'>
               <p className='weight-500 text-20'>{product.name}</p>
-              <p className='text-14'>
+              {/* <p className='text-14'>
                 {
                   selectedVariant.properties.origin &&
                   <>
                     Links:{' '} <span className='color-#1677FF capitalize'> {selectedVariant.properties.origin} | </span>
                   </>
                 }
-                {/*<Link href={'/fabrics'} className='color-#1677FF'>Similar Ankara Product</Link> */}
-              </p>
+                <Link href={'/fabrics'} className='color-#1677FF'>Similar Ankara Product</Link>
+              </p> */}
             </div>
             <div className='flex flex-col gap-12 border-b  border-#00000014 pb-15'>
               <p className='weight-400 text-28'>
@@ -452,7 +452,7 @@ const ProductDetails = ({ product }: { product: Product }) => {
                         <div
                           key={each}
                           onClick={() => {
-                            setSelectedColor(each)
+                            setSelectedColor(each.toLowerCase())
                             setSelectedImage(productImages[idx])
                           }}
                           style={{
@@ -591,7 +591,7 @@ const ProductDetails = ({ product }: { product: Product }) => {
                           <div
                             key={each}
                             onClick={() => {
-                              setSelectedColor(each)
+                              setSelectedColor(each.toLowerCase())
                               setSelectedImage(productImages[idx])
                             }}
                             style={{
@@ -693,17 +693,22 @@ const ProductDetails = ({ product }: { product: Product }) => {
       />
       <Modal isOpen={showAllPhotos} onClose={() => setShowAllPhotos(false)}>
         <div className='l:w-500 h-70vh flex l:grid grid-2-cols-1fr l:grid-2-row-auto gap-6 p-20 overflow-auto no-scrollbar'>
-          {uniqueVariantsFromProductImages.map((variant, idx) =>
-            variant?.media?.map((mediaItem: any, index: number) => {
+          {
+              uniqueImages.map((image, idx) => {
+                const variant = product.variants.find(variant => variant.media.some(media => media.url === image));
+                if (!variant) return null; // Skip if no variant found
+                const mediaItem = variant.media.find(media => media.url === image);
+                const currentIndex = globalMediaIndex++;
+             
               return (
                 <div
-                  key={index}
+                  key={idx}
                   style={{
                     filter: variant.status === 'OUT_OF_STOCK' ? 'grayscale(100%)' : 'none'
                   }}
                 >
                   <Image
-                    src={mediaItem?.url}
+                    src={mediaItem?.url || ''}
                     alt="product-image"
                     className={cx('object-fit w-50 h-50 radius-4 l:radius-0 l:w-full pointer l:h-full', {
                       'border border-green border-2':
@@ -714,13 +719,13 @@ const ProductDetails = ({ product }: { product: Product }) => {
                     onClick={() => {
                       setSelectedVariant(variant);
                       setSelectedImage(mediaItem?.url);
-                      setSelectedColor(variant.properties.color)
+                      setSelectedColor(variant.properties.color.toLowerCase())
                     }}
                   />
                 </div>
               );
             })
-          )}
+          }
         </div>
       </Modal>
 

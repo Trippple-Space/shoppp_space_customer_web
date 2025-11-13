@@ -5,7 +5,9 @@ const useTransformProduct = (product: Product) => {
   const productImages: string[] = []
 
   product.variants.forEach((each) => {
-    const color = each.properties.color;
+    const rawColor = each.properties.color || "";
+    const color = rawColor.trim().toLowerCase();
+
     const hashArray = groupedData[color];
     if (!hashArray) {
       groupedData[color] = [each];
