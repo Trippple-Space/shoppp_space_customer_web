@@ -29,6 +29,20 @@ export interface User {
   orderCount?: number;
 }
 
+export interface CustomerData {
+  createAt: string;
+  lastUpdated: string;
+  profile?: {
+    id: string;
+    firstName: string;
+    lastName: string;
+    gender: string | null;
+    phoneNumbers: string[];
+    email: string | null;
+    meta: Record<string, unknown> | null;
+  } | null;
+}
+
 
 // ---- API response shape ----
 export interface NewUser {
@@ -43,19 +57,7 @@ export interface NewUser {
   lastLoginAt?: string | null;
   orderCount?: number;
   storeRoles?: unknown[];
-  customer: {
-    createAt: string;
-    lastUpdated: string;
-    profile?: {
-      id: string;
-      firstName: string;
-      lastName: string;
-      gender: string | null;
-      phoneNumbers: string[];
-      email: string | null;
-      meta: Record<string, unknown> | null;
-    } | null;
-  };
+  customer: CustomerData
 }
 
 // ---- Converted/flattened output ----

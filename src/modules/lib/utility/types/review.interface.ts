@@ -20,9 +20,9 @@ export interface IFetchedReview {
         verifiedPurchase: boolean,
         images: string[]
     }
-    createAt: string,
+    createdAt: string,
     lastUpdated: string,
-    user: User
+    customer: User
 }
 
 export interface IReviewStat {
