@@ -230,6 +230,7 @@ const ProductDetails = ({ product }: { product: Product }) => {
                   className={`flex-grow-1 h-full radius-8 l:radius-t-l-16 l:radius-b-l-16 l:radius-b-r-0 l:radius-t-r-0   w-full h-full a-self-center object-fit-cover ${isOutOfStock && 'out-of-stock'}`}
                   alt={''}
                   ref={imgRef}
+                  width={10000}
 
                 />
                 :
@@ -265,6 +266,7 @@ const ProductDetails = ({ product }: { product: Product }) => {
                             'l:radius-b-r-16': currentIndex === 3,
 
                           })}
+                          width={10000}
                           onClick={() => {
                             setSelectedVariant(variant);
                             setSelectedImage(mediaItem?.url);
@@ -460,9 +462,9 @@ const ProductDetails = ({ product }: { product: Product }) => {
                             cursor: "pointer"
                           }}
                           className={classNames(
-                            'w-32 min-w-32 h-32 flex round cursor-pointer',
+                            'w-32 min-w-32 h-32 flex round cursor-pointer border border-1 border-lightgray',
                             {
-                              'border border-2.5 w-30 min-w-30 h-30 flex':
+                              'border border-2.3 border-black! w-30 min-w-30 h-30 flex':
                                 selectedColor === each
                             }
                           )}
@@ -599,9 +601,9 @@ const ProductDetails = ({ product }: { product: Product }) => {
                               cursor: "pointer"
                             }}
                             className={classNames(
-                              'w-36 min-w-36 h-36 flex round cursor-pointer',
+                              'w-36 min-w-36 h-36 flex round cursor-pointer border border-1 border-lightgray',
                               {
-                                'border border-2.8 w-34 min-w-34 h-34 flex':
+                                'border border-2.8 border-black! w-34 min-w-34 h-34 flex':
                                   selectedColor === each
                               }
                             )}
@@ -716,6 +718,7 @@ const ProductDetails = ({ product }: { product: Product }) => {
                       [`border-${mediaItem?.description?.toLocaleLowerCase()}`]:
                         selectedImage == mediaItem?.url
                     })}
+                    width={10000}
                     onClick={() => {
                       setSelectedVariant(variant);
                       setSelectedImage(mediaItem?.url);

@@ -135,12 +135,14 @@ const OrderDetails = ({ orderId }: OrderDetailsProps) => {
                           {orderReturnMessage(singleOrder.status)}
                         </p>
                       </div>
-                      <div className='bg-whitesmoke p-12 radius-12 w-60 h-60'>
+                      <div className='bg-whitesmoke p-12 radius-12 w-60 h-60 flex flex-col j-content-center a-items-center'>
                         <Image
                           type='icon'
                           src={getOrderImage(singleOrder?.status) || ''}
                           alt='placed order icon'
-                          className='w-fit'
+                          className='w-fit!'
+                          width={50}
+                          height={50}
                         />
                       </div>
                     </div>

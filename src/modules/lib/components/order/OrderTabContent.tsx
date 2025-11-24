@@ -52,7 +52,7 @@ const OrderTabContent = ({ status }: OrderTabContentProps) => {
           <div className='flex flex-col a-items-center gap-10'>
             <Image
               type='icon'
-              className='w-200'
+              className='w-200 h-200'
               src='order-message.svg'
               alt='no-order-image'
             />

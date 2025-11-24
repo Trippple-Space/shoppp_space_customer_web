@@ -174,8 +174,8 @@ const TrendFashion: FC<{
                         <div className="feature-text trend-flex">
                         {store.meta.template.features.slice(0, 3).map((feature: any, idx: number) => (
                             <div key={idx} className="feature">
-                            <h4>{feature.header || `Store feature ${idx + 1}`}</h4>
-                            <p>{feature.content || ""}</p>
+                                <h4>{feature.header}</h4>
+                                <p>{feature.content || ""}</p>
                             </div>
                         ))}
                         </div>

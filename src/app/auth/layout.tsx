@@ -80,9 +80,10 @@ const Layout: FC<ILayout> = ({ children }) => {
           </div>
           <div className="relative w-100p h-100p">
             <Image
-              className="absolute h-95p w-fit r-0 b-0"
+              className="absolute h-95p! w-fit! r-0 b-0"
               src="carton-man-0.png"
               alt="Delivery"
+              width={1000}
             />
           </div>
         </div>

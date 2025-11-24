@@ -56,7 +56,7 @@ const StorefrontNavBar = ({ store }: { store?: Store }) => {
             <div className="sm:flex hidden flex-row a-items-center gap-8 p-4 pl-12 border border-#00000014 radius-999 pointer">
               <HiMenuAlt3 className="w-24 h-24" />
               <img
-                src={`https://api.dicebear.com/7.x/thumbs/svg?seed=${user?.firstName}`}
+                src={`https://api.dicebear.com/7.x/thumbs/png?seed=${user?.firstName}`}
                 alt="user"
                 className="w-42 h-42 object-fit round border border-#00000014"
               />

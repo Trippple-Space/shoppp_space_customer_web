@@ -153,7 +153,7 @@ useEffect(() => {
       >
         <Link href={'/'} className='w-fit'>
           <Image
-            className='w-100 l:w-110'
+            className='w-100! l:w-110! h-27!'
             src='Main logo green.svg'
             alt='logo'
             type='logo'
@@ -236,7 +236,7 @@ useEffect(() => {
                 {user ? (
                   <Image
                     className='w-34 h-34 border-solid border-2 border-grey-300 radius-50p'
-                    src={`https://api.dicebear.com/7.x/thumbs/svg?seed=${user?.firstName}`}
+                    src={`https://api.dicebear.com/7.x/thumbs/png?seed=${user?.firstName}`}
                     alt='user'
                   />
                 ) : (
