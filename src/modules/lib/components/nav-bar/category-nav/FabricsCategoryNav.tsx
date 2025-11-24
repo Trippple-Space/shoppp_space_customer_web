@@ -39,6 +39,8 @@ const FabricsCategoryNav = ({ categories, selectedCategory, setSelectedCategory,
                   src="asoebi-fabrics.svg"
                   alt="logo"
                   type="icon"
+                  width={20}
+                  height={20}
                 />
               </div>
               <div className="flex flex-col gap-5 a-items-baseline cursor-pointer">
@@ -61,7 +63,7 @@ const FabricsCategoryNav = ({ categories, selectedCategory, setSelectedCategory,
               )}
             >
               <div className="flex bg-#F0FCED p-3 l:p-12 round">
-                <Image className="w-20" src="asoebi-wears.svg" alt="logo" type="icon" />
+                <Image className="w-20" src="asoebi-wears.svg" alt="logo" type="icon" width={20} height={20} />
               </div>
               <div className="flex flex-col gap-5 a-items-baseline cursor-pointer">
                 <p className="weight-400 l:weight-500 text-14 l:text-inherit">Wears</p>

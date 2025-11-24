@@ -144,11 +144,11 @@ const MiniCart: React.FC<ModalProps> = ({
                                   <Image
                                     src={cartItem.variant.media[0].url}
                                     alt='cart image'
-                                    className={`sm:w-80 w-70 sm:h-80 h-70 radius-6 border border-#00000014 object-fit ${cartItem.variant.status == 'OUT_OF_STOCK' ? 'greyscale' : ''}`}
+                                    className={`sm:w-80! w-70! sm:h-80! h-70! radius-6 border border-#00000014 object-fit ${cartItem.variant.status == 'OUT_OF_STOCK' ? 'greyscale' : ''}`}
                                   />
                                   :
                                   <VideoSrc
-                                    className={`sm:w-80 w-70 sm:h-80 h-70 radius-6 border border-#00000014 object-fit ${cartItem.variant.status == 'OUT_OF_STOCK' ? 'greyscale' : ''}`}
+                                    className={`sm:w-80! w-70! sm:h-80! h-70! radius-6 border border-#00000014 object-fit ${cartItem.variant.status == 'OUT_OF_STOCK' ? 'greyscale' : ''}`}
                                     src={cartItem.variant.media[0].url}
                                   />
                               }

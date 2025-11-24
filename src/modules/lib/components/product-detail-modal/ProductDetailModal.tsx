@@ -162,6 +162,7 @@ const ProductDetailModal = ({
                                           src={selectedImage}
                                           alt={variant?.product?.name || 'Product'}
                                           className={`object-fit w-full h-full ${selectedVariant?.status === 'OUT_OF_STOCK' ? 'greyscale' : ''}`}
+                                          width={10000}
                                         />
                                         :
                                         <VideoSrc
@@ -203,6 +204,7 @@ const ProductDetailModal = ({
                                                     selectedImage == mediaItem?.url
                                                 }
                                               )}
+                                              width={10000}
                                             />
                                             :
                                             <VideoSrc
@@ -271,9 +273,9 @@ const ProductDetailModal = ({
                                               cursor: "pointer"
                                             }}
                                             className={classNames(
-                                              'w-32 min-w-32 h-32 flex round cursor-pointer',
+                                              'w-32 min-w-32 h-32 flex round cursor-pointer border border-1 border-lightgray',
                                               {
-                                                'border border-2.5 w-30 min-w-30 h-30 flex':
+                                                'border border-2.3 border-black! w-30 min-w-30 h-30 flex':
                                                   selectedColor === each
                                               }
                                             )}

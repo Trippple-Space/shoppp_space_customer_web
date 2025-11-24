@@ -62,7 +62,7 @@ const UserProfileDropdown: FC<IUserProfileDropdown> = ({
                   <div className=''>
                     <img
                       className='l:w-60 l:h-60 w-40 h-40 border-solid border-0.5 border-#00000014 radius-50p'
-                      src={`https://api.dicebear.com/7.x/thumbs/svg?seed=${user?.firstName}`}
+                      src={`https://api.dicebear.com/7.x/thumbs/png?seed=${user?.firstName}`}
                       alt='user'
                     />
                   </div>

@@ -73,7 +73,9 @@ const CentralArena = () => {
           </div>
         )}
 
-        <div ref={ref}>
+        <div ref={ref} className="h-20"></div>
+
+        <div>
           <p className='w-100p flex j-content-center mt-10'>
             {(products.length && loading) ? <PuffLoader /> : ""}
           </p>

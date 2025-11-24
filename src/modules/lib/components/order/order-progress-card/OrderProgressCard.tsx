@@ -34,8 +34,6 @@ const OrderProgressCard = ({ orders }: OrderProgressProp) => {
     order.status.toUpperCase()
   )
 
-
-  console.log(orders[0].delivery);
   return (
     <>
       {orders.map(order => {

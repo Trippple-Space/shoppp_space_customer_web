@@ -238,6 +238,7 @@ useEffect(() => {
                 }`}
                 src={selectedImage}
                 alt="product-image"
+                width={10000}
               />
             </div>
           ) : (
@@ -394,7 +395,7 @@ useEffect(() => {
                   className={classNames(
                     `l:w-35.2 l:min-w-35.2 l:h-35.2 w-31 min-w-31 h-31 pointer md:radius-4 radius-3 a-self-center g|object-fit:cover ${variant?.status === 'OUT_OF_STOCK' && 'out-of-stock'}`,
                     {
-                      "border border-2": selectedImage == mediaItem?.url,
+                      "border border-2 border-black": selectedImage == mediaItem?.url,
                       [`border-${/*variant?.properties?.color?.toLocaleLowerCase() ||*/'#0B9378'}`]:
                         selectedImage == mediaItem?.url,
                     }
