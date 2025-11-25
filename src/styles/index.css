@@ -325,6 +325,8 @@
 @layer lo { .\@lo\:placeholder\:text-14::placeholder { font-size: 14px; } } 
 .bg-\#FACE33 { background-color: #FACE33; } 
 .bg-\#FFFFFF4D { background-color: #FFFFFF4D; } 
+[class~='g|inset:0px']{inset:0px} 
+.z-index-2, .z-2 { z-index: 2; } 
 .h-0 { height: 0px; } 
 .pt-12 { padding-top: 12px; } 
 .pb-12 { padding-bottom: 12px; } 
@@ -512,7 +514,6 @@
 .ml-70 { margin-left: 70px; } 
 .ml-55 { margin-left: 55px; } 
 .ml-40 { margin-left: 40px; } 
-.z-index-2, .z-2 { z-index: 2; } 
 .border-white { border-color: #FFFFFF; } 
 .bg-\#d9d9d9 { background-color: #d9d9d9; } 
 .p-1 { padding: 1px; } 

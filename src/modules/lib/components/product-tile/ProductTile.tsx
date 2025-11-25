@@ -238,6 +238,7 @@ useEffect(() => {
                 src={selectedImage}
                 alt="product-image"
                 width={10000}
+                hasLoader={true}
               />
             </div>
           ) : (
@@ -384,7 +385,7 @@ useEffect(() => {
         <div className="scroll-x no-scrollbar">
         <div
           id="product varients"
-          className="md:mt-16 mt-14 flex a-items-center md:gap-6 gap-4 w-full overflow-auto whitespace-nowrap no-scrollbar"
+          className="md:mt-16 mt-14 flex a-items-center md:gap-6 gap-4 w-full overflow-auto whitespace-nowrap no-scrollbar relative"
         >
           {uniqueVariantsFromProductImages.map((variant: any) =>
             variant?.media?.map((mediaItem: any, i: number) =>

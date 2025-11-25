@@ -30,6 +30,7 @@ export const useProductListView = () => {
     const updatedFilters = { ...allFilters, tags: selectedCategory.name === "All" ? "" : selectedCategory.name.toLowerCase() };
 
     updateHomePageFilter(updatedFilters);
+    setPage(1);
     setPagination({ page: 1, limit });
   }, [allFilters, JSON.stringify(query.allFilters), JSON.stringify(query.filters), selectedCategory.name])
 
