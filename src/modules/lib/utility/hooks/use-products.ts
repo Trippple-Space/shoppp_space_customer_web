@@ -104,7 +104,7 @@ export const useProducts = (initialQuery: IQueryParams) => {
   useEffect(() => {
     if (
       (productsCache[cacheKey]?.length ?? 0) <
-      (query.pagination?.limit ?? 0) * (query.pagination?.page ?? 0)
+      (query.pagination?.limit ?? 0) * (query.pagination?.page ?? 1)
     ) {
       setLoading(true);
       productService
