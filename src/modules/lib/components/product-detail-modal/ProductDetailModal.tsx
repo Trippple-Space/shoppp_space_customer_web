@@ -103,9 +103,7 @@ const ProductDetailModal = ({
   const maxDisplayDescLength = 20
   const hasSize = !(groupedData?.[selectedColor.toLowerCase()][0].size === null || groupedData?.[selectedColor.toLowerCase()][0].size === '')
 
-  console.log(groupedData?.[selectedColor])
-
-      const imgRef = useRef<HTMLImageElement>(null);
+  const imgRef = useRef<HTMLImageElement>(null);
 
   return (
     <div>
@@ -177,7 +175,7 @@ const ProductDetailModal = ({
                                     <MdArrowForwardIos className='w-fit' />
                                   </div>}
                                 </div>
-                                {!variantSelectedImage && (uniqueVariantsFromProductImages?.length ?? 0) > 1 && <div className='flex gap-10 py-5 overflow-x-auto a-items-center no-scrollbar w-full'>
+                                {!variantSelectedImage && (uniqueVariantsFromProductImages?.length ?? 0) && <div className='flex gap-10 py-5 overflow-x-auto a-items-center no-scrollbar w-full'>
                                   {uniqueVariantsFromProductImages?.map((vari, idx) =>
                                     vari?.media?.map((mediaItem: any) => {
                                       return (<div

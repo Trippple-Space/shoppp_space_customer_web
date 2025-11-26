@@ -15,6 +15,7 @@ export interface IImageProps {
   height?: number
   fill?: boolean
   hasLoader?: boolean
+  pulseClassName?: string
 }
 
 const extractSize = (className: string | undefined, prefix: 'w' | 'h'): number | undefined => {
@@ -27,7 +28,7 @@ const extractSize = (className: string | undefined, prefix: 'w' | 'h'): number |
 }
 
 const Image = React.forwardRef<HTMLImageElement, IImageProps>(
-  ({ className, src, alt, type = 'image', onClick, width, height, fill, hasLoader }, ref) => {
+  ({ className, src, alt, type = 'image', onClick, width, height, fill, hasLoader, pulseClassName }, ref) => {
     
     const [loaded, setLoaded] = useState(false);
     const autoWidth = width ?? extractSize(className, 'w') ?? 0
@@ -36,7 +37,7 @@ const Image = React.forwardRef<HTMLImageElement, IImageProps>(
     return src ? (
       <>
       {!loaded && hasLoader && (
-        <div className="absolute g|inset:0px z-2 pulsing-multi-color-bg" 
+        <div className={`absolute g|inset:0px z-2 pulsing-multi-color-bg ${pulseClassName}`} 
         />
       )}
       <NextImage
@@ -55,7 +56,7 @@ const Image = React.forwardRef<HTMLImageElement, IImageProps>(
         fill={fill}
       />
       </>
-    ) : null
+    ) : null;
   }
 )
 
