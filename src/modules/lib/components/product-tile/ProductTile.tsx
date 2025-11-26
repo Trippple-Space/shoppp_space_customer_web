@@ -50,8 +50,6 @@ const ProductTile: FC<IProductTile> = ({
     filters: { status: { In: `${onGoingOrderStatusQuery},DELIVERED` } },
   })
 
-
-
   const isCheckoutOrOrdersPage = pathname.includes('/checkout') || pathname.includes('/orders')
 
   const [seenAddToCartIconOnBoarding] = useState<boolean>(() => {
@@ -386,48 +384,54 @@ useEffect(() => {
         <div className="scroll-x no-scrollbar">
         <div
           id="product varients"
-          className="md:mt-16 mt-14 flex a-items-center md:gap-6 gap-4 w-full overflow-auto whitespace-nowrap no-scrollbar relative"
+          className="md:mt-16 mt-14 flex a-items-center md:gap-6 gap-4 w-full overflow-auto whitespace-nowrap no-scrollbar"
         >
           {uniqueVariantsFromProductImages.map((variant: any) =>
             variant?.media?.map((mediaItem: any, i: number) =>
-              mediaItem?.type === "image" ? (
-                <Image
-                  key={`${variant.id}-${mediaItem.url}-${i}`}
-                  className={classNames(
-                    `l:w-35.2 l:min-w-35.2 l:h-35.2 w-31 min-w-31 h-31 pointer md:radius-4 radius-3 a-self-center g|object-fit:cover ${variant?.status === 'OUT_OF_STOCK' && 'out-of-stock'}`,
-                    {
-                      "border border-2 border-black": selectedImage == mediaItem?.url,
-                      [`border-${/*variant?.properties?.color?.toLocaleLowerCase() ||*/'#0B9378'}`]:
-                        selectedImage == mediaItem?.url,
-                    }
-                  )}
-                  src={mediaItem?.url}
-                  onClick={() => {
-                    setSelectedVariant(variant);
-                    setRecentlyViewsId(variant.id)
-                    setSelectedImage(mediaItem?.url);
-                    setSelectedColor(variant?.properties?.color)
-                  }}
-                  alt="product-image"
-                />
-              ) : (
-                <VideoSrc
-                  key={`${variant.id}-${mediaItem.url}-${i}`}
-                  className={classNames(
-                    `l:w-35.2 l:min-w-35.2 l:h-35.2 w-31 min-w-31 h-31 pointer md:radius-4 radius-3 a-self-center g|object-fit:cover ${variant?.status === 'OUT_OF_STOCK' && 'out-of-stock'}`,
-                    {
-                      "border border-2": selectedImage == mediaItem?.url,
-                      [`border-${/*variant?.properties?.color?.toLocaleLowerCase() ||*/'#0B9378'}`]:
-                        selectedImage == mediaItem?.url,
-                    }
-                  )}
-                  onClick={() => {
-                    setSelectedVariant(variant);
-                    setSelectedImage(mediaItem?.url);
-                  }}
-                  src={mediaItem?.url}
-                />
-              )
+              <div className='l:w-35.2 l:min-w-35.2 l:h-35.2 w-31 min-w-31 h-31 pointer md:radius-4 radius-3 a-self-center relative'>
+                {
+                  mediaItem?.type === "image" ? (
+                    <Image
+                      key={`${variant.id}-${mediaItem.url}-${i}`}
+                      className={classNames(
+                        `l:w-35.2 l:min-w-35.2 l:h-35.2 w-31 min-w-31 h-31 pointer md:radius-4 radius-3 a-self-center g|object-fit:cover ${variant?.status === 'OUT_OF_STOCK' && 'out-of-stock'}`,
+                        {
+                          "border border-2 border-black": selectedImage == mediaItem?.url,
+                          [`border-${/*variant?.properties?.color?.toLocaleLowerCase() ||*/'#0B9378'}`]:
+                            selectedImage == mediaItem?.url,
+                        }
+                      )}
+                      src={mediaItem?.url}
+                      onClick={() => {
+                        setSelectedVariant(variant);
+                        setRecentlyViewsId(variant.id)
+                        setSelectedImage(mediaItem?.url);
+                        setSelectedColor(variant?.properties?.color)
+                      }}
+                      alt="product-image"
+                      hasLoader={true}
+                      pulseClassName='md:radius-4 radius-3'
+                    />
+                  ) : (
+                    <VideoSrc
+                      key={`${variant.id}-${mediaItem.url}-${i}`}
+                      className={classNames(
+                        `l:w-35.2 l:min-w-35.2 l:h-35.2 w-31 min-w-31 h-31 pointer md:radius-4 radius-3 a-self-center g|object-fit:cover ${variant?.status === 'OUT_OF_STOCK' && 'out-of-stock'}`,
+                        {
+                          "border border-2": selectedImage == mediaItem?.url,
+                          [`border-${/*variant?.properties?.color?.toLocaleLowerCase() ||*/'#0B9378'}`]:
+                            selectedImage == mediaItem?.url,
+                        }
+                      )}
+                      onClick={() => {
+                        setSelectedVariant(variant);
+                        setSelectedImage(mediaItem?.url);
+                      }}
+                      src={mediaItem?.url}
+                    />
+                  )
+                }
+              </div>
             )
           )}
         </div>

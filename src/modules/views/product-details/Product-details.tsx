@@ -13,6 +13,7 @@ import useTransformProduct from '@/modules/lib/utility/hooks/use-transform-produ
 import { productService } from '@/modules/lib/utility/services/product.service'
 import { Product, ProductVariant, RecentlyViewed } from '@/modules/lib/utility/types/product.interface'
 import { SavedVariant } from '@/modules/lib/utility/types/SavedVariant.interface'
+import styles from "@/styles/lightbox.module.css";
 import {
   checkMediaType,
   cx,
@@ -36,6 +37,8 @@ import colorNames from '@/modules/lib/utility/json-data/colors.json'
 import VideoSrc from '@/modules/lib/components/video-src/VideoSrc'
 import { AddReview } from './reviews/AddReview'
 import { useOrders } from '@/modules/lib/utility/hooks/use-orders'
+import { IoCloseSharp } from 'react-icons/io5'
+import { MdOutlineNavigateBefore, MdOutlineNavigateNext } from 'react-icons/md'
 
 const ProductDetails = ({ product }: { product: Product }) => {
 
@@ -68,6 +71,12 @@ const ProductDetails = ({ product }: { product: Product }) => {
   const [showAllPhotos, setShowAllPhotos] = useState(false)
   const [isOpen, setIsOpen] = useState<string | null>(null);
   const [isReviewModalOpen, setIsReviewModalOpen] = useState<boolean>(false)
+
+  const [showLightbox, setShowLightbox] = useState(false);
+  const [lightboxIndex, setLightboxIndex] = useState(0);
+  const lightboxRef = useRef<HTMLDivElement | null>(null);
+
+
   const selectedVariantItemInCart = cart.cartItems.find(
     item => item.variant.id === selectedVariant?.id
   )
@@ -118,6 +127,8 @@ const ProductDetails = ({ product }: { product: Product }) => {
 
   const allImages = product.variants.flatMap(variant => variant.media.map(media => media.url));
   const uniqueImages = Array.from(new Set(allImages));
+  const lightboxImages = uniqueImages.length ? uniqueImages : [''];
+  const lightboxTotal = lightboxImages.length;
 
   useEffect(() => {
     if (isAuthenticated) {
@@ -221,22 +232,35 @@ const ProductDetails = ({ product }: { product: Product }) => {
           <div className='w-full h-270 md:h-420 sm:h-350 relative'>
             {isOutOfStock && <div className="absolute w-100p h-100p text-white flex j-content-center a-items-center z-1 l:text-22 radius-6">
               Out of stock
-            </div>}
+            </div>
+            }
             {
-              mediaType === 'image' ?
-                <Image
-                  src={selectedImage}
-                  className={`flex-grow-1 h-full radius-8 l:radius-t-l-16 l:radius-b-l-16 l:radius-b-r-0 l:radius-t-r-0   w-full h-full a-self-center object-fit-cover ${isOutOfStock && 'out-of-stock'}`}
-                  alt={''}
-                  ref={imgRef}
-                  width={10000}
-
-                />
-                :
-                <VideoSrc
-                  className={`flex-grow-1 h-full radius-8 l:radius-t-l-16 l:radius-b-l-16 l:radius-b-r-0 l:radius-t-r-0   w-full h-full a-self-center object-fit-cover ${isOutOfStock && 'out-of-stock'}`}
-                  src={selectedImage}
-                />
+              <div 
+                className={`relative w-full h-full cursor-pointer`}
+                onClick={() => {
+                  const idx = lightboxImages.findIndex((u) => u === selectedImage);
+                  setLightboxIndex(idx >= 0 ? idx : 0);
+                  setShowLightbox(true);
+                }}
+                aria-label="Open gallery"
+              >
+                <div className={`absolute inset-0 bg-black hover:bg-black opacity-0 hover:opacity-20 g|transition-property:opacity g|transition-duration:0.2s z-1 radius-8 l:radius-t-l-16 l:radius-b-l-16 l:radius-b-r-0 l:radius-t-r-0`}></div>
+                {
+                  mediaType === 'image' ?
+                    <Image
+                      src={selectedImage}
+                      className={`flex-grow-1 h-full radius-8 l:radius-t-l-16 l:radius-b-l-16 l:radius-b-r-0 l:radius-t-r-0 w-full h-full a-self-center object-fit-cover ${isOutOfStock && 'out-of-stock'}`}
+                      alt={''}
+                      ref={imgRef}
+                      width={10000}
+                    />
+                    :
+                    <VideoSrc
+                      className={`flex-grow-1 h-full radius-8 l:radius-t-l-16 l:radius-b-l-16 l:radius-b-r-0 l:radius-t-r-0   w-full h-full a-self-center object-fit-cover ${isOutOfStock && 'out-of-stock'}`}
+                      src={selectedImage}
+                    />
+                }
+              </div>
             }
           </div>
 
@@ -293,56 +317,6 @@ const ProductDetails = ({ product }: { product: Product }) => {
                 );
               })
             }
-
-            {/* {uniqueVariantsFromProductImages.map((variant, idx) =>
-              variant?.media.map((mediaItem: any, index: number) => {
-                const currentIndex = globalMediaIndex++;
-                const constttt =  ""
-        
-                return (
-                  <div
-                    key={index}
-                    className={`l:h-207 ${variant?.status === 'OUT_OF_STOCK' && 'out-of-stock'} relative ${idx <= 3 ? 'block' : 'l:hidden block'}`}
-                  >
-                    {
-                      mediaType === 'image' ?
-                        <Image
-                          src={mediaItem?.url}
-                          alt="product-image"
-                          className={cx('object-fit w-50 h-50 radius-4 l:w-full l:h-full pointer l:radius-t-l-0 l:radius-b-l-0  l:radius-t-r-0 l:radius-b-r-0', {
-                            'border border-green border-2':
-                              selectedImage == mediaItem?.url,
-                            'l:radius-t-r-16': currentIndex === 1,
-                            'l:radius-b-r-16': currentIndex === 3,
-
-                          })}
-                          onClick={() => {
-                            setSelectedVariant(variant);
-                            setSelectedImage(mediaItem?.url);
-                            setSelectedColor(variant.properties.color)
-                          }}
-                        />
-                        :
-                        <VideoSrc
-                          className={cx('object-fit w-50 h-50 radius-4 l:w-full l:h-full pointer l:radius-t-l-0 l:radius-b-l-0  l:radius-t-r-0 l:radius-b-r-0', {
-                            'border border-green border-2':
-                              selectedImage == mediaItem?.url,
-                            'l:radius-t-r-16': currentIndex === 1,
-                            'l:radius-b-r-16': currentIndex === 3,
-
-                          })}
-                          src={mediaItem?.url}
-                          onClick={() => {
-                            setSelectedVariant(variant);
-                            setSelectedImage(mediaItem?.url);
-                            setSelectedColor(variant.properties.color)
-                          }}
-                        />
-                    }
-                  </div>
-                );
-              })
-            )} */}
           </div>
         </div>
 
@@ -350,15 +324,6 @@ const ProductDetails = ({ product }: { product: Product }) => {
           <div className='l:w-40p flex flex-col gap-12'>
             <div className='flex flex-col gap-12 border-b  border-#00000014 pb-15'>
               <p className='weight-500 text-20'>{product.name}</p>
-              {/* <p className='text-14'>
-                {
-                  selectedVariant.properties.origin &&
-                  <>
-                    Links:{' '} <span className='color-#1677FF capitalize'> {selectedVariant.properties.origin} | </span>
-                  </>
-                }
-                <Link href={'/fabrics'} className='color-#1677FF'>Similar Ankara Product</Link>
-              </p> */}
             </div>
             <div className='flex flex-col gap-12 border-b  border-#00000014 pb-15'>
               <p className='weight-400 text-28'>
@@ -730,7 +695,6 @@ const ProductDetails = ({ product }: { product: Product }) => {
           }
         </div>
       </Modal>
-
       <Modal
         isOpen={isReviewModalOpen && !reviewsLoading && !statsLoading}
         onClose={() => { setIsReviewModalOpen(false) }}
@@ -753,6 +717,70 @@ const ProductDetails = ({ product }: { product: Product }) => {
           </div>
         </div>
       </Modal>
+      {showLightbox && (
+        <div className={styles.wrapper} role="dialog" aria-modal="true">
+      <div className={`${styles.topBar} mt-20 md:mt-30 mx-5 sm:mx-20 md:mx-30 mb-5 md:mb-10 h-34 py-14 px-10 sm:px-24`}>
+        <button className={`${styles.closeBtn} flex a-items-center gap-4 p-8 pr-10 radius-10 hover:bg-#b2b1b13c`} onClick={() => {setShowLightbox(false)}}>
+          <IoCloseSharp size={18} /> Close
+        </button>
+
+        <div className={styles.counter}>{lightboxIndex + 1} / {lightboxImages.length}</div>
+
+        <div className={styles.actions}>
+          <p className='p-8 flex a-items-center j-content-center radius-100p hover:bg-#b2b1b13c'><RxShare2 onClick={() => setShowShareModal(true)} className={`${styles.icon} w-20 h-20 min-w-20`} size={20} /></p>
+
+          {isSaved ? (
+            <p className='p-8 flex a-items-center j-content-center radius-100p hover:bg-#b2b1b13c'><AiFillHeart onClick={handleSave} className={`${styles.icon} w-20 h-20 min-w-20`} size={20} /></p>
+          ) : (
+            <p className='p-8 flex a-items-center j-content-center radius-100p hover:bg-#b2b1b13c'>
+              <AiOutlineHeart
+                onClick={() => (isAuthenticated ? handleSave() : isLoginModal())} 
+                className={`${styles.icon} w-20 h-20 min-w-20`} 
+                size={20} 
+              />
+            </p>
+          )}
+        </div>
+      </div>
+
+      <div className={styles.viewer} onClick={() => {setShowLightbox(false)}}>
+        <div className={styles.mediaWrapper} onClick={(e) => e.stopPropagation()}>
+          
+          <button
+            className={`${styles.navBtn} ${styles.leftBtn}`}
+            onClick={() => setLightboxIndex((lightboxIndex - 1 + lightboxImages.length) % lightboxImages.length)}
+          >
+            <MdOutlineNavigateBefore className='color-#fffafaec' />
+          </button>
+ 
+          {checkMediaType(lightboxImages[lightboxIndex]) ?? "image" === "image" ? (
+
+            <Image
+              src={lightboxImages[lightboxIndex]}
+              className={`flex-grow-1 h-full w-full h-full a-self-center ${isOutOfStock && 'out-of-stock'} ${styles.media}`}
+              alt={''}
+              ref={imgRef}
+              width={10000}
+
+            />
+          ) : (
+            <VideoSrc
+              className={`flex-grow-1 h-full w-full h-full a-self-center ${isOutOfStock && 'out-of-stock'} ${styles.media}`}
+              src={lightboxImages[lightboxIndex]}
+            />
+          )}
+
+          <button
+            className={`${styles.navBtn} ${styles.rightBtn}`}
+            onClick={() => setLightboxIndex((lightboxIndex + 1) % lightboxImages.length)}
+          >
+            <MdOutlineNavigateNext className='color-#fffafaec' />
+          </button>
+
+        </div>
+      </div>
+    </div>
+      )}
       <Footer />
     </>
   );

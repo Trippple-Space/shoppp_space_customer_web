@@ -35,12 +35,6 @@ const ShareProductModal: React.FC<ModalProps> = ({
   return (
     <AnimatePresence>
       {modalOpen && (
-        <motion.div
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 100 }}
-          exit={{ opacity: 0 }}
-          transition={{ duration: 0.3 }}
-        >
           <Modal
             isOpen={modalOpen}
             onClose={handleCloseModal}
@@ -75,7 +69,6 @@ const ShareProductModal: React.FC<ModalProps> = ({
               </div>
             </div>
           </Modal>
-        </motion.div>
       )}
     </AnimatePresence>
   )
