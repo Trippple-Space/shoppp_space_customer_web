@@ -151,6 +151,17 @@ const ProductDetails = ({ product }: { product: Product }) => {
     setSelectedVariant(groupedData?.[selectedColor]?.[0])
   }, [selectedColor])
 
+  useEffect(() => {
+    if (!showLightbox) return;
+    function onKey(e: KeyboardEvent) {
+      if (e.key === 'Escape') setShowLightbox(false);
+      if (e.key === 'ArrowLeft') setLightboxIndex(i => (i - 1 + lightboxTotal) % lightboxTotal);
+      if (e.key === 'ArrowRight') setLightboxIndex(i => (i + 1) % lightboxTotal);
+    }
+    window.addEventListener('keydown', onKey);
+    return () => window.removeEventListener('keydown', onKey);
+  }, [showLightbox, lightboxTotal]);
+
   const isOutOfStock = selectedVariant?.status === 'OUT_OF_STOCK';
   const isDiscounted = new Date() <= new Date(product?.discount?.activeEndDate)
   const hasSize = !(groupedData?.[selectedColor.toLowerCase()][0].size === null || groupedData?.[selectedColor.toLowerCase()][0].size === '')
