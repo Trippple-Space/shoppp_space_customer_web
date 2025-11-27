@@ -1,6 +1,6 @@
 'use client'
 import { useAuthGuard } from "@/modules/lib/utility/hooks/use-auth-guard"
-import { useGoogleOauth } from "@/modules/lib/utility/hooks/use-google-oauth"
+import { useCart } from "@/modules/lib/utility/hooks/use-cart"
 import { usePathname, useRouter } from "next/navigation"
 import { useEffect } from "react"
 
@@ -8,12 +8,11 @@ export default function GoogleLayout({
   children
 }: {
   children: React.ReactNode
-  }) {
-  
-    const router = useRouter()
+}) {
+  const { addToCart, isAuthenticated } = useCart()
+  const { user, checking } = useAuthGuard()
+  const router = useRouter()
   const pathName = usePathname()
-  const path = pathName.split('/')[2] || ''
-  const { user, checking } = useAuthGuard()  
 
   const isAuthRoute = pathName.startsWith('/auth')
 
@@ -23,11 +22,26 @@ export default function GoogleLayout({
     }
   }, [checking, user, isAuthRoute, router])
 
-  if (checking) return null
+  useEffect(() => {
+    if (isAuthenticated) {
+      const variantId = localStorage.getItem("variantId")
+      const variantIdMinimumPurchase = localStorage.getItem("variantIdMinimumPurchase")
 
+      if (variantId && variantIdMinimumPurchase) {
+        const parsedMinimumPurchase = parseInt(variantIdMinimumPurchase, 10)
+
+        if (!isNaN(parsedMinimumPurchase)) {
+          addToCart(variantId, parsedMinimumPurchase)
+        }
+
+        localStorage.removeItem("variantId")
+        localStorage.removeItem("variantIdMinimumPurchase")
+      }
+    }
+  }, [isAuthenticated, addToCart])
+
+  if (checking) return null
   if (user && isAuthRoute) return null
 
-  
-  
-  return <>  {children}</>
+  return <>{children}</>
 }

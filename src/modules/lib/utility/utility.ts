@@ -360,6 +360,13 @@ export function getLastFiveIdChars(id: string): string {
 
 
 
+export function saveVariantToLocalStorage(variantId: string, minimumPur: string) {
+  if (typeof window === "undefined") return
+  localStorage.setItem('variantId', variantId)
+  localStorage.setItem('variantIdMinimumPurchase', minimumPur.toString())
+}
+
+
 
 
 
