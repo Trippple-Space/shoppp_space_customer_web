@@ -72,9 +72,7 @@ const Modal: React.FC<ModalProps> = ({ isOpen, onClose, children, extraModalClas
 
     scrollbarWidth: "none",
     msOverflowStyle: "none",
-    // maxHeight: '90vh',
-    // height: '100%',
-    position: !isOnCheckoutPage ? 'absolute' : 'relative',
+    position: 'absolute',
     ...extraClass
   };
 

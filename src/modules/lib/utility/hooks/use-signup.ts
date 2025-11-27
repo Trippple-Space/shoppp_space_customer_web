@@ -9,6 +9,7 @@ import { paths } from "@/modules/lib/utility/paths";
 import { useLoginView } from "./use-login";
 import useUserStore from "../store/user.store";
 import { useRouteGuard } from "./use-route-guard";
+import { useCartStore } from "../store/cart.store";
 
 
 const signUpValidationSchema = Yup.object().shape({
@@ -43,6 +44,7 @@ export const useSignUpView = () => {
   const searchParams = useSearchParams();
   const { formHandler: loginFormHandler } = useLoginView()
    const { isAuthenticated, authenticateUser } = useUserStore()
+   const {isLoginModal} = useCartStore()
 
   const [step, setStep] = useState<"initial" | "verify" | "createPassword">("initial");
 
@@ -62,6 +64,7 @@ export const useSignUpView = () => {
         });
           localStorage.setItem('signup-email', values.email);
           router.push(`${paths.verify}?token=${response.token}`);
+          isLoginModal()
   
     }
   } as FormikConfig<Pick<{ fullname: string; email: string;}, "fullname" | "email">>);
