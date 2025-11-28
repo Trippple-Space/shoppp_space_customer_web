@@ -157,6 +157,8 @@ useEffect(() => {
             src='Main logo green.svg'
             alt='logo'
             type='logo'
+            priority
+            fetchPriority='high'
           />
         </Link>
 

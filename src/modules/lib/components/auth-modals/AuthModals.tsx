@@ -37,12 +37,19 @@ export default function AuthModals() {
           src={'asoebi-graphics.svg'}
           alt="asoebi-graphics"
           type="image"
+          priority
+          fetchPriority="high"
         />
       </div>
 
       <div
         className={`px-16 sm:px-35 flex flex-col a-items-center j-content-center h-fit`}
-        style={{ flex: 1, overflowY: 'scroll', overflow: 'auto', margin: 'auto 0' }}
+        style={{
+          flex: 1,
+          overflowY: 'scroll',
+          overflow: 'auto',
+          margin: 'auto 0',
+        }}
       >
         {step === 1 && (
           <StepOne

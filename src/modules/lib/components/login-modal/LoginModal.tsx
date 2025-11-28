@@ -54,7 +54,7 @@ const LoginModal = () => {
                   animate={{ scale: 1 }}
                   exit={{ scale: 0 }}
                   transition={{ duration: 0.3 }}
-                  className="bg-white radius-8 w-95p l:w-100p max-w-500 md:max-w-981 py-20 md:py-8 md:pl-35 mx-auto flex shadow-30-30-4-0-\#00000040 h-fit"
+                  className="bg-white radius-8 w-95p l:w-100p max-w-500 md:max-w-981 py-30 md:py-10 md:pl-35 mx-auto flex shadow-30-30-4-0-\#00000040 h-fit"
                   style={{ overflowY: 'scroll', overflow: 'auto' }}
                   onClick={(e) => e.stopPropagation()}
                 >

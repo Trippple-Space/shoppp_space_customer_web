@@ -63,6 +63,8 @@ const Layout: FC<ILayout> = ({ children }) => {
           src="new-asoebi-logo-white.svg"
           alt="logo"
           type="logo"
+          priority
+          fetchPriority='high'
         />
       </Link>
 
@@ -75,6 +77,8 @@ const Layout: FC<ILayout> = ({ children }) => {
                 src="Main logo white.svg"
                 alt="logo"
                 type="logo"
+                priority
+                fetchPriority='high'
               />
             </Link>
           </div>
