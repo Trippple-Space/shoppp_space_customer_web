@@ -9,7 +9,7 @@ class AddressService {
     return new Promise((resolve, reject) => {
       http.get(buildEndpoint(endpoints.USER_ADDRESSES, {userId}))
         .then((response: AxiosResponse) => {
-          resolve(response.data);
+          resolve(response.data.data);
         })
         .catch((error) => {
           reject();

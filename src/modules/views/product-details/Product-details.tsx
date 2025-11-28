@@ -73,8 +73,8 @@ const ProductDetails = ({ product }: { product: Product }) => {
   } = useCart();
 
   const variantIds = useMemo(
-    () => product.variants.map((v) => v.id),
-    [product.variants]
+    () => product?.variants.map((v) => v.id),
+    [product?.variants]
   );
   const {
     reviews,
@@ -87,7 +87,7 @@ const ProductDetails = ({ product }: { product: Product }) => {
     refresh: refreshStats,
   } = useGetRatingStats(variantIds);
   const [selectedColor, setSelectedColor] = useState(
-    availableColors[0].toLowerCase()
+    availableColors[0]?.toLowerCase()
   );
   const [showShareModal, setShowShareModal] = useState(false);
   const [showFullDescription, setShowFullDescription] = useState(false);
@@ -131,7 +131,7 @@ const ProductDetails = ({ product }: { product: Product }) => {
     })();
   }, [isAuthenticated]);
 
-  const isSaved = savedVariants.find(
+  const isSaved = savedVariants?.find(
     (variant: SavedVariant) => selectedVariant.id === variant.variantId
   );
   const mediaType = checkMediaType(selectedImage) ?? 'image';
@@ -153,7 +153,7 @@ const ProductDetails = ({ product }: { product: Product }) => {
     isLoginModal();
   }
 
-  const allImages = product.variants.flatMap((variant) =>
+  const allImages = product?.variants?.flatMap((variant) =>
     variant.media.map((media) => media.url)
   );
   const uniqueImages = Array.from(new Set(allImages));
@@ -213,7 +213,7 @@ const ProductDetails = ({ product }: { product: Product }) => {
     groupedData?.[selectedColor.toLowerCase()][0].size === null ||
     groupedData?.[selectedColor.toLowerCase()][0].size === ''
   );
-
+  
   const addToCartBtn = () => {
     return (
       <div className="flex flex-col gap-16">
@@ -375,7 +375,7 @@ const ProductDetails = ({ product }: { product: Product }) => {
             style={{ width: '100%' }}
           >
             {uniqueImages.slice(0, 4).map((image, idx) => {
-              const variant = product.variants.find((variant) =>
+              const variant = product?.variants?.find((variant) =>
                 variant.media.some((media) => media.url === image)
               );
               if (!variant) return null; // Skip if no variant found
@@ -823,7 +823,7 @@ const ProductDetails = ({ product }: { product: Product }) => {
             </div>
           </div>
         </div>
-        {recentlyViewedVariants.length > 0 && (
+        {recentlyViewedVariants?.length > 0 && (
           <div className="flex flex-col gap-12 pb-15 pt-20">
             <div className="flex a-items-center j-content-between">
               <p className="text-16  weight-600">
@@ -835,7 +835,7 @@ const ProductDetails = ({ product }: { product: Product }) => {
               </p>
             </div>
             <div className="flex gap-20 a-items-start overflow-auto w-full h-fit no-scrollbar">
-              {recentlyViewedVariants.map((variant, i) => (
+              {recentlyViewedVariants?.map((variant, i) => (
                 <div className="" key={i}>
                   <VariantModal
                     variant={variant}
@@ -873,7 +873,7 @@ const ProductDetails = ({ product }: { product: Product }) => {
       <Modal isOpen={showAllPhotos} onClose={() => setShowAllPhotos(false)}>
         <div className="l:w-500 h-70vh flex l:grid grid-2-cols-1fr l:grid-2-row-auto gap-6 p-20 overflow-auto no-scrollbar">
           {uniqueImages.map((image, idx) => {
-            const variant = product.variants.find((variant) =>
+            const variant = product?.variants?.find((variant) =>
               variant.media.some((media) => media.url === image)
             );
             if (!variant) return null; // Skip if no variant found

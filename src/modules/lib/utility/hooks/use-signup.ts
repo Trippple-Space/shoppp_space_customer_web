@@ -43,8 +43,8 @@ export const useSignUpView = () => {
   const router = useRouter();
   const searchParams = useSearchParams();
   const { formHandler: loginFormHandler } = useLoginView()
-   const { isAuthenticated, authenticateUser } = useUserStore()
-   const {isLoginModal} = useCartStore()
+  const { isAuthenticated, authenticateUser } = useUserStore()
+  const { isLoginModal } = useCartStore()
 
   const [step, setStep] = useState<"initial" | "verify" | "createPassword">("initial");
 
@@ -57,17 +57,17 @@ export const useSignUpView = () => {
       email: ""
     },
     validationSchema: signUpValidationSchema,
-      onSubmit: async (values: { fullname: string;  email: string}) => {
-        const response = await authService.signUpInitial({
-          fullname: values.fullname,
-          email: values.email
-        });
-          localStorage.setItem('signup-email', values.email);
-          router.push(`${paths.verify}?token=${response.token}`);
-          isLoginModal()
-  
+    onSubmit: async (values: { fullname: string; email: string }) => {
+      const response = await authService.signUpInitial({
+        fullname: values.fullname,
+        email: values.email
+      });
+      localStorage.setItem('signup-email', values.email);
+      router.push(`${paths.verify}?token=${response.token}`);
+      isLoginModal()
+
     }
-  } as FormikConfig<Pick<{ fullname: string; email: string;}, "fullname" | "email">>);
+  } as FormikConfig<Pick<{ fullname: string; email: string; }, "fullname" | "email">>);
 
   // STEP 2: OTP verification form
   const formikOtp = useFormik({
@@ -76,25 +76,25 @@ export const useSignUpView = () => {
     },
     onSubmit: async (values: { otp: string }) => {
       const tokenFromUrl = searchParams.get("token") || "";
-        const response = await authService.verifyOtp({ token: tokenFromUrl, otp: values.otp });
-        localStorage.setItem("create-password-token", response.createPasswordToken);
-              setToken(response.createPasswordToken);
-              router.push(paths.create_password);
-              setStep("createPassword");
+      const response = await authService.verifyOtp({ token: tokenFromUrl, otp: values.otp });
+      localStorage.setItem("create-password-token", response.createPasswordToken);
+      setToken(response.createPasswordToken);
+      router.push(paths.create_password);
+      setStep("createPassword");
     }
   } as FormikConfig<{ otp: string }>);
 
 
   useEffect(() => {
     const tokenFromUrl = searchParams.get("token") || "";
-      const otpFromUrl = searchParams.get("otp");
-  
-      if (tokenFromUrl) {
-          setToken(tokenFromUrl);
-        if (otpFromUrl) {
+    const otpFromUrl = searchParams.get("otp");
+
+    if (tokenFromUrl) {
+      setToken(tokenFromUrl);
+      if (otpFromUrl) {
         authService
           .verifyOtp({ token: tokenFromUrl, otp: otpFromUrl })
-            .then((response) => {
+          .then((response) => {
             localStorage.setItem("create-password-token", response.createPasswordToken);
             setToken(response.token);
             toast.success("OTP verified via link successfully.");
@@ -115,32 +115,32 @@ export const useSignUpView = () => {
       confirmPassword: ""
     },
     validationSchema: passwordCreationSchema,
-    onSubmit: async (values) => {      
+    onSubmit: async (values) => {
       if (values.password === values.confirmPassword) {
-      try {
-        const storedToken = localStorage.getItem("create-password-token");
-        if (!storedToken) {
-          throw new Error("No valid token found. Please retry the verification process.");
+        try {
+          const storedToken = localStorage.getItem("create-password-token");
+          if (!storedToken) {
+            throw new Error("No valid token found. Please retry the verification process.");
+          }
+
+          const payload = {
+            token: storedToken,
+            password: values.password
+          };
+          await authService.setPassword(payload);
+          localStorage.removeItem('create-password-token')
+
+
+          const tempEmail = localStorage.getItem('signup-email');
+          authService.signIn({ email: tempEmail ?? '', password: payload.password }).then((response) => {
+
+            authenticateUser(response.user);
+            useRouteGuard(isAuthenticated, paths.homepage)
+          });
+
+        } catch (error: any) {
+          toast.error(error.response.data.message || "Registration failed");
         }
-          
-        const payload = {
-          token: storedToken,
-          password: values.password
-        };
-        await authService.setPassword(payload);
-        localStorage.removeItem('create-password-token')
-
-
-        const tempEmail = localStorage.getItem('signup-email');
-        authService.signIn({ email: tempEmail ?? '', password: payload.password }).then((response) => {
-    
-          authenticateUser(response.user); 
-          useRouteGuard(isAuthenticated, paths.homepage)
-        });
-
-      } catch (error: any) {
-        toast.error(error.response.data.message || "Registration failed");
-      }
       } else {
         toast.error("Password does not match")
       }

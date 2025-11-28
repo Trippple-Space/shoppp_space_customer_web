@@ -12,7 +12,7 @@ class OrderService {
                http.get(endpoints.ORDERS, {
                     params: query,
                }).then((response: AxiosResponse) => {
-                    resolve(response.data);
+                    resolve(response.data.data);
                });
           });
      }

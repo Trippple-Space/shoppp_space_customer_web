@@ -64,6 +64,17 @@ export interface Product {
   discount: Discount
 }
 
+export interface ProductsResponse {
+  data: Product[];
+  meta: {
+    totalItems: number;
+    itemCount: number;
+    itemsPerPage: number;
+    totalPages: number;
+    currentPage: number;
+  };
+}
+
 export interface ProductMedia {
   url: string;
   type: "image" | "video";
@@ -114,7 +125,9 @@ export interface IFilters {
   tags?: string
 }
 
-
+export interface RecentlyViewedResponse {
+  data: RecentlyViewed[]
+}
 
 export interface RecentlyViewed {
   id: string;
