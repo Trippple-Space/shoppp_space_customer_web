@@ -10,7 +10,7 @@ class ReviewService {
     }
 
     getProductReviews(productVariantId: string) {
-        return http.get(replaceParamInEndpoint(endpoints.GET_PRODUCT_REVIEWS, "productVariantId", productVariantId)).then((response: AxiosResponse) => response.data)
+        return http.get(replaceParamInEndpoint(endpoints.GET_PRODUCT_REVIEWS, "productVariantId", productVariantId)).then((response: AxiosResponse) => response.data.data)
     }
 
     createReview (data :IReview) {
