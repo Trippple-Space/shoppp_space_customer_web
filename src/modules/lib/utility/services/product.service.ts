@@ -1,5 +1,5 @@
 import { AxiosResponse } from "axios";
-import { Product, ProductCategory, RecentlyViewed } from "../types/product.interface";
+import { Product, ProductCategory, ProductsResponse, RecentlyViewed, RecentlyViewedResponse } from "../types/product.interface";
 import endpoints from "../endpoints";
 import http from "../http";
 import { IProductFilters, IQueryParams } from "../hooks/use-products";
@@ -19,7 +19,7 @@ class ProductService {
      ) {
           const cacheKey = `product/categories_${type}_${label}_${storeId}`;
           const cachedData = this.getCachedCategories(cacheKey);
-          
+
           if (cachedData) {
                return cachedData;
           }
@@ -64,20 +64,21 @@ class ProductService {
      }
 
      fetchProducts(query: IQueryParams, filters = {}): Promise<Product[]> {
-       return new Promise((resolve) => {
-            
-         
-            const filterParams = buildFilterParams(filters);
-            const {allFilters, ...queryWithoutAllFilters} = query
-           
-            http.get(endpoints.PRODUCTS, {
-                    params: { ...queryWithoutAllFilters, ...filterParams } 
-               }).then((response: AxiosResponse) => {
-                    resolve(response.data);
-              });
+          return new Promise((resolve, reject) => {
+               const filterParams = buildFilterParams(filters);
+               const { allFilters, ...queryWithoutAllFilters } = query;
+
+               http
+                    .get<ProductsResponse>(endpoints.PRODUCTS, {
+                         params: { ...queryWithoutAllFilters, ...filterParams },
+                    })
+                    .then((response) => {
+                         resolve(response.data.data);
+                    })
+                    .catch(reject);
           });
      }
-        
+
 
      fetchProductBySlug(
           slug: string,
@@ -89,13 +90,13 @@ class ProductService {
                          slug,
                     })
                );
-          
+
                Object.keys(query).forEach((key) =>
                     url.searchParams.append(key, query[key])
                );
 
                fetch(url.toString())
-                 .then((res) => {
+                    .then((res) => {
                          if (!res.ok) {
                               throw new Error(
                                    `HTTP error! Status: ${res.status}`
@@ -104,7 +105,7 @@ class ProductService {
                          return res.json();
                     })
                     .then((response: any) => {
-                      resolve(response);
+                         resolve(response);
                     })
                     .catch((err) => {
                          reject(err);
@@ -150,7 +151,7 @@ class ProductService {
                          return res.json();
                     })
                     .then((data) => {
-                         resolve(data);
+                         resolve(data.data);
                     })
                     .catch((err) => {
                          reject(err);
@@ -182,8 +183,7 @@ class ProductService {
                          return res.json();
                     })
                     .then((data) => {
-                         resolve(data);
-                         data;
+                         resolve(data.data);
                     })
                     .catch((err) => {
                          reject(err);
@@ -196,70 +196,70 @@ class ProductService {
      fetchSavedVariants(): Promise<SavedVariant[]> {
           return new Promise((resolve, reject) => {
                http.get(endpoints.SAVED_VARIANT).then((response: AxiosResponse) => {
-                    resolve(response.data);
+                    resolve(response.data.data);
                }).catch((err) => {
                     if (err.response && err.response.data.message === "No saved variants found for this user") {
                          return resolve([] as SavedVariant[]);
                     } else {
                          reject(err);
                     }
-         });
+               });
           });
      }
-    
-    saveVariant(productVariantId: string): Promise<SavedVariant> {
-        return new Promise((resolve, reject) => {
-            http.post(`${endpoints.SAVED_VARIANT}/${productVariantId}`).then((response: AxiosResponse) => {
-                resolve(response.data);
-            })
-        })
-    }
+
+     saveVariant(productVariantId: string): Promise<SavedVariant> {
+          return new Promise((resolve, reject) => {
+               http.post(`${endpoints.SAVED_VARIANT}/${productVariantId}`).then((response: AxiosResponse) => {
+                    resolve(response.data);
+               })
+          })
+     }
      removeSavedVariant(productVariantId: string) {
-        return new Promise((resolve, reject) => {
-            http.delete(`${endpoints.SAVED_VARIANT}/${productVariantId}`).then((response: AxiosResponse) => {
-                 resolve(response.data);
-            })
-        })
-    }
+          return new Promise((resolve, reject) => {
+               http.delete(`${endpoints.SAVED_VARIANT}/${productVariantId}`).then((response: AxiosResponse) => {
+                    resolve(response.data);
+               })
+          })
+     }
 
-    clearSavedVariants(): Promise<SavedVariant[]> {
-        return new Promise((resolve) => {
-            http.delete(endpoints.SAVED_VARIANT).then((response: AxiosResponse) => {
-                resolve(response.data);
-            })
-        })
-    }
+     clearSavedVariants(): Promise<SavedVariant[]> {
+          return new Promise((resolve) => {
+               http.delete(endpoints.SAVED_VARIANT).then((response: AxiosResponse) => {
+                    resolve(response.data);
+               })
+          })
+     }
 
 
-     getRecentlyViewedVariants(type?: string): Promise<RecentlyViewed[]> { 
-          const params: any = {};  
+     getRecentlyViewedVariants(type?: string): Promise<RecentlyViewed[]> {
+          const params: any = {};
           params["filters[type]"] = type;
 
           return new Promise((resolve, reject) => {
                http.get(endpoints.GET_RECENTLY_VIEWED, {
-                  params  
-               }).then((response: AxiosResponse<RecentlyViewed[]>) => resolve(response.data))
+                    params
+               }).then((response: AxiosResponse<RecentlyViewedResponse>) => resolve(response.data.data))
           })
      }
 
-     getAllRecentlyViewedVariants(): Promise<RecentlyViewed[]> { 
-          const params: any = {};  
+     getAllRecentlyViewedVariants(): Promise<RecentlyViewed[]> {
+          const params: any = {};
           params["filters[type]"] = "view";
 
           return new Promise((resolve, reject) => {
                http.get(endpoints.ALL_RECENTLY_VIEWED, {
-                  params  
-               }).then((response: AxiosResponse<RecentlyViewed[]>) => resolve(response.data))
+                    params
+               }).then((response: AxiosResponse<RecentlyViewedResponse>) => resolve(response.data.data))
           })
      }
 
-     addRecentlyViewedVariants(payload: { productVariantId: string, type?: string }) {     
+     addRecentlyViewedVariants(payload: { productVariantId: string, type?: string }) {
           return new Promise((resolve, reject) => {
                http.post(endpoints.RECENTLY_VIEWED, payload).then((response) => resolve(response.data))
           })
      }
 
-     clearRecentlyViewedVariants(payload: { type?: string }) {    
+     clearRecentlyViewedVariants(payload: { type?: string }) {
           return http.delete(endpoints.RECENTLY_VIEWED, {
                data: payload,
           }).then((response: AxiosResponse) => response.data);
@@ -268,8 +268,8 @@ class ProductService {
      createProductReview(payload:
           { productVariantId: string, rating: number, comment: string }) {
           return new Promise((resolve, reject) => {
-               http.post(`${endpoints.PRODUCT_REVIEW}/create`, payload).then((response) => 
-               resolve(response.data)
+               http.post(`${endpoints.PRODUCT_REVIEW}/create`, payload).then((response) =>
+                    resolve(response.data)
                )
           })
      }

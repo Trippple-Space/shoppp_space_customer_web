@@ -118,7 +118,7 @@ const OrderSummary: FC<IOrderSummary> = ({
               <div className=''>Discounts</div>
               <div className='flex flex-col gap-3'>
                 {
-                  cart.storeGroups.map((store) => (
+                  cart?.storeGroups?.map((store) => (
                     store.discountCode &&
                     <div key={store.id} className='flex space-between a-items-center text-15'>
                       <p className='py-3 flex gap-3 a-items-center color-#00000099'>

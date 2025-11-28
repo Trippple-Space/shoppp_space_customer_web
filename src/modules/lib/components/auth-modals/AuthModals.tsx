@@ -7,6 +7,9 @@ import StepThreeAuth from './AuthStepThree';
 import StepSuccess from './AuthSuccess';
 import { useCartStore } from '../../utility/store/cart.store';
 import { useLoginView } from '../../utility/hooks/use-login';
+import { useVerifyEmail } from '../../utility/hooks/use-verify-email';
+import { useRequestOtp } from '../../utility/hooks/use-request-otp';
+import { useVerifyOtpLogin } from '../../utility/hooks/use-verify-otp-login';
 
 export default function AuthModals() {
   const [step, setStep] = useState(1);
@@ -16,6 +19,11 @@ export default function AuthModals() {
   const [method, setMethod] = useState<'password' | 'otp'>('password');
   const [isLoading, setIsLoading] = useState(false);
 
+  const { verify, loading: verifyingEmail } = useVerifyEmail();
+  const { requestOtp, loading, otpToken } = useRequestOtp();
+  const { verifyOtp, loading: verifyingOtp } = useVerifyOtpLogin(() =>
+    setStep(4)
+  );
   const { isLoginModal } = useCartStore();
   const { formHandler: loginFormHandler } = useLoginView(isLoginModal, {
     shouldRedirect: false,
@@ -55,7 +63,16 @@ export default function AuthModals() {
           <StepOne
             setEmail={setEmail}
             email={email}
-            onContinue={() => {
+            onContinue={async () => {
+              const res = await verify(email);
+              if (res.exists && res.hasUserAccount) {
+                setHasAccount(true);
+              } else if (res.exists && !res.hasUserAccount) {
+                setHasAccount(false);
+              } else {
+                setHasAccount(false);
+              }
+
               setStep(2);
             }}
           />
@@ -69,8 +86,9 @@ export default function AuthModals() {
               setMethod('password');
               setStep(3);
             }}
-            onSelectOtp={() => {
+            onSelectOtp={async () => {
               setMethod('otp');
+              await requestOtp(email);
               setStep(3);
             }}
           />
@@ -86,9 +104,16 @@ export default function AuthModals() {
             onBack={() => setStep(2)}
             onSubmit={async () => {
               setIsLoading(true);
-              await loginFormHandler.submitForm();
+
+              if (method === 'password') {
+                await loginFormHandler.submitForm();
+              }
+
+              if (method === 'otp') {
+                await verifyOtp(password, otpToken!);
+              }
             }}
-            isLoading={isLoading}
+            isLoading={isLoading || verifyingOtp || loading}
             value={password}
             setValue={setPassword}
           />

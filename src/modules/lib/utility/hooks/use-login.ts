@@ -56,7 +56,7 @@ export const useLoginView = (isLoginModal?: any, options?: { shouldRedirect?: bo
     const { isAuthenticated, authenticateUser } = useUserStore()
 
     const shouldRedirect = options?.shouldRedirect ?? true;
-    
+
     const formHandler = useFormik(formikLoginConfig(router, (user) => {
         authenticateUser(user)
         options?.onSuccess?.();

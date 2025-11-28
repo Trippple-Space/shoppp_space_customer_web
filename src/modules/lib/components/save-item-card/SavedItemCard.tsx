@@ -39,6 +39,7 @@ const SavedVariantsCard: React.FC<any> = ({ savedVariant, removeSavedVariant, re
             src={savedVariant?.variant.media[0].url || recentVariant?.productVariant.media[0].url}
             alt='product'
             type='image'
+            width={1000}
           />
 
         </div>

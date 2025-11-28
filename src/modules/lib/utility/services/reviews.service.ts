@@ -6,7 +6,7 @@ import { IReview } from "../types/review.interface"
 
 class ReviewService {
     getAllReviews() {
-        return http.get(endpoints.GET_ALL_REVIEWS).then((response: AxiosResponse) => response.data)
+        return http.get(endpoints.GET_ALL_REVIEWS).then((response: AxiosResponse) => response.data.data)
     }
 
     getProductReviews(productVariantId: string) {
