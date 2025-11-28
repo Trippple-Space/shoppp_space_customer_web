@@ -37,9 +37,9 @@ export default function StepOne({ email, setEmail, onContinue }: StepOneProps) {
   };
 
   return (
-    <div className="flex flex-col a-items-center gap-16 sm:gap-26 weight-400">
+    <div className="flex flex-col gap-16 sm:gap-26 weight-400">
       <div>
-        <h2 className="text-30 sm:text-36 weight-600 text-black">
+        <h2 className="text-30 sm:text-36 weight-600 text-black mb-10">
           NICE CHOICE{' '}
           <Image
             className="w-50 sm:w-64 h-60 sm:h-74 mb--10"
@@ -48,7 +48,7 @@ export default function StepOne({ email, setEmail, onContinue }: StepOneProps) {
             type="icon"
           />
         </h2>
-        <p className="text-18 sm:text-24 weight-400 text-black">
+        <p className="text-18 sm:text-24 weight-400 text-black mb-10">
           JUST A SEC — Let’s get you in
         </p>
       </div>

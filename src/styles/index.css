@@ -408,6 +408,7 @@
 @layer lo { @layer base {.\@lo\:radius-8 { border-radius: 8px; } } } 
 .z-index-20, .z-20 { z-index: 20; } 
 .w-95p { width: 95%; } 
+.py-30 { padding-top: 30px; padding-bottom: 30px; } 
 [class~='g|overflow-y:hidden']{overflow-y:hidden} 
 .scroll-y {    overflow-y: scroll;  } 
 .pb-183 { padding-bottom: 183px; } 
@@ -701,7 +702,6 @@
 .grid-col-span-5 { grid-column: span 5; } 
 .min-w-200 { min-width: 200px; } 
 .r-80 { right: 80px; } 
-.py-30 { padding-top: 30px; padding-bottom: 30px; } 
 .t-65 { top: 65px; } 
 .uppercase {    text-transform: uppercase;  } 
 .bg-\#947458 { background-color: #947458; } 
@@ -1136,7 +1136,7 @@
 @media only screen and (min-width: 768px) { .md\:text-16 { font-size: 16px; } } 
 @media only screen and (min-width: 768px) { .md\:line-height-24 { line-height: 24px; } } 
 @media only screen and (min-width: 768px) { .md\:max-w-981 { max-width: 981px; } } 
-@media only screen and (min-width: 768px) { .md\:py-8 { padding-top: 8px; padding-bottom: 8px; } } 
+@media only screen and (min-width: 768px) { .md\:py-10 { padding-top: 10px; padding-bottom: 10px; } } 
 @media only screen and (min-width: 768px) { .md\:pl-35 { padding-left: 35px; } } 
 @media only screen and (min-width: 768px) { .md\:py-26 { padding-top: 26px; padding-bottom: 26px; } } 
 @media only screen and (min-width: 768px) { .md\:a-items-center { align-items: center; } } 

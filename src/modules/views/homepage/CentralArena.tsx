@@ -77,7 +77,7 @@ const CentralArena = () => {
 
         <div>
           <p className='w-100p flex j-content-center mt-10'>
-            {(products.length > 0 && loading) ? <PuffLoader /> : ""}
+            {(products.length >= 20 && loading) ? <PuffLoader /> : ""}
           </p>
         </div>
       </section>
