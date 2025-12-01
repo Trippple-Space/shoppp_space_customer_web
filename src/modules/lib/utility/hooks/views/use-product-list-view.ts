@@ -23,7 +23,9 @@ export const useProductListView = () => {
   const { allFilters } = useFilterStore();
 
   const { products, setPagination, query, updateHomePageFilter, loading } = useProducts({
-    filters: { type, status: { In: "ACTIVE,OUT_OF_STOCK" }, channel: "ASOEBI_STORE" }
+    filters: { type, status: { In: "ACTIVE,OUT_OF_STOCK" }, channel: "ASOEBI_STORE" }, order: {
+      priorityScore: "DESC"
+    },
   });
 
   useEffect(() => {

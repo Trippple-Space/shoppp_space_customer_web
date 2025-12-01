@@ -15,7 +15,7 @@ export interface IProductFilters {
 }
 
 export interface IOrderBy {
-  [key: string]: "asc" | "desc";
+  [key: string]: "ASC" | "DESC";
 }
 
 export interface IPagination {
