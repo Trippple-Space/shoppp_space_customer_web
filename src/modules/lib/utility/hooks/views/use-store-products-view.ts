@@ -6,7 +6,9 @@ export const useStoreProductsView = (selectedCategory?: any) => {
   const { slug } = useParams();
 
   const { products, updateFilters } = useProducts({
-       filters: { store: { slug }, status: { In: "ACTIVE,OUT_OF_STOCK" } },
+    filters: { store: { slug }, status: { In: "ACTIVE,OUT_OF_STOCK" } }, order: {
+      priorityScore: "DESC"
+    },
   });
 
   return {
