@@ -1,36 +1,43 @@
-'use client'
-import React, { FC, useEffect, useMemo, useRef, useState } from 'react'
-import Image from '../image/Image'
-import { AiFillStar, AiFillHeart } from 'react-icons/ai'
-import classNames from 'classnames'
-import { Product, ProductVariant } from '../../utility/types/product.interface'
-import { checkMediaType, displayProductPill, formatNumberAsPrice, handleFlyToCart, onGoingOrderStatusQuery, saveVariantToLocalStorage } from '../../utility/utility'
-import { useCart } from '../../utility/hooks/use-cart'
-import QuantitySelector from '../quantity-selector/QuantitySelector'
-import Link from 'next/link'
-import VideoSrc from '../video-src/VideoSrc'
-import { FaEye } from 'react-icons/fa6'
-import ProductDetailModal from '../product-detail-modal/ProductDetailModal'
-import { PiShoppingCartFill, PiStorefront } from 'react-icons/pi'
-import { SavedVariant } from '../../utility/types/SavedVariant.interface'
-import MiniReview from '@/modules/views/product-details/reviews/MiniReview'
-import { IFetchedReview } from '../../utility/types/review.interface'
-import useGetRatingStats from '../../utility/hooks/use-get-rating-stats'
-import useTransformProduct from '../../utility/hooks/use-transform-product'
-import { useRecentlyViewedVariant } from '../../utility/hooks/use-recently-viewed'
-import { useOrders } from '../../utility/hooks/use-orders'
-import Button from '../button/Button'
+'use client';
+import React, { FC, useEffect, useMemo, useRef, useState } from 'react';
+import Image from '../image/Image';
+import { AiFillStar, AiFillHeart } from 'react-icons/ai';
+import classNames from 'classnames';
+import { Product, ProductVariant } from '../../utility/types/product.interface';
+import {
+  checkMediaType,
+  displayProductPill,
+  formatNumberAsPrice,
+  handleFlyToCart,
+  onGoingOrderStatusQuery,
+  saveVariantToLocalStorage,
+} from '../../utility/utility';
+import { useCart } from '../../utility/hooks/use-cart';
+import QuantitySelector from '../quantity-selector/QuantitySelector';
+import Link from 'next/link';
+import VideoSrc from '../video-src/VideoSrc';
+import { FaEye } from 'react-icons/fa6';
+import ProductDetailModal from '../product-detail-modal/ProductDetailModal';
+import { PiShoppingCartFill, PiStorefront } from 'react-icons/pi';
+import { SavedVariant } from '../../utility/types/SavedVariant.interface';
+import MiniReview from '@/modules/views/product-details/reviews/MiniReview';
+import { IFetchedReview } from '../../utility/types/review.interface';
+import useGetRatingStats from '../../utility/hooks/use-get-rating-stats';
+import useTransformProduct from '../../utility/hooks/use-transform-product';
+import { useRecentlyViewedVariant } from '../../utility/hooks/use-recently-viewed';
+import { useOrders } from '../../utility/hooks/use-orders';
+import Button from '../button/Button';
 
 interface IProductTile {
-  product: Product
-  saveVariant?: (variantId: string) => void
-  removeSavedVariant?: (variantId: string) => void
-  savedVariants?: SavedVariant[]
-  allReviews: IFetchedReview[]
-  id: string
-  isOpen: string | null
-  setIsOpen: React.Dispatch<React.SetStateAction<string | null>>
-  index?: number
+  product: Product;
+  saveVariant?: (variantId: string) => void;
+  removeSavedVariant?: (variantId: string) => void;
+  savedVariants?: SavedVariant[];
+  allReviews: IFetchedReview[];
+  id: string;
+  isOpen: string | null;
+  setIsOpen: React.Dispatch<React.SetStateAction<string | null>>;
+  index?: number;
 }
 
 const ProductTile: FC<IProductTile> = ({
@@ -43,156 +50,207 @@ const ProductTile: FC<IProductTile> = ({
   setIsOpen,
   index,
 }) => {
-  const pathname = typeof window !== 'undefined' ? window.location.pathname : ''
-  const { groupedData, availableColors } = useTransformProduct(product)
-  const uniqueVariantsFromProductImages = availableColors.map((color) => groupedData?.[color][0])
+  const pathname =
+    typeof window !== 'undefined' ? window.location.pathname : '';
+  const { groupedData, availableColors, productImages, allProperties } = product
+    ? useTransformProduct(product)
+    : {
+        groupedData: {},
+        availableColors: [],
+        productImages: [],
+        allProperties: {},
+      };
+  const uniqueVariantsFromProductImages = availableColors
+    ?.map((color) => groupedData?.[color]?.[0])
+    .filter(Boolean);
+
   const { orders, fetching: orderFetching } = useOrders({
     filters: { status: { In: `${onGoingOrderStatusQuery},DELIVERED` } },
-  })
+  });
 
-  const isCheckoutOrOrdersPage = pathname.includes('/checkout') || pathname.includes('/orders')
+  const isCheckoutOrOrdersPage =
+    pathname.includes('/checkout') || pathname.includes('/orders');
 
   const [seenAddToCartIconOnBoarding] = useState<boolean>(() => {
     if (typeof window !== 'undefined') {
-      const stored = localStorage.getItem('seenAddToCartIcon')
-      return stored ? JSON.parse(stored) : false
+      const stored = localStorage.getItem('seenAddToCartIcon');
+      return stored ? JSON.parse(stored) : false;
     }
-    return false
-  })
+    return false;
+  });
 
-  const [onProductTileHover, setOnProductTileHover] = useState(false)
-  const [openSingleProductModal, setOpenSingleProductModal] = useState(false)
-  const [isToAddSize, setIsToAddSize] = useState<boolean>(false)
-  const [recentlyViewedId, setRecentlyViewsId] = useState<any>()
-  const [selectedColor, setSelectedColor] = useState(availableColors[0])
-  const [selectedImage, setSelectedImage] = useState(product?.variants?.[0]?.media?.[0]?.url)
-  const [selectedVariant, setSelectedVariant] = useState<ProductVariant>(product?.variants?.[0])
+  const [onProductTileHover, setOnProductTileHover] = useState(false);
+  const [openSingleProductModal, setOpenSingleProductModal] = useState(false);
+  const [isToAddProperties, setIsToAddProperties] = useState<boolean>(false);
+  const [recentlyViewedId, setRecentlyViewsId] = useState<any>();
+  const [selectedColor, setSelectedColor] = useState(availableColors[0]);
+  const [selectedImage, setSelectedImage] = useState(
+    product?.variants?.[0]?.media?.[0]?.url
+  );
+  const [selectedVariant, setSelectedVariant] = useState<ProductVariant>(
+    product?.variants?.[0]
+  );
 
-  const { addToCart, cart, increment, decrement, isAuthenticated, isLoginModal, fetching: cartFetching } = useCart()
-  const imgRef = useRef<HTMLImageElement>(null)
+  const {
+    addToCart,
+    cart,
+    increment,
+    decrement,
+    isAuthenticated,
+    isLoginModal,
+    fetching: cartFetching,
+  } = useCart();
+  const imgRef = useRef<HTMLImageElement>(null);
 
-  const variantIds = useMemo(() => product.variants.map((v: any) => v.id), [product.variants])
-  const { reviewStat, loading: statsLoading } = useGetRatingStats(variantIds)
-  const { addVariant } = useRecentlyViewedVariant()
+  const variantIds = useMemo(
+    () => product.variants.map((v: any) => v.id),
+    [product.variants]
+  );
+  const { reviewStat, loading: statsLoading } = useGetRatingStats(variantIds);
+  const { addVariant } = useRecentlyViewedVariant();
 
   const selectedVariantItemInCart = cart.cartItems.find(
     (item) => item.variant.id === selectedVariant?.id
-  )
+  );
 
   useEffect(() => {
-    setSelectedImage(product?.variants?.[0]?.media?.[0]?.url)
-    setSelectedVariant(product?.variants?.[0])
-  }, [product?.id])
+    setSelectedImage(product?.variants?.[0]?.media?.[0]?.url);
+    setSelectedVariant(product?.variants?.[0]);
+  }, [product?.id]);
 
-  const [topTwoPills, setTopTwoPills] = useState<any[]>([])
+  const [topTwoPills, setTopTwoPills] = useState<any[]>([]);
   useEffect(() => {
-    const pills = displayProductPill(product?.tags)
-    setTopTwoPills(pills)
+    const pills = displayProductPill(product?.tags);
+    setTopTwoPills(pills);
 
     if (!seenAddToCartIconOnBoarding) {
-      localStorage.setItem('seenAddToCartIcon', 'true')
+      localStorage.setItem('seenAddToCartIcon', 'true');
     }
-  }, [])
+  }, []);
 
-  const isSaved = savedVariants?.find((item: SavedVariant) => item.variantId === selectedVariant?.id)
-  const mediaType = checkMediaType(selectedImage) ?? 'image'
+  const isSaved = savedVariants?.find(
+    (item: SavedVariant) => item.variantId === selectedVariant?.id
+  );
+  const mediaType = checkMediaType(selectedImage) ?? 'image';
 
   const handleSave = () => {
     if (isSaved) {
-      removeSavedVariant && removeSavedVariant(selectedVariant?.id)
+      removeSavedVariant && removeSavedVariant(selectedVariant?.id);
     } else {
-      saveVariant && saveVariant(selectedVariant?.id)
+      saveVariant && saveVariant(selectedVariant?.id);
     }
-  }
+  };
 
   const handleCloseProductModal = () => {
-    setOpenSingleProductModal((prev) => !prev)
+    setOpenSingleProductModal((prev) => !prev);
     if (openSingleProductModal) {
-      setIsToAddSize(false)
+      setIsToAddProperties(false);
     }
-  }
+  };
 
   function handleLogin(variantId: string, minimumPurchase: number) {
-           saveVariantToLocalStorage(variantId, minimumPurchase.toString())
-    isLoginModal()
+    saveVariantToLocalStorage(variantId, minimumPurchase.toString());
+    isLoginModal();
   }
 
   useEffect(() => {
     if (recentlyViewedId && isAuthenticated) {
-      addVariant(recentlyViewedId, 'view')
+      addVariant(recentlyViewedId, 'view');
     }
-  }, [recentlyViewedId, isAuthenticated])
+  }, [recentlyViewedId, isAuthenticated]);
 
   useEffect(() => {
     if (isAuthenticated) {
-      const variantId = localStorage.getItem('variantId')
-      const variantIdMinimumPurchase = localStorage.getItem('variantIdMinimumPurchase')
+      const variantId = localStorage.getItem('variantId');
+      const variantIdMinimumPurchase = localStorage.getItem(
+        'variantIdMinimumPurchase'
+      );
       if (variantId && variantIdMinimumPurchase) {
-        const parsedMinimumPurchase = parseInt(variantIdMinimumPurchase, 10)
+        const parsedMinimumPurchase = parseInt(variantIdMinimumPurchase, 10);
         if (variantId && !isNaN(parsedMinimumPurchase)) {
-          addToCart(variantId, parsedMinimumPurchase)
+          addToCart(variantId, parsedMinimumPurchase);
         }
-        localStorage.removeItem('variantId')
-        localStorage.removeItem('variantIdMinimumPurchase')
+        localStorage.removeItem('variantId');
+        localStorage.removeItem('variantIdMinimumPurchase');
       }
     }
-  }, [isAuthenticated])
+  }, [isAuthenticated]);
 
-  const isOutOfStock = selectedVariant?.status === 'OUT_OF_STOCK'
+  const isOutOfStock = selectedVariant?.status === 'OUT_OF_STOCK';
   const isDiscounted =
-    new Date(product?.discount?.activeStartDate) <= new Date(new Date().setHours(new Date().getHours() + 1)) &&
-    new Date(new Date().setHours(new Date().getHours() + 1)) <= new Date(product?.discount?.activeEndDate)
-  const hasSize = !(groupedData?.[selectedColor]?.[0].size === null || groupedData?.[selectedColor]?.[0].size === '')
+    new Date(product?.discount?.activeStartDate) <=
+      new Date(new Date().setHours(new Date().getHours() + 1)) &&
+    new Date(new Date().setHours(new Date().getHours() + 1)) <=
+      new Date(product?.discount?.activeEndDate);
 
+  const hasProperties = useMemo(() => {
+    if (!selectedVariant) return false;
 
-  const [showOnBoardingModal, setShowOnBoardingModal] = useState(false)
-  const indexCount = index === 0
+    const hasSize = selectedVariant.size && selectedVariant.size.trim() !== '';
+    const hasOtherProperties =
+      selectedVariant.properties &&
+      Object.keys(selectedVariant.properties).length > 0;
 
-useEffect(() => {
-  // Combine your order and cart loading states
-  const isDataLoading = orderFetching || cartFetching;
+    return hasSize || hasOtherProperties;
+  }, [selectedVariant]);
 
-  // Wait until both are done loading before doing anything
-  if (isDataLoading) return;
+  const shouldAddDirectlyToCart = useMemo(() => {
+    if (!allProperties) return false;
 
-  // Now handle the logic only after data is ready
-  if (!seenAddToCartIconOnBoarding && !isCheckoutOrOrdersPage) {
-    const noOrders = (orders?.length ?? 0) === 0;
-    const emptyCart = (cart?.cartItems?.length ?? 0) === 0;
+    const propertyKeys = Object.keys(allProperties);
+    if (propertyKeys.length !== 1) return false;
 
-    if (noOrders && emptyCart) {
-      setShowOnBoardingModal(true);
+    const firstKey = propertyKeys[0];
+    const values = allProperties[firstKey];
+
+    if (!Array.isArray(values) || values.length !== 1) return false;
+
+    return true;
+  }, [allProperties]);
+
+  const [showOnBoardingModal, setShowOnBoardingModal] = useState(false);
+  const indexCount = index === 0;
+
+  useEffect(() => {
+    const isDataLoading = orderFetching || cartFetching;
+    if (isDataLoading) return;
+
+    if (!seenAddToCartIconOnBoarding && !isCheckoutOrOrdersPage) {
+      const noOrders = (orders?.length ?? 0) === 0;
+      const emptyCart = (cart?.cartItems?.length ?? 0) === 0;
+
+      if (noOrders && emptyCart) {
+        setShowOnBoardingModal(true);
+      } else {
+        setShowOnBoardingModal(false);
+      }
     } else {
       setShowOnBoardingModal(false);
     }
-  } else {
-    setShowOnBoardingModal(false);
-  }
-}, [
-  orderFetching,
-  cartFetching,
-  orders,
-  cart,
-  seenAddToCartIconOnBoarding,
-  isCheckoutOrOrdersPage,
-]);
-
+  }, [
+    orderFetching,
+    cartFetching,
+    orders,
+    cart,
+    seenAddToCartIconOnBoarding,
+    isCheckoutOrOrdersPage,
+  ]);
 
   useEffect(() => {
-    document.body.style.overflow = showOnBoardingModal ? 'hidden' : 'auto'
+    document.body.style.overflow = showOnBoardingModal ? 'hidden' : 'auto';
     return () => {
-      document.body.style.overflow = 'auto'
-    }
-  }, [showOnBoardingModal])
+      document.body.style.overflow = 'auto';
+    };
+  }, [showOnBoardingModal]);
 
   const handleOnboardingClose = () => {
-    setShowOnBoardingModal(false)
-    localStorage.setItem('seenAddToCartIcon', 'true')
+    setShowOnBoardingModal(false);
+    localStorage.setItem('seenAddToCartIcon', 'true');
     if (!localStorage.getItem('seenMiniCart') && !isCheckoutOrOrdersPage) {
-      window.dispatchEvent(new Event('showMiniCartOnboarding'))
-      localStorage.setItem('seenMiniCart', 'true')
+      window.dispatchEvent(new Event('showMiniCartOnboarding'));
+      localStorage.setItem('seenMiniCart', 'true');
     }
-  }
+  };
 
   return (
     <div className="mt-30 l:mt-20 w-full overflow-hidden">
@@ -264,24 +322,26 @@ useEffect(() => {
         )}
 
         {/* ADD TO CART / ONBOARDING */}
-        <div id="add to cart button" className="absolute b-0 r-0 mr-10 mb-10 l:mr-15 l:mb-15">
+        <div
+          id="add to cart button"
+          className="absolute b-0 r-0 mr-10 mb-10 l:mr-15 l:mb-15"
+        >
           {selectedVariantItemInCart ? (
             <QuantitySelector
               decrement={() => {
-                if (hasSize) {
-
-                  setIsToAddSize(true)
-                  handleCloseProductModal()
+                if (hasProperties && !shouldAddDirectlyToCart) {
+                  setIsToAddProperties(true);
+                  handleCloseProductModal();
                 } else {
-                  decrement(selectedVariantItemInCart)
+                  decrement(selectedVariantItemInCart);
                 }
               }}
               increment={() => {
-                if (hasSize) {
-                  setIsToAddSize(true)
-                  handleCloseProductModal()
+                if (hasProperties && !shouldAddDirectlyToCart) {
+                  setIsToAddProperties(true);
+                  handleCloseProductModal();
                 } else {
-                  increment(selectedVariantItemInCart)
+                  increment(selectedVariantItemInCart);
                 }
               }}
               cartItem={selectedVariantItemInCart}
@@ -299,7 +359,9 @@ useEffect(() => {
                     zIndex: 1000,
                   }}
                 >
-                  <p className="weight-400">Tap this button to add an item to your cart</p>
+                  <p className="weight-400">
+                    Tap this button to add an item to your cart
+                  </p>
                   <div onClick={handleOnboardingClose}>
                     <button className="bg-green text-white mt-2 l:mt-10 l:py-10 l:px-20 w-full py-5 radius-5 border-none hover:pointer text-13 l:text-14 font-inter hover:bg-darkgreen transition-0.5s text-center">
                       Close
@@ -308,24 +370,35 @@ useEffect(() => {
                 </div>
               )}
 
-              <div style={{ zIndex: showOnBoardingModal && indexCount ? 1000 : 0 }} className="round relative">
+              <div
+                style={{ zIndex: showOnBoardingModal && indexCount ? 1000 : 0 }}
+                className="round relative"
+              >
                 {selectedVariant?.status !== 'OUT_OF_STOCK' && (
                   <button
                     onClick={() => {
-                      if (hasSize) {
-                        setShowOnBoardingModal(false)
-                        setIsToAddSize(true)
-                        handleCloseProductModal()
+                      if (hasProperties && !shouldAddDirectlyToCart) {
+                        setShowOnBoardingModal(false);
+                        setIsToAddProperties(true);
+                        handleCloseProductModal();
                       } else {
-                        setShowOnBoardingModal(false)
+                        setShowOnBoardingModal(false);
                         if (isAuthenticated) {
                           if (!localStorage.getItem('seenMiniCart')) {
-                            window.dispatchEvent(new Event('showMiniCartOnboarding'))
-                            localStorage.setItem('seenMiniCart', 'true')
+                            window.dispatchEvent(
+                              new Event('showMiniCartOnboarding')
+                            );
+                            localStorage.setItem('seenMiniCart', 'true');
                           }
-                          addToCart(selectedVariant.id, selectedVariant.minPurchaseQuantity || 1)
+                          addToCart(
+                            selectedVariant.id,
+                            selectedVariant.minPurchaseQuantity || 1
+                          );
                         } else {
-                          handleLogin(selectedVariant.id, selectedVariant.minPurchaseQuantity || 1)
+                          handleLogin(
+                            selectedVariant.id,
+                            selectedVariant.minPurchaseQuantity || 1
+                          );
                         }
                       }
                     }}
@@ -348,7 +421,7 @@ useEffect(() => {
         {/* FAVORITE ICON */}
         <div
           id="favorite icon"
-          className="absolute t-0 r-0 mr-10 mt-10 l:mr-15 l:mt-15 text-24 l:text-34"
+          className="absolute z-1 t-0 r-0 mr-10 mt-10 l:mr-15 l:mt-15 text-24 l:text-34"
           onClick={isAuthenticated ? handleSave : () => isLoginModal()}
           style={{
             background: isSaved ? 'rgba(0,0,0,0.25)' : 'rgba(255,255,255,0.7)',
@@ -360,7 +433,10 @@ useEffect(() => {
             justifyContent: 'center',
           }}
         >
-          <AiFillHeart color={isSaved ? '#ffffffee' : '#000000aa'} className="shadow" />
+          <AiFillHeart
+            color={isSaved ? '#ffffffee' : '#000000aa'}
+            className="shadow"
+          />
         </div>
 
         {/* PILLS */}
@@ -380,58 +456,57 @@ useEffect(() => {
         </div>
       </div>
 
-        <div className="scroll-x no-scrollbar">
+      <div className="scroll-x no-scrollbar">
         <div
           id="product varients"
-          className="md:mt-16 mt-14 flex a-items-center md:gap-6 gap-4 w-full overflow-auto whitespace-nowrap no-scrollbar"
+          className="l:mt-16 mt-14 l:h-51.2 h-45 flex a-items-center md:gap-6 gap-4 w-full overflow-auto whitespace-nowrap no-scrollbar"
         >
           {uniqueVariantsFromProductImages.map((variant: any) =>
-            variant?.media?.map((mediaItem: any, i: number) =>
-              <div className='l:w-35.2 l:min-w-35.2 l:h-35.2 w-31 min-w-31 h-31 pointer md:radius-4 radius-3 a-self-center relative'>
-                {
-                  mediaItem?.type === "image" ? (
-                    <Image
-                      key={`${variant.id}-${mediaItem.url}-${i}`}
-                      className={classNames(
-                        `l:w-35.2 l:min-w-35.2 l:h-35.2 w-31 min-w-31 h-31 pointer md:radius-4 radius-3 a-self-center g|object-fit:cover ${variant?.status === 'OUT_OF_STOCK' && 'out-of-stock'}`,
-                        {
-                          "border border-2 border-black": selectedImage == mediaItem?.url,
-                          [`border-${/*variant?.properties?.color?.toLocaleLowerCase() ||*/'#0B9378'}`]:
-                            selectedImage == mediaItem?.url,
-                        }
-                      )}
-                      src={mediaItem?.url}
-                      onClick={() => {
-                        setSelectedVariant(variant);
-                        setRecentlyViewsId(variant.id)
-                        setSelectedImage(mediaItem?.url);
-                        setSelectedColor(variant?.properties?.color)
-                      }}
-                      alt="product-image"
-                      hasLoader={true}
-                      pulseClassName='md:radius-4 radius-3'
-                    />
-                  ) : (
-                    <VideoSrc
-                      key={`${variant.id}-${mediaItem.url}-${i}`}
-                      className={classNames(
-                        `l:w-35.2 l:min-w-35.2 l:h-35.2 w-31 min-w-31 h-31 pointer md:radius-4 radius-3 a-self-center g|object-fit:cover ${variant?.status === 'OUT_OF_STOCK' && 'out-of-stock'}`,
-                        {
-                          "border border-2": selectedImage == mediaItem?.url,
-                          [`border-${/*variant?.properties?.color?.toLocaleLowerCase() ||*/'#0B9378'}`]:
-                            selectedImage == mediaItem?.url,
-                        }
-                      )}
-                      onClick={() => {
-                        setSelectedVariant(variant);
-                        setSelectedImage(mediaItem?.url);
-                      }}
-                      src={mediaItem?.url}
-                    />
-                  )
-                }
+            variant?.media?.map((mediaItem: any, i: number) => (
+              <div className="l:w-35.2 l:min-w-35.2 l:h-35.2 w-31 min-w-31 h-31 pointer md:radius-4 radius-3 a-self-center relative">
+                {mediaItem?.type === 'image' ? (
+                  <Image
+                    key={`${variant.id}-${mediaItem.url}-${i}`}
+                    className={classNames(
+                      `l:w-35.2 l:min-w-35.2 l:h-35.2 w-31 min-w-31 h-31 pointer md:radius-4 radius-3 a-self-center g|object-fit:cover ${variant?.status === 'OUT_OF_STOCK' && 'out-of-stock'}`,
+                      {
+                        'border border-2 border-black':
+                          selectedImage == mediaItem?.url,
+                        [`border-${/*variant?.properties?.color?.toLocaleLowerCase() ||*/ '#0B9378'}`]:
+                          selectedImage == mediaItem?.url,
+                      }
+                    )}
+                    src={mediaItem?.url}
+                    onClick={() => {
+                      setSelectedVariant(variant);
+                      setRecentlyViewsId(variant.id);
+                      setSelectedImage(mediaItem?.url);
+                      setSelectedColor(variant?.properties?.color);
+                    }}
+                    alt="product-image"
+                    hasLoader={true}
+                    pulseClassName="md:radius-4 radius-3"
+                  />
+                ) : (
+                  <VideoSrc
+                    key={`${variant.id}-${mediaItem.url}-${i}`}
+                    className={classNames(
+                      `l:w-35.2 l:min-w-35.2 l:h-35.2 w-31 min-w-31 h-31 pointer md:radius-4 radius-3 a-self-center g|object-fit:cover ${variant?.status === 'OUT_OF_STOCK' && 'out-of-stock'}`,
+                      {
+                        'border border-2': selectedImage == mediaItem?.url,
+                        [`border-${/*variant?.properties?.color?.toLocaleLowerCase() ||*/ '#0B9378'}`]:
+                          selectedImage == mediaItem?.url,
+                      }
+                    )}
+                    onClick={() => {
+                      setSelectedVariant(variant);
+                      setSelectedImage(mediaItem?.url);
+                    }}
+                    src={mediaItem?.url}
+                  />
+                )}
               </div>
-            )
+            ))
           )}
         </div>
       </div>
@@ -446,9 +521,14 @@ useEffect(() => {
           <Link href={`/products/${product?.slug}`}>{product.name}</Link>
         </div>
         <div className="flex a-items-center gap-10 l:gap-18 text-dimgrey py-6 border-y border-#00000014">
-          <Link href={`/${product.store?.slug}`} className="flex gap-6 a-items-center color-#00000099 capitalize">
+          <Link
+            href={`/${product.store?.slug}`}
+            className="flex gap-6 a-items-center color-#00000099 capitalize"
+          >
             <PiStorefront className="md:w-16 w-14 md:h-16 h-14" />
-            <p className="md:text-12 text-10 weight-400 md:line-height-20 line-height-12.1">{product?.store?.name}</p>
+            <p className="md:text-12 text-10 weight-400 md:line-height-20 line-height-12.1">
+              {product?.store?.name}
+            </p>
           </Link>
           {!!product.reviewRating && (
             <div className="flex gap-3 items-center">
@@ -457,31 +537,36 @@ useEffect(() => {
             </div>
           )}
         </div>
-        <div className='flex j-content-between'>
-          <div className='flex md:gap-8 md:a-items-center md:flex-row flex-col'>
+        <div className="flex j-content-between">
+          <div className="flex md:gap-8 md:a-items-center md:flex-row flex-col">
             <p className="md:text-16 text-12 weight-600 md:line-height-24 line-height-20">
-              {
-                isDiscounted ? formatNumberAsPrice(
-                  selectedVariant?.discountedPrice
-                ) :
-                  formatNumberAsPrice(
+              {isDiscounted
+                ? formatNumberAsPrice(selectedVariant?.discountedPrice)
+                : formatNumberAsPrice(
                     selectedVariant?.finalPrice ?? product.finalPrice ?? 0
-                  )
-              }
+                  )}
             </p>
-            {
-              isDiscounted &&
+            {isDiscounted && (
               <p className="md:text-12 text-10 weight-400 md:line-height-20 color-#00000099 line-through">
                 {formatNumberAsPrice(
-                  (selectedVariant?.finalPrice ?? product.finalPrice ?? 0)
+                  selectedVariant?.finalPrice ?? product.finalPrice ?? 0
                 )}
               </p>
-            }
+            )}
           </div>
-          <div className='text-9 sm:text-10 text-grey'>
-            <MiniReview id={selectedVariant?.id} slug={product?.slug} isOpen={isOpen} setIsOpen={setIsOpen}
-              reviews={allReviews.filter((review: any) => review.productVariantId === selectedVariant?.id)}
-              reviewStat={reviewStat.find((stat: any) => stat.id === selectedVariant?.id)?.reviewStat}
+          <div className="text-9 sm:text-10 text-grey">
+            <MiniReview
+              id={selectedVariant?.id}
+              slug={product?.slug}
+              isOpen={isOpen}
+              setIsOpen={setIsOpen}
+              reviews={allReviews.filter(
+                (review: any) => review.productVariantId === selectedVariant?.id
+              )}
+              reviewStat={
+                reviewStat.find((stat: any) => stat.id === selectedVariant?.id)
+                  ?.reviewStat
+              }
               loading={statsLoading}
               color={selectedColor}
             />
@@ -503,15 +588,20 @@ useEffect(() => {
           openSingleProductModal={openSingleProductModal}
           handleCloseProductModal={handleCloseProductModal}
           position="homepage"
-          variantSelectedImage={isToAddSize ? selectedImage : ''}
-          variant={{
-            ...selectedVariant,
-            product
-          }}
+          variantSelectedImage={isToAddProperties ? selectedImage : ''}
+          product={selectedVariant.product ?? product}
+          variant={
+            isToAddProperties
+              ? {
+                  ...selectedVariant,
+                  product,
+                }
+              : undefined
+          }
         />
       )}
     </div>
-  )
-}
+  );
+};
 
-export default ProductTile
+export default ProductTile;
