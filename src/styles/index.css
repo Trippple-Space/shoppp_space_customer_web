@@ -382,7 +382,7 @@
 .bg-\#FACE33 { background-color: #FACE33; } 
 .bg-\#FFFFFF4D { background-color: #FFFFFF4D; } 
 [class~='g|inset:0px']{inset:0px} 
-.z-index-2, .z-2 { z-index: 2; } 
+.z-index-1, .z-1 { z-index: 1; } 
 .h-0 { height: 0px; } 
 .pt-12 { padding-top: 12px; } 
 .pb-12 { padding-bottom: 12px; } 
@@ -489,7 +489,6 @@
 .mt-85 { margin-top: 85px; } 
 .p-3 { padding: 3px; } 
 .t-75 { top: 75px; } 
-.z-index-1, .z-1 { z-index: 1; } 
 .mt-80 { margin-top: 80px; } 
 .mx-24 { margin-left: 24px; margin-right: 24px; } 
 @layer base {.radius-20 { border-radius: 20px; } } 
@@ -559,6 +558,7 @@
 .ml-70 { margin-left: 70px; } 
 .ml-55 { margin-left: 55px; } 
 .ml-40 { margin-left: 40px; } 
+.z-index-2, .z-2 { z-index: 2; } 
 .border-white { border-color: #FFFFFF; } 
 .bg-\#d9d9d9 { background-color: #d9d9d9; } 
 .p-1 { padding: 1px; } 

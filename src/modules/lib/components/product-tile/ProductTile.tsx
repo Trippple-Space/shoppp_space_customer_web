@@ -421,7 +421,7 @@ const ProductTile: FC<IProductTile> = ({
         {/* FAVORITE ICON */}
         <div
           id="favorite icon"
-          className="absolute t-0 r-0 mr-10 mt-10 l:mr-15 l:mt-15 text-24 l:text-34"
+          className="absolute z-1 t-0 r-0 mr-10 mt-10 l:mr-15 l:mt-15 text-24 l:text-34"
           onClick={isAuthenticated ? handleSave : () => isLoginModal()}
           style={{
             background: isSaved ? 'rgba(0,0,0,0.25)' : 'rgba(255,255,255,0.7)',

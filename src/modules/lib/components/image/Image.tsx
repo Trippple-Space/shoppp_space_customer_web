@@ -58,7 +58,7 @@ const Image = React.forwardRef<HTMLImageElement, IImageProps>(
       <>
         {!loaded && hasLoader && (
           <div
-            className={`absolute g|inset:0px z-2 pulsing-multi-color-bg ${pulseClassName}`}
+            className={`absolute g|inset:0px z-1 pulsing-multi-color-bg ${pulseClassName}`}
           />
         )}
         <NextImage

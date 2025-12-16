@@ -18,7 +18,7 @@ interface ProductDetailModalProp {
   openSingleProductModal: boolean;
   handleCloseProductModal: () => void;
   variant?: ProductVariant;
-  product: Product;
+  product?: Product;
   position: string;
   variantSelectedImage?: string;
 }
@@ -232,7 +232,7 @@ const ProductDetailModal = ({
 
   const resetToDefault = () => {
     setActiveFilters({});
-    setSelectedImage(product.variants[0]?.media?.[0]?.url);
+    setSelectedImage(product?.variants[0]?.media?.[0]?.url);
     setImageSource('default');
   };
 
