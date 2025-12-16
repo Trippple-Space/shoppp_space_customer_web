@@ -46,6 +46,12 @@ const nextConfig = {
       },
       {
         protocol: 'https',
+        hostname: 'asoebi-vendor-products-staging.s3.us-east-1.amazonaws.com',
+        port: '',
+        pathname: '/**',
+      },
+      {
+        protocol: 'https',
         hostname: 'asoebi-vendor-products-prod.s3.amazonaws.com',
         port: '',
         pathname: '/**',

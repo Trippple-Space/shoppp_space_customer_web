@@ -261,6 +261,7 @@ const VariantModal = ({variant, saveVariant, removeSavedVariant, savedVariants}:
           openSingleProductModal={openSingleProductModal}
           handleCloseProductModal={handleCloseProductModal}
           position=""
+          product={{...variant}}
             variant={variant.productVariant}
             variantSelectedImage= {selectedImage}
         />

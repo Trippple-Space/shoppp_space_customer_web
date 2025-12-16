@@ -205,7 +205,7 @@ const OrderDetails = ({ orderId }: OrderDetailsProps) => {
                       ) : (
                         <div className='flex w-100p a-items-center space-between'>
                           <p className='text-14 weight-500'>
-                            #{singleOrder.id}
+                            #{singleOrder.id.slice(-5)}
                           </p>
 
                           <button

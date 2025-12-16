@@ -9,7 +9,9 @@ import QuantitySelector from '@/modules/lib/components/quantity-selector/Quantit
 import VariantModal from '@/modules/lib/components/variant-modal/VariantModal';
 import { useCart } from '@/modules/lib/utility/hooks/use-cart';
 import { useSavedVariant } from '@/modules/lib/utility/hooks/use-saved-variants';
-import useTransformProduct from '@/modules/lib/utility/hooks/use-transform-product';
+import useTransformProduct, {
+  getVariantValue,
+} from '@/modules/lib/utility/hooks/use-transform-product';
 import { productService } from '@/modules/lib/utility/services/product.service';
 import {
   Product,
@@ -44,25 +46,88 @@ import { useOrders } from '@/modules/lib/utility/hooks/use-orders';
 import { IoCloseSharp } from 'react-icons/io5';
 import { MdOutlineNavigateBefore, MdOutlineNavigateNext } from 'react-icons/md';
 import { AnimatePresence, motion } from 'framer-motion';
+import ShowAllPhotosModal from './modals/ShowAllPhotosModal';
+import LightboxModal from './modals/LightboxModal';
+import ReviewModal from './modals/ReviewModal';
 
 const ProductDetails = ({ product }: { product: Product }) => {
-  const { groupedData, availableColors, productImages } =
-    useTransformProduct(product);
-  const uniqueVariantsFromProductImages = availableColors.map(
-    (color) => groupedData?.[color][0]
-  );
-
-  let globalMediaIndex = 0;
   const [recentlyViewedVariants, setRecentlyViewedVariants] = useState<
     RecentlyViewed[]
   >([]);
-  const [selectedVariant, setSelectedVariant] = useState(
-    groupedData?.[availableColors[0]]?.[0]
+
+  const [showShareModal, setShowShareModal] = useState(false);
+  const [showFullDescription, setShowFullDescription] = useState(false);
+  const [showAllPhotos, setShowAllPhotos] = useState(false);
+  const [isOpen, setIsOpen] = useState<string | null>(null);
+  const [isReviewModalOpen, setIsReviewModalOpen] = useState<boolean>(false);
+
+  const [showLightbox, setShowLightbox] = useState(false);
+  const [lightboxIndex, setLightboxIndex] = useState(0);
+
+  const [activeFilters, setActiveFilters] = useState<Record<string, string>>(
+    {}
   );
-  const [selectedImage, setSelectedImage] = useState(
-    uniqueVariantsFromProductImages[0]?.media?.[0]?.url
+
+  const [selectedImage, setSelectedImage] = useState<string | undefined>(
+    product.variants[0]?.media?.[0]?.url
   );
+
+  const [imageSource, setImageSource] = useState<
+    'default' | 'variant' | 'preview'
+  >('default');
+
+  const imgRef = useRef<HTMLImageElement>(null);
+
+  const variantIds = useMemo(
+    () => product?.variants.map((v) => v.id),
+    [product?.variants]
+  );
+
+  const filteredVariants = useMemo(() => {
+    if (!product?.variants) return [];
+    return product.variants.filter((v) =>
+      Object.entries(activeFilters).every(
+        ([key, value]) => getVariantValue(v, key) === value
+      )
+    );
+  }, [activeFilters, product?.variants]);
+
+  const { groupedData, availableColors, allProperties } =
+    useTransformProduct(product);
+
+  const allPropertiesWithSize = useMemo(() => {
+    const props: Record<string, string[]> = { ...allProperties };
+    const sizes = Array.from(
+      new Set(product?.variants?.map((v) => v.size).filter(Boolean))
+    ) as string[];
+
+    if (sizes.length) {
+      props.size = sizes;
+    }
+    return props;
+  }, [allProperties, product?.variants]);
+
+  const isSelectionComplete = useMemo(() => {
+    return filteredVariants.length === 1;
+  }, [filteredVariants]);
+
+  const selectedVariant = useMemo(() => {
+    return filteredVariants.length === 1 ? filteredVariants[0] : undefined;
+  }, [filteredVariants]);
+
+  const uniqueVariantsFromProductImages = availableColors
+    ?.map((color) => groupedData?.[color]?.[0])
+    .filter(Boolean);
+
+  const allImages = uniqueVariantsFromProductImages?.flatMap((variant) =>
+    variant.media.map((media) => media.url)
+  );
+  const uniqueImages = Array.from(new Set(allImages));
+  const lightboxImages = uniqueImages.length ? uniqueImages : [''];
+  const lightboxTotal = lightboxImages.length;
+
   const { saveVariant, savedVariants, removeSavedVariant } = useSavedVariant();
+
   const {
     addToCart,
     cart,
@@ -72,54 +137,21 @@ const ProductDetails = ({ product }: { product: Product }) => {
     isAuthenticated,
   } = useCart();
 
-  const variantIds = useMemo(
-    () => product?.variants.map((v) => v.id),
-    [product?.variants]
-  );
   const {
     reviews,
     loading: reviewsLoading,
     refresh: refreshReviews,
   } = useGetProductRating(variantIds);
+
   const {
     reviewStat,
     loading: statsLoading,
     refresh: refreshStats,
   } = useGetRatingStats(variantIds);
-  const [selectedColor, setSelectedColor] = useState(
-    availableColors[0]?.toLowerCase()
-  );
-  const [showShareModal, setShowShareModal] = useState(false);
-  const [showFullDescription, setShowFullDescription] = useState(false);
-  const [showAllPhotos, setShowAllPhotos] = useState(false);
-  const [isOpen, setIsOpen] = useState<string | null>(null);
-  const [isReviewModalOpen, setIsReviewModalOpen] = useState<boolean>(false);
 
-  const [showLightbox, setShowLightbox] = useState(false);
-  const [lightboxIndex, setLightboxIndex] = useState(0);
-  const lightboxRef = useRef<HTMLDivElement | null>(null);
-
-  const selectedVariantItemInCart = cart.cartItems.find(
-    (item) => item.variant.id === selectedVariant?.id
-  );
   const { orders } = useOrders({
     filters: { status: { In: `${onGoingOrderStatusQuery},DELIVERED` } },
   });
-  const imgRef = useRef<HTMLImageElement>(null);
-
-  useEffect(() => {
-    setSelectedImage(product?.variants?.[0]?.media?.[0]?.url);
-  }, [product]);
-
-  const descriptionLength = product.longDescription.split(' ').length;
-  const maxDisplayDescLength = 144;
-
-  function showLongDescElipsis(desc: string) {
-    if (!showFullDescription) {
-      return desc.split(' ').slice(0, maxDisplayDescLength).join(' ');
-    }
-    return desc;
-  }
 
   useEffect(() => {
     (async () => {
@@ -130,35 +162,6 @@ const ProductDetails = ({ product }: { product: Product }) => {
       }
     })();
   }, [isAuthenticated]);
-
-  const isSaved = savedVariants?.find(
-    (variant: SavedVariant) => selectedVariant.id === variant.variantId
-  );
-  const mediaType = checkMediaType(selectedImage) ?? 'image';
-
-  const handleSave = () => {
-    if (isSaved) {
-      removeSavedVariant(selectedVariant?.id);
-    } else {
-      saveVariant(selectedVariant?.id);
-    }
-  };
-
-  function handleLogin(variantId: string, minimumPurchase: number) {
-    localStorage.setItem('variantId', variantId.toString());
-    localStorage.setItem(
-      'variantIdMinimumPurchase',
-      minimumPurchase.toString()
-    );
-    isLoginModal();
-  }
-
-  const allImages = product?.variants?.flatMap((variant) =>
-    variant.media.map((media) => media.url)
-  );
-  const uniqueImages = Array.from(new Set(allImages));
-  const lightboxImages = uniqueImages.length ? uniqueImages : [''];
-  const lightboxTotal = lightboxImages.length;
 
   useEffect(() => {
     if (isAuthenticated) {
@@ -177,10 +180,6 @@ const ProductDetails = ({ product }: { product: Product }) => {
       }
     }
   }, [isAuthenticated]);
-
-  useEffect(() => {
-    setSelectedVariant(groupedData?.[selectedColor]?.[0]);
-  }, [selectedColor]);
 
   useEffect(() => {
     if (!showLightbox) return;
@@ -207,24 +206,180 @@ const ProductDetails = ({ product }: { product: Product }) => {
     };
   }, [showLightbox]);
 
-  const isOutOfStock = selectedVariant?.status === 'OUT_OF_STOCK';
-  const isDiscounted = new Date() <= new Date(product?.discount?.activeEndDate);
-  const hasSize = !(
-    groupedData?.[selectedColor.toLowerCase()][0].size === null ||
-    groupedData?.[selectedColor.toLowerCase()][0].size === ''
+  useEffect(() => {
+    if (!isSelectionComplete && imageSource === 'variant') {
+      setSelectedImage(product.variants[0]?.media?.[0]?.url);
+      setImageSource('default');
+    }
+  }, [isSelectionComplete, imageSource, product.variants[0]?.media]);
+
+  useEffect(() => {
+    if (selectedVariant?.media?.[0]?.url) {
+      setSelectedImage(selectedVariant.media[0].url);
+      setImageSource('variant');
+    }
+  }, [selectedVariant]);
+
+  const selectedVariantItemInCart = cart.cartItems.find(
+    (item) => item.variant.id === selectedVariant?.id
   );
-  
+
+  const descriptionLength = product?.longDescription?.split(' ')?.length || 0;
+  const maxDisplayDescLength = 144;
+
+  const isDiscounted = new Date() <= new Date(product?.discount?.activeEndDate);
+
+  const isOutOfStock = selectedVariant?.status === 'OUT_OF_STOCK';
+
+  const isOptionCompatible = (prop: string, value: string): boolean => {
+    return (
+      product?.variants?.some((v) => {
+        if (getVariantValue(v, prop) !== value) return false;
+        return Object.entries(activeFilters).every(([k, vValue]) => {
+          if (k === prop) return true;
+          return getVariantValue(v, k) === vValue;
+        });
+      }) ?? false
+    );
+  };
+
+  const toggleFilter = (key: string, value: string) => {
+    setActiveFilters((prev) => {
+      if (prev[key] === value) {
+        const copy = { ...prev };
+        delete copy[key];
+        return copy;
+      }
+
+      const next: Record<string, string> = { [key]: value };
+
+      Object.entries(prev).forEach(([k, v]) => {
+        if (k === key) return;
+        const compatible = product?.variants?.some((variant) => {
+          return (
+            getVariantValue(variant, key) === value &&
+            getVariantValue(variant, k) === v
+          );
+        });
+        if (compatible) {
+          next[k] = v;
+        }
+      });
+      return next;
+    });
+  };
+
+  const buildFiltersFromVariant = (variant: ProductVariant) => {
+    const filters: Record<string, string> = {};
+    Object.entries(variant.properties || {}).forEach(([key, value]) => {
+      if (value) filters[key] = String(value);
+    });
+    if (variant.size) filters.size = String(variant.size);
+    return filters;
+  };
+
+  const resetToDefault = () => {
+    setActiveFilters({});
+    setSelectedImage(product.variants[0]?.media?.[0]?.url);
+    setImageSource('default');
+  };
+
+  const colorMap = Object.fromEntries(
+    colorNames.map((c) => [c.name.replaceAll(' ', '').toLowerCase(), c.hex])
+  );
+
+  const mediaType = checkMediaType(selectedImage ?? '') ?? 'image';
+
+  const showLongDescElipsis = (desc: string) => {
+    if (!showFullDescription) {
+      return desc.split(' ').slice(0, maxDisplayDescLength).join(' ');
+    }
+    return desc;
+  };
+
+  const handleLogin = (variantId: string, minimumPurchase: number) => {
+    localStorage.setItem('variantId', variantId.toString());
+    localStorage.setItem(
+      'variantIdMinimumPurchase',
+      minimumPurchase.toString()
+    );
+    isLoginModal();
+  };
+
+  const isSaved = savedVariants?.find(
+    (variant: SavedVariant) => selectedVariant?.id === variant.variantId
+  );
+
+  const handleSave = () => {
+    if (isSaved) {
+      removeSavedVariant(selectedVariant?.id || product.variants[0]?.id);
+    } else {
+      saveVariant(selectedVariant?.id || product.variants[0]?.id);
+    }
+  };
+
+  const aggregatedReviewData = useMemo(() => {
+    const allReviews = reviews.flatMap((r) => r.reviews);
+
+    const validStats = reviewStat
+      .map((r) => r.reviewStat)
+      .filter(
+        (s): s is { averageRating: number; totalReviews: number } =>
+          typeof s?.averageRating === 'number' &&
+          typeof s?.totalReviews === 'number'
+      );
+
+    const totalReviews = validStats.reduce((sum, s) => sum + s.totalReviews, 0);
+
+    const weightedRatingSum = validStats.reduce(
+      (sum, s) => sum + s.averageRating * s.totalReviews,
+      0
+    );
+
+    const averageRating =
+      totalReviews > 0 ? weightedRatingSum / totalReviews : 0;
+
+    return {
+      reviews: allReviews,
+      reviewStat: {
+        averageRating,
+        totalReviews,
+      },
+    };
+  }, [reviews, reviewStat]);
+
+  const displayReviews = useMemo(() => {
+    if (!selectedVariant) return aggregatedReviewData.reviews;
+
+    return reviews.find((r) => r.id === selectedVariant.id)?.reviews ?? [];
+  }, [selectedVariant, reviews, aggregatedReviewData]);
+
+  const displayReviewStat = useMemo(() => {
+    if (!selectedVariant) return aggregatedReviewData.reviewStat;
+
+    return (
+      reviewStat.find((r) => r.id === selectedVariant.id)?.reviewStat ?? {
+        averageRating: 0,
+        totalReviews: 0,
+      }
+    );
+  }, [selectedVariant, reviewStat, aggregatedReviewData]);
+
   const addToCartBtn = () => {
     return (
       <div className="flex flex-col gap-16">
         <p className="text-24 weight-600">
-          {formatNumberAsPrice(selectedVariant.finalPrice)}
+          {formatNumberAsPrice(
+            selectedVariant?.finalPrice ??
+              product.variants[0]?.finalPrice ??
+              product.price
+          )}
         </p>
 
         {!selectedVariantItemInCart ? (
           <button
             className={classNames(
-              `text-white border-none l:px-24 l:py-12 py-15 w-100p radius-6 pointer  hover:bg-darkgreen ${selectedVariant && selectedVariant.status === 'OUT_OF_STOCK' ? 'bg-gray-300' : 'bg-#0B9378'}`
+              `text-white border-none l:px-24 l:py-12 py-15 w-100p radius-6 ${!selectedVariant || selectedVariant.status === 'OUT_OF_STOCK' ? 'bg-gray-300' : 'bg-#0B9378 hover:bg-darkgreen pointer'}`
             )}
             onClick={() => {
               if (isAuthenticated) {
@@ -242,24 +397,27 @@ const ProductDetails = ({ product }: { product: Product }) => {
                 }
               } else {
                 handleLogin(
-                  selectedVariant?.id ?? 0,
+                  selectedVariant?.id ?? '',
                   selectedVariant?.minPurchaseQuantity || 1
                 );
               }
             }}
           >
             <div className="l:flex grid grid-2-cols-auto gap-10 items-center w-fit mx-auto ">
-              {selectedVariant.status !== 'OUT_OF_STOCK' && (
-                <HiOutlineShoppingBag className="h-21" />
-              )}
+              {selectedVariant &&
+                selectedVariant?.status !== 'OUT_OF_STOCK' && (
+                  <HiOutlineShoppingBag className="h-21" />
+                )}
               <div
                 className={classNames(
-                  `whitespace-nowrap text-16 ${selectedVariant && selectedVariant.status === 'OUT_OF_STOCK' ? 'text-black' : 'text-white'}`
+                  `whitespace-nowrap text-16 ${!selectedVariant || selectedVariant.status === 'OUT_OF_STOCK' ? 'text-black' : 'text-white'}`
                 )}
               >
-                {selectedVariant && selectedVariant.status !== 'OUT_OF_STOCK'
-                  ? 'Add to cart'
-                  : 'Out of stock'}
+                {!selectedVariant
+                  ? 'Select options'
+                  : selectedVariant.status === 'OUT_OF_STOCK'
+                    ? 'Out of stock'
+                    : 'Add to cart'}
               </div>
             </div>
           </button>
@@ -354,7 +512,7 @@ const ProductDetails = ({ product }: { product: Product }) => {
                 ></div>
                 {mediaType === 'image' ? (
                   <Image
-                    src={selectedImage}
+                    src={selectedImage ?? ''}
                     className={`flex-grow-1 h-full radius-8 l:radius-t-l-16 l:radius-b-l-16 l:radius-b-r-0 l:radius-t-r-0 w-full h-full a-self-center object-fit-cover ${isOutOfStock && 'out-of-stock'}`}
                     alt={''}
                     ref={imgRef}
@@ -363,7 +521,7 @@ const ProductDetails = ({ product }: { product: Product }) => {
                 ) : (
                   <VideoSrc
                     className={`flex-grow-1 h-full radius-8 l:radius-t-l-16 l:radius-b-l-16 l:radius-b-r-0 l:radius-t-r-0   w-full h-full a-self-center object-fit-cover ${isOutOfStock && 'out-of-stock'}`}
-                    src={selectedImage}
+                    src={selectedImage ?? ''}
                   />
                 )}
               </div>
@@ -374,66 +532,65 @@ const ProductDetails = ({ product }: { product: Product }) => {
             className="w-100p flex l:grid grid-2-cols-1fr l:grid-2-row-auto gap-6 no-scrollbar l:overflow-visible overflow-auto"
             style={{ width: '100%' }}
           >
-            {uniqueImages.slice(0, 4).map((image, idx) => {
-              const variant = product?.variants?.find((variant) =>
-                variant.media.some((media) => media.url === image)
-              );
-              if (!variant) return null; // Skip if no variant found
-              const mediaItem = variant.media.find(
-                (media) => media.url === image
-              );
-              const currentIndex = globalMediaIndex++;
-              return (
-                <div
-                  key={idx}
-                  className={`l:h-207 ${variant?.status === 'OUT_OF_STOCK' && 'out-of-stock'} relative ${idx <= 3 ? 'block' : 'l:hidden block'}`}
-                >
-                  {mediaType === 'image' ? (
-                    <Image
-                      src={mediaItem?.url ?? ''}
-                      alt="product-image"
-                      className={cx(
-                        'object-fit w-50 h-50 radius-4 l:w-full l:h-full pointer l:radius-t-l-0 l:radius-b-l-0  l:radius-t-r-0 l:radius-b-r-0',
-                        {
-                          'border border-green border-2':
-                            selectedImage == mediaItem?.url,
-                          'l:radius-t-r-16': currentIndex === 1,
-                          'l:radius-b-r-16': currentIndex === 3,
-                        }
-                      )}
-                      width={10000}
+            {(uniqueVariantsFromProductImages?.length ?? 0) > 0 && (
+              <>
+                {uniqueVariantsFromProductImages.slice(0, 4).map((vari, idx) =>
+                  vari?.media?.map((mediaItem: any) => (
+                    <div
+                      key={`${vari.id}-${mediaItem.url}`}
                       onClick={() => {
-                        setSelectedVariant(variant);
-                        setSelectedImage(mediaItem?.url);
-                        setSelectedColor(
-                          variant.properties.color.toLowerCase()
-                        );
-                      }}
-                    />
-                  ) : (
-                    <VideoSrc
-                      className={cx(
-                        'object-fit w-50 h-50 radius-4 l:w-full l:h-full pointer l:radius-t-l-0 l:radius-b-l-0  l:radius-t-r-0 l:radius-b-r-0',
-                        {
-                          'border border-green border-2':
-                            selectedImage == mediaItem?.url,
-                          'l:radius-t-r-16': currentIndex === 1,
-                          'l:radius-b-r-16': currentIndex === 3,
+                        const isSameVariant = selectedVariant?.id === vari.id;
+                        const isSameImage = selectedImage === mediaItem.url;
+
+                        if (isSameVariant && isSameImage) {
+                          resetToDefault();
+                          return;
                         }
-                      )}
-                      src={mediaItem?.url ?? ''}
-                      onClick={() => {
-                        setSelectedVariant(variant);
-                        setSelectedImage(mediaItem?.url);
-                        setSelectedColor(
-                          variant.properties.color.toLowerCase()
-                        );
+
+                        setActiveFilters(buildFiltersFromVariant(vari));
+                        setSelectedImage(mediaItem.url);
+                        setImageSource('preview');
                       }}
-                    />
-                  )}
-                </div>
-              );
-            })}
+                      className={`l:h-207 ${vari?.status === 'OUT_OF_STOCK' && 'out-of-stock'} relative ${idx <= 3 ? 'block' : 'l:hidden block'}`}
+                    >
+                      {mediaType === 'image' ? (
+                        <Image
+                          src={mediaItem?.url ?? ''}
+                          alt="product-image"
+                          className={cx(
+                            'object-fit w-50 h-50 radius-4 l:w-full l:h-full pointer l:radius-t-l-0 l:radius-b-l-0  l:radius-t-r-0 l:radius-b-r-0',
+                            {
+                              'border border-green border-2':
+                                selectedVariant?.media.find(
+                                  (img) => img.url === mediaItem.url
+                                ),
+                              'l:radius-t-r-16': idx === 1,
+                              'l:radius-b-r-16': idx === 3,
+                            }
+                          )}
+                          width={10000}
+                        />
+                      ) : (
+                        <VideoSrc
+                          className={cx(
+                            'object-fit w-50 h-50 radius-4 l:w-full l:h-full pointer l:radius-t-l-0 l:radius-b-l-0  l:radius-t-r-0 l:radius-b-r-0',
+                            {
+                              'border border-green border-2':
+                                selectedVariant?.media.find(
+                                  (img) => img.url === mediaItem.url
+                                ),
+                              'l:radius-t-r-16': idx === 1,
+                              'l:radius-b-r-16': idx === 3,
+                            }
+                          )}
+                          src={mediaItem?.url ?? ''}
+                        />
+                      )}
+                    </div>
+                  ))
+                )}
+              </>
+            )}
           </div>
         </div>
 
@@ -447,12 +604,24 @@ const ProductDetails = ({ product }: { product: Product }) => {
             <div className="flex flex-col gap-12 border-b  border-#00000014 pb-15">
               <p className="weight-400 text-28">
                 {isDiscounted
-                  ? formatNumberAsPrice(selectedVariant?.discountedPrice)
-                  : formatNumberAsPrice(selectedVariant?.finalPrice)}
+                  ? formatNumberAsPrice(
+                      selectedVariant?.discountedPrice ??
+                        product.variants[0]?.discountedPrice ??
+                        0
+                    )
+                  : formatNumberAsPrice(
+                      selectedVariant?.finalPrice ??
+                        product.variants[0]?.finalPrice ??
+                        0
+                    )}
               </p>
               {isDiscounted && (
                 <p className="weight-400 text-16 color-#00000099 line-through">
-                  {formatNumberAsPrice(selectedVariant?.finalPrice)}
+                  {formatNumberAsPrice(
+                    selectedVariant?.finalPrice ??
+                      product.variants[0]?.finalPrice ??
+                      0
+                  )}
                 </p>
               )}
               <div className="flex flex-col l:flex-row l:a-items-center l:j-content-between gap-12 w-100p">
@@ -465,11 +634,7 @@ const ProductDetails = ({ product }: { product: Product }) => {
                         display: 'flex',
                         gap: '8px',
                       }}
-                      value={
-                        reviewStat?.find(
-                          (review) => review.id === selectedVariant.id
-                        )?.reviewStat?.averageRating ?? 0
-                      }
+                      value={displayReviewStat.averageRating}
                       itemStyles={{
                         itemShapes: Star,
                         activeFillColor: '#f59e0b',
@@ -478,9 +643,7 @@ const ProductDetails = ({ product }: { product: Product }) => {
                       readOnly
                     />
                     <span className="weight-500 text-14">
-                      {reviewStat
-                        ?.find((review) => review.id === selectedVariant.id)
-                        ?.reviewStat?.averageRating.toFixed(1) ?? 0}
+                      {displayReviewStat.averageRating.toFixed(1)}
                     </span>
                   </div>
                   <span className="color-" style={{ color: '#D9D9D9B2' }}>
@@ -488,22 +651,14 @@ const ProductDetails = ({ product }: { product: Product }) => {
                   </span>
                   <div className="color-#000000B2 text-12 flex a-items-center gap-5">
                     <MiniReview
-                      id={selectedVariant.id}
+                      id={selectedVariant?.id ?? ''}
                       isOpen={isOpen}
                       setIsOpen={setIsOpen}
-                      reviews={
-                        reviews.find(
-                          (review) => review.id === selectedVariant.id
-                        )?.reviews ?? []
-                      }
-                      reviewStat={
-                        reviewStat.find(
-                          (stat) => stat.id === selectedVariant.id
-                        )?.reviewStat
-                      }
+                      reviews={displayReviews}
+                      reviewStat={displayReviewStat}
                       loading={statsLoading}
                       slug={product.slug}
-                      color={selectedColor}
+                      /* color={selectedColor} */
                     />
                   </div>
                 </div>
@@ -545,88 +700,74 @@ const ProductDetails = ({ product }: { product: Product }) => {
               <p className="weight-600 border-b border-#00000014 pb-15 pt-15">
                 VARIATIONS
               </p>
-              <div>
-                <p className="text-left text-12 weight-400 color-#000000B2 mb-12">
-                  Select color:
-                </p>
-                <div
-                  className="flex gap-6 a-items-center no-scrollbar"
-                  style={{ width: '100%', overflow: 'auto' }}
-                >
-                  {availableColors?.map((each: string, idx: number) => {
-                    const colorMap = Object.fromEntries(
-                      colorNames.map((color) => [
-                        color.name.replaceAll(' ', '').toLowerCase(),
-                        color.hex,
-                      ])
-                    );
-
-                    const getColorHex = (colorName: string) => {
-                      if (!colorName) return null;
-                      return colorMap[colorName.toLowerCase()] || null;
-                    };
-                    const colorName = each.toString().replaceAll(' ', '');
-                    const colorHex = getColorHex(colorName);
-
-                    return (
-                      <div
-                        key={each}
-                        onClick={() => {
-                          setSelectedColor(each.toLowerCase());
-                          setSelectedImage(productImages[idx]);
-                        }}
-                        style={{
-                          background: colorHex || colorName || 'white',
-                          cursor: 'pointer',
-                        }}
-                        className={classNames(
-                          'w-32 min-w-32 h-32 flex round cursor-pointer border border-1 border-lightgray',
-                          {
-                            'border border-2.3 border-black! w-30 min-w-30 h-30 flex':
-                              selectedColor === each,
-                          }
-                        )}
-                      ></div>
-                    );
-                  })}
-                </div>
-              </div>
-              {hasSize && (
-                <div className="">
+              {allPropertiesWithSize.color?.length > 0 && (
+                <div>
                   <p className="text-left text-12 weight-400 color-#000000B2 mb-12">
-                    Select size:
+                    Select color:
                   </p>
-                  <div className="flex gap-6 a-items-center">
-                    {groupedData?.[selectedColor]?.map(
-                      (variant: ProductVariant, i: number) =>
-                        variant?.size && (
-                          <label
-                            key={variant.id}
-                            className={cx(
-                              'flex gap-8 text-14 bg-#F3F3F3 color-#000000CC px-10 py-7 radius-6 pointer',
-                              {
-                                'bg-#DEFFF9! color-#0B9378!':
-                                  variant?.id === selectedVariant?.id,
-                              }
-                            )}
-                          >
-                            <input
-                              type="radio"
-                              name={`size${i}`}
-                              onClick={() => setSelectedVariant(variant)}
-                              className={cx('accent-#0B9378 pointer')}
-                              checked={variant?.id === selectedVariant?.id}
-                              onChange={() => setSelectedVariant(variant)}
-                            />
-                            <span className={`whitespace-nowrap text-12`}>
-                              {variant?.size}
-                            </span>
-                          </label>
-                        )
-                    )}
+                  <div
+                    className="flex gap-6 a-items-center no-scrollbar"
+                    style={{ width: '100%', overflow: 'auto' }}
+                  >
+                    {allPropertiesWithSize.color?.map((color) => {
+                      const hex = colorMap[color.replaceAll(' ', '')];
+                      const active = activeFilters.color === color;
+                      const compatible = isOptionCompatible('color', color);
+
+                      return (
+                        <div
+                          key={color}
+                          onClick={() => toggleFilter('color', color)}
+                          className={classNames(
+                            'w-32 h-32 round border border-lightgray transition',
+                            {
+                              'border-2.3 border-black!': active,
+                              'opacity-40 cursor-not-allowed': !compatible,
+                            }
+                          )}
+                          style={{ background: hex || color }}
+                        />
+                      );
+                    })}
                   </div>
                 </div>
               )}
+
+              {Object.entries(allPropertiesWithSize).map(([prop, values]) => {
+                if (prop === 'color') return null;
+                return (
+                  <div key={prop}>
+                    <p className="text-left text-12 weight-400 color-#000000B2 mb-12">
+                      Select {prop}:
+                    </p>
+                    <div className="flex gap-10 flex-wrap">
+                      {values.map((value) => {
+                        const active = activeFilters[prop] === value;
+                        const compatible = isOptionCompatible(prop, value);
+
+                        return (
+                          <button
+                            key={value}
+                            onClick={() => toggleFilter(prop, value)}
+                            className={cx(
+                              'px-10 py-7 radius-6 border-2 transition whitespace-nowrap text-12',
+                              active &&
+                                'bg-#DEFFF9! color-#0B9378! border-#0B9378',
+                              !active &&
+                                compatible &&
+                                'bg-white border-grey-300 hover:border-black',
+                              !compatible &&
+                                'bg-grey-100 text-grey-400 border-grey-200 cursor-not-allowed'
+                            )}
+                          >
+                            {value}
+                          </button>
+                        );
+                      })}
+                    </div>
+                  </div>
+                );
+              })}
               {addToCartBtn()}
             </div>
 
@@ -733,91 +874,74 @@ const ProductDetails = ({ product }: { product: Product }) => {
                 VARIATIONS
               </p>
               <div className="flex flex-col gap-28">
-                <div>
-                  <p className="text-left text-12 weight-400 color-#000000B2 mb-12">
-                    Select color:
-                  </p>
-                  <div
-                    className="flex gap-6 a-items-center no-scrollbar"
-                    style={{ width: '100%', overflow: 'auto' }}
-                  >
-                    {availableColors?.map((each: string, idx: number) => {
-                      const colorMap = Object.fromEntries(
-                        colorNames.map((color) => [
-                          color.name.replaceAll(' ', '').toLowerCase(),
-                          color.hex,
-                        ])
-                      );
-
-                      const getColorHex = (colorName: string) => {
-                        if (!colorName) return null;
-                        return colorMap[colorName.toLowerCase()] || null;
-                      };
-                      const colorName = each.toString().replaceAll(' ', '');
-                      const colorHex = getColorHex(colorName);
-
-                      return (
-                        <div
-                          key={each}
-                          onClick={() => {
-                            setSelectedColor(each.toLowerCase());
-                            setSelectedImage(productImages[idx]);
-                          }}
-                          style={{
-                            background: colorHex || colorName || 'white',
-                            cursor: 'pointer',
-                          }}
-                          className={classNames(
-                            'w-36 min-w-36 h-36 flex round cursor-pointer border border-1 border-lightgray',
-                            {
-                              'border border-2.8 border-black! w-34 min-w-34 h-34 flex':
-                                selectedColor === each,
-                            }
-                          )}
-                        ></div>
-                      );
-                    })}
-                  </div>
-                </div>
-                {hasSize && (
-                  <div className="">
+                {allPropertiesWithSize.color?.length > 0 && (
+                  <div>
                     <p className="text-left text-12 weight-400 color-#000000B2 mb-12">
-                      Select size:
+                      Select color:
                     </p>
                     <div
                       className="flex gap-6 a-items-center no-scrollbar"
                       style={{ width: '100%', overflow: 'auto' }}
                     >
-                      {groupedData?.[selectedColor]?.map(
-                        (variant: ProductVariant, i: number) =>
-                          variant?.size && (
-                            <label
-                              key={variant.id}
-                              className={cx(
-                                'flex gap-8 text-14 bg-#F3F3F3 color-#000000CC px-10 py-7 radius-6 pointer',
-                                {
-                                  'bg-#DEFFF9! color-#0B9378!':
-                                    variant?.id === selectedVariant?.id,
-                                }
-                              )}
-                            >
-                              <input
-                                type="radio"
-                                name={`size-${i}`}
-                                onClick={() => setSelectedVariant(variant)}
-                                className={cx('accent-#0B9378 pointer')}
-                                checked={variant?.id === selectedVariant?.id}
-                                onChange={() => setSelectedVariant(variant)}
-                              />
-                              <span className={`whitespace-nowrap text-12`}>
-                                {variant?.size}
-                              </span>
-                            </label>
-                          )
-                      )}
+                      {allPropertiesWithSize.color?.map((color) => {
+                        const hex = colorMap[color.replaceAll(' ', '')];
+                        const active = activeFilters.color === color;
+                        const compatible = isOptionCompatible('color', color);
+
+                        return (
+                          <div
+                            key={color}
+                            onClick={() => toggleFilter('color', color)}
+                            className={classNames(
+                              'w-36 min-w-36 h-36 flex round border border-lightgray transition',
+                              {
+                                'border-2.8 border-black! w-34 min-w-34 h-34 flex':
+                                  active,
+                                'opacity-40 cursor-not-allowed': !compatible,
+                              }
+                            )}
+                            style={{ background: hex || color }}
+                          />
+                        );
+                      })}
                     </div>
                   </div>
                 )}
+                {Object.entries(allPropertiesWithSize).map(([prop, values]) => {
+                  if (prop === 'color') return null;
+                  return (
+                    <div key={prop}>
+                      <p className="text-left text-12 weight-400 color-#000000B2 mb-12">
+                        Select {prop}:
+                      </p>
+                      <div className="flex gap-10 flex-wrap">
+                        {values.map((value) => {
+                          const active = activeFilters[prop] === value;
+                          const compatible = isOptionCompatible(prop, value);
+
+                          return (
+                            <button
+                              key={value}
+                              onClick={() => toggleFilter(prop, value)}
+                              className={cx(
+                                'px-15 py-8 radius-6 border-2 transition text-12 whitespace-nowrap weight-400',
+                                active &&
+                                  'bg-#DEFFF9! color-#0B9378! border-#0B9378',
+                                !active &&
+                                  compatible &&
+                                  'bg-white border-grey-300 hover:border-black',
+                                !compatible &&
+                                  'bg-grey-100 text-grey-400 border-grey-200 cursor-not-allowed'
+                              )}
+                            >
+                              {value}
+                            </button>
+                          );
+                        })}
+                      </div>
+                    </div>
+                  );
+                })}
                 {addToCartBtn()}
               </div>
             </div>
@@ -870,199 +994,42 @@ const ProductDetails = ({ product }: { product: Product }) => {
           setShowShareModal(false);
         }}
       />
-      <Modal isOpen={showAllPhotos} onClose={() => setShowAllPhotos(false)}>
-        <div className="l:w-500 h-70vh flex l:grid grid-2-cols-1fr l:grid-2-row-auto gap-6 p-20 overflow-auto no-scrollbar">
-          {uniqueImages.map((image, idx) => {
-            const variant = product?.variants?.find((variant) =>
-              variant.media.some((media) => media.url === image)
-            );
-            if (!variant) return null; // Skip if no variant found
-            const mediaItem = variant.media.find(
-              (media) => media.url === image
-            );
-            const currentIndex = globalMediaIndex++;
-
-            return (
-              <div
-                key={idx}
-                style={{
-                  filter:
-                    variant.status === 'OUT_OF_STOCK'
-                      ? 'grayscale(100%)'
-                      : 'none',
-                }}
-              >
-                <Image
-                  src={mediaItem?.url || ''}
-                  alt="product-image"
-                  className={cx(
-                    'object-fit w-50 h-50 radius-4 l:radius-0 l:w-full pointer l:h-full',
-                    {
-                      'border border-green border-2':
-                        selectedImage == mediaItem?.url,
-                      [`border-${mediaItem?.description?.toLocaleLowerCase()}`]:
-                        selectedImage == mediaItem?.url,
-                    }
-                  )}
-                  width={10000}
-                  onClick={() => {
-                    setSelectedVariant(variant);
-                    setSelectedImage(mediaItem?.url);
-                    setSelectedColor(variant.properties.color.toLowerCase());
-                  }}
-                />
-              </div>
-            );
-          })}
-        </div>
-      </Modal>
-      <Modal
+      <ShowAllPhotosModal
+        isOpen={showAllPhotos}
+        onClose={() => setShowAllPhotos(false)}
+        uniqueImages={uniqueImages}
+        productVariants={product.variants}
+        selectedImage={selectedImage}
+        selectedVariant={selectedVariant}
+        setActiveFilters={setActiveFilters}
+        setSelectedImage={setSelectedImage}
+        setImageSource={setImageSource}
+        buildFiltersFromVariant={buildFiltersFromVariant}
+        resetToDefault={resetToDefault}
+      />
+      <ReviewModal
         isOpen={isReviewModalOpen && !reviewsLoading && !statsLoading}
-        onClose={() => {
-          setIsReviewModalOpen(false);
-        }}
-        extraClass={{ overflow: 'auto' }}
-        extraModalClass={{ backgroundColor: '#00000073' }}
-        className="h-fit md:w-fit sm:w-90p w-95p no-scrollbar"
-      >
-        <div
-          className="l:w-720 md:w-650 h-fit relative"
-          style={{ maxHeight: 'calc(100dvh - 90px)' }}
-        >
-          <div className="relative w-full">
-            <div className="sticky z-3 t-0 l-0 r-0 bg-white flex space-between a-items-center py-12 px-24 border-solid border-b border-1 border-#00000014">
-              <h5 className="text-16 weight-600 line-height-24">
-                Give a Review
-              </h5>
-              <AiOutlineClose
-                className="pointer w-20 h-20"
-                onClick={() => {
-                  setIsReviewModalOpen(false);
-                }}
-              />
-            </div>
-            <AddReview
-              id={selectedVariant.id}
-              setOpenModal={setIsReviewModalOpen}
-              refresh={() => {
-                refreshReviews();
-                refreshStats();
-              }}
-            />
-          </div>
-        </div>
-      </Modal>
-      <AnimatePresence>
-        {showLightbox && (
-          <motion.div
-            initial={{ scale: 0 }}
-            animate={{ scale: 1 }}
-            exit={{ scale: 0 }}
-            transition={{ duration: 0.3 }}
-            className={styles.wrapper}
-            role="dialog"
-            aria-modal="true"
-          >
-            <div
-              className={`${styles.topBar} mt-20 md:mt-30 mx-5 sm:mx-20 md:mx-30 mb-5 md:mb-10 h-34 py-14 px-10 sm:px-24`}
-            >
-              <button
-                className={`${styles.closeBtn} flex a-items-center gap-4 p-8 pr-10 radius-10 hover:bg-#b2b1b13c`}
-                onClick={() => {
-                  setShowLightbox(false);
-                }}
-              >
-                <IoCloseSharp size={18} /> Close
-              </button>
+        onClose={() => setIsReviewModalOpen(false)}
+        selectedVariantId={selectedVariant?.id ?? product.variants[0].id}
+        refreshReviews={refreshReviews}
+        refreshStats={refreshStats}
+      />
 
-              <div className={styles.counter}>
-                {lightboxIndex + 1} / {lightboxImages.length}
-              </div>
+      <LightboxModal
+        showLightbox={showLightbox}
+        setShowLightbox={setShowLightbox}
+        lightboxIndex={lightboxIndex}
+        setLightboxIndex={setLightboxIndex}
+        lightboxImages={lightboxImages}
+        isOutOfStock={isOutOfStock}
+        imgRef={imgRef}
+        isSaved={isSaved}
+        handleSave={handleSave}
+        isAuthenticated={isAuthenticated}
+        isLoginModal={isLoginModal}
+        setShowShareModal={setShowShareModal}
+      />
 
-              <div className={styles.actions}>
-                <p className="p-8 flex a-items-center j-content-center radius-100p hover:bg-#b2b1b13c">
-                  <RxShare2
-                    onClick={() => setShowShareModal(true)}
-                    className={`${styles.icon} w-20 h-20 min-w-20`}
-                    size={20}
-                  />
-                </p>
-
-                {isSaved ? (
-                  <p className="p-8 flex a-items-center j-content-center radius-100p hover:bg-#b2b1b13c">
-                    <AiFillHeart
-                      onClick={handleSave}
-                      className={`${styles.icon} w-20 h-20 min-w-20`}
-                      size={20}
-                    />
-                  </p>
-                ) : (
-                  <p className="p-8 flex a-items-center j-content-center radius-100p hover:bg-#b2b1b13c">
-                    <AiOutlineHeart
-                      onClick={() =>
-                        isAuthenticated ? handleSave() : isLoginModal()
-                      }
-                      className={`${styles.icon} w-20 h-20 min-w-20`}
-                      size={20}
-                    />
-                  </p>
-                )}
-              </div>
-            </div>
-
-            <div
-              className={styles.viewer}
-              onClick={() => {
-                setShowLightbox(false);
-              }}
-            >
-              <div
-                className={styles.mediaWrapper}
-                onClick={(e) => e.stopPropagation()}
-              >
-                <button
-                  className={`${styles.navBtn} ${styles.leftBtn}`}
-                  onClick={() =>
-                    setLightboxIndex(
-                      (lightboxIndex - 1 + lightboxImages.length) %
-                        lightboxImages.length
-                    )
-                  }
-                >
-                  <MdOutlineNavigateBefore className="color-#fffafaec" />
-                </button>
-
-                {(checkMediaType(lightboxImages[lightboxIndex]) ??
-                'image' === 'image') ? (
-                  <Image
-                    src={lightboxImages[lightboxIndex]}
-                    className={`flex-grow-1 h-full w-full h-full a-self-center ${isOutOfStock && 'out-of-stock'} ${styles.media}`}
-                    alt={''}
-                    ref={imgRef}
-                    width={10000}
-                  />
-                ) : (
-                  <VideoSrc
-                    className={`flex-grow-1 h-full w-full h-full a-self-center ${isOutOfStock && 'out-of-stock'} ${styles.media}`}
-                    src={lightboxImages[lightboxIndex]}
-                  />
-                )}
-
-                <button
-                  className={`${styles.navBtn} ${styles.rightBtn}`}
-                  onClick={() =>
-                    setLightboxIndex(
-                      (lightboxIndex + 1) % lightboxImages.length
-                    )
-                  }
-                >
-                  <MdOutlineNavigateNext className="color-#fffafaec" />
-                </button>
-              </div>
-            </div>
-          </motion.div>
-        )}
-      </AnimatePresence>
       <Footer />
     </>
   );

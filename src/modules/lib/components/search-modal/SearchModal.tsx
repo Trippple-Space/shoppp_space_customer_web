@@ -90,10 +90,11 @@ const SearchModal = ({
         openSingleProductModal={openSingleProductModal}
         handleCloseProductModal={handleCloseProductModal}
         position='homepage'
-        variant={{
+        product={product}
+        variant={/* {
           ...product.variants[0],
           product
-        }}
+        } */ undefined}
       />}
     </>
   )
