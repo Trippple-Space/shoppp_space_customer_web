@@ -15,7 +15,7 @@ const useGetRatingDist = (productVariantId: string) => {
             const reviewStatDist = await reviewService.getReviewStatDist(productVariantId);
             setReviewStatDist(reviewStatDist)
         } catch (error) {
-            toast.error((error as Error).message)
+            //toast.error((error as Error).message)
         } finally {
             setLoading(false)
         }

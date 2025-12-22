@@ -21,7 +21,8 @@
     ],
     "paths": {
       "@/*": ["./src/*"],
-      "@/store/*": ["./src/modules/lib/utility/store/*"]
+      "@/store/*": ["./src/modules/lib/utility/store/*"],
+      "@env": ["env/index.ts"]
     },
     "baseUrl": ".",
   },

@@ -517,6 +517,7 @@ const ProductDetails = ({ product }: { product: Product }) => {
                     alt={''}
                     ref={imgRef}
                     width={10000}
+                    hasLoader
                   />
                 ) : (
                   <VideoSrc
@@ -569,6 +570,7 @@ const ProductDetails = ({ product }: { product: Product }) => {
                             }
                           )}
                           width={10000}
+                          hasLoader
                         />
                       ) : (
                         <VideoSrc
