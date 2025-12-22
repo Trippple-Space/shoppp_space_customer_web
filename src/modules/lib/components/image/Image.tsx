@@ -70,7 +70,11 @@ const Image = React.forwardRef<HTMLImageElement, IImageProps>(
             ref={ref}
             className={classNames(
               'transition-opacity duration-500',
-              loaded ? 'opacity-100' : 'opacity-0',
+              hasLoader
+                ? loaded
+                  ? 'opacity-100'
+                  : 'opacity-0'
+                : 'opacity-100',
               className
             )}
             src={imageSrc}
@@ -87,7 +91,15 @@ const Image = React.forwardRef<HTMLImageElement, IImageProps>(
         ) : (
           <img
             ref={ref}
-            className={classNames('transition-opacity duration-500', className)}
+            className={classNames(
+              'transition-opacity duration-500',
+              hasLoader
+                ? loaded
+                  ? 'opacity-100'
+                  : 'opacity-0'
+                : 'opacity-100',
+              className
+            )}
             src={imageSrc}
             alt={alt}
             onClick={onClick}
@@ -95,7 +107,6 @@ const Image = React.forwardRef<HTMLImageElement, IImageProps>(
             width={autoWidth}
             height={autoHeight}
             onLoad={() => setLoaded(true)}
-            onLoadedData={() => setLoaded(true)}
           />
         )}
       </>
