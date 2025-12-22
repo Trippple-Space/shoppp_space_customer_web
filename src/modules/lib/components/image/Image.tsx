@@ -4,6 +4,7 @@ import classNames from 'classnames';
 import NextImage from 'next/image';
 import React, { useState } from 'react';
 import { ImageSrcFolder, getImageDir } from '../../utility/utility';
+import env from '@env';
 
 export interface IImageProps {
   src: string;
@@ -25,10 +26,7 @@ const extractSize = (
   prefix: 'w' | 'h'
 ): number | undefined => {
   if (!className) return undefined;
-
-  const regex = new RegExp(`${prefix}-(\\d+)`);
-  const match = className.match(regex);
-
+  const match = className.match(new RegExp(`${prefix}-(\\d+)`));
   return match ? Number(match[1]) : undefined;
 };
 
@@ -51,36 +49,68 @@ const Image = React.forwardRef<HTMLImageElement, IImageProps>(
     ref
   ) => {
     const [loaded, setLoaded] = useState(false);
-    const autoWidth = width ?? extractSize(className, 'w') ?? 0;
-    const autoHeight = height ?? extractSize(className, 'h') ?? 0;
 
-    return src ? (
+    const autoWidth = width ?? extractSize(className, 'w');
+    const autoHeight = height ?? extractSize(className, 'h');
+    const imageSrc = getImageDir((type + 's') as ImageSrcFolder, src);
+    const isProd = env.ENV === 'production';
+
+    if (!src) return null;
+
+    return (
       <>
         {!loaded && hasLoader && (
           <div
             className={`absolute g|inset:0px z-1 pulsing-multi-color-bg ${pulseClassName}`}
           />
         )}
-        <NextImage
-          ref={ref}
-          className={classNames(
-            'transition-opacity duration-500',
-            loaded ? 'opacity-100' : 'opacity-0',
-            className
-          )}
-          src={getImageDir((type + 's') as ImageSrcFolder, src)}
-          alt={alt}
-          onClick={onClick}
-          loading={priority || fetchPriority ? 'eager' : 'lazy'}
-          onLoad={() => setLoaded(true)}
-          width={autoWidth}
-          height={autoHeight}
-          fill={fill}
-          priority={priority}
-          fetchPriority={fetchPriority}
-        />
+
+        {isProd ? (
+          <NextImage
+            ref={ref}
+            className={classNames(
+              'transition-opacity duration-500',
+              hasLoader
+                ? loaded
+                  ? 'opacity-100'
+                  : 'opacity-0'
+                : 'opacity-100',
+              className
+            )}
+            src={imageSrc}
+            alt={alt}
+            onClick={onClick}
+            onLoad={() => setLoaded(true)}
+            loading={priority || fetchPriority ? 'eager' : 'lazy'}
+            width={autoWidth}
+            height={autoHeight}
+            fill={fill}
+            priority={priority}
+            fetchPriority={fetchPriority}
+          />
+        ) : (
+          <img
+            ref={ref}
+            className={classNames(
+              'transition-opacity duration-500',
+              hasLoader
+                ? loaded
+                  ? 'opacity-100'
+                  : 'opacity-0'
+                : 'opacity-100',
+              className
+            )}
+            src={imageSrc}
+            alt={alt}
+            onClick={onClick}
+            loading="lazy"
+            width={autoWidth}
+            height={autoHeight}
+            onLoad={() => setLoaded(true)}
+          />
+        )}
       </>
-    ) : null;
+    );
   }
 );
 

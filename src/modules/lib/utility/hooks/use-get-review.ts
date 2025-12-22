@@ -26,7 +26,7 @@ const useGetProductRating = (productVariantId: string | string[]) => {
         setReviews([{ id: productVariantId, reviews: singleReviews }]);
       }
     } catch (error) {
-      toast.error((error as Error).message);
+      //toast.error((error as Error).message);
     } finally {
       setLoading(false);
     }
