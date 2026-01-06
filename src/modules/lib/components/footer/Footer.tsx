@@ -68,6 +68,8 @@ const Footer = () => {
                     type='logo'
                     priority
                     fetchPriority='high'
+                    height={100}
+                    width={100}
                   />
                 </div>
               </div>
