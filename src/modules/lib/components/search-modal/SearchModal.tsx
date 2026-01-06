@@ -6,7 +6,7 @@ import { formatNumberAsPrice, cx, displayStockUnit } from '../../utility/utility
 import { Product } from '../../utility/types/product.interface'
 import Image from '../image/Image'
 import { useCart } from '../../utility/hooks/use-cart'
-import { useRecentlyViewedVariant } from '../../utility/hooks/use-recently-viewed'
+import { useRecentlyViewedActions, useRecentlyViewedVariant } from '../../utility/hooks/use-recently-viewed'
 
 const SearchModal = ({
   searchResults,
@@ -19,7 +19,7 @@ const SearchModal = ({
   const [product, setProduct] = useState<Product | null>(null)
   const [error, setError] = useState<string | null>(null)
   const { isAuthenticated } = useCart()
-  const { addVariant } = useRecentlyViewedVariant()
+  const { addVariant } = useRecentlyViewedActions()
 
   const router = useRouter()
   const handleFetchProduct = async (slug: string) => {
