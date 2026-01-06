@@ -34,6 +34,7 @@ export interface IQueryParams {
 export const useProducts = (initialQuery: IQueryParams) => {
   const [query, setQuery] = useState<IQueryParams>(initialQuery);
   const [loading, setLoading] = useState(false);
+  const [fetchingError, setFetchingError] = useState<Error | null>(null);
 
   const {
     productsCache,
@@ -91,6 +92,10 @@ export const useProducts = (initialQuery: IQueryParams) => {
         .then((fetchedProducts) => {
           setProductsCache(cacheKey, fetchedProducts);
         })
+        .catch((error) => {
+          setFetchingError(error);
+          setLoading(false);
+        })
         .finally(() => {
           setLoading(false);
         });
@@ -124,6 +129,9 @@ export const useProducts = (initialQuery: IQueryParams) => {
               {}
             )
           );
+        }).catch((error) => {
+          setFetchingError(error);
+          setLoading(false);
         }).finally(() => {
           setLoading(false);
         })
@@ -142,6 +150,7 @@ export const useProducts = (initialQuery: IQueryParams) => {
     setPagination,
     query,
     loading,
+    fetchingError
     // paginationLoading
   };
 };

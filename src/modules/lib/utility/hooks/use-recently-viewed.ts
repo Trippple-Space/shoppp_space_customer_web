@@ -4,7 +4,7 @@ import { useRecentVariantStore } from "../store/recentVariant.store";
 
 export const useRecentlyViewedVariant = () => {
     const { isAuthenticated } = useUserStore();
-    const { fetching, fetchRecentVariants, fetchRecentSearched, addVariant, recentVariants, recentSearched, clearRecentVariants, showLoginModal, isLoginModal } = useRecentVariantStore()
+    const { fetching, fetchRecentVariants, fetchRecentSearched, recentVariants, recentSearched, showLoginModal, isLoginModal } = useRecentVariantStore()
 
     useEffect(() => {
         if (isAuthenticated && !fetching) {
@@ -12,16 +12,23 @@ export const useRecentlyViewedVariant = () => {
             fetchRecentSearched()
         }
     }, [isAuthenticated]);
-    
+
     return {
         fetchRecentVariants,
         fetchRecentSearched,
         recentVariants,
         recentSearched,
-        addVariant,
-        clearRecentVariants,
         showLoginModal,
         isLoginModal,
         isAuthenticated,
     };
 }
+
+export const useRecentlyViewedActions = () => {
+    const { addVariant, clearRecentVariants } = useRecentVariantStore();
+
+    return {
+        addVariant,
+        clearRecentVariants,
+    };
+};

@@ -1,6 +1,7 @@
 import classNames from "classnames";
 import { StoreGroupResponse } from "./types/cart.interface";
 import { NewUser, User } from "./types/user.interface";
+import { IFilters } from "./types/product.interface";
 
 export type ImageSrcFolder = "icons" | "logos" | "images";
 export const getImageDir = (folder: ImageSrcFolder, object: string) => {
@@ -71,9 +72,9 @@ export const buildFilterParams = (filters: any) => {
     params["filters[price][LessThanOrEqual]"] = price.max;
   }
 
-  if (tags){
+  if (tags) {
     params["filters[tags][label]"] = tags
-  } 
+  }
 
   if (rating?.rateBy) {
     params["filters[variants][averageRating][MoreThanOrEqual]"] = rating.rateBy;
@@ -91,6 +92,37 @@ export const buildFilterParams = (filters: any) => {
   }*/
 
   return params;
+};
+
+export const filtersToSearchParams = (filters: IFilters) => {
+  const params = new URLSearchParams();
+
+  if (filters.rating.rateBy) params.set("rating", filters.rating.rateBy);
+  if (filters.price.min) params.set("priceMin", filters.price.min);
+  if (filters.price.max) params.set("priceMax", filters.price.max);
+  if (filters.sort.sortBy) params.set("sort", filters.sort.sortBy);
+  if (filters.location.selectedState)
+    params.set("location", filters.location.selectedState);
+  if (filters.showOffers) params.set("offers", "true");
+
+  return params;
+};
+
+export const searchParamsToFilters = (
+  searchParams: URLSearchParams
+): Partial<IFilters> => {
+  return {
+    rating: { rateBy: searchParams.get("rating") || "" },
+    price: {
+      min: searchParams.get("priceMin") || "",
+      max: searchParams.get("priceMax") || "",
+    },
+    sort: { sortBy: searchParams.get("sort") || "" },
+    location: {
+      selectedState: searchParams.get("location") || "",
+    },
+    showOffers: searchParams.get("offers") === "true",
+  };
 };
 
 export const chunkArray = <T>(arr: T[], noOfChunks: number): T[][] => {
@@ -259,48 +291,48 @@ export const preventCopyPaste = (e: ClipboardEvent) => {
   e.stopPropagation();
 }
 
-export const passwordValidatorRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[^A-Za-z\d])[A-Za-z\d\W]{8,}$/ 
+export const passwordValidatorRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[^A-Za-z\d])[A-Za-z\d\W]{8,}$/
 
 
 
-  export const ellipseText = (text: string, isExpanded: boolean, limit: number) => {
-    if (isExpanded || text.length <= limit) {
-      return text 
-    }
-    return `${text.substring(0, limit)}...` 
+export const ellipseText = (text: string, isExpanded: boolean, limit: number) => {
+  if (isExpanded || text.length <= limit) {
+    return text
   }
-
- export const onGoingOrderStatus = [
-    'ONGOING',
-    'PENDING_CONFIRMATION',
-    'CONFIRMED',
-   'ACKNOWLEDGED',
-    'WAITING_TO_BE_SHIPPED',
-    'OUT_FOR_DELIVERY',
-    'DELIVERED'
- ]
-  
-export function getStatusText(status: string) {    
-           switch (status) {
-       case 'ONGOING':
-         return 'Order placed'
-       case 'PENDING_CONFIRMATION':
-               return 'Pending Confirmation'
-             case 'CONFIRMED':
-               return 'Order confirmed'
-       case 'ACKNOWLEDGED':
-         return 'Order received'
-       case 'WAITING_TO_BE_SHIPPED':
-         return 'Waiting to be shipped'
-       case 'OUT_FOR_DELIVERY':
-         return 'Out for delivery'
-       case 'DELIVERED':
-         return 'Delivered'
-       default:
-         return ''
-     }
+  return `${text.substring(0, limit)}...`
 }
-   
+
+export const onGoingOrderStatus = [
+  'ONGOING',
+  'PENDING_CONFIRMATION',
+  'CONFIRMED',
+  'ACKNOWLEDGED',
+  'WAITING_TO_BE_SHIPPED',
+  'OUT_FOR_DELIVERY',
+  'DELIVERED'
+]
+
+export function getStatusText(status: string) {
+  switch (status) {
+    case 'ONGOING':
+      return 'Order placed'
+    case 'PENDING_CONFIRMATION':
+      return 'Pending Confirmation'
+    case 'CONFIRMED':
+      return 'Order confirmed'
+    case 'ACKNOWLEDGED':
+      return 'Order received'
+    case 'WAITING_TO_BE_SHIPPED':
+      return 'Waiting to be shipped'
+    case 'OUT_FOR_DELIVERY':
+      return 'Out for delivery'
+    case 'DELIVERED':
+      return 'Delivered'
+    default:
+      return ''
+  }
+}
+
 export const onGoingOrderStatusQuery = 'ONGOING,PENDING_CONFIRMATION,CONFIRMED,ACKNOWLEDGED,WAITING_TO_BE_SHIPPED,OUT_FOR_DELIVERY'
 export const states = [
   "Lagos"
@@ -353,7 +385,7 @@ export function convertUserResponse(data: NewUser): User {
 }
 
 export function getLastFiveIdChars(id: string): string {
-  if (id.length < 5) return id; 
+  if (id.length < 5) return id;
   return id.slice(-5).toLocaleUpperCase();
 }
 
@@ -377,7 +409,7 @@ export const handleFlyToCart = (imgRef: React.RefObject<HTMLImageElement>) => {
   const hasSeen = localStorage.getItem("seenCartAnimation");
   if (hasSeen) return;
 
-   const cartIcon = document.querySelector(".cart-icon") as HTMLElement | null;
+  const cartIcon = document.querySelector(".cart-icon") as HTMLElement | null;
   const img = imgRef.current as HTMLImageElement | null;
   if (!cartIcon || !img) return;
 

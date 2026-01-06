@@ -24,9 +24,13 @@ import MiniReview from '@/modules/views/product-details/reviews/MiniReview';
 import { IFetchedReview } from '../../utility/types/review.interface';
 import useGetRatingStats from '../../utility/hooks/use-get-rating-stats';
 import useTransformProduct from '../../utility/hooks/use-transform-product';
-import { useRecentlyViewedVariant } from '../../utility/hooks/use-recently-viewed';
+import {
+  useRecentlyViewedActions,
+  useRecentlyViewedVariant,
+} from '../../utility/hooks/use-recently-viewed';
 import { useOrders } from '../../utility/hooks/use-orders';
 import Button from '../button/Button';
+import { useProductTileOrders } from '../../utility/hooks/use-product-tile-orders';
 
 interface IProductTile {
   product: Product;
@@ -64,7 +68,7 @@ const ProductTile: FC<IProductTile> = ({
     ?.map((color) => groupedData?.[color]?.[0])
     .filter(Boolean);
 
-  const { orders, fetching: orderFetching } = useOrders({
+  const { orders, fetching: orderFetching } = useProductTileOrders({
     filters: { status: { In: `${onGoingOrderStatusQuery},DELIVERED` } },
   });
 
@@ -102,12 +106,12 @@ const ProductTile: FC<IProductTile> = ({
   } = useCart();
   const imgRef = useRef<HTMLImageElement>(null);
 
-  const variantIds = useMemo(
+  /* const variantIds = useMemo(
     () => product.variants.map((v: any) => v.id),
     [product.variants]
   );
-  const { reviewStat, loading: statsLoading } = useGetRatingStats(variantIds);
-  const { addVariant } = useRecentlyViewedVariant();
+  const { reviewStat, loading: statsLoading } = useGetRatingStats(variantIds); */
+  const { addVariant } = useRecentlyViewedActions();
 
   const selectedVariantItemInCart = cart.cartItems.find(
     (item) => item.variant.id === selectedVariant?.id
@@ -555,7 +559,7 @@ const ProductTile: FC<IProductTile> = ({
             )}
           </div>
           <div className="text-9 sm:text-10 text-grey">
-            <MiniReview
+            {/* <MiniReview
               id={selectedVariant?.id}
               slug={product?.slug}
               isOpen={isOpen}
@@ -569,7 +573,7 @@ const ProductTile: FC<IProductTile> = ({
               }
               loading={statsLoading}
               color={selectedColor}
-            />
+            /> */}
           </div>
         </div>
         {/* <div className="flex flex-wrap gap-4">

@@ -10,13 +10,12 @@ import useReviews from '@/modules/lib/utility/hooks/use-reviews';
 import { toast } from 'sonner';
 
 const CentralArena = () => {
-  const { products, type, ref, loading } = useProductListView();
+  const { products, type, ref, loading, fetchingError } = useProductListView();
   const { allReviews, allLoading: reviewsLoading } = useReviews();
   const { saveVariant, savedVariants, removeSavedVariant } = useSavedVariant();
   const [openReviewId, setOpenReviewId] = useState<string | null>(null);
   const renderedIds = new Set<string>();
 
-  // ✅ Run only in browser
   useEffect(() => {
     const handleGoogleLogin = () => {
       toast.success('Login Successful');
@@ -66,6 +65,10 @@ const CentralArena = () => {
                 />
               );
             })}
+          </div>
+        ) : fetchingError ? (
+          <div className="mt-60 bg-white grid-col-span-5 text-center">
+            Error loading products.
           </div>
         ) : (
           <div className="mt-60 bg-white grid-col-span-5 text-center">

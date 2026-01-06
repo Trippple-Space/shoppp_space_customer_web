@@ -28,6 +28,7 @@ interface IBaseNavBar {
 
 const BaseNavBar: FC<IBaseNavBar> = ({ links, parent }) => {
   useAuthGuard(); // TODO: refactor to rely on Next 13 auth middleware
+
   const [userProfileDropdown, setUserProfileDropdown] =
     useState<boolean>(false);
 
@@ -102,7 +103,6 @@ const BaseNavBar: FC<IBaseNavBar> = ({ links, parent }) => {
       }
     };
 
-    // 🧹 Always make sure no onboarding is visible on these pages
     const pathname = window.location.pathname;
     if (pathname.includes('/checkout') || pathname.includes('/orders')) {
       setShowOnBoardingModal(false);
@@ -261,26 +261,34 @@ const BaseNavBar: FC<IBaseNavBar> = ({ links, parent }) => {
         </div>
         {profileModal && (
           <>
-            <OrdersModal
-              modalOpen={profileModal === 'orders'}
-              handleCloseModal={() => setProfileModal('')}
-              data={undefined}
-            />
-            <RecentlySearchItems
-              modalOpen={profileModal === 'recently searched'}
-              handleCloseModal={() => setProfileModal('')}
-              data={undefined}
-            />
-            <RecentlyViewedItems
-              modalOpen={profileModal === 'recently viewed'}
-              handleCloseModal={() => setProfileModal('')}
-              data={undefined}
-            />
-            <SavedItemsModal
-              modalOpen={profileModal === 'saved items'}
-              handleCloseModal={() => setProfileModal('')}
-              data={undefined}
-            />
+            {profileModal === 'orders' && (
+              <OrdersModal
+                modalOpen={profileModal === 'orders'}
+                handleCloseModal={() => setProfileModal('')}
+                data={undefined}
+              />
+            )}
+            {profileModal === 'recently searched' && (
+              <RecentlySearchItems
+                modalOpen={profileModal === 'recently searched'}
+                handleCloseModal={() => setProfileModal('')}
+                data={undefined}
+              />
+            )}
+            {profileModal === 'recently viewed' && (
+              <RecentlyViewedItems
+                modalOpen={profileModal === 'recently viewed'}
+                handleCloseModal={() => setProfileModal('')}
+                data={undefined}
+              />
+            )}
+            {profileModal === 'saved items' && (
+              <SavedItemsModal
+                modalOpen={profileModal === 'saved items'}
+                handleCloseModal={() => setProfileModal('')}
+                data={undefined}
+              />
+            )}
           </>
         )}
       </div>
