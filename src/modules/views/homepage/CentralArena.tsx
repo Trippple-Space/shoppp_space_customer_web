@@ -8,15 +8,16 @@ import PuffLoader from '@/modules/lib/components/puff-loader/PuffLoader';
 import { useSavedVariant } from '@/modules/lib/utility/hooks/use-saved-variants';
 import useReviews from '@/modules/lib/utility/hooks/use-reviews';
 import { toast } from 'sonner';
+import Button from '@/modules/lib/components/button/Button';
 
-const CentralArena = () => {
-  const { products, type, ref, loading } = useProductListView();
+const CentralArena = ({ selectedCategory, setSelectedCategory }: any) => {
+  const { products, type, ref, loading, fetchingError, refetch } =
+    useProductListView();
   const { allReviews, allLoading: reviewsLoading } = useReviews();
   const { saveVariant, savedVariants, removeSavedVariant } = useSavedVariant();
   const [openReviewId, setOpenReviewId] = useState<string | null>(null);
   const renderedIds = new Set<string>();
 
-  // ✅ Run only in browser
   useEffect(() => {
     const handleGoogleLogin = () => {
       toast.success('Login Successful');
@@ -63,9 +64,19 @@ const CentralArena = () => {
                   isOpen={openReviewId}
                   setIsOpen={setOpenReviewId}
                   index={index}
+                  selectedCategory={selectedCategory}
+                  setSelectedCategory={setSelectedCategory}
                 />
               );
             })}
+          </div>
+        ) : fetchingError ? (
+          <div className="mt-60 bg-white grid-col-span-5 text-center">
+            <p className="mb-12">{fetchingError.message}</p>
+
+            <Button onClick={refetch} className="px-16 py-8 w-100p! max-w-100">
+              Retry
+            </Button>
           </div>
         ) : (
           <div className="mt-60 bg-white grid-col-span-5 text-center">
@@ -79,6 +90,11 @@ const CentralArena = () => {
           <p className="w-100p flex j-content-center mt-10">
             {products.length >= 20 && loading ? <PuffLoader /> : ''}
           </p>
+          {products.length >= 20 && !loading && fetchingError && (
+            <div className="mt-60 bg-white grid-col-span-5 text-center">
+              <p className="mb-12">{fetchingError.message}</p>
+            </div>
+          )}
         </div>
       </section>
     </>

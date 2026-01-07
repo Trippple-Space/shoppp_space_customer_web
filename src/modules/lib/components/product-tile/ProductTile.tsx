@@ -24,9 +24,14 @@ import MiniReview from '@/modules/views/product-details/reviews/MiniReview';
 import { IFetchedReview } from '../../utility/types/review.interface';
 import useGetRatingStats from '../../utility/hooks/use-get-rating-stats';
 import useTransformProduct from '../../utility/hooks/use-transform-product';
-import { useRecentlyViewedVariant } from '../../utility/hooks/use-recently-viewed';
+import {
+  useRecentlyViewedActions,
+  useRecentlyViewedVariant,
+} from '../../utility/hooks/use-recently-viewed';
 import { useOrders } from '../../utility/hooks/use-orders';
 import Button from '../button/Button';
+import { useProductTileOrders } from '../../utility/hooks/use-product-tile-orders';
+import { LuChevronRight } from 'react-icons/lu';
 
 interface IProductTile {
   product: Product;
@@ -38,6 +43,8 @@ interface IProductTile {
   isOpen: string | null;
   setIsOpen: React.Dispatch<React.SetStateAction<string | null>>;
   index?: number;
+  selectedCategory?: any;
+  setSelectedCategory?: any;
 }
 
 const ProductTile: FC<IProductTile> = ({
@@ -49,6 +56,8 @@ const ProductTile: FC<IProductTile> = ({
   isOpen,
   setIsOpen,
   index,
+  selectedCategory,
+  setSelectedCategory,
 }) => {
   const pathname =
     typeof window !== 'undefined' ? window.location.pathname : '';
@@ -64,7 +73,7 @@ const ProductTile: FC<IProductTile> = ({
     ?.map((color) => groupedData?.[color]?.[0])
     .filter(Boolean);
 
-  const { orders, fetching: orderFetching } = useOrders({
+  const { orders, fetching: orderFetching } = useProductTileOrders({
     filters: { status: { In: `${onGoingOrderStatusQuery},DELIVERED` } },
   });
 
@@ -91,6 +100,15 @@ const ProductTile: FC<IProductTile> = ({
     product?.variants?.[0]
   );
 
+  const rowRef = useRef<HTMLDivElement>(null);
+  const priceRef = useRef<HTMLDivElement>(null);
+  const chevronRef = useRef<HTMLDivElement>(null);
+  const tagsContainerRef = useRef<HTMLDivElement>(null);
+  const tagRefs = useRef<HTMLSpanElement[]>([]);
+
+  const [isOverflowing, setIsOverflowing] = useState(false);
+  const [showAllTags, setShowAllTags] = useState(false);
+
   const {
     addToCart,
     cart,
@@ -102,12 +120,12 @@ const ProductTile: FC<IProductTile> = ({
   } = useCart();
   const imgRef = useRef<HTMLImageElement>(null);
 
-  const variantIds = useMemo(
+  /* const variantIds = useMemo(
     () => product.variants.map((v: any) => v.id),
     [product.variants]
   );
-  const { reviewStat, loading: statsLoading } = useGetRatingStats(variantIds);
-  const { addVariant } = useRecentlyViewedVariant();
+  const { reviewStat, loading: statsLoading } = useGetRatingStats(variantIds); */
+  const { addVariant } = useRecentlyViewedActions();
 
   const selectedVariantItemInCart = cart.cartItems.find(
     (item) => item.variant.id === selectedVariant?.id
@@ -208,6 +226,14 @@ const ProductTile: FC<IProductTile> = ({
     return true;
   }, [allProperties]);
 
+  const visibleTags = useMemo(() => {
+    return (product?.tags ?? []).filter(
+      (tag: any) => !tag.label?.includes('pill:')
+    );
+  }, [product?.tags]);
+
+  const [visibleTagCount, setVisibleTagCount] = useState(visibleTags.length);
+
   const [showOnBoardingModal, setShowOnBoardingModal] = useState(false);
   const indexCount = index === 0;
 
@@ -242,6 +268,74 @@ const ProductTile: FC<IProductTile> = ({
       document.body.style.overflow = 'auto';
     };
   }, [showOnBoardingModal]);
+
+  const recalculateVisibleTags = React.useCallback(() => {
+    if (
+      !rowRef.current ||
+      !priceRef.current ||
+      !tagsContainerRef.current ||
+      visibleTags.length === 0
+    )
+      return;
+
+    const rowWidth = rowRef.current.clientWidth;
+    const priceWidth = priceRef.current.offsetWidth;
+
+    const gapBetween = 21;
+    const chevronWidth = chevronRef.current?.offsetWidth ?? 14;
+
+    const availableWidth = rowWidth - priceWidth - gapBetween - chevronWidth;
+
+    let usedWidth = 0;
+    let count = 0;
+
+    for (let i = 0; i < tagRefs.current.length; i++) {
+      const tagEl = tagRefs.current[i];
+      if (!tagEl) continue;
+
+      const style = window.getComputedStyle(tagEl);
+      const margin =
+        parseFloat(style.marginLeft) + parseFloat(style.marginRight);
+
+      const tagWidth = tagEl.offsetWidth + margin + 6;
+
+      if (usedWidth + tagWidth > availableWidth) break;
+
+      usedWidth += tagWidth;
+      count++;
+    }
+
+    setVisibleTagCount(count);
+    setIsOverflowing(count < visibleTags.length);
+  }, [visibleTags, selectedVariant?.id]);
+
+  useEffect(() => {
+    recalculateVisibleTags();
+  }, [recalculateVisibleTags]);
+
+  useEffect(() => {
+    if (!rowRef.current) return;
+
+    const observer = new ResizeObserver(() => {
+      recalculateVisibleTags();
+    });
+
+    observer.observe(rowRef.current);
+
+    return () => {
+      observer.disconnect();
+    };
+  }, [recalculateVisibleTags]);
+
+  useEffect(() => {
+    recalculateVisibleTags();
+  }, [visibleTags, selectedVariant?.id]);
+
+  useEffect(() => {
+    const close = () => setShowAllTags(false);
+    if (showAllTags) document.addEventListener('click', close);
+    return () => document.removeEventListener('click', close);
+  }, [showAllTags]);
 
   const handleOnboardingClose = () => {
     setShowOnBoardingModal(false);
@@ -537,8 +631,11 @@ const ProductTile: FC<IProductTile> = ({
             </div>
           )}
         </div>
-        <div className="flex j-content-between">
-          <div className="flex md:gap-8 md:a-items-center md:flex-row flex-col">
+        <div ref={rowRef} className="flex j-content-between gap-15">
+          <div
+            ref={priceRef}
+            className="flex md:gap-8 md:a-items-center md:flex-row flex-col"
+          >
             <p className="md:text-16 text-12 weight-600 md:line-height-24 line-height-20">
               {isDiscounted
                 ? formatNumberAsPrice(selectedVariant?.discountedPrice)
@@ -554,8 +651,9 @@ const ProductTile: FC<IProductTile> = ({
               </p>
             )}
           </div>
-          <div className="text-9 sm:text-10 text-grey">
-            <MiniReview
+
+          <div className="text-9 sm:text-10 text-grey flex gap-6 a-items-center relative">
+            {/* <MiniReview
               id={selectedVariant?.id}
               slug={product?.slug}
               isOpen={isOpen}
@@ -569,19 +667,91 @@ const ProductTile: FC<IProductTile> = ({
               }
               loading={statsLoading}
               color={selectedColor}
-            />
+            /> */}
+            <div className="absolute opacity-0 pointer-events-none z-0">
+              {visibleTags.map((tag: any, i: number) => (
+                <span
+                  key={i}
+                  ref={(el) => {
+                    if (el) tagRefs.current[i] = el;
+                  }}
+                  className="text-green md:text-12 text-10 inline-block mx-2"
+                >
+                  #{tag.label}
+                </span>
+              ))}
+            </div>
+
+            <div
+              ref={tagsContainerRef}
+              className="flex gap-6 overflow-hidden whitespace-nowrap max-w-full relative z-1"
+            >
+              {visibleTags
+                .slice(0, visibleTagCount)
+                .map((tag: any, i: number) => (
+                  <span
+                    key={i}
+                    ref={(el) => {
+                      if (el) tagRefs.current[i] = el;
+                    }}
+                    className="text-green md:text-12 text-10 inline-block radius-5 mx-2 my-1 pointer hover:underline lowercase"
+                    onClick={() => {
+                      console.log(selectedCategory);
+                      //to be fixed later (on fix on the backend)
+                      setSelectedCategory({
+                        ...selectedCategory,
+                        name: tag.label,
+                      });
+                    }}
+                  >
+                    #{tag.label}
+                  </span>
+                ))}
+            </div>
+
+            {isOverflowing && (
+              <div ref={chevronRef}>
+                <LuChevronRight
+                  className="w-14 h-14 min-w-14 color-#0B9378 mt-6 cursor-pointer relative z-1"
+                  onClick={() => setShowAllTags(true)}
+                />
+              </div>
+            )}
+
+            {showAllTags && (
+              <div
+                className="absolute b-3 r-5 sm:r-1 mt-6 bg-white g|box-shadow:0px|_|1px|_|3px|_|0px|_|rgba(0,0,0,0.1); radius-5 p-10 z-3"
+                onClick={(e) => e.stopPropagation()}
+              >
+                <div className="flex flex-wrap gap-6 max-w-220">
+                  {visibleTags.map((tag: any, i: number) => (
+                    <span
+                      key={i}
+                      className="text-green text-12 lowercase pointer hover:underline"
+                      onClick={() => {
+                        console.log(selectedCategory);
+                        //to be fixed later (on fix on the backend)
+                        setSelectedCategory({
+                          ...selectedCategory,
+                          name: tag.label,
+                        });
+                      }}
+                    >
+                      #{tag.label}
+                    </span>
+                  ))}
+                </div>
+
+                {/* <p
+                  className="text-10 text-grey mt-8 pointer"
+                  onClick={() => setShowAllTags(false)}
+                >
+                  Close
+                </p> */}
+              </div>
+            )}
           </div>
         </div>
-        {/* <div className="flex flex-wrap gap-4">
-          {product?.tags?.map((tag: any, i: number) => (
-            <span
-              className="text-green md:text-12 text-10 inline-block radius-5 mx-2 my-1 pointer hover:underline lowercase"
-              key={i}
-            >
-              {!tag.label.includes("pill:") && "#" + tag.label}
-            </span>
-          ))}
-        </div> */}
       </div>
       {openSingleProductModal && (
         <ProductDetailModal

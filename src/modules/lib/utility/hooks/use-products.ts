@@ -34,12 +34,15 @@ export interface IQueryParams {
 export const useProducts = (initialQuery: IQueryParams) => {
   const [query, setQuery] = useState<IQueryParams>(initialQuery);
   const [loading, setLoading] = useState(false);
+  const [fetchingError, setFetchingError] = useState<Error | null>(null);
+  const [refetchToken, setRefetchToken] = useState(0);
 
   const {
     productsCache,
     setProductsCache,
     setProductsCacheIdempotencyTracker,
-    productCacheIdempotencyTracker
+    productCacheIdempotencyTracker,
+    clearProductsCacheByKey,
   } = useProductStore();
 
   const setFilters = (filters: IProductFilters) => {
@@ -77,6 +80,18 @@ export const useProducts = (initialQuery: IQueryParams) => {
     }));
   };
 
+  const refetch = () => {
+    clearProductsCacheByKey(cacheKey);
+    setRefetchToken((t) => t + 1);
+    setQuery((prev) => ({
+      ...prev,
+      pagination: {
+        page: 1,
+        limit: prev.pagination?.limit ?? 20,
+      },
+    }));
+  };
+
   const cacheKey =
     "products_" +
     JSON.stringify(query.filters ?? {}) +
@@ -86,10 +101,15 @@ export const useProducts = (initialQuery: IQueryParams) => {
   useEffect(() => {
     if (!productsCache[cacheKey] || productsCache[cacheKey].length === 0) {
       setLoading(true);
+      setFetchingError(null);
       productService
         .fetchProducts(query, query.allFilters)
         .then((fetchedProducts) => {
           setProductsCache(cacheKey, fetchedProducts);
+        })
+        .catch((error) => {
+          setFetchingError(error);
+          setLoading(false);
         })
         .finally(() => {
           setLoading(false);
@@ -97,6 +117,7 @@ export const useProducts = (initialQuery: IQueryParams) => {
     }
   }, [
     cacheKey,
+    refetchToken,
     productsCache[cacheKey]?.length,
     JSON.stringify(query.allFilters)
   ]);
@@ -107,6 +128,7 @@ export const useProducts = (initialQuery: IQueryParams) => {
       (query.pagination?.limit ?? 0) * (query.pagination?.page ?? 1)
     ) {
       setLoading(true);
+      setFetchingError(null);
       productService
         .fetchProducts(query, query.allFilters)
         .then((fetchedProducts) => {
@@ -124,13 +146,17 @@ export const useProducts = (initialQuery: IQueryParams) => {
               {}
             )
           );
+        }).catch((error) => {
+          setFetchingError(error);
+          setLoading(false);
         }).finally(() => {
           setLoading(false);
         })
     }
   }, [
     JSON.stringify(query.pagination ?? {}),
-    JSON.stringify(query.allFilters)
+    JSON.stringify(query.allFilters),
+    refetchToken
   ]);
 
   return {
@@ -142,6 +168,8 @@ export const useProducts = (initialQuery: IQueryParams) => {
     setPagination,
     query,
     loading,
+    fetchingError,
+    refetch,
     // paginationLoading
   };
 };

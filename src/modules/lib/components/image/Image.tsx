@@ -50,8 +50,8 @@ const Image = React.forwardRef<HTMLImageElement, IImageProps>(
   ) => {
     const [loaded, setLoaded] = useState(false);
 
-    const autoWidth = width ?? extractSize(className, 'w');
-    const autoHeight = height ?? extractSize(className, 'h');
+    const autoWidth = width ?? extractSize(className, 'w') ?? 0;
+    const autoHeight = height ?? extractSize(className, 'h') ?? 0;
     const imageSrc = getImageDir((type + 's') as ImageSrcFolder, src);
     const isProd = env.ENV === 'production';
 
