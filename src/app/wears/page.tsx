@@ -1,11 +1,13 @@
-import Home from '@/modules/views/home/Home'
-import Homepage from '@/modules/views/homepage/Homepage'
-import React from 'react'
+import Home from '@/modules/views/home/Home';
+import Homepage from '@/modules/views/homepage/Homepage';
+import React, { Suspense } from 'react';
 
 const page = () => {
   return (
-    <Homepage />
-  )
-}
+    <Suspense fallback={<div />}>
+      <Homepage />
+    </Suspense>
+  );
+};
 
-export default page
+export default page;
