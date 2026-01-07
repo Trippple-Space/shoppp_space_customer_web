@@ -11,7 +11,8 @@ interface ProductStore {
         }
     }
     setProductsCache: (cacheKey: string, products: Product[]) => void;
-    setProductsCacheIdempotencyTracker: (cacheKey: string, productIds: {[x:string]: true}) => void;
+    setProductsCacheIdempotencyTracker: (cacheKey: string, productIds: { [x: string]: true }) => void;
+    clearProductsCacheByKey: (cacheKey: string) => void;
 }
 
 const placeholderProduct: Product = {
@@ -48,29 +49,29 @@ const placeholderProduct: Product = {
         updatedAt: ""
     },
     variants: [
-         {
-              id: "",
-              media: [
-                   {
-                        url: "",
-                        type: "image",
-                   },
+        {
+            id: "",
+            media: [
+                {
+                    url: "",
+                    type: "image",
+                },
             ],
-            size:'',
-              status:'',
-              stock: 0,
-              price: 0,
-              finalPrice: 0,
-              discountedPrice: 0,
-              minPurchaseQuantity: 0,
-              incrementBy: 0,
-              meta: undefined,
-              properties: undefined,
-              stockUnit: "",
-              createAt: "",
-              lastUpdated: "",
-              preOrder: false,
-         },
+            size: '',
+            status: '',
+            stock: 0,
+            price: 0,
+            finalPrice: 0,
+            discountedPrice: 0,
+            minPurchaseQuantity: 0,
+            incrementBy: 0,
+            meta: undefined,
+            properties: undefined,
+            stockUnit: "",
+            createAt: "",
+            lastUpdated: "",
+            preOrder: false,
+        },
     ],
     store: {
         name: "",
@@ -100,7 +101,7 @@ export const useProductStore = create<ProductStore>((set) => ({
                 [cacheKey]: products ?? [],
             },
         })),
-    setProductsCacheIdempotencyTracker: (cacheKey: string, productIds: {[x:string]: true}) =>
+    setProductsCacheIdempotencyTracker: (cacheKey: string, productIds: { [x: string]: true }) =>
         set((state) => ({
             productCacheIdempotencyTracker: {
                 ...state.productCacheIdempotencyTracker,
@@ -110,4 +111,15 @@ export const useProductStore = create<ProductStore>((set) => ({
                 },
             },
         })),
+    clearProductsCacheByKey: (cacheKey) =>
+        set((state) => {
+            const { [cacheKey]: _, ...rest } = state.productsCache;
+            const { [cacheKey]: __, ...restTracker } =
+                state.productCacheIdempotencyTracker;
+
+            return {
+                productsCache: rest,
+                productCacheIdempotencyTracker: restTracker,
+            };
+        }),
 }));

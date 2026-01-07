@@ -1,22 +1,36 @@
-import React, { FC, ReactNode } from 'react'
+import React, { FC, ReactNode } from 'react';
 
 interface IButton {
-    size?: 'large' | 'medium' | 'small'
-    theme?: 'primary' | 'secondary' | 'neutral',
-    className?: string,
-    children: ReactNode,
-    type?: 'submit' | 'reset' | 'button'
-    disabled?: boolean
+  size?: 'large' | 'medium' | 'small';
+  theme?: 'primary' | 'secondary' | 'neutral';
+  className?: string;
+  children: ReactNode;
+  type?: 'submit' | 'reset' | 'button';
+  disabled?: boolean;
+  onClick?: () => void;
 }
 
-const Button: FC<IButton> = ({children, size = 'medium', theme = 'primary', className, type, disabled}) => {
+const Button: FC<IButton> = ({
+  children,
+  size = 'medium',
+  theme = 'primary',
+  className,
+  type,
+  disabled,
+  onClick,
+}) => {
   return (
-    (<button disabled={disabled} type={type} className={`bg-green text-white py-10 l:py-15 px-20 w-fit radius-5 border-none
+    <button
+      disabled={disabled}
+      type={type}
+      className={`bg-green text-white py-10 l:py-15 px-20 w-fit radius-5 border-none
                     hover:pointer text-13 l:text-14 font-inter 
-                hover:bg-darkgreen g|transition:0.5s disabled:bg-#0b9378cb disabled:cursor-not-allowed ${className}`}>
+                hover:bg-darkgreen g|transition:0.5s disabled:bg-#0b9378cb disabled:cursor-not-allowed ${className}`}
+      onClick={onClick}
+    >
       {children}
-    </button>)
+    </button>
   );
-}
+};
 
-export default Button
+export default Button;

@@ -17,7 +17,7 @@ export const useFilterStore = create<FilterStore>((set) => ({
     price: { min: "", max: "" },
     rating: { rateBy: "" },
     showOffers: false,
-    location: {selectedState: ""},
+    location: { selectedState: "" },
   },
 
   setSort: (sortBy) => {
@@ -77,11 +77,16 @@ export const useFilterStore = create<FilterStore>((set) => ({
           field === "sort"
             ? { sortBy: "" }
             : field === "price"
-            ? { min: "", max: "" }
-            : field === "rating"
-            ? { rateBy: "" }
-            : {selectedState: ""}
+              ? { min: "", max: "" }
+              : field === "rating"
+                ? { rateBy: "" }
+                : field === "location"
+                  ? { selectedState: "" }
+                  : field === "showOffers"
+                    ? false
+                    : state.allFilters[field]
       }
     }));
   }
+
 }));

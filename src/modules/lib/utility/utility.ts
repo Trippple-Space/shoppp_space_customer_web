@@ -94,7 +94,7 @@ export const buildFilterParams = (filters: any) => {
   return params;
 };
 
-export const filtersToSearchParams = (filters: IFilters) => {
+export const filtersToSearchParams = (filters: IFilters, selectedCategory?: { name?: string }) => {
   const params = new URLSearchParams();
 
   if (filters.rating.rateBy) params.set("rating", filters.rating.rateBy);
@@ -104,6 +104,9 @@ export const filtersToSearchParams = (filters: IFilters) => {
   if (filters.location.selectedState)
     params.set("location", filters.location.selectedState);
   if (filters.showOffers) params.set("offers", "true");
+  if (selectedCategory?.name && selectedCategory.name !== "All") {
+    params.set("category", selectedCategory.name.toLowerCase());
+  }
 
   return params;
 };
