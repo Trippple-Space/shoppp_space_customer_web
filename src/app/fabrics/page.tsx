@@ -1,7 +1,12 @@
-import Homepage from "@/modules/views/homepage/Homepage";
+import Homepage from '@/modules/views/homepage/Homepage';
+import { Suspense } from 'react';
 
 const page = () => {
-  return <Homepage />;
+  return (
+    <Suspense fallback={<div />}>
+      <Homepage />
+    </Suspense>
+  );
 };
 
 export default page;
