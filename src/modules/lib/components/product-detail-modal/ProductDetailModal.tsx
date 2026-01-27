@@ -508,7 +508,7 @@ const ProductDetailModal = ({
                                         className={classNames(
                                           'w-32 h-32 round border transition',
                                           {
-                                            'border-2 border-black': active,
+                                            'border-3 border-#0B9378 border-solid': active,
                                             'opacity-40 cursor-not-allowed':
                                               !compatible,
                                           }
@@ -547,9 +547,9 @@ const ProductDetailModal = ({
                                               toggleFilter(prop, value)
                                             }
                                             className={cx(
-                                              'px-10 py-7 radius-6 border-2 transition whitespace-nowrap text-12',
+                                              'px-10 py-7 radius-6 border transition whitespace-nowrap text-12',
                                               active &&
-                                                'bg-#DEFFF9! color-#0B9378! border-#0B9378',
+                                                'bg-#DEFFF9! color-#0B9378! border-3 border-#0B9378 border-solid',
                                               !active &&
                                                 compatible &&
                                                 'bg-#F3F3F3',

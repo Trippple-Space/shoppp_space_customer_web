@@ -607,10 +607,10 @@
 .h-350 { height: 350px; } 
 .w-32 { width: 32px; } 
 .h-32 { height: 32px; } 
+.border-\#0B9378 { border-color: #0B9378; } 
 .opacity-40 { opacity: 40%; } 
 .bg-\#DEFFF9\! { background-color: #DEFFF9 !important; } 
 .color-\#0B9378\! { color: #0B9378 !important; } 
-.border-\#0B9378 { border-color: #0B9378; } 
 .border-hidden { border-style: hidden; } 
 .border-green-100 { border-color: rgba(11, 147, 120, 0.2); } 
 .grid-3-cols-1fr { grid-template-columns: repeat(3, 1fr); } 
@@ -663,6 +663,7 @@
 .px-27 { padding-left: 27px; padding-right: 27px; } 
 .py-17 { padding-top: 17px; padding-bottom: 17px; } 
 @layer base {.radius-30 { border-radius: 30px; } } 
+.min-w-70 { min-width: 70px; } 
 .disabled\:bg-yellow-200:disabled { background-color: #ffdc9e; } 
 .t-10p { top: 10%; } 
 .l--10 { left: -10px; } 
@@ -692,6 +693,7 @@
 .mt-5 { margin-top: 5px; } 
 .weight-300 { font-weight: 300; } 
 .mr-5 { margin-right: 5px; } 
+.max-w-200 { max-width: 200px; } 
 .bg-deep-yellow { background-color: #FACE33; } 
 .bg-dimgrey { background-color: #333333; } 
 .border-pink { border-color: pink; } 
@@ -1414,6 +1416,7 @@
 @media only screen and (min-width: 992px) { .l\:white-space-nowrap { white-space: nowrap; } } 
 @media only screen and (min-width: 992px) { .l\:gap-18 { gap: 18px; } } 
 @media only screen and (min-width: 992px) { .l\:w-115 { width: 115px; } } 
+@media only screen and (min-width: 992px) { .l\:min-w-115 { min-width: 115px; } } 
 @media only screen and (min-width: 992px) { .l\:h-115 { height: 115px; } } 
 @media only screen and (min-width: 992px) { .l\:bg-white { background-color: #FFFFFF; } } 
 @media only screen and (min-width: 992px) { @layer base {    .l\:border {       border: 1px solid;     }  } } 
@@ -1421,6 +1424,7 @@
 @media only screen and (min-width: 992px) { .l\:w-full {    width: 100%;  } } 
 @media only screen and (min-width: 992px) { .l\:text-15 { font-size: 15px; } } 
 @media only screen and (min-width: 992px) { .l\:mr-10 { margin-right: 10px; } } 
+@media only screen and (min-width: 992px) { .l\:max-w-250 { max-width: 250px; } } 
 @media only screen and (min-width: 992px) { .l\:r-60 { right: 60px; } } 
 @media only screen and (min-width: 992px) { .l\:grid-4-cols-1fr { grid-template-columns: repeat(4, 1fr); } } 
 @media only screen and (min-width: 992px) { .l\:mt--20 { margin-top: -20px; } } 
