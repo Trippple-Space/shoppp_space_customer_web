@@ -16,6 +16,7 @@ import {
 } from '@/modules/lib/utility/utility';
 import { TbX } from 'react-icons/tb';
 import { IFilters } from '@/modules/lib/utility/types/product.interface';
+import Collections from './Collections';
 
 const Homepage = () => {
   const searchParams = useSearchParams();
@@ -60,7 +61,7 @@ const Homepage = () => {
     const { min, max } = allFilters.price;
 
     if (min && max)
-      return `${formatNumberAsPrice(Number(min))} - ${formatNumberAsPrice(Number(max))}`;
+      return `${formatNumberAsPrice(Number(min)) || '₦ 0'} - ${formatNumberAsPrice(Number(max)) || 'Infinity'}`;
     if (min) return `≥ ${formatNumberAsPrice(Number(min))}`;
     if (max) return `≤ ${formatNumberAsPrice(Number(max))}`;
 
@@ -208,6 +209,8 @@ const Homepage = () => {
         )}
       </div>
       <div className="app-width">
+        <Collections storeId='0199c43e-1060-7180-acc2-71771c1944e7' />
+
         <CentralArena
           selectedCategory={selectedCategory}
           setSelectedCategory={setSelectedCategory}

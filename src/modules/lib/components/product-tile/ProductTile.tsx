@@ -38,10 +38,10 @@ interface IProductTile {
   saveVariant?: (variantId: string) => void;
   removeSavedVariant?: (variantId: string) => void;
   savedVariants?: SavedVariant[];
-  allReviews: IFetchedReview[];
+  allReviews?: IFetchedReview[];
   id: string;
-  isOpen: string | null;
-  setIsOpen: React.Dispatch<React.SetStateAction<string | null>>;
+  isOpen?: string | null;
+  setIsOpen?: React.Dispatch<React.SetStateAction<string | null>>;
   index?: number;
   selectedCategory?: any;
   setSelectedCategory?: any;
@@ -617,6 +617,7 @@ const ProductTile: FC<IProductTile> = ({
         <div className="flex a-items-center gap-10 l:gap-18 text-dimgrey py-6 border-y border-#00000014">
           <Link
             href={`/${product.store?.slug}`}
+            target='_blank'
             className="flex gap-6 a-items-center color-#00000099 capitalize"
           >
             <PiStorefront className="md:w-16 w-14 md:h-16 h-14" />

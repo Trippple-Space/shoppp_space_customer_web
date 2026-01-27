@@ -31,7 +31,7 @@ export interface IQueryParams {
   allFilters?: IFilters;
 }
 
-export const useProducts = (initialQuery: IQueryParams) => {
+export const useProducts = (initialQuery: IQueryParams, collectionSlug?: string) => {
   const [query, setQuery] = useState<IQueryParams>(initialQuery);
   const [loading, setLoading] = useState(false);
   const [fetchingError, setFetchingError] = useState<Error | null>(null);
@@ -93,7 +93,7 @@ export const useProducts = (initialQuery: IQueryParams) => {
   };
 
   const cacheKey =
-    "products_" +
+    (collectionSlug ? `collection_${collectionSlug}_` : "products_") +
     JSON.stringify(query.filters ?? {}) +
     JSON.stringify(query.order ?? {}) +
     JSON.stringify(query.allFilters ?? {});
@@ -103,7 +103,7 @@ export const useProducts = (initialQuery: IQueryParams) => {
       setLoading(true);
       setFetchingError(null);
       productService
-        .fetchProducts(query, query.allFilters)
+        .fetchProducts(query, query.allFilters, collectionSlug)
         .then((fetchedProducts) => {
           setProductsCache(cacheKey, fetchedProducts);
         })
@@ -130,7 +130,7 @@ export const useProducts = (initialQuery: IQueryParams) => {
       setLoading(true);
       setFetchingError(null);
       productService
-        .fetchProducts(query, query.allFilters)
+        .fetchProducts(query, query.allFilters, collectionSlug)
         .then((fetchedProducts) => {
           setProductsCache(cacheKey, [
             ...(productsCache[cacheKey] ?? []),

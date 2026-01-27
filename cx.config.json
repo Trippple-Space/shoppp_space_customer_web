@@ -1,7 +1,7 @@
 {
   "watchDirectory": "./src/",
   "output": "./src/styles/",
-  "layers": [ "lo", "hi", "xhi" ],
+  "layers": ["lo", "hi", "xhi"],
   "breakpoints": {
     "s": "576px",
     "m": "768px",
@@ -23,9 +23,9 @@
     "light-yellow": "#FFE68BB2",
     "faint-cream": "#fffaeb",
     "yellow": "#FACE33",
-    "light-green" : "#E2FFFACC",
-    "shadow-grey" : "#00000014",
-    "deep-yellow" : "#FACE33",
+    "light-green": "#E2FFFACC",
+    "shadow-grey": "#00000014",
+    "deep-yellow": "#FACE33",
     "deep-grey": "#A6A6A6",
     "whisper": "#EAEAEA",
     "whitesmoke": "#F5F5F5",
@@ -53,29 +53,29 @@
     "grey-700": "#6B6662",
     "grey-800": "#59534E",
     "grey-900": "#1F1B17",
-  
+
     "green-50": "rgba(11, 147, 120, 0.1)",
     "green-100": "rgba(11, 147, 120, 0.2)",
     "green-200": "rgba(11, 147, 120, 0.4)",
     "green-300": "rgba(11, 147, 120, 0.6)",
     "green-400": "rgba(11, 147, 120, 0.8)",
     "green-500": "#0B9378",
-    "green-600":" #087E66",
-    "green-700":" #056A54",
-    "green-800":" #025541",
-    "green-900":" #00412F",
-  
+    "green-600": " #087E66",
+    "green-700": " #056A54",
+    "green-800": " #025541",
+    "green-900": " #00412F",
+
     "yellow-50": "#fff9e8",
     "yellow-100": "rgba(250, 206, 51, 0.2)",
     "yellow-200": "#ffdc9e",
     "yellow-300": "rgba(250, 206, 51, 0.6)",
     "yellow-400": "rgba(250, 206, 51, 0.8)",
     "yellow-500": "#FACE33",
-    "yellow-600":" #E0B12E",
-    "yellow-700":" #C59429",
-    "yellow-800":" #AB7724",
-    "yellow-900":" #916A1F",
-  
+    "yellow-600": " #E0B12E",
+    "yellow-700": " #C59429",
+    "yellow-800": " #AB7724",
+    "yellow-900": " #916A1F",
+
     "white": "#FFFFFF",
     "black": "#000000"
   },
