@@ -17,7 +17,7 @@ const StorefrontFooter: React.FC<{ store: Store }> = ({ store }) => {
                 <span className="text-16">{store?.user?.mobile || store?.profile?.phoneNumbers?.[0]}</span>
               </Link>
               <Link
-                href={`https://maps.google.com/?q=${store?.meta?.settings?.location?.coordinates?.lat},${store?.meta?.settings?.location?.coordinates.lon}`}
+                href={`https://maps.google.com/?q=${store?.meta?.settings?.location?.coordinates?.lat},${store?.meta?.settings?.location?.coordinates?.lon}`}
                 target="_blank"
                 rel="noopener noreferrer"
                 className="flex flex-row gap-8 w-fit"

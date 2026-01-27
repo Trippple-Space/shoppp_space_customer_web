@@ -63,13 +63,17 @@ class ProductService {
           localStorage.setItem(key, JSON.stringify(toCache));
      }
 
-     fetchProducts(query: IQueryParams, filters = {}): Promise<Product[]> {
+     fetchProducts(query: IQueryParams, filters = {}, collectionSlug?: string): Promise<Product[]> {
           return new Promise((resolve, reject) => {
                const filterParams = buildFilterParams(filters);
                const { allFilters, ...queryWithoutAllFilters } = query;
 
+               const endpoint = collectionSlug
+                    ? endpoints.COLLECTION_PRODUCTS.replace(":collectionSlug", collectionSlug)
+                    : endpoints.PRODUCTS;
+
                http
-                    .get<ProductsResponse>(endpoints.PRODUCTS, {
+                    .get<ProductsResponse>(endpoint, {
                          params: { ...queryWithoutAllFilters, ...filterParams },
                     })
                     .then((response) => {
@@ -190,8 +194,6 @@ class ProductService {
                     });
           });
      }
-
-
 
      fetchSavedVariants(): Promise<SavedVariant[]> {
           return new Promise((resolve, reject) => {

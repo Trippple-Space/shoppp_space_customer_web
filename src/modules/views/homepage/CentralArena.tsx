@@ -9,11 +9,11 @@ import { useSavedVariant } from '@/modules/lib/utility/hooks/use-saved-variants'
 import useReviews from '@/modules/lib/utility/hooks/use-reviews';
 import { toast } from 'sonner';
 import Button from '@/modules/lib/components/button/Button';
+import { useCollections } from '@/modules/lib/utility/hooks/use-collections';
 
 const CentralArena = ({ selectedCategory, setSelectedCategory }: any) => {
   const { products, type, ref, loading, fetchingError, refetch } =
     useProductListView();
-  const { allReviews, allLoading: reviewsLoading } = useReviews();
   const { saveVariant, savedVariants, removeSavedVariant } = useSavedVariant();
   const [openReviewId, setOpenReviewId] = useState<string | null>(null);
   const renderedIds = new Set<string>();
@@ -43,7 +43,7 @@ const CentralArena = ({ selectedCategory, setSelectedCategory }: any) => {
           </h3>
         </div>
 
-        {products.length === 0 && (loading || reviewsLoading) ? (
+        {products.length === 0 && loading ? (
           <div className="w-100p flex j-content-center mt-10">
             <DotsLoader />
           </div>
@@ -59,7 +59,6 @@ const CentralArena = ({ selectedCategory, setSelectedCategory }: any) => {
                   savedVariants={savedVariants}
                   saveVariant={saveVariant}
                   removeSavedVariant={removeSavedVariant}
-                  allReviews={allReviews}
                   id={product.id}
                   isOpen={openReviewId}
                   setIsOpen={setOpenReviewId}
