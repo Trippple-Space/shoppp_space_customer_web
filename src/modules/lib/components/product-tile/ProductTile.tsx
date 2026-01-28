@@ -616,8 +616,26 @@ const ProductTile: FC<IProductTile> = ({
         <div
           title={product.name}
           className="md:text-16 text-15 weight-500 text-#000000E0 md:line-height-24 line-height-22 l:w-100p w-100 l:white-space-nowrap text-overflow-ellipsis flex flex-wrap a-items-center j-content-between"
+          style={{
+            whiteSpace: 'nowrap',
+            overflow: 'hidden',
+            textOverflow: 'ellipsis',
+            display: 'block',
+            maxWidth: '100%',
+          }}
         >
-          <Link href={`/products/${product?.slug}`}>{product.name}</Link>
+          <Link
+            href={`/products/${product?.slug}`}
+            style={{
+              whiteSpace: 'nowrap',
+              overflow: 'hidden',
+              textOverflow: 'ellipsis',
+              display: 'block',
+              maxWidth: '100%',
+            }}
+          >
+            {product.name}
+          </Link>
         </div>
         <div className="flex a-items-center gap-10 l:gap-18 text-dimgrey py-6 border-y border-#00000014">
           <Link
