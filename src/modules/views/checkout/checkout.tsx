@@ -184,101 +184,78 @@ const CheckoutPage = () => {
   }, []);
 
   const updateFees = async () => {
-    if (selectedAddress && allCartItems.cartItems.length > 0) {
-      const deliveryTypes: DeliveryOptionKey[] = [
-        'standard',
-        'express',
-        'vendorManaged',
-      ];
-      const getLatLon = (meta: any) => {
-        if (meta?.coordinates) {
-          return {
-            lat: meta.coordinates.lat,
-            lon: meta.coordinates.lon,
-          };
-        } else if (meta?.location) {
-          return {
-            lat: meta.location.latitude,
-            lon: meta.location.longitude,
-          };
-        }
-        return { lat: null, lon: null };
-      };
+    if (!selectedAddress || allCartItems.cartItems.length === 0) return;
 
-      const updatedOptions = { ...deliveryOptions };
-      const { lat, lon } = getLatLon(selectedAddress.meta);
+    const selectedType: DeliveryOptionKey = 'standard'; 
+    const updatedOptions = { ...deliveryOptions };
+    const { lat, lon } = selectedAddress.meta.coordinates || {
+      lat: selectedAddress.meta.location?.latitude,
+      lon: selectedAddress.meta.location?.longitude,
+    };
 
-      const existingAddressPrice = allAddressDeliveryPrice.find(
-        (addressPrice) => addressPrice.addressId === selectedAddress.id
-      );
-      if (
-        existingAddressPrice &&
-        existingAddressPrice.coordinates.lat === lat &&
-        existingAddressPrice.coordinates.lon === lon
-      ) {
-        setDeliveryOptions(existingAddressPrice.deliveryOptions);
-      } else {
-        for (const type of deliveryTypes) {
-          try {
-            setCalculatingFee(true);
-            const feeDetail = await calculateFee({
-              addressId: selectedAddress.id,
-              deliveryType: type,
-            });
+    const existingAddressPrice = allAddressDeliveryPrice.find(
+      (addressPrice) => addressPrice.addressId === selectedAddress.id
+    );
 
-            updatedOptions[type] = {
-              ...updatedOptions[type],
-              ...feeDetail[type],
-              price:
-                feeDetail.fee ||
-                feeDetail[type].vendorManagedTotal ||
-                feeDetail[type].fee ||
-                feeDetail[type].price,
-            };
-          } catch (error) {
-          } finally {
-            setDeliveryOptions(updatedOptions);
-            setAllAddressDeliveryPrice((prev) =>
-              prev.some((item) => item.addressId === selectedAddress.id)
-                ? prev.map((item) =>
-                    item.addressId === selectedAddress.id
-                      ? {
-                          addressId: selectedAddress.id,
-                          deliveryOptions: updatedOptions,
-                          coordinates: {
-                            lat,
-                            lon,
-                          },
-                        }
-                      : item
-                  )
-                : [
-                    ...prev,
-                    {
-                      addressId: selectedAddress.id,
-                      deliveryOptions: updatedOptions,
-                      coordinates: {
-                        lat,
-                        lon,
-                      },
-                    },
-                  ]
-            );
-            setCalculatingFee(false);
-          }
-        }
+    if (
+      existingAddressPrice &&
+      existingAddressPrice.coordinates.lat === lat &&
+      existingAddressPrice.coordinates.lon === lon
+    ) {
+      setDeliveryOptions(existingAddressPrice.deliveryOptions);
+    } else {
+      try {
+        setCalculatingFee(true);
+
+        const feeDetail = await calculateFee({
+          addressId: selectedAddress.id,
+          deliveryType: selectedType,
+        });
+
+        updatedOptions[selectedType] = {
+          ...updatedOptions[selectedType],
+          ...feeDetail[selectedType],
+          price:
+            feeDetail.fee ||
+            feeDetail[selectedType].vendorManagedTotal ||
+            feeDetail[selectedType].fee ||
+            feeDetail[selectedType].price,
+        };
+
+        setDeliveryOptions(updatedOptions);
+
+        setAllAddressDeliveryPrice((prev) => [
+          ...prev.filter((item) => item.addressId !== selectedAddress.id),
+          {
+            addressId: selectedAddress.id,
+            deliveryOptions: updatedOptions,
+            coordinates: { lat, lon },
+          },
+        ]);
+      } catch (error) {
+        console.error(error);
+      } finally {
+        setCalculatingFee(false);
       }
     }
   };
 
+  const debounce = (fn: Function, delay = 300) => {
+    let timer: NodeJS.Timeout;
+    return (...args: any[]) => {
+      clearTimeout(timer);
+      timer = setTimeout(() => fn(...args), delay);
+    };
+  };
+
+  const debouncedUpdateFees = useRef(debounce(updateFees, 200)).current;
+
   useEffect(() => {
     if (!selectedAddress) return;
-
     const addressChanged = lastAddressRef.current !== selectedAddress.id;
-
     if (addressChanged || shouldUpdateFee) {
       lastAddressRef.current = selectedAddress.id;
-      updateFees();
+      debouncedUpdateFees();
       if (shouldUpdateFee) setShouldUpdateFee(false);
     }
   }, [selectedAddress, shouldUpdateFee]);
