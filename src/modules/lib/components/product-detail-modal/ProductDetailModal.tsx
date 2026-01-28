@@ -49,10 +49,6 @@ const ProductDetailModal = ({
         allProperties: {},
       };
 
-  const [selectedProperties, setSelectedProperties] = useState<
-    Record<string, string>
-  >(variant?.properties || {});
-
   const [activeFilters, setActiveFilters] = useState<Record<string, string>>(
     {}
   );
@@ -92,40 +88,74 @@ const ProductDetailModal = ({
     return props;
   }, [allProperties, product?.variants]);
 
-  const variantsForRequirementCheck = useMemo(() => {
-    return filteredVariants.length > 0
-      ? filteredVariants
-      : (product?.variants ?? []);
-  }, [filteredVariants, product?.variants]);
+  const hasValue = (value: unknown): boolean => {
+    if (value === null || value === undefined) return false;
+    if (typeof value === 'string') return value.trim().length > 0;
+    return true;
+  };
 
-  const contextualRequiredProperties = useMemo(() => {
-    const props = new Set<string>();
+  const requiredKeysForVariant = (variant: ProductVariant): string[] => {
+    const keys: string[] = [];
 
-    variantsForRequirementCheck.forEach((variant) => {
-      Object.keys(variant.properties || {}).forEach((key) => {
-        props.add(key);
-      });
-
-      if (variant.size) {
-        props.add('size');
+    Object.entries(variant.properties || {}).forEach(([key, value]) => {
+      if (hasValue(value)) {
+        keys.push(key);
       }
     });
 
-    return Array.from(props);
-  }, [variantsForRequirementCheck]);
+    if (hasValue(variant.size)) {
+      keys.push('size');
+    }
 
-  const hasSelectedAllRequiredProperties = useMemo(() => {
-    return contextualRequiredProperties.every((prop) => activeFilters[prop]);
-  }, [contextualRequiredProperties, activeFilters]);
+    return keys;
+  };
 
   const isSelectionComplete = useMemo(() => {
-    return hasSelectedAllRequiredProperties && filteredVariants.length === 1;
-  }, [hasSelectedAllRequiredProperties, filteredVariants]);
+    if (filteredVariants.length !== 1) return false;
+
+    const candidate = filteredVariants[0];
+    const requiredKeys = requiredKeysForVariant(candidate);
+
+    return requiredKeys.every((key) => activeFilters[key]);
+  }, [filteredVariants, activeFilters]);
 
   const selectedVariant = useMemo(() => {
     if (!isSelectionComplete) return undefined;
     return filteredVariants[0];
   }, [filteredVariants, isSelectionComplete]);
+
+  const missingRequiredOptions = useMemo(() => {
+    if (!product?.variants?.length) return [];
+
+    let candidate: ProductVariant | undefined;
+
+    if (filteredVariants.length === 1) {
+      candidate = filteredVariants[0];
+    } else {
+      candidate = product.variants.find((v) =>
+        Object.entries(activeFilters).every(
+          ([key, value]) => getVariantValue(v, key) === value
+        )
+      );
+    }
+
+    if (!candidate) {
+      candidate = product.variants[0];
+    }
+
+    const requiredKeys = requiredKeysForVariant(candidate);
+
+    return requiredKeys.filter((key) => !activeFilters[key]);
+  }, [filteredVariants, activeFilters, product?.variants]);
+
+  const initialMissingOptions = useMemo(() => {
+    if (!openSingleProductModal) return [];
+    if (Object.keys(activeFilters).length > 0) return [];
+    if (!product?.variants?.length) return [];
+
+    const firstVariant = product.variants[0];
+    return requiredKeysForVariant(firstVariant);
+  }, [openSingleProductModal, activeFilters, product?.variants]);
 
   useEffect(() => {
     if (!isSelectionComplete && imageSource === 'variant') {
@@ -237,33 +267,43 @@ const ProductDetailModal = ({
   };
 
   const handlePreviousImage = () => {
-    if (!selectedVariant || !uniqueVariantsFromProductImages?.length) return;
+    if (!uniqueVariantsFromProductImages?.length) return;
 
-    const index = uniqueVariantsFromProductImages.findIndex(
-      (v) => v?.id === selectedVariant.id
+    const currentIndex = uniqueVariantsFromProductImages.findIndex((v) =>
+      v?.media?.some((m) => m.url === selectedImage)
     );
-    const prev =
-      index > 0
-        ? uniqueVariantsFromProductImages[index - 1]
-        : uniqueVariantsFromProductImages[
-            uniqueVariantsFromProductImages.length - 1
-          ];
 
-    setSelectedProperties(prev?.properties);
+    const prevIndex =
+      currentIndex > 0
+        ? currentIndex - 1
+        : uniqueVariantsFromProductImages.length - 1;
+
+    const prevVariant = uniqueVariantsFromProductImages[prevIndex];
+
+    if (!prevVariant) return;
+
+    setActiveFilters(buildFiltersFromVariant(prevVariant));
+    setSelectedImage(prevVariant.media?.[0]?.url);
+    setImageSource('variant');
   };
 
   const handleNextImage = () => {
-    if (!selectedVariant || !uniqueVariantsFromProductImages?.length) return;
+    if (!uniqueVariantsFromProductImages?.length) return;
 
-    const index = uniqueVariantsFromProductImages.findIndex(
-      (v) => v?.id === selectedVariant.id
+    const currentIndex = uniqueVariantsFromProductImages.findIndex((v) =>
+      v?.media?.some((m) => m.url === selectedImage)
     );
-    const next =
-      uniqueVariantsFromProductImages[
-        (index + 1) % uniqueVariantsFromProductImages.length
-      ];
 
-    setSelectedProperties(next?.properties);
+    const nextIndex =
+      (currentIndex + 1) % uniqueVariantsFromProductImages.length;
+
+    const nextVariant = uniqueVariantsFromProductImages[nextIndex];
+
+    if (!nextVariant) return;
+
+    setActiveFilters(buildFiltersFromVariant(nextVariant));
+    setSelectedImage(nextVariant.media?.[0]?.url);
+    setImageSource('variant');
   };
 
   const buildFiltersFromVariant = (variant: ProductVariant) => {
@@ -475,10 +515,6 @@ const ProductDetailModal = ({
                               {' '}
                               {formatNumberAsPrice(displayPrice || 0)}{' '}
                             </p>
-                            {/* <p className="weight-600 text-13 text-black capitalize">
-                                {' '}
-                                Color: {selectedVariant?.properties?.color}{' '}
-                              </p> */}
                           </div>
 
                           <div className="mt-10 flex flex-col">
@@ -508,7 +544,8 @@ const ProductDetailModal = ({
                                         className={classNames(
                                           'w-32 h-32 round border transition',
                                           {
-                                            'border-3 border-#0B9378 border-solid': active,
+                                            'border-3 border-#0B9378 border-solid':
+                                              active,
                                             'opacity-40 cursor-not-allowed':
                                               !compatible,
                                           }
@@ -540,6 +577,8 @@ const ProductDetailModal = ({
                                           value
                                         );
 
+                                        if (value === '') return;
+
                                         return (
                                           <button
                                             key={value}
@@ -566,6 +605,30 @@ const ProductDetailModal = ({
                                 );
                               }
                             )}
+
+                            {!selectedVariant &&
+                              (missingRequiredOptions.length > 0 ||
+                                initialMissingOptions.length > 0) && (
+                                <div className="flex flex-col gap-6 p-10 radius-6 bg-#FFF7E6 border border-#FFD699 mt-20">
+                                  <p className="text-12 weight-400 color-#8A5A00">
+                                    Please select the following to continue:
+                                  </p>
+
+                                  <div className="flex flex-wrap gap-6">
+                                    {(missingRequiredOptions.length > 0
+                                      ? missingRequiredOptions
+                                      : initialMissingOptions
+                                    ).map((option) => (
+                                      <span
+                                        key={option}
+                                        className="px-8 py-4 radius-99 bg-#FFD699 text-11 weight-500 capitalize"
+                                      >
+                                        {option}
+                                      </span>
+                                    ))}
+                                  </div>
+                                </div>
+                              )}
 
                             <div className="grid mt-20 mb-10 gap-10">
                               {!selectedVariantItemInCart ? (
@@ -627,11 +690,11 @@ const ProductDetailModal = ({
                                 >
                                   <div
                                     className={classNames(
-                                      `l:block weight-500 ${selectedVariant && selectedVariant.status === 'OUT_OF_STOCK' ? 'color-black' : 'color-white'}`
+                                      `l:block weight-500 ${selectedVariant ? (selectedVariant.status === 'OUT_OF_STOCK' ? 'color-black' : 'color-white') : 'color-gray'}`
                                     )}
                                   >
                                     {!selectedVariant
-                                      ? 'Select options'
+                                      ? 'Add to cart'
                                       : selectedVariant.status ===
                                           'OUT_OF_STOCK'
                                         ? 'Out of stock'
