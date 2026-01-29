@@ -2,6 +2,7 @@ import classNames from "classnames";
 import { StoreGroupResponse } from "./types/cart.interface";
 import { NewUser, User } from "./types/user.interface";
 import { IFilters } from "./types/product.interface";
+import { ContactFormData } from "./types/contact-us.interface";
 
 export type ImageSrcFolder = "icons" | "logos" | "images";
 export const getImageDir = (folder: ImageSrcFolder, object: string) => {
@@ -466,6 +467,67 @@ export const handleFlyToCart = (imgRef: React.RefObject<HTMLImageElement>) => {
   localStorage.setItem("seenCartAnimation", "true");
 };
 
+export const buildContactSlackMessage = (data: ContactFormData) => ({
+  blocks: [
+    {
+      type: 'header',
+      text: {
+        type: 'plain_text',
+        text: '📩 New Contact Form Submission',
+        emoji: true,
+      },
+    },
+    {
+      type: 'section',
+      text: {
+        type: 'mrkdwn',
+        text: `*Full Name:*\n${data.fullName}`,
+      },
+    },
+    {
+      type: 'section',
+      text: {
+        type: 'mrkdwn',
+        text: `*Email:*\n${data.email}`,
+      },
+    },
+    ...(data.phone
+      ? [
+        {
+          type: 'section',
+          text: {
+            type: 'mrkdwn',
+            text: `*Phone:*\n${data.phone}`,
+          },
+        },
+      ]
+      : []),
+    {
+      type: 'section',
+      text: {
+        type: 'mrkdwn',
+        text: `*Subject:*\n${data.subject}`,
+      },
+    },
+    {
+      type: 'section',
+      text: {
+        type: 'mrkdwn',
+        text: `*Message:*\n${data.message}`,
+      },
+    },
+    {
+      type: 'divider',
+    },
+    {
+      type: 'section',
+      text: {
+        type: 'mrkdwn',
+        text: `<mailto:${data.email}|Reply to sender>`,
+      },
+    },
+  ],
+});
 
 /*
 [

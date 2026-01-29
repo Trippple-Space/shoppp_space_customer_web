@@ -1,77 +1,14 @@
 'use client';
 
+import useContactForm from '@/modules/lib/utility/hooks/use-contact-us';
 import React, { useState } from 'react';
 import { toast } from 'sonner';
 
 const BRAND_COLOR = '#0B9378';
 
 const ContactUsPage = () => {
-  const [form, setForm] = useState({
-    fullName: '',
-    email: '',
-    phone: '',
-    subject: '',
-    message: '',
-  });
-
-  const [errors, setErrors] = useState<Record<string, string>>({});
-  const [isSubmitting, setIsSubmitting] = useState(false);
-
-  const validate = () => {
-    const newErrors: Record<string, string> = {};
-
-    if (!form.fullName.trim()) newErrors.fullName = 'Full name is required';
-
-    if (!form.email.trim()) {
-      newErrors.email = 'Email is required';
-    } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(form.email)) {
-      newErrors.email = 'Enter a valid email address';
-    }
-
-    if (!form.subject.trim()) newErrors.subject = 'Subject is required';
-
-    if (!form.message.trim()) {
-      newErrors.message = 'Message cannot be empty';
-    } else if (form.message.length < 10) {
-      newErrors.message = 'Message is too short';
-    }
-
-    setErrors(newErrors);
-    return Object.keys(newErrors).length === 0;
-  };
-
-  const handleChange = (
-    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
-  ) => {
-    const { name, value } = e.target;
-    setForm((prev) => ({ ...prev, [name]: value }));
-    if (errors[name]) {
-      setErrors((prev) => ({ ...prev, [name]: '' }));
-    }
-  };
-
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-
-    if (!validate()) return;
-
-    setIsSubmitting(true);
-
-    try {
-      const payload = {
-        ...form,
-      };
-
-      console.log('Contact form payload:', payload);
-
-      toast.success('Message sent successfully. We’ll get back to you soon!');
-      setForm({ fullName: '', email: '', phone: '', subject: '', message: '' });
-    } catch (error) {
-      toast.error('Something went wrong. Please try again.');
-    } finally {
-      setIsSubmitting(false);
-    }
-  };
+  const { form, errors, loading, btnDisabled, handleChange, handleSubmit } =
+    useContactForm();
 
   return (
     <div className="flex j-content-center bg-#F9FAFB md:px-40 sm:px-24 px-10 py-80">
@@ -86,7 +23,10 @@ const ContactUsPage = () => {
           </p>
         </div>
 
-        <form className="flex flex-col gap-20" onSubmit={handleSubmit}>
+        <form
+          className="flex flex-col gap-20"
+          onSubmit={(e) => e.preventDefault()}
+        >
           <div className="flex flex-col gap-6">
             <label className="text-14 weight-500">Full Name</label>
             <input
@@ -168,14 +108,15 @@ const ContactUsPage = () => {
 
           <button
             type="submit"
-            disabled={isSubmitting}
+            disabled={btnDisabled || loading}
+            onClick={handleSubmit}
             className="mt-10 py-14 radius-8 text-white weight-500 pointer border-0 outline-0"
             style={{
               backgroundColor: BRAND_COLOR,
-              opacity: isSubmitting ? 0.7 : 1,
+              opacity: btnDisabled || loading ? 0.7 : 1,
             }}
           >
-            {isSubmitting ? 'Sending…' : 'Send Message'}
+            {loading ? 'Sending…' : 'Send Message'}
           </button>
         </form>
       </div>

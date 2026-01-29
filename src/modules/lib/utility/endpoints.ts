@@ -19,7 +19,7 @@ const endpoints = {
   PRODUCT: "products/:slug",
   SEARCH_PRODUCTS: "products",
   COLLECTIONS_BY_STORE: "/collections/stores/:storeId",
-  COLLECTION_PRODUCTS: "/products/collection/:collectionSlug", 
+  COLLECTION_PRODUCTS: "/products/collection/:collectionSlug",
   RECENTLY_VIEWED: "/recently-viewed-items",
   GET_RECENTLY_VIEWED: "/recently-viewed-items/viewed",
   ALL_RECENTLY_VIEWED: "/recently-viewed-items/all-viewed",
@@ -45,7 +45,9 @@ const endpoints = {
   GET_PRODUCT_REVIEWS: "/product-review/product/:productVariantId",
   CREATE_PRODUCT_REVIEW: "/product-review/create",
   GET_REVIEW_STATS: "/product-review/stats/product/:productVariantId",
-  GET_REVIEW_STATS_DIST: "/product-review/stats/product/:productVariantId/distribution"
+  GET_REVIEW_STATS_DIST: "/product-review/stats/product/:productVariantId/distribution",
+
+  CONTACT_FORM: '/slack',
 };
 
 export default endpoints;
