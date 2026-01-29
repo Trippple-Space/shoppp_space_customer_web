@@ -62,6 +62,7 @@ export interface Product {
   availableUnit?: any[];
   tags: Tag[];
   discount: Discount
+  meta: any;
 }
 
 export interface ProductsResponse {

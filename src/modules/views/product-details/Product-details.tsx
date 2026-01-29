@@ -947,7 +947,7 @@ const ProductDetails = ({ product }: { product: Product }) => {
                     Material
                   </div>
                   <div className="w-60p pl-10 capitalize">
-                    {selectedVariant?.properties?.material}
+                    {product?.meta?.material || ''}
                   </div>
                 </div>
                 <div
@@ -958,7 +958,7 @@ const ProductDetails = ({ product }: { product: Product }) => {
                     Brand name
                   </div>
                   <div className="w-60p pl-10 capitalize">
-                    {selectedVariant?.properties?.origin}
+                    {product?.meta?.origin || ''}
                   </div>
                 </div>
               </div>
