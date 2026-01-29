@@ -7,7 +7,8 @@
 const productionConfig = {
     API_HOST: 'https://api.asoebi.africa',
     VENDOR_CENTER_HOST: 'https://vendor.asoebi.africa',
-    VENDOR_CENTER_SIGNUP: 'https://vendor.asoebi.africa/auth/signup'
+    VENDOR_CENTER_SIGNUP: 'https://vendor.asoebi.africa/auth/signup',
+    LANDING_PAGE_HOST: 'https://vendor.asoebi.africa/landing-page'
 }
 
 export default productionConfig;

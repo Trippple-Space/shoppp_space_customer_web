@@ -102,7 +102,7 @@ const AsoebiLinksModal = ({ sellOnAsoebi }: { sellOnAsoebi: boolean }) => {
         </Link>
         {sellOnAsoebi && (
           <Link
-            href={`${config.VENDOR_CENTER_SIGNUP}`}
+            href={`${config.LANDING_PAGE_HOST}`}
             target="_blank"
             className="flex a-items-center gap-20 radius-8 hover:bg-#F5F5F5 p-20"
           >
