@@ -12,10 +12,48 @@ import { paths } from '../../utility/paths';
 
 const Footer = () => {
   const [isFooterOpen, setIsFooterOpen] = useState(false);
+  const [newsletterError, setNewsletterError] = useState('');
   const currentDate = new Date();
 
   const handleCloseFooter = () => {
     setIsFooterOpen(false);
+  };
+
+  const handleNewsletterSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    setNewsletterError('');
+
+    const formData = new FormData(e.currentTarget);
+
+    const firstName = formData.get('firstName');
+    const lastName = formData.get('lastName');
+    const email = formData.get('email');
+
+    const firstNameValue =
+      typeof firstName === 'string' ? firstName.trim() : '';
+    const lastNameValue = typeof lastName === 'string' ? lastName.trim() : '';
+    const emailValue = typeof email === 'string' ? email.trim() : '';
+
+    if (!firstNameValue || !lastNameValue || !emailValue) {
+      setNewsletterError('All fields are required');
+      return;
+    }
+
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(emailValue)) {
+      setNewsletterError('Please enter a valid email address');
+      return;
+    }
+
+    const data = {
+      firstName: firstNameValue,
+      lastName: lastNameValue,
+      email: emailValue,
+    };
+
+    console.log('Newsletter form data:', data);
+
+    e.currentTarget.reset();
   };
 
   return (
@@ -102,22 +140,29 @@ const Footer = () => {
               <div className="text-dimgrey py-25">
                 <h2 className="l:text-20 text-16 weight-600">USEFUL STUFF</h2>
                 <div className="l:text-14 text-12 weight-400 font-inter l:pt-15">
-                  <p className="pt-15 pb-5 underline-on-hover">CONTACT US</p>
-                  <Link href={paths.orders}>
-                    <p className="pt-15 pb-5 underline-on-hover">
-                      MY ORDERS
-                    </p>
+                  <Link href={paths.contact_us} target="_blank">
+                    <p className="pt-15 pb-5 underline-on-hover">CONTACT US</p>
                   </Link>
-                  <Link href={'/legal-document'} target='_blank'>
+                  <Link href={paths.orders}>
+                    <p className="pt-15 pb-5 underline-on-hover">MY ORDERS</p>
+                  </Link>
+                  <Link href={'/legal-document'} target="_blank">
                     <p className="pt-15 pb-5 underline-on-hover">
                       PRIVACY AND COOKIES
                     </p>
                   </Link>
-                  <p className="pt-15 pb-5 underline-on-hover">JOIN OUR TEAM</p>
+                  <Link href={config.VENDOR_CENTER_SIGNUP} target="_blank">
+                    <p className="pt-15 pb-5 underline-on-hover">
+                      SELL ON ASOEBI
+                    </p>
+                  </Link>
                 </div>
               </div>
 
-              <div className="text-dimgrey l:w-27p l:py-25 l:pb-0 pb-20">
+              <form
+                onSubmit={handleNewsletterSubmit}
+                className="text-dimgrey l:w-27p l:py-25 l:pb-0 pb-20"
+              >
                 <h2 className="l:text-20 text-16 weight-600">
                   Subscribe to Newsletter
                 </h2>
@@ -131,27 +176,36 @@ const Footer = () => {
                     <input
                       type="text"
                       placeholder="First name"
+                      name="firstName"
                       className="w-50p bg-lightest-grey border radius-10 border-1 text-grey text-14 weight-400 opacity-60 border-lighter-grey l:py-15  py-12 px-15 outline-grey-400"
+                      onChange={() => setNewsletterError('')}
                     />
                     <input
                       type="text"
                       placeholder="Last name"
+                      name="lastName"
                       className="w-50p bg-lightest-grey border radius-10 border-1 text-grey text-14 weight-400 opacity-60 border-lighter-grey l:py-15 py-12 px-20 outline-grey-400"
+                      onChange={() => setNewsletterError('')}
                     />
                   </div>
 
                   <div className="w-100p py-20">
                     <input
                       type="text"
+                      name="email"
                       placeholder="Enter your email address..."
                       className="w-100p bg-lightest-grey border radius-10 border-1 text-grey text-14 weight-400 opacity-60 border-lighter-grey l:py-15 py-12 px-15 px-20 outline-grey-400"
+                      onChange={() => setNewsletterError('')}
                     />
                   </div>
+                  {newsletterError && (
+                    <p className="text-red text-12 pb-10">{newsletterError}</p>
+                  )}
                   <button className="border-none bg-green text-white text-14 l:py-12 py-10 l:px-20 px-12 radius-5 weight-400 pointer">
                     Join Now
                   </button>
                 </div>
-              </div>
+              </form>
             </div>
           }
 
@@ -182,7 +236,10 @@ const Footer = () => {
                   </span>
                   <span className="flex w-fit">
                     {' '}
-                    <BsDot className="w-20 h-20" /> <span>Contact</span>{' '}
+                    <BsDot className="w-20 h-20" />{' '}
+                    <Link href={paths.contact_us} target="_blank">
+                      Contact
+                    </Link>{' '}
                   </span>
                 </div>
               </div>

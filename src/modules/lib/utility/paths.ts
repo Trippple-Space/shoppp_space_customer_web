@@ -16,6 +16,7 @@ export const paths = {
    vendor_link: "https://vendor.asoebi.africa/auth/signup",
    orders: "/orders",
    legal_document: "/legal-document",
+   contact_us: "/contact-us",
 };
 
 export const protectedPaths = [paths.checkout, paths.orders];
