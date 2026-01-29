@@ -168,8 +168,13 @@ export const useCartStore = create<CartStore>((set, get) => ({
       set({ applyingCode: true });
       const updatedCart = await cartService.applyDiscountCode(code);
       set({ cart: updatedCart, applyingCode: false });
-    } catch {
+    } catch (error) {
       set({ applyingCode: false });
+      if (error instanceof Object && 'status' in error && error.status === 400) {
+        toast.error("Invalid discount code.");
+        return;
+      }
+      toast.error("Failed to apply discount code.");
     }
   },
 
@@ -177,7 +182,7 @@ export const useCartStore = create<CartStore>((set, get) => ({
   removeDiscountCode: async () => {
     try {
       await cartService.removeDiscountCodes();
-    } catch {}
+    } catch { }
   },
 
   // Toggle login modal
