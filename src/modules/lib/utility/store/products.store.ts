@@ -32,6 +32,7 @@ const placeholderProduct: Product = {
     reviewRating: 0,
     reviews: undefined,
     comments: undefined,
+    meta: null,
     discount: {
         id: "",
         title: "",
