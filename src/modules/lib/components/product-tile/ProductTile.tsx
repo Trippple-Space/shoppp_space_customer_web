@@ -406,7 +406,12 @@ const ProductTile: FC<IProductTile> = ({
           <div
             id="add to cart button"
             className="hidden l:block absolute z-1 b-0 l-0 ml-10 mt-20 l:mr-15 l:mb-15"
-            onClick={handleCloseProductModal}
+            onClick={() => {
+              handleCloseProductModal();
+              if (selectedVariant) {
+                setRecentlyViewsId(selectedVariant.id);
+              }
+            }}
           >
             <p className="bg-white radius-20 p-5 cursor-pointer text-12 flex a-items-center gap-5">
               <FaEye className="w-fit" />
@@ -611,13 +616,31 @@ const ProductTile: FC<IProductTile> = ({
         <div
           title={product.name}
           className="md:text-16 text-15 weight-500 text-#000000E0 md:line-height-24 line-height-22 l:w-100p w-100 l:white-space-nowrap text-overflow-ellipsis flex flex-wrap a-items-center j-content-between"
+          style={{
+            whiteSpace: 'nowrap',
+            overflow: 'hidden',
+            textOverflow: 'ellipsis',
+            display: 'block',
+            maxWidth: '100%',
+          }}
         >
-          <Link href={`/products/${product?.slug}`}>{product.name}</Link>
+          <Link
+            href={`/products/${product?.slug}`}
+            style={{
+              whiteSpace: 'nowrap',
+              overflow: 'hidden',
+              textOverflow: 'ellipsis',
+              display: 'block',
+              maxWidth: '100%',
+            }}
+          >
+            {product.name}
+          </Link>
         </div>
         <div className="flex a-items-center gap-10 l:gap-18 text-dimgrey py-6 border-y border-#00000014">
           <Link
             href={`/${product.store?.slug}`}
-            target='_blank'
+            target="_blank"
             className="flex gap-6 a-items-center color-#00000099 capitalize"
           >
             <PiStorefront className="md:w-16 w-14 md:h-16 h-14" />

@@ -33,7 +33,7 @@ export interface IQueryParams {
 
 export const useProducts = (initialQuery: IQueryParams, collectionSlug?: string) => {
   const [query, setQuery] = useState<IQueryParams>(initialQuery);
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState(true);
   const [fetchingError, setFetchingError] = useState<Error | null>(null);
   const [refetchToken, setRefetchToken] = useState(0);
 

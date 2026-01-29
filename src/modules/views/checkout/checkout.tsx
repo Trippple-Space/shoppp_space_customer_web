@@ -185,11 +185,6 @@ const CheckoutPage = () => {
 
   const updateFees = async () => {
     if (selectedAddress && allCartItems.cartItems.length > 0) {
-      const deliveryTypes: DeliveryOptionKey[] = [
-        'standard',
-        'express',
-        'vendorManaged',
-      ];
       const getLatLon = (meta: any) => {
         if (meta?.coordinates) {
           return {
@@ -205,7 +200,9 @@ const CheckoutPage = () => {
         return { lat: null, lon: null };
       };
 
-      const updatedOptions = { ...deliveryOptions };
+      const selectedType: DeliveryOptionKey = 'standard';
+
+      let updatedOptions = { ...deliveryOptions };
       const { lat, lon } = getLatLon(selectedAddress.meta);
 
       const existingAddressPrice = allAddressDeliveryPrice.find(
@@ -218,54 +215,70 @@ const CheckoutPage = () => {
       ) {
         setDeliveryOptions(existingAddressPrice.deliveryOptions);
       } else {
-        for (const type of deliveryTypes) {
-          try {
-            setCalculatingFee(true);
-            const feeDetail = await calculateFee({
-              addressId: selectedAddress.id,
-              deliveryType: type,
-            });
+        try {
+          setCalculatingFee(true);
+          const feeDetail = await calculateFee({
+            addressId: selectedAddress.id,
+            deliveryType: selectedType,
+          });
 
-            updatedOptions[type] = {
-              ...updatedOptions[type],
-              ...feeDetail[type],
-              price:
-                feeDetail.fee ||
-                feeDetail[type].vendorManagedTotal ||
-                feeDetail[type].fee ||
-                feeDetail[type].price,
-            };
-          } catch (error) {
-          } finally {
-            setDeliveryOptions(updatedOptions);
-            setAllAddressDeliveryPrice((prev) =>
-              prev.some((item) => item.addressId === selectedAddress.id)
-                ? prev.map((item) =>
-                    item.addressId === selectedAddress.id
-                      ? {
-                          addressId: selectedAddress.id,
-                          deliveryOptions: updatedOptions,
-                          coordinates: {
-                            lat,
-                            lon,
-                          },
-                        }
-                      : item
-                  )
-                : [
-                    ...prev,
-                    {
-                      addressId: selectedAddress.id,
-                      deliveryOptions: updatedOptions,
-                      coordinates: {
-                        lat,
-                        lon,
-                      },
+          updatedOptions = {
+            standard: {
+              ...deliveryOptions.standard,
+              ...feeDetail.standard,
+              price: feeDetail.standard?.fee ?? NaN,
+              error: feeDetail.standard?.error ?? null,
+              message: feeDetail.standard?.message ?? null,
+              available: feeDetail.standard?.available ?? false,
+            },
+
+            express: {
+              ...deliveryOptions.express,
+              ...feeDetail.express,
+              price: feeDetail.express?.fee ?? NaN,
+              error: feeDetail.express?.error ?? null,
+              message: feeDetail.express?.message ?? null,
+              available: feeDetail.express?.available ?? false,
+            },
+
+            vendorManaged: {
+              ...deliveryOptions.vendorManaged,
+              pickup: feeDetail.vendorManaged?.pickup ?? [],
+              vendorManaged: feeDetail.vendorManaged?.vendorManaged ?? [],
+              vendorManagedTotal:
+                feeDetail.vendorManaged?.vendorManagedTotal ?? 0,
+            },
+          };
+        } catch (error) {
+        } finally {
+          setDeliveryOptions(updatedOptions);
+          setAllAddressDeliveryPrice((prev) =>
+            prev.some((item) => item.addressId === selectedAddress.id)
+              ? prev.map((item) =>
+                  item.addressId === selectedAddress.id
+                    ? {
+                        addressId: selectedAddress.id,
+                        deliveryOptions: updatedOptions,
+                        coordinates: {
+                          lat,
+                          lon,
+                        },
+                      }
+                    : item
+                )
+              : [
+                  ...prev,
+                  {
+                    addressId: selectedAddress.id,
+                    deliveryOptions: updatedOptions,
+                    coordinates: {
+                      lat,
+                      lon,
                     },
-                  ]
-            );
-            setCalculatingFee(false);
-          }
+                  },
+                ]
+          );
+          setCalculatingFee(false);
         }
       }
     }

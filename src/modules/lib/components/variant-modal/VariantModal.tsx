@@ -224,11 +224,21 @@ const VariantModal = ({
       </div> */}
         <div
           id="product details"
-          className="md:mt-16 mt-20 flex text-ellipsis flex flex-col gap-8 whitespace-nowrap w-200 overflow-hidden l:w-full"
+          className="md:mt-16 mt-20 l:max-w-250 max-w-200 overflow-hidden l:w-full white-space-nowrap text-overflow-ellipsis flex flex-col gap-8"
         >
           <div title={variant.productVariant.product?.name}>
-            <Link href={`/products/${variant.productVariant?.product?.slug}`}>
-              {variant.productVariant?.product?.name}
+            <Link
+              href={`/products/${variant.productVariant?.product?.slug}`}
+              className="inline-block text-overflow-ellipsis"
+              style={{
+                whiteSpace: 'nowrap',
+                overflow: 'hidden',
+                textOverflow: 'ellipsis',
+                display: 'block',
+                maxWidth: '100%',
+              }}
+            >
+              {variant.productVariant?.product?.name || 'No name'}
             </Link>
           </div>
           <div className="flex a-items-center gap-10 l:gap-18 text-dimgrey py-6 border-y border-#00000014">

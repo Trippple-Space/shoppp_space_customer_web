@@ -104,7 +104,7 @@ const OrderSummary: FC<IOrderSummary> = ({
                     handleApplyDiscount(discountCode)
                   }
                 >
-                  <Button disabled={applyingCode || discountCode.length <= 4} className="flex flex-col j-content-center a-items-center h-40">{applyingCode ? "Processing..." : "Apply"}</Button>
+                  <Button disabled={applyingCode} className="flex flex-col j-content-center a-items-center h-40">{applyingCode ? "Processing..." : "Apply"}</Button>
                 </div>
               </div>
 

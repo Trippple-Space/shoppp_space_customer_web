@@ -1,9 +1,8 @@
 'use client';
 import Footer from '@/modules/lib/components/footer/Footer';
 import Image from '@/modules/lib/components/image/Image';
-import Modal from '@/modules/lib/components/modal/modal';
 import { useEffect, useState, useMemo, useRef } from 'react';
-import { AiFillHeart, AiOutlineClose, AiOutlineHeart } from 'react-icons/ai';
+import { AiFillHeart, AiOutlineHeart } from 'react-icons/ai';
 import HomepageNavBar from '@/modules/lib/components/nav-bar/HomepageNavBar';
 import QuantitySelector from '@/modules/lib/components/quantity-selector/QuantitySelector';
 import VariantModal from '@/modules/lib/components/variant-modal/VariantModal';
@@ -19,7 +18,6 @@ import {
   RecentlyViewed,
 } from '@/modules/lib/utility/types/product.interface';
 import { SavedVariant } from '@/modules/lib/utility/types/SavedVariant.interface';
-import styles from '@/styles/lightbox.module.css';
 import {
   checkMediaType,
   cx,
@@ -41,11 +39,7 @@ import useGetRatingStats from '@/modules/lib/utility/hooks/use-get-rating-stats'
 import useGetProductRating from '@/modules/lib/utility/hooks/use-get-review';
 import colorNames from '@/modules/lib/utility/json-data/colors.json';
 import VideoSrc from '@/modules/lib/components/video-src/VideoSrc';
-import { AddReview } from './reviews/AddReview';
 import { useOrders } from '@/modules/lib/utility/hooks/use-orders';
-import { IoCloseSharp } from 'react-icons/io5';
-import { MdOutlineNavigateBefore, MdOutlineNavigateNext } from 'react-icons/md';
-import { AnimatePresence, motion } from 'framer-motion';
 import ShowAllPhotosModal from './modals/ShowAllPhotosModal';
 import LightboxModal from './modals/LightboxModal';
 import ReviewModal from './modals/ReviewModal';
@@ -76,6 +70,8 @@ const ProductDetails = ({ product }: { product: Product }) => {
     'default' | 'variant' | 'preview'
   >('default');
 
+  const [savedToggle, setSavedToggle] = useState(false);
+
   const imgRef = useRef<HTMLImageElement>(null);
 
   const variantIds = useMemo(
@@ -85,7 +81,8 @@ const ProductDetails = ({ product }: { product: Product }) => {
 
   const filteredVariants = useMemo(() => {
     if (!product?.variants) return [];
-    return product.variants.filter((v) =>
+
+    return product?.variants.filter((v) =>
       Object.entries(activeFilters).every(
         ([key, value]) => getVariantValue(v, key) === value
       )
@@ -97,6 +94,7 @@ const ProductDetails = ({ product }: { product: Product }) => {
 
   const allPropertiesWithSize = useMemo(() => {
     const props: Record<string, string[]> = { ...allProperties };
+
     const sizes = Array.from(
       new Set(product?.variants?.map((v) => v.size).filter(Boolean))
     ) as string[];
@@ -104,16 +102,77 @@ const ProductDetails = ({ product }: { product: Product }) => {
     if (sizes.length) {
       props.size = sizes;
     }
+
     return props;
   }, [allProperties, product?.variants]);
 
+  const hasValue = (value: unknown): boolean => {
+    if (value === null || value === undefined) return false;
+    if (typeof value === 'string') return value.trim().length > 0;
+    return true;
+  };
+
+  const requiredKeysForVariant = (variant: ProductVariant): string[] => {
+    const keys: string[] = [];
+
+    Object.entries(variant.properties || {}).forEach(([key, value]) => {
+      if (hasValue(value)) {
+        keys.push(key);
+      }
+    });
+
+    if (hasValue(variant.size)) {
+      keys.push('size');
+    }
+
+    return keys;
+  };
+
   const isSelectionComplete = useMemo(() => {
-    return filteredVariants.length === 1;
-  }, [filteredVariants]);
+    if (filteredVariants.length !== 1) return false;
+
+    const candidate = filteredVariants[0];
+    const requiredKeys = requiredKeysForVariant(candidate);
+
+    return requiredKeys.every((key) => activeFilters[key]);
+  }, [filteredVariants, activeFilters]);
 
   const selectedVariant = useMemo(() => {
-    return filteredVariants.length === 1 ? filteredVariants[0] : undefined;
-  }, [filteredVariants]);
+    if (!isSelectionComplete) return undefined;
+    return filteredVariants[0];
+  }, [filteredVariants, isSelectionComplete]);
+
+  const missingRequiredOptions = useMemo(() => {
+    if (!product?.variants?.length) return [];
+
+    let candidate: ProductVariant | undefined;
+
+    if (filteredVariants.length === 1) {
+      candidate = filteredVariants[0];
+    } else {
+      candidate = product.variants.find((v) =>
+        Object.entries(activeFilters).every(
+          ([key, value]) => getVariantValue(v, key) === value
+        )
+      );
+    }
+
+    if (!candidate) {
+      candidate = product.variants[0];
+    }
+
+    const requiredKeys = requiredKeysForVariant(candidate);
+
+    return requiredKeys.filter((key) => !activeFilters[key]);
+  }, [filteredVariants, activeFilters, product?.variants]);
+
+  const initialMissingOptions = useMemo(() => {
+    if (Object.keys(activeFilters).length > 0) return [];
+    if (!product?.variants?.length) return [];
+
+    const firstVariant = product.variants[0];
+    return requiredKeysForVariant(firstVariant);
+  }, [activeFilters, product?.variants]);
 
   const uniqueVariantsFromProductImages = availableColors
     ?.map((color) => groupedData?.[color]?.[0])
@@ -235,6 +294,7 @@ const ProductDetails = ({ product }: { product: Product }) => {
     return (
       product?.variants?.some((v) => {
         if (getVariantValue(v, prop) !== value) return false;
+
         return Object.entries(activeFilters).every(([k, vValue]) => {
           if (k === prop) return true;
           return getVariantValue(v, k) === vValue;
@@ -255,16 +315,19 @@ const ProductDetails = ({ product }: { product: Product }) => {
 
       Object.entries(prev).forEach(([k, v]) => {
         if (k === key) return;
+
         const compatible = product?.variants?.some((variant) => {
           return (
             getVariantValue(variant, key) === value &&
             getVariantValue(variant, k) === v
           );
         });
+
         if (compatible) {
           next[k] = v;
         }
       });
+
       return next;
     });
   };
@@ -306,16 +369,26 @@ const ProductDetails = ({ product }: { product: Product }) => {
     isLoginModal();
   };
 
-  const isSaved = savedVariants?.find(
-    (variant: SavedVariant) => selectedVariant?.id === variant.variantId
+  const currentVariantId = selectedVariant?.id || product.variants[0]?.id;
+
+  const isSaved = savedVariants?.some(
+    (variant: SavedVariant) => variant.variantId === currentVariantId
   );
 
   const handleSave = () => {
-    if (isSaved) {
-      removeSavedVariant(selectedVariant?.id || product.variants[0]?.id);
-    } else {
-      saveVariant(selectedVariant?.id || product.variants[0]?.id);
+    let variantToSave = selectedVariant;
+    if (!variantToSave) {
+      variantToSave = product.variants[0];
     }
+    const variantId = variantToSave.id;
+
+    if (savedVariants?.some((v) => v.variantId === variantId)) {
+      removeSavedVariant(variantId);
+    } else {
+      saveVariant(variantId);
+    }
+
+    setSavedToggle((prev) => !prev);
   };
 
   const aggregatedReviewData = useMemo(() => {
@@ -376,10 +449,34 @@ const ProductDetails = ({ product }: { product: Product }) => {
           )}
         </p>
 
+        {!selectedVariant &&
+          (missingRequiredOptions.length > 0 ||
+            initialMissingOptions.length > 0) && (
+            <div className="flex flex-col gap-6 p-10 radius-6 bg-#FFF7E6 border border-#FFD699">
+              <p className="text-12 weight-400 color-#8A5A00">
+                Please select the following to continue:
+              </p>
+
+              <div className="flex flex-wrap gap-6">
+                {(missingRequiredOptions.length > 0
+                  ? missingRequiredOptions
+                  : initialMissingOptions
+                ).map((option) => (
+                  <span
+                    key={option}
+                    className="px-8 py-4 radius-99 bg-#FFD699 text-11 weight-500 capitalize"
+                  >
+                    {option}
+                  </span>
+                ))}
+              </div>
+            </div>
+          )}
+
         {!selectedVariantItemInCart ? (
           <button
             className={classNames(
-              `text-white border-none l:px-24 l:py-12 py-15 w-100p radius-6 ${!selectedVariant || selectedVariant.status === 'OUT_OF_STOCK' ? 'bg-gray-300' : 'bg-#0B9378 hover:bg-darkgreen pointer'}`
+              `text-white border-none l:px-24 l:py-12 py-15 w-100p radius-6 ${!selectedVariant || selectedVariant.status === 'OUT_OF_STOCK' ? 'bg-gray-300 cursor-not-allowed' : 'bg-#0B9378 hover:bg-darkgreen pointer'}`
             )}
             onClick={() => {
               if (isAuthenticated) {
@@ -410,11 +507,11 @@ const ProductDetails = ({ product }: { product: Product }) => {
                 )}
               <div
                 className={classNames(
-                  `whitespace-nowrap text-16 ${!selectedVariant || selectedVariant.status === 'OUT_OF_STOCK' ? 'text-black' : 'text-white'}`
+                  `whitespace-nowrap text-16 ${selectedVariant ? (selectedVariant.status === 'OUT_OF_STOCK' ? 'text-black' : 'text-white') : 'color-gray'}`
                 )}
               >
                 {!selectedVariant
-                  ? 'Select options'
+                  ? 'Add to cart'
                   : selectedVariant.status === 'OUT_OF_STOCK'
                     ? 'Out of stock'
                     : 'Add to cart'}
@@ -723,7 +820,7 @@ const ProductDetails = ({ product }: { product: Product }) => {
                           className={classNames(
                             'w-32 h-32 round border border-lightgray transition',
                             {
-                              'border-2.3 border-black!': active,
+                              'border-3 border-#0B9378! border-solid': active,
                               'opacity-40 cursor-not-allowed': !compatible,
                             }
                           )}
@@ -747,14 +844,16 @@ const ProductDetails = ({ product }: { product: Product }) => {
                         const active = activeFilters[prop] === value;
                         const compatible = isOptionCompatible(prop, value);
 
+                        if (value === '') return;
+
                         return (
                           <button
                             key={value}
                             onClick={() => toggleFilter(prop, value)}
                             className={cx(
-                              'px-10 py-7 radius-6 border-2 transition whitespace-nowrap text-12',
+                              'px-10 py-7 radius-6 border transition whitespace-nowrap text-12',
                               active &&
-                                'bg-#DEFFF9! color-#0B9378! border-#0B9378',
+                                'bg-#DEFFF9! color-#0B9378! border-#0B9378 border-3 border-solid',
                               !active &&
                                 compatible &&
                                 'bg-white border-grey-300 hover:border-black',
@@ -897,7 +996,7 @@ const ProductDetails = ({ product }: { product: Product }) => {
                             className={classNames(
                               'w-36 min-w-36 h-36 flex round border border-lightgray transition',
                               {
-                                'border-2.8 border-black! w-34 min-w-34 h-34 flex':
+                                'border-3 border-#0B9378! border-solid w-34 min-w-34 h-34 flex':
                                   active,
                                 'opacity-40 cursor-not-allowed': !compatible,
                               }
@@ -921,14 +1020,16 @@ const ProductDetails = ({ product }: { product: Product }) => {
                           const active = activeFilters[prop] === value;
                           const compatible = isOptionCompatible(prop, value);
 
+                          if (value === '') return;
+
                           return (
                             <button
                               key={value}
                               onClick={() => toggleFilter(prop, value)}
                               className={cx(
-                                'px-15 py-8 radius-6 border-2 transition text-12 whitespace-nowrap weight-400',
+                                'px-15 py-8 radius-6 border transition text-12 whitespace-nowrap weight-400',
                                 active &&
-                                  'bg-#DEFFF9! color-#0B9378! border-#0B9378',
+                                  'bg-#DEFFF9! color-#0B9378! border-3 border-#0B9378 border-solid',
                                 !active &&
                                   compatible &&
                                   'bg-white border-grey-300 hover:border-black',

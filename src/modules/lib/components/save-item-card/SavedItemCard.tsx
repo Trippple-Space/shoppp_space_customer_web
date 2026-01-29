@@ -28,8 +28,7 @@ const SavedVariantsCard: React.FC<any> = ({ savedVariant, removeSavedVariant, re
   return (
     <div className='l:flex space-between items-center'>
       <div className='flex w-100p l:w-50p gap-10 l:gap-30 items-center mb-10'>
-        <div className='l:w-115 l:h-115 w-70 w-70 relative'>
-
+        <div className='l:w-115 l:min-w-115 l:h-115 w-70 min-w-70 relative'>
           {isOutOfStock
             && <div className="absolute w-100p h-100p text-white flex j-content-center a-items-center z-1 radius-6">
               Out of stock
