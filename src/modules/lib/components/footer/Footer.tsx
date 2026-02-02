@@ -9,9 +9,11 @@ import Image from '../image/Image';
 import Link from 'next/link';
 import config from '../../../../../env';
 import { paths } from '../../utility/paths';
+import { toast } from 'sonner';
 
 const Footer = () => {
   const [isFooterOpen, setIsFooterOpen] = useState(false);
+  const [loading, setLoading] = useState(false);
   const [newsletterError, setNewsletterError] = useState('');
   const currentDate = new Date();
 
@@ -19,11 +21,15 @@ const Footer = () => {
     setIsFooterOpen(false);
   };
 
-  const handleNewsletterSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+  const handleNewsletterSubmit = async (
+    e: React.FormEvent<HTMLFormElement>
+  ) => {
     e.preventDefault();
     setNewsletterError('');
+    setLoading(true);
 
-    const formData = new FormData(e.currentTarget);
+    const form = e.currentTarget;
+    const formData = new FormData(form);
 
     const firstName = formData.get('firstName');
     const lastName = formData.get('lastName');
@@ -45,15 +51,23 @@ const Footer = () => {
       return;
     }
 
-    const data = {
-      firstName: firstNameValue,
-      lastName: lastNameValue,
-      email: emailValue,
-    };
+    const res = await fetch('/api/subscribe', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        email: emailValue,
+        name: `${firstNameValue} ${lastNameValue}`,
+      }),
+    });
 
-    console.log('Newsletter form data:', data);
+    setLoading(false);
 
-    e.currentTarget.reset();
+    if (res.ok) {
+      toast.success('Subscribed successfully');
+      form.reset();
+    } else {
+      toast.error('Something went wrong. Try again.');
+    }
   };
 
   return (
@@ -201,8 +215,11 @@ const Footer = () => {
                   {newsletterError && (
                     <p className="text-red text-12 pb-10">{newsletterError}</p>
                   )}
-                  <button className="border-none bg-green text-white text-14 l:py-12 py-10 l:px-20 px-12 radius-5 weight-400 pointer">
-                    Join Now
+                  <button
+                    disabled={loading}
+                    className="border-none disabled:bg-lighter-grey disabled:cursor-not-allowed bg-green text-white text-14 l:py-12 py-10 l:px-20 px-12 radius-5 weight-400 pointer"
+                  >
+                    {loading ? 'Subscribing...' : 'Join Now'}
                   </button>
                 </div>
               </form>

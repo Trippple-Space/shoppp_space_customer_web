@@ -138,7 +138,7 @@ const UserProfileDropdown: FC<IUserProfileDropdown> = ({
                 target="_blank"
                 className="py-10 px-24 hover:bg-grey-100 g|transition:0.3s"
               >
-                Sell on Asoebi.Africa
+                Sell on Asoebi Africa
               </Link>
               <Link
                 href={paths.contact_us}
