@@ -30,7 +30,7 @@ const SignUpDetails = ({ email }: { email?: string }) => {
     <div className="w-full">
       <div className="font-inter mb-30">
         <h3 className="text-center text-20 weight-500 mb-10 text-grey-900">
-          Welcome to Asoebi.Africa
+          Welcome to Asoebi Africa
         </h3>
         <p className="text-center text-14 text-grey-700">
           Enter your details to start a stress-free shopping.

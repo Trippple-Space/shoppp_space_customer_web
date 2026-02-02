@@ -96,7 +96,7 @@ class AuthService {
 
   setPassword(payload: { token: string, password: string }): Promise<any> {
     return http.post(endpoints.SIGN_UP_CREATE_PASSWORD, payload).then(async (response: AxiosResponse) => {
-      toast.success(`Thank you for signing up with Asoebi.Africa. Have a wonderful time shopping`);
+      toast.success(`Thank you for signing up with Asoebi Africa. Have a wonderful time shopping`);
       return response.data
     }).catch((error) => {
       return toast.error(error.response.data.message)
