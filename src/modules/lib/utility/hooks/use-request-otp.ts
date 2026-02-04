@@ -11,6 +11,8 @@ export const useRequestOtp = () => {
             const res = await authService.requestOtp(email);
             setOtpToken(res.token || null); 
             return res;
+        } catch (error) {
+            setLoading(false);
         } finally {
             setLoading(false);
         }
