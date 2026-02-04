@@ -112,6 +112,8 @@ export default function AuthModals() {
               if (method === 'otp') {
                 await verifyOtp(password, otpToken!);
               }
+
+              setIsLoading(false)
             }}
             isLoading={isLoading || verifyingOtp || loading}
             value={password}

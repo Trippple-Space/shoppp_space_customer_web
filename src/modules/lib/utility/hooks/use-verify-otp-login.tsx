@@ -18,6 +18,8 @@ export const useVerifyOtpLogin = (onSuccess?: () => void) => {
       onSuccess?.();
 
       return user;
+    } catch (error) {
+      setLoading(false);
     } finally {
       setLoading(false);
     }

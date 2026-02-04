@@ -31,8 +31,8 @@ const signUpValidationSchema = Yup.object().shape({
 
 const passwordCreationSchema = Yup.object().shape({
   password: Yup.string()
-    .min(8, "Minimum password length is 8 characters")
-    .max(20, "Max password length is 20 characters")
+    /* .min(8, "Minimum password length is 8 characters")
+    .max(20, "Max password length is 20 characters") */
     .required("Required")
 });
 
