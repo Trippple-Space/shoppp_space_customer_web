@@ -77,7 +77,15 @@ class ProductService {
                          params: { ...queryWithoutAllFilters, ...filterParams },
                     })
                     .then((response) => {
-                         resolve(response.data.data);
+                         const productsWithOrderedVariants = response.data.data.map((product) => {
+                              product.variants = product.variants.sort((a, b) => {
+                                   if (a.status === 'OUT_OF_STOCK' && b.status !== 'OUT_OF_STOCK') return 1;
+                                   if (a.status !== 'OUT_OF_STOCK' && b.status === 'OUT_OF_STOCK') return -1;
+                                   return 0;
+                              });
+                              return product;
+                         })
+                         resolve(productsWithOrderedVariants);
                     })
                     .catch(reject);
           });
@@ -109,7 +117,16 @@ class ProductService {
                          return res.json();
                     })
                     .then((response: any) => {
-                         resolve(response);
+                         const productsWithOrderedVariants = {
+                              ...response,
+                              variants: response.variants.sort((a: any, b: any) => {
+                                   if (a.status === 'OUT_OF_STOCK' && b.status !== 'OUT_OF_STOCK') return 1;
+                                   if (a.status !== 'OUT_OF_STOCK' && b.status === 'OUT_OF_STOCK') return -1;
+                                   return 0;
+                              })
+                         };
+
+                         resolve(productsWithOrderedVariants)
                     })
                     .catch((err) => {
                          reject(err);

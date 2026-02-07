@@ -476,7 +476,7 @@ const ProductDetails = ({ product }: { product: Product }) => {
         {!selectedVariantItemInCart ? (
           <button
             className={classNames(
-              `text-white border-none l:px-24 l:py-12 py-15 w-100p radius-6 ${!selectedVariant || selectedVariant.status === 'OUT_OF_STOCK' ? 'bg-gray-300 cursor-not-allowed' : 'bg-#0B9378 hover:bg-darkgreen pointer'}`
+              `text-white border-none l:px-24 l:py-12 py-15 w-100p radius-6 ${!selectedVariant || isOutOfStock ? 'bg-gray-300 cursor-not-allowed' : 'bg-#0B9378 hover:bg-darkgreen pointer'}`
             )}
             onClick={() => {
               if (isAuthenticated) {
@@ -507,12 +507,12 @@ const ProductDetails = ({ product }: { product: Product }) => {
                 )}
               <div
                 className={classNames(
-                  `whitespace-nowrap text-16 ${selectedVariant ? (selectedVariant.status === 'OUT_OF_STOCK' ? 'text-black' : 'text-white') : 'color-gray'}`
+                  `whitespace-nowrap text-16 ${selectedVariant ? (isOutOfStock ? 'text-black' : 'text-white') : 'color-gray'}`
                 )}
               >
                 {!selectedVariant
                   ? 'Add to cart'
-                  : selectedVariant.status === 'OUT_OF_STOCK'
+                  : isOutOfStock
                     ? 'Out of stock'
                     : 'Add to cart'}
               </div>

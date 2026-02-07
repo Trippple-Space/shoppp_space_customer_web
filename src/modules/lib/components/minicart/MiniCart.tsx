@@ -145,7 +145,7 @@ const MiniCart: React.FC<ModalProps> = ({
                   <div className="p-24 flex flex-col gap-16">
                     {cart.cartItems.map((cartItem: CartItem, i) => {
                       const mediaType =
-                        checkMediaType(cartItem.variant.media[0].url) ??
+                        checkMediaType(cartItem.variant?.media ? cartItem.variant?.media[0]?.url || '' : '') ??
                         'image';
 
                       return (
@@ -159,14 +159,14 @@ const MiniCart: React.FC<ModalProps> = ({
                             <div className="flex gap-10">
                               {mediaType === 'image' ? (
                                 <Image
-                                  src={cartItem.variant.media[0].url}
+                                  src={cartItem?.variant?.media ? cartItem?.variant?.media[0]?.url : ''}
                                   alt="cart image"
                                   className={`sm:w-80! w-70! sm:h-80! h-70! radius-6 border border-#00000014 object-fit ${cartItem.variant.status == 'OUT_OF_STOCK' ? 'greyscale' : ''}`}
                                 />
                               ) : (
                                 <VideoSrc
                                   className={`sm:w-80! w-70! sm:h-80! h-70! radius-6 border border-#00000014 object-fit ${cartItem.variant.status == 'OUT_OF_STOCK' ? 'greyscale' : ''}`}
-                                  src={cartItem.variant.media[0].url}
+                                  src={cartItem?.variant?.media ? cartItem?.variant?.media[0]?.url : ''}
                                 />
                               )}
                               <div
