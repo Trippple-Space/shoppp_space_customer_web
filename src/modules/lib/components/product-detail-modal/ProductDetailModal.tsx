@@ -13,6 +13,11 @@ import useTransformProduct, {
 } from '../../utility/hooks/use-transform-product';
 import colorNames from '@/modules/lib/utility/json-data/colors.json';
 import VideoSrc from '../video-src/VideoSrc';
+import {
+  DisplayProductConfigurations,
+  isEmptyValue,
+  renderCustomerField,
+} from './productConfigurationsHelper';
 
 interface ProductDetailModalProp {
   openSingleProductModal: boolean;
@@ -59,6 +64,10 @@ const ProductDetailModal = ({
   const [imageSource, setImageSource] = useState<
     'default' | 'variant' | 'preview'
   >('default');
+
+  const [configurationValues, setConfigurationValues] = useState<
+    Record<string, any>
+  >({});
 
   const [isHover, setIsHover] = useState(false);
 
@@ -322,6 +331,43 @@ const ProductDetailModal = ({
     return filters;
   };
 
+  const configurationRecords = selectedVariant?.configurationRecords ?? [];
+
+  const handleConfigChange = (key: string, value: any) => {
+    setConfigurationValues((prev) => ({
+      ...prev,
+      [key]: value,
+    }));
+  };
+
+  const getRequiredCustomerFields = useMemo(() => {
+    if (!selectedVariant) return [];
+
+    return (selectedVariant.configurationRecords ?? []).flatMap((record: any) =>
+      (record.customerDataForm ?? []).filter(
+        (f: any) =>
+          f.valueFormat?.targetUserType === 'customer' &&
+          f.valueFormat?.required
+      )
+    );
+  }, [selectedVariant]);
+
+  const areRequiredCustomerFieldsFilled = useMemo(() => {
+    return getRequiredCustomerFields.every((field: any) => {
+      const key = field.valueFormat.fieldName;
+      const value = configurationValues[key];
+
+      if (field.valueFormat.type === 'array') {
+        if (!value || typeof value !== 'object') return false;
+        return field.valueFormat.defaultValue.every(
+          (k: string) => !isEmptyValue(value[k])
+        );
+      }
+
+      return !isEmptyValue(value);
+    });
+  }, [getRequiredCustomerFields, configurationValues]);
+
   return (
     <div>
       {openSingleProductModal && (
@@ -507,7 +553,13 @@ const ProductDetailModal = ({
                             <div>
                               <p className="weight-400 text-grey-500 text-14">
                                 {' '}
-                                sold by {product?.store?.name}{' '}
+                                sold by{' '}
+                                <Link
+                                  href={`/${product?.store?.slug}`}
+                                  target="_blank"
+                                >
+                                  {product?.store?.name}
+                                </Link>{' '}
                               </p>
                             </div>
                             <p className="weight-400"> in {product?.type} </p>
@@ -630,6 +682,12 @@ const ProductDetailModal = ({
                                 </div>
                               )}
 
+                            <DisplayProductConfigurations
+                              configurationRecords={configurationRecords}
+                              configurationValues={configurationValues}
+                              handleConfigChange={handleConfigChange}
+                            />
+
                             <div className="grid mt-20 mb-10 gap-10">
                               {!selectedVariantItemInCart ? (
                                 <button
@@ -648,7 +706,8 @@ const ProductDetailModal = ({
                                   )}
                                   disabled={
                                     !selectedVariant ||
-                                    selectedVariant.status === 'OUT_OF_STOCK'
+                                    selectedVariant.status === 'OUT_OF_STOCK' ||
+                                    !areRequiredCustomerFieldsFilled
                                   }
                                   onClick={() => {
                                     if (isAuthenticated) {

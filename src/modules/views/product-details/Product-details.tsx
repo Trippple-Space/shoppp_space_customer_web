@@ -43,6 +43,10 @@ import { useOrders } from '@/modules/lib/utility/hooks/use-orders';
 import ShowAllPhotosModal from './modals/ShowAllPhotosModal';
 import LightboxModal from './modals/LightboxModal';
 import ReviewModal from './modals/ReviewModal';
+import {
+  DisplayProductConfigurations,
+  isEmptyValue,
+} from '@/modules/lib/components/product-detail-modal/productConfigurationsHelper';
 
 const ProductDetails = ({ product }: { product: Product }) => {
   const [recentlyViewedVariants, setRecentlyViewedVariants] = useState<
@@ -71,6 +75,10 @@ const ProductDetails = ({ product }: { product: Product }) => {
   >('default');
 
   const [savedToggle, setSavedToggle] = useState(false);
+
+  const [configurationValues, setConfigurationValues] = useState<
+    Record<string, any>
+  >({});
 
   const imgRef = useRef<HTMLImageElement>(null);
 
@@ -438,6 +446,43 @@ const ProductDetails = ({ product }: { product: Product }) => {
     );
   }, [selectedVariant, reviewStat, aggregatedReviewData]);
 
+  const configurationRecords = selectedVariant?.configurationRecords ?? [];
+
+  const handleConfigChange = (key: string, value: any) => {
+    setConfigurationValues((prev) => ({
+      ...prev,
+      [key]: value,
+    }));
+  };
+
+  const getRequiredCustomerFields = useMemo(() => {
+    if (!selectedVariant) return [];
+
+    return (selectedVariant.configurationRecords ?? []).flatMap((record: any) =>
+      (record.customerDataForm ?? []).filter(
+        (f: any) =>
+          f.valueFormat?.targetUserType === 'customer' &&
+          f.valueFormat?.required
+      )
+    );
+  }, [selectedVariant]);
+
+  const areRequiredCustomerFieldsFilled = useMemo(() => {
+    return getRequiredCustomerFields.every((field: any) => {
+      const key = field.valueFormat.fieldName;
+      const value = configurationValues[key];
+
+      if (field.valueFormat.type === 'array') {
+        if (!value || typeof value !== 'object') return false;
+        return field.valueFormat.defaultValue.every(
+          (k: string) => !isEmptyValue(value[k])
+        );
+      }
+
+      return !isEmptyValue(value);
+    });
+  }, [getRequiredCustomerFields, configurationValues]);
+
   const addToCartBtn = () => {
     return (
       <div className="flex flex-col gap-16">
@@ -476,7 +521,7 @@ const ProductDetails = ({ product }: { product: Product }) => {
         {!selectedVariantItemInCart ? (
           <button
             className={classNames(
-              `text-white border-none l:px-24 l:py-12 py-15 w-100p radius-6 ${!selectedVariant || isOutOfStock ? 'bg-gray-300 cursor-not-allowed' : 'bg-#0B9378 hover:bg-darkgreen pointer'}`
+              `text-white border-none l:px-24 l:py-12 py-15 w-100p radius-6 ${!selectedVariant || isOutOfStock || !areRequiredCustomerFieldsFilled ? 'bg-gray-300 cursor-not-allowed' : 'bg-#0B9378 hover:bg-darkgreen pointer'}`
             )}
             onClick={() => {
               if (isAuthenticated) {
@@ -485,7 +530,8 @@ const ProductDetails = ({ product }: { product: Product }) => {
                 }
                 if (
                   selectedVariant &&
-                  selectedVariant.status !== 'OUT_OF_STOCK'
+                  selectedVariant.status !== 'OUT_OF_STOCK' &&
+                  areRequiredCustomerFieldsFilled
                 ) {
                   addToCart(
                     selectedVariant?.id ?? 0,
@@ -502,12 +548,13 @@ const ProductDetails = ({ product }: { product: Product }) => {
           >
             <div className="l:flex grid grid-2-cols-auto gap-10 items-center w-fit mx-auto ">
               {selectedVariant &&
+                areRequiredCustomerFieldsFilled &&
                 selectedVariant?.status !== 'OUT_OF_STOCK' && (
                   <HiOutlineShoppingBag className="h-21" />
                 )}
               <div
                 className={classNames(
-                  `whitespace-nowrap text-16 ${selectedVariant ? (isOutOfStock ? 'text-black' : 'text-white') : 'color-gray'}`
+                  `whitespace-nowrap text-16 ${selectedVariant && areRequiredCustomerFieldsFilled ? (isOutOfStock ? 'text-black' : 'text-white') : 'color-gray'}`
                 )}
               >
                 {!selectedVariant
@@ -869,6 +916,13 @@ const ProductDetails = ({ product }: { product: Product }) => {
                   </div>
                 );
               })}
+
+              <DisplayProductConfigurations
+                configurationRecords={configurationRecords}
+                configurationValues={configurationValues}
+                handleConfigChange={handleConfigChange}
+              />
+
               {addToCartBtn()}
             </div>
 
@@ -1045,6 +1099,13 @@ const ProductDetails = ({ product }: { product: Product }) => {
                     </div>
                   );
                 })}
+
+                <DisplayProductConfigurations
+                  configurationRecords={configurationRecords}
+                  configurationValues={configurationValues}
+                  handleConfigChange={handleConfigChange}
+                />
+
                 {addToCartBtn()}
               </div>
             </div>
