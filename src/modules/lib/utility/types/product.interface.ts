@@ -101,6 +101,7 @@ export interface ProductVariant {
   createAt: string;
   lastUpdated: string;
   preOrder?: boolean;
+  configurationRecords?: ConfigurationRecord[];
 }
 
 export interface Tag {
@@ -138,4 +139,44 @@ export interface RecentlyViewed {
   productVariant: ProductVariant;
   createdAt: string;
   updatedAt: string;
+}
+
+//product configurations
+export interface ConfigurationRecord {
+  configurationRecordSchemaId: string;
+  id: string;
+  storeId: string;
+  tagDefinition: string | null;
+  name: string;
+  slug: string;
+  description: string | null;
+  createdAt: string;
+  updatedAt: string;
+  deletedAt: string | null;
+  isActive: boolean;
+  customerDataForm: ConfigurationRecordCustomerDataField[];
+}
+
+export interface ConfigurationRecordCustomerDataField {
+  keyFormat: ConfigurationRecordCustomerDataFieldKeyFormat;
+  valueFormat: ConfigurationRecordCustomerDataFieldValueFormat;
+}
+
+export interface ConfigurationRecordCustomerDataFieldKeyFormat {
+  fieldName: string;
+  type: string;
+  defaultValue: string;
+  readonly: boolean;
+}
+
+export interface ConfigurationRecordCustomerDataFieldValueFormat {
+  fieldName: string;
+  type: string;
+  required: boolean;
+  description: string;
+  example?: string | null;
+  placeholder?: string | null;
+  defaultValue?: unknown;
+  readonly?: boolean | null;
+  targetUserType?: string | null;
 }

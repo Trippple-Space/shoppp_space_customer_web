@@ -597,6 +597,11 @@
 .mt-50 { margin-top: 50px; } 
 .h-80 { height: 80px; } 
 [class~='g|max-height:90vh']{max-height:90vh} 
+.text-11 { font-size: 11px; } 
+.bg-\#F0F9FF { background-color: #F0F9FF; } 
+.border-\#91D5FF { border-color: #91D5FF; } 
+.color-\#003A8C { color: #003A8C; } 
+.color-\#D4380D { color: #D4380D; } 
 .l-3 { left: 3px; } 
 .overflow-x-auto { overflow-x: auto; } 
 .min-w-90 { min-width: 90px; } 
@@ -609,7 +614,6 @@
 .px-8 { padding-left: 8px; padding-right: 8px; } 
 @layer base {.radius-99 { border-radius: 99px; } } 
 .bg-\#FFD699 { background-color: #FFD699; } 
-.text-11 { font-size: 11px; } 
 .w-94p { width: 94%; } 
 .b-45p { bottom: 45%; } 
 .color-\#A9A9A9 { color: #A9A9A9; } 

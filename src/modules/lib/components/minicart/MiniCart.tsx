@@ -145,8 +145,11 @@ const MiniCart: React.FC<ModalProps> = ({
                   <div className="p-24 flex flex-col gap-16">
                     {cart.cartItems.map((cartItem: CartItem, i) => {
                       const mediaType =
-                        checkMediaType(cartItem.variant.media[0].url) ??
-                        'image';
+                        checkMediaType(
+                          cartItem.variant?.media
+                            ? cartItem.variant?.media[0]?.url || ''
+                            : ''
+                        ) ?? 'image';
 
                       return (
                         <div
@@ -159,18 +162,26 @@ const MiniCart: React.FC<ModalProps> = ({
                             <div className="flex gap-10">
                               {mediaType === 'image' ? (
                                 <Image
-                                  src={cartItem.variant.media[0].url}
+                                  src={
+                                    cartItem?.variant?.media
+                                      ? cartItem?.variant?.media[0]?.url
+                                      : ''
+                                  }
                                   alt="cart image"
                                   className={`sm:w-80! w-70! sm:h-80! h-70! radius-6 border border-#00000014 object-fit ${cartItem.variant.status == 'OUT_OF_STOCK' ? 'greyscale' : ''}`}
                                 />
                               ) : (
                                 <VideoSrc
                                   className={`sm:w-80! w-70! sm:h-80! h-70! radius-6 border border-#00000014 object-fit ${cartItem.variant.status == 'OUT_OF_STOCK' ? 'greyscale' : ''}`}
-                                  src={cartItem.variant.media[0].url}
+                                  src={
+                                    cartItem?.variant?.media
+                                      ? cartItem?.variant?.media[0]?.url
+                                      : ''
+                                  }
                                 />
                               )}
                               <div
-                                className={`flex flex-col ${Object.keys(cartItem?.variant?.properties).length > 2 ? 'gap-2.8' : 'gap-6'}`}
+                                className={`flex flex-col ${Object.keys(cartItem?.variant?.properties ?? {}).length > 2 ? 'gap-2.8' : 'gap-6'}`}
                               >
                                 <p
                                   className={`weight-600 sm:text-16 text-14 sm:line-height-24 line-height-22 ${cartItem.variant.status === 'OUT_OF_STOCK' ? 'color-#00000099' : 'color-#000000E0'}`}
@@ -178,7 +189,7 @@ const MiniCart: React.FC<ModalProps> = ({
                                   {cartItem?.variant?.product?.name}{' '}
                                 </p>
                                 <p
-                                  className={`weight-400 ${Object.keys(cartItem?.variant?.properties).length > 2 ? 'text-13.5 line-height-16' : 'text-14 line-height-16.94'}`}
+                                  className={`weight-400 ${Object.keys(cartItem?.variant?.properties ?? {}).length > 2 ? 'text-13.5 line-height-16' : 'text-14 line-height-16.94'}`}
                                 >
                                   Quantity:{' '}
                                   {`${cartItem?.quantity} ${displayStockUnit(
@@ -187,7 +198,7 @@ const MiniCart: React.FC<ModalProps> = ({
                                 </p>
                                 {cartItem?.variant?.properties?.color && (
                                   <p
-                                    className={`weight-400 capitalize ${Object.keys(cartItem?.variant?.properties).length > 2 ? 'text-13.5 line-height-16' : 'text-14 line-height-16.94'}`}
+                                    className={`weight-400 capitalize ${Object.keys(cartItem?.variant?.properties ?? {}).length > 2 ? 'text-13.5 line-height-16' : 'text-14 line-height-16.94'}`}
                                   >
                                     Color:{' '}
                                     {cartItem?.variant?.properties?.color}

@@ -6,7 +6,7 @@ import { formatNumberAsPrice, cx, displayStockUnit } from '../../utility/utility
 import { Product } from '../../utility/types/product.interface'
 import Image from '../image/Image'
 import { useCart } from '../../utility/hooks/use-cart'
-import { useRecentlyViewedActions, useRecentlyViewedVariant } from '../../utility/hooks/use-recently-viewed'
+import { useRecentlyViewedActions } from '../../utility/hooks/use-recently-viewed'
 
 const SearchModal = ({
   searchResults,

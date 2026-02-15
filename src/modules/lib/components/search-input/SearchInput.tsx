@@ -1,32 +1,33 @@
-import React, { FC, useEffect, useState } from 'react'
-import { BiSearch } from 'react-icons/bi'
-import { IoIosSearch } from 'react-icons/io'
-import { productService } from '../../utility/services/product.service'
-import { Product } from '../../utility/types/product.interface'
-import SearchModal from '../search-modal/SearchModal'
-import classNames from 'classnames'
-import { usePathname } from 'next/navigation'
+import React, { FC, useEffect, useState } from 'react';
+import { BiSearch } from 'react-icons/bi';
+import { IoIosSearch } from 'react-icons/io';
+import { productService } from '../../utility/services/product.service';
+import { Product } from '../../utility/types/product.interface';
+import SearchModal from '../search-modal/SearchModal';
+import classNames from 'classnames';
+import { usePathname } from 'next/navigation';
+import { storeService } from '../../utility/services/store.service';
 
 interface ISearchInput {
-  component?: any
-  placeholder?: any
-  storeSlug?: any
+  component?: any;
+  placeholder?: any;
+  storeSlug?: any;
 }
 
 const SearchInput: FC<ISearchInput> = ({
   component,
   placeholder,
-  storeSlug
+  storeSlug,
 }) => {
-  const typePath = usePathname()
-  const [searchTerm, setSearchTerm] = useState('')
-  const [searchResults, setSearchResults] = useState<Product[]>([])
+  const typePath = usePathname();
+  const [searchTerm, setSearchTerm] = useState('');
+  const [searchResults, setSearchResults] = useState<Product[]>([]);
 
-  const [openSearchModal, setOpenSearchModal] = useState<boolean>(false)
+  const [openSearchModal, setOpenSearchModal] = useState<boolean>(false);
 
   const handleOpenSearchModal = () => {
-    setOpenSearchModal(prev => !prev)
-  }
+    setOpenSearchModal((prev) => !prev);
+  };
 
   useEffect(() => {
     const fetchProducts = async () => {
@@ -34,24 +35,32 @@ const SearchInput: FC<ISearchInput> = ({
         const result =
           component === 'home'
             ? await productService.fetchProductBySearch(searchTerm, {
-                filters: { type: typePath === '/fabrics' ? 'fabrics' : 'wears' }
+                filters: {
+                  type: typePath === '/fabrics' ? 'fabrics' : 'wears',
+                },
               })
             : await productService.fetchProductBySlugSearch(
                 storeSlug,
                 searchTerm
-              )
-        setSearchResults(result)
+              );
+        setSearchResults(result);
+
+        const storeSearchResults = await storeService.fetchStores(
+          {},
+          searchTerm
+        );
+        console.log(storeSearchResults);
       } catch (err) {
         //console.error(err)
       }
-    }
+    };
     if (searchTerm) {
-      fetchProducts()
+      fetchProducts();
     }
     if (!openSearchModal || searchTerm === '') {
-      setSearchResults([])
+      setSearchResults([]);
     }
-  }, [searchTerm, openSearchModal])
+  }, [searchTerm, openSearchModal]);
 
   return (
     <div
@@ -69,34 +78,33 @@ const SearchInput: FC<ISearchInput> = ({
                   'md:radius-99 md:border md:border-#D9D9D9': !openSearchModal,
                   'md:radius-t-r-9': openSearchModal,
                   'md:radius-t-l-9': openSearchModal,
-                  'md:bg-#F3F3F3': openSearchModal
+                  'md:bg-#F3F3F3': openSearchModal,
                 }
               )
         }
       >
-
-        <div className='w-full hidden md:block'>
-        <input
-          type='text'
-          className={
-            component === 'home'
-              ? classNames(
-                  'hidden flex l:block md:border md:bg-#F3F3F3 md:border-none md:py-12 md:px-14 md:outline-none md:w-100p',
-                  {
-                    'md:radius-99': !openSearchModal,
-                    'md:radius-t-r-9': openSearchModal,
-                    'md:radius-t-l-9': openSearchModal
-                  }
-                )
-              : 'md:block hidden border-none bg-none outline-none md:w-100p text-16 md:py-11.2 md:pl-14'
-          }
-          placeholder={placeholder}
-          value={searchTerm}
-          onChange={e => setSearchTerm(e.target.value)}
-          onClick={() => setOpenSearchModal(true)}
+        <div className="w-full hidden md:block">
+          <input
+            type="text"
+            className={
+              component === 'home'
+                ? classNames(
+                    'hidden flex l:block md:border md:bg-#F3F3F3 md:border-none md:py-12 md:px-14 md:outline-none md:w-100p',
+                    {
+                      'md:radius-99': !openSearchModal,
+                      'md:radius-t-r-9': openSearchModal,
+                      'md:radius-t-l-9': openSearchModal,
+                    }
+                  )
+                : 'md:block hidden border-none bg-none outline-none md:w-100p text-16 md:py-11.2 md:pl-14'
+            }
+            placeholder={placeholder}
+            value={searchTerm}
+            onChange={(e) => setSearchTerm(e.target.value)}
+            onClick={() => setOpenSearchModal(true)}
           />
-      </div>
-          
+        </div>
+
         <div
           className={
             component === 'home'
@@ -104,7 +112,7 @@ const SearchInput: FC<ISearchInput> = ({
                   'flex a-items-center j-content-center md:bg-#0B9378 md:absolute r-0 md:m-5 md:cursor-pointer md:w-30 md:h-30 w-100p',
                   {
                     'md:radius-50': !openSearchModal,
-                    'md:radius-8': openSearchModal
+                    'md:radius-8': openSearchModal,
                   }
                 )
               : 'md:pr-0 pr-20'
@@ -125,7 +133,7 @@ const SearchInput: FC<ISearchInput> = ({
               'hidden md:block md:absolute md:bg-#f3f3f3 md:w-100p md:h-200 md:bg-#F3F3F3 md:t-35 z-10',
               {
                 'md:radius-b-r-9': openSearchModal,
-                'md:radius-b-l-9': openSearchModal
+                'md:radius-b-l-9': openSearchModal,
               }
             )}
           >
@@ -136,25 +144,25 @@ const SearchInput: FC<ISearchInput> = ({
       {openSearchModal && (
         <>
           <div
-            className='fixed inset-0 bg-black opacity-70 z-6 md:opacity-0'
+            className="fixed inset-0 bg-black opacity-70 z-6 md:opacity-0"
             onClick={handleOpenSearchModal}
           />
           <div
             className={`fixed l-50p g|transform:translate(-50%); w-90p h-70 md:w-50p h-60p t-70 mt-30 bg-white z-10 radius-8 pb-20 relative md:mt-0 md:t-60  md:hidden`}
           >
-            <div className=' w-100p flex j-content-center md:hidden border-b pb-20 border-b-#00000014'>
-              <div className='flex j-content-center relative a-items-center mt-20 w-80p'>
+            <div className=" w-100p flex j-content-center md:hidden border-b pb-20 border-b-#00000014">
+              <div className="flex j-content-center relative a-items-center mt-20 w-80p">
                 <input
-                  type='text'
+                  type="text"
                   value={searchTerm}
-                  onChange={e => setSearchTerm(e.target.value)}
-                  className='block radius-99 border bg-#F3F3F3 border-none py-12 px-14 outline-none w-100p'
-                  placeholder='Search asoebi.africa'
+                  onChange={(e) => setSearchTerm(e.target.value)}
+                  className="block radius-99 border bg-#F3F3F3 border-none py-12 px-14 outline-none w-100p"
+                  placeholder="Search asoebi.africa"
                 />
 
-                <div className='flex j-content-center a-items-center bg-#0B9378 absolute r-0 radius-50 m-5 w-30 h-30'>
+                <div className="flex j-content-center a-items-center bg-#0B9378 absolute r-0 radius-50 m-5 w-30 h-30">
                   <IoIosSearch
-                    className='w-25 h-20 color-#fff'
+                    className="w-25 h-20 color-#fff"
                     onClick={handleOpenSearchModal}
                   />
                 </div>
@@ -162,14 +170,14 @@ const SearchInput: FC<ISearchInput> = ({
             </div>
             {searchResults.length > 0 && (
               <>
-                <SearchModal searchResults={searchResults} position='' />
+                <SearchModal searchResults={searchResults} position="" />
               </>
             )}
           </div>
         </>
       )}
     </div>
-  )
-}
+  );
+};
 
-export default SearchInput
+export default SearchInput;

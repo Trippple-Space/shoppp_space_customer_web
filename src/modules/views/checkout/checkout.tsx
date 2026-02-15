@@ -446,22 +446,22 @@ const CheckoutPage = () => {
                             />
                           )}
                           <div
-                            className={`flex-grow-1 flex flex-col ${Object.keys(cartItem?.variant?.properties).length > 2 ? 'gap-2.8' : 'gap-6'} overflow-hidden white-space-nowrap text-overflow-ellipsis`}
+                            className={`flex-grow-1 flex flex-col ${Object.keys(cartItem?.variant?.properties ?? {}).length > 2 ? 'gap-2.8' : 'gap-6'} overflow-hidden white-space-nowrap text-overflow-ellipsis`}
                           >
                             <p className="weight-600 text-14 line-height-22 color-#000000E0">
                               {cartItem?.variant?.product?.name}
                             </p>
                             <p
-                              className={`weight-400 color-#0000008C ${Object.keys(cartItem?.variant?.properties).length > 2 ? 'text-13.5 line-height-16' : 'text-14 line-height-16.94'}`}
+                              className={`weight-400 color-#0000008C ${Object.keys(cartItem?.variant?.properties ?? {}).length > 2 ? 'text-13.5 line-height-16' : 'text-14 line-height-16.94'}`}
                             >
                               Quantity:{' '}
                               {`${cartItem?.quantity} ${displayStockUnit(
                                 cartItem.variant.stockUnit
                               )}${cartItem?.quantity > 1 ? 's' : ''}`}
                             </p>
-                            {cartItem?.variant?.properties.color && (
+                            {cartItem?.variant?.properties?.color && (
                               <p
-                                className={`weight-400 color-#0000008C capitalize ${Object.keys(cartItem?.variant?.properties).length > 2 ? 'text-13.5 line-height-16' : 'text-14 line-height-16.94'}`}
+                                className={`weight-400 color-#0000008C capitalize ${Object.keys(cartItem?.variant?.properties ?? {}).length > 2 ? 'text-13.5 line-height-16' : 'text-14 line-height-16.94'}`}
                               >
                                 Color: {cartItem?.variant?.properties?.color}
                               </p>
@@ -473,7 +473,7 @@ const CheckoutPage = () => {
                             )}
 
                             {cartItem?.variant?.properties &&
-                              Object.entries(cartItem.variant.properties).map(
+                              Object.entries(cartItem.variant.properties ?? {}).map(
                                 ([key, value]) => {
                                   if (key === 'color') return null;
                                   return (
