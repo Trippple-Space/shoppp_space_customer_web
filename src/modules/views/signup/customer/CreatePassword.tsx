@@ -61,13 +61,17 @@ const CreatePassword: FC = () => {
               formikComplete.handleChange(e);
             }}
             handleBlur={formikComplete.handleBlur}
-            /* after={
-              <div className="mt-10">
-                {password.length > 0 && (
-                  <PasswordStrengthMeter password={password} />
-                )}
-              </div>
-            } */
+            after={
+              password &&
+              password.length < 5 && (
+                <div className="notice text-12 h-0 @one:flex gap-5 j-content-end w-full mt-12 text-danger">
+                  <Icon name="alert-circle" className="w-14 a-self-center" />
+                  <span className="a-self-center">
+                    Minimum password length is 5 characters
+                  </span>
+                </div>
+              )
+            }
           />
           <Input
             label="Confirm Password"

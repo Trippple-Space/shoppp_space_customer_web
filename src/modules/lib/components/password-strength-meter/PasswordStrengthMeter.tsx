@@ -9,13 +9,13 @@ const getPasswordStrength = (password: string) => {
   const hasSpecialChar = passwordValidatorRegex.test(password);
   
   if (password.length < 3) return 1;
-  if (password.length <= 7) return 2;
+  if (password.length <= 4) return 2;
 
-  const meetsBaseCriteria = password.length >= 8 && hasSpecialChar && hasUpperCase && hasLowerCase && hasNumber;
+  const meetsBaseCriteria = password.length >= 5 && hasSpecialChar && hasUpperCase && hasLowerCase && hasNumber;
   if (!meetsBaseCriteria) return 2;
 
-  if (password.length >= 16) return 5;
-  if (password.length > 12) return 4;
+  if (password.length >= 12) return 5;
+  if (password.length > 8) return 4;
   return 3;
 };
 

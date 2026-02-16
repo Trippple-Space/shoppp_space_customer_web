@@ -1,4 +1,4 @@
-'use client'
+'use client';
 
 import Icon from '@/modules/lib/components/icon/Icon';
 import Input from '@/modules/lib/components/input/Input';
@@ -7,7 +7,6 @@ import { useResetPassword } from '@/modules/lib/utility/hooks/use-reset-password
 import { cx } from '@/modules/lib/utility/utility';
 import React, { FC, useEffect, useState } from 'react';
 import { toast } from 'sonner';
-
 
 const ResetPassword: FC = () => {
   const { formHandler } = useResetPassword();
@@ -64,14 +63,19 @@ const ResetPassword: FC = () => {
             }}
             handleBlur={formHandler.handleBlur}
             after={
-              <div className="mt-10">
+              password && password.length < 5 && (
+                <div className="notice text-12 h-0 @one:flex gap-5 j-content-end w-full mt-12 text-danger">
+                  <Icon name="alert-circle" className="w-14 a-self-center" />
+                  <span className="a-self-center">Minimum password length is 5 characters</span>
+                </div>
+              )
+            }
+          />
+          {/* <div className="mt-10">
                 {password.length > 0 && (
                   <PasswordStrengthMeter password={password} />
                 )}
-              </div>
-            }
-          />
-
+              </div> */}
           <Input
             label="Confirm Password"
             id="confirmPassword"
@@ -86,7 +90,8 @@ const ResetPassword: FC = () => {
             }}
             handleBlur={formHandler.handleBlur}
             inputClass={cx({
-              'border-red': password && confirmPassword && password !== confirmPassword,
+              'border-red':
+                password && confirmPassword && password !== confirmPassword,
             })}
             after={
               password &&

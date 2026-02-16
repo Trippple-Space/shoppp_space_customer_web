@@ -31,8 +31,8 @@ const signUpValidationSchema = Yup.object().shape({
 
 const passwordCreationSchema = Yup.object().shape({
   password: Yup.string()
-    /* .min(8, "Minimum password length is 8 characters")
-    .max(20, "Max password length is 20 characters") */
+    .min(5, "Minimum password length is 5 characters")
+    //.max(20, "Max password length is 20 characters")
     .required("Required")
 });
 
@@ -127,16 +127,20 @@ export const useSignUpView = () => {
             token: storedToken,
             password: values.password
           };
-          await authService.setPassword(payload);
-          localStorage.removeItem('create-password-token')
 
+          const res = await authService.setPassword(payload)
 
-          const tempEmail = localStorage.getItem('signup-email');
-          authService.signIn({ email: tempEmail ?? '', password: payload.password }).then((response) => {
+          if (res?.success) {
+            localStorage.removeItem('create-password-token');
 
-            authenticateUser(response.user);
-            useRouteGuard(isAuthenticated, paths.homepage)
-          });
+            const tempEmail = localStorage.getItem('signup-email');
+            authService.signIn({ email: tempEmail ?? '', password: payload.password }).then((response) => {
+              authenticateUser(response.user);
+              useRouteGuard(isAuthenticated, paths.homepage)
+            });
+          } else {
+            //toast.error(res?.message || "Something went wrong. Please try again.");
+          }
 
         } catch (error: any) {
           toast.error(error.response.data.message || "Registration failed");
