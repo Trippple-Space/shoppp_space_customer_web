@@ -7,11 +7,11 @@ import { paths } from "../paths";
 const ResetPasswordValidationSchema = Yup.object().shape({
   password: Yup.string()
     .required("Password is required")
-    .min(8, "Must be at least 8 characters")
-    .matches(/[A-Z]/, "Must contain an uppercase letter")
-    .matches(/[a-z]/, "Must contain a lowercase letter")
-    .matches(/[0-9]/, "Must contain a number")
-    .matches(/[@$!%*?&]/, "Must contain a special character"),
+    .min(5, "Must be at least 5 characters"),
+  /* .matches(/[A-Z]/, "Must contain an uppercase letter")
+  .matches(/[a-z]/, "Must contain a lowercase letter")
+  .matches(/[0-9]/, "Must contain a number")
+  .matches(/[@$!%*?&]/, "Must contain a special character"), */
   confirmPassword: Yup.string()
     .oneOf([Yup.ref("password")], "Passwords must match")
     .required("Confirm your password"),
@@ -31,7 +31,7 @@ const formikResetConfig = (
       const urlToken =
         typeof window !== "undefined"
           ? new URLSearchParams(window.location.search).get("token") ??
-            window.location.pathname.split("/").filter(Boolean).pop()
+          window.location.pathname.split("/").filter(Boolean).pop()
           : undefined;
 
       const token = values.token || urlToken;
@@ -41,16 +41,19 @@ const formikResetConfig = (
         return;
       }
 
-      await authService.resetPassword?.({
+      const res = await authService.resetPassword?.({
         token,
         password: values.password,
         confirmPassword: values.confirmPassword,
-      }).then(() => {
-        location.replace(paths.login);
       });
 
-      callback?.();
-      resetForm();
+      if (res?.success) {
+        location.replace(paths.login);
+        callback?.();
+        resetForm();
+      } else {
+        //toast.error(res?.message || "Something went wrong. Please try again.");
+      }
     } catch (err: any) {
       const message = err?.response?.data?.message;
       if (message) setErrors({ password: message });
