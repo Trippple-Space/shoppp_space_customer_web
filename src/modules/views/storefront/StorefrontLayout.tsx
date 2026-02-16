@@ -20,6 +20,7 @@ import { FC, ReactNode, useEffect, useRef, useState } from 'react';
 import { GoArrowRight } from 'react-icons/go';
 import { MdChevronRight } from 'react-icons/md';
 import Collections from '../homepage/Collections';
+import { DotsLoader } from '@/modules/lib/components/dots-loader/DotsLoader';
 
 const StorefrontLayout: FC<{ store: Store; children: ReactNode }> = ({
   store,
@@ -29,7 +30,7 @@ const StorefrontLayout: FC<{ store: Store; children: ReactNode }> = ({
   const scrollRef2 = useRef<HTMLDivElement>(null);
   const [selectedCategory, setSelectedCategory] =
     useState<ProductCategory | null>(null);
-  const { products } = useStoreProductsView(selectedCategory);
+  const { products, loading } = useStoreProductsView(selectedCategory);
   const { allReviews } = useReviews();
   const { categories } = useStoreCategoryNavView({ storeId: store.id });
   const [filteredProducts, setFilteredProducts] = useState<Product[]>([]);
@@ -292,7 +293,11 @@ const StorefrontLayout: FC<{ store: Store; children: ReactNode }> = ({
             )}
           </div>
           <div className="grid l:grid-4-cols-1fr sm:grid-3-cols-1fr grid-2-cols-1fr l:gap-20 sm:gap-10 gap-20 w-full">
-            {featuredProducts.length ? (
+            {products.length === 0 && loading ? (
+              <div className="w-100p flex j-content-center mt-10">
+                <DotsLoader />
+              </div>
+            ) : featuredProducts.length ? (
               featuredProducts.map((product, i) => (
                 <div key={i} className="l:mt--20 mt--30 w-full overflow-hidden">
                   <ProductTile
