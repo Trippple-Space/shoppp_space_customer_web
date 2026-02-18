@@ -152,12 +152,11 @@ const ProductTile: FC<IProductTile> = ({
   const [openSingleProductModal, setOpenSingleProductModal] = useState(false);
   const [isToAddProperties, setIsToAddProperties] = useState<boolean>(false);
   const [recentlyViewedId, setRecentlyViewsId] = useState<any>();
-  const [selectedColor, setSelectedColor] = useState(availableColors[0]);
   const [selectedImage, setSelectedImage] = useState(
     product?.variants?.[0]?.media?.[0]?.url
   );
   const [selectedVariant, setSelectedVariant] = useState<ProductVariant>(
-    product?.variants?.[0]
+    uniqueVariantsFromProductImages[0] ?? product?.variants?.[0]
   );
 
   const rowRef = useRef<HTMLDivElement>(null);
@@ -679,7 +678,7 @@ const ProductTile: FC<IProductTile> = ({
         >
           {uniqueVariantsFromProductImages.map((variant: any) =>
             variant?.media?.map((mediaItem: any, i: number) => (
-              <div className="l:w-35.2 l:min-w-35.2 l:h-35.2 w-31 min-w-31 h-31 pointer md:radius-4 radius-3 a-self-center relative">
+              <div key={mediaItem + i} className="l:w-35.2 l:min-w-35.2 l:h-35.2 w-31 min-w-31 h-31 pointer md:radius-4 radius-3 a-self-center relative">
                 {mediaItem?.type === 'image' ? (
                   <Image
                     key={`${variant.id}-${mediaItem.url}-${i}`}
@@ -697,7 +696,6 @@ const ProductTile: FC<IProductTile> = ({
                       setSelectedVariant(variant);
                       setRecentlyViewsId(variant.id);
                       setSelectedImage(mediaItem?.url);
-                      setSelectedColor(variant?.properties?.color);
                     }}
                     alt="product-image"
                     hasLoader={true}
