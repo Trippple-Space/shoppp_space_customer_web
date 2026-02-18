@@ -94,20 +94,69 @@ export const renderCustomerField = (
   return null;
 };
 
+export const buildUserConfigurations = (
+  configurationValues: Record<string, any>,
+  configurationRecords: ConfigurationRecord[]
+) => {
+  const result: Record<string, any> = {};
+
+  configurationRecords.forEach((record: any) => {
+    const schemaName = record?.description?.toLowerCase().replaceAll(' ', '_');
+
+    const customerFields =
+      record.customerDataForm?.filter(
+        (f: any) => f.valueFormat?.targetUserType === 'customer'
+      ) || [];
+
+    const valuesForSchema: Record<string, any> = {};
+
+    customerFields.forEach((field: any) => {
+      const { fieldName, type } = field.valueFormat;
+      const value = configurationValues[fieldName];
+
+      if (isEmptyValue(value)) return;
+
+      if (type === 'string' || type === 'number') {
+        valuesForSchema[fieldName] = value;
+        return;
+      }
+
+      if (type === 'array') {
+        valuesForSchema[fieldName] = value;
+        return;
+      }
+    });
+
+    if (Object.keys(valuesForSchema).length > 0) {
+      result[schemaName] = valuesForSchema;
+    }
+  });
+
+  return result;
+};
+
 interface IDisplayProductConfigurations {
   configurationRecords: ConfigurationRecord[];
   configurationValues: Record<string, any>;
   handleConfigChange: (key: string, value: any) => void;
+  userConfigurations?: Record<string, any>;
+  isEditingConfiguration?: boolean;
+  onEditConfiguration?: () => void;
 }
 
-export const DisplayProductConfigurations: FC<IDisplayProductConfigurations> = ({
+export const DisplayProductConfigurations: FC<
+  IDisplayProductConfigurations
+> = ({
   configurationRecords,
   configurationValues,
   handleConfigChange,
+  userConfigurations,
+  isEditingConfiguration = true,
+  onEditConfiguration,
 }) => {
   return (
     configurationRecords.length > 0 && (
-      <div className="mt-20 flex flex-col gap-16">
+      <div className="flex flex-col gap-16">
         {configurationRecords.map((record) => {
           const customerFields =
             record.customerDataForm?.filter(
@@ -128,7 +177,10 @@ export const DisplayProductConfigurations: FC<IDisplayProductConfigurations> = (
             return null;
 
           return (
-            <div key={record.id} className="flex flex-col gap-12">
+            <div
+              key={record.id}
+              className={`flex flex-col ${userConfigurations && !isEditingConfiguration ? 'gap-4' : 'gap-12'}`}
+            >
               <div className="flex flex-col gap-6 p-10 radius-6 bg-#F0F9FF border border-#91D5FF">
                 <p className="text-12 weight-400 color-#003A8C">
                   This product is a{' '}
@@ -160,64 +212,135 @@ export const DisplayProductConfigurations: FC<IDisplayProductConfigurations> = (
                   </div>
                 )}
 
-                {customerFields.some((f: any) => f.valueFormat?.required) && (
-                  <p className="text-11 color-#003A8C">
-                    Please fill all required fields below to continue.
-                  </p>
-                )}
+                {!userConfigurations &&
+                  customerFields.some((f: any) => f.valueFormat?.required) && (
+                    <p className="text-11 color-#003A8C">
+                      Please fill all required fields below to continue.
+                    </p>
+                  )}
               </div>
-
               {customerFields.length > 0 && (
-                <div className="flex flex-col gap-10">
-                  {customerFields.map((field: any) => {
-                    const hasError =
-                      field.valueFormat?.required &&
-                      (() => {
-                        const key = field.valueFormat.fieldName;
-                        const val = configurationValues[key];
+                <>
+                  {userConfigurations &&
+                  !isEditingConfiguration &&
+                  record.description &&
+                  userConfigurations[
+                    record.description.toLowerCase().replaceAll(' ', '_')
+                  ] ? (
+                    <UserConfigurationSummary
+                      userConfigurations={{
+                        [record.description.toLowerCase().replaceAll(' ', '_')]:
+                          userConfigurations[
+                            record.description
+                              .toLowerCase()
+                              .replaceAll(' ', '_')
+                          ],
+                      }}
+                      onEdit={onEditConfiguration ?? (() => {})}
+                    />
+                  ) : (
+                    <div className="flex flex-col gap-10">
+                      {customerFields.map((field: any) => {
+                        const hasError =
+                          field.valueFormat?.required &&
+                          (() => {
+                            const key = field.valueFormat.fieldName;
+                            const val = configurationValues[key];
 
-                        if (field.valueFormat.type === 'array') {
-                          if (!val || typeof val !== 'object') return true;
-                          return field.valueFormat.defaultValue.some(
-                            (k: string) => isEmptyValue(val[k])
-                          );
-                        }
+                            if (field.valueFormat.type === 'array') {
+                              if (!val || typeof val !== 'object') return true;
+                              return field.valueFormat.defaultValue.some(
+                                (k: string) => isEmptyValue(val[k])
+                              );
+                            }
 
-                        return isEmptyValue(val);
-                      })();
+                            return isEmptyValue(val);
+                          })();
 
-                    return (
-                      <div
-                        key={field.valueFormat.fieldName}
-                        className="flex flex-col gap-4"
-                      >
-                        <label className="text-12 weight-400">
-                          {field.keyFormat?.defaultValue}
-                          {field.valueFormat?.required && (
-                            <span style={{ color: 'red' }}> *</span>
-                          )}
-                        </label>
+                        return (
+                          <div
+                            key={field.valueFormat.fieldName}
+                            className="flex flex-col gap-4"
+                          >
+                            <label className="text-12 weight-400">
+                              {field.keyFormat?.defaultValue}
+                              {field.valueFormat?.required && (
+                                <span style={{ color: 'red' }}> *</span>
+                              )}
+                            </label>
 
-                        {renderCustomerField(
-                          field,
-                          configurationValues,
-                          handleConfigChange
-                        )}
+                            {renderCustomerField(
+                              field,
+                              configurationValues,
+                              handleConfigChange
+                            )}
 
-                        {hasError && (
-                          <span className="text-11 color-#D4380D">
-                            This field is required
-                          </span>
-                        )}
-                      </div>
-                    );
-                  })}
-                </div>
+                            {hasError && (
+                              <span className="text-11 color-#D4380D">
+                                This field is required
+                              </span>
+                            )}
+                          </div>
+                        );
+                      })}
+                    </div>
+                  )}
+                </>
               )}
             </div>
           );
         })}
       </div>
     )
+  );
+};
+
+export const UserConfigurationSummary = ({
+  userConfigurations,
+  onEdit,
+}: {
+  userConfigurations: Record<string, any>;
+  onEdit: () => void;
+}) => {
+  return (
+    <div className="flex flex-col gap-10">
+      {Object.entries(userConfigurations).map(([schemaName, fields]) => (
+        <div
+          key={schemaName}
+          className="p-10 radius-6 border border-#0B9378 bg-#EDFCF7 bg-#F5FBFF flex flex-col gap-6"
+        >
+          <div className="flex flex-col gap-4">
+            {Object.entries(fields as Record<string, any>).map(
+              ([key, value]) => {
+                const display =
+                  typeof value === 'object'
+                    ? Object.entries(value)
+                        .map(([k, v]) => `${k}: ${v}`)
+                        .join(', ')
+                    : String(value);
+
+                return (
+                  <div key={key} className="flex justify-between gap-3 text-12">
+                    <span className="color-#00000099 weight-400 capitalize">
+                      {key.replaceAll('_', ' ')}:
+                    </span>
+
+                    <span className="weight-500 color-#000000">{display}</span>
+                  </div>
+                );
+              }
+            )}
+          </div>
+        </div>
+      ))}
+
+      <button
+        type="button"
+        onClick={onEdit}
+        className="self-start text-12 color-#0B9378 weight-500 underline border-none bg-transparent cursor-pointer"
+      >
+        Edit user data
+      </button>
+    </div>
   );
 };

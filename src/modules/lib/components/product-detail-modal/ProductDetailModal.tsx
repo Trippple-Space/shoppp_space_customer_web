@@ -14,9 +14,10 @@ import useTransformProduct, {
 import colorNames from '@/modules/lib/utility/json-data/colors.json';
 import VideoSrc from '../video-src/VideoSrc';
 import {
+  buildUserConfigurations,
   DisplayProductConfigurations,
   isEmptyValue,
-  renderCustomerField,
+  UserConfigurationSummary,
 } from './productConfigurationsHelper';
 
 interface ProductDetailModalProp {
@@ -70,8 +71,10 @@ const ProductDetailModal = ({
   >({});
 
   const [isHover, setIsHover] = useState(false);
+  const [isEditingConfiguration, setIsEditingConfiguration] = useState(false);
 
   const imgRef = useRef<HTMLImageElement>(null);
+  const didInitFromVariantRef = useRef(false);
 
   const filteredVariants = useMemo(() => {
     if (!product?.variants) return [];
@@ -166,6 +169,10 @@ const ProductDetailModal = ({
     return requiredKeysForVariant(firstVariant);
   }, [openSingleProductModal, activeFilters, product?.variants]);
 
+  const selectedVariantItemInCart = cart.cartItems.find(
+    (item) => item.variant.id === selectedVariant?.id
+  );
+
   useEffect(() => {
     if (!isSelectionComplete && imageSource === 'variant') {
       setSelectedImage(
@@ -190,7 +197,14 @@ const ProductDetailModal = ({
   }, [openSingleProductModal]);
 
   useEffect(() => {
-    if (!openSingleProductModal) return;
+    if (!openSingleProductModal) {
+      didInitFromVariantRef.current = false;
+      return;
+    }
+
+    if (didInitFromVariantRef.current) return;
+
+    didInitFromVariantRef.current = true;
 
     if (variant) {
       const filters = buildFiltersFromVariant(variant);
@@ -206,17 +220,35 @@ const ProductDetailModal = ({
       setSelectedImage(product?.variants[0]?.media?.[0]?.url);
       setImageSource('default');
     }
-  }, [openSingleProductModal, variant]);
+  }, [openSingleProductModal]);
+
+  useEffect(() => {
+    if (!selectedVariantItemInCart?.userConfigurations) return;
+
+    const nextValues: Record<string, any> = {};
+
+    Object.values(selectedVariantItemInCart.userConfigurations).forEach(
+      (schema: any) => {
+        if (!schema || typeof schema !== 'object') return;
+
+        Object.entries(schema).forEach(([fieldName, value]) => {
+          nextValues[fieldName] = value;
+        });
+      }
+    );
+
+    setConfigurationValues(nextValues);
+  }, [selectedVariantItemInCart]);
+
+  useEffect(() => {
+    setIsEditingConfiguration(false);
+  }, [selectedVariant?.id]);
 
   const uniqueVariantsFromProductImages = variantSelectedImage
     ? [variant]
     : availableColors
         ?.map((color) => groupedData?.[color]?.[0])
         .filter(Boolean);
-
-  const selectedVariantItemInCart = cart.cartItems.find(
-    (item) => item.variant.id === selectedVariant?.id
-  );
 
   const displayPrice = selectedVariant?.finalPrice || product?.finalPrice;
   const descriptionLength = product?.longDescription?.split(' ')?.length || 0;
@@ -367,6 +399,11 @@ const ProductDetailModal = ({
       return !isEmptyValue(value);
     });
   }, [getRequiredCustomerFields, configurationValues]);
+
+  const userConfigurations = buildUserConfigurations(
+    configurationValues,
+    configurationRecords
+  );
 
   return (
     <div>
@@ -682,11 +719,20 @@ const ProductDetailModal = ({
                                 </div>
                               )}
 
-                            <DisplayProductConfigurations
-                              configurationRecords={configurationRecords}
-                              configurationValues={configurationValues}
-                              handleConfigChange={handleConfigChange}
-                            />
+                            <div className='mt-20'>
+                              <DisplayProductConfigurations
+                                configurationRecords={configurationRecords}
+                                configurationValues={configurationValues}
+                                handleConfigChange={handleConfigChange}
+                                userConfigurations={
+                                  selectedVariantItemInCart?.userConfigurations
+                                }
+                                isEditingConfiguration={isEditingConfiguration}
+                                onEditConfiguration={() =>
+                                  setIsEditingConfiguration(true)
+                                }
+                              />
+                            </div>
 
                             <div className="grid mt-20 mb-10 gap-10">
                               {!selectedVariantItemInCart ? (
@@ -730,7 +776,8 @@ const ProductDetailModal = ({
                                         addToCart(
                                           selectedVariant?.id ?? '0',
                                           selectedVariant?.minPurchaseQuantity ||
-                                            1
+                                            1,
+                                          userConfigurations
                                         );
                                       }
                                     } else {
@@ -764,10 +811,16 @@ const ProductDetailModal = ({
                                 <div className="mb-10">
                                   <QuantitySelector
                                     decrement={() =>
-                                      decrement(selectedVariantItemInCart)
+                                      decrement(
+                                        selectedVariantItemInCart,
+                                        userConfigurations
+                                      )
                                     }
                                     increment={() =>
-                                      increment(selectedVariantItemInCart)
+                                      increment(
+                                        selectedVariantItemInCart,
+                                        userConfigurations
+                                      )
                                     }
                                     cartItem={selectedVariantItemInCart}
                                   />

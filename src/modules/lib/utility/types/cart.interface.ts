@@ -25,7 +25,8 @@ export interface CartItem {
   variant: ProductVariant;
   totalPrice: number;
   discountedPrice: number;
-  createAt: string;
+  userConfigurations?: Record<string, any>;
+  createdAt: string;
   discountValue: number;
   lastUpdated: string;
   meta: any | null;

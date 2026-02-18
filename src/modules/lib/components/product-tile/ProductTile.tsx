@@ -226,6 +226,16 @@ const ProductTile: FC<IProductTile> = ({
     return true;
   }, [allProperties]);
 
+  const hasCustomerConfiguration = useMemo(() => {
+    return (
+      selectedVariant?.configurationRecords?.some((record: any) =>
+        record.customerDataForm?.some(
+          (f: any) => f.valueFormat?.targetUserType === 'customer'
+        )
+      ) ?? false
+    );
+  }, [selectedVariant?.id]);
+
   const visibleTags = useMemo(() => {
     return (product?.tags ?? []).filter(
       (tag: any) => !tag.label?.includes('pill:')
@@ -428,7 +438,10 @@ const ProductTile: FC<IProductTile> = ({
           {selectedVariantItemInCart ? (
             <QuantitySelector
               decrement={() => {
-                if (hasProperties && !shouldAddDirectlyToCart) {
+                if (
+                  (hasProperties && !shouldAddDirectlyToCart) ||
+                  hasCustomerConfiguration
+                ) {
                   setIsToAddProperties(true);
                   handleCloseProductModal();
                 } else {
@@ -436,7 +449,10 @@ const ProductTile: FC<IProductTile> = ({
                 }
               }}
               increment={() => {
-                if (hasProperties && !shouldAddDirectlyToCart) {
+                if (
+                  (hasProperties && !shouldAddDirectlyToCart) ||
+                  hasCustomerConfiguration
+                ) {
                   setIsToAddProperties(true);
                   handleCloseProductModal();
                 } else {
@@ -476,7 +492,10 @@ const ProductTile: FC<IProductTile> = ({
                 {selectedVariant?.status !== 'OUT_OF_STOCK' && (
                   <button
                     onClick={() => {
-                      if (hasProperties && !shouldAddDirectlyToCart) {
+                      if (
+                        (hasProperties && !shouldAddDirectlyToCart) ||
+                        hasCustomerConfiguration
+                      ) {
                         setShowOnBoardingModal(false);
                         setIsToAddProperties(true);
                         handleCloseProductModal();

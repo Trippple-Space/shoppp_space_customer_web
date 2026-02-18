@@ -602,6 +602,9 @@
 .border-\#91D5FF { border-color: #91D5FF; } 
 .color-\#003A8C { color: #003A8C; } 
 .color-\#D4380D { color: #D4380D; } 
+.border-\#0B9378 { border-color: #0B9378; } 
+.bg-\#F5FBFF { background-color: #F5FBFF; } 
+.color-\#000000 { color: #000000; } 
 .l-3 { left: 3px; } 
 .overflow-x-auto { overflow-x: auto; } 
 .min-w-90 { min-width: 90px; } 
@@ -622,7 +625,6 @@
 .h-350 { height: 350px; } 
 .w-32 { width: 32px; } 
 .h-32 { height: 32px; } 
-.border-\#0B9378 { border-color: #0B9378; } 
 .opacity-40 { opacity: 40%; } 
 .bg-\#DEFFF9\! { background-color: #DEFFF9 !important; } 
 .color-\#0B9378\! { color: #0B9378 !important; } 
@@ -697,7 +699,6 @@
 .h-70 { height: 70px; } 
 .h-60p { height: 60%; } 
 .j-content-start { justify-content: flex-start; } 
-.color-\#000000 { color: #000000; } 
 .bg-grey-300 { background-color: #E4E1DF; } 
 .h-340 { height: 340px; } 
 .mr-4 { margin-right: 4px; } 
