@@ -1,4 +1,4 @@
-import { FC } from 'react';
+import { FC, useState } from 'react';
 import { ConfigurationRecord } from '../../utility/types/product.interface';
 
 export const isEmptyValue = (v: any) => {
@@ -108,6 +108,11 @@ export const buildUserConfigurations = (
         (f: any) => f.valueFormat?.targetUserType === 'customer'
       ) || [];
 
+    const vendorFields =
+      record.customerDataForm?.filter(
+        (f: any) => f.valueFormat?.targetUserType !== 'customer'
+      ) || [];
+
     const valuesForSchema: Record<string, any> = {};
 
     customerFields.forEach((field: any) => {
@@ -125,6 +130,14 @@ export const buildUserConfigurations = (
         valuesForSchema[fieldName] = value;
         return;
       }
+    });
+
+    vendorFields.forEach((field: any) => {
+      const { fieldName, defaultValue } = field.valueFormat;
+
+      if (isEmptyValue(defaultValue)) return;
+
+      valuesForSchema[fieldName] = defaultValue;
     });
 
     if (Object.keys(valuesForSchema).length > 0) {
@@ -295,7 +308,7 @@ export const DisplayProductConfigurations: FC<
   );
 };
 
-export const UserConfigurationSummary = ({
+const UserConfigurationSummary = ({
   userConfigurations,
   onEdit,
 }: {
@@ -312,7 +325,6 @@ export const UserConfigurationSummary = ({
           <div className="flex flex-col gap-4">
             {Object.entries(fields as Record<string, any>).map(
               ([key, value]) => {
-                
                 const display =
                   typeof value === 'object'
                     ? Object.entries(value)
@@ -342,6 +354,105 @@ export const UserConfigurationSummary = ({
       >
         Edit user data
       </button>
+    </div>
+  );
+};
+
+const renderConfigDetails = (value: any) => {
+  if (
+    value === undefined ||
+    value === null ||
+    value === '' ||
+    (Array.isArray(value) && value.length === 0)
+  ) {
+    return null;
+  }
+
+  if (typeof value !== 'object' || Array.isArray(value)) {
+    return (
+      <div className="text-12 color-#00000099">
+        {Array.isArray(value) ? value.join(', ') : String(value)}
+      </div>
+    );
+  }
+
+  return Object.entries(value).map(([k, v]) => {
+    if (v && typeof v === 'object' && !Array.isArray(v)) {
+      return (
+        <div key={k} className="flex flex-col gap-2">
+          <span className="text-12 color-#00000099 capitalize">
+            {k.replaceAll('_', ' ')}
+          </span>
+
+          <div className="flex flex-col gap-1 ml-6">
+            {Object.entries(v).map(([nk, nv]) => (
+              <div
+                key={nk}
+                className="flex space-between gap-12 text-12 color-#00000099"
+              >
+                <span className="capitalize">{nk.replaceAll('_', ' ')}</span>
+                <span className="weight-500 color-#000000E0">{String(nv)}</span>
+              </div>
+            ))}
+          </div>
+        </div>
+      );
+    }
+
+    return (
+      <div key={k} className="flex gap-12 space-between text-12">
+        <span className="capitalize color-#00000099">
+          {k.replaceAll('_', ' ')}
+        </span>
+        <span className="weight-500 color-#000000E0">{String(v)}</span>
+      </div>
+    );
+  });
+};
+
+export const ConfigPill = ({ title, value }: { title: string; value: any }) => {
+  const [open, setOpen] = useState(false);
+
+  return (
+    <div
+      className="sm:relative"
+      onMouseEnter={() => setOpen(true)}
+      onMouseLeave={() => setOpen(false)}
+    >
+      <span
+        className="text-12 weight-500 hover:pointer"
+        style={{
+          padding: '6px 10px',
+          borderRadius: 999,
+          background: '#F0F9FF',
+          border: '1px solid #91D5FF',
+          color: '#003A8C',
+          whiteSpace: 'nowrap',
+        }}
+      >
+        {title}
+      </span>
+
+      {open && (
+        <div
+          className="absolute z-50 radius-6 border border-#00000014 bg-white p-10 flex flex-col gap-6 min-w-250"
+          style={{
+            top: '120%',
+            left: 0,
+            boxShadow: '0px 6px 24px rgba(0,0,0,0.08)',
+            width: 'max-content',
+            maxWidth: 'calc(100vw - 32px)',
+          }}
+        >
+          <p className="text-12 weight-600 capitalize color-#000000E0">
+            {title}
+          </p>
+
+          <div className="flex flex-col gap-4">
+            {renderConfigDetails(value)}
+          </div>
+        </div>
+      )}
     </div>
   );
 };

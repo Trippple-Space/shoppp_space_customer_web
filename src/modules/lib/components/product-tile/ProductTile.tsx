@@ -183,13 +183,19 @@ const ProductTile: FC<IProductTile> = ({
       const variantIdMinimumPurchase = localStorage.getItem(
         'variantIdMinimumPurchase'
       );
+      const storedConfig = localStorage.getItem('userConfigurations');
+      const userConfigurations: Record<string, any> | null = storedConfig
+        ? JSON.parse(storedConfig)
+        : null;
+
       if (variantId && variantIdMinimumPurchase) {
         const parsedMinimumPurchase = parseInt(variantIdMinimumPurchase, 10);
         if (variantId && !isNaN(parsedMinimumPurchase)) {
-          addToCart(variantId, parsedMinimumPurchase);
+          addToCart(variantId, parsedMinimumPurchase, userConfigurations ?? undefined);
         }
         localStorage.removeItem('variantId');
         localStorage.removeItem('variantIdMinimumPurchase');
+        localStorage.removeItem('userConfigurations');
       }
     }
   }, [isAuthenticated]);

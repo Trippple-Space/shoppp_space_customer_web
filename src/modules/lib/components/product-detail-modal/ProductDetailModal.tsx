@@ -719,7 +719,7 @@ const ProductDetailModal = ({
                                 </div>
                               )}
 
-                            <div className='mt-20'>
+                            <div className="mt-20">
                               <DisplayProductConfigurations
                                 configurationRecords={configurationRecords}
                                 configurationValues={configurationValues}
@@ -790,6 +790,12 @@ const ProductDetailModal = ({
                                         selectedVariant?.minPurchaseQuantity.toString() ||
                                           '1'
                                       );
+                                      if (userConfigurations) {
+                                        localStorage.setItem(
+                                          'userConfigurations',
+                                          JSON.stringify(userConfigurations)
+                                        );
+                                      }
                                       isLoginModal();
                                     }
                                   }}

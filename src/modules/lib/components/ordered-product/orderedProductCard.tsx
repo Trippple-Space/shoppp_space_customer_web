@@ -6,6 +6,7 @@ import {
 import React from 'react';
 import Image from '../image/Image';
 import VideoSrc from '../video-src/VideoSrc';
+import { ConfigPill } from '../product-detail-modal/productConfigurationsHelper';
 
 function orderedProductCard({ orderedProducts }: any) {
   const cartItems = getCartItems(orderedProducts?.cart?.storeGroups);
@@ -78,79 +79,36 @@ function orderedProductCard({ orderedProducts }: any) {
                 </div>
               </div>
 
-              {item?.userConfigurations && (
-                <div className="py-12">
-                  {Object.keys(item?.userConfigurations ?? {}).length >
-                    0 && (
-                    <div className="border-t border-#00000014 flex flex-col gap-4">
-                      <p className="text-12 weight-500 uppercase color-#000000E0 line-height-16 mt-12">
-                        Customizations
-                      </p>
-
-                      <div className="flex flex-col gap-2">
-                        {Object.entries(item?.userConfigurations ?? {}).map(
-                          ([key, value]) => {
+              {item?.userConfigurations &&
+                Object.keys(item.userConfigurations).length > 0 && (
+                  <div className="py-12">
+                    <div className="pt-10 flex flex-col gap-6">
+                      <div
+                        className="flex gap-8 flex-wrap relative"
+                        style={{ rowGap: 8 }}
+                      >
+                        {Object.entries(item.userConfigurations).map(
+                          ([recordName, recordValue]) => {
                             if (
-                              value === undefined ||
-                              value === null ||
-                              value === '' ||
-                              (Array.isArray(value) && value.length === 0) ||
-                              (typeof value === 'object' &&
-                                !Array.isArray(value) &&
-                                Object.keys(value ?? {}).length === 0)
-                            ) {
+                              !recordValue ||
+                              typeof recordValue !== 'object' ||
+                              Object.keys(recordValue).length === 0
+                            )
                               return null;
-                            }
-
-                            let display = '';
-
-                            if (
-                              value &&
-                              typeof value === 'object' &&
-                              !Array.isArray(value)
-                            ) {
-                              display = Object.entries(value)
-                                .map(([k, v]) => {
-                                  if (v && typeof v === 'object') {
-                                    return `${k.replaceAll('_', ' ')}: ${Object.entries(
-                                      v
-                                    )
-                                      .map(
-                                        ([nk, nv]) =>
-                                          `${nk.replaceAll('_', ' ')}: ${nv}`
-                                      )
-                                      .join(', ')}`;
-                                  }
-                                  return `${k.replaceAll('_', ' ')}: ${v}`;
-                                })
-                                .join(', ');
-                            } else if (Array.isArray(value)) {
-                              display = value.join(', ');
-                            } else {
-                              display = String(value);
-                            }
 
                             return (
-                              <div
-                                key={key}
-                                className="flex justify-between text-12 flex-col"
-                              >
-                                <span className="color-#00000099 weight-400 capitalize">
-                                  {key.replaceAll('_', ' ')}
-                                </span>
-
-                                <span className="weight-500 color-#00000099 ml-5">
-                                  {display}
-                                </span>
-                              </div>
+                              <ConfigPill
+                                key={recordName}
+                                title={recordName.replaceAll('_', ' ')}
+                                value={recordValue}
+                              />
                             );
                           }
                         )}
                       </div>
                     </div>
-                  )}
-                </div>
-              )}
+                  </div>
+                )}
             </div>
           );
         })}
