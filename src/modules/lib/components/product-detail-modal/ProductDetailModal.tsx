@@ -17,7 +17,6 @@ import {
   buildUserConfigurations,
   DisplayProductConfigurations,
   isEmptyValue,
-  UserConfigurationSummary,
 } from './productConfigurationsHelper';
 
 interface ProductDetailModalProp {
