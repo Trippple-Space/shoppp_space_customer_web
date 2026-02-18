@@ -146,6 +146,34 @@ const ProductTile: FC<IProductTile> = ({
     }
   }, []);
 
+  const configPills = useMemo(() => {
+    const records = selectedVariant?.configurationRecords ?? [];
+
+    return records
+      .filter((r: any) => !!r?.description)
+      .map((r: any) => ({
+        text: r.description,
+        pillBackground: '#FFF7E6',
+        pillColor: '#AD6800',
+        source: 'config',
+      }));
+  }, [selectedVariant?.id]);
+
+  const finalTopPills = useMemo(() => {
+    const configs = configPills.slice(0, 2);
+    const normal = topTwoPills ?? [];
+
+    if (configs.length >= 2) {
+      return configs;
+    }
+
+    if (configs.length === 1) {
+      return [...configs, normal[0]].filter(Boolean);
+    }
+
+    return normal.slice(0, 2);
+  }, [configPills, topTwoPills]);
+
   const isSaved = savedVariants?.find(
     (item: SavedVariant) => item.variantId === selectedVariant?.id
   );
@@ -191,7 +219,11 @@ const ProductTile: FC<IProductTile> = ({
       if (variantId && variantIdMinimumPurchase) {
         const parsedMinimumPurchase = parseInt(variantIdMinimumPurchase, 10);
         if (variantId && !isNaN(parsedMinimumPurchase)) {
-          addToCart(variantId, parsedMinimumPurchase, userConfigurations ?? undefined);
+          addToCart(
+            variantId,
+            parsedMinimumPurchase,
+            userConfigurations ?? undefined
+          );
         }
         localStorage.removeItem('variantId');
         localStorage.removeItem('variantIdMinimumPurchase');
@@ -564,8 +596,8 @@ const ProductTile: FC<IProductTile> = ({
         </div>
 
         {/* PILLS */}
-        <div className="absolute w-fit h-fit t-0 l-0">
-          {topTwoPills.map((pill, index) => (
+        <div className="absolute w-fit h-fit t-0 l-0 z-1">
+          {finalTopPills.map((pill, index) => (
             <div
               key={index + pill.text + pill.pillColor}
               className="mt-10 l:ml-15 l:mt-15 whitespace-nowrap w-fit h-20 radius-20 flex a-items-center j-content-center px-10 py-15 ml-5"
