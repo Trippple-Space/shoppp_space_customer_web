@@ -23,7 +23,9 @@ import { SavedVariant } from '../../utility/types/SavedVariant.interface';
 import MiniReview from '@/modules/views/product-details/reviews/MiniReview';
 import { IFetchedReview } from '../../utility/types/review.interface';
 import useGetRatingStats from '../../utility/hooks/use-get-rating-stats';
-import useTransformProduct from '../../utility/hooks/use-transform-product';
+import useTransformProduct, {
+  getVariantValue,
+} from '../../utility/hooks/use-transform-product';
 import {
   useRecentlyViewedActions,
   useRecentlyViewedVariant,
@@ -69,9 +71,67 @@ const ProductTile: FC<IProductTile> = ({
         productImages: [],
         allProperties: {},
       };
-  const uniqueVariantsFromProductImages = availableColors
-    ?.map((color) => groupedData?.[color]?.[0])
-    .filter(Boolean);
+
+  const allPropertiesWithSize = useMemo(() => {
+    const props: Record<string, string[]> = { ...allProperties };
+
+    const sizes = Array.from(
+      new Set(product?.variants?.map((v) => v.size).filter(Boolean))
+    ) as string[];
+
+    if (sizes.length) {
+      props.size = sizes;
+    }
+
+    return props;
+  }, [allProperties, product?.variants]);
+
+  const uniqueVariantsFromProductImages = useMemo(() => {
+    if (!product?.variants?.length) return [];
+
+    const candidateKeys = [
+      ...(allPropertiesWithSize.color?.length ? ['color'] : []),
+      ...Object.keys(allPropertiesWithSize).filter(
+        (k) => k !== 'color' && k !== 'size'
+      ),
+      ...(allPropertiesWithSize.size?.length ? ['size'] : []),
+    ];
+
+    const uniqueKey = candidateKeys.find((key) => {
+      const values = new Set(
+        product.variants
+          .map((v) => String(getVariantValue(v, key) ?? '').trim())
+          .filter(Boolean)
+      );
+
+      return values.size > 1;
+    });
+
+    if (!uniqueKey) {
+      return product.variants;
+    }
+
+    const map = new Map<string, ProductVariant>();
+    const rest: ProductVariant[] = [];
+
+    for (const v of product.variants) {
+      const raw = getVariantValue(v, uniqueKey);
+      const value = String(raw ?? '')
+        .trim()
+        .toLowerCase();
+
+      if (!value) {
+        rest.push(v);
+        continue;
+      }
+
+      if (!map.has(value)) {
+        map.set(value, v);
+      }
+    }
+
+    return Array.from(map.values()).concat(rest);
+  }, [product?.variants, allPropertiesWithSize]);
 
   const { orders, fetching: orderFetching } = useProductTileOrders({
     filters: { status: { In: `${onGoingOrderStatusQuery},DELIVERED` } },
@@ -146,6 +206,34 @@ const ProductTile: FC<IProductTile> = ({
     }
   }, []);
 
+  const configPills = useMemo(() => {
+    const records = selectedVariant?.configurationRecords ?? [];
+
+    return records
+      .filter((r: any) => !!r?.description)
+      .map((r: any) => ({
+        text: r.description,
+        pillBackground: '#FFF7E6',
+        pillColor: '#AD6800',
+        source: 'config',
+      }));
+  }, [selectedVariant?.id]);
+
+  const finalTopPills = useMemo(() => {
+    const configs = configPills.slice(0, 2);
+    const normal = topTwoPills ?? [];
+
+    if (configs.length >= 2) {
+      return configs;
+    }
+
+    if (configs.length === 1) {
+      return [...configs, normal[0]].filter(Boolean);
+    }
+
+    return normal.slice(0, 2);
+  }, [configPills, topTwoPills]);
+
   const isSaved = savedVariants?.find(
     (item: SavedVariant) => item.variantId === selectedVariant?.id
   );
@@ -191,7 +279,11 @@ const ProductTile: FC<IProductTile> = ({
       if (variantId && variantIdMinimumPurchase) {
         const parsedMinimumPurchase = parseInt(variantIdMinimumPurchase, 10);
         if (variantId && !isNaN(parsedMinimumPurchase)) {
-          addToCart(variantId, parsedMinimumPurchase, userConfigurations ?? undefined);
+          addToCart(
+            variantId,
+            parsedMinimumPurchase,
+            userConfigurations ?? undefined
+          );
         }
         localStorage.removeItem('variantId');
         localStorage.removeItem('variantIdMinimumPurchase');
@@ -564,8 +656,8 @@ const ProductTile: FC<IProductTile> = ({
         </div>
 
         {/* PILLS */}
-        <div className="absolute w-fit h-fit t-0 l-0">
-          {topTwoPills.map((pill, index) => (
+        <div className="absolute w-fit h-fit t-0 l-0 z-1">
+          {finalTopPills.map((pill, index) => (
             <div
               key={index + pill.text + pill.pillColor}
               className="mt-10 l:ml-15 l:mt-15 whitespace-nowrap w-fit h-20 radius-20 flex a-items-center j-content-center px-10 py-15 ml-5"

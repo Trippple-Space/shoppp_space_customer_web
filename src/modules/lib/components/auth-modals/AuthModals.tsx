@@ -75,6 +75,7 @@ export default function AuthModals() {
 
               setStep(2);
             }}
+            isLoading={verifyingEmail}
           />
         )}
 

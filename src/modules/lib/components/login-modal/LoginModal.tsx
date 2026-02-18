@@ -5,12 +5,14 @@ import './LoginModal.module.scss';
 import { useCartStore } from '../../utility/store/cart.store';
 import { motion, AnimatePresence } from 'framer-motion';
 import AuthModals from '../auth-modals/AuthModals';
+import { usePathname } from 'next/navigation';
 
 const LoginModal = () => {
   const { showLoginModal, isLoginModal } = useCartStore();
+  const pathname = usePathname();
 
   useEffect(() => {
-    if (showLoginModal) {
+    if (showLoginModal && shouldRender) {
       document.body.style.overflow = 'hidden';
     } else {
       document.body.style.overflow = '';
@@ -21,10 +23,12 @@ const LoginModal = () => {
     };
   }, [showLoginModal]);
 
+  const shouldRender = !pathname.startsWith('/auth');
+
   return (
     <>
       <AnimatePresence>
-        {showLoginModal ? (
+        {shouldRender && showLoginModal ? (
           <div className="radius-8 w-100p">
             <div
               className="fixed l-0 t-0 h-full w-full z-20"

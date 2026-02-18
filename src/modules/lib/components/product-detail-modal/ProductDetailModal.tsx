@@ -57,6 +57,7 @@ const ProductDetailModal = ({
   const [activeFilters, setActiveFilters] = useState<Record<string, string>>(
     {}
   );
+  const [forcedVariantId, setForcedVariantId] = useState<string | undefined>();
 
   const [selectedImage, setSelectedImage] = useState<string | undefined>(
     variant?.media?.[0]?.url || product?.variants[0]?.media?.[0]?.url
@@ -130,10 +131,27 @@ const ProductDetailModal = ({
     return requiredKeys.every((key) => activeFilters[key]);
   }, [filteredVariants, activeFilters]);
 
-  const selectedVariant = useMemo(() => {
+  /* const selectedVariant = useMemo(() => {
     if (!isSelectionComplete) return undefined;
     return filteredVariants[0];
-  }, [filteredVariants, isSelectionComplete]);
+  }, [filteredVariants, isSelectionComplete]); */
+
+  const selectedVariant = useMemo(() => {
+    if (isSelectionComplete) {
+      return filteredVariants[0];
+    }
+
+    if (forcedVariantId && product?.variants?.length) {
+      return product.variants.find((v) => v.id === forcedVariantId);
+    }
+
+    return undefined;
+  }, [
+    isSelectionComplete,
+    filteredVariants,
+    forcedVariantId,
+    product?.variants,
+  ]);
 
   const missingRequiredOptions = useMemo(() => {
     if (!product?.variants?.length) return [];
@@ -167,6 +185,18 @@ const ProductDetailModal = ({
     const firstVariant = product.variants[0];
     return requiredKeysForVariant(firstVariant);
   }, [openSingleProductModal, activeFilters, product?.variants]);
+
+  const hasAnySelectableOptions = useMemo(() => {
+    if (!product?.variants?.length) return false;
+
+    return product.variants.some((v) => {
+      if (v.size) return true;
+
+      return Object.values(v.properties || {}).some(
+        (val) => val !== null && val !== undefined && String(val).trim() !== ''
+      );
+    });
+  }, [product?.variants]);
 
   const selectedVariantItemInCart = cart.cartItems.find(
     (item) => item.variant.id === selectedVariant?.id
@@ -215,6 +245,16 @@ const ProductDetailModal = ({
         setImageSource('variant');
       }
     } else {
+      if (!hasAnySelectableOptions && product?.variants?.length) {
+        const first = product.variants[0];
+
+        setForcedVariantId(first.id);
+        setActiveFilters({});
+        setSelectedImage(first.media?.[0]?.url);
+        setImageSource('variant');
+        return;
+      }
+
       setActiveFilters({});
       setSelectedImage(product?.variants[0]?.media?.[0]?.url);
       setImageSource('default');
@@ -243,11 +283,65 @@ const ProductDetailModal = ({
     setIsEditingConfiguration(false);
   }, [selectedVariant?.id]);
 
-  const uniqueVariantsFromProductImages = variantSelectedImage
+  /* const uniqueVariantsFromProductImages = variantSelectedImage
     ? [variant]
     : availableColors
         ?.map((color) => groupedData?.[color]?.[0])
-        .filter(Boolean);
+        .filter(Boolean); */
+
+  const uniqueVariantsFromProductImages = useMemo(() => {
+    if (variantSelectedImage) {
+      return variant ? [variant] : [];
+    }
+
+    if (!product?.variants?.length) return [];
+
+    // build list of candidate keys that can define uniqueness
+    // prefer color first, then others, then size
+    const candidateKeys = [
+      ...(allPropertiesWithSize.color?.length ? ['color'] : []),
+      ...Object.keys(allPropertiesWithSize).filter(
+        (k) => k !== 'color' && k !== 'size'
+      ),
+      ...(allPropertiesWithSize.size?.length ? ['size'] : []),
+    ];
+
+    // pick the first key that actually varies across variants
+    const uniqueKey = candidateKeys.find((key) => {
+      const values = new Set(
+        product.variants
+          .map((v) => String(getVariantValue(v, key) ?? '').trim())
+          .filter(Boolean)
+      );
+
+      return values.size > 1;
+    });
+    
+    if (!uniqueKey) {
+      return product.variants;
+    }
+
+    const map = new Map<string, ProductVariant>();
+    const rest: ProductVariant[] = [];
+
+    for (const v of product.variants) {
+      const raw = getVariantValue(v, uniqueKey);
+      const value = String(raw ?? '')
+        .trim()
+        .toLowerCase();
+
+      if (!value) {
+        rest.push(v);
+        continue;
+      }
+
+      if (!map.has(value)) {
+        map.set(value, v);
+      }
+    }
+
+    return Array.from(map.values()).concat(rest);
+  }, [variantSelectedImage, variant, product?.variants, allPropertiesWithSize]);
 
   const displayPrice = selectedVariant?.finalPrice || product?.finalPrice;
   const descriptionLength = product?.longDescription?.split(' ')?.length || 0;
@@ -272,6 +366,7 @@ const ProductDetailModal = ({
   };
 
   const toggleFilter = (key: string, value: string) => {
+    setForcedVariantId(undefined);
     setActiveFilters((prev) => {
       if (prev[key] === value) {
         const copy = { ...prev };
@@ -301,6 +396,7 @@ const ProductDetailModal = ({
   };
 
   const resetToDefault = () => {
+    setForcedVariantId(undefined);
     setActiveFilters({});
     setSelectedImage(product?.variants[0]?.media?.[0]?.url);
     setImageSource('default');
@@ -514,6 +610,7 @@ const ProductDetailModal = ({
                                                 return;
                                               }
 
+                                              setForcedVariantId(vari.id);
                                               setActiveFilters(
                                                 buildFiltersFromVariant(vari)
                                               );

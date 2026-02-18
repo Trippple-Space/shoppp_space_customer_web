@@ -11,9 +11,10 @@ type StepOneProps = {
   email: string;
   setEmail: (value: string) => void;
   onContinue: () => void;
+  isLoading?: boolean;
 };
 
-export default function StepOne({ email, setEmail, onContinue }: StepOneProps) {
+export default function StepOne({ email, setEmail, onContinue, isLoading }: StepOneProps) {
   const [error, setError] = useState('');
   const { googleOauthInitializer } = useGoogleOauth();
 
@@ -93,7 +94,8 @@ export default function StepOne({ email, setEmail, onContinue }: StepOneProps) {
 
       <button
         onClick={handleContinue}
-        className="bg-green text-white p-12 l:py-15 radius-14 w-full border text-14 mt-10 hover:pointer font-inter hover:bg-darkgreen g|transition:0.5s disabled:bg-grey weight-400 flex a-items-center j-content-center gap-5"
+        disabled={isLoading}
+        className="bg-green text-white p-12 l:py-15 radius-14 w-full border text-14 mt-10 hover:pointer font-inter hover:bg-darkgreen g|transition:0.5s disabled:bg-grey disabled:cursor-not-allowed weight-400 flex a-items-center j-content-center gap-5"
       >
         Continue with Email
         <HiOutlineArrowNarrowRight className="w-24 h-24 text-#374957" />

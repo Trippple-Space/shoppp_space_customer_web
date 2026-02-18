@@ -66,7 +66,7 @@ const ProductDetails = ({ product }: { product: Product }) => {
   const [activeFilters, setActiveFilters] = useState<Record<string, string>>(
     {}
   );
-
+  const [forcedVariantId, setForcedVariantId] = useState<string | undefined>();
   const [selectedImage, setSelectedImage] = useState<string | undefined>(
     product.variants[0]?.media?.[0]?.url
   );
@@ -149,9 +149,21 @@ const ProductDetails = ({ product }: { product: Product }) => {
   }, [filteredVariants, activeFilters]);
 
   const selectedVariant = useMemo(() => {
-    if (!isSelectionComplete) return undefined;
-    return filteredVariants[0];
-  }, [filteredVariants, isSelectionComplete]);
+    if (isSelectionComplete) {
+      return filteredVariants[0];
+    }
+
+    if (forcedVariantId && product?.variants?.length) {
+      return product.variants.find((v) => v.id === forcedVariantId);
+    }
+
+    return undefined;
+  }, [
+    isSelectionComplete,
+    filteredVariants,
+    forcedVariantId,
+    product?.variants,
+  ]);
 
   const missingRequiredOptions = useMemo(() => {
     if (!product?.variants?.length) return [];
@@ -185,11 +197,64 @@ const ProductDetails = ({ product }: { product: Product }) => {
     return requiredKeysForVariant(firstVariant);
   }, [activeFilters, product?.variants]);
 
-  // TODO: unique variants should not always rely on the availability of a color
-  // Or logically, it does make sense that a product is only visually different if the colors are different
-  const uniqueVariantsFromProductImages = availableColors
-    ?.map((color) => groupedData?.[color]?.[0])
-    .filter(Boolean);
+  const hasAnySelectableOptions = useMemo(() => {
+    if (!product?.variants?.length) return false;
+
+    return product.variants.some((v) => {
+      if (v.size) return true;
+
+      return Object.values(v.properties || {}).some(
+        (val) => val !== null && val !== undefined && String(val).trim() !== ''
+      );
+    });
+  }, [product?.variants]);
+
+  const uniqueVariantsFromProductImages = useMemo(() => {
+    if (!product?.variants?.length) return [];
+
+    const candidateKeys = [
+      ...(allPropertiesWithSize.color?.length ? ['color'] : []),
+      ...Object.keys(allPropertiesWithSize).filter(
+        (k) => k !== 'color' && k !== 'size'
+      ),
+      ...(allPropertiesWithSize.size?.length ? ['size'] : []),
+    ];
+
+    const uniqueKey = candidateKeys.find((key) => {
+      const values = new Set(
+        product.variants
+          .map((v) => String(getVariantValue(v, key) ?? '').trim())
+          .filter(Boolean)
+      );
+
+      return values.size > 1;
+    });
+
+    if (!uniqueKey) {
+      return product.variants;
+    }
+
+    const map = new Map<string, ProductVariant>();
+    const rest: ProductVariant[] = [];
+
+    for (const v of product.variants) {
+      const raw = getVariantValue(v, uniqueKey);
+      const value = String(raw ?? '')
+        .trim()
+        .toLowerCase();
+
+      if (!value) {
+        rest.push(v);
+        continue;
+      }
+
+      if (!map.has(value)) {
+        map.set(value, v);
+      }
+    }
+
+    return Array.from(map.values()).concat(rest);
+  }, [product?.variants, allPropertiesWithSize]);
 
   const allImages = uniqueVariantsFromProductImages?.flatMap((variant) =>
     variant.media.map((media) => media.url)
@@ -328,6 +393,18 @@ const ProductDetails = ({ product }: { product: Product }) => {
     setIsEditingConfiguration(false);
   }, [selectedVariant?.id]);
 
+  useEffect(() => {
+    if (!hasAnySelectableOptions && product?.variants?.length) {
+      const first = product.variants[0];
+
+      setForcedVariantId(first.id);
+      setActiveFilters({});
+      setSelectedImage(first.media?.[0]?.url);
+      setImageSource('variant');
+      return;
+    }
+  }, []);
+
   const descriptionLength = product?.longDescription?.split(' ')?.length || 0;
   const maxDisplayDescLength = 144;
 
@@ -349,6 +426,7 @@ const ProductDetails = ({ product }: { product: Product }) => {
   };
 
   const toggleFilter = (key: string, value: string) => {
+    setForcedVariantId(undefined);
     setActiveFilters((prev) => {
       if (prev[key] === value) {
         const copy = { ...prev };
@@ -387,6 +465,7 @@ const ProductDetails = ({ product }: { product: Product }) => {
   };
 
   const resetToDefault = () => {
+    setForcedVariantId(undefined);
     setActiveFilters({});
     setSelectedImage(product.variants[0]?.media?.[0]?.url);
     setImageSource('default');
@@ -747,6 +826,7 @@ const ProductDetails = ({ product }: { product: Product }) => {
                           return;
                         }
 
+                        setForcedVariantId(vari.id);
                         setActiveFilters(buildFiltersFromVariant(vari));
                         setSelectedImage(mediaItem.url);
                         setImageSource('preview');

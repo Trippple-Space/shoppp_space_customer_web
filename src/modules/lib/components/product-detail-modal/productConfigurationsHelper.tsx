@@ -1,5 +1,16 @@
 import { FC, useState } from 'react';
 import { ConfigurationRecord } from '../../utility/types/product.interface';
+import {
+  useFloating,
+  offset,
+  flip,
+  shift,
+  useHover,
+  useDismiss,
+  useInteractions,
+  safePolygon,
+  FloatingPortal,
+} from '@floating-ui/react';
 
 export const isEmptyValue = (v: any) => {
   if (v === null || v === undefined) return true;
@@ -320,7 +331,7 @@ const UserConfigurationSummary = ({
       {Object.entries(userConfigurations).map(([schemaName, fields]) => (
         <div
           key={schemaName}
-          className="p-10 radius-6 border border-#0B9378 bg-#EDFCF7 bg-#F5FBFF flex flex-col gap-6"
+          className="p-10 radius-6 border border-#0B9378 bg-#EDFCF7 flex flex-col gap-6"
         >
           <div className="flex flex-col gap-4">
             {Object.entries(fields as Record<string, any>).map(
@@ -413,14 +424,31 @@ const renderConfigDetails = (value: any) => {
 export const ConfigPill = ({ title, value }: { title: string; value: any }) => {
   const [open, setOpen] = useState(false);
 
+  const { refs, floatingStyles, context } = useFloating({
+    open,
+    onOpenChange: setOpen,
+    placement: 'bottom-start',
+    middleware: [offset(8), flip(), shift({ padding: 8 })],
+  });
+
+  const hover = useHover(context, {
+    handleClose: safePolygon(),
+    move: false,
+  });
+
+  const dismiss = useDismiss(context);
+
+  const { getReferenceProps, getFloatingProps } = useInteractions([
+    hover,
+    dismiss,
+  ]);
+
   return (
-    <div
-      className="sm:relative"
-      onMouseEnter={() => setOpen(true)}
-      onMouseLeave={() => setOpen(false)}
-    >
+    <>
       <span
-        className="text-12 weight-500 hover:pointer"
+        ref={refs.setReference}
+        {...getReferenceProps()}
+        className="text-12 weight-500 hover:pointer inline-block"
         style={{
           padding: '6px 10px',
           borderRadius: 999,
@@ -434,25 +462,23 @@ export const ConfigPill = ({ title, value }: { title: string; value: any }) => {
       </span>
 
       {open && (
-        <div
-          className="absolute z-50 radius-6 border border-#00000014 bg-white p-10 flex flex-col gap-6 min-w-250"
-          style={{
-            top: '120%',
-            left: 0,
-            boxShadow: '0px 6px 24px rgba(0,0,0,0.08)',
-            width: 'max-content',
-            maxWidth: 'calc(100vw - 32px)',
-          }}
-        >
-          <p className="text-12 weight-600 capitalize color-#000000E0">
-            {title}
-          </p>
+        <FloatingPortal>
+          <div
+            ref={refs.setFloating}
+            style={floatingStyles}
+            {...getFloatingProps()}
+            className="z-50 radius-6 border border-#00000014 bg-white p-10 flex flex-col gap-6 min-w-250"
+          >
+            <p className="text-12 weight-600 capitalize color-#000000E0">
+              {title}
+            </p>
 
-          <div className="flex flex-col gap-4">
-            {renderConfigDetails(value)}
+            <div className="flex flex-col gap-4">
+              {renderConfigDetails(value)}
+            </div>
           </div>
-        </div>
+        </FloatingPortal>
       )}
-    </div>
+    </>
   );
 };
