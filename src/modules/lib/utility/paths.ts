@@ -19,4 +19,4 @@ export const paths = {
    contact_us: "/contact-us",
 };
 
-export const protectedPaths = [paths.checkout, paths.orders];
+export const protectedPaths = [/* paths.checkout */, paths.orders];

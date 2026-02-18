@@ -209,30 +209,52 @@ const ProductDetails = ({ product }: { product: Product }) => {
     });
   }, [product?.variants]);
 
-  // TODO: unique variants should not always rely on the availability of a color
-  // Or logically, it does make sense that a product is only visually different if the colors are different
-
   const uniqueVariantsFromProductImages = useMemo(() => {
     if (!product?.variants?.length) return [];
 
-    const withColor = new Map<string, ProductVariant>();
-    const withoutColor: ProductVariant[] = [];
+    const candidateKeys = [
+      ...(allPropertiesWithSize.color?.length ? ['color'] : []),
+      ...Object.keys(allPropertiesWithSize).filter(
+        (k) => k !== 'color' && k !== 'size'
+      ),
+      ...(allPropertiesWithSize.size?.length ? ['size'] : []),
+    ];
+
+    const uniqueKey = candidateKeys.find((key) => {
+      const values = new Set(
+        product.variants
+          .map((v) => String(getVariantValue(v, key) ?? '').trim())
+          .filter(Boolean)
+      );
+
+      return values.size > 1;
+    });
+
+    if (!uniqueKey) {
+      return product.variants;
+    }
+
+    const map = new Map<string, ProductVariant>();
+    const rest: ProductVariant[] = [];
 
     for (const v of product.variants) {
-      const color = v.properties?.color?.trim().toLowerCase();
+      const raw = getVariantValue(v, uniqueKey);
+      const value = String(raw ?? '')
+        .trim()
+        .toLowerCase();
 
-      if (color) {
-        if (!withColor.has(color)) {
-          withColor.set(color, v); // one per color
-        }
-      } else {
-        // no color: keep every variant
-        withoutColor.push(v);
+      if (!value) {
+        rest.push(v);
+        continue;
+      }
+
+      if (!map.has(value)) {
+        map.set(value, v);
       }
     }
 
-    return [Array.from(withColor.values()), ...withoutColor].flat();
-  }, [product?.variants]);
+    return Array.from(map.values()).concat(rest);
+  }, [product?.variants, allPropertiesWithSize]);
 
   const allImages = uniqueVariantsFromProductImages?.flatMap((variant) =>
     variant.media.map((media) => media.url)

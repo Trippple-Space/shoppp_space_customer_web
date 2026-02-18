@@ -296,24 +296,52 @@ const ProductDetailModal = ({
 
     if (!product?.variants?.length) return [];
 
-    const withColor = new Map<string, ProductVariant>();
-    const withoutColor: ProductVariant[] = [];
+    // build list of candidate keys that can define uniqueness
+    // prefer color first, then others, then size
+    const candidateKeys = [
+      ...(allPropertiesWithSize.color?.length ? ['color'] : []),
+      ...Object.keys(allPropertiesWithSize).filter(
+        (k) => k !== 'color' && k !== 'size'
+      ),
+      ...(allPropertiesWithSize.size?.length ? ['size'] : []),
+    ];
+
+    // pick the first key that actually varies across variants
+    const uniqueKey = candidateKeys.find((key) => {
+      const values = new Set(
+        product.variants
+          .map((v) => String(getVariantValue(v, key) ?? '').trim())
+          .filter(Boolean)
+      );
+
+      return values.size > 1;
+    });
+    
+    if (!uniqueKey) {
+      return product.variants;
+    }
+
+    const map = new Map<string, ProductVariant>();
+    const rest: ProductVariant[] = [];
 
     for (const v of product.variants) {
-      const color = v.properties?.color?.trim().toLowerCase();
+      const raw = getVariantValue(v, uniqueKey);
+      const value = String(raw ?? '')
+        .trim()
+        .toLowerCase();
 
-      if (color) {
-        if (!withColor.has(color)) {
-          withColor.set(color, v); // one per color
-        }
-      } else {
-        // no color: keep every variant
-        withoutColor.push(v);
+      if (!value) {
+        rest.push(v);
+        continue;
+      }
+
+      if (!map.has(value)) {
+        map.set(value, v);
       }
     }
 
-    return [Array.from(withColor.values()), ...withoutColor].flat();
-  }, [variantSelectedImage, variant, product?.variants]);
+    return Array.from(map.values()).concat(rest);
+  }, [variantSelectedImage, variant, product?.variants, allPropertiesWithSize]);
 
   const displayPrice = selectedVariant?.finalPrice || product?.finalPrice;
   const descriptionLength = product?.longDescription?.split(' ')?.length || 0;

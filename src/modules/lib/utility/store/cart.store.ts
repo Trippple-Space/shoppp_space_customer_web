@@ -39,7 +39,7 @@ export const useCartStore = create<CartStore>((set, get) => ({
     systemDiscountValue: 0,
   },
 
-  fetching: false,
+  fetching: true,
   applyingCode: false,
   showLoginModal: false,
   pendingRequests: {},

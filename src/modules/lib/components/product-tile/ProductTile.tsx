@@ -23,7 +23,9 @@ import { SavedVariant } from '../../utility/types/SavedVariant.interface';
 import MiniReview from '@/modules/views/product-details/reviews/MiniReview';
 import { IFetchedReview } from '../../utility/types/review.interface';
 import useGetRatingStats from '../../utility/hooks/use-get-rating-stats';
-import useTransformProduct from '../../utility/hooks/use-transform-product';
+import useTransformProduct, {
+  getVariantValue,
+} from '../../utility/hooks/use-transform-product';
 import {
   useRecentlyViewedActions,
   useRecentlyViewedVariant,
@@ -69,28 +71,67 @@ const ProductTile: FC<IProductTile> = ({
         productImages: [],
         allProperties: {},
       };
-      
+
+  const allPropertiesWithSize = useMemo(() => {
+    const props: Record<string, string[]> = { ...allProperties };
+
+    const sizes = Array.from(
+      new Set(product?.variants?.map((v) => v.size).filter(Boolean))
+    ) as string[];
+
+    if (sizes.length) {
+      props.size = sizes;
+    }
+
+    return props;
+  }, [allProperties, product?.variants]);
+
   const uniqueVariantsFromProductImages = useMemo(() => {
     if (!product?.variants?.length) return [];
 
-    const withColor = new Map<string, ProductVariant>();
-    const withoutColor: ProductVariant[] = [];
+    const candidateKeys = [
+      ...(allPropertiesWithSize.color?.length ? ['color'] : []),
+      ...Object.keys(allPropertiesWithSize).filter(
+        (k) => k !== 'color' && k !== 'size'
+      ),
+      ...(allPropertiesWithSize.size?.length ? ['size'] : []),
+    ];
+
+    const uniqueKey = candidateKeys.find((key) => {
+      const values = new Set(
+        product.variants
+          .map((v) => String(getVariantValue(v, key) ?? '').trim())
+          .filter(Boolean)
+      );
+
+      return values.size > 1;
+    });
+
+    if (!uniqueKey) {
+      return product.variants;
+    }
+
+    const map = new Map<string, ProductVariant>();
+    const rest: ProductVariant[] = [];
 
     for (const v of product.variants) {
-      const color = v.properties?.color?.trim().toLowerCase();
+      const raw = getVariantValue(v, uniqueKey);
+      const value = String(raw ?? '')
+        .trim()
+        .toLowerCase();
 
-      if (color) {
-        if (!withColor.has(color)) {
-          withColor.set(color, v); // one per color
-        }
-      } else {
-        // no color: keep every variant
-        withoutColor.push(v);
+      if (!value) {
+        rest.push(v);
+        continue;
+      }
+
+      if (!map.has(value)) {
+        map.set(value, v);
       }
     }
 
-    return [Array.from(withColor.values()), ...withoutColor].flat();
-  }, [product?.variants]);
+    return Array.from(map.values()).concat(rest);
+  }, [product?.variants, allPropertiesWithSize]);
 
   const { orders, fetching: orderFetching } = useProductTileOrders({
     filters: { status: { In: `${onGoingOrderStatusQuery},DELIVERED` } },
