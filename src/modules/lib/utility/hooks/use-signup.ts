@@ -44,7 +44,7 @@ export const useSignUpView = () => {
   const searchParams = useSearchParams();
   const { formHandler: loginFormHandler } = useLoginView()
   const { isAuthenticated, authenticateUser } = useUserStore()
-  const { isLoginModal } = useCartStore()
+  //const { isLoginModal } = useCartStore()
 
   const [step, setStep] = useState<"initial" | "verify" | "createPassword">("initial");
 
@@ -64,7 +64,7 @@ export const useSignUpView = () => {
       });
       localStorage.setItem('signup-email', values.email);
       router.push(`${paths.verify}?token=${response.token}`);
-      isLoginModal()
+      //isLoginModal()
 
     }
   } as FormikConfig<Pick<{ fullname: string; email: string; }, "fullname" | "email">>);
