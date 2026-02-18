@@ -5,9 +5,13 @@ import './LoginModal.module.scss';
 import { useCartStore } from '../../utility/store/cart.store';
 import { motion, AnimatePresence } from 'framer-motion';
 import AuthModals from '../auth-modals/AuthModals';
+import { usePathname } from 'next/navigation';
 
 const LoginModal = () => {
   const { showLoginModal, isLoginModal } = useCartStore();
+  const pathname = usePathname();
+
+  if (pathname.startsWith('/auth')) return null;
 
   useEffect(() => {
     if (showLoginModal) {
