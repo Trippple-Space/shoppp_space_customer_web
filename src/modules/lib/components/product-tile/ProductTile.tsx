@@ -237,9 +237,9 @@ const ProductTile: FC<IProductTile> = ({
   }, [selectedVariant?.id]);
 
   const visibleTags = useMemo(() => {
-    return (product?.tags ?? []).filter(
-      (tag: any) => !tag.label?.includes('pill:')
-    );
+    return (product?.tags ?? [])
+      .filter((tag: any) => !tag.label?.includes('pill:'))
+      .filter((tag: any) => !tag.label?.includes('collection:'));
   }, [product?.tags]);
 
   const [visibleTagCount, setVisibleTagCount] = useState(visibleTags.length);

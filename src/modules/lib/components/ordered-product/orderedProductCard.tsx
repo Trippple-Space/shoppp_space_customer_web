@@ -17,8 +17,8 @@ function orderedProductCard({ orderedProducts }: any) {
             checkMediaType(item?.variant.media[0].url) ?? 'image';
 
           return (
-            <>
-              <div className="bg-whitesmoke radius-5 p-10 l:flex space-between a-items-start">
+            <div className="flex flex-col gap-4 bg-whitesmoke radius-5 p-10">
+              <div className="l:flex space-between a-items-start">
                 <div className="flex gap-10 l:w-60p w-90p">
                   {mediaType === 'image' ? (
                     <Image
@@ -77,7 +77,81 @@ function orderedProductCard({ orderedProducts }: any) {
                   <p className="text-12 text-right"> X {item.quantity}</p>
                 </div>
               </div>
-            </>
+
+              {item?.userConfigurations && (
+                <div className="py-12">
+                  {Object.keys(item?.userConfigurations ?? {}).length >
+                    0 && (
+                    <div className="border-t border-#00000014 flex flex-col gap-4">
+                      <p className="text-12 weight-500 uppercase color-#000000E0 line-height-16 mt-12">
+                        Customizations
+                      </p>
+
+                      <div className="flex flex-col gap-2">
+                        {Object.entries(item?.userConfigurations ?? {}).map(
+                          ([key, value]) => {
+                            if (
+                              value === undefined ||
+                              value === null ||
+                              value === '' ||
+                              (Array.isArray(value) && value.length === 0) ||
+                              (typeof value === 'object' &&
+                                !Array.isArray(value) &&
+                                Object.keys(value ?? {}).length === 0)
+                            ) {
+                              return null;
+                            }
+
+                            let display = '';
+
+                            if (
+                              value &&
+                              typeof value === 'object' &&
+                              !Array.isArray(value)
+                            ) {
+                              display = Object.entries(value)
+                                .map(([k, v]) => {
+                                  if (v && typeof v === 'object') {
+                                    return `${k.replaceAll('_', ' ')}: ${Object.entries(
+                                      v
+                                    )
+                                      .map(
+                                        ([nk, nv]) =>
+                                          `${nk.replaceAll('_', ' ')}: ${nv}`
+                                      )
+                                      .join(', ')}`;
+                                  }
+                                  return `${k.replaceAll('_', ' ')}: ${v}`;
+                                })
+                                .join(', ');
+                            } else if (Array.isArray(value)) {
+                              display = value.join(', ');
+                            } else {
+                              display = String(value);
+                            }
+
+                            return (
+                              <div
+                                key={key}
+                                className="flex justify-between text-12 flex-col"
+                              >
+                                <span className="color-#00000099 weight-400 capitalize">
+                                  {key.replaceAll('_', ' ')}
+                                </span>
+
+                                <span className="weight-500 color-#00000099 ml-5">
+                                  {display}
+                                </span>
+                              </div>
+                            );
+                          }
+                        )}
+                      </div>
+                    </div>
+                  )}
+                </div>
+              )}
+            </div>
           );
         })}
       </div>

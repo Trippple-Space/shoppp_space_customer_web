@@ -429,52 +429,54 @@ const CheckoutPage = () => {
                         'image';
 
                       return (
-                        <div
-                          className={`gap-12 ${store.visible ? 'flex a-items-center' : 'hidden'}`}
-                          key={j}
-                        >
-                          {mediaType === 'image' ? (
-                            <Image
-                              src={cartItem.variant.media?.[0].url}
-                              alt="order image"
-                              className="w-73 h-75 radius-6 border border-#00000014 object-fit"
-                            />
-                          ) : (
-                            <VideoSrc
-                              className="w-73 h-75 radius-6 border border-#00000014 object-fit"
-                              src={cartItem.variant.media?.[0].url}
-                            />
-                          )}
+                        <div className="flex flex-col gap-4">
                           <div
-                            className={`flex-grow-1 flex flex-col ${Object.keys(cartItem?.variant?.properties ?? {}).length > 2 ? 'gap-2.8' : 'gap-6'} overflow-hidden white-space-nowrap text-overflow-ellipsis`}
+                            className={`gap-12 ${store.visible ? 'flex a-items-center' : 'hidden'}`}
+                            key={j}
                           >
-                            <p className="weight-600 text-14 line-height-22 color-#000000E0">
-                              {cartItem?.variant?.product?.name}
-                            </p>
-                            <p
-                              className={`weight-400 color-#0000008C ${Object.keys(cartItem?.variant?.properties ?? {}).length > 2 ? 'text-13.5 line-height-16' : 'text-14 line-height-16.94'}`}
+                            {mediaType === 'image' ? (
+                              <Image
+                                src={cartItem.variant.media?.[0].url}
+                                alt="order image"
+                                className="w-73 h-75 radius-6 border border-#00000014 object-fit"
+                              />
+                            ) : (
+                              <VideoSrc
+                                className="w-73 h-75 radius-6 border border-#00000014 object-fit"
+                                src={cartItem.variant.media?.[0].url}
+                              />
+                            )}
+                            <div
+                              className={`flex-grow-1 flex flex-col ${Object.keys(cartItem?.variant?.properties ?? {}).length > 2 ? 'gap-2.8' : 'gap-6'} overflow-hidden white-space-nowrap text-overflow-ellipsis`}
                             >
-                              Quantity:{' '}
-                              {`${cartItem?.quantity} ${displayStockUnit(
-                                cartItem.variant.stockUnit
-                              )}${cartItem?.quantity > 1 ? 's' : ''}`}
-                            </p>
-                            {cartItem?.variant?.properties?.color && (
+                              <p className="weight-600 text-14 line-height-22 color-#000000E0">
+                                {cartItem?.variant?.product?.name}
+                              </p>
                               <p
-                                className={`weight-400 color-#0000008C capitalize ${Object.keys(cartItem?.variant?.properties ?? {}).length > 2 ? 'text-13.5 line-height-16' : 'text-14 line-height-16.94'}`}
+                                className={`weight-400 color-#0000008C ${Object.keys(cartItem?.variant?.properties ?? {}).length > 2 ? 'text-13.5 line-height-16' : 'text-14 line-height-16.94'}`}
                               >
-                                Color: {cartItem?.variant?.properties?.color}
+                                Quantity:{' '}
+                                {`${cartItem?.quantity} ${displayStockUnit(
+                                  cartItem.variant.stockUnit
+                                )}${cartItem?.quantity > 1 ? 's' : ''}`}
                               </p>
-                            )}
-                            {cartItem?.variant?.size && (
-                              <p className="weight-400 text-13.5 line-height-16 color-#0000008C">
-                                Size: {cartItem?.variant?.size}
-                              </p>
-                            )}
+                              {cartItem?.variant?.properties?.color && (
+                                <p
+                                  className={`weight-400 color-#0000008C capitalize ${Object.keys(cartItem?.variant?.properties ?? {}).length > 2 ? 'text-13.5 line-height-16' : 'text-14 line-height-16.94'}`}
+                                >
+                                  Color: {cartItem?.variant?.properties?.color}
+                                </p>
+                              )}
+                              {cartItem?.variant?.size && (
+                                <p className="weight-400 text-13.5 line-height-16 color-#0000008C">
+                                  Size: {cartItem?.variant?.size}
+                                </p>
+                              )}
 
-                            {cartItem?.variant?.properties &&
-                              Object.entries(cartItem.variant.properties ?? {}).map(
-                                ([key, value]) => {
+                              {cartItem?.variant?.properties &&
+                                Object.entries(
+                                  cartItem.variant.properties ?? {}
+                                ).map(([key, value]) => {
                                   if (key === 'color') return null;
                                   return (
                                     <p
@@ -484,41 +486,116 @@ const CheckoutPage = () => {
                                       {`${key}: ${Array.isArray(value) ? value.join(', ') : value}`}
                                     </p>
                                   );
-                                }
-                              )}
-                          </div>
-                          <div className="flex flex-col gap-10 a-items-end">
-                            <div className="flex a-items-center gap-8">
-                              <p
-                                className={`weight-600 md:text-20 sm:text-16 text-14 md:line-height-28 sm:line-height-24 line-height-22 ${cartItem.variant.status === 'OUT_OF_STOCK' ? 'color-#00000099' : ''}`}
-                              >
-                                {isValidDiscount(cartItem)
-                                  ? formatNumberAsPrice(
-                                      cartItem.discountedPrice
-                                    )
-                                  : formatNumberAsPrice(cartItem.totalPrice)}
-                              </p>
-                              {isValidDiscount(cartItem) && (
+                                })}
+                            </div>
+                            <div className="flex flex-col gap-10 a-items-end">
+                              <div className="flex a-items-center gap-8">
                                 <p
-                                  className={`weight-400 md:text-16 sm:text-12 text-10 md:line-height-24 sm:line-height-20 line-height-18 line-through color-#00000099  ${cartItem.variant.status === 'OUT_OF_STOCK' ? 'color-#00000099' : ''}`}
+                                  className={`weight-600 md:text-20 sm:text-16 text-14 md:line-height-28 sm:line-height-24 line-height-22 ${cartItem.variant.status === 'OUT_OF_STOCK' ? 'color-#00000099' : ''}`}
                                 >
-                                  {formatNumberAsPrice(cartItem.totalPrice)}
+                                  {isValidDiscount(cartItem)
+                                    ? formatNumberAsPrice(
+                                        cartItem.discountedPrice
+                                      )
+                                    : formatNumberAsPrice(cartItem.totalPrice)}
                                 </p>
+                                {isValidDiscount(cartItem) && (
+                                  <p
+                                    className={`weight-400 md:text-16 sm:text-12 text-10 md:line-height-24 sm:line-height-20 line-height-18 line-through color-#00000099  ${cartItem.variant.status === 'OUT_OF_STOCK' ? 'color-#00000099' : ''}`}
+                                  >
+                                    {formatNumberAsPrice(cartItem.totalPrice)}
+                                  </p>
+                                )}
+                              </div>
+                              <p
+                                className="weight-400 text-14 line-height-22 text-danger underline pointer"
+                                onClick={async () => {
+                                  try {
+                                    await removeFromCart(cartItem?.id);
+                                    setAllAddressDeliveryPrice([]);
+                                    //setShouldUpdateFee(true);
+                                  } catch (error) {}
+                                }}
+                              >
+                                Remove
+                              </p>
+                            </div>
+                          </div>
+
+                          {cartItem?.userConfigurations && (
+                            <div className="">
+                              {Object.keys(cartItem?.userConfigurations ?? {})
+                                .length > 0 && (
+                                <div className="border-b pb-12 border-#00000014 flex flex-col gap-4">
+                                  <p className="text-12 weight-500 uppercase color-#000000E0 line-height-16 mt-12">
+                                    Customizations
+                                  </p>
+
+                                  <div className="flex flex-col gap-2">
+                                    {Object.entries(
+                                      cartItem?.userConfigurations ?? {}
+                                    ).map(([key, value]) => {
+                                      if (
+                                        value === undefined ||
+                                        value === null ||
+                                        value === '' ||
+                                        (Array.isArray(value) &&
+                                          value.length === 0) ||
+                                        (typeof value === 'object' &&
+                                          !Array.isArray(value) &&
+                                          Object.keys(value ?? {}).length === 0)
+                                      ) {
+                                        return null;
+                                      }
+
+                                      let display = '';
+
+                                      if (
+                                        value &&
+                                        typeof value === 'object' &&
+                                        !Array.isArray(value)
+                                      ) {
+                                        display = Object.entries(value)
+                                          .map(([k, v]) => {
+                                            if (v && typeof v === 'object') {
+                                              return `${k.replaceAll('_', ' ')}: ${Object.entries(
+                                                v
+                                              )
+                                                .map(
+                                                  ([nk, nv]) =>
+                                                    `${nk.replaceAll('_', ' ')}: ${nv}`
+                                                )
+                                                .join(', ')}`;
+                                            }
+                                            return `${k.replaceAll('_', ' ')}: ${v}`;
+                                          })
+                                          .join(', ');
+                                      } else if (Array.isArray(value)) {
+                                        display = value.join(', ');
+                                      } else {
+                                        display = String(value);
+                                      }
+
+                                      return (
+                                        <div
+                                          key={key}
+                                          className="flex justify-between text-12 flex-col"
+                                        >
+                                          <span className="color-#00000099 weight-400 capitalize">
+                                            {key.replaceAll('_', ' ')}
+                                          </span>
+
+                                          <span className="weight-500 color-#00000099 ml-5">
+                                            {display}
+                                          </span>
+                                        </div>
+                                      );
+                                    })}
+                                  </div>
+                                </div>
                               )}
                             </div>
-                            <p
-                              className="weight-400 text-14 line-height-22 text-danger underline pointer"
-                              onClick={async () => {
-                                try {
-                                  await removeFromCart(cartItem?.id);
-                                  setAllAddressDeliveryPrice([]);
-                                  //setShouldUpdateFee(true);
-                                } catch (error) {}
-                              }}
-                            >
-                              Remove
-                            </p>
-                          </div>
+                          )}
                         </div>
                       );
                     })}

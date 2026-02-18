@@ -428,6 +428,8 @@
 .text-13\.5 { font-size: 13.5px; } 
 .line-height-16 { line-height: 16px; } 
 .color-red { color: red; } 
+.uppercase {    text-transform: uppercase;  } 
+.ml-5 { margin-left: 5px; } 
 .p-4 { padding: 4px; } 
 @layer base {.radius-100 { border-radius: 100px; } } 
 .w-150 { width: 150px; } 
@@ -469,7 +471,6 @@
 .t-70 { top: 70px; } 
 .j-self-end { justify-self: flex-end; } 
 .w-10 { width: 10px; } 
-.ml-5 { margin-left: 5px; } 
 .t-50 { top: 50px; } 
 .r-20 { right: 20px; } 
 .w-34 { width: 34px; } 
@@ -724,7 +725,6 @@
 .min-w-200 { min-width: 200px; } 
 .r-80 { right: 80px; } 
 .t-65 { top: 65px; } 
-.uppercase {    text-transform: uppercase;  } 
 .bg-\#947458 { background-color: #947458; } 
 .bg-\#F6F4F2 { background-color: #F6F4F2; } 
 .r--7 { right: -7px; } 

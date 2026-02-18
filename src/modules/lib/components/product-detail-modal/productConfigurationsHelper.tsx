@@ -312,6 +312,7 @@ export const UserConfigurationSummary = ({
           <div className="flex flex-col gap-4">
             {Object.entries(fields as Record<string, any>).map(
               ([key, value]) => {
+                
                 const display =
                   typeof value === 'object'
                     ? Object.entries(value)

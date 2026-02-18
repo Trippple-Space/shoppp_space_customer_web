@@ -112,79 +112,156 @@ const OrderedProductModal = ({
                       checkMediaType(item?.variant.media[0].url) ?? 'image';
 
                     return (
-                      <div
-                        className={classNames(
-                          'bg-whitesmoke radius-8 p-10 gap-5 flex flex-col  l:flex-row space-between a-items-start'
-                        )}
-                        key={i}
-                      >
-                        <div className="flex gap-10 l:w-60p">
-                          {mediaType === 'image' ? (
-                            <Image
-                              src={item?.variant.media[0].url}
-                              alt={item.variant?.product?.name || ''}
-                              className="w-80 h-80 xl:w-70 xl:h-70 radius-8 object-fit-cover"
-                            />
-                          ) : (
-                            <VideoSrc
-                              className="w-80 h-80 xl:w-70 xl:h-70 radius-8 object-fit-cover"
-                              src={item?.variant.media[0].url}
-                            />
+                      <div className="flex flex-col gap-4 bg-whitesmoke radius-8 p-10">
+                        <div
+                          className={classNames(
+                            'gap-5 flex flex-col l:flex-row space-between a-items-start'
                           )}
-                          <div className="flex flex-col gap-6">
-                            <div className="flex flex-col gap-3">
-                              <div
-                                className="weight-600 text-12 xl:w-10 xl:white-space-nowrap text-overflow-ellipsis"
-                                onClick={() => handleTextClick(item.id)}
-                              >
-                                {ellipseText(
-                                  item.variant.product?.name ?? '',
-                                  expandedId === item.id,
-                                  30
-                                )}
+                          key={i}
+                        >
+                          <div className="flex gap-10 l:w-60p">
+                            {mediaType === 'image' ? (
+                              <Image
+                                src={item?.variant.media[0].url}
+                                alt={item.variant?.product?.name || ''}
+                                className="w-80 h-80 xl:w-70 xl:h-70 radius-8 object-fit-cover"
+                              />
+                            ) : (
+                              <VideoSrc
+                                className="w-80 h-80 xl:w-70 xl:h-70 radius-8 object-fit-cover"
+                                src={item?.variant.media[0].url}
+                              />
+                            )}
+                            <div className="flex flex-col gap-6">
+                              <div className="flex flex-col gap-3">
+                                <div
+                                  className="weight-600 text-12 xl:w-10 xl:white-space-nowrap text-overflow-ellipsis"
+                                  onClick={() => handleTextClick(item.id)}
+                                >
+                                  {ellipseText(
+                                    item.variant.product?.name ?? '',
+                                    expandedId === item.id,
+                                    30
+                                  )}
+                                </div>
+                                <p className="color-#0000008C text-10 w-fit">
+                                  {item.variant.product?.store.name}
+                                </p>
                               </div>
-                              <p className="color-#0000008C text-10 w-fit">
-                                {item.variant.product?.store.name}
-                              </p>
-                            </div>
-                            <div className="flex flex-col gap-5">
-                              {' '}
-                              {item?.variant?.size ? (
-                                <p className="color-#0000008C text-12 w-fit">
-                                  Size: {item?.variant?.size}
-                                </p>
-                              ) : null}
-                              {item.variant.properties.color && (
-                                <p className="color-#0000008C text-12 w-fit">
-                                  Color: {item.variant.properties.color}
-                                </p>
-                              )}
-                              {item?.variant?.properties &&
-                                Object.entries(item.variant.properties).map(
-                                  ([key, value]) => {
-                                    if (key === 'color') return null;
-                                    return (
-                                      <p
-                                        key={key}
-                                        className="color-#0000008C text-14 w-fit"
-                                      >
-                                        {`${key}: ${Array.isArray(value) ? value.join(', ') : value}`}
-                                      </p>
-                                    );
-                                  }
+                              <div className="flex flex-col gap-5">
+                                {' '}
+                                {item?.variant?.size ? (
+                                  <p className="color-#0000008C text-12 w-fit">
+                                    Size: {item?.variant?.size}
+                                  </p>
+                                ) : null}
+                                {item.variant.properties.color && (
+                                  <p className="color-#0000008C text-12 w-fit">
+                                    Color: {item.variant.properties.color}
+                                  </p>
                                 )}
+                                {item?.variant?.properties &&
+                                  Object.entries(item.variant.properties).map(
+                                    ([key, value]) => {
+                                      if (key === 'color') return null;
+                                      return (
+                                        <p
+                                          key={key}
+                                          className="color-#0000008C text-14 w-fit"
+                                        >
+                                          {`${key}: ${Array.isArray(value) ? value.join(', ') : value}`}
+                                        </p>
+                                      );
+                                    }
+                                  )}
+                              </div>
                             </div>
                           </div>
+                          <div className="l:grid flex flex-col a-items-end w-100p l:w-fit gap-5 mt-10 l:mt-0">
+                            <p className="text-14 weight-500">
+                              {formatNumberAsPrice(item.totalPrice)}
+                            </p>
+                            <p className="text-12 weight-600 color-#0000008C text-right">
+                              {' '}
+                              X {item.quantity}
+                            </p>
+                          </div>
                         </div>
-                        <div className="l:grid flex flex-col a-items-end w-100p l:w-fit gap-5 mt-10 l:mt-0">
-                          <p className="text-14 weight-500">
-                            {formatNumberAsPrice(item.totalPrice)}
-                          </p>
-                          <p className="text-12 weight-600 color-#0000008C text-right">
-                            {' '}
-                            X {item.quantity}
-                          </p>
-                        </div>
+
+                        {item?.userConfigurations && (
+                          <div className="py-12">
+                            {Object.keys(item?.userConfigurations ?? {})
+                              .length > 0 && (
+                              <div className="border-t border-#00000014 flex flex-col gap-4">
+                                <p className="text-12 weight-500 uppercase color-#000000E0 line-height-16 mt-12">
+                                  Customizations
+                                </p>
+
+                                <div className="flex flex-col gap-2">
+                                  {Object.entries(
+                                    item?.userConfigurations ?? {}
+                                  ).map(([key, value]) => {
+                                    if (
+                                      value === undefined ||
+                                      value === null ||
+                                      value === '' ||
+                                      (Array.isArray(value) &&
+                                        value.length === 0) ||
+                                      (typeof value === 'object' &&
+                                        !Array.isArray(value) &&
+                                        Object.keys(value ?? {}).length === 0)
+                                    ) {
+                                      return null;
+                                    }
+
+                                    let display = '';
+
+                                    if (
+                                      value &&
+                                      typeof value === 'object' &&
+                                      !Array.isArray(value)
+                                    ) {
+                                      display = Object.entries(value)
+                                        .map(([k, v]) => {
+                                          if (v && typeof v === 'object') {
+                                            return `${k.replaceAll('_', ' ')}: ${Object.entries(
+                                              v
+                                            )
+                                              .map(
+                                                ([nk, nv]) =>
+                                                  `${nk.replaceAll('_', ' ')}: ${nv}`
+                                              )
+                                              .join(', ')}`;
+                                          }
+                                          return `${k.replaceAll('_', ' ')}: ${v}`;
+                                        })
+                                        .join(', ');
+                                    } else if (Array.isArray(value)) {
+                                      display = value.join(', ');
+                                    } else {
+                                      display = String(value);
+                                    }
+
+                                    return (
+                                      <div
+                                        key={key}
+                                        className="flex justify-between text-12 flex-col"
+                                      >
+                                        <span className="color-#00000099 weight-400 capitalize">
+                                          {key.replaceAll('_', ' ')}
+                                        </span>
+
+                                        <span className="weight-500 color-#00000099 ml-5">
+                                          {display}
+                                        </span>
+                                      </div>
+                                    );
+                                  })}
+                                </div>
+                              </div>
+                            )}
+                          </div>
+                        )}
                       </div>
                     );
                   })}
