@@ -69,9 +69,28 @@ const ProductTile: FC<IProductTile> = ({
         productImages: [],
         allProperties: {},
       };
-  const uniqueVariantsFromProductImages = availableColors
-    ?.map((color) => groupedData?.[color]?.[0])
-    .filter(Boolean);
+      
+  const uniqueVariantsFromProductImages = useMemo(() => {
+    if (!product?.variants?.length) return [];
+
+    const withColor = new Map<string, ProductVariant>();
+    const withoutColor: ProductVariant[] = [];
+
+    for (const v of product.variants) {
+      const color = v.properties?.color?.trim().toLowerCase();
+
+      if (color) {
+        if (!withColor.has(color)) {
+          withColor.set(color, v); // one per color
+        }
+      } else {
+        // no color: keep every variant
+        withoutColor.push(v);
+      }
+    }
+
+    return [Array.from(withColor.values()), ...withoutColor].flat();
+  }, [product?.variants]);
 
   const { orders, fetching: orderFetching } = useProductTileOrders({
     filters: { status: { In: `${onGoingOrderStatusQuery},DELIVERED` } },

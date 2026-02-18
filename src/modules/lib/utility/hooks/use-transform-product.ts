@@ -30,22 +30,6 @@ const useTransformProduct = (product: Product) => {
 
 export default useTransformProduct;
 
-export const generateVariantCombinations = (properties: { [key: string]: string[] }) => {
-  let combinations: { [key: string]: string }[] = [{}];
-
-  Object.entries(properties).forEach(([propName, values]) => {
-    const newCombos: { [key: string]: string }[] = [];
-    combinations.forEach((combo) => {
-      values.forEach((val) => {
-        newCombos.push({ ...combo, [propName]: val });
-      });
-    });
-    combinations = newCombos;
-  });
-
-  return combinations;
-};
-
 export const getVariantValue = (
   variant: ProductVariant,
   key: string
