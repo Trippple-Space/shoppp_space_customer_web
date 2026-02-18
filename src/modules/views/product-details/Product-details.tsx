@@ -44,6 +44,7 @@ import ShowAllPhotosModal from './modals/ShowAllPhotosModal';
 import LightboxModal from './modals/LightboxModal';
 import ReviewModal from './modals/ReviewModal';
 import {
+  buildUserConfigurations,
   DisplayProductConfigurations,
   isEmptyValue,
 } from '@/modules/lib/components/product-detail-modal/productConfigurationsHelper';
@@ -79,6 +80,8 @@ const ProductDetails = ({ product }: { product: Product }) => {
   const [configurationValues, setConfigurationValues] = useState<
     Record<string, any>
   >({});
+
+  const [isEditingConfiguration, setIsEditingConfiguration] = useState(false);
 
   const imgRef = useRef<HTMLImageElement>(null);
 
@@ -222,6 +225,10 @@ const ProductDetails = ({ product }: { product: Product }) => {
     filters: { status: { In: `${onGoingOrderStatusQuery},DELIVERED` } },
   });
 
+  const selectedVariantItemInCart = cart.cartItems.find(
+    (item) => item.variant.id === selectedVariant?.id
+  );
+
   useEffect(() => {
     (async () => {
       if (isAuthenticated) {
@@ -238,14 +245,24 @@ const ProductDetails = ({ product }: { product: Product }) => {
       const variantIdMinimumPurchase = localStorage.getItem(
         'variantIdMinimumPurchase'
       );
+      const storedConfig = localStorage.getItem('userConfigurations');
+      const userConfigurations: Record<string, any> | null = storedConfig
+        ? JSON.parse(storedConfig)
+        : null;
+
       if (variantId && variantIdMinimumPurchase) {
         const parsedMinimumPurchase = parseInt(variantIdMinimumPurchase, 10);
 
         if (variantId && !isNaN(parsedMinimumPurchase)) {
-          addToCart(variantId, parsedMinimumPurchase);
+          addToCart(
+            variantId,
+            parsedMinimumPurchase,
+            userConfigurations ?? undefined
+          );
         }
         localStorage.removeItem('variantId');
         localStorage.removeItem('variantIdMinimumPurchase');
+        localStorage.removeItem('userConfigurations');
       }
     }
   }, [isAuthenticated]);
@@ -289,9 +306,27 @@ const ProductDetails = ({ product }: { product: Product }) => {
     }
   }, [selectedVariant]);
 
-  const selectedVariantItemInCart = cart.cartItems.find(
-    (item) => item.variant.id === selectedVariant?.id
-  );
+  useEffect(() => {
+    if (!selectedVariantItemInCart?.userConfigurations) return;
+
+    const nextValues: Record<string, any> = {};
+
+    Object.values(selectedVariantItemInCart.userConfigurations).forEach(
+      (schema: any) => {
+        if (!schema || typeof schema !== 'object') return;
+
+        Object.entries(schema).forEach(([fieldName, value]) => {
+          nextValues[fieldName] = value;
+        });
+      }
+    );
+
+    setConfigurationValues(nextValues);
+  }, [selectedVariantItemInCart]);
+
+  useEffect(() => {
+    setIsEditingConfiguration(false);
+  }, [selectedVariant?.id]);
 
   const descriptionLength = product?.longDescription?.split(' ')?.length || 0;
   const maxDisplayDescLength = 144;
@@ -370,12 +405,23 @@ const ProductDetails = ({ product }: { product: Product }) => {
     return desc;
   };
 
-  const handleLogin = (variantId: string, minimumPurchase: number) => {
+  const handleLogin = (
+    variantId: string,
+    minimumPurchase: number,
+    userConfigurations?: Record<string, any>
+  ) => {
     localStorage.setItem('variantId', variantId.toString());
     localStorage.setItem(
       'variantIdMinimumPurchase',
       minimumPurchase.toString()
     );
+    if (userConfigurations) {
+      localStorage.setItem(
+        'userConfigurations',
+        JSON.stringify(userConfigurations)
+      );
+    }
+
     isLoginModal();
   };
 
@@ -485,6 +531,11 @@ const ProductDetails = ({ product }: { product: Product }) => {
     });
   }, [getRequiredCustomerFields, configurationValues]);
 
+  const userConfigurations = buildUserConfigurations(
+    configurationValues,
+    configurationRecords
+  );
+
   const addToCartBtn = () => {
     return (
       <div className="flex flex-col gap-16">
@@ -537,13 +588,15 @@ const ProductDetails = ({ product }: { product: Product }) => {
                 ) {
                   addToCart(
                     selectedVariant?.id ?? 0,
-                    selectedVariant?.minPurchaseQuantity || 1
+                    selectedVariant?.minPurchaseQuantity || 1,
+                    userConfigurations
                   );
                 }
               } else {
                 handleLogin(
                   selectedVariant?.id ?? '',
-                  selectedVariant?.minPurchaseQuantity || 1
+                  selectedVariant?.minPurchaseQuantity || 1,
+                  userConfigurations
                 );
               }
             }}
@@ -923,6 +976,11 @@ const ProductDetails = ({ product }: { product: Product }) => {
                 configurationRecords={configurationRecords}
                 configurationValues={configurationValues}
                 handleConfigChange={handleConfigChange}
+                userConfigurations={
+                  selectedVariantItemInCart?.userConfigurations
+                }
+                isEditingConfiguration={isEditingConfiguration}
+                onEditConfiguration={() => setIsEditingConfiguration(true)}
               />
 
               {addToCartBtn()}
@@ -1106,6 +1164,11 @@ const ProductDetails = ({ product }: { product: Product }) => {
                   configurationRecords={configurationRecords}
                   configurationValues={configurationValues}
                   handleConfigChange={handleConfigChange}
+                  userConfigurations={
+                    selectedVariantItemInCart?.userConfigurations
+                  }
+                  isEditingConfiguration={isEditingConfiguration}
+                  onEditConfiguration={() => setIsEditingConfiguration(true)}
                 />
 
                 {addToCartBtn()}

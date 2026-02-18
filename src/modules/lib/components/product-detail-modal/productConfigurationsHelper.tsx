@@ -1,4 +1,4 @@
-import { FC } from 'react';
+import { FC, useState } from 'react';
 import { ConfigurationRecord } from '../../utility/types/product.interface';
 
 export const isEmptyValue = (v: any) => {
@@ -94,20 +94,82 @@ export const renderCustomerField = (
   return null;
 };
 
+export const buildUserConfigurations = (
+  configurationValues: Record<string, any>,
+  configurationRecords: ConfigurationRecord[]
+) => {
+  const result: Record<string, any> = {};
+
+  configurationRecords.forEach((record: any) => {
+    const schemaName = record?.description?.toLowerCase().replaceAll(' ', '_');
+
+    const customerFields =
+      record.customerDataForm?.filter(
+        (f: any) => f.valueFormat?.targetUserType === 'customer'
+      ) || [];
+
+    const vendorFields =
+      record.customerDataForm?.filter(
+        (f: any) => f.valueFormat?.targetUserType !== 'customer'
+      ) || [];
+
+    const valuesForSchema: Record<string, any> = {};
+
+    customerFields.forEach((field: any) => {
+      const { fieldName, type } = field.valueFormat;
+      const value = configurationValues[fieldName];
+
+      if (isEmptyValue(value)) return;
+
+      if (type === 'string' || type === 'number') {
+        valuesForSchema[fieldName] = value;
+        return;
+      }
+
+      if (type === 'array') {
+        valuesForSchema[fieldName] = value;
+        return;
+      }
+    });
+
+    vendorFields.forEach((field: any) => {
+      const { fieldName, defaultValue } = field.valueFormat;
+
+      if (isEmptyValue(defaultValue)) return;
+
+      valuesForSchema[fieldName] = defaultValue;
+    });
+
+    if (Object.keys(valuesForSchema).length > 0) {
+      result[schemaName] = valuesForSchema;
+    }
+  });
+
+  return result;
+};
+
 interface IDisplayProductConfigurations {
   configurationRecords: ConfigurationRecord[];
   configurationValues: Record<string, any>;
   handleConfigChange: (key: string, value: any) => void;
+  userConfigurations?: Record<string, any>;
+  isEditingConfiguration?: boolean;
+  onEditConfiguration?: () => void;
 }
 
-export const DisplayProductConfigurations: FC<IDisplayProductConfigurations> = ({
+export const DisplayProductConfigurations: FC<
+  IDisplayProductConfigurations
+> = ({
   configurationRecords,
   configurationValues,
   handleConfigChange,
+  userConfigurations,
+  isEditingConfiguration = true,
+  onEditConfiguration,
 }) => {
   return (
     configurationRecords.length > 0 && (
-      <div className="mt-20 flex flex-col gap-16">
+      <div className="flex flex-col gap-16">
         {configurationRecords.map((record) => {
           const customerFields =
             record.customerDataForm?.filter(
@@ -128,7 +190,10 @@ export const DisplayProductConfigurations: FC<IDisplayProductConfigurations> = (
             return null;
 
           return (
-            <div key={record.id} className="flex flex-col gap-12">
+            <div
+              key={record.id}
+              className={`flex flex-col ${userConfigurations && !isEditingConfiguration ? 'gap-4' : 'gap-12'}`}
+            >
               <div className="flex flex-col gap-6 p-10 radius-6 bg-#F0F9FF border border-#91D5FF">
                 <p className="text-12 weight-400 color-#003A8C">
                   This product is a{' '}
@@ -160,64 +225,234 @@ export const DisplayProductConfigurations: FC<IDisplayProductConfigurations> = (
                   </div>
                 )}
 
-                {customerFields.some((f: any) => f.valueFormat?.required) && (
-                  <p className="text-11 color-#003A8C">
-                    Please fill all required fields below to continue.
-                  </p>
-                )}
+                {!userConfigurations &&
+                  customerFields.some((f: any) => f.valueFormat?.required) && (
+                    <p className="text-11 color-#003A8C">
+                      Please fill all required fields below to continue.
+                    </p>
+                  )}
               </div>
-
               {customerFields.length > 0 && (
-                <div className="flex flex-col gap-10">
-                  {customerFields.map((field: any) => {
-                    const hasError =
-                      field.valueFormat?.required &&
-                      (() => {
-                        const key = field.valueFormat.fieldName;
-                        const val = configurationValues[key];
+                <>
+                  {userConfigurations &&
+                  !isEditingConfiguration &&
+                  record.description &&
+                  userConfigurations[
+                    record.description.toLowerCase().replaceAll(' ', '_')
+                  ] ? (
+                    <UserConfigurationSummary
+                      userConfigurations={{
+                        [record.description.toLowerCase().replaceAll(' ', '_')]:
+                          userConfigurations[
+                            record.description
+                              .toLowerCase()
+                              .replaceAll(' ', '_')
+                          ],
+                      }}
+                      onEdit={onEditConfiguration ?? (() => {})}
+                    />
+                  ) : (
+                    <div className="flex flex-col gap-10">
+                      {customerFields.map((field: any) => {
+                        const hasError =
+                          field.valueFormat?.required &&
+                          (() => {
+                            const key = field.valueFormat.fieldName;
+                            const val = configurationValues[key];
 
-                        if (field.valueFormat.type === 'array') {
-                          if (!val || typeof val !== 'object') return true;
-                          return field.valueFormat.defaultValue.some(
-                            (k: string) => isEmptyValue(val[k])
-                          );
-                        }
+                            if (field.valueFormat.type === 'array') {
+                              if (!val || typeof val !== 'object') return true;
+                              return field.valueFormat.defaultValue.some(
+                                (k: string) => isEmptyValue(val[k])
+                              );
+                            }
 
-                        return isEmptyValue(val);
-                      })();
+                            return isEmptyValue(val);
+                          })();
 
-                    return (
-                      <div
-                        key={field.valueFormat.fieldName}
-                        className="flex flex-col gap-4"
-                      >
-                        <label className="text-12 weight-400">
-                          {field.keyFormat?.defaultValue}
-                          {field.valueFormat?.required && (
-                            <span style={{ color: 'red' }}> *</span>
-                          )}
-                        </label>
+                        return (
+                          <div
+                            key={field.valueFormat.fieldName}
+                            className="flex flex-col gap-4"
+                          >
+                            <label className="text-12 weight-400">
+                              {field.keyFormat?.defaultValue}
+                              {field.valueFormat?.required && (
+                                <span style={{ color: 'red' }}> *</span>
+                              )}
+                            </label>
 
-                        {renderCustomerField(
-                          field,
-                          configurationValues,
-                          handleConfigChange
-                        )}
+                            {renderCustomerField(
+                              field,
+                              configurationValues,
+                              handleConfigChange
+                            )}
 
-                        {hasError && (
-                          <span className="text-11 color-#D4380D">
-                            This field is required
-                          </span>
-                        )}
-                      </div>
-                    );
-                  })}
-                </div>
+                            {hasError && (
+                              <span className="text-11 color-#D4380D">
+                                This field is required
+                              </span>
+                            )}
+                          </div>
+                        );
+                      })}
+                    </div>
+                  )}
+                </>
               )}
             </div>
           );
         })}
       </div>
     )
+  );
+};
+
+const UserConfigurationSummary = ({
+  userConfigurations,
+  onEdit,
+}: {
+  userConfigurations: Record<string, any>;
+  onEdit: () => void;
+}) => {
+  return (
+    <div className="flex flex-col gap-10">
+      {Object.entries(userConfigurations).map(([schemaName, fields]) => (
+        <div
+          key={schemaName}
+          className="p-10 radius-6 border border-#0B9378 bg-#EDFCF7 bg-#F5FBFF flex flex-col gap-6"
+        >
+          <div className="flex flex-col gap-4">
+            {Object.entries(fields as Record<string, any>).map(
+              ([key, value]) => {
+                const display =
+                  typeof value === 'object'
+                    ? Object.entries(value)
+                        .map(([k, v]) => `${k}: ${v}`)
+                        .join(', ')
+                    : String(value);
+
+                return (
+                  <div key={key} className="flex justify-between gap-3 text-12">
+                    <span className="color-#00000099 weight-400 capitalize">
+                      {key.replaceAll('_', ' ')}:
+                    </span>
+
+                    <span className="weight-500 color-#000000">{display}</span>
+                  </div>
+                );
+              }
+            )}
+          </div>
+        </div>
+      ))}
+
+      <button
+        type="button"
+        onClick={onEdit}
+        className="self-start text-12 color-#0B9378 weight-500 underline border-none bg-transparent cursor-pointer"
+      >
+        Edit user data
+      </button>
+    </div>
+  );
+};
+
+const renderConfigDetails = (value: any) => {
+  if (
+    value === undefined ||
+    value === null ||
+    value === '' ||
+    (Array.isArray(value) && value.length === 0)
+  ) {
+    return null;
+  }
+
+  if (typeof value !== 'object' || Array.isArray(value)) {
+    return (
+      <div className="text-12 color-#00000099">
+        {Array.isArray(value) ? value.join(', ') : String(value)}
+      </div>
+    );
+  }
+
+  return Object.entries(value).map(([k, v]) => {
+    if (v && typeof v === 'object' && !Array.isArray(v)) {
+      return (
+        <div key={k} className="flex flex-col gap-2">
+          <span className="text-12 color-#00000099 capitalize">
+            {k.replaceAll('_', ' ')}
+          </span>
+
+          <div className="flex flex-col gap-1 ml-6">
+            {Object.entries(v).map(([nk, nv]) => (
+              <div
+                key={nk}
+                className="flex space-between gap-12 text-12 color-#00000099"
+              >
+                <span className="capitalize">{nk.replaceAll('_', ' ')}</span>
+                <span className="weight-500 color-#000000E0">{String(nv)}</span>
+              </div>
+            ))}
+          </div>
+        </div>
+      );
+    }
+
+    return (
+      <div key={k} className="flex gap-12 space-between text-12">
+        <span className="capitalize color-#00000099">
+          {k.replaceAll('_', ' ')}
+        </span>
+        <span className="weight-500 color-#000000E0">{String(v)}</span>
+      </div>
+    );
+  });
+};
+
+export const ConfigPill = ({ title, value }: { title: string; value: any }) => {
+  const [open, setOpen] = useState(false);
+
+  return (
+    <div
+      className="sm:relative"
+      onMouseEnter={() => setOpen(true)}
+      onMouseLeave={() => setOpen(false)}
+    >
+      <span
+        className="text-12 weight-500 hover:pointer"
+        style={{
+          padding: '6px 10px',
+          borderRadius: 999,
+          background: '#F0F9FF',
+          border: '1px solid #91D5FF',
+          color: '#003A8C',
+          whiteSpace: 'nowrap',
+        }}
+      >
+        {title}
+      </span>
+
+      {open && (
+        <div
+          className="absolute z-50 radius-6 border border-#00000014 bg-white p-10 flex flex-col gap-6 min-w-250"
+          style={{
+            top: '120%',
+            left: 0,
+            boxShadow: '0px 6px 24px rgba(0,0,0,0.08)',
+            width: 'max-content',
+            maxWidth: 'calc(100vw - 32px)',
+          }}
+        >
+          <p className="text-12 weight-600 capitalize color-#000000E0">
+            {title}
+          </p>
+
+          <div className="flex flex-col gap-4">
+            {renderConfigDetails(value)}
+          </div>
+        </div>
+      )}
+    </div>
   );
 };

@@ -183,13 +183,19 @@ const ProductTile: FC<IProductTile> = ({
       const variantIdMinimumPurchase = localStorage.getItem(
         'variantIdMinimumPurchase'
       );
+      const storedConfig = localStorage.getItem('userConfigurations');
+      const userConfigurations: Record<string, any> | null = storedConfig
+        ? JSON.parse(storedConfig)
+        : null;
+
       if (variantId && variantIdMinimumPurchase) {
         const parsedMinimumPurchase = parseInt(variantIdMinimumPurchase, 10);
         if (variantId && !isNaN(parsedMinimumPurchase)) {
-          addToCart(variantId, parsedMinimumPurchase);
+          addToCart(variantId, parsedMinimumPurchase, userConfigurations ?? undefined);
         }
         localStorage.removeItem('variantId');
         localStorage.removeItem('variantIdMinimumPurchase');
+        localStorage.removeItem('userConfigurations');
       }
     }
   }, [isAuthenticated]);
@@ -226,10 +232,20 @@ const ProductTile: FC<IProductTile> = ({
     return true;
   }, [allProperties]);
 
-  const visibleTags = useMemo(() => {
-    return (product?.tags ?? []).filter(
-      (tag: any) => !tag.label?.includes('pill:')
+  const hasCustomerConfiguration = useMemo(() => {
+    return (
+      selectedVariant?.configurationRecords?.some((record: any) =>
+        record.customerDataForm?.some(
+          (f: any) => f.valueFormat?.targetUserType === 'customer'
+        )
+      ) ?? false
     );
+  }, [selectedVariant?.id]);
+
+  const visibleTags = useMemo(() => {
+    return (product?.tags ?? [])
+      .filter((tag: any) => !tag.label?.includes('pill:'))
+      .filter((tag: any) => !tag.label?.includes('collection:'));
   }, [product?.tags]);
 
   const [visibleTagCount, setVisibleTagCount] = useState(visibleTags.length);
@@ -428,7 +444,10 @@ const ProductTile: FC<IProductTile> = ({
           {selectedVariantItemInCart ? (
             <QuantitySelector
               decrement={() => {
-                if (hasProperties && !shouldAddDirectlyToCart) {
+                if (
+                  (hasProperties && !shouldAddDirectlyToCart) ||
+                  hasCustomerConfiguration
+                ) {
                   setIsToAddProperties(true);
                   handleCloseProductModal();
                 } else {
@@ -436,7 +455,10 @@ const ProductTile: FC<IProductTile> = ({
                 }
               }}
               increment={() => {
-                if (hasProperties && !shouldAddDirectlyToCart) {
+                if (
+                  (hasProperties && !shouldAddDirectlyToCart) ||
+                  hasCustomerConfiguration
+                ) {
                   setIsToAddProperties(true);
                   handleCloseProductModal();
                 } else {
@@ -476,7 +498,10 @@ const ProductTile: FC<IProductTile> = ({
                 {selectedVariant?.status !== 'OUT_OF_STOCK' && (
                   <button
                     onClick={() => {
-                      if (hasProperties && !shouldAddDirectlyToCart) {
+                      if (
+                        (hasProperties && !shouldAddDirectlyToCart) ||
+                        hasCustomerConfiguration
+                      ) {
                         setShowOnBoardingModal(false);
                         setIsToAddProperties(true);
                         handleCloseProductModal();

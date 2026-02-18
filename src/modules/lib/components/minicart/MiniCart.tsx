@@ -21,6 +21,7 @@ import Image from '../image/Image';
 import { useNavbarView } from '../../utility/hooks/views/use-navbar-view';
 import useUserStore from '../../utility/store/user.store';
 import VideoSrc from '../video-src/VideoSrc';
+import { ConfigPill } from '../product-detail-modal/productConfigurationsHelper';
 
 interface ModalProps {
   isOpen?: boolean;
@@ -234,6 +235,42 @@ const MiniCart: React.FC<ModalProps> = ({
                               />
                             }
                           </div>
+                         
+                          {cartItem?.userConfigurations &&
+                            Object.keys(cartItem.userConfigurations).length >
+                              0 && (
+                              <div className="px-12 pb-12">
+                                <div className="pt-10 flex flex-col gap-6">
+                                  <div
+                                    className="flex gap-8 flex-wrap relative"
+                                    style={{ rowGap: 8 }}
+                                  >
+                                    {Object.entries(
+                                      cartItem.userConfigurations
+                                    ).map(([recordName, recordValue]) => {
+                                      if (
+                                        !recordValue ||
+                                        typeof recordValue !== 'object' ||
+                                        Object.keys(recordValue).length === 0
+                                      )
+                                        return null;
+
+                                      return (
+                                        <ConfigPill
+                                          key={recordName}
+                                          title={recordName.replaceAll(
+                                            '_',
+                                            ' '
+                                          )}
+                                          value={recordValue}
+                                        />
+                                      );
+                                    })}
+                                  </div>
+                                </div>
+                              </div>
+                            )}
+
                           <div className="px-12 pb-12 flex space-between a-items-center">
                             <div className="flex md:a-items-center md:gap-8 md:flex-row flex-col">
                               <p

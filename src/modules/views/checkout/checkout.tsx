@@ -27,6 +27,7 @@ import { useCalculatedeliveryFee } from '@/modules/lib/utility/hooks/use-calcula
 import { DeliveryOption } from '@/modules/lib/utility/types/delivery.interface';
 import VideoSrc from '@/modules/lib/components/video-src/VideoSrc';
 import { toast } from 'sonner';
+import { ConfigPill } from '@/modules/lib/components/product-detail-modal/productConfigurationsHelper';
 
 type DeliveryOptionKey = 'standard' | 'express' | 'vendorManaged';
 type addressDeliveryPrice = {
@@ -429,52 +430,54 @@ const CheckoutPage = () => {
                         'image';
 
                       return (
-                        <div
-                          className={`gap-12 ${store.visible ? 'flex a-items-center' : 'hidden'}`}
-                          key={j}
-                        >
-                          {mediaType === 'image' ? (
-                            <Image
-                              src={cartItem.variant.media?.[0].url}
-                              alt="order image"
-                              className="w-73 h-75 radius-6 border border-#00000014 object-fit"
-                            />
-                          ) : (
-                            <VideoSrc
-                              className="w-73 h-75 radius-6 border border-#00000014 object-fit"
-                              src={cartItem.variant.media?.[0].url}
-                            />
-                          )}
+                        <div className="flex flex-col gap-4">
                           <div
-                            className={`flex-grow-1 flex flex-col ${Object.keys(cartItem?.variant?.properties ?? {}).length > 2 ? 'gap-2.8' : 'gap-6'} overflow-hidden white-space-nowrap text-overflow-ellipsis`}
+                            className={`gap-12 ${store.visible ? 'flex a-items-center' : 'hidden'}`}
+                            key={j}
                           >
-                            <p className="weight-600 text-14 line-height-22 color-#000000E0">
-                              {cartItem?.variant?.product?.name}
-                            </p>
-                            <p
-                              className={`weight-400 color-#0000008C ${Object.keys(cartItem?.variant?.properties ?? {}).length > 2 ? 'text-13.5 line-height-16' : 'text-14 line-height-16.94'}`}
+                            {mediaType === 'image' ? (
+                              <Image
+                                src={cartItem.variant.media?.[0].url}
+                                alt="order image"
+                                className="w-73 h-75 radius-6 border border-#00000014 object-fit"
+                              />
+                            ) : (
+                              <VideoSrc
+                                className="w-73 h-75 radius-6 border border-#00000014 object-fit"
+                                src={cartItem.variant.media?.[0].url}
+                              />
+                            )}
+                            <div
+                              className={`flex-grow-1 flex flex-col ${Object.keys(cartItem?.variant?.properties ?? {}).length > 2 ? 'gap-2.8' : 'gap-6'} overflow-hidden white-space-nowrap text-overflow-ellipsis`}
                             >
-                              Quantity:{' '}
-                              {`${cartItem?.quantity} ${displayStockUnit(
-                                cartItem.variant.stockUnit
-                              )}${cartItem?.quantity > 1 ? 's' : ''}`}
-                            </p>
-                            {cartItem?.variant?.properties?.color && (
+                              <p className="weight-600 text-14 line-height-22 color-#000000E0">
+                                {cartItem?.variant?.product?.name}
+                              </p>
                               <p
-                                className={`weight-400 color-#0000008C capitalize ${Object.keys(cartItem?.variant?.properties ?? {}).length > 2 ? 'text-13.5 line-height-16' : 'text-14 line-height-16.94'}`}
+                                className={`weight-400 color-#0000008C ${Object.keys(cartItem?.variant?.properties ?? {}).length > 2 ? 'text-13.5 line-height-16' : 'text-14 line-height-16.94'}`}
                               >
-                                Color: {cartItem?.variant?.properties?.color}
+                                Quantity:{' '}
+                                {`${cartItem?.quantity} ${displayStockUnit(
+                                  cartItem.variant.stockUnit
+                                )}${cartItem?.quantity > 1 ? 's' : ''}`}
                               </p>
-                            )}
-                            {cartItem?.variant?.size && (
-                              <p className="weight-400 text-13.5 line-height-16 color-#0000008C">
-                                Size: {cartItem?.variant?.size}
-                              </p>
-                            )}
+                              {cartItem?.variant?.properties?.color && (
+                                <p
+                                  className={`weight-400 color-#0000008C capitalize ${Object.keys(cartItem?.variant?.properties ?? {}).length > 2 ? 'text-13.5 line-height-16' : 'text-14 line-height-16.94'}`}
+                                >
+                                  Color: {cartItem?.variant?.properties?.color}
+                                </p>
+                              )}
+                              {cartItem?.variant?.size && (
+                                <p className="weight-400 text-13.5 line-height-16 color-#0000008C">
+                                  Size: {cartItem?.variant?.size}
+                                </p>
+                              )}
 
-                            {cartItem?.variant?.properties &&
-                              Object.entries(cartItem.variant.properties ?? {}).map(
-                                ([key, value]) => {
+                              {cartItem?.variant?.properties &&
+                                Object.entries(
+                                  cartItem.variant.properties ?? {}
+                                ).map(([key, value]) => {
                                   if (key === 'color') return null;
                                   return (
                                     <p
@@ -484,41 +487,76 @@ const CheckoutPage = () => {
                                       {`${key}: ${Array.isArray(value) ? value.join(', ') : value}`}
                                     </p>
                                   );
-                                }
-                              )}
-                          </div>
-                          <div className="flex flex-col gap-10 a-items-end">
-                            <div className="flex a-items-center gap-8">
-                              <p
-                                className={`weight-600 md:text-20 sm:text-16 text-14 md:line-height-28 sm:line-height-24 line-height-22 ${cartItem.variant.status === 'OUT_OF_STOCK' ? 'color-#00000099' : ''}`}
-                              >
-                                {isValidDiscount(cartItem)
-                                  ? formatNumberAsPrice(
-                                      cartItem.discountedPrice
-                                    )
-                                  : formatNumberAsPrice(cartItem.totalPrice)}
-                              </p>
-                              {isValidDiscount(cartItem) && (
-                                <p
-                                  className={`weight-400 md:text-16 sm:text-12 text-10 md:line-height-24 sm:line-height-20 line-height-18 line-through color-#00000099  ${cartItem.variant.status === 'OUT_OF_STOCK' ? 'color-#00000099' : ''}`}
-                                >
-                                  {formatNumberAsPrice(cartItem.totalPrice)}
-                                </p>
-                              )}
+                                })}
                             </div>
-                            <p
-                              className="weight-400 text-14 line-height-22 text-danger underline pointer"
-                              onClick={async () => {
-                                try {
-                                  await removeFromCart(cartItem?.id);
-                                  setAllAddressDeliveryPrice([]);
-                                  //setShouldUpdateFee(true);
-                                } catch (error) {}
-                              }}
-                            >
-                              Remove
-                            </p>
+                            <div className="flex flex-col gap-10 a-items-end">
+                              <div className="flex a-items-center gap-8">
+                                <p
+                                  className={`weight-600 md:text-20 sm:text-16 text-14 md:line-height-28 sm:line-height-24 line-height-22 ${cartItem.variant.status === 'OUT_OF_STOCK' ? 'color-#00000099' : ''}`}
+                                >
+                                  {isValidDiscount(cartItem)
+                                    ? formatNumberAsPrice(
+                                        cartItem.discountedPrice
+                                      )
+                                    : formatNumberAsPrice(cartItem.totalPrice)}
+                                </p>
+                                {isValidDiscount(cartItem) && (
+                                  <p
+                                    className={`weight-400 md:text-16 sm:text-12 text-10 md:line-height-24 sm:line-height-20 line-height-18 line-through color-#00000099  ${cartItem.variant.status === 'OUT_OF_STOCK' ? 'color-#00000099' : ''}`}
+                                  >
+                                    {formatNumberAsPrice(cartItem.totalPrice)}
+                                  </p>
+                                )}
+                              </div>
+                              <p
+                                className="weight-400 text-14 line-height-22 text-danger underline pointer"
+                                onClick={async () => {
+                                  try {
+                                    await removeFromCart(cartItem?.id);
+                                    setAllAddressDeliveryPrice([]);
+                                    //setShouldUpdateFee(true);
+                                  } catch (error) {}
+                                }}
+                              >
+                                Remove
+                              </p>
+                            </div>
                           </div>
+
+                          {cartItem?.userConfigurations &&
+                            Object.keys(cartItem.userConfigurations).length >
+                              0 && (
+                              <div className="pb-12">
+                                <div className="pt-10 flex flex-col gap-6">
+                                  <div
+                                    className="flex gap-8 flex-wrap relative"
+                                    style={{ rowGap: 8 }}
+                                  >
+                                    {Object.entries(
+                                      cartItem.userConfigurations
+                                    ).map(([recordName, recordValue]) => {
+                                      if (
+                                        !recordValue ||
+                                        typeof recordValue !== 'object' ||
+                                        Object.keys(recordValue).length === 0
+                                      )
+                                        return null;
+
+                                      return (
+                                        <ConfigPill
+                                          key={recordName}
+                                          title={recordName.replaceAll(
+                                            '_',
+                                            ' '
+                                          )}
+                                          value={recordValue}
+                                        />
+                                      );
+                                    })}
+                                  </div>
+                                </div>
+                              </div>
+                            )}
                         </div>
                       );
                     })}

@@ -16,6 +16,7 @@ import { useEffect, useState } from 'react';
 import { useCart } from '../../utility/hooks/use-cart';
 import PuffLoader from '../puff-loader/PuffLoader';
 import VideoSrc from '../video-src/VideoSrc';
+import { ConfigPill } from '../product-detail-modal/productConfigurationsHelper';
 
 const OrderedProductModal = ({
   handleOrderModal,
@@ -112,79 +113,115 @@ const OrderedProductModal = ({
                       checkMediaType(item?.variant.media[0].url) ?? 'image';
 
                     return (
-                      <div
-                        className={classNames(
-                          'bg-whitesmoke radius-8 p-10 gap-5 flex flex-col  l:flex-row space-between a-items-start'
-                        )}
-                        key={i}
-                      >
-                        <div className="flex gap-10 l:w-60p">
-                          {mediaType === 'image' ? (
-                            <Image
-                              src={item?.variant.media[0].url}
-                              alt={item.variant?.product?.name || ''}
-                              className="w-80 h-80 xl:w-70 xl:h-70 radius-8 object-fit-cover"
-                            />
-                          ) : (
-                            <VideoSrc
-                              className="w-80 h-80 xl:w-70 xl:h-70 radius-8 object-fit-cover"
-                              src={item?.variant.media[0].url}
-                            />
+                      <div className="flex flex-col gap-4 bg-whitesmoke radius-8 p-10">
+                        <div
+                          className={classNames(
+                            'gap-5 flex flex-col l:flex-row space-between a-items-start'
                           )}
-                          <div className="flex flex-col gap-6">
-                            <div className="flex flex-col gap-3">
-                              <div
-                                className="weight-600 text-12 xl:w-10 xl:white-space-nowrap text-overflow-ellipsis"
-                                onClick={() => handleTextClick(item.id)}
-                              >
-                                {ellipseText(
-                                  item.variant.product?.name ?? '',
-                                  expandedId === item.id,
-                                  30
-                                )}
+                          key={i}
+                        >
+                          <div className="flex gap-10 l:w-60p">
+                            {mediaType === 'image' ? (
+                              <Image
+                                src={item?.variant.media[0].url}
+                                alt={item.variant?.product?.name || ''}
+                                className="w-80 h-80 xl:w-70 xl:h-70 radius-8 object-fit-cover"
+                              />
+                            ) : (
+                              <VideoSrc
+                                className="w-80 h-80 xl:w-70 xl:h-70 radius-8 object-fit-cover"
+                                src={item?.variant.media[0].url}
+                              />
+                            )}
+                            <div className="flex flex-col gap-6">
+                              <div className="flex flex-col gap-3">
+                                <div
+                                  className="weight-600 text-12 xl:w-10 xl:white-space-nowrap text-overflow-ellipsis"
+                                  onClick={() => handleTextClick(item.id)}
+                                >
+                                  {ellipseText(
+                                    item.variant.product?.name ?? '',
+                                    expandedId === item.id,
+                                    30
+                                  )}
+                                </div>
+                                <p className="color-#0000008C text-10 w-fit">
+                                  {item.variant.product?.store.name}
+                                </p>
                               </div>
-                              <p className="color-#0000008C text-10 w-fit">
-                                {item.variant.product?.store.name}
-                              </p>
-                            </div>
-                            <div className="flex flex-col gap-5">
-                              {' '}
-                              {item?.variant?.size ? (
-                                <p className="color-#0000008C text-12 w-fit">
-                                  Size: {item?.variant?.size}
-                                </p>
-                              ) : null}
-                              {item.variant.properties.color && (
-                                <p className="color-#0000008C text-12 w-fit">
-                                  Color: {item.variant.properties.color}
-                                </p>
-                              )}
-                              {item?.variant?.properties &&
-                                Object.entries(item.variant.properties).map(
-                                  ([key, value]) => {
-                                    if (key === 'color') return null;
-                                    return (
-                                      <p
-                                        key={key}
-                                        className="color-#0000008C text-14 w-fit"
-                                      >
-                                        {`${key}: ${Array.isArray(value) ? value.join(', ') : value}`}
-                                      </p>
-                                    );
-                                  }
+                              <div className="flex flex-col gap-5">
+                                {' '}
+                                {item?.variant?.size ? (
+                                  <p className="color-#0000008C text-12 w-fit">
+                                    Size: {item?.variant?.size}
+                                  </p>
+                                ) : null}
+                                {item.variant.properties.color && (
+                                  <p className="color-#0000008C text-12 w-fit">
+                                    Color: {item.variant.properties.color}
+                                  </p>
                                 )}
+                                {item?.variant?.properties &&
+                                  Object.entries(item.variant.properties).map(
+                                    ([key, value]) => {
+                                      if (key === 'color') return null;
+                                      return (
+                                        <p
+                                          key={key}
+                                          className="color-#0000008C text-14 w-fit"
+                                        >
+                                          {`${key}: ${Array.isArray(value) ? value.join(', ') : value}`}
+                                        </p>
+                                      );
+                                    }
+                                  )}
+                              </div>
                             </div>
                           </div>
+                          <div className="l:grid flex flex-col a-items-end w-100p l:w-fit gap-5 mt-10 l:mt-0">
+                            <p className="text-14 weight-500">
+                              {formatNumberAsPrice(item.totalPrice)}
+                            </p>
+                            <p className="text-12 weight-600 color-#0000008C text-right">
+                              {' '}
+                              X {item.quantity}
+                            </p>
+                          </div>
                         </div>
-                        <div className="l:grid flex flex-col a-items-end w-100p l:w-fit gap-5 mt-10 l:mt-0">
-                          <p className="text-14 weight-500">
-                            {formatNumberAsPrice(item.totalPrice)}
-                          </p>
-                          <p className="text-12 weight-600 color-#0000008C text-right">
-                            {' '}
-                            X {item.quantity}
-                          </p>
-                        </div>
+
+                        {item?.userConfigurations &&
+                          Object.keys(item.userConfigurations).length > 0 && (
+                            <div className="py-12">
+                              <div className="pt-10 flex flex-col gap-6">
+                                <div
+                                  className="flex gap-8 flex-wrap relative"
+                                  style={{ rowGap: 8 }}
+                                >
+                                  {Object.entries(item.userConfigurations).map(
+                                    ([recordName, recordValue]) => {
+                                      if (
+                                        !recordValue ||
+                                        typeof recordValue !== 'object' ||
+                                        Object.keys(recordValue).length === 0
+                                      )
+                                        return null;
+
+                                      return (
+                                        <ConfigPill
+                                          key={recordName}
+                                          title={recordName.replaceAll(
+                                            '_',
+                                            ' '
+                                          )}
+                                          value={recordValue}
+                                        />
+                                      );
+                                    }
+                                  )}
+                                </div>
+                              </div>
+                            </div>
+                          )}
                       </div>
                     );
                   })}

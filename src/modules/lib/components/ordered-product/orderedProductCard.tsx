@@ -6,6 +6,7 @@ import {
 import React from 'react';
 import Image from '../image/Image';
 import VideoSrc from '../video-src/VideoSrc';
+import { ConfigPill } from '../product-detail-modal/productConfigurationsHelper';
 
 function orderedProductCard({ orderedProducts }: any) {
   const cartItems = getCartItems(orderedProducts?.cart?.storeGroups);
@@ -17,8 +18,8 @@ function orderedProductCard({ orderedProducts }: any) {
             checkMediaType(item?.variant.media[0].url) ?? 'image';
 
           return (
-            <>
-              <div className="bg-whitesmoke radius-5 p-10 l:flex space-between a-items-start">
+            <div className="flex flex-col gap-4 bg-whitesmoke radius-5 p-10">
+              <div className="l:flex space-between a-items-start">
                 <div className="flex gap-10 l:w-60p w-90p">
                   {mediaType === 'image' ? (
                     <Image
@@ -77,7 +78,38 @@ function orderedProductCard({ orderedProducts }: any) {
                   <p className="text-12 text-right"> X {item.quantity}</p>
                 </div>
               </div>
-            </>
+
+              {item?.userConfigurations &&
+                Object.keys(item.userConfigurations).length > 0 && (
+                  <div className="py-12">
+                    <div className="pt-10 flex flex-col gap-6">
+                      <div
+                        className="flex gap-8 flex-wrap relative"
+                        style={{ rowGap: 8 }}
+                      >
+                        {Object.entries(item.userConfigurations).map(
+                          ([recordName, recordValue]) => {
+                            if (
+                              !recordValue ||
+                              typeof recordValue !== 'object' ||
+                              Object.keys(recordValue).length === 0
+                            )
+                              return null;
+
+                            return (
+                              <ConfigPill
+                                key={recordName}
+                                title={recordName.replaceAll('_', ' ')}
+                                value={recordValue}
+                              />
+                            );
+                          }
+                        )}
+                      </div>
+                    </div>
+                  </div>
+                )}
+            </div>
           );
         })}
       </div>
