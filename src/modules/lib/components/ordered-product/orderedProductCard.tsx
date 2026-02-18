@@ -57,7 +57,7 @@ function orderedProductCard({ orderedProducts }: any) {
                       {item?.variant?.properties &&
                         Object.entries(item.variant.properties).map(
                           ([key, value]) => {
-                            if (key === 'color') return null;
+                            if (key === 'color' || key === 'size') return null;
                             return (
                               <p
                                 key={key}
@@ -83,10 +83,7 @@ function orderedProductCard({ orderedProducts }: any) {
                 Object.keys(item.userConfigurations).length > 0 && (
                   <div className="py-12">
                     <div className="pt-10 flex flex-col gap-6">
-                      <div
-                        className="flex gap-8 flex-wrap relative"
-                        style={{ rowGap: 8 }}
-                      >
+                      <div className="flex gap-8 flex-wrap relative">
                         {Object.entries(item.userConfigurations).map(
                           ([recordName, recordValue]) => {
                             if (

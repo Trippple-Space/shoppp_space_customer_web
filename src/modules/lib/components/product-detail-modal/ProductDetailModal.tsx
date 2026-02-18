@@ -9,7 +9,9 @@ import QuantitySelector from '../quantity-selector/QuantitySelector';
 import Image from '../image/Image';
 import { MdArrowBackIos, MdArrowForwardIos } from 'react-icons/md';
 import useTransformProduct, {
+  buildFiltersFromVariant,
   getVariantValue,
+  requiredKeysForVariant,
 } from '../../utility/hooks/use-transform-product';
 import colorNames from '@/modules/lib/utility/json-data/colors.json';
 import VideoSrc from '../video-src/VideoSrc';
@@ -100,28 +102,6 @@ const ProductDetailModal = ({
     return props;
   }, [allProperties, product?.variants]);
 
-  const hasValue = (value: unknown): boolean => {
-    if (value === null || value === undefined) return false;
-    if (typeof value === 'string') return value.trim().length > 0;
-    return true;
-  };
-
-  const requiredKeysForVariant = (variant: ProductVariant): string[] => {
-    const keys: string[] = [];
-
-    Object.entries(variant.properties || {}).forEach(([key, value]) => {
-      if (hasValue(value)) {
-        keys.push(key);
-      }
-    });
-
-    if (hasValue(variant.size)) {
-      keys.push('size');
-    }
-
-    return keys;
-  };
-
   const isSelectionComplete = useMemo(() => {
     if (filteredVariants.length !== 1) return false;
 
@@ -130,11 +110,6 @@ const ProductDetailModal = ({
 
     return requiredKeys.every((key) => activeFilters[key]);
   }, [filteredVariants, activeFilters]);
-
-  /* const selectedVariant = useMemo(() => {
-    if (!isSelectionComplete) return undefined;
-    return filteredVariants[0];
-  }, [filteredVariants, isSelectionComplete]); */
 
   const selectedVariant = useMemo(() => {
     if (isSelectionComplete) {
@@ -316,7 +291,7 @@ const ProductDetailModal = ({
 
       return values.size > 1;
     });
-    
+
     if (!uniqueKey) {
       return product.variants;
     }
@@ -440,22 +415,6 @@ const ProductDetailModal = ({
     setActiveFilters(buildFiltersFromVariant(nextVariant));
     setSelectedImage(nextVariant.media?.[0]?.url);
     setImageSource('variant');
-  };
-
-  const buildFiltersFromVariant = (variant: ProductVariant) => {
-    const filters: Record<string, string> = {};
-
-    Object.entries(variant.properties || {}).forEach(([key, value]) => {
-      if (value) {
-        filters[key] = String(value);
-      }
-    });
-
-    if (variant.size) {
-      filters.size = String(variant.size);
-    }
-
-    return filters;
   };
 
   const configurationRecords = selectedVariant?.configurationRecords ?? [];

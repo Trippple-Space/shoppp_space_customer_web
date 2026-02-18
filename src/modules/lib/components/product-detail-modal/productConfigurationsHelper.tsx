@@ -381,32 +381,32 @@ const renderConfigDetails = (value: any) => {
 
   if (typeof value !== 'object' || Array.isArray(value)) {
     return (
-      <div className="text-12 color-#00000099">
+      <span className="inline-block text-12 color-#00000099">
         {Array.isArray(value) ? value.join(', ') : String(value)}
-      </div>
+      </span>
     );
   }
 
   return Object.entries(value).map(([k, v]) => {
     if (v && typeof v === 'object' && !Array.isArray(v)) {
       return (
-        <div key={k} className="flex flex-col gap-2">
+        <span key={k} className="flex flex-col gap-2">
           <span className="text-12 color-#00000099 capitalize">
             {k.replaceAll('_', ' ')}
           </span>
 
-          <div className="flex flex-col gap-1 ml-6">
+          <span className="flex flex-col gap-1 ml-6">
             {Object.entries(v).map(([nk, nv]) => (
-              <div
+              <span
                 key={nk}
                 className="flex space-between gap-12 text-12 color-#00000099"
               >
                 <span className="capitalize">{nk.replaceAll('_', ' ')}</span>
                 <span className="weight-500 color-#000000E0">{String(nv)}</span>
-              </div>
+              </span>
             ))}
-          </div>
-        </div>
+          </span>
+        </span>
       );
     }
 
@@ -463,20 +463,20 @@ export const ConfigPill = ({ title, value }: { title: string; value: any }) => {
 
       {open && (
         <FloatingPortal>
-          <div
+          <p
             ref={refs.setFloating}
             style={floatingStyles}
             {...getFloatingProps()}
             className="z-50 radius-6 border border-#00000014 bg-white p-10 flex flex-col gap-6 min-w-250"
           >
-            <p className="text-12 weight-600 capitalize color-#000000E0">
+            <span className="inline-block text-12 weight-600 capitalize color-#000000E0">
               {title}
-            </p>
+            </span>
 
-            <div className="flex flex-col gap-4">
+            <span className="flex flex-col gap-4">
               {renderConfigDetails(value)}
-            </div>
-          </div>
+            </span>
+          </p>
         </FloatingPortal>
       )}
     </>

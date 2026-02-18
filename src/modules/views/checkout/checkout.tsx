@@ -436,7 +436,10 @@ const CheckoutPage = () => {
                             'image';
 
                           return (
-                            <div className="flex flex-col gap-4">
+                            <div
+                              className="flex flex-col gap-4"
+                              key={j + cartItem?.id}
+                            >
                               <div
                                 className={`gap-12 ${store.visible ? 'flex a-items-center' : 'hidden'}`}
                                 key={j}
@@ -485,7 +488,7 @@ const CheckoutPage = () => {
                                     Object.entries(
                                       cartItem.variant.properties ?? {}
                                     ).map(([key, value]) => {
-                                      if (key === 'color') return null;
+                                      if (key === 'color' || key === 'size') return null;
                                       return (
                                         <p
                                           key={key}
@@ -535,14 +538,12 @@ const CheckoutPage = () => {
                               </div>
 
                               {cartItem?.userConfigurations &&
+                                store.visible &&
                                 Object.keys(cartItem.userConfigurations)
                                   .length > 0 && (
                                   <div className="pb-12">
                                     <div className="pt-10 flex flex-col gap-6">
-                                      <div
-                                        className="flex gap-8 flex-wrap relative"
-                                        style={{ rowGap: 8 }}
-                                      >
+                                      <div className="flex gap-8 flex-wrap relative">
                                         {Object.entries(
                                           cartItem.userConfigurations
                                         ).map(([recordName, recordValue]) => {
