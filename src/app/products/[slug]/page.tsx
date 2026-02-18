@@ -50,16 +50,28 @@ export async function generateMetadata({
       .map(([key, values]) => `${key}: ${values.join(', ')}`)
       .join('. ');
 
+    const priceAmount =
+      product?.variants?.[0]?.finalPrice ??
+      product?.finalPrice ??
+      product?.price ??
+      0;
+    const priceFormatted =
+      priceAmount > 0
+        ? `₦${Number(priceAmount).toLocaleString('en')}`
+        : '';
+    const priceSuffix = priceFormatted ? ` Price: ${priceFormatted}.` : '';
+
+    const descriptionBase =
+      `${product?.longDescription}. Available sizes: ${sizes.join(', ')}. Available colors: ${colors.join(', ')}. ${customPropsString}.` ||
+      `${product?.name}. Available sizes: ${sizes.join(', ')}. Available colors: ${colors.join(', ')}. ${customPropsString}. - Check out this piece on Asoebi Africa`;
+    const descriptionWithPrice = `${descriptionBase}${priceSuffix}`;
+
     return {
       title: `${product?.name} - Asoebi Africa`,
-      description:
-        `${product?.longDescription}. Available sizes: ${sizes.join(', ')}. Available colors: ${colors.join(', ')}. ${customPropsString}.` ||
-        `${product?.name}. Available sizes: ${sizes.join(', ')}. Available colors: ${colors.join(', ')}. ${customPropsString}. - Check out this piece on Asoebi Africa`,
+      description: descriptionWithPrice,
       openGraph: {
         title: `${product?.name} - Asoebi Africa`,
-        description:
-          `${product?.longDescription}. Available sizes: ${sizes.join(', ')}. Available colors: ${colors.join(', ')}. ${customPropsString}.` ||
-          `${product?.name}. Available sizes: ${sizes.join(', ')}. Available colors: ${colors.join(', ')}. ${customPropsString}. - Check out this piece on Asoebi Africa`,
+        description: descriptionWithPrice,
         url: `https://asoebi.africa/products/${params.slug}`,
         siteName: 'Asoebi Africa',
         images: [
@@ -76,13 +88,17 @@ export async function generateMetadata({
       twitter: {
         card: 'summary_large_image',
         title: `${product?.name} - Asoebi Africa`,
-        description:
-          `${product?.longDescription}. Available sizes: ${sizes.join(', ')}. Available colors: ${colors.join(', ')}. ${customPropsString}.` ||
-          `${product?.name}. Available sizes: ${sizes.join(', ')}. Available colors: ${colors.join(', ')}. ${customPropsString}. - Check out this piece on Asoebi Africa`,
+        description: descriptionWithPrice,
         images: [
           product?.variants?.[0]?.media?.[0]?.url || 'asoebi-stacked-logo.svg',
         ],
       },
+      ...(priceAmount > 0 && {
+        other: {
+          'og:price:amount': String(priceAmount),
+          'og:price:currency': 'NGN',
+        },
+      }),
     };
   } catch (error) {
     //console.error('Error generating metadata:', error)

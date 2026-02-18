@@ -182,6 +182,8 @@ const ProductDetails = ({ product }: { product: Product }) => {
     return requiredKeysForVariant(firstVariant);
   }, [activeFilters, product?.variants]);
 
+  // TODO: unique variants should not always rely on the availability of a color
+  // Or logically, it does make sense that a product is only visually different if the colors are different
   const uniqueVariantsFromProductImages = availableColors
     ?.map((color) => groupedData?.[color]?.[0])
     .filter(Boolean);
