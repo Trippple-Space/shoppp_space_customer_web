@@ -6,7 +6,7 @@ export const getCartItemVariantPropertiesAsJsx = (
 ) => {
   return (
     <span className='flex gap-3'>
-      {Object.entries(cartItem.variant.properties).reduce(
+      {Object.entries(cartItem.variant?.properties).reduce(
         (cumm, [key, value]: any, i) => (
           <>
             {cumm}

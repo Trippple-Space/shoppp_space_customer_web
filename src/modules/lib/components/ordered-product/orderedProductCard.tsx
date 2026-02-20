@@ -44,18 +44,18 @@ function orderedProductCard({ orderedProducts }: any) {
                     </div>
                     <div className="flex flex-col gap-5">
                       {' '}
-                      {item.variant.size ? (
+                      {item.variant?.size ? (
                         <p className="color-#0000008C text-14 w-fit">
-                          Size: {item.variant.size}
+                          Size: {item.variant?.size}
                         </p>
                       ) : null}
-                      {item.variant.properties.color && (
+                      {item.variant?.properties?.color && (
                         <p className="color-#0000008C text-14">
-                          Color: {item.variant.properties.color}
+                          Color: {item.variant?.properties?.color}
                         </p>
                       )}
                       {item?.variant?.properties &&
-                        Object.entries(item.variant.properties).map(
+                        Object.entries(item.variant?.properties).map(
                           ([key, value]) => {
                             if (key === 'color' || key === 'size') return null;
                             return (

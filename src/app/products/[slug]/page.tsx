@@ -17,12 +17,12 @@ export async function generateMetadata({
       const customProperties: Record<string, Set<string>> = {};
 
       product.variants.forEach((variant) => {
-        if (variant.size) sizes.add(variant.size);
+        if (variant?.size) sizes.add(variant?.size);
 
-        if (variant.properties?.color) colors.add(variant.properties.color);
+        if (variant?.properties?.color) colors.add(variant?.properties?.color);
 
-        if (variant.properties) {
-          Object.entries(variant.properties).forEach(([key, value]) => {
+        if (variant?.properties) {
+          Object.entries(variant?.properties).forEach(([key, value]) => {
             if (key === 'color') return;
             if (!customProperties[key]) customProperties[key] = new Set();
             customProperties[key].add(
@@ -56,14 +56,12 @@ export async function generateMetadata({
       product?.price ??
       0;
     const priceFormatted =
-      priceAmount > 0
-        ? `₦${Number(priceAmount).toLocaleString('en')}`
-        : '';
+      priceAmount > 0 ? `₦${Number(priceAmount).toLocaleString('en')}` : '';
     const priceSuffix = priceFormatted ? ` Price: ${priceFormatted}.` : '';
 
     const descriptionBase =
-      `${product?.longDescription}. Available sizes: ${sizes.join(', ')}. Available colors: ${colors.join(', ')}. ${customPropsString}.` ||
-      `${product?.name}. Available sizes: ${sizes.join(', ')}. Available colors: ${colors.join(', ')}. ${customPropsString}. - Check out this piece on Asoebi Africa`;
+      `${product?.longDescription}. ${sizes ? `Available sizes: ${sizes.join(', ')}.` : ''} ${colors ? `Available colors: ${colors.join(', ')}.` : ''} ${customPropsString}.` ||
+      `${product?.name}. ${sizes ? `Available sizes: ${sizes.join(', ')}.` : ''} ${colors ? `Available colors: ${colors.join(', ')}.` : ''} ${customPropsString}. - Check out this piece on Asoebi Africa`;
     const descriptionWithPrice = `${descriptionBase}${priceSuffix}`;
 
     return {

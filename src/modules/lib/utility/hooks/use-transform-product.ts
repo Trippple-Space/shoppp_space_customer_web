@@ -6,7 +6,7 @@ const useTransformProduct = (product: Product) => {
   const allProperties: { [key: string]: string[] } = {};
 
   product?.variants?.forEach((variant) => {
-    const rawColor = variant.properties?.color || "";
+    const rawColor = variant?.properties?.color || "";
     const color = rawColor.trim()?.toLowerCase();
 
     if (!groupedData[color]) {
@@ -16,7 +16,7 @@ const useTransformProduct = (product: Product) => {
       groupedData[color].push(variant);
     }
 
-    Object.entries(variant.properties || {}).forEach(([key, value]) => {
+    Object.entries(variant?.properties || {}).forEach(([key, value]) => {
       if (!allProperties[key]) allProperties[key] = [];
       const stringValue = String(value);
       if (!allProperties[key].includes(stringValue)) allProperties[key].push(stringValue);
@@ -35,13 +35,13 @@ export const getVariantValue = (
   key: string
 ): string | undefined => {
   if (key === 'size') return variant.size ?? undefined;
-  return variant.properties?.[key];
+  return variant?.properties?.[key];
 };
 
 export const normalizeVariant = (variant: ProductVariant): ProductVariant => {
-  if (!variant.properties) return variant;
+  if (!variant?.properties) return variant;
 
-  const { size, ...rest } = variant.properties;
+  const { size, ...rest } = variant?.properties;
   return {
     ...variant,
     size: variant.size ?? size,
