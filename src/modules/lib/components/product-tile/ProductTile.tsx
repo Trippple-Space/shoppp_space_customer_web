@@ -303,8 +303,8 @@ const ProductTile: FC<IProductTile> = ({
 
     const hasSize = selectedVariant.size && selectedVariant.size.trim() !== '';
     const hasOtherProperties =
-      selectedVariant.properties &&
-      Object.keys(selectedVariant.properties).length > 0;
+      selectedVariant?.properties &&
+      Object.keys(selectedVariant?.properties).length > 0;
 
     return hasSize || hasOtherProperties;
   }, [selectedVariant]);

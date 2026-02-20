@@ -213,7 +213,7 @@ const MiniCart: React.FC<ModalProps> = ({
 
                                 {cartItem?.variant?.properties &&
                                   Object.entries(
-                                    cartItem.variant.properties
+                                    cartItem.variant?.properties
                                   ).map(([key, value]) => {
                                     if (key === 'color' || key === 'size')
                                       return null;
