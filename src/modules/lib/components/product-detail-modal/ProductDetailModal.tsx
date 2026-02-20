@@ -662,14 +662,16 @@ const ProductDetailModal = ({
                           </div>
 
                           <div className="mt-10 flex flex-col">
-                            {allPropertiesWithSize.color?.length > 0 && (
+                            {allPropertiesWithSize?.color?.filter(
+                              (v) => v.trim() !== ''
+                            )?.length > 0 && (
                               <div className="mt-12">
                                 <p className="text-left text-14 weight-400">
                                   Select color:
                                 </p>
 
                                 <div className="mt-10 flex gap-6 a-items-center">
-                                  {allPropertiesWithSize.color.map((color) => {
+                                  {allPropertiesWithSize?.color.map((color) => {
                                     const hex =
                                       colorMap[color.replaceAll(' ', '')];
                                     const active =
@@ -705,6 +707,11 @@ const ProductDetailModal = ({
                             {Object.entries(allPropertiesWithSize).map(
                               ([prop, values]) => {
                                 if (prop === 'color') return null;
+                                const cleanValues = values.filter(
+                                  (v) => v.trim() !== ''
+                                );
+
+                                if (cleanValues.length === 0) return null;
 
                                 return (
                                   <div key={prop} className="mt-12">

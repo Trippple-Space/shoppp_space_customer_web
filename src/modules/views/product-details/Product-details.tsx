@@ -193,7 +193,7 @@ const ProductDetails = ({ product }: { product: Product }) => {
     if (!product?.variants?.length) return [];
 
     const candidateKeys = [
-      ...(allPropertiesWithSize.color?.length ? ['color'] : []),
+      ...(allPropertiesWithSize?.color?.length ? ['color'] : []),
       ...Object.keys(allPropertiesWithSize).filter(
         (k) => k !== 'color' && k !== 'size'
       ),
@@ -434,7 +434,7 @@ const ProductDetails = ({ product }: { product: Product }) => {
       return next;
     });
   };
-  
+
   const resetToDefault = () => {
     setForcedVariantId(undefined);
     setActiveFilters({});
@@ -952,7 +952,8 @@ const ProductDetails = ({ product }: { product: Product }) => {
               <p className="weight-600 border-b border-#00000014 pb-15 pt-15">
                 VARIATIONS
               </p>
-              {allPropertiesWithSize.color?.length > 0 && (
+              {allPropertiesWithSize?.color?.filter((v) => v.trim() !== '')
+                ?.length > 0 && (
                 <div>
                   <p className="text-left text-12 weight-400 color-#000000B2 mb-12">
                     Select color:
@@ -987,6 +988,10 @@ const ProductDetails = ({ product }: { product: Product }) => {
 
               {Object.entries(allPropertiesWithSize).map(([prop, values]) => {
                 if (prop === 'color') return null;
+                const cleanValues = values.filter((v) => v.trim() !== '');
+
+                if (cleanValues.length === 0) return null;
+
                 return (
                   <div key={prop}>
                     <p className="text-left text-12 weight-400 color-#000000B2 mb-12">
@@ -1140,7 +1145,8 @@ const ProductDetails = ({ product }: { product: Product }) => {
                 VARIATIONS
               </p>
               <div className="flex flex-col gap-28">
-                {allPropertiesWithSize.color?.length > 0 && (
+                {allPropertiesWithSize?.color?.filter((v) => v.trim() !== '')
+                  ?.length > 0 && (
                   <div>
                     <p className="text-left text-12 weight-400 color-#000000B2 mb-12">
                       Select color:
@@ -1175,6 +1181,11 @@ const ProductDetails = ({ product }: { product: Product }) => {
                 )}
                 {Object.entries(allPropertiesWithSize).map(([prop, values]) => {
                   if (prop === 'color') return null;
+
+                  const cleanValues = values.filter((v) => v.trim() !== '');
+
+                  if (cleanValues.length === 0) return null;
+                  
                   return (
                     <div key={prop}>
                       <p className="text-left text-12 weight-400 color-#000000B2 mb-12">

@@ -23,7 +23,7 @@ export async function generateMetadata({
 
         if (variant?.properties) {
           Object.entries(variant?.properties).forEach(([key, value]) => {
-            if (key === 'color') return;
+            if (key === 'color' || key === 'size') return;
             if (!customProperties[key]) customProperties[key] = new Set();
             customProperties[key].add(
               Array.isArray(value) ? value.join(', ') : String(value)
