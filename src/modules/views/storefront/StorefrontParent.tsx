@@ -21,6 +21,9 @@ import { useCart } from '@/modules/lib/utility/hooks/use-cart';
 import ModernLuxe from '@/modules/templates/lustre/Lustre';
 import UrbanEdge from '@/modules/templates/urbanEdge/UrbanEdge';
 import SimpleFlow from '@/modules/templates/simpleFlow/SimpleFlow';
+import useUserStore from '@/modules/lib/utility/store/user.store';
+import { useGetIPAddress } from '@/modules/lib/utility/hooks/use-get-ip-address';
+import { useLogVisit } from '@/modules/lib/utility/hooks/use-log-visit';
 
 export const StorefrontParent: FC<{ store: Store }> = ({ store }) => {
   const [selectedCategory, setSelectedCategory] =
@@ -72,6 +75,12 @@ export const StorefrontParent: FC<{ store: Store }> = ({ store }) => {
   const { savedVariants } = useSavedVariant();
   const { cart } = useCart();
 
+  const [hasScrolled, setHasScrolled] = useState(false);
+  const { isAuthenticated } = useUserStore();
+  const { ipAddress } = useGetIPAddress();
+  const [hasPerformedAction, setHasPerformedAction] = useState(false);
+  const { logVisit } = useLogVisit(store?.id, { ipAddress: ipAddress });
+
   const scrollToProducts = () => {
     if (productsRef.current) {
       productsRef.current.scrollIntoView({ behavior: 'smooth' });
@@ -99,7 +108,6 @@ export const StorefrontParent: FC<{ store: Store }> = ({ store }) => {
         const remaining = products.filter(
           (p) => p.id !== first.id && !others.some((o) => o.id === p.id)
         );
-        console.log(remaining);
         const extra = remaining.slice(0, 3 - others.length);
         setNextTwoDiscounts([...others, ...extra]);
       } else {
@@ -118,6 +126,38 @@ export const StorefrontParent: FC<{ store: Store }> = ({ store }) => {
     }
   }, []);
 
+  useEffect(() => {
+    // Define the function to be triggered after 1 minute
+    const triggerFunction = () => {
+      if (isAuthenticated && hasScrolled && hasPerformedAction) {
+        logVisit();
+      }
+    };
+    // Set up the timer
+    const timer = setTimeout(triggerFunction, 10000);
+
+    // Scroll event handler
+    const handleScroll = () => {
+      setHasScrolled(true);
+    };
+    // Click event handler
+    const handleClick = () => {
+      setHasPerformedAction(true);
+    };
+
+    // Add scroll event listener
+    window.addEventListener('scroll', handleScroll);
+    // Add click event listener
+    window.addEventListener('click', handleClick);
+
+    // Cleanup: remove event listener and clear timeout
+    return () => {
+      window.removeEventListener('scroll', handleScroll);
+      window.removeEventListener('click', handleClick);
+      clearTimeout(timer);
+    };
+  }, [isAuthenticated, hasScrolled, hasPerformedAction]);
+
   return (
     <>
       {template ? (
@@ -125,7 +165,6 @@ export const StorefrontParent: FC<{ store: Store }> = ({ store }) => {
           <TrendFashion
             store={store}
             products={products}
-            filteredProducts={filteredProducts}
             allReviews={allReviews}
             openReviewId={openReviewId}
             setOpenReviewId={setOpenReviewId}
@@ -150,8 +189,7 @@ export const StorefrontParent: FC<{ store: Store }> = ({ store }) => {
         ) : template?.name === 'Minimal' ? (
           <Furniture
             store={store}
-            products={products}
-            filteredProducts={filteredProducts}
+            products={filteredProducts}
             allReviews={allReviews}
             openReviewId={openReviewId}
             setOpenReviewId={setOpenReviewId}
@@ -192,7 +230,6 @@ export const StorefrontParent: FC<{ store: Store }> = ({ store }) => {
             discountText={discountText}
             store={store}
             products={products}
-            filteredProducts={filteredProducts}
             allReviews={allReviews}
             openReviewId={openReviewId}
             setOpenReviewId={setOpenReviewId}
@@ -220,7 +257,6 @@ export const StorefrontParent: FC<{ store: Store }> = ({ store }) => {
           <ModernLuxe
             store={store}
             products={products}
-            filteredProducts={filteredProducts}
             allReviews={allReviews}
             openReviewId={openReviewId}
             setOpenReviewId={setOpenReviewId}
@@ -285,7 +321,6 @@ export const StorefrontParent: FC<{ store: Store }> = ({ store }) => {
           <UrbanEdge
             store={store}
             products={products}
-            filteredProducts={filteredProducts}
             allReviews={allReviews}
             openReviewId={openReviewId}
             setOpenReviewId={setOpenReviewId}
@@ -311,8 +346,7 @@ export const StorefrontParent: FC<{ store: Store }> = ({ store }) => {
         ) : template?.name === 'Simple-flow' ? (
           <SimpleFlow
             store={store}
-            products={products}
-            filteredProducts={filteredProducts}
+            products={filteredProducts}
             allReviews={allReviews}
             openReviewId={openReviewId}
             setOpenReviewId={setOpenReviewId}
@@ -336,12 +370,20 @@ export const StorefrontParent: FC<{ store: Store }> = ({ store }) => {
             loading={loading}
           />
         ) : (
-          <StorefrontLayout store={store}>
+          <StorefrontLayout
+            store={store}
+            products={filteredProducts}
+            loading={loading}
+          >
             <StorefrontAbout store={store} />
           </StorefrontLayout>
         )
       ) : (
-        <StorefrontLayout store={store}>
+        <StorefrontLayout
+          store={store}
+          products={filteredProducts}
+          loading={loading}
+        >
           <StorefrontAbout store={store} />
         </StorefrontLayout>
       )}

@@ -16,13 +16,15 @@ import ProductTile from '@/modules/lib/components/product-tile/ProductTile';
 import { PiShoppingCart } from 'react-icons/pi';
 import { BsArrowUp } from 'react-icons/bs';
 import { DotsLoader } from '@/modules/lib/components/dots-loader/DotsLoader';
+import StoreProductsList from '@/modules/views/storefront/StoreProductsList';
+import Collections from '@/modules/views/homepage/Collections';
 
 const UrbanEdge: FC<{
   store: Store;
   handleUserProfileDropdown: () => void;
   handleCloseDropdown: () => void;
   openReviewId: string | null;
-  filteredProducts: Product[];
+  products: Product[];
   setOpenReviewId: React.Dispatch<React.SetStateAction<string | null>>;
   cartOpen: boolean;
   setCartOpen: React.Dispatch<React.SetStateAction<boolean>>;
@@ -32,7 +34,6 @@ const UrbanEdge: FC<{
   setProfileModal: React.Dispatch<React.SetStateAction<string>>;
   menuOpen: boolean;
   setMenuOpen: React.Dispatch<React.SetStateAction<boolean>>;
-  products: Product[];
   allReviews: IFetchedReview[];
   selectedCategory: ProductCategory | null;
   setSelectedCategory: React.Dispatch<
@@ -48,7 +49,7 @@ const UrbanEdge: FC<{
   store,
   handleUserProfileDropdown,
   handleCloseDropdown,
-  filteredProducts,
+  products,
   openReviewId,
   setOpenReviewId,
   cartOpen,
@@ -164,6 +165,9 @@ const UrbanEdge: FC<{
             ))}
           </section>
         )}
+
+        <Collections storeId={store.id} />
+
         <section className="py-30 sm:py-40 md:py-50 l:py-60" ref={productsRef}>
           <div className="urbanEdge_product-headings">
             <h3 className="font-volkhov">
@@ -174,30 +178,11 @@ const UrbanEdge: FC<{
             )}
           </div>
 
-          {filteredProducts.length === 0 && loading ? (
-            <div className="w-100p flex j-content-center mt-10">
-              <DotsLoader />
-            </div>
-          ) : filteredProducts.length ? (
-            <div className="grid l:grid-4-cols-1fr sm:grid-3-cols-1fr grid-2-cols-1fr l:gap-20 sm:gap-10 gap-20 w-full mt-30">
-              {filteredProducts.map((product, i) => (
-                <div key={i} className="l:mt--20 mt--30 w-full overflow-hidden">
-                  <ProductTile
-                    product={product}
-                    key={i}
-                    allReviews={allReviews}
-                    id={product.id}
-                    isOpen={openReviewId}
-                    setIsOpen={setOpenReviewId}
-                  />
-                </div>
-              ))}
-            </div>
-          ) : (
-            <div className="mt-60 grid-col-span-5 text-center bg-white">
-              No products found for the selected filters
-            </div>
-          )}
+          <StoreProductsList
+            products={products}
+            store={store}
+            loading={loading}
+          />
         </section>
         <div className="urbanEdge__floating">
           <button

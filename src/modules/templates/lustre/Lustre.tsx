@@ -15,13 +15,14 @@ import UserProfileDropdown from '@/modules/lib/components/nav-bar/profile-modal/
 import MiniCart from '@/modules/lib/components/minicart/MiniCart';
 import Collections from '@/modules/views/homepage/Collections';
 import { DotsLoader } from '@/modules/lib/components/dots-loader/DotsLoader';
+import StoreProductsList from '@/modules/views/storefront/StoreProductsList';
 
 const ModernLuxe: FC<{
   store: Store;
   handleUserProfileDropdown: () => void;
   handleCloseDropdown: () => void;
   openReviewId: string | null;
-  filteredProducts: Product[];
+  products: Product[];
   setOpenReviewId: React.Dispatch<React.SetStateAction<string | null>>;
   cartOpen: boolean;
   setCartOpen: React.Dispatch<React.SetStateAction<boolean>>;
@@ -31,7 +32,6 @@ const ModernLuxe: FC<{
   setProfileModal: React.Dispatch<React.SetStateAction<string>>;
   menuOpen: boolean;
   setMenuOpen: React.Dispatch<React.SetStateAction<boolean>>;
-  products: Product[];
   allReviews: IFetchedReview[];
   selectedCategory: ProductCategory | null;
   setSelectedCategory: React.Dispatch<
@@ -47,7 +47,7 @@ const ModernLuxe: FC<{
   store,
   handleUserProfileDropdown,
   handleCloseDropdown,
-  filteredProducts,
+  products,
   openReviewId,
   setOpenReviewId,
   cartOpen,
@@ -262,30 +262,11 @@ const ModernLuxe: FC<{
           )}
         </div>
 
-        {filteredProducts.length === 0 && loading ? (
-          <div className="w-100p flex j-content-center mt-10">
-            <DotsLoader />
-          </div>
-        ) : filteredProducts.length ? (
-          <div className="grid l:grid-4-cols-1fr sm:grid-3-cols-1fr grid-2-cols-1fr l:gap-20 sm:gap-10 gap-20 w-full mt-30">
-            {filteredProducts.map((product, i) => (
-              <div key={i} className="l:mt--20 mt--30 w-full overflow-hidden">
-                <ProductTile
-                  product={product}
-                  key={i}
-                  allReviews={allReviews}
-                  id={product.id}
-                  isOpen={openReviewId}
-                  setIsOpen={setOpenReviewId}
-                />
-              </div>
-            ))}
-          </div>
-        ) : (
-          <div className="mt-60 grid-col-span-5 text-center bg-white">
-            No products found for the selected filters
-          </div>
-        )}
+        <StoreProductsList
+          products={products}
+          store={store}
+          loading={loading}
+        />
       </section>
 
       <StorefrontFooter store={store} />

@@ -14,13 +14,14 @@ import MobileNav from '@/modules/lib/components/nav-bar/mobile-nav/MobileNav';
 import StorefrontFooter from '@/modules/lib/components/footer/StorefrontFooter';
 import { IFetchedReview } from '@/modules/lib/utility/types/review.interface';
 import { DotsLoader } from '@/modules/lib/components/dots-loader/DotsLoader';
+import StoreProductsList from '@/modules/views/storefront/StoreProductsList';
+import Collections from '@/modules/views/homepage/Collections';
 
 const TrendFashion: FC<{
   store: Store;
   handleUserProfileDropdown: () => void;
   handleCloseDropdown: () => void;
   openReviewId: string | null;
-  filteredProducts: Product[];
   setOpenReviewId: React.Dispatch<React.SetStateAction<string | null>>;
   cartOpen: boolean;
   setCartOpen: React.Dispatch<React.SetStateAction<boolean>>;
@@ -45,7 +46,6 @@ const TrendFashion: FC<{
   store,
   handleUserProfileDropdown,
   handleCloseDropdown,
-  filteredProducts,
   openReviewId,
   setOpenReviewId,
   cartOpen,
@@ -72,11 +72,13 @@ const TrendFashion: FC<{
         <section className="navbar">
           <div className="navbar-child">
             <div className="logo-container trend-flex sm:max-w-100p max-w-69p">
-              <img
-                src={store?.thumbnail || ''}
-                alt="logo-img"
-                className="logo-img"
-              />
+              {store?.thumbnail && (
+                <img
+                  src={store?.thumbnail || ''}
+                  alt="logo-img"
+                  className="logo-img"
+                />
+              )}
               <h1 className="logo truncate">{store?.name || ''}</h1>
             </div>
             {/* <nav className="nav-links">
@@ -214,6 +216,8 @@ const TrendFashion: FC<{
           </section>
         )}
 
+      <Collections storeId={store.id} />
+
       <section className="exclusive" ref={productsRef}>
         <h2 className="exclusive-header">
           {template?.productSectionHeading || 'Exclusive Products'}
@@ -224,30 +228,11 @@ const TrendFashion: FC<{
           </p>
         )}
 
-        {filteredProducts.length === 0 && loading ? (
-          <div className="w-100p flex j-content-center mt-10">
-            <DotsLoader />
-          </div>
-        ) : filteredProducts.length ? (
-          <div className="grid l:grid-4-cols-1fr sm:grid-3-cols-1fr grid-2-cols-1fr l:gap-20 sm:gap-10 gap-20 w-full mt-30">
-            {filteredProducts.map((product, i) => (
-              <div key={i} className="l:mt--20 mt--30 w-full overflow-hidden">
-                <ProductTile
-                  product={product}
-                  key={i}
-                  allReviews={allReviews}
-                  id={product.id}
-                  isOpen={openReviewId}
-                  setIsOpen={setOpenReviewId}
-                />
-              </div>
-            ))}
-          </div>
-        ) : (
-          <div className="mt-60 grid-col-span-5 text-center bg-white">
-            No products found for the selected filters
-          </div>
-        )}
+        <StoreProductsList
+          products={products}
+          store={store}
+          loading={loading}
+        />
       </section>
 
       {/*mini-cart */}
