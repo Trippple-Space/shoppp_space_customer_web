@@ -34,6 +34,7 @@ import { useOrders } from '../../utility/hooks/use-orders';
 import Button from '../button/Button';
 import { useProductTileOrders } from '../../utility/hooks/use-product-tile-orders';
 import { LuChevronRight } from 'react-icons/lu';
+import { buildUserConfigurations } from '../product-detail-modal/productConfigurationsHelper';
 
 interface IProductTile {
   product: Product;
@@ -253,8 +254,16 @@ const ProductTile: FC<IProductTile> = ({
     }
   };
 
-  function handleLogin(variantId: string, minimumPurchase: number) {
-    saveVariantToLocalStorage(variantId, minimumPurchase.toString());
+  function handleLogin(
+    variantId: string,
+    minimumPurchase: number,
+    userConfigurations?: Record<string, any>
+  ) {
+    saveVariantToLocalStorage(
+      variantId,
+      minimumPurchase.toString(),
+      userConfigurations
+    );
     isLoginModal();
   }
 
@@ -453,6 +462,34 @@ const ProductTile: FC<IProductTile> = ({
     }
   };
 
+  const configurationRecords = selectedVariant?.configurationRecords ?? [];
+  const [configurationValues, setConfigurationValues] = useState<
+    Record<string, any>
+  >({});
+
+  useEffect(() => {
+    if (!selectedVariantItemInCart?.userConfigurations) return;
+
+    const nextValues: Record<string, any> = {};
+
+    Object.values(selectedVariantItemInCart.userConfigurations).forEach(
+      (schema: any) => {
+        if (!schema || typeof schema !== 'object') return;
+
+        Object.entries(schema).forEach(([fieldName, value]) => {
+          nextValues[fieldName] = value;
+        });
+      }
+    );
+
+    setConfigurationValues(nextValues);
+  }, [selectedVariantItemInCart]);
+
+  const userConfigurations = buildUserConfigurations(
+    configurationValues,
+    configurationRecords
+  );
+
   return (
     <div className="mt-30 l:mt-20 w-full overflow-hidden">
       {showOnBoardingModal && indexCount && (
@@ -607,12 +644,14 @@ const ProductTile: FC<IProductTile> = ({
                           }
                           addToCart(
                             selectedVariant.id,
-                            selectedVariant.minPurchaseQuantity || 1
+                            selectedVariant.minPurchaseQuantity || 1,
+                            userConfigurations
                           );
                         } else {
                           handleLogin(
                             selectedVariant.id,
-                            selectedVariant.minPurchaseQuantity || 1
+                            selectedVariant.minPurchaseQuantity || 1,
+                            userConfigurations
                           );
                         }
                       }
@@ -678,7 +717,10 @@ const ProductTile: FC<IProductTile> = ({
         >
           {uniqueVariantsFromProductImages.map((variant: any) =>
             variant?.media?.map((mediaItem: any, i: number) => (
-              <div key={mediaItem + i} className="l:w-35.2 l:min-w-35.2 l:h-35.2 w-31 min-w-31 h-31 pointer md:radius-4 radius-3 a-self-center relative">
+              <div
+                key={mediaItem + i}
+                className="l:w-35.2 l:min-w-35.2 l:h-35.2 w-31 min-w-31 h-31 pointer md:radius-4 radius-3 a-self-center relative"
+              >
                 {mediaItem?.type === 'image' ? (
                   <Image
                     key={`${variant.id}-${mediaItem.url}-${i}`}

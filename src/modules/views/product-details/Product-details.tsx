@@ -1185,7 +1185,7 @@ const ProductDetails = ({ product }: { product: Product }) => {
                   const cleanValues = values.filter((v) => v.trim() !== '');
 
                   if (cleanValues.length === 0) return null;
-                  
+
                   return (
                     <div key={prop}>
                       <p className="text-left text-12 weight-400 color-#000000B2 mb-12">
@@ -1222,16 +1222,18 @@ const ProductDetails = ({ product }: { product: Product }) => {
                   );
                 })}
 
-                <DisplayProductConfigurations
-                  configurationRecords={configurationRecords}
-                  configurationValues={configurationValues}
-                  handleConfigChange={handleConfigChange}
-                  userConfigurations={
-                    selectedVariantItemInCart?.userConfigurations
-                  }
-                  isEditingConfiguration={isEditingConfiguration}
-                  onEditConfiguration={() => setIsEditingConfiguration(true)}
-                />
+                {selectedVariant?.status !== 'OUT_OF_STOCK' && (
+                  <DisplayProductConfigurations
+                    configurationRecords={configurationRecords}
+                    configurationValues={configurationValues}
+                    handleConfigChange={handleConfigChange}
+                    userConfigurations={
+                      selectedVariantItemInCart?.userConfigurations
+                    }
+                    isEditingConfiguration={isEditingConfiguration}
+                    onEditConfiguration={() => setIsEditingConfiguration(true)}
+                  />
+                )}
 
                 {addToCartBtn()}
               </div>

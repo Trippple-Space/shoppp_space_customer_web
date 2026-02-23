@@ -396,10 +396,16 @@ export function getLastFiveIdChars(id: string): string {
 
 
 
-export function saveVariantToLocalStorage(variantId: string, minimumPur: string) {
+export function saveVariantToLocalStorage(variantId: string, minimumPur: string, userConfigurations?: Record<string, any>) {
   if (typeof window === "undefined") return
   localStorage.setItem('variantId', variantId)
   localStorage.setItem('variantIdMinimumPurchase', minimumPur.toString())
+  if (userConfigurations) {
+    localStorage.setItem(
+      'userConfigurations',
+      JSON.stringify(userConfigurations)
+    );
+  }
 }
 
 

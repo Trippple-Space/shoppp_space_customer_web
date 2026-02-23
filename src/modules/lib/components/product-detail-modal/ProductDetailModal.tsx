@@ -781,20 +781,24 @@ const ProductDetailModal = ({
                                 </div>
                               )}
 
-                            <div className="mt-20">
-                              <DisplayProductConfigurations
-                                configurationRecords={configurationRecords}
-                                configurationValues={configurationValues}
-                                handleConfigChange={handleConfigChange}
-                                userConfigurations={
-                                  selectedVariantItemInCart?.userConfigurations
-                                }
-                                isEditingConfiguration={isEditingConfiguration}
-                                onEditConfiguration={() =>
-                                  setIsEditingConfiguration(true)
-                                }
-                              />
-                            </div>
+                            {selectedVariant?.status !== 'OUT_OF_STOCK' && (
+                              <div className="mt-20">
+                                <DisplayProductConfigurations
+                                  configurationRecords={configurationRecords}
+                                  configurationValues={configurationValues}
+                                  handleConfigChange={handleConfigChange}
+                                  userConfigurations={
+                                    selectedVariantItemInCart?.userConfigurations
+                                  }
+                                  isEditingConfiguration={
+                                    isEditingConfiguration
+                                  }
+                                  onEditConfiguration={() =>
+                                    setIsEditingConfiguration(true)
+                                  }
+                                />
+                              </div>
+                            )}
 
                             <div className="grid mt-20 mb-10 gap-10">
                               {!selectedVariantItemInCart ? (
