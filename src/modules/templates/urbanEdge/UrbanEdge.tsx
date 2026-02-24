@@ -1,69 +1,39 @@
 import React, { FC } from 'react';
 import '../urbanEdge/urbanEdge.css';
-import { Store } from '@/modules/lib/utility/types/store.interface';
-import {
-  Product,
-  ProductCategory,
-} from '@/modules/lib/utility/types/product.interface';
-import { IFetchedReview } from '@/modules/lib/utility/types/review.interface';
 import { RiCloseFill, RiMenu2Fill } from 'react-icons/ri';
 import MobileNav from '@/modules/lib/components/nav-bar/mobile-nav/MobileNav';
 import UserProfileDropdown from '@/modules/lib/components/nav-bar/profile-modal/UserProfileDropdown';
 import MiniCart from '@/modules/lib/components/minicart/MiniCart';
 import { Cart } from '@/modules/lib/utility/types/cart.interface';
 import StorefrontFooter from '@/modules/lib/components/footer/StorefrontFooter';
-import ProductTile from '@/modules/lib/components/product-tile/ProductTile';
 import { PiShoppingCart } from 'react-icons/pi';
-import { BsArrowUp } from 'react-icons/bs';
-import { DotsLoader } from '@/modules/lib/components/dots-loader/DotsLoader';
 import StoreProductsList from '@/modules/views/storefront/StoreProductsList';
 import Collections from '@/modules/views/homepage/Collections';
+import { BaseStorefrontProps } from '@/modules/lib/utility/types/storefront-template.interface';
 
-const UrbanEdge: FC<{
-  store: Store;
-  handleUserProfileDropdown: () => void;
-  handleCloseDropdown: () => void;
-  openReviewId: string | null;
-  products: Product[];
-  setOpenReviewId: React.Dispatch<React.SetStateAction<string | null>>;
-  cartOpen: boolean;
-  setCartOpen: React.Dispatch<React.SetStateAction<boolean>>;
-  userProfileDropdown: boolean;
-  setUserProfileDropdown: React.Dispatch<React.SetStateAction<boolean>>;
-  profileModal: string;
-  setProfileModal: React.Dispatch<React.SetStateAction<string>>;
-  menuOpen: boolean;
-  setMenuOpen: React.Dispatch<React.SetStateAction<boolean>>;
-  allReviews: IFetchedReview[];
-  selectedCategory: ProductCategory | null;
-  setSelectedCategory: React.Dispatch<
-    React.SetStateAction<ProductCategory | null>
-  >;
-  handleCategoryChange: (category: ProductCategory) => void;
-  template?: any;
-  scrollToProducts: () => void;
-  productsRef: React.RefObject<HTMLElement>;
+type UrbanEdgeProps = BaseStorefrontProps & {
   cart?: Cart;
-  loading: boolean;
-}> = ({
+};
+
+const UrbanEdge: FC<UrbanEdgeProps> = ({
   store,
   handleUserProfileDropdown,
   handleCloseDropdown,
   products,
-  openReviewId,
-  setOpenReviewId,
   cartOpen,
   setCartOpen,
   userProfileDropdown,
   setProfileModal,
   menuOpen,
   setMenuOpen,
-  allReviews,
   template,
   scrollToProducts,
   productsRef,
   cart,
   loading,
+  page,
+  setPage,
+  totalPages
 }) => {
   return (
     <>
@@ -182,6 +152,9 @@ const UrbanEdge: FC<{
             products={products}
             store={store}
             loading={loading}
+            page={page}
+            onPageChange={setPage}
+            totalPages={totalPages}
           />
         </section>
         <div className="urbanEdge__floating">

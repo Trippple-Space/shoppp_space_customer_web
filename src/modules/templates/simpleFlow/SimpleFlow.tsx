@@ -23,52 +23,31 @@ import MobileNav from '@/modules/lib/components/nav-bar/mobile-nav/MobileNav';
 import { DotsLoader } from '@/modules/lib/components/dots-loader/DotsLoader';
 import StoreProductsList from '@/modules/views/storefront/StoreProductsList';
 import Collections from '@/modules/views/homepage/Collections';
+import { BaseStorefrontProps } from '@/modules/lib/utility/types/storefront-template.interface';
 
-const SimpleFlow: FC<{
-  store: Store;
-  handleUserProfileDropdown: () => void;
-  handleCloseDropdown: () => void;
-  openReviewId: string | null;
-  products: Product[];
-  setOpenReviewId: React.Dispatch<React.SetStateAction<string | null>>;
-  cartOpen: boolean;
-  setCartOpen: React.Dispatch<React.SetStateAction<boolean>>;
-  userProfileDropdown: boolean;
-  setUserProfileDropdown: React.Dispatch<React.SetStateAction<boolean>>;
-  profileModal: string;
-  setProfileModal: React.Dispatch<React.SetStateAction<string>>;
-  menuOpen: boolean;
-  setMenuOpen: React.Dispatch<React.SetStateAction<boolean>>;
-  allReviews: IFetchedReview[];
-  selectedCategory: ProductCategory | null;
-  setSelectedCategory: React.Dispatch<
-    React.SetStateAction<ProductCategory | null>
-  >;
-  handleCategoryChange: (category: ProductCategory) => void;
-  template?: any;
-  scrollToProducts: () => void;
-  productsRef: React.RefObject<HTMLElement>;
+type SimpleFlowProps = BaseStorefrontProps & {
   cart?: Cart;
-  loading: boolean;
-}> = ({
+};
+
+const SimpleFlow: FC<SimpleFlowProps> = ({
   store,
   handleUserProfileDropdown,
   handleCloseDropdown,
   products,
-  openReviewId,
-  setOpenReviewId,
   cartOpen,
   setCartOpen,
   userProfileDropdown,
   setProfileModal,
   menuOpen,
   setMenuOpen,
-  allReviews,
   template,
   scrollToProducts,
   productsRef,
   cart,
   loading,
+  page,
+  setPage,
+  totalPages,
 }) => {
   return (
     <>
@@ -181,7 +160,12 @@ const SimpleFlow: FC<{
                   {store?.meta?.template?.features
                     .slice(0, 3)
                     .map((feature: any, idx: number) => {
-                      if (!feature?.header && !feature?.icon && !feature?.content) return null
+                      if (
+                        !feature?.header &&
+                        !feature?.icon &&
+                        !feature?.content
+                      )
+                        return null;
                       return (
                         <div
                           className="simpleFlow__featureCard"
@@ -229,6 +213,9 @@ const SimpleFlow: FC<{
               products={products}
               store={store}
               loading={loading}
+              page={page}
+              onPageChange={setPage}
+              totalPages={totalPages}
             />
           </div>
         </section>

@@ -2,69 +2,34 @@
 
 import { FC } from 'react';
 import '../trendFashion/trendFashion.css';
-import { Store } from '@/modules/lib/utility/types/store.interface';
-import {
-  Product,
-  ProductCategory,
-} from '@/modules/lib/utility/types/product.interface';
-import ProductTile from '@/modules/lib/components/product-tile/ProductTile';
-import MiniCart from '@/modules/lib/components/minicart/MiniCart';
 import UserProfileDropdown from '@/modules/lib/components/nav-bar/profile-modal/UserProfileDropdown';
 import MobileNav from '@/modules/lib/components/nav-bar/mobile-nav/MobileNav';
 import StorefrontFooter from '@/modules/lib/components/footer/StorefrontFooter';
-import { IFetchedReview } from '@/modules/lib/utility/types/review.interface';
-import { DotsLoader } from '@/modules/lib/components/dots-loader/DotsLoader';
 import StoreProductsList from '@/modules/views/storefront/StoreProductsList';
 import Collections from '@/modules/views/homepage/Collections';
+import { BaseStorefrontProps } from '@/modules/lib/utility/types/storefront-template.interface';
+import MiniCart from '@/modules/lib/components/minicart/MiniCart';
 
-const TrendFashion: FC<{
-  store: Store;
-  handleUserProfileDropdown: () => void;
-  handleCloseDropdown: () => void;
-  openReviewId: string | null;
-  setOpenReviewId: React.Dispatch<React.SetStateAction<string | null>>;
-  cartOpen: boolean;
-  setCartOpen: React.Dispatch<React.SetStateAction<boolean>>;
-  userProfileDropdown: boolean;
-  setUserProfileDropdown: React.Dispatch<React.SetStateAction<boolean>>;
-  profileModal: string;
-  setProfileModal: React.Dispatch<React.SetStateAction<string>>;
-  menuOpen: boolean;
-  setMenuOpen: React.Dispatch<React.SetStateAction<boolean>>;
-  products: Product[];
-  allReviews: IFetchedReview[];
-  selectedCategory: ProductCategory | null;
-  setSelectedCategory: React.Dispatch<
-    React.SetStateAction<ProductCategory | null>
-  >;
-  handleCategoryChange: (category: ProductCategory) => void;
-  template?: any;
-  scrollToProducts: () => void;
-  productsRef: React.RefObject<HTMLElement>;
-  loading: boolean;
-}> = ({
+type TrendFashionProps = BaseStorefrontProps;
+
+const TrendFashion: FC<TrendFashionProps> = ({
   store,
   handleUserProfileDropdown,
   handleCloseDropdown,
-  openReviewId,
-  setOpenReviewId,
   cartOpen,
   setCartOpen,
   userProfileDropdown,
-  setUserProfileDropdown,
-  profileModal,
   setProfileModal,
   menuOpen,
   setMenuOpen,
   products,
-  allReviews,
-  selectedCategory,
-  setSelectedCategory,
-  handleCategoryChange,
   template,
   scrollToProducts,
   productsRef,
   loading,
+  page,
+  setPage,
+  totalPages
 }) => {
   return (
     <div className="trend-body font-inter">
@@ -232,6 +197,9 @@ const TrendFashion: FC<{
           products={products}
           store={store}
           loading={loading}
+          page={page}
+          totalPages={totalPages}
+          onPageChange={setPage}
         />
       </section>
 

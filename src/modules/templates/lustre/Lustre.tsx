@@ -1,68 +1,46 @@
 import React, { FC } from 'react';
 import { FaShoppingBag, FaUser } from 'react-icons/fa';
 import '../lustre/lustre.css';
-import { Store } from '@/modules/lib/utility/types/store.interface';
-import {
-  Product,
-  ProductCategory,
-} from '@/modules/lib/utility/types/product.interface';
-import { IFetchedReview } from '@/modules/lib/utility/types/review.interface';
-import ProductTile from '@/modules/lib/components/product-tile/ProductTile';
 import StorefrontFooter from '@/modules/lib/components/footer/StorefrontFooter';
 import { ProductSearch } from './ProductSearch';
 import MobileNav from '@/modules/lib/components/nav-bar/mobile-nav/MobileNav';
 import UserProfileDropdown from '@/modules/lib/components/nav-bar/profile-modal/UserProfileDropdown';
 import MiniCart from '@/modules/lib/components/minicart/MiniCart';
 import Collections from '@/modules/views/homepage/Collections';
-import { DotsLoader } from '@/modules/lib/components/dots-loader/DotsLoader';
 import StoreProductsList from '@/modules/views/storefront/StoreProductsList';
+import { BaseStorefrontProps } from '@/modules/lib/utility/types/storefront-template.interface';
 
-const ModernLuxe: FC<{
-  store: Store;
-  handleUserProfileDropdown: () => void;
-  handleCloseDropdown: () => void;
-  openReviewId: string | null;
-  products: Product[];
-  setOpenReviewId: React.Dispatch<React.SetStateAction<string | null>>;
-  cartOpen: boolean;
-  setCartOpen: React.Dispatch<React.SetStateAction<boolean>>;
-  userProfileDropdown: boolean;
-  setUserProfileDropdown: React.Dispatch<React.SetStateAction<boolean>>;
-  profileModal: string;
-  setProfileModal: React.Dispatch<React.SetStateAction<string>>;
-  menuOpen: boolean;
-  setMenuOpen: React.Dispatch<React.SetStateAction<boolean>>;
-  allReviews: IFetchedReview[];
-  selectedCategory: ProductCategory | null;
-  setSelectedCategory: React.Dispatch<
-    React.SetStateAction<ProductCategory | null>
-  >;
-  handleCategoryChange: (category: ProductCategory) => void;
-  template?: any;
-  scrollToProducts: () => void;
-  productsRef: React.RefObject<HTMLElement>;
-  offers: { price?: string; text?: string; subText?: string; image?: string }[];
-  loading: boolean;
-}> = ({
-  store,
-  handleUserProfileDropdown,
-  handleCloseDropdown,
-  products,
-  openReviewId,
-  setOpenReviewId,
-  cartOpen,
-  setCartOpen,
-  userProfileDropdown,
-  setProfileModal,
-  menuOpen,
-  setMenuOpen,
-  allReviews,
-  template,
-  scrollToProducts,
-  productsRef,
-  offers,
-  loading,
-}) => {
+type ModernLuxeProps = BaseStorefrontProps & {
+  offers: {
+    price?: string;
+    text?: string;
+    subText?: string;
+    image?: string;
+  }[];
+};
+
+const ModernLuxe: FC<ModernLuxeProps> = (props) => {
+  const {
+    store,
+    cartOpen,
+    setCartOpen,
+    menuOpen,
+    setMenuOpen,
+    userProfileDropdown,
+    setProfileModal,
+    handleUserProfileDropdown,
+    handleCloseDropdown,
+    products,
+    template,
+    scrollToProducts,
+    productsRef,
+    loading,
+    page,
+    setPage,
+    totalPages,
+    offers,
+  } = props;
+
   return (
     <div className="modernLuxe__page-wrapper">
       <div className="modernLuxe__header-wrapper">
@@ -266,6 +244,9 @@ const ModernLuxe: FC<{
           products={products}
           store={store}
           loading={loading}
+          page={page}
+          onPageChange={setPage}
+          totalPages={totalPages}
         />
       </section>
 

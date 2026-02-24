@@ -21,74 +21,54 @@ import StorefrontFooter from '@/modules/lib/components/footer/StorefrontFooter';
 import { DotsLoader } from '@/modules/lib/components/dots-loader/DotsLoader';
 import Collections from '@/modules/views/homepage/Collections';
 import StoreProductsList from '@/modules/views/storefront/StoreProductsList';
+import { BaseStorefrontProps } from '@/modules/lib/utility/types/storefront-template.interface';
 
-type ModernEarthProps = {
+type ModernEarthProps = BaseStorefrontProps & {
   title: string;
   description: string;
   primaryBtnText: string;
   heroImage: string;
-  offers: { price?: string; text?: string; subText?: string; image?: string }[];
-  store: Store;
-  handleUserProfileDropdown: () => void;
-  handleCloseDropdown: () => void;
-  openReviewId: string | null;
-  setOpenReviewId: React.Dispatch<React.SetStateAction<string | null>>;
-  cartOpen: boolean;
-  setCartOpen: React.Dispatch<React.SetStateAction<boolean>>;
-  userProfileDropdown: boolean;
-  setUserProfileDropdown: React.Dispatch<React.SetStateAction<boolean>>;
-  profileModal: string;
-  setProfileModal: React.Dispatch<React.SetStateAction<string>>;
-  menuOpen: boolean;
-  setMenuOpen: React.Dispatch<React.SetStateAction<boolean>>;
-  products: Product[];
-  allReviews: IFetchedReview[];
-  selectedCategory: ProductCategory | null;
-  setSelectedCategory: React.Dispatch<
-    React.SetStateAction<ProductCategory | null>
-  >;
-  handleCategoryChange: (category: ProductCategory) => void;
-  template?: any;
-  scrollToProducts: () => void;
-  productsRef: React.RefObject<HTMLElement>;
+
+  offers: {
+    price?: string;
+    text?: string;
+    subText?: string;
+    image?: string;
+  }[];
+
   cart?: Cart;
   savedVariant?: SavedVariant[];
   discountText?: string;
-  loading: boolean;
 };
+const ModernEarth: React.FC<ModernEarthProps> = (props) => {
+  const {
+    store,
+    cartOpen,
+    setCartOpen,
+    menuOpen,
+    setMenuOpen,
+    userProfileDropdown,
+    setProfileModal,
+    handleUserProfileDropdown,
+    handleCloseDropdown,
+    products,
+    template,
+    scrollToProducts,
+    productsRef,
+    loading,
+    page,
+    setPage,
+    totalPages,
+    discountText,
+    savedVariant,
+    cart,
+    heroImage,
+    title,
+    description,
+    primaryBtnText,
+    offers,
+  } = props;
 
-const ModernEarth: React.FC<ModernEarthProps> = ({
-  title,
-  description,
-  primaryBtnText,
-  heroImage,
-  offers,
-  store,
-  handleUserProfileDropdown,
-  handleCloseDropdown,
-  openReviewId,
-  setOpenReviewId,
-  cartOpen,
-  setCartOpen,
-  userProfileDropdown,
-  setUserProfileDropdown,
-  profileModal,
-  setProfileModal,
-  menuOpen,
-  setMenuOpen,
-  products,
-  allReviews,
-  selectedCategory,
-  setSelectedCategory,
-  handleCategoryChange,
-  template,
-  scrollToProducts,
-  productsRef,
-  cart,
-  savedVariant,
-  discountText,
-  loading,
-}) => {
   return (
     <>
       <div className="font-dmSans">
@@ -302,6 +282,9 @@ const ModernEarth: React.FC<ModernEarthProps> = ({
             products={products}
             store={store}
             loading={loading}
+            page={page}
+            onPageChange={setPage}
+            totalPages={totalPages}
           />
         </section>
 

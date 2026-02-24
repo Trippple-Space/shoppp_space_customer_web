@@ -28,7 +28,7 @@ import { useLogVisit } from '@/modules/lib/utility/hooks/use-log-visit';
 export const StorefrontParent: FC<{ store: Store }> = ({ store }) => {
   const [selectedCategory, setSelectedCategory] =
     useState<ProductCategory | null>(null);
-  const { products, loading, fetchingError, refetch } =
+  const { products, loading, fetchingError, refetch, page, setPage, totalPages } =
     useStoreProductsView(selectedCategory);
   const [filteredProducts, setFilteredProducts] = useState<Product[]>([]);
   const [openReviewId, setOpenReviewId] = useState<string | null>(null);
@@ -183,6 +183,10 @@ export const StorefrontParent: FC<{ store: Store }> = ({ store }) => {
     scrollToProducts,
     loading,
     products: filteredProducts,
+
+    page,
+    setPage,
+    totalPages,
   };
 
   return (

@@ -9,11 +9,12 @@ export const useStoreProductsView = (selectedCategory?: any) => {
   const [page, setPage] = useState(1);
   const limit = 20;
 
-  const { products, updateFilters, setPagination, loading, fetchingError, refetch } = useProducts({
+  const { products, updateFilters, setPagination, loading, fetchingError, refetch, meta } = useProducts({
     filters: { store: { slug }, status: { In: "ACTIVE,OUT_OF_STOCK" } }, order: {
       priorityScore: "DESC"
     },
-  });
+    pagination: { page, limit }
+  }, 'buttons');
 
   useEffect(() => {
     setPagination({ page, limit });
@@ -26,6 +27,7 @@ export const useStoreProductsView = (selectedCategory?: any) => {
     fetchingError,
     refetch,
     page,
-    setPage
+    setPage,
+    totalPages: meta?.totalPages ?? 1
   };
 };
