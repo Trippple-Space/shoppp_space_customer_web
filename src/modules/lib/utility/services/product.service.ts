@@ -63,7 +63,7 @@ class ProductService {
           localStorage.setItem(key, JSON.stringify(toCache));
      }
 
-     fetchProducts(query: IQueryParams, filters = {}, collectionSlug?: string): Promise<Product[]> {
+     fetchProducts(query: IQueryParams, filters = {}, collectionSlug?: string): Promise<{ data: Product[]; meta: ProductsResponse['meta'] }> {
           return new Promise((resolve, reject) => {
                const filterParams = buildFilterParams(filters);
                const { allFilters, ...queryWithoutAllFilters } = query;
@@ -85,7 +85,10 @@ class ProductService {
                               });
                               return product;
                          })
-                         resolve(productsWithOrderedVariants);
+                         resolve({
+                              data: productsWithOrderedVariants,
+                              meta: response.data.meta
+                         });
                     })
                     .catch(reject);
           });

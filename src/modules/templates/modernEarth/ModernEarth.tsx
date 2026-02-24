@@ -19,76 +19,56 @@ import { ModernEarthSearch } from './ProductSearch';
 import ProductTile from '@/modules/lib/components/product-tile/ProductTile';
 import StorefrontFooter from '@/modules/lib/components/footer/StorefrontFooter';
 import { DotsLoader } from '@/modules/lib/components/dots-loader/DotsLoader';
+import Collections from '@/modules/views/homepage/Collections';
+import StoreProductsList from '@/modules/views/storefront/StoreProductsList';
+import { BaseStorefrontProps } from '@/modules/lib/utility/types/storefront-template.interface';
 
-type ModernEarthProps = {
+type ModernEarthProps = BaseStorefrontProps & {
   title: string;
   description: string;
   primaryBtnText: string;
   heroImage: string;
-  offers: { price?: string; text?: string; subText?: string; image?: string }[];
-  store: Store;
-  handleUserProfileDropdown: () => void;
-  handleCloseDropdown: () => void;
-  openReviewId: string | null;
-  filteredProducts: Product[];
-  setOpenReviewId: React.Dispatch<React.SetStateAction<string | null>>;
-  cartOpen: boolean;
-  setCartOpen: React.Dispatch<React.SetStateAction<boolean>>;
-  userProfileDropdown: boolean;
-  setUserProfileDropdown: React.Dispatch<React.SetStateAction<boolean>>;
-  profileModal: string;
-  setProfileModal: React.Dispatch<React.SetStateAction<string>>;
-  menuOpen: boolean;
-  setMenuOpen: React.Dispatch<React.SetStateAction<boolean>>;
-  products: Product[];
-  allReviews: IFetchedReview[];
-  selectedCategory: ProductCategory | null;
-  setSelectedCategory: React.Dispatch<
-    React.SetStateAction<ProductCategory | null>
-  >;
-  handleCategoryChange: (category: ProductCategory) => void;
-  template?: any;
-  scrollToProducts: () => void;
-  productsRef: React.RefObject<HTMLElement>;
+
+  offers: {
+    price?: string;
+    text?: string;
+    subText?: string;
+    image?: string;
+  }[];
+
   cart?: Cart;
   savedVariant?: SavedVariant[];
   discountText?: string;
-  loading: boolean;
 };
+const ModernEarth: React.FC<ModernEarthProps> = (props) => {
+  const {
+    store,
+    cartOpen,
+    setCartOpen,
+    menuOpen,
+    setMenuOpen,
+    userProfileDropdown,
+    setProfileModal,
+    handleUserProfileDropdown,
+    handleCloseDropdown,
+    products,
+    template,
+    scrollToProducts,
+    productsRef,
+    loading,
+    page,
+    setPage,
+    totalPages,
+    discountText,
+    savedVariant,
+    cart,
+    heroImage,
+    title,
+    description,
+    primaryBtnText,
+    offers,
+  } = props;
 
-const ModernEarth: React.FC<ModernEarthProps> = ({
-  title,
-  description,
-  primaryBtnText,
-  heroImage,
-  offers,
-  store,
-  handleUserProfileDropdown,
-  handleCloseDropdown,
-  filteredProducts,
-  openReviewId,
-  setOpenReviewId,
-  cartOpen,
-  setCartOpen,
-  userProfileDropdown,
-  setUserProfileDropdown,
-  profileModal,
-  setProfileModal,
-  menuOpen,
-  setMenuOpen,
-  products,
-  allReviews,
-  selectedCategory,
-  setSelectedCategory,
-  handleCategoryChange,
-  template,
-  scrollToProducts,
-  productsRef,
-  cart,
-  savedVariant,
-  discountText,
-  loading,
-}) => {
   return (
     <>
       <div className="font-dmSans">
@@ -281,6 +261,10 @@ const ModernEarth: React.FC<ModernEarthProps> = ({
           hideDefaultCart={true}
         />
 
+        <section>
+          <Collections storeId={store.id} />
+        </section>
+
         <section
           className="py-20 sm:py-40 md:py-80 l:py-120 px-16 sm:px-25 font-dmSans max-w-1440 mx-auto"
           ref={productsRef}
@@ -294,30 +278,14 @@ const ModernEarth: React.FC<ModernEarthProps> = ({
             </p>
           )}
 
-          {filteredProducts.length === 0 && loading ? (
-            <div className="w-100p flex j-content-center mt-10">
-              <DotsLoader />
-            </div>
-          ) : filteredProducts.length ? (
-            <div className="grid l:grid-4-cols-1fr sm:grid-3-cols-1fr grid-2-cols-1fr l:gap-20 sm:gap-10 gap-20 w-full mt-30">
-              {filteredProducts.map((product, i) => (
-                <div key={i} className="l:mt--20 mt--30 w-full overflow-hidden">
-                  <ProductTile
-                    product={product}
-                    key={i}
-                    allReviews={allReviews}
-                    id={product.id}
-                    isOpen={openReviewId}
-                    setIsOpen={setOpenReviewId}
-                  />
-                </div>
-              ))}
-            </div>
-          ) : (
-            <div className="mt-60 grid-col-span-5 text-center bg-white">
-              No products found for the selected filters
-            </div>
-          )}
+          <StoreProductsList
+            products={products}
+            store={store}
+            loading={loading}
+            page={page}
+            onPageChange={setPage}
+            totalPages={totalPages}
+          />
         </section>
 
         <div className="font-dmSans">

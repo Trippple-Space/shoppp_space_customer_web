@@ -31,7 +31,9 @@ export interface IQueryParams {
   allFilters?: IFilters;
 }
 
-export const useProducts = (initialQuery: IQueryParams, collectionSlug?: string) => {
+export type PaginationType = "infinite" | "buttons";
+
+export const useProducts = (initialQuery: IQueryParams, paginationType: PaginationType = "infinite", collectionSlug?: string) => {
   const [query, setQuery] = useState<IQueryParams>(initialQuery);
   const [loading, setLoading] = useState(true);
   const [fetchingError, setFetchingError] = useState<Error | null>(null);
@@ -92,20 +94,54 @@ export const useProducts = (initialQuery: IQueryParams, collectionSlug?: string)
     }));
   };
 
-  const cacheKey =
+  const baseCacheKey =
     (collectionSlug ? `collection_${collectionSlug}_` : "products_") +
     JSON.stringify(query.filters ?? {}) +
     JSON.stringify(query.order ?? {}) +
     JSON.stringify(query.allFilters ?? {});
 
+  const cacheKey =
+    paginationType === "infinite"
+      ? baseCacheKey
+      : baseCacheKey +
+      `_page_${query.pagination?.page ?? 1}` +
+      `_limit_${query.pagination?.limit ?? 0}`;
+
   useEffect(() => {
-    if (!productsCache[cacheKey] || productsCache[cacheKey].length === 0) {
+    if (!query.pagination) return;
+
+    //buttons scroll
+    if (paginationType === "buttons") {
+      if (productsCache[cacheKey]) return;
+
+      setLoading(true);
+      setFetchingError(null);
+
+      productService
+        .fetchProducts(query, query.allFilters, collectionSlug)
+        .then((fetchedProducts) => {
+          setProductsCache(cacheKey, {
+            data: fetchedProducts.data,
+            meta: fetchedProducts.meta
+          });
+        })
+        .catch(setFetchingError)
+        .finally(() => setLoading(false));
+
+      return;
+    }
+
+    //infinite scroll
+    if (!productsCache[cacheKey] || productsCache[cacheKey].data.length === 0) {
       setLoading(true);
       setFetchingError(null);
       productService
         .fetchProducts(query, query.allFilters, collectionSlug)
         .then((fetchedProducts) => {
-          setProductsCache(cacheKey, fetchedProducts);
+          setProductsCache(cacheKey, {
+            data: fetchedProducts.data,
+            meta: fetchedProducts.meta
+          });
         })
         .catch((error) => {
           setFetchingError(error);
@@ -118,13 +154,17 @@ export const useProducts = (initialQuery: IQueryParams, collectionSlug?: string)
   }, [
     cacheKey,
     refetchToken,
-    productsCache[cacheKey]?.length,
-    JSON.stringify(query.allFilters)
+    productsCache[cacheKey]?.data?.length,
+    JSON.stringify(query.allFilters),
+    query.pagination
   ]);
 
   useEffect(() => {
+    if (paginationType !== "infinite") return;
+    if (!query.pagination) return;
+
     if (
-      (productsCache[cacheKey]?.length ?? 0) <
+      (productsCache[cacheKey]?.data?.length ?? 0) <
       (query.pagination?.limit ?? 0) * (query.pagination?.page ?? 1)
     ) {
       setLoading(true);
@@ -132,16 +172,22 @@ export const useProducts = (initialQuery: IQueryParams, collectionSlug?: string)
       productService
         .fetchProducts(query, query.allFilters, collectionSlug)
         .then((fetchedProducts) => {
-          setProductsCache(cacheKey, [
-            ...(productsCache[cacheKey] ?? []),
-            ...fetchedProducts.filter(
-              (product) =>
-                !productCacheIdempotencyTracker?.[cacheKey]?.[product.id]
-            )
-          ]);
+          const previous = productsCache[cacheKey];
+
+          setProductsCache(cacheKey, {
+            data: [
+              ...(previous?.data ?? []),
+              ...fetchedProducts.data.filter(
+                (product) =>
+                  !productCacheIdempotencyTracker?.[cacheKey]?.[product.id]
+              ),
+            ],
+            meta: fetchedProducts.meta
+          });
+
           setProductsCacheIdempotencyTracker(
             cacheKey,
-            fetchedProducts.reduce(
+            fetchedProducts.data.reduce(
               (cumm, curr) => ({ ...cumm, [curr.id]: true }),
               {}
             )
@@ -160,7 +206,7 @@ export const useProducts = (initialQuery: IQueryParams, collectionSlug?: string)
   ]);
 
   return {
-    products: productsCache[cacheKey] ?? [],
+    products: productsCache[cacheKey]?.data ?? [],
     setFilters,
     updateFilters,
     updateHomePageFilter,
@@ -170,6 +216,7 @@ export const useProducts = (initialQuery: IQueryParams, collectionSlug?: string)
     loading,
     fetchingError,
     refetch,
+    meta: productsCache[cacheKey]?.meta
     // paginationLoading
   };
 };

@@ -2,69 +2,34 @@
 
 import { FC } from 'react';
 import '../trendFashion/trendFashion.css';
-import { Store } from '@/modules/lib/utility/types/store.interface';
-import {
-  Product,
-  ProductCategory,
-} from '@/modules/lib/utility/types/product.interface';
-import ProductTile from '@/modules/lib/components/product-tile/ProductTile';
-import MiniCart from '@/modules/lib/components/minicart/MiniCart';
 import UserProfileDropdown from '@/modules/lib/components/nav-bar/profile-modal/UserProfileDropdown';
 import MobileNav from '@/modules/lib/components/nav-bar/mobile-nav/MobileNav';
 import StorefrontFooter from '@/modules/lib/components/footer/StorefrontFooter';
-import { IFetchedReview } from '@/modules/lib/utility/types/review.interface';
-import { DotsLoader } from '@/modules/lib/components/dots-loader/DotsLoader';
+import StoreProductsList from '@/modules/views/storefront/StoreProductsList';
+import Collections from '@/modules/views/homepage/Collections';
+import { BaseStorefrontProps } from '@/modules/lib/utility/types/storefront-template.interface';
+import MiniCart from '@/modules/lib/components/minicart/MiniCart';
 
-const TrendFashion: FC<{
-  store: Store;
-  handleUserProfileDropdown: () => void;
-  handleCloseDropdown: () => void;
-  openReviewId: string | null;
-  filteredProducts: Product[];
-  setOpenReviewId: React.Dispatch<React.SetStateAction<string | null>>;
-  cartOpen: boolean;
-  setCartOpen: React.Dispatch<React.SetStateAction<boolean>>;
-  userProfileDropdown: boolean;
-  setUserProfileDropdown: React.Dispatch<React.SetStateAction<boolean>>;
-  profileModal: string;
-  setProfileModal: React.Dispatch<React.SetStateAction<string>>;
-  menuOpen: boolean;
-  setMenuOpen: React.Dispatch<React.SetStateAction<boolean>>;
-  products: Product[];
-  allReviews: IFetchedReview[];
-  selectedCategory: ProductCategory | null;
-  setSelectedCategory: React.Dispatch<
-    React.SetStateAction<ProductCategory | null>
-  >;
-  handleCategoryChange: (category: ProductCategory) => void;
-  template?: any;
-  scrollToProducts: () => void;
-  productsRef: React.RefObject<HTMLElement>;
-  loading: boolean;
-}> = ({
+type TrendFashionProps = BaseStorefrontProps;
+
+const TrendFashion: FC<TrendFashionProps> = ({
   store,
   handleUserProfileDropdown,
   handleCloseDropdown,
-  filteredProducts,
-  openReviewId,
-  setOpenReviewId,
   cartOpen,
   setCartOpen,
   userProfileDropdown,
-  setUserProfileDropdown,
-  profileModal,
   setProfileModal,
   menuOpen,
   setMenuOpen,
   products,
-  allReviews,
-  selectedCategory,
-  setSelectedCategory,
-  handleCategoryChange,
   template,
   scrollToProducts,
   productsRef,
   loading,
+  page,
+  setPage,
+  totalPages
 }) => {
   return (
     <div className="trend-body font-inter">
@@ -72,11 +37,13 @@ const TrendFashion: FC<{
         <section className="navbar">
           <div className="navbar-child">
             <div className="logo-container trend-flex sm:max-w-100p max-w-69p">
-              <img
-                src={store?.thumbnail || ''}
-                alt="logo-img"
-                className="logo-img"
-              />
+              {store?.thumbnail && (
+                <img
+                  src={store?.thumbnail || ''}
+                  alt="logo-img"
+                  className="logo-img"
+                />
+              )}
               <h1 className="logo truncate">{store?.name || ''}</h1>
             </div>
             {/* <nav className="nav-links">
@@ -214,6 +181,8 @@ const TrendFashion: FC<{
           </section>
         )}
 
+      <Collections storeId={store.id} />
+
       <section className="exclusive" ref={productsRef}>
         <h2 className="exclusive-header">
           {template?.productSectionHeading || 'Exclusive Products'}
@@ -224,30 +193,14 @@ const TrendFashion: FC<{
           </p>
         )}
 
-        {filteredProducts.length === 0 && loading ? (
-          <div className="w-100p flex j-content-center mt-10">
-            <DotsLoader />
-          </div>
-        ) : filteredProducts.length ? (
-          <div className="grid l:grid-4-cols-1fr sm:grid-3-cols-1fr grid-2-cols-1fr l:gap-20 sm:gap-10 gap-20 w-full mt-30">
-            {filteredProducts.map((product, i) => (
-              <div key={i} className="l:mt--20 mt--30 w-full overflow-hidden">
-                <ProductTile
-                  product={product}
-                  key={i}
-                  allReviews={allReviews}
-                  id={product.id}
-                  isOpen={openReviewId}
-                  setIsOpen={setOpenReviewId}
-                />
-              </div>
-            ))}
-          </div>
-        ) : (
-          <div className="mt-60 grid-col-span-5 text-center bg-white">
-            No products found for the selected filters
-          </div>
-        )}
+        <StoreProductsList
+          products={products}
+          store={store}
+          loading={loading}
+          page={page}
+          totalPages={totalPages}
+          onPageChange={setPage}
+        />
       </section>
 
       {/*mini-cart */}

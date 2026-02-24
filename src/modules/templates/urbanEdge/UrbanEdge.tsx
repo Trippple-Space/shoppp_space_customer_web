@@ -1,68 +1,39 @@
 import React, { FC } from 'react';
 import '../urbanEdge/urbanEdge.css';
-import { Store } from '@/modules/lib/utility/types/store.interface';
-import {
-  Product,
-  ProductCategory,
-} from '@/modules/lib/utility/types/product.interface';
-import { IFetchedReview } from '@/modules/lib/utility/types/review.interface';
 import { RiCloseFill, RiMenu2Fill } from 'react-icons/ri';
 import MobileNav from '@/modules/lib/components/nav-bar/mobile-nav/MobileNav';
 import UserProfileDropdown from '@/modules/lib/components/nav-bar/profile-modal/UserProfileDropdown';
 import MiniCart from '@/modules/lib/components/minicart/MiniCart';
 import { Cart } from '@/modules/lib/utility/types/cart.interface';
 import StorefrontFooter from '@/modules/lib/components/footer/StorefrontFooter';
-import ProductTile from '@/modules/lib/components/product-tile/ProductTile';
 import { PiShoppingCart } from 'react-icons/pi';
-import { BsArrowUp } from 'react-icons/bs';
-import { DotsLoader } from '@/modules/lib/components/dots-loader/DotsLoader';
+import StoreProductsList from '@/modules/views/storefront/StoreProductsList';
+import Collections from '@/modules/views/homepage/Collections';
+import { BaseStorefrontProps } from '@/modules/lib/utility/types/storefront-template.interface';
 
-const UrbanEdge: FC<{
-  store: Store;
-  handleUserProfileDropdown: () => void;
-  handleCloseDropdown: () => void;
-  openReviewId: string | null;
-  filteredProducts: Product[];
-  setOpenReviewId: React.Dispatch<React.SetStateAction<string | null>>;
-  cartOpen: boolean;
-  setCartOpen: React.Dispatch<React.SetStateAction<boolean>>;
-  userProfileDropdown: boolean;
-  setUserProfileDropdown: React.Dispatch<React.SetStateAction<boolean>>;
-  profileModal: string;
-  setProfileModal: React.Dispatch<React.SetStateAction<string>>;
-  menuOpen: boolean;
-  setMenuOpen: React.Dispatch<React.SetStateAction<boolean>>;
-  products: Product[];
-  allReviews: IFetchedReview[];
-  selectedCategory: ProductCategory | null;
-  setSelectedCategory: React.Dispatch<
-    React.SetStateAction<ProductCategory | null>
-  >;
-  handleCategoryChange: (category: ProductCategory) => void;
-  template?: any;
-  scrollToProducts: () => void;
-  productsRef: React.RefObject<HTMLElement>;
+type UrbanEdgeProps = BaseStorefrontProps & {
   cart?: Cart;
-  loading: boolean;
-}> = ({
+};
+
+const UrbanEdge: FC<UrbanEdgeProps> = ({
   store,
   handleUserProfileDropdown,
   handleCloseDropdown,
-  filteredProducts,
-  openReviewId,
-  setOpenReviewId,
+  products,
   cartOpen,
   setCartOpen,
   userProfileDropdown,
   setProfileModal,
   menuOpen,
   setMenuOpen,
-  allReviews,
   template,
   scrollToProducts,
   productsRef,
   cart,
   loading,
+  page,
+  setPage,
+  totalPages
 }) => {
   return (
     <>
@@ -164,6 +135,9 @@ const UrbanEdge: FC<{
             ))}
           </section>
         )}
+
+        <Collections storeId={store.id} />
+
         <section className="py-30 sm:py-40 md:py-50 l:py-60" ref={productsRef}>
           <div className="urbanEdge_product-headings">
             <h3 className="font-volkhov">
@@ -174,30 +148,14 @@ const UrbanEdge: FC<{
             )}
           </div>
 
-          {filteredProducts.length === 0 && loading ? (
-            <div className="w-100p flex j-content-center mt-10">
-              <DotsLoader />
-            </div>
-          ) : filteredProducts.length ? (
-            <div className="grid l:grid-4-cols-1fr sm:grid-3-cols-1fr grid-2-cols-1fr l:gap-20 sm:gap-10 gap-20 w-full mt-30">
-              {filteredProducts.map((product, i) => (
-                <div key={i} className="l:mt--20 mt--30 w-full overflow-hidden">
-                  <ProductTile
-                    product={product}
-                    key={i}
-                    allReviews={allReviews}
-                    id={product.id}
-                    isOpen={openReviewId}
-                    setIsOpen={setOpenReviewId}
-                  />
-                </div>
-              ))}
-            </div>
-          ) : (
-            <div className="mt-60 grid-col-span-5 text-center bg-white">
-              No products found for the selected filters
-            </div>
-          )}
+          <StoreProductsList
+            products={products}
+            store={store}
+            loading={loading}
+            page={page}
+            onPageChange={setPage}
+            totalPages={totalPages}
+          />
         </section>
         <div className="urbanEdge__floating">
           <button

@@ -21,11 +21,22 @@ import { useCart } from '@/modules/lib/utility/hooks/use-cart';
 import ModernLuxe from '@/modules/templates/lustre/Lustre';
 import UrbanEdge from '@/modules/templates/urbanEdge/UrbanEdge';
 import SimpleFlow from '@/modules/templates/simpleFlow/SimpleFlow';
+import useUserStore from '@/modules/lib/utility/store/user.store';
+import { useGetIPAddress } from '@/modules/lib/utility/hooks/use-get-ip-address';
+import { useLogVisit } from '@/modules/lib/utility/hooks/use-log-visit';
 
 export const StorefrontParent: FC<{ store: Store }> = ({ store }) => {
   const [selectedCategory, setSelectedCategory] =
     useState<ProductCategory | null>(null);
-  const { products, loading } = useStoreProductsView(selectedCategory);
+  const {
+    products,
+    loading,
+    fetchingError,
+    refetch,
+    page,
+    setPage,
+    totalPages,
+  } = useStoreProductsView(selectedCategory);
   const [filteredProducts, setFilteredProducts] = useState<Product[]>([]);
   const [openReviewId, setOpenReviewId] = useState<string | null>(null);
   const [cartOpen, setCartOpen] = useState(false);
@@ -72,6 +83,12 @@ export const StorefrontParent: FC<{ store: Store }> = ({ store }) => {
   const { savedVariants } = useSavedVariant();
   const { cart } = useCart();
 
+  const [hasScrolled, setHasScrolled] = useState(false);
+  const { isAuthenticated } = useUserStore();
+  const { ipAddress } = useGetIPAddress();
+  const [hasPerformedAction, setHasPerformedAction] = useState(false);
+  const { logVisit } = useLogVisit(store?.id, { ipAddress: ipAddress });
+
   const scrollToProducts = () => {
     if (productsRef.current) {
       productsRef.current.scrollIntoView({ behavior: 'smooth' });
@@ -99,7 +116,6 @@ export const StorefrontParent: FC<{ store: Store }> = ({ store }) => {
         const remaining = products.filter(
           (p) => p.id !== first.id && !others.some((o) => o.id === p.id)
         );
-        console.log(remaining);
         const extra = remaining.slice(0, 3 - others.length);
         setNextTwoDiscounts([...others, ...extra]);
       } else {
@@ -118,64 +134,78 @@ export const StorefrontParent: FC<{ store: Store }> = ({ store }) => {
     }
   }, []);
 
+  useEffect(() => {
+    // Define the function to be triggered after 1 minute
+    const triggerFunction = () => {
+      if (isAuthenticated && hasScrolled && hasPerformedAction) {
+        logVisit();
+      }
+    };
+    // Set up the timer
+    const timer = setTimeout(triggerFunction, 10000);
+
+    // Scroll event handler
+    const handleScroll = () => {
+      setHasScrolled(true);
+    };
+    // Click event handler
+    const handleClick = () => {
+      setHasPerformedAction(true);
+    };
+
+    // Add scroll event listener
+    window.addEventListener('scroll', handleScroll);
+    // Add click event listener
+    window.addEventListener('click', handleClick);
+
+    // Cleanup: remove event listener and clear timeout
+    return () => {
+      window.removeEventListener('scroll', handleScroll);
+      window.removeEventListener('click', handleClick);
+      clearTimeout(timer);
+    };
+  }, [isAuthenticated, hasScrolled, hasPerformedAction]);
+
+  const commonTemplateProps = {
+    store,
+    allReviews,
+    openReviewId,
+    setOpenReviewId,
+    cart,
+    cartOpen,
+    setCartOpen,
+    userProfileDropdown,
+    setUserProfileDropdown,
+    handleUserProfileDropdown,
+    handleCloseDropdown,
+    profileModal,
+    setProfileModal,
+    menuOpen,
+    setMenuOpen,
+    selectedCategory,
+    setSelectedCategory,
+    handleCategoryChange,
+    template,
+    productsRef,
+    scrollToProducts,
+    loading,
+    products: filteredProducts,
+
+    page,
+    setPage,
+    totalPages,
+  };
+
   return (
     <>
       {template ? (
         template?.name === 'Bold' ? (
-          <TrendFashion
-            store={store}
-            products={products}
-            filteredProducts={filteredProducts}
-            allReviews={allReviews}
-            openReviewId={openReviewId}
-            setOpenReviewId={setOpenReviewId}
-            cartOpen={cartOpen}
-            setCartOpen={setCartOpen}
-            userProfileDropdown={userProfileDropdown}
-            setUserProfileDropdown={setUserProfileDropdown}
-            handleUserProfileDropdown={handleUserProfileDropdown}
-            handleCloseDropdown={handleCloseDropdown}
-            profileModal={profileModal}
-            setProfileModal={setProfileModal}
-            menuOpen={menuOpen}
-            setMenuOpen={setMenuOpen}
-            selectedCategory={selectedCategory}
-            setSelectedCategory={setSelectedCategory}
-            handleCategoryChange={handleCategoryChange}
-            template={template}
-            productsRef={productsRef}
-            scrollToProducts={scrollToProducts}
-            loading={loading}
-          />
+          <TrendFashion {...commonTemplateProps} />
         ) : template?.name === 'Minimal' ? (
-          <Furniture
-            store={store}
-            products={products}
-            filteredProducts={filteredProducts}
-            allReviews={allReviews}
-            openReviewId={openReviewId}
-            setOpenReviewId={setOpenReviewId}
-            cartOpen={cartOpen}
-            setCartOpen={setCartOpen}
-            userProfileDropdown={userProfileDropdown}
-            setUserProfileDropdown={setUserProfileDropdown}
-            handleUserProfileDropdown={handleUserProfileDropdown}
-            handleCloseDropdown={handleCloseDropdown}
-            profileModal={profileModal}
-            setProfileModal={setProfileModal}
-            menuOpen={menuOpen}
-            setMenuOpen={setMenuOpen}
-            selectedCategory={selectedCategory}
-            setSelectedCategory={setSelectedCategory}
-            handleCategoryChange={handleCategoryChange}
-            template={template}
-            productsRef={productsRef}
-            scrollToProducts={scrollToProducts}
-            productSold={productSold || 0}
-            loading={loading}
-          />
+          <Furniture {...commonTemplateProps} productSold={productSold || 0} />
         ) : template?.name === 'Modern-earth' ? (
           <ModernEarth
+            {...commonTemplateProps}
             title={store?.heading || ''}
             description={store?.subHeading || ''}
             primaryBtnText="Shop now"
@@ -184,62 +214,21 @@ export const StorefrontParent: FC<{ store: Store }> = ({ store }) => {
               { image: store?.meta?.heroImage2 },
               {
                 text: `${discountText}`,
-                subText: `${discountText ? 'on selected products' : 'Check back soon for upcoming deals!'}`,
+                subText: `${
+                  discountText
+                    ? 'on selected products'
+                    : 'Check back soon for upcoming deals!'
+                }`,
               },
               { image: store?.meta?.heroImage3 },
               { image: store?.meta?.heroImage4 },
             ]}
             discountText={discountText}
-            store={store}
-            products={products}
-            filteredProducts={filteredProducts}
-            allReviews={allReviews}
-            openReviewId={openReviewId}
-            setOpenReviewId={setOpenReviewId}
-            cartOpen={cartOpen}
-            setCartOpen={setCartOpen}
-            userProfileDropdown={userProfileDropdown}
-            setUserProfileDropdown={setUserProfileDropdown}
-            handleUserProfileDropdown={handleUserProfileDropdown}
-            handleCloseDropdown={handleCloseDropdown}
-            profileModal={profileModal}
-            setProfileModal={setProfileModal}
-            menuOpen={menuOpen}
-            setMenuOpen={setMenuOpen}
-            selectedCategory={selectedCategory}
-            setSelectedCategory={setSelectedCategory}
-            handleCategoryChange={handleCategoryChange}
-            template={template}
-            productsRef={productsRef}
-            scrollToProducts={scrollToProducts}
-            cart={cart}
             savedVariant={savedVariants}
-            loading={loading}
           />
         ) : template?.name === 'Lustre' ? (
           <ModernLuxe
-            store={store}
-            products={products}
-            filteredProducts={filteredProducts}
-            allReviews={allReviews}
-            openReviewId={openReviewId}
-            setOpenReviewId={setOpenReviewId}
-            cartOpen={cartOpen}
-            setCartOpen={setCartOpen}
-            userProfileDropdown={userProfileDropdown}
-            setUserProfileDropdown={setUserProfileDropdown}
-            handleUserProfileDropdown={handleUserProfileDropdown}
-            handleCloseDropdown={handleCloseDropdown}
-            profileModal={profileModal}
-            setProfileModal={setProfileModal}
-            menuOpen={menuOpen}
-            setMenuOpen={setMenuOpen}
-            selectedCategory={selectedCategory}
-            setSelectedCategory={setSelectedCategory}
-            handleCategoryChange={handleCategoryChange}
-            template={template}
-            productsRef={productsRef}
-            scrollToProducts={scrollToProducts}
+            {...commonTemplateProps}
             offers={[
               {
                 price: formatNumberAsPrice(
@@ -279,69 +268,32 @@ export const StorefrontParent: FC<{ store: Store }> = ({ store }) => {
                   products[2]?.variants[0]?.media[0]?.url,
               },
             ]}
-            loading={loading}
           />
         ) : template?.name === 'Urban-edge' ? (
-          <UrbanEdge
-            store={store}
-            products={products}
-            filteredProducts={filteredProducts}
-            allReviews={allReviews}
-            openReviewId={openReviewId}
-            setOpenReviewId={setOpenReviewId}
-            cartOpen={cartOpen}
-            setCartOpen={setCartOpen}
-            userProfileDropdown={userProfileDropdown}
-            setUserProfileDropdown={setUserProfileDropdown}
-            handleUserProfileDropdown={handleUserProfileDropdown}
-            handleCloseDropdown={handleCloseDropdown}
-            profileModal={profileModal}
-            setProfileModal={setProfileModal}
-            menuOpen={menuOpen}
-            setMenuOpen={setMenuOpen}
-            selectedCategory={selectedCategory}
-            setSelectedCategory={setSelectedCategory}
-            handleCategoryChange={handleCategoryChange}
-            template={template}
-            productsRef={productsRef}
-            scrollToProducts={scrollToProducts}
-            cart={cart}
-            loading={loading}
-          />
+          <UrbanEdge {...commonTemplateProps} />
         ) : template?.name === 'Simple-flow' ? (
-          <SimpleFlow
-            store={store}
-            products={products}
-            filteredProducts={filteredProducts}
-            allReviews={allReviews}
-            openReviewId={openReviewId}
-            setOpenReviewId={setOpenReviewId}
-            cartOpen={cartOpen}
-            setCartOpen={setCartOpen}
-            userProfileDropdown={userProfileDropdown}
-            setUserProfileDropdown={setUserProfileDropdown}
-            handleUserProfileDropdown={handleUserProfileDropdown}
-            handleCloseDropdown={handleCloseDropdown}
-            profileModal={profileModal}
-            setProfileModal={setProfileModal}
-            menuOpen={menuOpen}
-            setMenuOpen={setMenuOpen}
-            selectedCategory={selectedCategory}
-            setSelectedCategory={setSelectedCategory}
-            handleCategoryChange={handleCategoryChange}
-            template={template}
-            productsRef={productsRef}
-            scrollToProducts={scrollToProducts}
-            cart={cart}
-            loading={loading}
-          />
+          <SimpleFlow {...commonTemplateProps} />
         ) : (
-          <StorefrontLayout store={store}>
+          <StorefrontLayout
+            store={store}
+            products={filteredProducts}
+            loading={loading}
+            page={page}
+            setPage={setPage}
+            totalPages={totalPages}
+          >
             <StorefrontAbout store={store} />
           </StorefrontLayout>
         )
       ) : (
-        <StorefrontLayout store={store}>
+        <StorefrontLayout
+          store={store}
+          products={filteredProducts}
+          loading={loading}
+          page={page}
+          setPage={setPage}
+          totalPages={totalPages}
+        >
           <StorefrontAbout store={store} />
         </StorefrontLayout>
       )}
