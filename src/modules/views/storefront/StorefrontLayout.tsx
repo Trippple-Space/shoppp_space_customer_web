@@ -18,7 +18,10 @@ const StorefrontLayout: FC<{
   children: ReactNode;
   loading: boolean;
   products: Product[];
-}> = ({ store, children, products, loading }) => {
+  page: number;
+  setPage: React.Dispatch<React.SetStateAction<number>>;
+  totalPages: number;
+}> = ({ store, children, products, loading, page, setPage, totalPages }) => {
   const [selectedCategory, setSelectedCategory] =
     useState<ProductCategory | null>(null);
   const { categories } = useStoreCategoryNavView({ storeId: store.id });
@@ -61,6 +64,9 @@ const StorefrontLayout: FC<{
             products={products}
             store={store}
             loading={loading}
+            page={page}
+            onPageChange={setPage}
+            totalPages={totalPages}
           />
         </section>
       </div>

@@ -32,6 +32,7 @@ const CollectionSection = ({ collection }: Props) => {
     {
       pagination: { page: 1, limit: 10 },
     },
+    'infinite',
     collection.slug
   );
 
