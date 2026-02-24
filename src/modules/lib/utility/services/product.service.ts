@@ -7,8 +7,6 @@ import { buildEndpoint, buildFilterParams } from "../utility";
 import config from "env";
 import { SavedVariant } from "../types/SavedVariant.interface";
 
-
-
 class ProductService {
      CACHE_EXPIRY = 60 * 60 * 1000; // 1 hour
 
@@ -34,8 +32,7 @@ class ProductService {
                          },
                     },
                }).then((response: AxiosResponse) => {
-                    const fetchedCategories: ProductCategory =
-                         response.data?.[0];
+                    const fetchedCategories: ProductCategory = response.data?.data?.[0];
                     this.cacheCategories(cacheKey, fetchedCategories);
                     resolve(fetchedCategories);
                });
@@ -43,12 +40,12 @@ class ProductService {
      }
 
      getCachedCategories(key: string) {
-          const cached = localStorage.getItem(key);
+          const cached = sessionStorage.getItem(key);
           if (!cached) return null;
 
           const parsed = JSON.parse(cached);
           if (Date.now() - parsed.timestamp > this.CACHE_EXPIRY) {
-               localStorage.removeItem(key);
+               sessionStorage.removeItem(key);
                return null;
           }
 
@@ -60,7 +57,7 @@ class ProductService {
                data,
                timestamp: Date.now(),
           };
-          localStorage.setItem(key, JSON.stringify(toCache));
+          sessionStorage.setItem(key, JSON.stringify(toCache));
      }
 
      fetchProducts(query: IQueryParams, filters = {}, collectionSlug?: string): Promise<{ data: Product[]; meta: ProductsResponse['meta'] }> {
