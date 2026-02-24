@@ -1,4 +1,3 @@
-import { useState } from "react";
 import { useCategories } from "../use-categories";
 import { usePathname } from "next/navigation";
 
