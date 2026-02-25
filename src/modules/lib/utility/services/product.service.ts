@@ -136,43 +136,20 @@ class ProductService {
 
      fetchProductBySearch(
           searchTerm: string,
-          query: IQueryParams | any
+          query: IQueryParams | any,
+          signal?: AbortSignal
      ): Promise<Product[]> {
           return new Promise((resolve, reject) => {
-               const url = new URL(
-                    buildEndpoint(
-                         config.API_HOST + "/" + endpoints.SEARCH_PRODUCTS,
-                         {}
-                    )
-               );
-
-               Object.keys(query).forEach((key) => {
-                    const value = query[key];
-                    if (key === "filters" && typeof value === "object") {
-                         Object.keys(value).forEach((filterKey) => {
-                              url.searchParams.append(
-                                   `filters[${filterKey}]`,
-                                   value[filterKey]
-                              );
-                         });
-                    } else {
-                         url.searchParams.append(key, value);
-                    }
-               });
-
-               url.searchParams.append("search", searchTerm);
-
-               fetch(url.toString())
-                    .then((res) => {
-                         if (!res.ok) {
-                              throw new Error(
-                                   `HTTP error! Status: ${res.status}`
-                              );
-                         }
-                         return res.json();
+               http
+                    .get<ProductsResponse>(endpoints.SEARCH_PRODUCTS, {
+                         params: {
+                              ...query,
+                              search: searchTerm,
+                         },
+                         signal
                     })
-                    .then((data) => {
-                         resolve(data.data);
+                    .then((response) => {
+                         resolve(response.data.data);
                     })
                     .catch((err) => {
                          reject(err);
@@ -180,31 +157,28 @@ class ProductService {
           });
      }
 
+
      fetchProductBySlugSearch(
           storeSlug: string,
-          searchTerm: string
+          searchTerm: string,
+          query?: IQueryParams | any,
+          signal?: AbortSignal
      ): Promise<Product[]> {
           return new Promise((resolve, reject) => {
-               const url = new URL(
-                    buildEndpoint(
-                         config.API_HOST + "/" + endpoints.SEARCH_PRODUCTS,
-                         {}
-                    )
-               );
-               url.searchParams.append("filters[store][slug]", storeSlug);
-               url.searchParams.append("search", searchTerm);
+               const storeFilter = {
+                    "filters[store][slug]": storeSlug,
+               };
 
-               fetch(url.toString())
-                    .then((res) => {
-                         if (!res.ok) {
-                              throw new Error(
-                                   `HTTP error! Status: ${res.status}`
-                              );
-                         }
-                         return res.json();
-                    })
-                    .then((data) => {
-                         resolve(data.data);
+               http.get<ProductsResponse>(endpoints.SEARCH_PRODUCTS, {
+                    params: {
+                         ...query,
+                         ...storeFilter,
+                         search: searchTerm,
+                    },
+                    signal
+               })
+                    .then((response) => {
+                         resolve(response.data.data);
                     })
                     .catch((err) => {
                          reject(err);

@@ -29,6 +29,7 @@ export interface IQueryParams {
   pagination?: IPagination;
   // key: any
   allFilters?: IFilters;
+  search?: string;
 }
 
 export type PaginationType = "infinite" | "buttons";
@@ -82,6 +83,17 @@ export const useProducts = (initialQuery: IQueryParams, paginationType: Paginati
     }));
   };
 
+  const setSearch = (search?: string) => {
+    setQuery((prev) => ({
+      ...prev,
+      search,
+      pagination: {
+        page: 1,
+        limit: prev.pagination?.limit ?? 20,
+      },
+    }));
+  };
+
   const refetch = () => {
     clearProductsCacheByKey(cacheKey);
     setRefetchToken((t) => t + 1);
@@ -98,7 +110,8 @@ export const useProducts = (initialQuery: IQueryParams, paginationType: Paginati
     (collectionSlug ? `collection_${collectionSlug}_` : "products_") +
     JSON.stringify(query.filters ?? {}) +
     JSON.stringify(query.order ?? {}) +
-    JSON.stringify(query.allFilters ?? {});
+    JSON.stringify(query.allFilters ?? {}) +
+    (query.search ?? "");
 
   const cacheKey =
     paginationType === "infinite"
@@ -156,7 +169,8 @@ export const useProducts = (initialQuery: IQueryParams, paginationType: Paginati
     refetchToken,
     productsCache[cacheKey]?.data?.length,
     JSON.stringify(query.allFilters),
-    query.pagination
+    query.pagination,
+    query.search
   ]);
 
   useEffect(() => {
@@ -202,6 +216,7 @@ export const useProducts = (initialQuery: IQueryParams, paginationType: Paginati
   }, [
     JSON.stringify(query.pagination ?? {}),
     JSON.stringify(query.allFilters),
+    JSON.stringify(query.search ?? ''),
     refetchToken
   ]);
 
@@ -212,6 +227,7 @@ export const useProducts = (initialQuery: IQueryParams, paginationType: Paginati
     updateHomePageFilter,
     setOrdering,
     setPagination,
+    setSearch,
     query,
     loading,
     fetchingError,

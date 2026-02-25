@@ -15,7 +15,7 @@ class StoreService {
           params: { ...query, search: searchTerm },
         })
         .then((response: AxiosResponse) => {
-          resolve(response.data);
+          resolve(response.data.data);
         });
     });
   }

@@ -6,17 +6,24 @@ import { useProductListView } from '@/modules/lib/utility/hooks/views/use-produc
 import { DotsLoader } from '@/modules/lib/components/dots-loader/DotsLoader';
 import PuffLoader from '@/modules/lib/components/puff-loader/PuffLoader';
 import { useSavedVariant } from '@/modules/lib/utility/hooks/use-saved-variants';
-import useReviews from '@/modules/lib/utility/hooks/use-reviews';
 import { toast } from 'sonner';
 import Button from '@/modules/lib/components/button/Button';
-import { useCollections } from '@/modules/lib/utility/hooks/use-collections';
+import { useSearchParams } from 'next/navigation';
 
 const CentralArena = ({ selectedCategory, setSelectedCategory }: any) => {
-  const { products, type, ref, loading, fetchingError, refetch } =
+  const searchParams = useSearchParams();
+
+  const { products, type, ref, loading, fetchingError, refetch, setSearch } =
     useProductListView();
   const { saveVariant, savedVariants, removeSavedVariant } = useSavedVariant();
   const [openReviewId, setOpenReviewId] = useState<string | null>(null);
   const renderedIds = new Set<string>();
+
+  useEffect(() => {
+    const searchFromUrl = searchParams.get('search');
+
+    setSearch(searchFromUrl || '');
+  }, [searchParams]);
 
   useEffect(() => {
     const handleGoogleLogin = () => {
