@@ -161,7 +161,7 @@ class ProductService {
      fetchProductBySlugSearch(
           storeSlug: string,
           searchTerm: string,
-          query: IQueryParams | any,
+          query?: IQueryParams | any,
           signal?: AbortSignal
      ): Promise<Product[]> {
           return new Promise((resolve, reject) => {
