@@ -9,8 +9,9 @@ import { RatingFilter } from './RatingFilter';
 import { SortFilter } from './SortFilter';
 import { useFilterStore } from '@/modules/lib/utility/store/filter.store';
 import { LocationFilter } from './LocationFilter';
-import { usePathname, useRouter } from 'next/navigation';
+import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 import { filtersToSearchParams } from '@/modules/lib/utility/utility';
+import { useCategoryStore } from '@/modules/lib/utility/store/categories.store';
 interface ModalProps {
   modalOpen: boolean;
   handleCloseModal: () => void;
@@ -24,8 +25,11 @@ const FilterModal: React.FC<ModalProps> = ({
 }) => {
   const router = useRouter();
   const pathname = usePathname();
+  const searchParams = useSearchParams();
 
   const { resetFilters, allFilters } = useFilterStore();
+  const { selectedCategory } = useCategoryStore();
+
   const [sortBy, setSortBy] = useState<string>('');
   const [rating, setRating] = useState<string>('');
   const [priceRange, setPriceRange] = useState<any>({ min: '', max: '' });
@@ -34,15 +38,19 @@ const FilterModal: React.FC<ModalProps> = ({
   const applyFilter = (e: any) => {
     e.preventDefault();
 
-    const params = filtersToSearchParams({
-      ...allFilters,
-      ...(filterBy === 'Rating' && { rating: { rateBy: rating } }),
-      ...(filterBy === 'Price' && { price: priceRange }),
-      ...(filterBy === 'Location' && {
-        location: { selectedState },
-      }),
-      ...(filterBy === 'Sort' && { sort: { sortBy } }),
-    });
+    const existingParams = new URLSearchParams(searchParams as any);
+
+    const params = filtersToSearchParams(
+      {
+        ...allFilters,
+        ...(filterBy === 'Rating' && { rating: { rateBy: rating } }),
+        ...(filterBy === 'Price' && { price: priceRange }),
+        ...(filterBy === 'Location' && { location: { selectedState } }),
+        ...(filterBy === 'Sort' && { sort: { sortBy } }),
+      },
+      selectedCategory,
+      existingParams
+    );
 
     router.replace(`${pathname}?${params.toString()}`, {
       scroll: false,
@@ -54,10 +62,15 @@ const FilterModal: React.FC<ModalProps> = ({
   const handleReset = () => {
     resetFilters(filterBy.toLowerCase());
 
-    const params = filtersToSearchParams({
-      ...allFilters,
-      [filterBy.toLowerCase()]: {},
-    });
+    const existingParams = new URLSearchParams(searchParams as any);
+    const params = filtersToSearchParams(
+      {
+        ...allFilters,
+        [filterBy.toLowerCase()]: {},
+      },
+      selectedCategory,
+      existingParams
+    );
 
     router.replace(`${pathname}?${params.toString()}`, {
       scroll: false,

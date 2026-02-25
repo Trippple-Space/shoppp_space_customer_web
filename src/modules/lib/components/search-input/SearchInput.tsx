@@ -5,7 +5,7 @@ import { productService } from '../../utility/services/product.service';
 import { Product } from '../../utility/types/product.interface';
 import SearchModal from '../search-modal/SearchModal';
 import classNames from 'classnames';
-import { usePathname, useRouter } from 'next/navigation';
+import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 import { storeService } from '../../utility/services/store.service';
 import { FaArrowTrendUp } from 'react-icons/fa6';
 import { useRecentlyViewedVariant } from '../../utility/hooks/use-recently-viewed';
@@ -33,6 +33,7 @@ const SearchInput: FC<ISearchInput> = ({
 
   const typePath = usePathname();
   const router = useRouter();
+  const searchParams = useSearchParams();
 
   const [searchTerm, setSearchTerm] = useState('');
   const [searchResults, setSearchResults] = useState<Product[]>([]);
@@ -148,6 +149,11 @@ const SearchInput: FC<ISearchInput> = ({
       controller.abort();
     };
   }, [searchTerm, openSearchModal]);
+
+  useEffect(() => {
+    const search = searchParams.get('search') || '';
+    setSearchTerm(search);
+  }, [searchParams]);
 
   return (
     <div
@@ -383,6 +389,8 @@ const SearchInput: FC<ISearchInput> = ({
                       <SearchModal
                         searchResults={searchResults}
                         position={'homepage'}
+                        searchTerm={searchTerm}
+                        setOpenSearchModal={setOpenSearchModal}
                       />
                     ))}
                 </div>

@@ -548,6 +548,11 @@
 [class~='g|max-height:500px;']{max-height:500px;} 
 .w-40 { width: 40px; } 
 .h-40 { height: 40px; } 
+@layer base {.radius-30 { border-radius: 30px; } } 
+.r-16 { right: 16px; } 
+.hover\:bg-\#eee:hover { background-color: #eee; } 
+.border-\#999 { border-color: #999; } 
+.color-\#999 { color: #999; } 
 .border-b-1 { border-bottom-width: 1px; } 
 .flex-grow-1 { flex-grow: 1; } 
 .pl-12 { padding-left: 12px; } 
@@ -694,7 +699,6 @@
 .bg-grey-200 { background-color: #F5F3F1; } 
 .px-27 { padding-left: 27px; padding-right: 27px; } 
 .py-17 { padding-top: 17px; padding-bottom: 17px; } 
-@layer base {.radius-30 { border-radius: 30px; } } 
 .min-w-70 { min-width: 70px; } 
 .disabled\:bg-yellow-200:disabled { background-color: #ffdc9e; } 
 .t-10p { top: 10%; } 
@@ -707,7 +711,6 @@
 .color-\#fff { color: #fff; } 
 .gap-42 { gap: 42px; } 
 .gap-18 { gap: 18px; } 
-.hover\:bg-\#eee:hover { background-color: #eee; } 
 .h-33 { height: 33px; } 
 .h-21 { height: 21px; } 
 .min-w-20 { min-width: 20px; } 
@@ -1063,6 +1066,7 @@
 @media only screen and (min-width: 576px) { .sm\:mx-40 { margin-left: 40px; margin-right: 40px; } } 
 @media only screen and (min-width: 576px) { .sm\:px-36 { padding-left: 36px; padding-right: 36px; } } 
 @media only screen and (min-width: 576px) { .sm\:block {    display: block;  } } 
+@media only screen and (min-width: 576px) { @layer base {.sm\:radius-55 { border-radius: 55px; } } } 
 @media only screen and (min-width: 576px) { .sm\:py-14 { padding-top: 14px; padding-bottom: 14px; } } 
 @media only screen and (min-width: 576px) { .sm\:text-26 { font-size: 26px; } } 
 @media only screen and (min-width: 576px) { .sm\:flex {    display: flex;  } } 

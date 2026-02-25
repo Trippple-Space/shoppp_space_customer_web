@@ -3,7 +3,7 @@ import { useCategoryStore } from "../store/categories.store";
 import { ICategory, ProductCategory } from "../types/product.interface";
 import { useEffect, useState, useRef } from "react";
 import { filtersToSearchParams } from "../utility";
-import { usePathname, useRouter } from "next/navigation";
+import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { useFilterStore } from "../store/filter.store";
 
 
@@ -18,6 +18,7 @@ export const useCategories = ({
 }) => {
   const router = useRouter();
   const pathname = usePathname();
+   const searchParams = useSearchParams();
 
   const {
     categoriesCache,
@@ -50,7 +51,9 @@ export const useCategories = ({
   const setCat = (category: ICategory) => {
     setSelectedCategory(type, label, storeId, category)
 
-    const params = filtersToSearchParams(allFilters, category);
+    const existingParams = new URLSearchParams(searchParams as any);
+
+    const params = filtersToSearchParams(allFilters, category, existingParams);
     router.replace(`${pathname}?${params.toString()}`, {
       scroll: false,
     });

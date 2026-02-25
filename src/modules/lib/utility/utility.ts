@@ -95,18 +95,32 @@ export const buildFilterParams = (filters: any) => {
   return params;
 };
 
-export const filtersToSearchParams = (filters: IFilters, selectedCategory?: { name?: string }) => {
-  const params = new URLSearchParams();
+export const filtersToSearchParams = (filters: IFilters, selectedCategory?: { name?: string }, existingParams?: URLSearchParams) => {
+  const params = existingParams ? new URLSearchParams(existingParams) : new URLSearchParams();
 
   if (filters.rating.rateBy) params.set("rating", filters.rating.rateBy);
+  else params.delete("rating");
+
   if (filters.price.min) params.set("priceMin", filters.price.min);
+  else params.delete("priceMin");
+
   if (filters.price.max) params.set("priceMax", filters.price.max);
+  else params.delete("priceMax");
+
   if (filters.sort.sortBy) params.set("sort", filters.sort.sortBy);
+  else params.delete("sort");
+
   if (filters.location.selectedState)
     params.set("location", filters.location.selectedState);
+  else params.delete("location");
+
   if (filters.showOffers) params.set("offers", "true");
+  else params.delete("offers");
+
   if (selectedCategory?.name && selectedCategory.name !== "All") {
     params.set("category", selectedCategory.name.toLowerCase());
+  } else {
+    params.delete("category");
   }
 
   return params;

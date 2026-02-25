@@ -71,10 +71,15 @@ const Homepage = () => {
   const handleReset = (filterBy: keyof IFilters) => {
     resetFilters(filterBy);
 
-    const params = filtersToSearchParams({
-      ...allFilters,
-      [filterBy.toLowerCase()]: {},
-    });
+    const existingParams = new URLSearchParams(searchParams as any);
+    const params = filtersToSearchParams(
+      {
+        ...allFilters,
+        [filterBy.toLowerCase()]: {},
+      },
+      selectedCategory,
+      existingParams
+    );
 
     router.replace(`${pathname}?${params.toString()}`, {
       scroll: false,
@@ -90,7 +95,12 @@ const Homepage = () => {
       subcategories: [],
     });
 
-    const params = filtersToSearchParams(allFilters);
+    const existingParams = new URLSearchParams(searchParams as any);
+    const params = filtersToSearchParams(
+      allFilters,
+      selectedCategory,
+      existingParams
+    );
     params.delete('category');
 
     router.replace(`${pathname}?${params.toString()}`, {
@@ -115,7 +125,13 @@ const Homepage = () => {
       subcategories: [],
     });
 
-    router.replace(pathname, { scroll: false });
+    const params = new URLSearchParams(searchParams as any);
+    const searchTerm = params.get('search');
+
+    const newParams = new URLSearchParams();
+    if (searchTerm) newParams.set('search', searchTerm);
+
+    router.replace(`${pathname}?${newParams.toString()}`, { scroll: false });
   };
 
   return (
@@ -209,7 +225,7 @@ const Homepage = () => {
         )}
       </div>
       <div className="app-width">
-        <Collections storeId='0199c43e-1060-7180-acc2-71771c1944e7' />
+        <Collections storeId="0199c43e-1060-7180-acc2-71771c1944e7" />
 
         <CentralArena
           selectedCategory={selectedCategory}

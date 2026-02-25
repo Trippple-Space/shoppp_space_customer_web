@@ -1,33 +1,45 @@
 import { useState } from 'react';
 import ProductDetailModal from '../product-detail-modal/ProductDetailModal';
-import { useRouter } from 'next/navigation';
+import { usePathname, useRouter } from 'next/navigation';
 import { productService } from '../../utility/services/product.service';
 import {
   formatNumberAsPrice,
   cx,
   displayStockUnit,
+  filtersToSearchParams,
 } from '../../utility/utility';
 import { Product } from '../../utility/types/product.interface';
 import Image from '../image/Image';
 import { useCart } from '../../utility/hooks/use-cart';
 import { useRecentlyViewedActions } from '../../utility/hooks/use-recently-viewed';
 import { useRecentVariantStore } from '../../utility/store/recentVariant.store';
+import { useFilterStore } from '../../utility/store/filter.store';
+import { useCategoryStore } from '../../utility/store/categories.store';
 
 const SearchModal = ({
   searchResults,
   position,
+  searchTerm,
+  setOpenSearchModal,
 }: {
   searchResults: Product[];
   position: string;
+  searchTerm?: string;
+  setOpenSearchModal?: (v: boolean) => void;
 }) => {
   const [openSingleProductModal, setOpenSingleProductModal] = useState(false);
   const [product, setProduct] = useState<Product | null>(null);
   const [error, setError] = useState<string | null>(null);
+
   const { isAuthenticated } = useCart();
   const { addVariant } = useRecentlyViewedActions();
   const { fetchRecentSearched } = useRecentVariantStore();
+  const { allFilters } = useFilterStore();
+  const { selectedCategory } = useCategoryStore();
 
   const router = useRouter();
+  const pathname = usePathname();
+
   const handleFetchProduct = async (slug: string, searcedProduct?: Product) => {
     if (window.innerWidth >= 768) {
       setOpenSingleProductModal(true);
@@ -50,6 +62,17 @@ const SearchModal = ({
     setOpenSingleProductModal(false);
     setProduct(null);
   }
+
+  const handleShowMore = () => {
+    const params = filtersToSearchParams(allFilters, selectedCategory);
+
+    if (searchTerm) {
+      params.set('search', searchTerm);
+    }
+
+    router.replace(`${pathname}?${params.toString()}`);
+    setOpenSearchModal?.(false);
+  };
 
   return (
     <>
@@ -101,7 +124,10 @@ const SearchModal = ({
               ))}
             </div>
             {searchResults.length > 5 && (
-              <p className="bg-#F3F3F3 hover:bg-#eee h-34 w-fit mx-auto px-20 py-8 radius-999 flex flex-col gap-8 a-items-center j-content-center pointer">
+              <p
+                onClick={handleShowMore}
+                className="bg-#F3F3F3 hover:bg-#eee h-34 w-fit mx-auto px-20 py-8 radius-999 flex flex-col gap-8 a-items-center j-content-center pointer"
+              >
                 <span className="text-14 weight-500">Show more</span>
               </p>
             )}

@@ -1,10 +1,12 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import BaseCategoryNav from './BaseCategoryNav';
 import { paths } from '@/modules/lib/utility/paths';
 import Link from 'next/link';
 import Image from '../../image/Image';
-import { cx } from '@/modules/lib/utility/utility';
-import { usePathname, useSearchParams } from 'next/navigation';
+import { cx, filtersToSearchParams } from '@/modules/lib/utility/utility';
+import { usePathname, useRouter, useSearchParams } from 'next/navigation';
+import SearchPageInfo from '../SearchPageInfo';
+import { useFilterStore } from '@/modules/lib/utility/store/filter.store';
 
 const FabricsCategoryNav = ({
   categories,
@@ -14,8 +16,21 @@ const FabricsCategoryNav = ({
 }: any) => {
   const path = usePathname();
   const searchParams = useSearchParams();
+  const router = useRouter();
+
+  const { allFilters } = useFilterStore();
 
   const currentQuery = Object.fromEntries(searchParams.entries());
+
+  const [searchTerm, setSearchTerm] = useState('');
+
+  useEffect(() => {
+    const search = searchParams.get('search');
+
+    if (search && search !== searchTerm) {
+      setSearchTerm(search);
+    }
+  }, [searchParams]);
 
   return (
     <div
@@ -95,12 +110,24 @@ const FabricsCategoryNav = ({
           </div>
         </div>
       )}
-      <BaseCategoryNav
-        categories={categories}
-        selectedCategory={selectedCategory}
-        setSelectedCategory={setSelectedCategory}
-        page={page}
-      />
+      {searchTerm ? (
+        <SearchPageInfo
+          searchTerm={searchTerm}
+          onClearSearch={() => {
+            const params = filtersToSearchParams(allFilters, selectedCategory);
+            params.delete('search');
+            setSearchTerm('')
+            router.replace(`${path}?${params.toString()}`);
+          }}
+        />
+      ) : (
+        <BaseCategoryNav
+          categories={categories}
+          selectedCategory={selectedCategory}
+          setSelectedCategory={setSelectedCategory}
+          page={page}
+        />
+      )}
     </div>
   );
 };
