@@ -21,6 +21,7 @@ export const useRecentlyViewedVariant = () => {
         showLoginModal,
         isLoginModal,
         isAuthenticated,
+        fetching
     };
 }
 

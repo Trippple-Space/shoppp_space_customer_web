@@ -223,7 +223,7 @@ const BaseNavBar: FC<IBaseNavBar> = ({ links, parent }) => {
 
                 <div
                   className="relative"
-                  style={{ zIndex: showonBoardingModal ? 100 : 1 }}
+                  style={{ zIndex: showonBoardingModal ? 100 : 0 }}
                 >
                   <MiniCart />
                 </div>
