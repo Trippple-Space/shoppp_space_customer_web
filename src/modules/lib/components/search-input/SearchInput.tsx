@@ -214,7 +214,7 @@ const SearchInput: FC<ISearchInput> = ({
 
             <div
               className={classNames(
-                `z-1 bg-white radius-30 md:radius-20 fixed l-50p md:l-auto t-70 md:t--12 md:pt-70 g|transform:translate(-50%); w-90p h-60p md:h-400 md:w-520 md:absolute md:transform-none md:g|box-shadow:0px|_|2px|_|5px|_|rgba(0,0,0,0.05);`
+                `z-1 bg-white radius-30 md:radius-20 flex flex-col fixed l-50p md:l-auto t-70 md:t--12 md:pt-70 g|transform:translate(-50%); w-90p h-70p md:h-400 md:w-520 md:absolute md:transform-none md:g|box-shadow:0px|_|2px|_|5px|_|rgba(0,0,0,0.05);`
               )}
             >
               <div className="w-100p flex j-content-center md:hidden pb-20">
@@ -233,7 +233,7 @@ const SearchInput: FC<ISearchInput> = ({
                 </div>
               </div>
 
-              <div className="flex flex-col gap-42 w-90p mx-auto h-100p overflow-auto no-scrollbar py-20">
+              <div className="flex flex-col gap-42 sm:w-90p w-93p mx-auto flex-1 min-h-0 overflow-auto no-scrollbar py-20">
                 {searchTerm.length === 0 ? (
                   <>
                     {recentSearched?.length !== 0 ? (

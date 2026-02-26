@@ -549,7 +549,7 @@
 .w-40 { width: 40px; } 
 .h-40 { height: 40px; } 
 @layer base {.radius-30 { border-radius: 30px; } } 
-.r-36 { right: 36px; } 
+.r-16 { right: 16px; } 
 .hover\:bg-\#eee:hover { background-color: #eee; } 
 .border-\#999 { border-color: #999; } 
 .color-\#999 { color: #999; } 
@@ -710,6 +710,7 @@
 .m-5 { margin: 5px; } 
 .color-\#fff { color: #fff; } 
 .gap-42 { gap: 42px; } 
+.w-93p { width: 93%; } 
 .gap-18 { gap: 18px; } 
 .h-33 { height: 33px; } 
 .h-21 { height: 21px; } 
@@ -720,8 +721,9 @@
 .pr-20 { padding-right: 20px; } 
 .mb--5 { margin-bottom: -5px; } 
 [class~='g|transform:translate(-50%);']{transform:translate(-50%);} 
-.h-60p { height: 60%; } 
+.h-70p { height: 70%; } 
 .j-content-start { justify-content: flex-start; } 
+.min-w-50 { min-width: 50px; } 
 .bg-grey-300 { background-color: #E4E1DF; } 
 .h-340 { height: 340px; } 
 .mr-4 { margin-right: 4px; } 
@@ -744,6 +746,7 @@
 .min-w-200 { min-width: 200px; } 
 .z-index-6, .z-6 { z-index: 6; } 
 .h-70 { height: 70px; } 
+.h-60p { height: 60%; } 
 .r-80 { right: 80px; } 
 .t-65 { top: 65px; } 
 .uppercase {    text-transform: uppercase;  } 
@@ -1067,6 +1070,9 @@
 @media only screen and (min-width: 576px) { .sm\:px-36 { padding-left: 36px; padding-right: 36px; } } 
 @media only screen and (min-width: 576px) { .sm\:block {    display: block;  } } 
 @media only screen and (min-width: 576px) { @layer base {.sm\:radius-55 { border-radius: 55px; } } } 
+@media only screen and (min-width: 576px) { .sm\:r-36 { right: 36px; } } 
+@media only screen and (min-width: 576px) { .sm\:w-40 { width: 40px; } } 
+@media only screen and (min-width: 576px) { .sm\:h-40 { height: 40px; } } 
 @media only screen and (min-width: 576px) { .sm\:py-14 { padding-top: 14px; padding-bottom: 14px; } } 
 @media only screen and (min-width: 576px) { .sm\:text-26 { font-size: 26px; } } 
 @media only screen and (min-width: 576px) { .sm\:flex {    display: flex;  } } 
