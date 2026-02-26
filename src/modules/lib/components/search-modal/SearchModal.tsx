@@ -104,7 +104,7 @@ const SearchModal = ({
                         ?.media?.[0]?.url
                     }
                     alt={product.name}
-                    className="w-50 h-50 radius-6 object-fit-cover"
+                    className="w-50 min-w-50 h-50 radius-6 object-fit-cover"
                   />
                   <div className="flex flex-col a-items-start gap-4">
                     <p className="color-#000000 text-left text-14 weight-500">

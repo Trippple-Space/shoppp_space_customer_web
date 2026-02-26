@@ -11,11 +11,11 @@ const SearchPageInfo = ({ searchTerm, onClearSearch }: SearchPageInfoProps) => {
     <div className="bg-#F3F3F3 py-12 px-24 flex flex-col a-items-center j-content-center gap-16 sm:radius-55 radius-30 font-inter relative">
       <button
         onClick={onClearSearch}
-        className="absolute t-16 r-36 w-40 h-40 cursor-pointer hover:bg-#eee border-#999 border-solid radius-50p flex flex-col a-items-center j-content-center"
+        className="absolute t-16 sm:r-36 r-16 sm:w-40 w-28 sm:h-40 h-28 cursor-pointer hover:bg-#eee border-#999 border-solid radius-50p flex flex-col a-items-center j-content-center"
         aria-label="Clear Search"
         title='Clear Search'
       >
-        <FiX className="text-24 color-#999" />
+        <FiX className="sm:text-24 text-16 color-#999" />
       </button>
 
       <div className="flex flex-col gap-8 a-items-center j-content-center">
