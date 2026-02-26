@@ -8,6 +8,7 @@ import {
   useRecentlyViewedVariant,
 } from '@/modules/lib/utility/hooks/use-recently-viewed';
 import Image from '../../image/Image';
+import NoResultMessage from '../../error-messages/no-result-found';
 
 interface ModalProps {
   modalOpen: boolean;
@@ -29,16 +30,7 @@ const RecentlySearchItems: React.FC<ModalProps> = ({
         return (
           <div className="text-16 weight-400 text-grey-700 h-full">
             {recentSearched.length === 0 ? (
-              <div className="flex flex-col a-items-center gap-8 py-16 h-full j-content-center">
-                <Image
-                  src="empty-tray.png"
-                  className="w-184 h-152 object-fit-scale-down ml--30"
-                  alt="empty"
-                />
-                <p className="text-14 weight-400 line-height-22 color-#00000073 w-320 px-12 py-5">
-                  Continue shopping to discover our best deals!
-                </p>
-              </div>
+              <NoResultMessage textContent="Continue shopping to discover our best deals!" />
             ) : (
               recentSearched.map((recentVariant) => (
                 <div className="pb-20 mb-20 border-b border-1 border-grey-300">

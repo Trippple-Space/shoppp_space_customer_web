@@ -22,6 +22,7 @@ import { useNavbarView } from '../../utility/hooks/views/use-navbar-view';
 import useUserStore from '../../utility/store/user.store';
 import VideoSrc from '../video-src/VideoSrc';
 import { ConfigPill } from '../product-detail-modal/productConfigurationsHelper';
+import NoResultMessage from '../error-messages/no-result-found';
 
 interface ModalProps {
   isOpen?: boolean;
@@ -109,16 +110,7 @@ const MiniCart: React.FC<ModalProps> = ({
               <div className="flex flex-col pb-183">
                 {!cart.cartItems.length ? (
                   <div className="mx-auto text-center flex flex-col a-items-center gap-16 py-24">
-                    <div className="flex flex-col a-items-center gap-8 py-16">
-                      <Image
-                        src="empty-tray.png"
-                        className="w-184 h-152 object-fit-scale-down"
-                        alt="empty"
-                      />
-                      <p className="text-14 weight-400 line-height-22 color-#00000073 w-320 px-12 py-5">
-                        Continue shopping to discover our best deals!
-                      </p>
-                    </div>
+                    <NoResultMessage textContent='Continue shopping to discover our best deals!'/>
 
                     <div className="flex flex-col gap-8 text-14 w-250 mx-auto">
                       {!isAuthenticated && (
