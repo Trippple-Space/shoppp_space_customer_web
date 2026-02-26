@@ -1,29 +1,16 @@
-import { BiSearch, BiUser, BiCart } from 'react-icons/bi';
-import {
-  IoChatbubbleOutline,
-  IoGiftOutline,
-  IoStarOutline,
-} from 'react-icons/io5';
+import { BiUser, BiCart } from 'react-icons/bi';
 import Link from 'next/link';
 import '../simpleFlow/simpleFlow.css';
 import { FC } from 'react';
-import { Store } from '@/modules/lib/utility/types/store.interface';
-import {
-  Product,
-  ProductCategory,
-} from '@/modules/lib/utility/types/product.interface';
-import { IFetchedReview } from '@/modules/lib/utility/types/review.interface';
 import { Cart } from '@/modules/lib/utility/types/cart.interface';
-import ProductTile from '@/modules/lib/components/product-tile/ProductTile';
 import StorefrontFooter from '@/modules/lib/components/footer/StorefrontFooter';
 import UserProfileDropdown from '@/modules/lib/components/nav-bar/profile-modal/UserProfileDropdown';
 import MiniCart from '@/modules/lib/components/minicart/MiniCart';
-import { ProductSearch } from './ProductSearch';
 import MobileNav from '@/modules/lib/components/nav-bar/mobile-nav/MobileNav';
-import { DotsLoader } from '@/modules/lib/components/dots-loader/DotsLoader';
 import StoreProductsList from '@/modules/views/storefront/StoreProductsList';
 import Collections from '@/modules/views/homepage/Collections';
 import { BaseStorefrontProps } from '@/modules/lib/utility/types/storefront-template.interface';
+import { ProductSearch } from '@/modules/lib/components/search-input/StoreFrontProductSearch';
 
 type SimpleFlowProps = BaseStorefrontProps & {
   cart?: Cart;
@@ -69,7 +56,7 @@ const SimpleFlow: FC<SimpleFlowProps> = ({
               </Link>
 
               <div className="simpleFlow__headerActions">
-                <ProductSearch storeSlug={store?.slug} />
+                <ProductSearch storeSlug={store?.slug} variant="simple" />
                 <button
                   className="simpleFlow__iconButton sm:flex! hidden!"
                   aria-label="Account"

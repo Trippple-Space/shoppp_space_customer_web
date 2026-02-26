@@ -1,7 +1,4 @@
-import { useState } from 'react';
-import ProductDetailModal from '../product-detail-modal/ProductDetailModal';
 import { usePathname, useRouter } from 'next/navigation';
-import { productService } from '../../utility/services/product.service';
 import {
   formatNumberAsPrice,
   cx,
@@ -21,16 +18,14 @@ const SearchModal = ({
   position,
   searchTerm,
   setOpenSearchModal,
+  handleFetchProduct,
 }: {
   searchResults: Product[];
   position: string;
   searchTerm?: string;
   setOpenSearchModal?: (v: boolean) => void;
+  handleFetchProduct: (slug: string) => void;
 }) => {
-  const [openSingleProductModal, setOpenSingleProductModal] = useState(false);
-  const [product, setProduct] = useState<Product | null>(null);
-  const [error, setError] = useState<string | null>(null);
-
   const { isAuthenticated } = useCart();
   const { addVariant } = useRecentlyViewedActions();
   const { fetchRecentSearched } = useRecentVariantStore();
@@ -39,29 +34,6 @@ const SearchModal = ({
 
   const router = useRouter();
   const pathname = usePathname();
-
-  const handleFetchProduct = async (slug: string, searcedProduct?: Product) => {
-    if (window.innerWidth >= 768) {
-      setOpenSingleProductModal(true);
-      /* if (searcedProduct) setProduct(searcedProduct); */
-      try {
-        const singleSearchProduct = await productService.fetchProductBySlug(
-          slug,
-          {}
-        );
-        setProduct(singleSearchProduct);
-      } catch (err) {
-        setError('Failed to fetch product details');
-      }
-    } else {
-      router.push(`/products/${slug}`);
-    }
-  };
-
-  function handleCloseProductModal() {
-    setOpenSingleProductModal(false);
-    setProduct(null);
-  }
 
   const handleShowMore = () => {
     const params = filtersToSearchParams(allFilters, selectedCategory);
@@ -80,11 +52,7 @@ const SearchModal = ({
         {searchResults && (
           <div className=" l:mt-0  flex flex-col a-items-start w-100p h-100p gap-15">
             {/*  <p className='color-#00000099 text-left text-12 p-10'>Results</p> */}
-            {position === 'homepage' ? (
-              <h6 className="font-inter weight-700 text-14">Products</h6>
-            ) : (
-              ''
-            )}
+            <h6 className="font-inter weight-700 text-14">Products</h6>
             <div className="overflow-auto w-100p flex flex-col gap-3 no-scrollbar">
               {searchResults.slice(0, 5).map((product) => (
                 <div
@@ -95,7 +63,7 @@ const SearchModal = ({
                       addVariant(product.variants[0].id, 'search');
                       fetchRecentSearched();
                     }
-                    handleFetchProduct(product.slug, product);
+                    handleFetchProduct(product.slug);
                   }}
                 >
                   <Image
@@ -134,20 +102,6 @@ const SearchModal = ({
           </div>
         )}
       </div>
-      {product && (
-        <ProductDetailModal
-          openSingleProductModal={openSingleProductModal}
-          handleCloseProductModal={handleCloseProductModal}
-          position="homepage"
-          product={product}
-          variant={
-            /* {
-          ...product.variants[0],
-          product
-        } */ undefined
-          }
-        />
-      )}
     </>
   );
 };

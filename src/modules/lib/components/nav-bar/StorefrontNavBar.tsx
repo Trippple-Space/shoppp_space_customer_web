@@ -1,25 +1,24 @@
-"use client";
+'use client';
 
-import React, { useState } from "react";
-import { Store } from "../../utility/types/store.interface";
-import SearchInput from "../search-input/SearchInput";
-import MiniCart from "../minicart/MiniCart";
-import { HiMenuAlt3 } from "react-icons/hi";
-import { useNavbarView } from "../../utility/hooks/views/use-navbar-view";
-import MobileNav from "./mobile-nav/MobileNav";
-import UserProfileDropdown from "./profile-modal/UserProfileDropdown";
-import OrdersModal from "./profile-modal/OrdersModal";
-import RecentlySearchItems from "./profile-modal/RecentlySearchItems ";
-import RecentlyViewedItems from "./profile-modal/RecentlyViewedItems ";
-import SavedItemsModal from "./profile-modal/SavedItems";
-import Link from "next/link";
-import Image from "../image/Image";
+import React, { useState } from 'react';
+import { Store } from '../../utility/types/store.interface';
+import SearchInput from '../search-input/SearchInput';
+import MiniCart from '../minicart/MiniCart';
+import { HiMenuAlt3 } from 'react-icons/hi';
+import { useNavbarView } from '../../utility/hooks/views/use-navbar-view';
+import MobileNav from './mobile-nav/MobileNav';
+import UserProfileDropdown from './profile-modal/UserProfileDropdown';
+import OrdersModal from './profile-modal/OrdersModal';
+import RecentlySearchItems from './profile-modal/RecentlySearchItems ';
+import RecentlyViewedItems from './profile-modal/RecentlyViewedItems ';
+import SavedItemsModal from './profile-modal/SavedItems';
+import Image from '../image/Image';
 
 const StorefrontNavBar = ({ store }: { store?: Store }) => {
   const { user } = useNavbarView();
   const [userProfileDropdown, setUserProfileDropdown] =
     useState<boolean>(false);
-  const [profileModal, setProfileModal] = useState<string>("");
+  const [profileModal, setProfileModal] = useState<string>('');
 
   const handleUserProfileDropdown = () => {
     setUserProfileDropdown((prev) => !prev);
@@ -30,22 +29,36 @@ const StorefrontNavBar = ({ store }: { store?: Store }) => {
   };
 
   return (
-    <nav className="flex flex-row j-content-between a-items-center border border-0 border-b-1 border-b-#00000014 sm:py-14 py-12 l:px-80 md:px-60 sm:px-40 px-24 fixed w-100p bg-white z-10">
-      <div className="md:flex-grow-0 flex-grow-1">
-        <h1 className="font-robotoMono weight-500 md:text-28 sm:text-26 text-22 w-fit">
+    <nav className="flex flex-row j-content-between gap-20 a-items-center border border-0 border-b-1 border-b-#00000014 sm:py-14 py-12 l:px-80 md:px-60 sm:px-40 px-24 fixed w-100p bg-white z-10">
+      <div
+        className="md:flex-grow-0 flex-grow-1 flex flex-row"
+        style={{
+          whiteSpace: 'nowrap',
+          overflow: 'hidden',
+          textOverflow: 'ellipsis',
+          display: 'block',
+          maxWidth: '100%',
+        }}
+      >
+        <h1
+          className="font-robotoMono weight-500 md:text-28 sm:text-26 text-22 w-fit"
+          style={{
+            whiteSpace: 'nowrap',
+            overflow: 'hidden',
+            textOverflow: 'ellipsis',
+            display: 'block',
+            maxWidth: '100%',
+          }}
+        >
           {store?.name}
         </h1>
-        {/* <Link href={'/'} className='w-fit'>
-          <Image
-            className='w-70 l:w-100'
-            src='new-asoebi-logo.svg'
-            alt='logo'
-            type='logo'
-          />
-        </Link> */}
       </div>
 
-      <SearchInput placeholder={"Search"} component={"store"} storeSlug={store?.slug} />
+      <SearchInput
+        placeholder={'Search'}
+        component={'store'}
+        storeSlug={store?.slug}
+      />
       <div className="">
         <div className="flex flex-row md:gap-24 gap-10 a-items-center">
           <MiniCart />
@@ -80,23 +93,23 @@ const StorefrontNavBar = ({ store }: { store?: Store }) => {
         {profileModal && (
           <>
             <OrdersModal
-              modalOpen={profileModal === "orders"}
-              handleCloseModal={() => setProfileModal("")}
+              modalOpen={profileModal === 'orders'}
+              handleCloseModal={() => setProfileModal('')}
               data={undefined}
             />
             <RecentlySearchItems
-              modalOpen={profileModal === "recently searched"}
-              handleCloseModal={() => setProfileModal("")}
+              modalOpen={profileModal === 'recently searched'}
+              handleCloseModal={() => setProfileModal('')}
               data={undefined}
             />
             <RecentlyViewedItems
-              modalOpen={profileModal === "recently viewed"}
-              handleCloseModal={() => setProfileModal("")}
+              modalOpen={profileModal === 'recently viewed'}
+              handleCloseModal={() => setProfileModal('')}
               data={undefined}
             />
             <SavedItemsModal
-              modalOpen={profileModal === "saved items"}
-              handleCloseModal={() => setProfileModal("")}
+              modalOpen={profileModal === 'saved items'}
+              handleCloseModal={() => setProfileModal('')}
               data={undefined}
             />
           </>

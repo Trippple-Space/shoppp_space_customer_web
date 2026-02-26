@@ -2,7 +2,7 @@ import React, { FC, useEffect, useRef, useState } from 'react';
 import { BiSearch, BiStoreAlt } from 'react-icons/bi';
 import { IoIosSearch } from 'react-icons/io';
 import { productService } from '../../utility/services/product.service';
-import { Product } from '../../utility/types/product.interface';
+import { Product, RecentlyViewed } from '../../utility/types/product.interface';
 import SearchModal from '../search-modal/SearchModal';
 import classNames from 'classnames';
 import { usePathname, useRouter, useSearchParams } from 'next/navigation';
@@ -165,9 +165,7 @@ const SearchInput: FC<ISearchInput> = ({
         className={
           component === 'home'
             ? 'flex w-100p relative a-items-center md:z-2'
-            : classNames(
-                'relative flex flex-row a-items-center j-content-between flex-grow-1 l:w-full md:w-320 md:radius-99 md:border md:border-#D9D9D9 md:z-2'
-              )
+            : classNames('relative flex a-items-center w-100p md:z-2')
         }
       >
         <div className="w-full hidden md:block">
@@ -176,9 +174,9 @@ const SearchInput: FC<ISearchInput> = ({
             className={
               component === 'home'
                 ? classNames(
-                    'hidden flex l:block md:border md:bg-#F3F3F3 md:border-none md:py-12 md:px-14 md:outline-none md:w-100p md:relative md:z-2 md:radius-99'
+                    'flex l:block md:border md:bg-#F3F3F3 md:border-none md:py-12 md:px-14 md:outline-none md:w-100p md:relative md:z-2 md:radius-99'
                   )
-                : 'md:block hidden border-none bg-none outline-none md:w-100p text-16 md:py-11.2 md:pl-14 md:relative md:z-2 md:radius-99'
+                : 'md:block hidden md:radius-99 md:border md:border-#D9D9D9 bg-none outline-none l:w-full md:w-320 text-16 md:py-11.2 md:pl-14 md:relative md:z-2 md:radius-99'
             }
             placeholder={placeholder}
             value={searchTerm}
@@ -188,13 +186,13 @@ const SearchInput: FC<ISearchInput> = ({
         </div>
 
         <div
-          className={
+          className={`md:absolute r-0 md:cursor-pointer md:z-2 md:radius-50 ${
             component === 'home'
               ? classNames(
-                  'flex a-items-center j-content-center md:bg-#0B9378 md:absolute r-0 md:m-5 md:cursor-pointer md:w-30 md:h-30 w-100p md:z-2 md:radius-50'
+                  'flex a-items-center j-content-center md:bg-#0B9378 md:w-30 md:h-30 w-100p md:m-5'
                 )
-              : 'md:pr-0 pr-20 md:z-2 md:radius-50'
-          }
+              : 'md:z-2 md:radius-50'
+          }`}
         >
           <BiSearch
             className={
@@ -223,66 +221,24 @@ const SearchInput: FC<ISearchInput> = ({
                     type="text"
                     value={searchTerm}
                     onChange={(e) => setSearchTerm(e.target.value)}
-                    className="block radius-99 bg-#F3F3F3 border-none py-12 px-14 outline-none w-100p"
-                    placeholder="Search asoebi.africa"
+                    className={`block radius-99 py-12 px-14 outline-none w-100p ${component === 'home' ? 'bg-#F3F3F3 border-none' : 'border border-#D9D9D9'}`}
+                    placeholder={`${component === 'home' ? 'Search asoebi.africa' : 'Search'}`}
                   />
 
-                  <div className="flex j-content-center a-items-center bg-#0B9378 absolute r-0 radius-50 m-5 w-30 h-30">
-                    <IoIosSearch className="w-25 h-20 color-#fff" />
+                  <div
+                    className={`flex j-content-center a-items-center absolute r-0 radius-50 m-5 w-30 h-30 ${component === 'home' ? 'bg-#0B9378 color-#fff' : ''}`}
+                  >
+                    <IoIosSearch className="w-25 h-20" />
                   </div>
                 </div>
               </div>
 
               <div className="flex flex-col gap-42 sm:w-90p w-93p mx-auto flex-1 min-h-0 overflow-auto no-scrollbar py-20">
                 {searchTerm.length === 0 ? (
-                  <>
-                    {recentSearched?.length !== 0 ? (
-                      <div className="flex flex-col gap-22">
-                        <h6 className="font-inter weight-700 text-14">
-                          Recent Searches
-                        </h6>
-                        <div className="flex gap-18 a-items-center w-100p overflow-auto no-scrollbar">
-                          {recentSearched?.toReversed().map((searched, idx) => (
-                            <p
-                              key={searched.id + idx}
-                              onClick={() => {
-                                handleFetchProduct(
-                                  searched?.productVariant?.product?.slug || ''
-                                );
-                              }}
-                              className="bg-#F3F3F3 hover:bg-#eee h-33 px-16 py-8 radius-999 flex flex-col gap-8 a-items-center j-content-center pointer"
-                            >
-                              <span
-                                className="text-14 weight-500"
-                                style={{ textWrap: 'nowrap' }}
-                              >
-                                {searched?.productVariant?.product?.name}
-                              </span>
-                            </p>
-                          ))}
-                        </div>
-                      </div>
-                    ) : (
-                      ''
-                    )}
-
-                    {/* <div className="flex flex-col gap-22">
-                      <h6 className="font-inter weight-700 text-14">
-                        Trending Now
-                      </h6>
-                      <div className="flex gap-18 a-items-center overflow-auto no-scrollbar">
-                        <p className="bg-#F3F3F3 hover:bg-#eee h-33 px-16 py-8 radius-999 flex gap-8 a-items-center j-content-center pointer">
-                          <span
-                            className="text-14 weight-500"
-                            style={{ textWrap: 'nowrap' }}
-                          >
-                            Flowery Lace
-                          </span>
-                          <FaArrowTrendUp size={21} />
-                        </p>
-                      </div>
-                    </div> */}
-                  </>
+                  <MiniRecentlySearched
+                    recentSearched={recentSearched}
+                    handleFetchProduct={handleFetchProduct}
+                  />
                 ) : (
                   ''
                 )}
@@ -357,24 +313,7 @@ const SearchInput: FC<ISearchInput> = ({
                   {searchTerm.length > 0 &&
                     (searchResults.length === 0 ? (
                       loadingProducts ? (
-                        <div className="flex flex-col gap-15">
-                          <h6 className="font-inter weight-700 text-14">
-                            Products
-                          </h6>
-
-                          <div className="flex flex-col gap-10">
-                            {Array.from({ length: 4 }).map((_, i) => (
-                              <div key={i} className="flex gap-8 p-10 radius-8">
-                                <Shimmer className="w-50 h-50 radius-6" />
-
-                                <div className="flex flex-col gap-6 flex-grow-1">
-                                  <Shimmer className="h-12 w-70p" />
-                                  <Shimmer className="h-10 w-40p" />
-                                </div>
-                              </div>
-                            ))}
-                          </div>
-                        </div>
+                        <ProductLoadingSkeleton />
                       ) : (
                         <div className="flex flex-col gap-22">
                           <h6 className="font-inter weight-700 text-14">
@@ -391,6 +330,7 @@ const SearchInput: FC<ISearchInput> = ({
                         position={'homepage'}
                         searchTerm={searchTerm}
                         setOpenSearchModal={setOpenSearchModal}
+                        handleFetchProduct={handleFetchProduct}
                       />
                     ))}
                 </div>
@@ -399,7 +339,6 @@ const SearchInput: FC<ISearchInput> = ({
           </>
         )}
       </div>
-
       {product && (
         <ProductDetailModal
           openSingleProductModal={openSingleProductModal}
@@ -414,3 +353,81 @@ const SearchInput: FC<ISearchInput> = ({
 };
 
 export default SearchInput;
+
+export const MiniRecentlySearched = ({
+  recentSearched,
+  handleFetchProduct,
+}: {
+  recentSearched: RecentlyViewed[];
+  handleFetchProduct: (slug: string) => void;
+}) => {
+  return (
+    <>
+      {recentSearched?.length !== 0 ? (
+        <div className="flex flex-col gap-22">
+          <h6 className="font-inter weight-700 text-14">Recent Searches</h6>
+          <div className="flex gap-18 a-items-center w-100p overflow-auto no-scrollbar">
+            {recentSearched?.toReversed().map((searched, idx) => (
+              <p
+                key={searched.id + idx}
+                onClick={() => {
+                  handleFetchProduct(
+                    searched?.productVariant?.product?.slug || ''
+                  );
+                }}
+                className="bg-#F3F3F3 hover:bg-#eee h-33 px-16 py-8 radius-999 flex flex-col gap-8 a-items-center j-content-center pointer"
+              >
+                <span
+                  className="text-14 weight-500"
+                  style={{ textWrap: 'nowrap' }}
+                >
+                  {searched?.productVariant?.product?.name}
+                </span>
+              </p>
+            ))}
+          </div>
+        </div>
+      ) : (
+        ''
+      )}
+
+      {/* <div className="flex flex-col gap-22">
+                      <h6 className="font-inter weight-700 text-14">
+                        Trending Now
+                      </h6>
+                      <div className="flex gap-18 a-items-center overflow-auto no-scrollbar">
+                        <p className="bg-#F3F3F3 hover:bg-#eee h-33 px-16 py-8 radius-999 flex gap-8 a-items-center j-content-center pointer">
+                          <span
+                            className="text-14 weight-500"
+                            style={{ textWrap: 'nowrap' }}
+                          >
+                            Flowery Lace
+                          </span>
+                          <FaArrowTrendUp size={21} />
+                        </p>
+                      </div>
+                    </div> */}
+    </>
+  );
+};
+
+export const ProductLoadingSkeleton = () => {
+  return (
+    <div className="flex flex-col gap-15">
+      <h6 className="font-inter weight-700 text-14">Products</h6>
+
+      <div className="flex flex-col gap-10">
+        {Array.from({ length: 4 }).map((_, i) => (
+          <div key={i} className="flex gap-8 p-10 radius-8">
+            <Shimmer className="w-50 h-50 radius-6" />
+
+            <div className="flex flex-col gap-6 flex-grow-1">
+              <Shimmer className="h-12 w-70p" />
+              <Shimmer className="h-10 w-40p" />
+            </div>
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+};
