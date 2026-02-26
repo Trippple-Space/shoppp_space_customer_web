@@ -159,14 +159,10 @@ const SearchInput: FC<ISearchInput> = ({
     <div
       className={`flex gap-30 l:gap-50 weight-200 text-14 l:text-16 ${
         component === 'home' ? 'l:w-400 md:w-340' : 'l:w-400'
-      }`}
+      } ${openSearchModal ? 'md:relative md:z-2' : 'md-relative z-0'}`}
     >
       <div
-        className={
-          component === 'home'
-            ? 'flex w-100p relative a-items-center md:z-2'
-            : classNames('relative flex a-items-center w-100p md:z-2')
-        }
+        className={`flex w-100p relative a-items-center ${openSearchModal ? 'md:z-2' : ''}`}
       >
         <div className="w-full hidden md:block">
           <input

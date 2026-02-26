@@ -1,8 +1,6 @@
 'use client';
 
-import HomepageNavBar from '@/modules/lib/components/nav-bar/HomepageNavBar';
 import Footer from '@/modules/lib/components/footer/Footer';
-import Icon from '@/modules/lib/components/icon/Icon';
 import Link from 'next/link';
 import useUserStore from '@/modules/lib/utility/store/user.store';
 import { paths } from '@/modules/lib/utility/paths';
