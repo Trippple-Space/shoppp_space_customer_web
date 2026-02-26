@@ -47,6 +47,7 @@ const UrbanEdge: FC<UrbanEdgeProps> = ({
           </div>
 
           <div className="urbanEgde__rightButtons">
+            
             {cart?.cartItems ? (
               ''
             ) : (

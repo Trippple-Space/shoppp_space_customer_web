@@ -6,10 +6,10 @@ import MiniCart from '@/modules/lib/components/minicart/MiniCart';
 import MobileNav from '@/modules/lib/components/nav-bar/mobile-nav/MobileNav';
 import UserProfileDropdown from '@/modules/lib/components/nav-bar/profile-modal/UserProfileDropdown';
 import StorefrontFooter from '@/modules/lib/components/footer/StorefrontFooter';
-import { ProductSearch } from './ProductSearch';
 import StoreProductsList from '@/modules/views/storefront/StoreProductsList';
 import Collections from '@/modules/views/homepage/Collections';
 import { BaseStorefrontProps } from '@/modules/lib/utility/types/storefront-template.interface';
+import { ProductSearch } from '@/modules/lib/components/search-input/StoreFrontProductSearch';
 
 type FurnitureProps = BaseStorefrontProps & {
   productSold: number;
@@ -71,7 +71,7 @@ const Furniture: FC<FurnitureProps> = (props) => {
             </div>
 
             <div id="search-icons" className="furniture-flex">
-              <ProductSearch storeSlug={store?.slug} />
+              <ProductSearch storeSlug={store?.slug} variant="furniture" />
               <div id="user-icons" className="furniture-flex">
                 <span
                   id="cartIcon"

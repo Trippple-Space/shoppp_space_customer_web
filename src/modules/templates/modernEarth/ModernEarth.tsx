@@ -1,11 +1,5 @@
 import React from 'react';
 import '../modernEarth/modernEarth.css';
-import { Store } from '@/modules/lib/utility/types/store.interface';
-import {
-  Product,
-  ProductCategory,
-} from '@/modules/lib/utility/types/product.interface';
-import { IFetchedReview } from '@/modules/lib/utility/types/review.interface';
 import Link from 'next/link';
 import { TbHeart, TbPhoneCall } from 'react-icons/tb';
 import Image from 'next/image';
@@ -15,13 +9,11 @@ import { SavedVariant } from '@/modules/lib/utility/types/SavedVariant.interface
 import MiniCart from '@/modules/lib/components/minicart/MiniCart';
 import MobileNav from '@/modules/lib/components/nav-bar/mobile-nav/MobileNav';
 import UserProfileDropdown from '@/modules/lib/components/nav-bar/profile-modal/UserProfileDropdown';
-import { ModernEarthSearch } from './ProductSearch';
-import ProductTile from '@/modules/lib/components/product-tile/ProductTile';
 import StorefrontFooter from '@/modules/lib/components/footer/StorefrontFooter';
-import { DotsLoader } from '@/modules/lib/components/dots-loader/DotsLoader';
 import Collections from '@/modules/views/homepage/Collections';
 import StoreProductsList from '@/modules/views/storefront/StoreProductsList';
 import { BaseStorefrontProps } from '@/modules/lib/utility/types/storefront-template.interface';
+import { ProductSearch } from '@/modules/lib/components/search-input/StoreFrontProductSearch';
 
 type ModernEarthProps = BaseStorefrontProps & {
   title: string;
@@ -84,7 +76,7 @@ const ModernEarth: React.FC<ModernEarthProps> = (props) => {
                 JSON.parse(store?.registrationProposal?.data)?.storeAddress}
             </span>
             <div className="modernEarth__topbar-right relative">
-              <ModernEarthSearch storeSlug={store?.slug} />
+              <ProductSearch storeSlug={store?.slug} variant="modernEarth" />
               <Link
                 href={`tel:${store?.user?.mobile || store?.profile?.phoneNumbers?.[0]}`}
                 className="modernEarth__phone flex a-items-center gap-12"

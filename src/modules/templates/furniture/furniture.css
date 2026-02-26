@@ -1,5 +1,5 @@
 .furniture-body {
-  font-family: "Nunito Sans", sans-serif;
+  font-family: 'Nunito Sans', sans-serif;
   overflow-x: hidden;
   position: relative;
   display: flex;
@@ -77,36 +77,44 @@
   gap: 2rem;
 }
 
-.furniture-body nav #search-box {
+.furniture-body nav .search-box {
   border-bottom: 1px solid rgba(0, 0, 0, 0.15);
   padding: 8px 0;
   overflow-y: visible;
- /*  overflow-x: hidden; */
+  /*  overflow-x: hidden; */
   gap: 0.5rem;
   width: 280px;
 }
 
-.furniture-body nav #search-box .img:nth-of-type(1) {
+.furniture-body nav .search-box-input {
+  border-bottom: 1px solid rgba(0, 0, 0, 0.15);
+  overflow-y: visible;
+  /*  overflow-x: hidden; */
+  gap: 0.5rem;
+  width: 280px;
+}
+
+.furniture-body nav .search-box .img:nth-of-type(1) {
   width: 24px;
   height: 24px;
   display: block;
 }
 
-.furniture-body nav #search-box .img:nth-of-type(2) {
+.furniture-body nav .search-box .img:nth-of-type(2) {
   width: 23px;
   height: 23px;
   margin-top: -7px;
   display: none;
 }
 
-.furniture-body nav #search-box input {
+.furniture-body nav .search-box input {
   border: none;
   outline: none;
   width: 100%;
   font-size: 14px;
 }
 
-.furniture-body nav #search-box input::placeholder {
+.furniture-body nav .search-box input::placeholder {
   color: #8e8e8e;
 }
 
@@ -418,7 +426,7 @@
     gap: 3rem;
   }
 
-  nav #search-box {
+  nav .search-box, nav .search-box-input {
     width: 200px;
   }
 
@@ -615,14 +623,14 @@
   .furniture-body nav #nav-items-container #nav-items .nav-item {
     display: none;
   }
-   
-  .furniture-body nav #search-box {
+
+  .furniture-body nav .search-box {
     border-bottom: none;
     padding: 0;
     width: 20px;
   }
-  
-  .furniture-body nav #search-box {
+
+  .furniture-body nav .search-box {
     display: block;
   }
 
@@ -630,15 +638,15 @@
     display: none;
   }
 
-  .furniture-body nav #search-box .img:nth-of-type(1) {
+  .furniture-body nav .search-box .img:nth-of-type(1) {
     display: none;
   }
 
-  .furniture-body nav #search-box .img:nth-of-type(2) {
+  .furniture-body nav .search-box .img:nth-of-type(2) {
     display: block;
   }
 
-  .furniture-body nav #search-box input {
+  .furniture-body nav .search-box input {
     display: none;
   }
 

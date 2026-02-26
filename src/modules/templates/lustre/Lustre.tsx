@@ -2,13 +2,13 @@ import React, { FC } from 'react';
 import { FaShoppingBag, FaUser } from 'react-icons/fa';
 import '../lustre/lustre.css';
 import StorefrontFooter from '@/modules/lib/components/footer/StorefrontFooter';
-import { ProductSearch } from './ProductSearch';
 import MobileNav from '@/modules/lib/components/nav-bar/mobile-nav/MobileNav';
 import UserProfileDropdown from '@/modules/lib/components/nav-bar/profile-modal/UserProfileDropdown';
 import MiniCart from '@/modules/lib/components/minicart/MiniCart';
 import Collections from '@/modules/views/homepage/Collections';
 import StoreProductsList from '@/modules/views/storefront/StoreProductsList';
 import { BaseStorefrontProps } from '@/modules/lib/utility/types/storefront-template.interface';
+import { ProductSearch } from '@/modules/lib/components/search-input/StoreFrontProductSearch';
 
 type ModernLuxeProps = BaseStorefrontProps & {
   offers: {
@@ -47,7 +47,7 @@ const ModernLuxe: FC<ModernLuxeProps> = (props) => {
         <div style={{ maxWidth: '1440px', margin: 'auto' }}>
           <header className="modernLuxe__header">
             <div className="modernLuxe__header-mini-wrapper">
-              <ProductSearch storeSlug={store?.slug} />
+              <ProductSearch storeSlug={store?.slug} variant="modernLuxe" />
 
               <div className="modernLuxe__logo">
                 <img
