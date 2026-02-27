@@ -1,69 +1,78 @@
 // "use client"
 
-import "../styles/styles.scss";
-import { Inter, Roboto, Lora, Roboto_Mono, DM_Sans, Volkhov, Poppins, Young_Serif } from "next/font/google";
+import '../styles/styles.scss';
+import {
+  Inter,
+  Roboto,
+  Lora,
+  Roboto_Mono,
+  DM_Sans,
+  Volkhov,
+  Poppins,
+  Young_Serif,
+} from 'next/font/google';
 // import { useAuthGuard } from '@/modules/lib/utility/hooks/use-auth-guard';
-import GlobalArena from "@/modules/lib/components/global-arena/GlobalArena";
-import { PHProvider } from './providers'
-import dynamic from 'next/dynamic'
-import '@smastrom/react-rating/style.css'
+import GlobalArena from '@/modules/lib/components/global-arena/GlobalArena';
+import { PHProvider } from './providers';
+import dynamic from 'next/dynamic';
+import '@smastrom/react-rating/style.css';
 
 const inter = Inter({
-  subsets: ["latin"],
-  variable: "--font-inter",
-  display: "swap",
+  subsets: ['latin'],
+  variable: '--font-inter',
+  display: 'swap',
 });
 
 const dmSans = DM_Sans({
-  subsets: ["latin"],
-  variable: "--font-dmSans",
-  display: "swap",
+  subsets: ['latin'],
+  variable: '--font-dmSans',
+  display: 'swap',
 });
 
 const volkhov = Volkhov({
-  subsets: ["latin"],
-  variable: "--font-volkhov",
-  display: "swap",
-  weight: ["400", "700"],
+  subsets: ['latin'],
+  variable: '--font-volkhov',
+  display: 'swap',
+  weight: ['400', '700'],
 });
 
 const poppins = Poppins({
-  subsets: ["latin"],
-  variable: "--font-poppins",
-  display: "swap",
-  weight: ["100", "300", "400", "500", "700", "900"],
+  subsets: ['latin'],
+  variable: '--font-poppins',
+  display: 'swap',
+  weight: ['100', '300', '400', '500', '700', '900'],
 });
 
 const youngSerif = Young_Serif({
-  subsets: ["latin"],
-  variable: "--font-youngSerif",
-  display: "swap",
-  weight: ["400"],
+  subsets: ['latin'],
+  variable: '--font-youngSerif',
+  display: 'swap',
+  weight: ['400'],
 });
 
 const roboto = Roboto({
-  subsets: ["latin"],
-  variable: "--font-roboto",
-  display: "swap",
-  weight: ["100", "300", "400", "500", "700", "900"],
+  subsets: ['latin'],
+  variable: '--font-roboto',
+  display: 'swap',
+  weight: ['100', '300', '400', '500', '700', '900'],
 });
 
 const lora = Lora({
-  subsets: ["latin"],
-  variable: "--font-lora",
-  display: "swap",
+  subsets: ['latin'],
+  variable: '--font-lora',
+  display: 'swap',
 });
 
 const robotoMono = Roboto_Mono({
-  subsets: ["latin"],
-  variable: "--font-robotoMono",
-  display: "swap",
-  weight: ["100", "300", "400", "500", "700"],
-})
+  subsets: ['latin'],
+  variable: '--font-robotoMono',
+  display: 'swap',
+  weight: ['100', '300', '400', '500', '700'],
+});
 
 export const metadata = {
-  title: "Asoebi Africa",
-  description: "Fabrics touche",
+  title: 'Asoebi Africa',
+  description: 'Fashion commerce with the vibe 😎',
 };
 
 export interface ILayout {
@@ -72,7 +81,7 @@ export interface ILayout {
 
 const PostHogPageView = dynamic(() => import('./PostHogPageView'), {
   ssr: false,
-})
+});
 
 export default function RootLayout({
   children,
@@ -87,7 +96,7 @@ export default function RootLayout({
       className={`${inter.variable} ${roboto.variable} ${lora.variable} ${robotoMono.variable} ${dmSans.variable} ${volkhov.variable} ${poppins.variable} ${youngSerif.variable} bg-white font-inter h-full`}
     >
       <body className="@lo:weight-300 @lo:text-dimgrey h-full">
-        <PHProvider >
+        <PHProvider>
           <PostHogPageView />
           <GlobalArena />
           {/* <div className="fixed w-full b-60 z-3">
