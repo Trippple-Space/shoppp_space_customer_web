@@ -92,7 +92,7 @@ export const ProductSearch: React.FC<ProductSearchProps> = ({
       };
 
       fetchProducts();
-    }, 1000);
+    }, 500);
 
     return () => {
       clearTimeout(timeoutId);
@@ -234,7 +234,7 @@ export const ProductSearch: React.FC<ProductSearchProps> = ({
         return 'absolute hidden md:block min-w-200 max-w-400 h-300 bg-white border border-#00000014 radius-4 t-44 z-8';
 
       case 'modernLuxe':
-        return 'modernLuxe__searchContent md:absolute hidden md:block md:w-100p min-w-200 md:h-200 md:bg-white md:border md:border-#00000014 radius-4 t-65 z-8';
+        return 'modernLuxe__searchContent md:absolute hidden md:block md:w-100p min-w-200 md:h-200 md:bg-white md:h-400 overflow-auto no-scrollbar radius-4 t-65 z-8';
 
       case 'simple':
         return '';
