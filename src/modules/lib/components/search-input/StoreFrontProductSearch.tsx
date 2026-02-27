@@ -53,6 +53,7 @@ export const ProductSearch: React.FC<ProductSearchProps> = ({
   useEffect(() => {
     if (!searchTerm || !openSearchModal) {
       setSearchResults([]);
+      setLoadingProducts(false);
       return;
     }
 
@@ -61,10 +62,10 @@ export const ProductSearch: React.FC<ProductSearchProps> = ({
     const controller = new AbortController();
     abortRef.current = controller;
 
+    setLoadingProducts(true);
+
     const timeoutId = setTimeout(() => {
       const fetchProducts = async () => {
-        setLoadingProducts(true);
-
         try {
           const result = await productService.fetchProductBySlugSearch(
             storeSlug,
