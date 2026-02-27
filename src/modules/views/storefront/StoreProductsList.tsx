@@ -5,6 +5,7 @@ import { Product } from '@/modules/lib/utility/types/product.interface';
 import { Store } from '@/modules/lib/utility/types/store.interface';
 import StorePagination from '@/modules/lib/components/pagination/StorePagination';
 import NoResultMessage from '@/modules/lib/components/error-messages/no-result-found';
+import { useSavedVariant } from '@/modules/lib/utility/hooks/use-saved-variants';
 
 const StoreProductsList: FC<{
   products: Product[];
@@ -14,6 +15,8 @@ const StoreProductsList: FC<{
   totalPages: number;
   onPageChange: (page: number) => void;
 }> = ({ products, store, loading, page, totalPages, onPageChange }) => {
+  const { saveVariant, savedVariants, removeSavedVariant } = useSavedVariant();
+
   return (
     <>
       {loading ? (
@@ -24,7 +27,16 @@ const StoreProductsList: FC<{
         <div className="grid l:grid-4-cols-1fr sm:grid-3-cols-1fr grid-2-cols-1fr l:gap-20 sm:gap-10 gap-20 w-full">
           {products.map((product, i) => (
             <div key={i} className="l:mt--20 mt--30 w-full overflow-hidden">
-              <ProductTile product={product} key={i} id={product.id} />
+              <ProductTile
+                product={product}
+                key={i}
+                id={product.id}
+                savedVariants={savedVariants}
+                saveVariant={saveVariant}
+                removeSavedVariant={removeSavedVariant}
+                /* selectedCategory={selectedCategory}
+                setSelectedCategory={setSelectedCategory} */
+              />
             </div>
           ))}
         </div>
