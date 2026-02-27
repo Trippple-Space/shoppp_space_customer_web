@@ -89,63 +89,69 @@ const SearchInput: FC<ISearchInput> = ({
     const controller = new AbortController();
     abortRef.current = controller;
 
-    const fetchProducts = async () => {
-      setLoadingProducts(true);
-      setLoadingStores(true);
+    const timeoutId = setTimeout(() => {
+      const fetchProducts = async () => {
+        setLoadingProducts(true);
+        setLoadingStores(true);
 
-      try {
-        const result =
-          component === 'home'
-            ? await productService.fetchProductBySearch(
-                searchTerm,
-                {
-                  filters: {
-                    type: typePath === '/fabrics' ? 'fabrics' : 'wears',
+        try {
+          const result =
+            component === 'home'
+              ? await productService.fetchProductBySearch(
+                  searchTerm,
+                  {
+                    filters: {
+                      type: typePath === '/fabrics' ? 'fabrics' : 'wears',
+                    },
+                    pagination: {
+                      page: 1,
+                      limit: 10,
+                    },
                   },
-                  pagination: {
-                    page: 1,
-                    limit: 10,
+                  controller.signal
+                )
+              : await productService.fetchProductBySlugSearch(
+                  storeSlug,
+                  searchTerm,
+                  {
+                    pagination: {
+                      page: 1,
+                      limit: 10,
+                    },
                   },
-                },
-                controller.signal
-              )
-            : await productService.fetchProductBySlugSearch(
-                storeSlug,
-                searchTerm,
-                {
-                  pagination: {
-                    page: 1,
-                    limit: 10,
-                  },
-                },
-                controller.signal
-              );
+                  controller.signal
+                );
 
-        setSearchResults(result);
+          setSearchResults(result);
 
-        if (component === 'home') {
-          const storeSearchResults = await storeService
-            .fetchStores({}, searchTerm)
-            .finally(() => {
-              setLoadingStores(false);
-            });
-          setStoreResults(storeSearchResults || []);
-        } else {
-          setStoreResults([]);
+          if (component === 'home') {
+            const storeSearchResults = await storeService
+              .fetchStores({}, searchTerm)
+              .finally(() => {
+                setLoadingStores(false);
+              });
+
+            setStoreResults(storeSearchResults || []);
+          } else {
+            setStoreResults([]);
+            setLoadingStores(false);
+          }
+        } catch (err: any) {
+          if (err?.name === 'CanceledError' || err?.code === 'ERR_CANCELED') {
+            return;
+          }
+        } finally {
+          if (!controller.signal.aborted) {
+            setLoadingProducts(false);
+          }
         }
-      } catch (err: any) {
-        if (err?.name === 'CanceledError' || err?.code === 'ERR_CANCELED') {
-          return;
-        }
-      } finally {
-        if (!controller.signal.aborted) {
-          setLoadingProducts(false);
-        }
-      }
-    };
-    fetchProducts();
+      };
+
+      fetchProducts();
+    }, 1000);
 
     return () => {
+      clearTimeout(timeoutId);
       controller.abort();
     };
   }, [searchTerm, openSearchModal]);

@@ -61,35 +61,40 @@ export const ProductSearch: React.FC<ProductSearchProps> = ({
     const controller = new AbortController();
     abortRef.current = controller;
 
-    const fetchProducts = async () => {
-      setLoadingProducts(true);
-      try {
-        const result = await productService.fetchProductBySlugSearch(
-          storeSlug,
-          searchTerm,
-          {
-            pagination: {
-              page: 1,
-              limit: 10,
-            },
-          },
-          controller.signal
-        );
-        setSearchResults(result);
-      } catch (err: any) {
-        if (err?.name === 'CanceledError' || err?.code === 'ERR_CANCELED') {
-          return;
-        }
-      } finally {
-        if (!controller.signal.aborted) {
-          setLoadingProducts(false);
-        }
-      }
-    };
+    const timeoutId = setTimeout(() => {
+      const fetchProducts = async () => {
+        setLoadingProducts(true);
 
-    fetchProducts();
+        try {
+          const result = await productService.fetchProductBySlugSearch(
+            storeSlug,
+            searchTerm,
+            {
+              pagination: {
+                page: 1,
+                limit: 10,
+              },
+            },
+            controller.signal
+          );
+
+          setSearchResults(result);
+        } catch (err: any) {
+          if (err?.name === 'CanceledError' || err?.code === 'ERR_CANCELED') {
+            return;
+          }
+        } finally {
+          if (!controller.signal.aborted) {
+            setLoadingProducts(false);
+          }
+        }
+      };
+
+      fetchProducts();
+    }, 1000);
 
     return () => {
+      clearTimeout(timeoutId);
       controller.abort();
     };
   }, [searchTerm, openSearchModal, storeSlug]);
