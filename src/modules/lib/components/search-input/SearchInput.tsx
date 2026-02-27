@@ -81,6 +81,8 @@ const SearchInput: FC<ISearchInput> = ({
     if (!searchTerm || !openSearchModal) {
       setSearchResults([]);
       setStoreResults([]);
+      setLoadingProducts(false);
+      setLoadingStores(false);
       return;
     }
 
@@ -88,12 +90,12 @@ const SearchInput: FC<ISearchInput> = ({
 
     const controller = new AbortController();
     abortRef.current = controller;
+   
+    setLoadingProducts(true);
+    setLoadingStores(true);
 
     const timeoutId = setTimeout(() => {
       const fetchProducts = async () => {
-        setLoadingProducts(true);
-        setLoadingStores(true);
-
         try {
           const result =
             component === 'home'
@@ -122,16 +124,25 @@ const SearchInput: FC<ISearchInput> = ({
                   controller.signal
                 );
 
+          if (controller.signal.aborted) return;
+
           setSearchResults(result);
 
           if (component === 'home') {
-            const storeSearchResults = await storeService
-              .fetchStores({}, searchTerm)
-              .finally(() => {
-                setLoadingStores(false);
-              });
+            try {
+              const storeSearchResults = await storeService.fetchStores(
+                {},
+                searchTerm
+              );
 
-            setStoreResults(storeSearchResults || []);
+              if (!controller.signal.aborted) {
+                setStoreResults(storeSearchResults || []);
+              }
+            } finally {
+              if (!controller.signal.aborted) {
+                setLoadingStores(false);
+              }
+            }
           } else {
             setStoreResults([]);
             setLoadingStores(false);
