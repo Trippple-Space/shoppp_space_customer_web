@@ -148,7 +148,7 @@ const Homepage = () => {
         <Filters />
         {(hasPrice || hasRating || hasLocation || hasOffers || hasCategory) && (
           <div className="bg-#F3F3F3 min-h-92 h-fit py-30 flex flex-col j-content-center">
-            <div className="app-width flex j-content-between gap-100">
+            <div className="app-width flex j-content-between sm:gap-100 gap-30">
               <div className="flex gap-12">
                 <div className="h-33 flex flex-col a-items-center j-content-center">
                   <p className="text-14 weight-500">Active:</p>
@@ -168,7 +168,7 @@ const Homepage = () => {
 
                   {hasPrice && (
                     <p className="bg-white h-33 min-w-121 flex gap-8 a-items-center j-content-between radius-999 p-10">
-                      <span className="text-14 weight-500">
+                      <span className="text-14 weight-500" style={{textWrap: "nowrap"}}>
                         {getPriceLabel()}
                       </span>
                       <TbX
