@@ -813,7 +813,6 @@
 @layer base {.radius-16 { border-radius: 16px; } } 
 .bg-\#FFF3F1 { background-color: #FFF3F1; } 
 .border-whitesmoke { border-color: #F5F5F5; } 
-.gap-100 { gap: 100px; } 
 .min-w-121 { min-width: 121px; } 
 .grid-2-cols-auto { grid-template-columns: repeat(2, auto); } 
 .px-35 { padding-left: 35px; padding-right: 35px; } 
@@ -1118,6 +1117,7 @@
 @media only screen and (min-width: 576px) { .sm\:w-220 { width: 220px; } } 
 @media only screen and (min-width: 576px) { .sm\:p-24 { padding: 24px; } } 
 @media only screen and (min-width: 576px) { .sm\:gap-20 { gap: 20px; } } 
+@media only screen and (min-width: 576px) { .sm\:gap-100 { gap: 100px; } } 
 @media only screen and (min-width: 576px) { .sm\:mx-20 { margin-left: 20px; margin-right: 20px; } } 
 @media only screen and (min-width: 576px) { .sm\:mt-96 { margin-top: 96px; } } 
 @media only screen and (min-width: 576px) { .sm\:h-350 { height: 350px; } } 
