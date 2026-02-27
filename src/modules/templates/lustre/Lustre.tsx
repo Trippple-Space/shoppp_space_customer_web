@@ -54,7 +54,18 @@ const ModernLuxe: FC<ModernLuxeProps> = (props) => {
                   src="/images/templates/lustre-template/rhombus-icon.svg"
                   alt="icon"
                 />
-                <p className="font-lora">{store?.name || ''}</p>
+                <p
+                  className="font-lora"
+                  style={{
+                    whiteSpace: 'nowrap',
+                    overflow: 'hidden',
+                    textOverflow: 'ellipsis',
+                    display: 'block',
+                    maxWidth: '100%',
+                  }}
+                >
+                  {store?.name || ''}
+                </p>
                 <img
                   src="/images/templates/lustre-template/rhombus-icon.svg"
                   alt="icon"

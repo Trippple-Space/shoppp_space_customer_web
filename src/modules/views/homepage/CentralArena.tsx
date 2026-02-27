@@ -9,12 +9,21 @@ import { useSavedVariant } from '@/modules/lib/utility/hooks/use-saved-variants'
 import { toast } from 'sonner';
 import Button from '@/modules/lib/components/button/Button';
 import { useSearchParams } from 'next/navigation';
+import NoResultMessage from '@/modules/lib/components/error-messages/no-result-found';
 
 const CentralArena = ({ selectedCategory, setSelectedCategory }: any) => {
   const searchParams = useSearchParams();
 
-  const { products, type, ref, loading, fetchingError, refetch, setSearch } =
-    useProductListView();
+  const {
+    products,
+    type,
+    ref,
+    loading,
+    fetchingError,
+    refetch,
+    setSearch,
+    search,
+  } = useProductListView();
   const { saveVariant, savedVariants, removeSavedVariant } = useSavedVariant();
   const [openReviewId, setOpenReviewId] = useState<string | null>(null);
   const renderedIds = new Set<string>();
@@ -86,12 +95,16 @@ const CentralArena = ({ selectedCategory, setSelectedCategory }: any) => {
           </div>
         ) : (
           <div className="mt-60 bg-white grid-col-span-5 text-center">
-            No products found for the selected filters
+            <NoResultMessage
+              textContent={`It seems we can’t find any results based on your ${search ? 'search.' : 'filters.'}`}
+              contentTitle="No results found"
+            />
           </div>
         )}
 
-        <div ref={ref} className="h-20"></div>
-
+        {products.length > 0 && !fetchingError && !loading && (
+          <div ref={ref} className="h-20"></div>
+        )}
         <div>
           <p className="w-100p flex j-content-center mt-10">
             {products.length >= 20 && loading ? <PuffLoader /> : ''}

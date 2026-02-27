@@ -4,6 +4,7 @@ import ProductTile from '@/modules/lib/components/product-tile/ProductTile';
 import { Product } from '@/modules/lib/utility/types/product.interface';
 import { Store } from '@/modules/lib/utility/types/store.interface';
 import StorePagination from '@/modules/lib/components/pagination/StorePagination';
+import NoResultMessage from '@/modules/lib/components/error-messages/no-result-found';
 
 const StoreProductsList: FC<{
   products: Product[];
@@ -29,7 +30,10 @@ const StoreProductsList: FC<{
         </div>
       ) : (
         <div className="mt-60 grid-col-span-5 text-center bg-white">
-          No products found for the selected filters
+          <NoResultMessage
+            textContent={`It seems we can’t find any results based on your filters.`}
+            contentTitle="No results found"
+          />
         </div>
       )}
 

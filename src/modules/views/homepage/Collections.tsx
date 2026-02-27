@@ -10,7 +10,7 @@ const Collections = ({ storeId }: { storeId: string }) => {
   /*  const scrollRef1 = useRef<HTMLDivElement>(null);
   const scrollRef2 = useRef<HTMLDivElement>(null); */
 
-  if (loadingCollections) return <p>Loading collections...</p>;
+  if (loadingCollections) return null; {/* <p>Loading collections...</p> */}
 
   return (
     <div className="px-24 sm:px-40 md:px-60 l:px-100 xl:px-200 flex flex-col gap-20">

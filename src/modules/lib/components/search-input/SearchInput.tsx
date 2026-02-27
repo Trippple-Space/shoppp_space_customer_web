@@ -159,7 +159,7 @@ const SearchInput: FC<ISearchInput> = ({
       };
 
       fetchProducts();
-    }, 1000);
+    }, 500);
 
     return () => {
       clearTimeout(timeoutId);
