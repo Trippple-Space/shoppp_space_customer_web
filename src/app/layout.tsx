@@ -99,8 +99,8 @@ export default function RootLayout({
       <body className="@lo:weight-300 @lo:text-dimgrey h-full">
         <PHProvider>
           <PostHogPageView />
-          <GlobalLaunchBanner />
           <GlobalArena />
+          <GlobalLaunchBanner />
           {/* <div className="fixed w-full b-60 z-3">
             <div className="max-w-1000 mx-auto flex text-14 l:text-16 bg-yellow-50 text-green p-10 max-w-1100 mx-auto ">
               <BsInfoCircle className="inline-block w-fit text-26 mr-10 mt--2" />
