@@ -29,6 +29,10 @@ import { toast } from 'sonner';
 import { ConfigPill } from '@/modules/lib/components/product-detail-modal/productConfigurationsHelper';
 import EmptyCheckout from './empty-checkout';
 import { DotsLoader } from '@/modules/lib/components/dots-loader/DotsLoader';
+import {
+  MARKETPLACE_OPENS_DATE,
+  MARKETPLACE_PURCHASES_ENABLED,
+} from '@/modules/lib/utility/constants';
 
 type DeliveryOptionKey = 'standard' | 'express' | 'vendorManaged';
 type addressDeliveryPrice = {
@@ -100,15 +104,16 @@ const CheckoutPage = () => {
   const selectedDeliveryOptionDetails = selectedDeliveryOption
     ? deliveryOptions[selectedDeliveryOption]
     : null;
-  const canProceedToPayment = !(
+  const formReadyForPayment =
     !isPaymentLoading &&
     selectedAddress &&
     user &&
     !calculatingFee &&
     selectedDeliveryOptionDetails !== null &&
     'price' in selectedDeliveryOptionDetails &&
-    !isNaN(selectedDeliveryOptionDetails.price)
-  );
+    !isNaN(selectedDeliveryOptionDetails.price);
+  const canProceedToPayment =
+    !MARKETPLACE_PURCHASES_ENABLED || !formReadyForPayment;
   const [devOptions, setDevOptions] = useState<string>();
   const [showSummary, setshowSummary] = useState(true);
   const [devAddressError, setDevAddressError] = useState(false);
@@ -648,61 +653,70 @@ const CheckoutPage = () => {
                           )}
                         </p>
                       </div>
-                      <div className="flex gap-14 a-items-center sm:j-content-end w-full">
-                        {!showSummary && (
-                          <span className="md:hidden sm:block hidden sm:weight-600 weight-700 sm:text-16 text-14 sm:line-height-22 line-height-19">
-                            {formatNumberAsPrice(
-                              cart.total +
-                                (selectedDeliveryOptionDetails &&
-                                'price' in selectedDeliveryOptionDetails &&
-                                typeof selectedDeliveryOptionDetails.price ===
-                                  'number'
-                                  ? selectedDeliveryOptionDetails.price
-                                  : 0)
-                            )}
-                          </span>
+                      <div className="flex flex-col gap-12 w-full sm:w-auto sm:items-end">
+                        {!MARKETPLACE_PURCHASES_ENABLED && (
+                          <p className="text-14 line-height-20 weight-500 color-#0B9378 text-center sm:text-right">
+                            Marketplace opens officially by {MARKETPLACE_OPENS_DATE}. Purchases are not available yet.
+                          </p>
                         )}
-                        <button
-                          onClick={() => {
-                            if (canProceedToPayment) {
-                              if (!selectedAddress) {
-                                setDevAddressError(true);
-                                rightScrollRef.current?.scrollTo({
-                                  top: 0,
-                                  behavior: 'smooth',
-                                });
-                                toast.error(
-                                  'You need to add a delivery address to continue to payment.'
-                                );
-                              } else if (!selectedDeliveryOption) {
-                                leftScrollRef.current?.scrollTo({
-                                  top: 0,
-                                  behavior: 'smooth',
-                                });
-                                rightScrollRef.current?.scrollTo({
-                                  top: 300,
-                                  behavior: 'smooth',
-                                });
-                                toast.error(
-                                  'You need to select a delivery option to continue to payment.'
-                                );
+                        <div className="flex gap-14 a-items-center sm:j-content-end w-full">
+                          {!showSummary && (
+                            <span className="md:hidden sm:block hidden sm:weight-600 weight-700 sm:text-16 text-14 sm:line-height-22 line-height-19">
+                              {formatNumberAsPrice(
+                                cart.total +
+                                  (selectedDeliveryOptionDetails &&
+                                  'price' in selectedDeliveryOptionDetails &&
+                                  typeof selectedDeliveryOptionDetails.price ===
+                                    'number'
+                                    ? selectedDeliveryOptionDetails.price
+                                    : 0)
+                              )}
+                            </span>
+                          )}
+                          <button
+                            onClick={() => {
+                              if (!MARKETPLACE_PURCHASES_ENABLED) return;
+                              if (canProceedToPayment) {
+                                if (!selectedAddress) {
+                                  setDevAddressError(true);
+                                  rightScrollRef.current?.scrollTo({
+                                    top: 0,
+                                    behavior: 'smooth',
+                                  });
+                                  toast.error(
+                                    'You need to add a delivery address to continue to payment.'
+                                  );
+                                } else if (!selectedDeliveryOption) {
+                                  leftScrollRef.current?.scrollTo({
+                                    top: 0,
+                                    behavior: 'smooth',
+                                  });
+                                  rightScrollRef.current?.scrollTo({
+                                    top: 300,
+                                    behavior: 'smooth',
+                                  });
+                                  toast.error(
+                                    'You need to select a delivery option to continue to payment.'
+                                  );
+                                }
+                              } else {
+                                if (selectedDeliveryOption !== null) {
+                                  payWithPaystack({
+                                    addressId: selectedAddress?.id,
+                                    deliveryOption: selectedDeliveryOption,
+                                  });
+                                }
                               }
-                            } else {
-                              if (selectedDeliveryOption !== null) {
-                                payWithPaystack({
-                                  addressId: selectedAddress?.id,
-                                  deliveryOption: selectedDeliveryOption,
-                                });
-                              }
+                            }}
+                            className={`md:w-full sm:w-fit w-full border-none m:flex text-white md:text-16 text-14 weight-500 md:line-height-22 line-height-19 md:px-24 px-16 py-12 radius-6 l:float-right j-content-center ${!showSummary && 'sm:mt-0 mt-56'} ${canProceedToPayment ? 'bg-#D1D5DB opacity-80 g|box-shadow:inset|_|0px|_|2px|_|4px|_|#0000001A color-#6B7280 cursor-not-allowed' : 'bg-#0B9378 pointer'}`}
+                            title={
+                              !MARKETPLACE_PURCHASES_ENABLED
+                                ? `Purchases available from ${MARKETPLACE_OPENS_DATE}`
+                                : selectedAddress
+                                  ? ''
+                                  : 'Add an address to proceed to payment'
                             }
-                          }}
-                          className={`md:w-full sm:w-fit w-full border-none m:flex text-white md:text-16 text-14 weight-500 md:line-height-22 line-height-19 md:px-24 px-16 py-12 radius-6 l:float-right j-content-center ${!showSummary && 'sm:mt-0 mt-56'} ${canProceedToPayment ? 'bg-#D1D5DB opacity-80 g|box-shadow:inset|_|0px|_|2px|_|4px|_|#0000001A color-#6B7280 cursor-not-allowed' : 'bg-#0B9378 pointer'}`}
-                          title={
-                            selectedAddress
-                              ? ''
-                              : 'Add an address to proceed to payment'
-                          }
-                        >
+                          >
                           <span className="">
                             Proceed to payment{' '}
                             {!showSummary && (
@@ -727,6 +741,7 @@ const CheckoutPage = () => {
                             className="ml-10"
                           />
                         </button>
+                        </div>
                       </div>
                     </div>
 
