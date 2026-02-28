@@ -5,7 +5,7 @@ import React from 'react'
 import { FaUserCircle } from 'react-icons/fa'
 import { useReviewModalStore } from '@/modules/lib/utility/store/reviews.store'
 
-export const Comments = ({ reviews, limit, productId, slug, isModal, color, openMore }: { reviews: IFetchedReview[], limit?: number, productId?: number, slug: string, isModal: boolean, color?: string, openMore?: () => void }) => {
+export const Comments = ({ reviews, limit, productId, slug, isModal, color, openMore }: { reviews: IFetchedReview[], limit?: number, productId?: string, slug: string, isModal: boolean, color?: string, openMore?: () => void }) => {
     const openModal = useReviewModalStore().open;
 
     return (
@@ -31,8 +31,8 @@ export const Comments = ({ reviews, limit, productId, slug, isModal, color, open
                                             <FaUserCircle className='color-white w-34 h-34 border border-2 border-#C1C7D0 bg-#C1C7D0 round' />
                                             <div className={`flex-grow-1 flex j-content-between a-items-center ${isModal && 'gap-8'}`}>
                                                 <p className={`flex flex-col ${isModal ? 'gap-1' : 'gap-1 sm:gap-3'}`}>
-                                                    <span className={`weight-600 ${isModal ? 'text-12 sm:text-14' : 'text-14 sm:text-16'}`}>{review.user.profile.firstName || ''} {review.user.profile.lastName || ''}</span>
-                                                    <span className={`weight-400 color-#0000008C ${isModal ? 'text-10 sm:text-12' : 'text-12 sm:text-14'}`}>{new Date(review.dateCreated).toLocaleDateString('en-GB', {
+                                                    <span className={`weight-600 ${isModal ? 'text-12 sm:text-14' : 'text-14 sm:text-16'}`}>{review.customer?.profile.firstName || ''} {review.customer?.profile.lastName || ''}</span>
+                                                    <span className={`weight-400 color-#0000008C ${isModal ? 'text-10 sm:text-12' : 'text-12 sm:text-14'}`}>{new Date(review.createdAt).toLocaleDateString('en-GB', {
                                                         day: '2-digit',
                                                         month: 'short',
                                                         year: 'numeric'
@@ -60,7 +60,7 @@ export const Comments = ({ reviews, limit, productId, slug, isModal, color, open
                             <p className='flex j-content-center mt-10'>
                                 <span className='color-#1677FF text-12 border-b outline-none cursor-pointer' onClick={() => {
                                     openMore?.();
-                                    openModal(productId ? productId : 0, slug, reviews, color)
+                                    openModal(productId ? productId : '0', slug, reviews, color)
                                 }}>See more reviews</span>
                             </p>
                         }

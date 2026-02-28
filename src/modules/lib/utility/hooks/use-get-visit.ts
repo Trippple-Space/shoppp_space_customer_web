@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { visitService } from "../services/visit.service";
 
-export const useGetVisit = (storeID: number) => {
+export const useGetVisit = (storeID: string) => {
   const [visit, setVisit] = useState<any>();
   useEffect(() => {
     const getVisit = async () => {

@@ -1,5 +1,6 @@
 "use client"
 import { useRef, useEffect, useState } from 'react';
+import { paths } from '../../utility/paths';
 
 interface ModalProps {
   isOpen: boolean;
@@ -12,6 +13,13 @@ interface ModalProps {
 }
 
 const Modal: React.FC<ModalProps> = ({ isOpen, onClose, children, extraModalClass, extraClass, className, modalClassName }) => {
+ const [isOnCheckoutPage, setIsOnCheckoutPage] = useState(false);
+
+  useEffect(() => {
+    if (typeof window !== "undefined") {
+      setIsOnCheckoutPage(window.location.pathname === paths.checkout);
+    }
+  }, []);
 
   const modalRef = useRef<HTMLDivElement>(null);
 
@@ -64,14 +72,12 @@ const Modal: React.FC<ModalProps> = ({ isOpen, onClose, children, extraModalClas
 
     scrollbarWidth: "none",
     msOverflowStyle: "none",
-    // maxHeight: '90vh',
-    // height: '100%',
     position: 'absolute',
     ...extraClass
   };
 
   return (
-    <div style={modalStyle} className={`${modalClassName === 'filter' ? 'm:absolute fixed m:t-40 t-0 md:bg-transparent! md:z-1 z-11' : 'fixed t-0 z-11'}`}>
+    <div style={modalStyle} className={`${modalClassName === 'filter' ? 'm:absolute fixed m:t-40 t-0 md:bg-transparent! md:z-2 z-11' : 'fixed t-0 z-11'}`}>
       <div ref={modalRef} className={className} style={modalContentStyle}>
         <div className='h-full'>{children}</div>
       </div>

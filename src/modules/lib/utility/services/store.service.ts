@@ -8,14 +8,14 @@ import config from "env";
 import { Store } from "../types/store.interface";
 
 class StoreService {
-  fetchStores(query: IQueryParams): Promise<Product[]> {
+  fetchStores(query: IQueryParams, searchTerm?: string,): Promise<Store[]> {
     return new Promise((resolve) => {
       http
         .get(endpoints.STORES, {
-          params: query,
+          params: { ...query, search: searchTerm },
         })
         .then((response: AxiosResponse) => {
-          resolve(response.data);
+          resolve(response.data.data);
         });
     });
   }

@@ -21,9 +21,10 @@
     ],
     "paths": {
       "@/*": ["./src/*"],
-      "@/store/*": ["./src/modules/lib/utility/store/*"]
+      "@/store/*": ["./src/modules/lib/utility/store/*"],
+      "@env": ["env/index.ts"]
     },
-    "baseUrl": ".",
+    "baseUrl": "."
   },
   "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", ".next/types/**/*.ts"],
   "exclude": ["node_modules"]

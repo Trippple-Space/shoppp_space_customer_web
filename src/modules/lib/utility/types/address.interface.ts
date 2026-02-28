@@ -1,8 +1,8 @@
 export interface Address {
   firstName: string;
   lastName: string;
-  id: number;
-  userId: number;
+  id: string;
+  userId: string;
   label: string;
   address: string;
   city: string;
@@ -12,6 +12,6 @@ export interface Address {
   isDefault: boolean;
   notes: string;
   meta: any;
-  dateCreated: Date;
+  createAt: Date;
   lastUpdated: Date;
 }

@@ -3,13 +3,23 @@ const endpoints = {
   SIGN_UP: "/auth/register",
   SIGN_UP_DETAILS: '/auth/register',
   SIGN_UP_VERIFY_OTP: '/auth/verify',
+
   RESEND_OTP: '/auth/resend-otp',
+  FORGOT_PASSWORD: '/auth/forgot-password',
+  RESET_PASSWORD: '/auth/reset-password',
   SIGN_UP_CREATE_PASSWORD: '/auth/create-password',
+  GOOGLE_OAUTH_INITIALIZER: "auth/google",
+  GOOGLE_OAUTH_CALLBACK: "auth/google/callback",
   VALIDATE_TOKEN: "/auth/validate",
+  VERIFY_EMAIL: '/auth/verify-email',
+  OTP_REQUEST: "/auth/otp-login/request",
+  OTP_VERIFY: "/auth/otp-login/verify",
   PRODUCT_CATEGORIES: "/product-categories",
   PRODUCTS: "products",
   PRODUCT: "products/:slug",
   SEARCH_PRODUCTS: "products",
+  COLLECTIONS_BY_STORE: "/collections/stores/:storeId",
+  COLLECTION_PRODUCTS: "/products/collection/:collectionSlug",
   RECENTLY_VIEWED: "/recently-viewed-items",
   GET_RECENTLY_VIEWED: "/recently-viewed-items/viewed",
   ALL_RECENTLY_VIEWED: "/recently-viewed-items/all-viewed",
@@ -17,7 +27,7 @@ const endpoints = {
   CART: "/cart",
   CHECKOUTCART: "/cart/checkout",
   MULTIPLECART: "/cart/multiple",
-  USER_ADDRESSES: "users/:userId/addresses",
+  USER_ADDRESSES: "/user-addresses",
   CALCULATEDELIVERYFEE: "/order-delivery/calculate-fee",
   PAY_WITH_PAYSTACK: "payment/initialize/paystack",
   STORES: "stores",
@@ -27,7 +37,7 @@ const endpoints = {
   GET_FOLLOWERS: "stores/get-followers-count/:storeId",
   GET_FOLLOWING: "/stores/is-following-store/:storeId",
   ORDERS: "orders",
-  SAVED_VARIANT: "/saved-product",
+  SAVED_VARIANT: "/saved-products",
   LOG_VISIT: "/store-visit/log/:storeID",
   GET_VISIT: "/store-visit/:storeID?period=monthly",
   GET_PRODUCT_SOLD: "/orders/product-sold/:storeID",
@@ -35,7 +45,9 @@ const endpoints = {
   GET_PRODUCT_REVIEWS: "/product-review/product/:productVariantId",
   CREATE_PRODUCT_REVIEW: "/product-review/create",
   GET_REVIEW_STATS: "/product-review/stats/product/:productVariantId",
-  GET_REVIEW_STATS_DIST: "/product-review/stats/product/:productVariantId/distribution"
+  GET_REVIEW_STATS_DIST: "/product-review/stats/product/:productVariantId/distribution",
+
+  CONTACT_FORM: '/slack',
 };
 
 export default endpoints;

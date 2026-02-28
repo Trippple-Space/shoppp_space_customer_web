@@ -9,8 +9,8 @@ interface CategoryStore {
     }
     currentCategoryList: ICategory[];
     products: Record<string, any>;
-    setCategoriesCache: (type: string | null, label: string, storeId: number, categories: any) => void;
-    setSelectedCategory: (type: string | null, label: string, storeId: number, category: ICategory) => void;
+    setCategoriesCache: (type: string | null, label: string, storeId: string, categories: any) => void;
+    setSelectedCategory: (type: string | null, label: string, storeId: string, category: ICategory) => void;
     setCurrentCategoryList: (categoryList: ICategory[]) => void;
 }
 

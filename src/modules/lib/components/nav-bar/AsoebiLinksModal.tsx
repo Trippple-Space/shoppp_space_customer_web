@@ -62,7 +62,7 @@ const AsoebiLinksModal = ({ sellOnAsoebi }: { sellOnAsoebi: boolean }) => {
           )}
         >
           <div className='flex bg-#F0FCED p-12 radius-200'>
-            <Image className='' src='asoebi-wears.svg' alt='logo' type='icon' />
+            <Image className='h-28 w-28' src='asoebi-wears.svg' alt='logo' type='icon' priority fetchPriority='high' />
           </div>
           <div className='flex flex-col gap-5 a-items-baseline cursor-pointer'>
             <p className='weight-500'>Asoebi Wears</p>
@@ -84,7 +84,7 @@ const AsoebiLinksModal = ({ sellOnAsoebi }: { sellOnAsoebi: boolean }) => {
         >
           <div className='flex bg-#FCEDED p-12 radius-200'>
             <Image
-              className='asoebi-fabrics'
+              className='asoebi-fabrics h-28 w-28'
               src='asoebi-fabrics.svg'
               alt='logo'
               type='icon'
@@ -102,7 +102,7 @@ const AsoebiLinksModal = ({ sellOnAsoebi }: { sellOnAsoebi: boolean }) => {
         </Link>
         {sellOnAsoebi && (
           <Link
-            href={`${config.VENDOR_CENTER_HOST}`}
+            href={`${config.LANDING_PAGE_HOST}`}
             target="_blank"
             className="flex a-items-center gap-20 radius-8 hover:bg-#F5F5F5 p-20"
           >

@@ -11,11 +11,11 @@ export interface IProductFilters {
   category?: string;
   keywords?: string[];
   [key: string]: any;
-  status?: { In: string[] };
+  status?: { In: string };
 }
 
 export interface IOrderBy {
-  [key: string]: "asc" | "desc";
+  [key: string]: "ASC" | "DESC" | 'asc' | 'desc';
 }
 
 export interface IPagination {
@@ -29,17 +29,23 @@ export interface IQueryParams {
   pagination?: IPagination;
   // key: any
   allFilters?: IFilters;
+  search?: string;
 }
 
-export const useProducts = (initialQuery: IQueryParams) => {
+export type PaginationType = "infinite" | "buttons";
+
+export const useProducts = (initialQuery: IQueryParams, paginationType: PaginationType = "infinite", collectionSlug?: string) => {
   const [query, setQuery] = useState<IQueryParams>(initialQuery);
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState(true);
+  const [fetchingError, setFetchingError] = useState<Error | null>(null);
+  const [refetchToken, setRefetchToken] = useState(0);
 
   const {
     productsCache,
     setProductsCache,
     setProductsCacheIdempotencyTracker,
-    productCacheIdempotencyTracker
+    productCacheIdempotencyTracker,
+    clearProductsCacheByKey,
   } = useProductStore();
 
   const setFilters = (filters: IProductFilters) => {
@@ -77,19 +83,82 @@ export const useProducts = (initialQuery: IQueryParams) => {
     }));
   };
 
-  const cacheKey =
-    "products_" +
+  const setSearch = (search?: string) => {
+    setQuery((prev) => ({
+      ...prev,
+      search,
+      pagination: {
+        page: 1,
+        limit: prev.pagination?.limit ?? 20,
+      },
+    }));
+  };
+
+  const refetch = () => {
+    clearProductsCacheByKey(cacheKey);
+    setRefetchToken((t) => t + 1);
+    setQuery((prev) => ({
+      ...prev,
+      pagination: {
+        page: 1,
+        limit: prev.pagination?.limit ?? 20,
+      },
+    }));
+  };
+
+  const baseCacheKey =
+    (collectionSlug ? `collection_${collectionSlug}_` : "products_") +
     JSON.stringify(query.filters ?? {}) +
     JSON.stringify(query.order ?? {}) +
-    JSON.stringify(query.allFilters ?? {});
+    JSON.stringify(query.allFilters ?? {}) +
+    (query.search ?? "");
+
+  const cacheKey =
+    paginationType === "infinite"
+      ? baseCacheKey
+      : baseCacheKey +
+      `_page_${query.pagination?.page ?? 1}` +
+      `_limit_${query.pagination?.limit ?? 0}`;
 
   useEffect(() => {
-    if (!productsCache[cacheKey] || productsCache[cacheKey].length === 0) {
+    if (!query.pagination) return;
+
+    //buttons scroll
+    if (paginationType === "buttons") {
+      if (productsCache[cacheKey]) return;
+
       setLoading(true);
+      setFetchingError(null);
+
       productService
-        .fetchProducts(query, query.allFilters)
+        .fetchProducts(query, query.allFilters, collectionSlug)
         .then((fetchedProducts) => {
-          setProductsCache(cacheKey, fetchedProducts);
+          setProductsCache(cacheKey, {
+            data: fetchedProducts.data,
+            meta: fetchedProducts.meta
+          });
+        })
+        .catch(setFetchingError)
+        .finally(() => setLoading(false));
+
+      return;
+    }
+
+    //infinite scroll
+    if (!productsCache[cacheKey] || productsCache[cacheKey].data.length === 0) {
+      setLoading(true);
+      setFetchingError(null);
+      productService
+        .fetchProducts(query, query.allFilters, collectionSlug)
+        .then((fetchedProducts) => {
+          setProductsCache(cacheKey, {
+            data: fetchedProducts.data,
+            meta: fetchedProducts.meta
+          });
+        })
+        .catch((error) => {
+          setFetchingError(error);
+          setLoading(false);
         })
         .finally(() => {
           setLoading(false);
@@ -97,51 +166,73 @@ export const useProducts = (initialQuery: IQueryParams) => {
     }
   }, [
     cacheKey,
-    productsCache[cacheKey]?.length,
-    JSON.stringify(query.allFilters)
+    refetchToken,
+    productsCache[cacheKey]?.data?.length,
+    JSON.stringify(query.allFilters),
+    query.pagination,
+    query.search
   ]);
 
   useEffect(() => {
+    if (paginationType !== "infinite") return;
+    if (!query.pagination) return;
+
     if (
-      (productsCache[cacheKey]?.length ?? 0) <
-      (query.pagination?.limit ?? 0) * (query.pagination?.page ?? 0)
+      (productsCache[cacheKey]?.data?.length ?? 0) <
+      (query.pagination?.limit ?? 0) * (query.pagination?.page ?? 1)
     ) {
       setLoading(true);
+      setFetchingError(null);
       productService
-        .fetchProducts(query, query.allFilters)
+        .fetchProducts(query, query.allFilters, collectionSlug)
         .then((fetchedProducts) => {
-          setProductsCache(cacheKey, [
-            ...(productsCache[cacheKey] ?? []),
-            ...fetchedProducts.filter(
-              (product) =>
-                !productCacheIdempotencyTracker?.[cacheKey]?.[product.id]
-            )
-          ]);
+          const previous = productsCache[cacheKey];
+
+          setProductsCache(cacheKey, {
+            data: [
+              ...(previous?.data ?? []),
+              ...fetchedProducts.data.filter(
+                (product) =>
+                  !productCacheIdempotencyTracker?.[cacheKey]?.[product.id]
+              ),
+            ],
+            meta: fetchedProducts.meta
+          });
+
           setProductsCacheIdempotencyTracker(
             cacheKey,
-            fetchedProducts.reduce(
+            fetchedProducts.data.reduce(
               (cumm, curr) => ({ ...cumm, [curr.id]: true }),
               {}
             )
           );
+        }).catch((error) => {
+          setFetchingError(error);
+          setLoading(false);
         }).finally(() => {
           setLoading(false);
         })
     }
   }, [
     JSON.stringify(query.pagination ?? {}),
-    JSON.stringify(query.allFilters)
+    JSON.stringify(query.allFilters),
+    JSON.stringify(query.search ?? ''),
+    refetchToken
   ]);
 
   return {
-    products: productsCache[cacheKey] ?? [],
+    products: productsCache[cacheKey]?.data ?? [],
     setFilters,
     updateFilters,
     updateHomePageFilter,
     setOrdering,
     setPagination,
+    setSearch,
     query,
     loading,
+    fetchingError,
+    refetch,
+    meta: productsCache[cacheKey]?.meta
     // paginationLoading
   };
 };

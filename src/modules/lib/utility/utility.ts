@@ -1,5 +1,8 @@
 import classNames from "classnames";
 import { StoreGroupResponse } from "./types/cart.interface";
+import { NewUser, User } from "./types/user.interface";
+import { IFilters } from "./types/product.interface";
+import { ContactFormData } from "./types/contact-us.interface";
 
 export type ImageSrcFolder = "icons" | "logos" | "images";
 export const getImageDir = (folder: ImageSrcFolder, object: string) => {
@@ -70,9 +73,9 @@ export const buildFilterParams = (filters: any) => {
     params["filters[price][LessThanOrEqual]"] = price.max;
   }
 
-  if (tags){
+  if (tags) {
     params["filters[tags][label]"] = tags
-  } 
+  }
 
   if (rating?.rateBy) {
     params["filters[variants][averageRating][MoreThanOrEqual]"] = rating.rateBy;
@@ -90,6 +93,54 @@ export const buildFilterParams = (filters: any) => {
   }*/
 
   return params;
+};
+
+export const filtersToSearchParams = (filters: IFilters, selectedCategory?: { name?: string }, existingParams?: URLSearchParams) => {
+  const params = existingParams ? new URLSearchParams(existingParams) : new URLSearchParams();
+
+  if (filters.rating.rateBy) params.set("rating", filters.rating.rateBy);
+  else params.delete("rating");
+
+  if (filters.price.min) params.set("priceMin", filters.price.min);
+  else params.delete("priceMin");
+
+  if (filters.price.max) params.set("priceMax", filters.price.max);
+  else params.delete("priceMax");
+
+  if (filters.sort.sortBy) params.set("sort", filters.sort.sortBy);
+  else params.delete("sort");
+
+  if (filters.location.selectedState)
+    params.set("location", filters.location.selectedState);
+  else params.delete("location");
+
+  if (filters.showOffers) params.set("offers", "true");
+  else params.delete("offers");
+
+  if (selectedCategory?.name && selectedCategory.name !== "All") {
+    params.set("category", selectedCategory.name.toLowerCase());
+  } else {
+    params.delete("category");
+  }
+
+  return params;
+};
+
+export const searchParamsToFilters = (
+  searchParams: URLSearchParams
+): Partial<IFilters> => {
+  return {
+    rating: { rateBy: searchParams.get("rating") || "" },
+    price: {
+      min: searchParams.get("priceMin") || "",
+      max: searchParams.get("priceMax") || "",
+    },
+    sort: { sortBy: searchParams.get("sort") || "" },
+    location: {
+      selectedState: searchParams.get("location") || "",
+    },
+    showOffers: searchParams.get("offers") === "true",
+  };
 };
 
 export const chunkArray = <T>(arr: T[], noOfChunks: number): T[][] => {
@@ -237,7 +288,7 @@ export const getStoreNames = (storeGroups: StoreGroupResponse[]) => {
 };
 
 export const checkMediaType = (url: string) => {
-  const lowerUrl = url.toLowerCase();
+  const lowerUrl = url?.toLowerCase();
   if (/\.(jpg|jpeg|png|gif|webp)$/.test(lowerUrl)) {
     return "image";
   } else if (/\.(mp4|webm|mov|avi|mkv)$/.test(lowerUrl)) {
@@ -258,48 +309,48 @@ export const preventCopyPaste = (e: ClipboardEvent) => {
   e.stopPropagation();
 }
 
-export const passwordValidatorRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[^A-Za-z\d])[A-Za-z\d\W]{8,}$/ 
+export const passwordValidatorRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[^A-Za-z\d])[A-Za-z\d\W]{8,}$/
 
 
 
-  export const ellipseText = (text: string, isExpanded: boolean, limit: number) => {
-    if (isExpanded || text.length <= limit) {
-      return text 
-    }
-    return `${text.substring(0, limit)}...` 
+export const ellipseText = (text: string, isExpanded: boolean, limit: number) => {
+  if (isExpanded || text.length <= limit) {
+    return text
   }
-
- export const onGoingOrderStatus = [
-    'ONGOING',
-    'PENDING_CONFIRMATION',
-    'CONFIRMED',
-   'ACKNOWLEDGED',
-    'WAITING_TO_BE_SHIPPED',
-    'OUT_FOR_DELIVERY',
-    'DELIVERED'
- ]
-  
-export function getStatusText(status: string) {    
-           switch (status) {
-       case 'ONGOING':
-         return 'Order placed'
-       case 'PENDING_CONFIRMATION':
-               return 'Pending Confirmation'
-             case 'CONFIRMED':
-               return 'Order confirmed'
-       case 'ACKNOWLEDGED':
-         return 'Order received'
-       case 'WAITING_TO_BE_SHIPPED':
-         return 'Waiting to be shipped'
-       case 'OUT_FOR_DELIVERY':
-         return 'Out for delivery'
-       case 'DELIVERED':
-         return 'Delivered'
-       default:
-         return ''
-     }
+  return `${text.substring(0, limit)}...`
 }
-   
+
+export const onGoingOrderStatus = [
+  'ONGOING',
+  'PENDING_CONFIRMATION',
+  'CONFIRMED',
+  'ACKNOWLEDGED',
+  'WAITING_TO_BE_SHIPPED',
+  'OUT_FOR_DELIVERY',
+  'DELIVERED'
+]
+
+export function getStatusText(status: string) {
+  switch (status) {
+    case 'ONGOING':
+      return 'Order placed'
+    case 'PENDING_CONFIRMATION':
+      return 'Pending Confirmation'
+    case 'CONFIRMED':
+      return 'Order confirmed'
+    case 'ACKNOWLEDGED':
+      return 'Order received'
+    case 'WAITING_TO_BE_SHIPPED':
+      return 'Waiting to be shipped'
+    case 'OUT_FOR_DELIVERY':
+      return 'Out for delivery'
+    case 'DELIVERED':
+      return 'Delivered'
+    default:
+      return ''
+  }
+}
+
 export const onGoingOrderStatusQuery = 'ONGOING,PENDING_CONFIRMATION,CONFIRMED,ACKNOWLEDGED,WAITING_TO_BE_SHIPPED,OUT_FOR_DELIVERY'
 export const states = [
   "Lagos"
@@ -308,6 +359,195 @@ export const states = [
 export const contactEmail = "support@asoebi.africa"
 
 export const emailRegex = /^([a-zA-Z0-9_.\-]+)([+][a-zA-Z0-9_.\-]+)*@(([a-zA-Z0-9-])+\.)+([a-zA-Z0-9]{2,4})+$/;
+
+
+export function convertUserResponse(data: NewUser): User {
+  const profile = data.customer.profile ?? {
+    id: '',
+    firstName: "",
+    lastName: "",
+    gender: null,
+    phoneNumbers: [],
+    email: null,
+    meta: null,
+  };
+
+  return {
+    id: data.id,
+    username: data.username ?? "",
+    email: data.email ?? "",
+    mobile: data.mobile ?? "",
+    role: data.role,
+    status: data.status,
+    settings: data.settings ?? {},
+    meta: data.meta ?? null,
+    lastLoginAt: data.lastLoginAt ?? "",
+    createAt: data.customer.createAt,
+    lastUpdated: data.customer.lastUpdated,
+    profile: {
+      id: profile.id,
+      firstName: profile.firstName,
+      lastName: profile.lastName,
+      gender: profile.gender,
+      phoneNumbers: profile.phoneNumbers,
+      meta: profile.meta,
+    },
+    storeRoles: data.storeRoles ?? [],
+    workEmail: data.email ?? "",
+    personalEmail: profile.email ?? "",
+    firstName: profile.firstName,
+    lastName: profile.lastName,
+    phoneNumber: profile.phoneNumbers,
+    orderCount: data.orderCount,
+  };
+}
+
+export function getLastFiveIdChars(id: string): string {
+  if (id.length < 5) return id;
+  return id.slice(-5).toLocaleUpperCase();
+}
+
+
+
+
+export function saveVariantToLocalStorage(variantId: string, minimumPur: string, userConfigurations?: Record<string, any>) {
+  if (typeof window === "undefined") return
+  localStorage.setItem('variantId', variantId)
+  localStorage.setItem('variantIdMinimumPurchase', minimumPur.toString())
+  if (userConfigurations) {
+    localStorage.setItem(
+      'userConfigurations',
+      JSON.stringify(userConfigurations)
+    );
+  }
+}
+
+
+
+
+
+export const handleFlyToCart = (imgRef: React.RefObject<HTMLImageElement>) => {
+  if (typeof window === "undefined") return;
+
+  // Only run once
+  const hasSeen = localStorage.getItem("seenCartAnimation");
+  if (hasSeen) return;
+
+  const cartIcon = document.querySelector(".cart-icon") as HTMLElement | null;
+  const img = imgRef.current as HTMLImageElement | null;
+  if (!cartIcon || !img) return;
+
+  const imgRect = img.getBoundingClientRect();
+  const cartRect = cartIcon.getBoundingClientRect();
+
+  const scrollX = window.scrollX || document.documentElement.scrollLeft;
+  const scrollY = window.scrollY || document.documentElement.scrollTop;
+  const viewportOffsetY = window.visualViewport?.offsetTop || 0;
+
+  const imgX = imgRect.left + scrollX;
+  const imgY = imgRect.top + scrollY + viewportOffsetY;
+  const cartX = cartRect.left + scrollX;
+  const cartY = cartRect.top + scrollY + viewportOffsetY;
+
+  const clone = img.cloneNode(true) as HTMLImageElement;
+  Object.assign(clone.style, {
+    position: "fixed",
+    left: `${imgX}px`,
+    top: `${imgY}px`,
+    width: `${imgRect.width}px`,
+    height: `${imgRect.height}px`,
+    zIndex: "99999",
+    transition: "transform 0.8s cubic-bezier(0.2, 0.8, 0.2, 1), opacity 0.8s",
+    transform: "translate3d(0, 0, 0)",
+    pointerEvents: "none",
+  });
+  document.body.appendChild(clone);
+
+  const deltaX = cartX + cartRect.width / 2 - (imgX + imgRect.width / 2);
+  const deltaY = cartY + cartRect.height / 2 - (imgY + imgRect.height / 2);
+
+  requestAnimationFrame(() => {
+    clone.style.transform = `translate(${deltaX}px, ${deltaY}px) scale(0.2)`;
+    clone.style.opacity = "0.3";
+  });
+
+  clone.addEventListener("transitionend", () => {
+    clone.remove();
+    cartIcon.classList.remove("cart-bounce");
+    void cartIcon.offsetWidth;
+    cartIcon.classList.add("cart-bounce");
+    setTimeout(() => cartIcon.classList.remove("cart-bounce"), 300);
+  }, { once: true });
+
+
+
+
+
+
+  localStorage.setItem("seenCartAnimation", "true");
+};
+
+export const buildContactSlackMessage = (data: ContactFormData) => ({
+  blocks: [
+    {
+      type: 'header',
+      text: {
+        type: 'plain_text',
+        text: '📩 New Contact Form Submission',
+        emoji: true,
+      },
+    },
+    {
+      type: 'section',
+      text: {
+        type: 'mrkdwn',
+        text: `*Full Name:*\n${data.fullName}`,
+      },
+    },
+    {
+      type: 'section',
+      text: {
+        type: 'mrkdwn',
+        text: `*Email:*\n${data.email}`,
+      },
+    },
+    ...(data.phone
+      ? [
+        {
+          type: 'section',
+          text: {
+            type: 'mrkdwn',
+            text: `*Phone:*\n${data.phone}`,
+          },
+        },
+      ]
+      : []),
+    {
+      type: 'section',
+      text: {
+        type: 'mrkdwn',
+        text: `*Subject:*\n${data.subject}`,
+      },
+    },
+    {
+      type: 'section',
+      text: {
+        type: 'mrkdwn',
+        text: `*Message:*\n${data.message}`,
+      },
+    },
+    {
+      type: 'divider',
+    },
+    {
+      type: 'section',
+      text: {
+        type: 'mrkdwn',
+        text: `<mailto:${data.email}|Reply to sender>`,
+      },
+    },
+  ],
+});
 
 /*
 [
@@ -347,3 +587,4 @@ export const emailRegex = /^([a-zA-Z0-9_.\-]+)([+][a-zA-Z0-9_.\-]+)*@(([a-zA-Z0-
   "Zamfara",
 ]
 */
+

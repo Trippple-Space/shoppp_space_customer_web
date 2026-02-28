@@ -1,4 +1,7 @@
-import { useLayoutEffect } from 'react';
+// 'use client';
+
+
+import { useLayoutEffect, useState } from 'react';
 import { protectedPaths } from '../paths';
 import { authService } from '../services/auth.service';
 import useUserStore from '../store/user.store';
@@ -14,26 +17,31 @@ import { usePathname } from 'next/navigation';
  */
 export const useAuthGuard = () => {
     const { user, isAuthenticated, authenticateUser } = useUserStore();
-    const signOut = useSignOut()
-    const pathname = usePathname()
+    const { signOut } = useSignOut()
+  const pathname = usePathname()
+    const [checking, setChecking] = useState(true) 
+
     useLayoutEffect(() => {
         const checkAuth = async () => {
             if (!user || !isAuthenticated) {
                 const authToken = authService.getAuthCredentials();
-                if (authToken) {
+              if (authToken) {
                     const authUser = await authService.validateAuth();
-                    if (authUser) {
-                        return authenticateUser(authUser)
-                    }
+                if (authUser) {
+                  authenticateUser(authUser)
+                  setChecking(false)
+                  return
+                }
                 }
                 if (!authToken && protectedPaths.includes(pathname)) {
                     signOut();
                 }
             }
+                setChecking(false)
         };
         checkAuth();
     }, [user, isAuthenticated, pathname]);
-
-    return null;
+  
+  return { user, checking }
 };
 

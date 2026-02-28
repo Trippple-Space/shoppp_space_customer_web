@@ -3,7 +3,7 @@ import http from "../http";
 import { replaceParamInEndpoint } from "../utility";
 
 class VisitService {
-  logVisit(storeID: number, ipAddress: { ipAddress: string }) {
+  logVisit(storeID: string, ipAddress: { ipAddress: string }) {
     return http
       .post(
         replaceParamInEndpoint(endpoints.LOG_VISIT, "storeID", storeID),
@@ -16,7 +16,7 @@ class VisitService {
         return null;
       });
   }
-  getVisit(storeID: number) {
+  getVisit(storeID: string) {
     return http
       .get(replaceParamInEndpoint(endpoints.GET_VISIT, "storeID", storeID))
       .then((response) => {
@@ -26,7 +26,7 @@ class VisitService {
         return null;
       });
   }
-  getProductSold(storeID: number) {
+  getProductSold(storeID: string) {
     return http
       .get(
         replaceParamInEndpoint(endpoints.GET_PRODUCT_SOLD, "storeID", storeID)

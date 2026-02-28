@@ -35,15 +35,8 @@ const QuantitySelector: FC<QuantitySelectorProps> = ({
             <PiMinus className='s:w-24 w-22 s:h-24 h-22' />
           )}
         </button>
-        <input
-          className='w-fit min-w-18 max-w-20 inline-block text-center weight-500 bg-transparent s:text-18 text-16 @lo:border-none min-w-0 inline-block h-full focus:outline-none no-arrows'
-          type='number'
-          name='product-qty'
-          min='0'
-          max='10'
-          value={cartItem.quantity}
-          readOnly
-        />
+        <p className='w-fit inline-block text-center weight-500 bg-transparent s:text-18 text-16 @lo:border-none inline-block h-full focus:outline-none no-arrows'>{cartItem.quantity}</p>
+
         <button
           onClick={() => increment()}
           className='bg-#FACE33 active:bg-#e8b915! border-none shadow-0-4-8-0-#00000033 hover:shadow-0-5-8-0-#00000033 hover:scale-1.03 g|transition:0.5s g|will-change:transform focus:outline-none pointer s:p-8 p-6 flex a-items-center j-items-center gap-10 round'

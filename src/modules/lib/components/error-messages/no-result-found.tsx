@@ -1,15 +1,31 @@
-import Icon from '@/modules/lib/components/icon/Icon'
-import React from 'react'
+import Image from '../image/Image';
 
-
-const NoResultMessage = () => {
+const NoResultMessage = ({
+  textContent,
+  contentTitle,
+}: {
+  textContent?: string;
+  contentTitle?: string;
+}) => {
   return (
-    <div className="w-100p h-100p mx-auto flex flex-col items-center j-content-center p-20">
-        <h1 className='text-24 l:text-30 pt-10 text-dimgrey line-height-40 my-5 weight-700'>No result found</h1>
-        <p className='text-16 text-center l:text-18 line-height-30 text-dimgrey opacity-70'>It seems we can’t find any result based on your search.</p>
-        <Icon name='search-character' className='w-80p l:100p h-100 l:h-170 my-20' />
+    <div className="flex flex-col a-items-center gap-8 py-16">
+      <Image
+        src="empty-tray.png"
+        className="w-184 h-152 object-fit-scale-down"
+        alt="empty"
+      />
+      {contentTitle && (
+        <h1 className="text-24 l:text-30 line-height-40 my-15 weight-700 text-center">
+          {contentTitle}
+        </h1>
+      )}
+      {textContent && (
+        <p className="text-14 weight-400 line-height-22 color-#00000073 w-320 px-12 py-5">
+          {textContent}
+        </p>
+      )}
     </div>
-  )
-}
+  );
+};
 
-export default NoResultMessage
+export default NoResultMessage;

@@ -1,5 +1,5 @@
 export interface Store {
-     id: number;
+     id: string;
      slug: string;
      type: string;
      status: string;
@@ -12,6 +12,7 @@ export interface Store {
      user?: {[key:string]:any};
      profile?: {[key:string]:any};
      registrationProposal?: {[key:string]:any};
+     categories?: string[]
 }
 
 interface StoreMeta {
@@ -35,4 +36,6 @@ interface StoreMeta {
                }
           };
      };
+     template: any
+     templateFields: {[key:string]:any};
 }

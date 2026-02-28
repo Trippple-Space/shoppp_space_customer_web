@@ -6,8 +6,10 @@ import { useCategories } from "../use-categories";
 import { useFilterStore } from "../../store/filter.store";
 
 export const useProductListView = () => {
-  const { ref, inView } = useInView();
-  const [page, setPage] = useState(0);
+  const { ref, inView } = useInView({
+    threshold: 0.9,
+  });
+  const [page, setPage] = useState(1);
   const limit = 20;
 
   const pathname = usePathname();
@@ -15,37 +17,47 @@ export const useProductListView = () => {
 
   const { selectedCategory, setSelectedCategory } = useCategories({
     type,
-    storeId: 0,
+    storeId: '',
     label: "GLOBAL"
   });
   const { allFilters } = useFilterStore();
 
-  const { products, setPagination, query, updateHomePageFilter, loading } = useProducts({
-    filters: { type, status: { In: ["ACTIVE", "OUT_OF_STOCK"] }, channel: "ASOEBI_STORE"}
+  const { products, setPagination, setSearch, query, updateHomePageFilter, loading, fetchingError, refetch } = useProducts({
+    filters: { type, status: { In: "ACTIVE,OUT_OF_STOCK" }, channel: "ASOEBI_STORE" }, order: {
+      priorityScore: "DESC"
+    },
   });
 
   useEffect(() => {
     const updatedFilters = { ...allFilters, tags: selectedCategory.name === "All" ? "" : selectedCategory.name.toLowerCase() };
 
     updateHomePageFilter(updatedFilters);
-    setPagination({ page: 0, limit});
+    setPage(1);
+    setPagination({ page: 1, limit });
   }, [allFilters, JSON.stringify(query.allFilters), JSON.stringify(query.filters), selectedCategory.name])
 
   useEffect(() => {
     if (inView) {
-      if (products.length > 20 && products.length % 20 === 0) {
+      if (products.length >= 20 && products.length % 20 === 0) {
         setPage((prev) => prev + 1);
       }
-      setPagination({ page, limit });
     }
   }, [inView]);
+
+  useEffect(() => {
+    setPagination({ page, limit });
+  }, [page, inView]);
 
   return {
     type,
     products,
     loading,
+    fetchingError,
     setSelectedCategory,
     selectedCategory,
-    ref
+    setSearch,
+    search: query.search,   
+    ref,
+    refetch
   };
 };

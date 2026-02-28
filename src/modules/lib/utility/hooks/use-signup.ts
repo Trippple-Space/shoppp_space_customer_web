@@ -6,6 +6,10 @@ import * as Yup from "yup";
 import { authService } from "@/modules/lib/utility/services/auth.service";
 import { RegistrationDetails } from "@/modules/lib/utility/types/auth.interface";
 import { paths } from "@/modules/lib/utility/paths";
+import { useLoginView } from "./use-login";
+import useUserStore from "../store/user.store";
+import { useRouteGuard } from "./use-route-guard";
+import { useCartStore } from "../store/cart.store";
 
 
 const signUpValidationSchema = Yup.object().shape({
@@ -27,8 +31,8 @@ const signUpValidationSchema = Yup.object().shape({
 
 const passwordCreationSchema = Yup.object().shape({
   password: Yup.string()
-    .min(8, "Minimum password length is 8 characters")
-    .max(20, "Max password length is 20 characters")
+    .min(5, "Minimum password length is 5 characters")
+    //.max(20, "Max password length is 20 characters")
     .required("Required")
 });
 
@@ -38,6 +42,9 @@ const passwordCreationSchema = Yup.object().shape({
 export const useSignUpView = () => {
   const router = useRouter();
   const searchParams = useSearchParams();
+  const { formHandler: loginFormHandler } = useLoginView()
+  const { isAuthenticated, authenticateUser } = useUserStore()
+  //const { isLoginModal } = useCartStore()
 
   const [step, setStep] = useState<"initial" | "verify" | "createPassword">("initial");
 
@@ -50,15 +57,17 @@ export const useSignUpView = () => {
       email: ""
     },
     validationSchema: signUpValidationSchema,
-      onSubmit: async (values: { fullname: string;  email: string}) => {
-        const response = await authService.signUpInitial({
-          fullname: values.fullname,
-          email: values.email
-        });
-          router.push(`${paths.verify}?token=${response.token}`);
-  
+    onSubmit: async (values: { fullname: string; email: string }) => {
+      const response = await authService.signUpInitial({
+        fullname: values.fullname,
+        email: values.email
+      });
+      localStorage.setItem('signup-email', values.email);
+      router.push(`${paths.verify}?token=${response.token}`);
+      //isLoginModal()
+
     }
-  } as FormikConfig<Pick<{ fullname: string; email: string;}, "fullname" | "email">>);
+  } as FormikConfig<Pick<{ fullname: string; email: string; }, "fullname" | "email">>);
 
   // STEP 2: OTP verification form
   const formikOtp = useFormik({
@@ -67,25 +76,25 @@ export const useSignUpView = () => {
     },
     onSubmit: async (values: { otp: string }) => {
       const tokenFromUrl = searchParams.get("token") || "";
-        const response = await authService.verifyOtp({ token: tokenFromUrl, otp: values.otp });
-        localStorage.setItem("create-password-token", response.createPasswordToken);
-              setToken(response.createPasswordToken);
-              router.push(paths.create_password);
-              setStep("createPassword");
+      const response = await authService.verifyOtp({ token: tokenFromUrl, otp: values.otp });
+      localStorage.setItem("create-password-token", response.createPasswordToken);
+      setToken(response.createPasswordToken);
+      router.push(paths.create_password);
+      setStep("createPassword");
     }
   } as FormikConfig<{ otp: string }>);
 
 
   useEffect(() => {
     const tokenFromUrl = searchParams.get("token") || "";
-      const otpFromUrl = searchParams.get("otp");
-  
-      if (tokenFromUrl) {
-          setToken(tokenFromUrl);
-        if (otpFromUrl) {
+    const otpFromUrl = searchParams.get("otp");
+
+    if (tokenFromUrl) {
+      setToken(tokenFromUrl);
+      if (otpFromUrl) {
         authService
           .verifyOtp({ token: tokenFromUrl, otp: otpFromUrl })
-            .then((response) => {
+          .then((response) => {
             localStorage.setItem("create-password-token", response.createPasswordToken);
             setToken(response.token);
             toast.success("OTP verified via link successfully.");
@@ -98,31 +107,44 @@ export const useSignUpView = () => {
     }
   }, [router, searchParams]);
 
+  //STEP 3: CREATE PASSWORD
+
   const formikComplete = useFormik({
     initialValues: {
       password: "",
       confirmPassword: ""
     },
     validationSchema: passwordCreationSchema,
-    onSubmit: async (values) => {      
+    onSubmit: async (values) => {
       if (values.password === values.confirmPassword) {
-      try {
-        const storedToken = localStorage.getItem("create-password-token");
-        if (!storedToken) {
-          throw new Error("No valid token found. Please retry the verification process.");
-        }
-          
-        const payload = {
-          token: storedToken,
-          password: values.password
-        };
-        const res = await authService.setPassword(payload);
+        try {
+          const storedToken = localStorage.getItem("create-password-token");
+          if (!storedToken) {
+            throw new Error("No valid token found. Please retry the verification process.");
+          }
 
-          localStorage.removeItem('create-password-token')
-        router.push(paths.login);
-      } catch (error: any) {
-        toast.error(error.response.data.message || "Registration failed");
-      }
+          const payload = {
+            token: storedToken,
+            password: values.password
+          };
+
+          const res = await authService.setPassword(payload)
+
+          if (res?.success) {
+            localStorage.removeItem('create-password-token');
+
+            const tempEmail = localStorage.getItem('signup-email');
+            authService.signIn({ email: tempEmail ?? '', password: payload.password }).then((response) => {
+              authenticateUser(response.user);
+              useRouteGuard(isAuthenticated, paths.homepage)
+            });
+          } else {
+            //toast.error(res?.message || "Something went wrong. Please try again.");
+          }
+
+        } catch (error: any) {
+          toast.error(error.response.data.message || "Registration failed");
+        }
       } else {
         toast.error("Password does not match")
       }

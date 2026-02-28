@@ -15,15 +15,15 @@ export interface ICategory {
 
 export interface ProductCategory {
   name?: any;
-  id: number;
+  id: string;
   label: string;
   type: "wears" | "fabrics" | null;
   categories: ICategory[];
-  storeId: number;
+  storeId: string;
 }
 
 export interface Discount {
-  id: number,
+  id: string,
   title: string,
   discountCode: string,
   discountType: string,
@@ -43,15 +43,16 @@ export interface Product {
   longDescription: string;
   shortDescription: string;
   keywords: string[];
-  id: number;
+  id: string;
   slug: string;
   price: number;
+  discountedPrice?: number
   finalPrice?: number;
   type: string;
   name: string;
   stockUnit: string;
   status: number;
-  dateCreated: string;
+  createAt: string;
   lastUpdated: string;
   reviewRating: number;
   reviews: any;
@@ -61,6 +62,18 @@ export interface Product {
   availableUnit?: any[];
   tags: Tag[];
   discount: Discount
+  meta: any;
+}
+
+export interface ProductsResponse {
+  data: Product[];
+  meta: {
+    totalItems: number;
+    itemCount: number;
+    itemsPerPage: number;
+    totalPages: number;
+    currentPage: number;
+  };
 }
 
 export interface ProductMedia {
@@ -71,7 +84,7 @@ export interface ProductMedia {
 }
 
 export interface ProductVariant {
-  id: number;
+  id: string;
   media: ProductMedia[];
   stock: number;
   price: number;
@@ -85,9 +98,10 @@ export interface ProductVariant {
   meta: null | any;
   properties: null | any;
   stockUnit: string;
-  dateCreated: string;
+  createAt: string;
   lastUpdated: string;
   preOrder?: boolean;
+  configurationRecords?: ConfigurationRecord[];
 }
 
 export interface Tag {
@@ -113,14 +127,56 @@ export interface IFilters {
   tags?: string
 }
 
-
+export interface RecentlyViewedResponse {
+  data: RecentlyViewed[]
+}
 
 export interface RecentlyViewed {
-  id: number;
-  productVariantId: number;
-  userId: number;
+  id: string;
+  productVariantId: string;
+  userId: string;
   type: string;
   productVariant: ProductVariant;
   createdAt: string;
   updatedAt: string;
+}
+
+//product configurations
+export interface ConfigurationRecord {
+  configurationRecordSchemaId: string;
+  id: string;
+  storeId: string;
+  tagDefinition: string | null;
+  name: string;
+  slug: string;
+  description: string | null;
+  createdAt: string;
+  updatedAt: string;
+  deletedAt: string | null;
+  isActive: boolean;
+  customerDataForm: ConfigurationRecordCustomerDataField[];
+}
+
+export interface ConfigurationRecordCustomerDataField {
+  keyFormat: ConfigurationRecordCustomerDataFieldKeyFormat;
+  valueFormat: ConfigurationRecordCustomerDataFieldValueFormat;
+}
+
+export interface ConfigurationRecordCustomerDataFieldKeyFormat {
+  fieldName: string;
+  type: string;
+  defaultValue: string;
+  readonly: boolean;
+}
+
+export interface ConfigurationRecordCustomerDataFieldValueFormat {
+  fieldName: string;
+  type: string;
+  required: boolean;
+  description: string;
+  example?: string | null;
+  placeholder?: string | null;
+  defaultValue?: unknown;
+  readonly?: boolean | null;
+  targetUserType?: string | null;
 }

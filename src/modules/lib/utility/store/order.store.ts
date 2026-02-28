@@ -1,6 +1,6 @@
 import { create } from 'zustand'
 
-import {Order} from '../types/order.interface'
+import { Order } from '../types/order.interface'
 import { IQueryParams } from '../hooks/use-products';
 import { orderService } from '../services/order.service';
 
@@ -10,10 +10,10 @@ type OrderStore = {
     order: Order,
     fetching: boolean;
     showLoginModal: boolean;
-     isLoginModal: () => void;
+    isLoginModal: () => void;
     fetchOrders: (query: IQueryParams) => Promise<void>
-    fetchOrderById: (id: number, query: IQueryParams | any) => Promise<void>
-    cancelOrderById: (id: number, reasons: string, query: IQueryParams | any) => Promise<void>
+    fetchOrderById: (id: string, query: IQueryParams | any) => Promise<void>
+    cancelOrderById: (id: string, reasons: string, query: IQueryParams | any) => Promise<void>
 }
 
 export const useOrderStore = create<OrderStore>((set) => ({
@@ -23,12 +23,13 @@ export const useOrderStore = create<OrderStore>((set) => ({
     fetchOrders: async (query) => {
         try {
             set({ fetching: true })
-            const orders = await orderService.fetchOrders(query)
+            const orders = await orderService.fetchOrders({ ...query, order: { id: 'desc' } });
             set({ orders, fetching: false })
         } catch (error) {
-            set({fetching: false})
+            set({ fetching: false })
+            throw error;
         }
-        
+
     },
     fetchOrderById: async (id, query) => {
         const singleOrder = await orderService.fetchOrderById(id, query)
@@ -37,7 +38,7 @@ export const useOrderStore = create<OrderStore>((set) => ({
 
     cancelOrderById: async (id, reasons, query) => {
         const cancelOrder = await orderService.cancelOrderById(id, reasons, query)
-        set({order: cancelOrder})
+        set({ order: cancelOrder })
     },
     showLoginModal: false,
     isLoginModal: () =>

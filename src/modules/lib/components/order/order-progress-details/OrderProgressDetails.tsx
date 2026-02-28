@@ -84,7 +84,7 @@ const OrderProgressDetails = ({
           <>
             <OrderProcess
               text='Order placed'
-              date={singleOrder.delivery.dateCreated}
+              date={singleOrder.delivery.createAt}
               active={true}
               styles='b-10 h-200 z-0'
               singleOrder={singleOrder}

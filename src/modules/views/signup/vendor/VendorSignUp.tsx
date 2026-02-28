@@ -1,4 +1,4 @@
-"use client"
+'use client';
 import BoxRadio from '@/modules/lib/components/box-radio/BoxRadio';
 import Image from '@/modules/lib/components/image/Image';
 import ProgressBar from '@/modules/lib/components/progress-bar/ProgressBar';
@@ -15,15 +15,18 @@ export interface IVendorSignUpStep {
   setCurrentStep: (step: StepNumber) => void;
 }
 
-const vendorSignUpSteps: { [x: number]: React.ComponentType<IVendorSignUpStep> } = {
+const vendorSignUpSteps: {
+  [x: number]: React.ComponentType<IVendorSignUpStep>;
+} = {
   1: VendorSignUpStep1,
   2: VendorSignUpStep2,
   3: VendorSignUpStep3,
   4: VendorSignUpStep4,
 };
 
-
-const percentageProgress: (currentStep: StepNumber ) => number = (currentStep) => {
+const percentageProgress: (currentStep: StepNumber) => number = (
+  currentStep
+) => {
   const progressMap: Record<StepNumber, number> = {
     1: 30,
     2: 50,
@@ -40,20 +43,20 @@ const VendorSignUp = () => {
   const VendorSignUpStep = vendorSignUpSteps[currentStep];
 
   return (
-    <>    
-          <div className="mb-43">
-            <Image
-              className='w-100 h-27 mb-16 a-self-left'
-              src='asoebi-logo-colored.png'
-              alt='logo'
-              type='logo'
-            />
-            <ProgressBar percentage={percentageProgress(currentStep)} />
-          </div>
-          {VendorSignUpStep && <VendorSignUpStep setCurrentStep={setCurrentStep} />}
-
-      </>
-
+    <>
+      <div className="mb-43">
+        <Image
+          className="w-100 h-27 mb-16 a-self-left"
+          src="Main logo green.svg"
+          alt="logo"
+          type="logo"
+          height={100}
+          width={100}
+        />
+        <ProgressBar percentage={percentageProgress(currentStep)} />
+      </div>
+      {VendorSignUpStep && <VendorSignUpStep setCurrentStep={setCurrentStep} />}
+    </>
   );
 };
 

@@ -1,0 +1,113 @@
+.wrapper {
+  position: fixed;
+  inset: 0;
+  z-index: 9;
+  background: black;
+  color: white;
+  display: flex;
+  flex-direction: column;
+}
+
+.topBar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.closeBtn {
+  background: none;
+  border: none;
+  font-size: 15px;
+  font-weight: 500;
+  color: rgba(255,255,255,0.9);
+  cursor: pointer;
+}
+
+.counter {
+  opacity: 0.9;
+  font-size: 16px;
+  font-weight: 500;
+}
+
+.actions {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.icon {
+  cursor: pointer;
+}
+
+.viewer {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 12px;
+}
+
+.mediaWrapper {
+  position: relative;
+  max-height: calc(100vh - 200px);
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.media {
+  max-height: calc(100vh - 180px);
+  width: 100%;
+  object-fit: contain;
+}
+
+.navBtn {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  background: rgba(0,0,0,0.4);
+  border: 2px solid #c4bdbdad;
+  border-radius: 50%;
+  width: 48px;
+  height: 48px;
+  font-size: 24px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  z-index: 40;
+}
+
+.navBtn:hover{
+  background: #b2b1b13c;
+  transition: all 0.15s ease-in-out;
+}
+
+.leftBtn {
+  left: 24px;
+}
+
+.rightBtn {
+  right: 24px;
+}
+
+@media (max-width: 768px) {
+  .viewer {
+    padding: 12px 0;
+  }
+
+  .mediaWrapper {
+    max-height: calc(100vh - 150px);
+  }
+
+  .media {
+    max-height: calc(100vh - 180px);
+  }
+
+  .navBtn {
+    width: 38px;
+    height: 38px;
+    font-size: 20px;
+  }
+}

@@ -2,7 +2,7 @@
 import { useAuthGuard } from '@/modules/lib/utility/hooks/use-auth-guard'
 import { useNavbarView } from '@/modules/lib/utility/hooks/views/use-navbar-view'
 import useUserStore from '@/modules/lib/utility/store/user.store'
-import React, { FC, useState } from 'react'
+import React, { FC, useEffect, useState } from 'react'
 import { PiStorefront } from 'react-icons/pi'
 import { RxCross1, RxHamburgerMenu } from 'react-icons/rx'
 import { SlArrowDown } from 'react-icons/sl'
@@ -12,38 +12,67 @@ import { paths } from '@/modules/lib/utility/paths'
 import config from '../../../../../../env'
 import { useOrders } from '@/modules/lib/utility/hooks/use-orders'
 import { onGoingOrderStatus, onGoingOrderStatusQuery } from '@/modules/lib/utility/utility'
+import { useRouter } from 'next/navigation'
 
 
 interface IMobileNav {
   handleCloseDropdown: () => void
   setProfileModal?: any
+  isOpen?: boolean
+  onOpenChange?: (open: boolean) => void
+  hideTrigger?: boolean
+  className?: string
 }
 
 const MobileNav: FC<IMobileNav> = ({
   handleCloseDropdown,
-  setProfileModal
+  setProfileModal,
+  isOpen,
+  onOpenChange,
+  hideTrigger = false,
+  className,
 }) => {
   useAuthGuard() // TODO: refactor to rely on Next 13 auth middleware
   const [asoebiMobileModal, setAsoebiMobileModal] = useState<boolean>(false)
-  const [hamburgerMenu, setHamburgerMenu] = useState<boolean>(false)
+  const [internalOpen, setInternalOpen] = useState(false);
+  const hamburgerMenu = isOpen !== undefined ? isOpen : internalOpen;
+  const setHamburgerMenu = (val: boolean) => {
+    if (onOpenChange) onOpenChange(val);
+    else setInternalOpen(val);
+  };
+  //const [hamburgerMenu, setHamburgerMenu] = useState<boolean>(false)
   const { user, signOut } = useNavbarView()
+    const router = useRouter()
   const { isAuthenticated } = useUserStore()
 
-  const query:any = onGoingOrderStatusQuery;
+  const query: any = onGoingOrderStatusQuery;
 
   const { orders } = useOrders({
     filters: { status: { In: query } }
   })
 
+  useEffect(() => {
+    if (hamburgerMenu) {
+      document.body.style.overflow = "hidden";
+      document.documentElement.style.overflow = "hidden";
+    } else {
+      document.body.style.overflow = "";
+      document.documentElement.style.overflow = "";
+    }
 
+    return () => {
+      document.body.style.overflow = "";
+      document.documentElement.style.overflow = "";
+    };
+  }, [hamburgerMenu]);
 
   const handleAsoebiMobileDropdown = () => {
     setAsoebiMobileModal(prev => !prev)
   }
 
-  const toogleHamburgerMenu = () => {
-    setHamburgerMenu(prev => !prev)
-  }
+  const toggleHamburgerMenu = () => {
+    setHamburgerMenu(!hamburgerMenu);
+  };
 
   const profileModals = [
     'orders',
@@ -51,19 +80,20 @@ const MobileNav: FC<IMobileNav> = ({
     'recently viewed',
     'recently searched'
   ]
-  {/*'ratings & reviews', */}
+  {/*'ratings & reviews', */ }
 
   return (
     <div className='md:hidden flex a-items-center'>
-      {hamburgerMenu ? (
-        <RxCross1 onClick={toogleHamburgerMenu} className='w-24 h-24' />
-      ) : (
-        <RxHamburgerMenu onClick={toogleHamburgerMenu} className='w-24 h-24' />
+      {!hideTrigger && (
+        hamburgerMenu ? (
+          <RxCross1 onClick={toggleHamburgerMenu} className="w-24 h-24" />
+        ) : (
+          <RxHamburgerMenu onClick={toggleHamburgerMenu} className="w-24 h-24" />
+        )
       )}
-
       {hamburgerMenu && (
         <div
-          className='md:hidden z-5 overflow-hidden bg-white r-0 w-100p t-64 fixed border-t border-1 border-#00000014 g|box-shadow:0px|_|8px|_|16px|_|#494F5E1F;'
+          className={`md:hidden z-5 overflow-hidden bg-white r-0 w-100p t-64 fixed border-t border-1 border-#00000014 g|box-shadow:0px|_|8px|_|16px|_|#494F5E1F; ${className}`}
           style={{ height: 'calc(100dvh - 64px)' }}
         >
           <div className='scroll-y no-scrollbar flex flex-col space-between h-full py-24'>
@@ -88,9 +118,8 @@ const MobileNav: FC<IMobileNav> = ({
 
               {isAuthenticated && (
                 <div
-                  className={`${
-                    asoebiMobileModal && 'border-t border-1 border-#00000014'
-                  }`}
+                  className={`${asoebiMobileModal && 'border-t border-1 border-#00000014'
+                    }`}
                 >
                   {profileModals.map((modal, i) => (
                     <div
@@ -106,7 +135,7 @@ const MobileNav: FC<IMobileNav> = ({
                           href={'/orders'}
                           className='line-height-24 weight-400 capitalize w-full'
                         >
-                          Orders ({orders.length})  
+                          Orders ({orders.length})
                         </Link>
                       ) : (
                         <p className='line-height-24 weight-400 capitalize'>
@@ -118,7 +147,7 @@ const MobileNav: FC<IMobileNav> = ({
 
                   <div
                     className='py-10 hover:bg-red-100 g|transition:0.5s pointer flex items-center gap-10 text-16 sm:px-36 px-24'
-                    onClick={() => signOut()}
+                    onClick={() =>  signOut()}
                   >
                     <p className='line-height-24 weight-400 color-#D4280C'>
                       Logout
@@ -128,17 +157,16 @@ const MobileNav: FC<IMobileNav> = ({
               )}
 
               <div
-                className={`flex flex-col pt-5 text-16 weight-400 line-height-24 ${
-                  (asoebiMobileModal || isAuthenticated) &&
+                className={`flex flex-col pt-5 text-16 weight-400 line-height-24 ${(asoebiMobileModal || isAuthenticated) &&
                   'border-t border-1 border-#00000014'
-                }`}
+                  }`}
               >
                 <Link
-                  href={config.VENDOR_CENTER_HOST}
+                  href={config.VENDOR_CENTER_SIGNUP}
                   target='_blank'
                   className='py-10 hover:bg-grey-100 sm:px-36 px-24 g|transition:0.3s'
                 >
-                  Sell on Asoebi.Africa
+                  Sell on Asoebi Africa
                 </Link>
                 <p className='py-10 hover:bg-grey-100 sm:px-36 px-24 g|transition:0.3s'>
                   Help Center
@@ -151,13 +179,13 @@ const MobileNav: FC<IMobileNav> = ({
                 <div className=''>
                   <img
                     className='w-60 h-60 border-solid border-0.5 border-#00000014 radius-50p'
-                    src={`https://api.dicebear.com/7.x/thumbs/svg?seed=${user?.username}`}
+                    src={`https://api.dicebear.com/7.x/thumbs/png?seed=${user?.firstName}`}
                     alt='user'
                   />
                 </div>
 
                 <div className=''>
-                  <p className='capitalize weight-600 text-14 line-height-22'>{`${user?.profile.firstName} ${user?.profile.lastName}`}</p>
+                  <p className='capitalize weight-600 text-14 line-height-22'>{`${user?.profile?.firstName} ${user?.profile?.lastName}`}</p>
                   <p className='text-12 line-height-20 color-#00000099 weight-400'>
                     {user?.email}
                   </p>
@@ -167,7 +195,7 @@ const MobileNav: FC<IMobileNav> = ({
               <div className='flex flex-col gap-8 sm:px-36 px-24'>
                 <button
                   className='bg-green text-white py-12 px-16 border-none radius-6 w-full text-14 line-height-19 hover:pointer font-inter hover:bg-darkgreen g|transition:0.3s disabled:bg-grey weight-500'
-                  onClick={() => signOut()}
+                  onClick={() => {router.push(paths.login)}}
                 >
                   Login
                 </button>
@@ -183,7 +211,7 @@ const MobileNav: FC<IMobileNav> = ({
         </div>
       )}
     </div>
-  )
+  );
 }
 
 export default MobileNav

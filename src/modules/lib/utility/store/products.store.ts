@@ -1,38 +1,48 @@
 import { create } from 'zustand';
 import { Product } from '../types/product.interface';
 
+export interface ProductsCacheEntry {
+    data: Product[];
+    meta: any;
+}
+
 interface ProductStore {
     productsCache: {
-        [x: string]: Product[]
+        [x: string]: ProductsCacheEntry
     };
     productCacheIdempotencyTracker: {
         [x: string]: {
-            [x: number]: true
+            [x: string]: true
         }
     }
-    setProductsCache: (cacheKey: string, products: Product[]) => void;
-    setProductsCacheIdempotencyTracker: (cacheKey: string, productIds: {[x:number]: true}) => void;
+    setProductsCache: (
+        cacheKey: string,
+        entry: ProductsCacheEntry
+    ) => void;
+    setProductsCacheIdempotencyTracker: (cacheKey: string, productIds: { [x: string]: true }) => void;
+    clearProductsCacheByKey: (cacheKey: string) => void;
 }
 
 const placeholderProduct: Product = {
     longDescription: "",
     keywords: [],
     tags: [{ label: "" }],
-    id: 0,
+    id: "",
     slug: "",
     price: 0,
     name: "",
     type: "",
     stockUnit: "",
     status: 0,
-    dateCreated: "",
+    createAt: "",
     shortDescription: "",
     lastUpdated: "",
     reviewRating: 0,
     reviews: undefined,
     comments: undefined,
+    meta: null,
     discount: {
-        id: 0,
+        id: "",
         title: "",
         discountCode: "",
         discountType: "",
@@ -48,34 +58,34 @@ const placeholderProduct: Product = {
         updatedAt: ""
     },
     variants: [
-         {
-              id: 0,
-              media: [
-                   {
-                        url: "",
-                        type: "image",
-                   },
+        {
+            id: "",
+            media: [
+                {
+                    url: "",
+                    type: "image",
+                },
             ],
-            size:'',
-              status:'',
-              stock: 0,
-              price: 0,
-              finalPrice: 0,
-              discountedPrice: 0,
-              minPurchaseQuantity: 0,
-              incrementBy: 0,
-              meta: undefined,
-              properties: undefined,
-              stockUnit: "",
-              dateCreated: "",
-              lastUpdated: "",
-              preOrder: false,
-         },
+            size: '',
+            status: '',
+            stock: 0,
+            price: 0,
+            finalPrice: 0,
+            discountedPrice: 0,
+            minPurchaseQuantity: 0,
+            incrementBy: 0,
+            meta: undefined,
+            properties: undefined,
+            stockUnit: "",
+            createAt: "",
+            lastUpdated: "",
+            preOrder: false,
+        },
     ],
     store: {
         name: "",
         slug: "",
-        id: 0,
+        id: "",
         description: "",
         status: 'ACTIVE',
         type: "",
@@ -90,24 +100,38 @@ const placeholderProduct: Product = {
 
 export const useProductStore = create<ProductStore>((set) => ({
     productsCache: {
-        placeholder: Array.from({ length: 10 }).map(() => placeholderProduct)
+        placeholder: {
+            data: Array.from({ length: 10 }).map(() => placeholderProduct),
+            meta: null,
+        }
     },
     productCacheIdempotencyTracker: {},
-    setProductsCache: (cacheKey, products) =>
+    setProductsCache: (cacheKey, entry) =>
         set((state) => ({
             productsCache: {
                 ...state.productsCache,
-                [cacheKey]: products ?? [],
+                [cacheKey]: entry,
             },
         })),
-    setProductsCacheIdempotencyTracker: (cacheKey: string, productIds: {[x:number]: true}) =>
+    setProductsCacheIdempotencyTracker: (cacheKey: string, productIds: { [x: string]: true }) =>
         set((state) => ({
             productCacheIdempotencyTracker: {
                 ...state.productCacheIdempotencyTracker,
                 [cacheKey]: {
-                    ...(state.productCacheIdempotencyTracker[cacheKey] ?? []),
+                    ...(state.productCacheIdempotencyTracker[cacheKey] ?? {}),
                     ...productIds
                 },
             },
         })),
+    clearProductsCacheByKey: (cacheKey) =>
+        set((state) => {
+            const { [cacheKey]: _, ...rest } = state.productsCache;
+            const { [cacheKey]: __, ...restTracker } =
+                state.productCacheIdempotencyTracker;
+
+            return {
+                productsCache: rest,
+                productCacheIdempotencyTracker: restTracker,
+            };
+        }),
 }));

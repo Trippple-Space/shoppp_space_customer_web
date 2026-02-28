@@ -1,16 +1,63 @@
+
+// ---- Core system user response shape ----
 export interface User {
-    email: string;
-    id: number;
-    lastLoginAt: Date;
-    meta?: any
-    mobile?: string
-    settings?: any
-    username: string
-    profile: UserProfile
+  id: string;
+  username: string;
+  email: string;
+  mobile: string;
+  role: string;
+  status: string;
+  settings: Record<string, unknown>;
+  meta: Record<string, unknown> | null;
+  lastLoginAt: string;
+  createAt: string;
+  lastUpdated: string;
+  profile: {
+    id: string;
+    firstName: string;
+    lastName: string;
+    gender: string | null;
+    phoneNumbers: string[];
+    meta: Record<string, unknown> | null;
+  };
+  storeRoles: unknown[];
+  workEmail: string;
+  personalEmail: string;
+  firstName: string;
+  lastName: string;
+  phoneNumber: string[];
+  orderCount?: number;
 }
 
-export interface UserProfile {
-    firstName: string,
-    lastName: string,
-    gender: string,
+export interface CustomerData {
+  createAt: string;
+  lastUpdated: string;
+  profile?: {
+    id: string;
+    firstName: string;
+    lastName: string;
+    gender: string | null;
+    phoneNumbers: string[];
+    email: string | null;
+    meta: Record<string, unknown> | null;
+  } | null;
 }
+
+
+// ---- API response shape ----
+export interface NewUser {
+  id: string;
+  username?: string;
+  email: string | null;
+  mobile?: string | null;
+  role: string;
+  status: string;
+  settings?: Record<string, unknown> | null;
+  meta?: Record<string, unknown> | null;
+  lastLoginAt?: string | null;
+  orderCount?: number;
+  storeRoles?: unknown[];
+  customer: CustomerData
+}
+
+// ---- Converted/flattened output ----

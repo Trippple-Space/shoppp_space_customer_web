@@ -2,7 +2,7 @@ import { Cart } from "./cart.interface";
 import { User } from "./user.interface";
 
 export interface Delivery {
-     id: number;
+     id: string;
      deliveryDate: string;
      deliveryWindowStart: string;
      deliveryWindowEnd: string;
@@ -11,12 +11,12 @@ export interface Delivery {
      code: string;
      meta: any;
      dateTimeDelivered: string | null;
-     dateCreated: string;
+     createAt: string;
      lastUpdated: string;
 }
 
 export interface Order {
-     id: number;
+     id: string;
      cart: Cart;
      status: string;
      user: User;

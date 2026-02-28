@@ -31,8 +31,8 @@ export const AddressValidationSchema = Yup.object().shape({
         const phoneNumber = value.startsWith("+234")
           ? value.slice(4)
           : value.startsWith("0")
-          ? value.slice(1)
-          : value;
+            ? value.slice(1)
+            : value;
         return /^(7|8|9)\d{9}$/.test(phoneNumber);
       }
     )
@@ -55,8 +55,8 @@ export const AddressValidationSchema = Yup.object().shape({
         const phoneNumber = value.startsWith("+234")
           ? value.slice(4)
           : value.startsWith("0")
-          ? value.slice(1)
-          : value;
+            ? value.slice(1)
+            : value;
         return /^(7|8|9)\d{9}$/.test(phoneNumber);
       }
     ),
@@ -88,8 +88,8 @@ const formikAddressConfig = (
         .replace(/^\+234/, "")}`,
       secondaryContactNo: values.secondaryContactNo
         ? `+234${values.secondaryContactNo
-            .replace(/^0/, "")
-            .replace(/^\+234/, "")}`
+          .replace(/^0/, "")
+          .replace(/^\+234/, "")}`
         : "",
     };
     if (!values.secondaryContactNo) {
@@ -125,19 +125,22 @@ const useAddress = () => {
     (address) => address.id === addressToUpdateId
   );
 
-  const handleCreateAddress = (newAddress: Address) => {
+  const handleCreateAddress = async (newAddress: Address) => {
     if (user?.id) {
-      createAddress(user.id, newAddress);
+      const created = await createAddress(user.id, newAddress);
+      if (created?.id) {
+        selectAddress(created.id);
+      }
     }
   };
 
-  const handleUpdateAddress = (addressId: number, newAddress: Address) => {
+  const handleUpdateAddress = (addressId: string, newAddress: Address) => {
     if (user?.id && selectedAddressId !== null) {
       updateAddress(user.id, addressId, newAddress);
     }
   };
 
-  const handleDeleteAddress = (addressId: number) => {
+  const handleDeleteAddress = (addressId: string) => {
     if (user?.id) {
       deleteAddress(user.id, addressId);
     }

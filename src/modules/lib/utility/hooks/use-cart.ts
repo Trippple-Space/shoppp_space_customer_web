@@ -16,36 +16,36 @@ export const useCart = (isCheckout?: boolean) => {
           incrementCartItem,
           decrementCartItem,
           isLoginModal,
-       showLoginModal,
-       applyDiscount,
-       removeDiscountCode,
-       applyingCode
+          showLoginModal,
+          applyDiscount,
+          removeDiscountCode,
+          applyingCode
      } = useCartStore();
      const { isAuthenticated } = useUserStore();
 
-     const increment = (cartItem: CartItem) => {
+     const increment = (cartItem: CartItem, userConfigurations?: Record<string, any>) => {
           if (cartItem.quantity >= cartItem.variant.stock) {
-               return toast.error('You’ve reached the maximum quantity available for this item.');   
+               return toast.error('You’ve reached the maximum quantity available for this item.');
           } else {
-          incrementCartItem(cartItem.variant.id, cartItem.variant.incrementBy);
+               incrementCartItem(cartItem.variant.id, cartItem.variant.incrementBy, userConfigurations);
           }
      };
 
-     const decrement = (cartItem: CartItem) => {
+     const decrement = (cartItem: CartItem, userConfigurations?: Record<string, any>) => {
           if (cartItem.quantity <= cartItem.variant.minPurchaseQuantity) {
                return removeFromCart(cartItem.id);
+          } else {
+               decrementCartItem(cartItem.variant.id, cartItem.variant.incrementBy, userConfigurations)
           }
-
-          decrementCartItem(cartItem.variant.id, cartItem.variant.incrementBy);
      };
 
 
 
      useEffect(() => {
           if (!cart.id && isAuthenticated && !fetching) {
-            fetchCart(isCheckout);
+               fetchCart(isCheckout);
           }
-     },[isAuthenticated]);
+     }, [isAuthenticated]);
 
      return {
           cart,
@@ -54,14 +54,13 @@ export const useCart = (isCheckout?: boolean) => {
           removeFromCart,
           increment,
           decrement,
-       fetching,
-       fetchCart,
+          fetching,
+          fetchCart,
           applyDiscount,
           applyingCode,
           removeDiscountCode,
           isAuthenticated,
           isLoginModal,
-       showLoginModal,
-          
+          showLoginModal,
      };
 };

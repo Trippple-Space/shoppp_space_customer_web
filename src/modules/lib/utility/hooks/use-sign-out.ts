@@ -10,8 +10,9 @@ export const useSignOut = () => {
   const signOut = () => {
     deAuthenticateUser();
     authService.signOut()
-    router.push(paths.login);
+    window.location.reload()
+   
   };
 
-  return signOut;
+  return { signOut };
 };

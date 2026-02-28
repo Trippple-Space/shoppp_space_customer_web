@@ -1,100 +1,70 @@
-'use client'
+'use client';
 
-import React from 'react'
-import './LoginModal.module.scss'
-import { useCartStore } from '../../utility/store/cart.store'
-import { IoMdCloseCircle } from 'react-icons/io'
-import Input from '../input/Input'
-import { motion, AnimatePresence } from 'framer-motion'
-import { useLoginView } from '../../utility/hooks/use-login'
-import Link from 'next/link'
-import { paths } from '../../utility/paths'
+import React, { useEffect } from 'react';
+import './LoginModal.module.scss';
+import { useCartStore } from '../../utility/store/cart.store';
+import { motion, AnimatePresence } from 'framer-motion';
+import AuthModals from '../auth-modals/AuthModals';
+import { usePathname } from 'next/navigation';
 
 const LoginModal = () => {
-  const { showLoginModal, isLoginModal } = useCartStore()
-  const { formHandler: loginFormHandler } = useLoginView(isLoginModal)
+  const { showLoginModal, isLoginModal } = useCartStore();
+  const pathname = usePathname();
 
+  useEffect(() => {
+    if (showLoginModal && shouldRender) {
+      document.body.style.overflow = 'hidden';
+    } else {
+      document.body.style.overflow = '';
+    }
+
+    return () => {
+      document.body.style.overflow = '';
+    };
+  }, [showLoginModal]);
+
+  const shouldRender = !pathname.startsWith('/auth');
 
   return (
     <>
       <AnimatePresence>
-        {showLoginModal ? (
-          <div className='radius-8 w-100p'>
-            <div className='bg-black z-6 l-0 t-0 h-full w-100p fixed opacity-40 z-20'></div>
-            <div className='fixed z-20 w-full h-full flex items-center j-content-center'>
-              <motion.div
-                initial={{ scale: 0 }}
-                animate={{ scale: 1 }}
-                exit={{ scale: 0 }}
-                transition={{ duration: 0.3 }}
-                className='bg-white radius-8 l:w-400 w-80p'
+        {shouldRender && showLoginModal ? (
+          <div className="radius-8 w-100p">
+            <div
+              className="fixed l-0 t-0 h-full w-full z-20"
+              style={{
+                height: '100dvh',
+                background: '#00000012',
+                backdropFilter: 'blur(8px)',
+                WebkitBackdropFilter: 'blur(8px)',
+              }}
+            ></div>
+            <div
+              className="fixed z-20 w-full h-full t-0 b-0 overflow-hidden"
+              style={{
+                maxHeight: '90vh',
+                margin: 'auto 0',
+              }}
+              onClick={() => {
+                isLoginModal();
+              }}
+            >
+              <div
+                className="my-auto flex flex-col j-content-center a-items-center h-full py-20"
+                style={{ minHeight: 449 }}
               >
-                <header className='flex space-between items-center p-16'>
-                  <div className='weight-500 text-16 whitespace-nowrap text-green-700'>
-                    Log in
-                  </div>
-                  {/* <div className='weight-500 text-14 whitespace-nowrap'>Log in</div> */}
-                  <IoMdCloseCircle
-                    className='w-fit text-grey-400 pointer w-20 h-20'
-                    onClick={isLoginModal}
-                  />
-                </header>
-                <div className='border-t border-2 border-grey-200'></div>
-                <form onSubmit={loginFormHandler.handleSubmit}>
-                  <main className='p-16'>
-                    <Input
-                      type='email'
-                      id='email'
-                      name='email'
-                      placeholder='Email'
-                      inputClass='h-20 text-12'
-                      handleBlur={loginFormHandler.handleBlur}
-                      handleChange={loginFormHandler.handleChange}
-                    />
-
-                    <Input
-                      id='password'
-                      name='password'
-                      type='password'
-                      placeholder='Password'
-                      inputClass='h-20 text-12'
-                      className='mt-16'
-                      handleBlur={loginFormHandler.handleBlur}
-                      handleChange={loginFormHandler.handleChange}
-                    />
-                  </main>
-                
-                  <div className='px-16 mb-20'>
-                    <button
-                      className='bg-green text-white py-8 l:py-10 radius-8 w-full border 
-                                    text-10 l:text-12 mt-20 hover:pointer font-inter
-                                    hover:bg-darkgreen g|transition:0.5s disabled:bg-grey weight-600
-                                '
-                    >
-                      Sign In
-                    </button>
-                  </div>
-
-                  <div className='text-center text-10 text-green-500 pointer'>
-                    Forgot Your Password?
-                  </div>
-
-                </form>
-
-                <div className='border-t border-2 border-grey-200'></div>
-                <div className='weight-500 text-10 whitespace-nowrap p-16 text-center'>
-                  Already have an account?{' '}
-                  <Link
-                    href={paths.signup}
-                    className='text-green-700'
-                    onClick={isLoginModal}
-                    target='_blank'
-                  >
-                    {' '}
-                    Sign Up
-                  </Link>
-                </div>
-              </motion.div>
+                <motion.div
+                  initial={{ scale: 0 }}
+                  animate={{ scale: 1 }}
+                  exit={{ scale: 0 }}
+                  transition={{ duration: 0.3 }}
+                  className="bg-white radius-8 w-95p l:w-100p max-w-500 md:max-w-981 py-30 md:py-10 md:pl-35 mx-auto flex shadow-30-30-4-0-\#00000040 h-fit"
+                  style={{ overflowY: 'scroll', overflow: 'auto' }}
+                  onClick={(e) => e.stopPropagation()}
+                >
+                  <AuthModals />
+                </motion.div>
+              </div>
             </div>
           </div>
         ) : (
@@ -102,7 +72,7 @@ const LoginModal = () => {
         )}
       </AnimatePresence>
     </>
-  )
-}
+  );
+};
 
-export default LoginModal
+export default LoginModal;

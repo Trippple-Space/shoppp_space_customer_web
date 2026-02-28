@@ -1,16 +1,48 @@
+export const dynamic = "force-dynamic";
+export const dynamicParams = true;
+
 import { storeService } from "@/modules/lib/utility/services/store.service";
-import StorefrontAbout from "@/modules/views/storefront/StorefrontAbout";
-import StorefrontLayout from "@/modules/views/storefront/StorefrontLayout";
 import React from "react";
 import type { Metadata } from 'next'
+import { StorefrontParent } from "@/modules/views/storefront/StorefrontParent";
+import { redirect } from "next/navigation";
+import config from "env";
+import UnknownVendor from "@/modules/views/unknown-routes/unknown-vendor";
+import endpoints from "@/modules/lib/utility/endpoints";
+import { buildEndpoint } from "@/modules/lib/utility/utility";
 
-export async function generateMetadata({
-  params
-}: {
-  params: { slug: string }
-}): Promise<Metadata> {
+async function getStore(slug: string) {
   try {
-    const store = await storeService.fetchStoreBySlug(params.slug, {});
+    const res = await fetch(config.API_HOST + "/" + buildEndpoint(endpoints.STORE, { slug }), {
+      cache: "no-store",
+    })
+
+    if (!res.ok) {
+      return null;
+    }
+
+    const text = await res.text();
+    if (!text) {
+      return null;
+    }
+
+    return JSON.parse(text);
+  } catch (e) {
+    console.error("Error fetching store:", e);
+    return null;
+  }
+}
+
+export async function generateMetadata({ params }: { params: { slug: string } }): Promise<Metadata> {
+  try {
+    const store = await getStore(params.slug);
+
+    if (!store?.id) {
+      return {
+        title: `Unknown Vendor - Asoebi Africa`,
+        description: `This store could not be found`
+      };
+    }
 
     return {
       title: `${store?.name} ${store?.heading ? `- ${store?.heading}` : ''}`,
@@ -47,13 +79,12 @@ export async function generateMetadata({
           store?.thumbnail || store?.meta?.heroImage1 || 'new-asoebi-logo.svg'
         ]
       }
-    }
+    };
   } catch (error) {
-    //console.error('Error generating metadata:', error)
     return {
-      title: 'Store Not Found - Asoebi Africa',
-      description: 'This store could not be found'
-    }
+      title: `Unknown Vendor - Asoebi Africa`,
+      description: `This store could not be found`
+    };
   }
 }
 
@@ -63,10 +94,16 @@ export default async function storeFront({
 }: {
   params: { slug: string };
 }) {
-  const store = await storeService.fetchStoreBySlug(params.slug, {});
+  const store = await getStore(params.slug);
+
+
+  if (!store) {
+  return <UnknownVendor /> 
+  }
+
   return (
-    <StorefrontLayout store={store}>
-      <StorefrontAbout store={store} />
-    </StorefrontLayout>
+    <>
+      <StorefrontParent store={store} />
+    </>
   );
 }

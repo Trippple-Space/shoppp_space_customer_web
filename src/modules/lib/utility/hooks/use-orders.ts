@@ -24,7 +24,7 @@ export const useOrders = (initialQuery: IQueryParams) => {
           }
      };
      
-     const fetchOrderById = async (id: number, query: IQueryParams) => {
+     const fetchOrderById = async (id: string, query: IQueryParams) => {
           setFetching(true);
           try {
                const order = await orderService.fetchOrderById(id, query);
@@ -39,7 +39,7 @@ export const useOrders = (initialQuery: IQueryParams) => {
      };
 
      const cancelOrderById = async (
-          id: number,
+          id: string,
           reasons: string,
           query: IQueryParams | any
      ) => {

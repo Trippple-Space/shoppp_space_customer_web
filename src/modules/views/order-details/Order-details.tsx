@@ -3,6 +3,7 @@
 import {
   formatNumberAsPrice,
   getCartItems,
+  getLastFiveIdChars,
   getStoreNames
 } from '@/modules/lib/utility/utility'
 import React, { useEffect, useState } from 'react'
@@ -25,7 +26,7 @@ import { useOrders } from '@/modules/lib/utility/hooks/use-orders'
 import { useCart } from '@/modules/lib/utility/hooks/use-cart'
 
 interface OrderDetailsProps {
-  orderId: number
+  orderId: string
 }
 
 const OrderDetails = ({ orderId }: OrderDetailsProps) => {
@@ -122,7 +123,7 @@ const OrderDetails = ({ orderId }: OrderDetailsProps) => {
                     >
                       <GoArrowLeft className='w-fit' />
                       <p className='weight-400 text-16'>
-                        Order #{singleOrder.id}
+                        Order #{getLastFiveIdChars(singleOrder.id)}
                       </p>
                     </div>
                     <div className='bg-white p-25 flex a-items-center space-between'>
@@ -134,12 +135,14 @@ const OrderDetails = ({ orderId }: OrderDetailsProps) => {
                           {orderReturnMessage(singleOrder.status)}
                         </p>
                       </div>
-                      <div className='bg-whitesmoke p-12 radius-12 w-60 h-60'>
+                      <div className='bg-whitesmoke p-12 radius-12 w-60 h-60 flex flex-col j-content-center a-items-center'>
                         <Image
                           type='icon'
                           src={getOrderImage(singleOrder?.status) || ''}
                           alt='placed order icon'
-                          className='w-fit'
+                          className='w-fit!'
+                          width={50}
+                          height={50}
                         />
                       </div>
                     </div>
@@ -202,7 +205,7 @@ const OrderDetails = ({ orderId }: OrderDetailsProps) => {
                       ) : (
                         <div className='flex w-100p a-items-center space-between'>
                           <p className='text-14 weight-500'>
-                            #{singleOrder.id}
+                            #{singleOrder.id.slice(-5)}
                           </p>
 
                           <button

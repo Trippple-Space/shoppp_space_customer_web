@@ -2,17 +2,24 @@ import { productService } from "../services/product.service";
 import { useCategoryStore } from "../store/categories.store";
 import { ICategory, ProductCategory } from "../types/product.interface";
 import { useEffect, useState, useRef } from "react";
+import { filtersToSearchParams } from "../utility";
+import { usePathname, useRouter, useSearchParams } from "next/navigation";
+import { useFilterStore } from "../store/filter.store";
 
 
 export const useCategories = ({
   type = "fabrics",
-  storeId = 0,
+  storeId = "",
   label = "GLOBAL"
 }: {
   type: "fabrics" | "wears" | null;
-  storeId?: number,
+  storeId?: string,
   label: "GLOBAL" | "STORE"
 }) => {
+  const router = useRouter();
+  const pathname = usePathname();
+   const searchParams = useSearchParams();
+
   const {
     categoriesCache,
     setCurrentCategoryList,
@@ -21,6 +28,8 @@ export const useCategories = ({
     selectedCategory,
     setSelectedCategory
   } = useCategoryStore()
+
+  const { allFilters } = useFilterStore();
 
   //console.log('START:', { type, storeId, label, len: currentCategoryList?.length })
   useEffect(() => {
@@ -40,13 +49,20 @@ export const useCategories = ({
 
   const cat = selectedCategory[`${type}_${label}_${storeId}`] ?? {}
   const setCat = (category: ICategory) => {
-    setSelectedCategory(type, label, storeId, category) 
+    setSelectedCategory(type, label, storeId, category)
+
+    const existingParams = new URLSearchParams(searchParams as any);
+
+    const params = filtersToSearchParams(allFilters, category, existingParams);
+    router.replace(`${pathname}?${params.toString()}`, {
+      scroll: false,
+    });
   }
 
-  return { 
+  return {
     // currentCategoryList: categoriesCache[`${type}_${label}_${storeId}`] ?? [], 
-    currentCategoryList, 
-    selectedCategory: (!!Object.keys(cat).length ? cat : { name: '', images: {}, description: '', filters: {}, subcategories: [] } as unknown as ICategory), 
+    currentCategoryList,
+    selectedCategory: (!!Object.keys(cat).length ? cat : { name: '', images: {}, description: '', filters: {}, subcategories: [] } as unknown as ICategory),
     setSelectedCategory: setCat
   };
 };

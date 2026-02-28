@@ -14,8 +14,8 @@ const LoginValidationSchema = Yup.object().shape({
     email: Yup.string()
         .trim()
         .test("test-username", "Enter Valid Email", (value) => {
-      
-          return value ? emailRegex.test(value) : false;
+
+            return value ? emailRegex.test(value) : false;
         })
         .required("Required"),
     password: Yup.string().min(8, "Minimum password length is 8 characters").max(20, "Max password length is 20 characters").required("Required"),
@@ -23,8 +23,8 @@ const LoginValidationSchema = Yup.object().shape({
 
 
 const formikLoginConfig = (
-    router: any, 
-    callback?: (user: User) => void, 
+    router: any,
+    callback?: (user: User) => void,
     isLoginModal?: any
 ): FormikConfig<LoginCredentials> => ({
     initialValues: {
@@ -36,9 +36,9 @@ const formikLoginConfig = (
             const { user } = await authService.signIn(values);
             toast.success(`Welcome ${user.profile.firstName}`);
             callback?.(user);
-            isLoginModal?.();
+            //isLoginModal?.();
         } catch (err: any) {
-            if (err.response?.data?.message === 'Your password has not been set' || err.response?.data?.message === 'Account not verified' ) {
+            if (err.response?.data?.message === 'Your password has not been set' || err.response?.data?.message === 'Account not verified' || err.response?.data?.message === 'Password not set') {
                 setErrors({ password: 'You have not completed sign up process.' });
             } else {
                 return
@@ -51,15 +51,18 @@ const formikLoginConfig = (
 });
 
 
-export const useLoginView = (isLoginModal?: any) => {
+export const useLoginView = (isLoginModal?: any, options?: { shouldRedirect?: boolean; onSuccess?: () => void }) => {
     const router = useRouter()
     const { isAuthenticated, authenticateUser } = useUserStore()
-  const formHandler = useFormik(formikLoginConfig(router, (user) => {
-    authenticateUser(user)
-      
-     }, isLoginModal))
 
-    useRouteGuard(!isLoginModal && isAuthenticated, paths.homepage)
+    const shouldRedirect = options?.shouldRedirect ?? true;
+
+    const formHandler = useFormik(formikLoginConfig(router, (user) => {
+        authenticateUser(user)
+        options?.onSuccess?.();
+    }, isLoginModal))
+
+    useRouteGuard(!isLoginModal && isAuthenticated && shouldRedirect, paths.homepage)
 
     return { formHandler }
 }

@@ -6,8 +6,8 @@ type SavedVariantStore = {
     savedVariants: SavedVariant[];
     fetching: boolean;
     fetchSavedVariants: () => void;
-    saveVariant: (productVariantId: number) => void;
-    removeSavedVariant: (productVariantId: number) => void;
+    saveVariant: (productVariantId: string) => void;
+    removeSavedVariant: (productVariantId: string) => void;
     clearSavedVariants: () => void;
     isLoginModal: () => void;
     showLoginModal: boolean;
@@ -26,12 +26,12 @@ export const useSavedVariantStore = create<SavedVariantStore>((set) => ({
             set({ fetching: false });
         }
     },
-    saveVariant: async (productVariantId: number) => {
+    saveVariant: async (productVariantId: string) => {
         await productService.saveVariant(productVariantId);
         const savedVariants = await productService.fetchSavedVariants();
         set({ savedVariants });
     },
-    removeSavedVariant: async (productVariantId: number) => {
+    removeSavedVariant: async (productVariantId: string) => {
         try {
             await productService.removeSavedVariant(productVariantId);
             const savedVariants = await productService.fetchSavedVariants();

@@ -23,6 +23,9 @@ export function middleware(request: NextRequest) {
   const subdomain = extractMerchantSubdomainFromHost(host);
   const reconstructedHost = host.replace(new RegExp(`^${subdomain}([.-])`), '')
 
+
+
+  console.log({ pathname, host, subdomain, reconstructedHost })
   /*
   console.log('Middleware details:', {
     currentUser,

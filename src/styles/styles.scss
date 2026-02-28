@@ -20,6 +20,7 @@
   body {
     max-width: 100vw;
     overflow-x: hidden;
+    font-family: "Inter", sans-serif;
   }
 
   a {
@@ -64,6 +65,32 @@
 
   .font-robotoMono {
     font-family: var(--font-robotoMono);
+  }
+
+  .font-robotoMono{
+    font-family: var(--font-robotoMono);
+  }
+
+  .font-dmSans{
+    font-family: var(--font-dmSans);
+  }
+
+  .font-volkhov{
+    font-family: var(--font-volkhov);
+  }
+
+  .font-poppins {
+    font-family: var(--font-poppins);
+  }
+
+  .font-youngSerif {
+    font-family: var(--font-youngSerif);
+  }
+
+  .truncate {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
   }
 
   .custom-progress {

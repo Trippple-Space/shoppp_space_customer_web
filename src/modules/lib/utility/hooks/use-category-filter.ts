@@ -9,7 +9,7 @@ export const useCategoryFilter = (
      const [selectedCategory, setSelectedCategory] =
           useState<ProductCategory | null>(null);
      const [categoryCount, setCategoryCount] = useState<{
-          [key: number]: number;
+          [key: string]: number;
      }>({});
 
      useEffect(() => {

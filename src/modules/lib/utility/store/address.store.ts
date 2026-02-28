@@ -13,14 +13,14 @@ interface AddressStore {
   openAddressModal: () => void;
   closeAddressModal: () => void;
   fetchAddresses: (userId: User["id"]) => Promise<void>;
-  selectAddress: (id: number) => void;
+  selectAddress: (id: string) => void;
   updateAddress: (
     userId: User["id"],
-    addressId: number,
+    addressId: string,
     updatedData: Partial<Address>
   ) => Promise<void>;
-  createAddress: (userId: number, newAddress: Address) => Promise<void>;
-  deleteAddress: (userId: number, addressId: Address["id"]) => Promise<void>;
+  createAddress: (userId: string, newAddress: Address) => Promise<Address | null>;
+  deleteAddress: (userId: string, addressId: Address["id"]) => Promise<void>;
 }
 
 const useAddressStore = create<AddressStore>((set) => ({
@@ -28,12 +28,12 @@ const useAddressStore = create<AddressStore>((set) => ({
   addresses: null,
   selectedAddressId: null,
   addressToUpdateId: null,
-  setAddressToUpdateId: (id: number | null) => set({ addressToUpdateId: id }),
+  setAddressToUpdateId: (id: string | null) => set({ addressToUpdateId: id }),
 
   openAddressModal: () => set({ isAddressModalOpen: true }),
   closeAddressModal: () => set({ isAddressModalOpen: false }),
 
-  fetchAddresses: async (userId: number) => {
+  fetchAddresses: async (userId: string) => {
     try {
       const fetchedAddresses = await addressService.fetchAddresses(userId);
 
@@ -48,13 +48,13 @@ const useAddressStore = create<AddressStore>((set) => ({
     }
   },
 
-  selectAddress: (id: number) => {
+  selectAddress: (id: string) => {
     set({ selectedAddressId: id });
   },
 
   updateAddress: async (
-    userId: number,
-    addressId: number,
+    userId: string,
+    addressId: string,
     updatedData: Partial<Address>
   ) => {
     try {
@@ -90,7 +90,7 @@ const useAddressStore = create<AddressStore>((set) => ({
     }
   },
 
-  createAddress: async (userId: number, newAddress: Address) => {
+  createAddress: async (userId: string, newAddress: Address) => {
     try {
       const address = await addressService.createAddress(userId, newAddress);
 
@@ -118,12 +118,14 @@ const useAddressStore = create<AddressStore>((set) => ({
 
         return { addresses: updatedAddresses };
       });
+      return address;
     } catch (error: any) {
       toast.error(error.response.data.detail.message?.[0]);
+      return null;
     }
   },
 
-  deleteAddress: async (userId: number, addressId: number) => {
+  deleteAddress: async (userId: string, addressId: string) => {
     try {
       await addressService.deleteAddress(userId, addressId);
       set((state) => ({

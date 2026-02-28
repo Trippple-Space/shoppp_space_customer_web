@@ -1,58 +1,59 @@
 import { ProductVariant } from "./product.interface";
 
 export interface Cart {
-    id: number;
-    userId: number;
-    subTotal: number;
-    total: number;
+  id: string;
+  userId: string;
+  subTotal: number;
+  total: number;
   cartItems: CartItem[]
   totalDiscountedPrice: number;
   discountValue: number;
   discountedPrice: number;
   totalDiscountValue: number;
   meta: any | null;
-  dateCreated: string;
+  createAt: string;
   lastUpdated: string;
-  storeGroups: StoreGroupResponse[];  
+  storeGroups: StoreGroupResponse[];
   systemDiscountCode: string;
   systemDiscountValue: number
 }
 
 export interface CartItem {
-    id: number,
-    productId: string,
-quantity: number;
-variant: ProductVariant;
-totalPrice: number;
-discountedPrice: number;
-dateCreated: string;
-discountValue: number;
-lastUpdated: string;
-meta: any | null;
-  
+  id: string,
+  productId: string,
+  quantity: number;
+  variant: ProductVariant;
+  totalPrice: number;
+  discountedPrice: number;
+  userConfigurations?: Record<string, any>;
+  createdAt: string;
+  discountValue: number;
+  lastUpdated: string;
+  meta: any | null;
+
 }
 
 export interface BuyAgain {
-    variantId: number
-    quantity: number
+  variantId: string
+  quantity: number
 }
 
 export interface StoreGroupResponse {
-  id: number;
+  id: string;
   storeSubTotal: number;
   storeTotal: number;
   storeDiscountedTotal: number;
   storeDiscountValue: number;
   discountCode: string | null;
   meta: any | null;
-  dateCreated: string;
+  createAt: string;
   lastUpdated: string;
   store: StoreResponse;
   items: CartItem[];
 }
 
 export interface StoreResponse {
-  id: number;
+  id: string;
   slug: string;
   type: string | null;
   status: string;
@@ -63,7 +64,7 @@ export interface StoreResponse {
   subHeading: string;
   categories: string[];
   meta: StoreMeta;
-  dateCreated: string;
+  createAt: string;
   lastUpdated: string;
 }
 

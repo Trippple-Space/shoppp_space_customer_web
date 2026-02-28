@@ -8,7 +8,7 @@ type RecentVariantStore = {
     fetching: boolean;
     fetchRecentVariants: () => void;
     fetchRecentSearched: () => void;
-    addVariant: (productVariantId: number, type: "view" | "search") => void;
+    addVariant: (productVariantId: string, type: "view" | "search") => void;
     clearRecentVariants: (type: "view" | "search") => void;
     isLoginModal: () => void;
     showLoginModal: boolean;
@@ -37,7 +37,7 @@ export const useRecentVariantStore = create<RecentVariantStore>((set) => ({
             set({ fetching: false });
         }
     },
-    addVariant: async (productVariantId: number, type: "view" | "search") => {
+    addVariant: async (productVariantId: string, type: "view" | "search") => {
         await productService.addRecentlyViewedVariants({
                   productVariantId: productVariantId,
                   type: type
