@@ -1,3 +1,7 @@
+/** Marketplace opens officially on this date; purchases disabled until then */
+export const MARKETPLACE_OPENS_DATE = 'March 30th';
+export const MARKETPLACE_PURCHASES_ENABLED = false;
+
 export const deliveryOptions = {
     standard: {
         title: 'Standard Delivery',
