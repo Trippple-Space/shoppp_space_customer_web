@@ -225,7 +225,7 @@ const Homepage = () => {
         )}
       </div>
       <div className="app-width">
-        <Collections storeId="0199c43e-1060-7180-acc2-71771c1944e7" />
+        <Collections storeId="global" />
 
         <CentralArena
           selectedCategory={selectedCategory}
