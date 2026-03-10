@@ -225,7 +225,9 @@ const Homepage = () => {
         )}
       </div>
       <div className="app-width">
-        <Collections storeId="global" />
+        {!searchParams.get('search') && (
+          <Collections storeId="global" />
+        )}
 
         <CentralArena
           selectedCategory={selectedCategory}

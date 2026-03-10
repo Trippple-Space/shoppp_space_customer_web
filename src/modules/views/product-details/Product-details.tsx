@@ -592,8 +592,8 @@ const ProductDetails = ({ product }: { product: Product }) => {
         <p className="text-24 weight-600">
           {formatNumberAsPrice(
             selectedVariant?.finalPrice ??
-              product.variants[0]?.finalPrice ??
-              product.price
+            product.variants[0]?.finalPrice ??
+            product.price
           )}
         </p>
 
@@ -681,6 +681,23 @@ const ProductDetails = ({ product }: { product: Product }) => {
     );
   };
 
+  const storeUrl = useMemo(() => {
+    if (typeof window === "undefined") return `/${product.store?.slug}`;
+
+    const host = window.location.hostname;
+    const slug = product.store?.slug;
+
+    if (host === "asoebi.africa") {
+      return `https://${slug}.asoebi.africa`;
+    }
+
+    if (host === "staging.asoebi.africa") {
+      return `https://staging.asoebi.africa/${slug}`;
+    }
+
+    return `/${slug}`;
+  }, [product.store?.slug]);
+
   return (
     <>
       <HomepageNavBar parent="" />
@@ -689,7 +706,8 @@ const ProductDetails = ({ product }: { product: Product }) => {
           <div className="flex a-items-center gap-5">
             <PiStorefront className="w-fit color-#00000066 w-15 h-15" />
             <Link
-              href={`/${product?.store?.slug}`}
+              href={storeUrl}
+              target="_blank"
               className="text-14 color-#00000066"
             >
               {product?.store?.name} /
@@ -857,22 +875,22 @@ const ProductDetails = ({ product }: { product: Product }) => {
               <p className="weight-400 text-28">
                 {isDiscounted
                   ? formatNumberAsPrice(
-                      selectedVariant?.discountedPrice ??
-                        product.variants[0]?.discountedPrice ??
-                        0
-                    )
+                    selectedVariant?.discountedPrice ??
+                    product.variants[0]?.discountedPrice ??
+                    0
+                  )
                   : formatNumberAsPrice(
-                      selectedVariant?.finalPrice ??
-                        product.variants[0]?.finalPrice ??
-                        0
-                    )}
+                    selectedVariant?.finalPrice ??
+                    product.variants[0]?.finalPrice ??
+                    0
+                  )}
               </p>
               {isDiscounted && (
                 <p className="weight-400 text-16 color-#00000099 line-through">
                   {formatNumberAsPrice(
                     selectedVariant?.finalPrice ??
-                      product.variants[0]?.finalPrice ??
-                      0
+                    product.variants[0]?.finalPrice ??
+                    0
                   )}
                 </p>
               )}
@@ -910,7 +928,7 @@ const ProductDetails = ({ product }: { product: Product }) => {
                       reviewStat={displayReviewStat}
                       loading={statsLoading}
                       slug={product.slug}
-                      /* color={selectedColor} */
+                    /* color={selectedColor} */
                     />
                   </div>
                 </div>
@@ -939,7 +957,8 @@ const ProductDetails = ({ product }: { product: Product }) => {
                     Seller by {product.store.name}
                   </p>
                   <Link
-                    href={`/${product?.store?.slug}`}
+                    href={storeUrl}
+                    target="_blank"
                     className="color-#00000099 text-14 border-b"
                   >
                     Visit store home
@@ -954,37 +973,37 @@ const ProductDetails = ({ product }: { product: Product }) => {
               </p>
               {allPropertiesWithSize?.color?.filter((v) => v.trim() !== '')
                 ?.length > 0 && (
-                <div>
-                  <p className="text-left text-12 weight-400 color-#000000B2 mb-12">
-                    Select color:
-                  </p>
-                  <div
-                    className="flex gap-6 a-items-center no-scrollbar"
-                    style={{ width: '100%', overflow: 'auto' }}
-                  >
-                    {allPropertiesWithSize.color?.map((color) => {
-                      const hex = colorMap[color.replaceAll(' ', '')];
-                      const active = activeFilters.color === color;
-                      const compatible = isOptionCompatible('color', color);
+                  <div>
+                    <p className="text-left text-12 weight-400 color-#000000B2 mb-12">
+                      Select color:
+                    </p>
+                    <div
+                      className="flex gap-6 a-items-center no-scrollbar"
+                      style={{ width: '100%', overflow: 'auto' }}
+                    >
+                      {allPropertiesWithSize.color?.map((color) => {
+                        const hex = colorMap[color.replaceAll(' ', '')];
+                        const active = activeFilters.color === color;
+                        const compatible = isOptionCompatible('color', color);
 
-                      return (
-                        <div
-                          key={color}
-                          onClick={() => toggleFilter('color', color)}
-                          className={classNames(
-                            'w-32 h-32 round border border-lightgray transition',
-                            {
-                              'border-3 border-#0B9378! border-solid': active,
-                              'opacity-40 cursor-not-allowed': !compatible,
-                            }
-                          )}
-                          style={{ background: hex || color }}
-                        />
-                      );
-                    })}
+                        return (
+                          <div
+                            key={color}
+                            onClick={() => toggleFilter('color', color)}
+                            className={classNames(
+                              'w-32 h-32 round border border-lightgray transition',
+                              {
+                                'border-3 border-#0B9378! border-solid': active,
+                                'opacity-40 cursor-not-allowed': !compatible,
+                              }
+                            )}
+                            style={{ background: hex || color }}
+                          />
+                        );
+                      })}
+                    </div>
                   </div>
-                </div>
-              )}
+                )}
 
               {Object.entries(allPropertiesWithSize).map(([prop, values]) => {
                 if (prop === 'color') return null;
@@ -1011,12 +1030,12 @@ const ProductDetails = ({ product }: { product: Product }) => {
                             className={cx(
                               'px-10 py-7 radius-6 border transition whitespace-nowrap text-12',
                               active &&
-                                'bg-#DEFFF9! color-#0B9378! border-#0B9378 border-3 border-solid',
+                              'bg-#DEFFF9! color-#0B9378! border-#0B9378 border-3 border-solid',
                               !active &&
-                                compatible &&
-                                'bg-white border-grey-300 hover:border-black',
+                              compatible &&
+                              'bg-white border-grey-300 hover:border-black',
                               !compatible &&
-                                'bg-grey-100 text-grey-400 border-grey-200 cursor-not-allowed'
+                              'bg-grey-100 text-grey-400 border-grey-200 cursor-not-allowed'
                             )}
                           >
                             {value}
@@ -1147,38 +1166,38 @@ const ProductDetails = ({ product }: { product: Product }) => {
               <div className="flex flex-col gap-28">
                 {allPropertiesWithSize?.color?.filter((v) => v.trim() !== '')
                   ?.length > 0 && (
-                  <div>
-                    <p className="text-left text-12 weight-400 color-#000000B2 mb-12">
-                      Select color:
-                    </p>
-                    <div
-                      className="flex gap-6 a-items-center no-scrollbar"
-                      style={{ width: '100%', overflow: 'auto' }}
-                    >
-                      {allPropertiesWithSize.color?.map((color) => {
-                        const hex = colorMap[color.replaceAll(' ', '')];
-                        const active = activeFilters.color === color;
-                        const compatible = isOptionCompatible('color', color);
+                    <div>
+                      <p className="text-left text-12 weight-400 color-#000000B2 mb-12">
+                        Select color:
+                      </p>
+                      <div
+                        className="flex gap-6 a-items-center no-scrollbar"
+                        style={{ width: '100%', overflow: 'auto' }}
+                      >
+                        {allPropertiesWithSize.color?.map((color) => {
+                          const hex = colorMap[color.replaceAll(' ', '')];
+                          const active = activeFilters.color === color;
+                          const compatible = isOptionCompatible('color', color);
 
-                        return (
-                          <div
-                            key={color}
-                            onClick={() => toggleFilter('color', color)}
-                            className={classNames(
-                              'w-36 min-w-36 h-36 flex round border border-lightgray transition',
-                              {
-                                'border-3 border-#0B9378! border-solid w-34 min-w-34 h-34 flex':
-                                  active,
-                                'opacity-40 cursor-not-allowed': !compatible,
-                              }
-                            )}
-                            style={{ background: hex || color }}
-                          />
-                        );
-                      })}
+                          return (
+                            <div
+                              key={color}
+                              onClick={() => toggleFilter('color', color)}
+                              className={classNames(
+                                'w-36 min-w-36 h-36 flex round border border-lightgray transition',
+                                {
+                                  'border-3 border-#0B9378! border-solid w-34 min-w-34 h-34 flex':
+                                    active,
+                                  'opacity-40 cursor-not-allowed': !compatible,
+                                }
+                              )}
+                              style={{ background: hex || color }}
+                            />
+                          );
+                        })}
+                      </div>
                     </div>
-                  </div>
-                )}
+                  )}
                 {Object.entries(allPropertiesWithSize).map(([prop, values]) => {
                   if (prop === 'color') return null;
 
@@ -1205,12 +1224,12 @@ const ProductDetails = ({ product }: { product: Product }) => {
                               className={cx(
                                 'px-15 py-8 radius-6 border transition text-12 whitespace-nowrap weight-400',
                                 active &&
-                                  'bg-#DEFFF9! color-#0B9378! border-3 border-#0B9378 border-solid',
+                                'bg-#DEFFF9! color-#0B9378! border-3 border-#0B9378 border-solid',
                                 !active &&
-                                  compatible &&
-                                  'bg-white border-grey-300 hover:border-black',
+                                compatible &&
+                                'bg-white border-grey-300 hover:border-black',
                                 !compatible &&
-                                  'bg-grey-100 text-grey-400 border-grey-200 cursor-not-allowed'
+                                'bg-grey-100 text-grey-400 border-grey-200 cursor-not-allowed'
                               )}
                             >
                               {value}
