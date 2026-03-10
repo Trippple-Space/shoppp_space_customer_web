@@ -67,11 +67,28 @@ const ProductTile: FC<IProductTile> = ({
   const { groupedData, availableColors, productImages, allProperties } = product
     ? useTransformProduct(product)
     : {
-        groupedData: {},
-        availableColors: [],
-        productImages: [],
-        allProperties: {},
-      };
+      groupedData: {},
+      availableColors: [],
+      productImages: [],
+      allProperties: {},
+    };
+
+  const storeUrl = useMemo(() => {
+    if (typeof window === "undefined") return `/${product.store?.slug}`;
+
+    const host = window.location.hostname;
+    const slug = product.store?.slug;
+
+    if (host === "asoebi.africa") {
+      return `https://${slug}.asoebi.africa`;
+    }
+
+    if (host === "staging.asoebi.africa") {
+      return `https://staging.asoebi.africa/${slug}`;
+    }
+
+    return `/${slug}`;
+  }, [product.store?.slug]);
 
   const allPropertiesWithSize = useMemo(() => {
     const props: Record<string, string[]> = { ...allProperties };
@@ -303,9 +320,9 @@ const ProductTile: FC<IProductTile> = ({
   const isOutOfStock = selectedVariant?.status === 'OUT_OF_STOCK';
   const isDiscounted =
     new Date(product?.discount?.activeStartDate) <=
-      new Date(new Date().setHours(new Date().getHours() + 1)) &&
+    new Date(new Date().setHours(new Date().getHours() + 1)) &&
     new Date(new Date().setHours(new Date().getHours() + 1)) <=
-      new Date(product?.discount?.activeEndDate);
+    new Date(product?.discount?.activeEndDate);
 
   const hasProperties = useMemo(() => {
     if (!selectedVariant) return false;
@@ -526,9 +543,8 @@ const ProductTile: FC<IProductTile> = ({
               )}
               <Image
                 ref={imgRef}
-                className={`absolute w-full h-full a-self-center g|object-fit:cover pointer ${
-                  isOutOfStock && 'out-of-stock'
-                }`}
+                className={`absolute w-full h-full a-self-center g|object-fit:cover pointer ${isOutOfStock && 'out-of-stock'
+                  }`}
                 src={selectedImage}
                 alt="product-image"
                 width={10000}
@@ -537,9 +553,8 @@ const ProductTile: FC<IProductTile> = ({
             </div>
           ) : (
             <VideoSrc
-              className={`absolute w-full h-full a-self-center g|object-fit:cover pointer ${
-                isOutOfStock && 'out-of-stock'
-              }`}
+              className={`absolute w-full h-full a-self-center g|object-fit:cover pointer ${isOutOfStock && 'out-of-stock'
+                }`}
               src={selectedImage}
             />
           )}
@@ -796,7 +811,7 @@ const ProductTile: FC<IProductTile> = ({
         </div>
         <div className="flex a-items-center gap-10 l:gap-18 text-dimgrey py-6 border-y border-#00000014">
           <Link
-            href={`/${product.store?.slug}`}
+            href={storeUrl}
             target="_blank"
             className="flex gap-6 a-items-center color-#00000099 capitalize"
           >
@@ -821,8 +836,8 @@ const ProductTile: FC<IProductTile> = ({
               {isDiscounted
                 ? formatNumberAsPrice(selectedVariant?.discountedPrice)
                 : formatNumberAsPrice(
-                    selectedVariant?.finalPrice ?? product.finalPrice ?? 0
-                  )}
+                  selectedVariant?.finalPrice ?? product.finalPrice ?? 0
+                )}
             </p>
             {isDiscounted && (
               <p className="md:text-12 text-10 weight-400 md:line-height-20 color-#00000099 line-through">
@@ -944,9 +959,9 @@ const ProductTile: FC<IProductTile> = ({
           variant={
             isToAddProperties
               ? {
-                  ...selectedVariant,
-                  product,
-                }
+                ...selectedVariant,
+                product,
+              }
               : undefined
           }
         />
