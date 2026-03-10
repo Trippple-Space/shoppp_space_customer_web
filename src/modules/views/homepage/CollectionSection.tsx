@@ -38,8 +38,12 @@ const CollectionSection = ({ collection, index }: Props) => {
     label: 'GLOBAL',
   });
   const { allFilters } = useFilterStore();
+  
   const { products, loading, query, updateHomePageFilter } = useProducts(
     {
+      filters: { type, status: { In: "ACTIVE,OUT_OF_STOCK" }, channel: "ASOEBI_STORE" }, order: {
+        priorityScore: "DESC"
+      },
       pagination: { page: 1, limit: 10 },
     },
     'infinite',
