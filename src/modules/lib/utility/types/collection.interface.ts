@@ -1,3 +1,5 @@
+import { Product } from "./product.interface";
+
 export interface ICollectionMeta {
     featured?: boolean;
     season?: string;
@@ -28,6 +30,7 @@ export interface ICollection {
     productCount: number;
     createdAt: string;
     updatedAt: string;
+    products?: Product[];
 }
 
 export interface CollectionResponse {
