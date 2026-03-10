@@ -10,10 +10,10 @@ const Collections = ({ storeId }: { storeId: string }) => {
   /*  const scrollRef1 = useRef<HTMLDivElement>(null);
   const scrollRef2 = useRef<HTMLDivElement>(null); */
 
-  if (loadingCollections) return null; {/* <p>Loading collections...</p> */}
+  if (loadingCollections) return null;
 
   return (
-    <div className="px-24 sm:px-40 md:px-60 l:px-100 xl:px-200 flex flex-col gap-20">
+    <div className="md:mt-32 mt-24 w-100p flex flex-col md:gap-24 gap-20">
       {/* {(!!newArrivals?.length || !!dealsForYou.length) && (
           <div className="px-24 sm:px-40 md:px-60 l:px-100 xl:px-200 flex flex-col gap-20">
             {!!newArrivals?.length && (
