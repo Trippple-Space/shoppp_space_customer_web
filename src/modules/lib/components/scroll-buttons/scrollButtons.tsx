@@ -37,7 +37,7 @@ const ScrollButtons: FC<IScrollButtons> = ({
   const checkOverflowAndPosition = useCallback(() => {
     const categoriesWidth = screen.width >= 576 ? 90 : 71;
     const storeFrontCats = screen.width >= 576 ? 125 : 96;
-    const storeProductsWidth = screen.width >= 992 ? 250 : 242;
+    const storeProductsWidth = screen.width >= 992 ? 300 : 242;
 
     const scrollContainerWidth =
       page === "home"

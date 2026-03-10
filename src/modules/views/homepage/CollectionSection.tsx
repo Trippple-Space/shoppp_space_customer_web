@@ -1,11 +1,9 @@
 import {
-  IQueryParams,
   useProducts,
 } from '@/modules/lib/utility/hooks/use-products';
 import ProductTile from '@/modules/lib/components/product-tile/ProductTile';
 import ScrollButtons from '@/modules/lib/components/scroll-buttons/scrollButtons';
 import Link from 'next/link';
-import { MdChevronRight } from 'react-icons/md';
 import { useEffect, useRef } from 'react';
 import { ICollection } from '@/modules/lib/utility/types/collection.interface';
 import { useFilterStore } from '@/modules/lib/utility/store/filter.store';
@@ -13,14 +11,25 @@ import { useCategories } from '@/modules/lib/utility/hooks/use-categories';
 import { usePathname } from 'next/navigation';
 import { LuArrowRight } from 'react-icons/lu';
 
+const sectionThemes = [
+  { bg: "#FEFBE8", button: "#FACE33", text: 'black' }, // yellow
+  { bg: "#FFF3F1", button: "#D4280C", text: 'white' }, // red
+  { bg: "#EDF8FF", button: "#1677FF", text: 'black' }, // blue
+  { bg: "#F4F0FF", button: "#7B61FF", text: 'black' }, // purple
+  { bg: "#ECFFF6", button: "#00B96B", text: 'black' }, // green
+];
+
 interface Props {
   collection: ICollection;
+  index: number;
 }
 
-const CollectionSection = ({ collection }: Props) => {
+const CollectionSection = ({ collection, index }: Props) => {
   const scrollRef1 = useRef<HTMLDivElement>(null);
 
   const pathname = usePathname();
+
+  const theme = sectionThemes[index % sectionThemes.length];
   const type = pathname.includes('wears') ? 'wears' : 'fabrics';
 
   const { selectedCategory, setSelectedCategory } = useCategories({
@@ -56,11 +65,10 @@ const CollectionSection = ({ collection }: Props) => {
 
   if (loading || !products.length) return null;
 
-  //yelow shades: #FEFBE8, #FACE33, red shades: #FFF3F1, #D4280C, blue shades: #EDF8FF, #1677FF
-
   return (
     <section
-      className={`bg-#FEFBE8 radius-16 sm:p-24 p-20 flex flex-col md:gap-24 sm:gap-20 gap-24 w-full relative`}
+      style={{ background: theme.bg }}
+      className={`radius-16 sm:p-24 p-20 flex flex-col md:gap-24 sm:gap-20 gap-24 w-full relative`}
     >
       <div className="flex flex-row j-content-between a-items-center gap-24">
         <div className='flex flex-col gap-2'>
@@ -72,12 +80,12 @@ const CollectionSection = ({ collection }: Props) => {
           </p>
         </div>
 
-        {products?.length > 4 && (
+        {products?.length > 9 && (
           <Link
             href={'/'}
             className=""
           >
-            <span className='w-36 h-36 bg-#FACE33 radius-999 flex flex-col a-items-center j-content-center'>
+            <span style={{ background: theme.button, color: theme.text }} className='w-36 h-36 radius-999 flex flex-col a-items-center j-content-center'>
               <LuArrowRight className='w-20 h-20' />
             </span>
 
