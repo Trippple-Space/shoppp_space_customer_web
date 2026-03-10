@@ -37,7 +37,7 @@ const ScrollButtons: FC<IScrollButtons> = ({
   const checkOverflowAndPosition = useCallback(() => {
     const categoriesWidth = screen.width >= 576 ? 90 : 71;
     const storeFrontCats = screen.width >= 576 ? 125 : 96;
-    const storeProductsWidth = screen.width >= 992 ? 250 : 242;
+    const storeProductsWidth = screen.width >= 992 ? 300 : 242;
 
     const scrollContainerWidth =
       page === "home"
@@ -86,7 +86,7 @@ const ScrollButtons: FC<IScrollButtons> = ({
                 component === "categories"
                   ? "t-10p l--10  px-6 py-6 l:bg-white bg-#F5F5F5 sm:flex hidden"
                   : "t-40p l-0 p-12 bg-#FFFFFFCC md:flex hidden"
-              } absolute l:border border-#00000014 pointer round j-content-center items-center margin-left:12px;`}
+              } absolute z-1 l:border border-#00000014 pointer round j-content-center items-center margin-left:12px;`}
             >
               <HiOutlineChevronLeft
                 className={
@@ -103,7 +103,7 @@ const ScrollButtons: FC<IScrollButtons> = ({
                 component === "categories"
                   ? "t-10p r--10  px-6 py-6 l:bg-white bg-#F5F5F5 sm:flex hidden"
                   : "t-40p r-0 p-12 bg-#FFFFFFCC md:flex hidden"
-              } absolute l:border border-#00000014 pointer round j-content-center items-center margin-left:12px;`}
+              } absolute z-1 l:border border-#00000014 pointer round j-content-center items-center margin-left:12px;`}
             >
               <HiOutlineChevronRight
                 className={
