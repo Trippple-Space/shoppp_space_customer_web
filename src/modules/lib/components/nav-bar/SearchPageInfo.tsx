@@ -32,7 +32,7 @@ const SearchPageInfo = ({ searchTerm, selectedCollection, onClearSearch }: Searc
       {
         searchTerm && !selectedCollection &&
         <div className="flex flex-col gap-8 a-items-center j-content-center">
-          <h5 className="sm:text-32 text-20 weight-600">{searchTerm}</h5>
+          <h5 className="sm:text-32 text-20 weight-600 capitalize">{searchTerm}</h5>
           <p className="sm:text-16 text-14 weight-400">
             Browse all {searchTerm} results
           </p>
