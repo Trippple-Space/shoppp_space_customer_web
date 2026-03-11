@@ -59,6 +59,7 @@ const CollectionSection = ({ collection, index, selectedCollection, setSelectedC
     },
     'infinite',
     collection.slug,
+    selectedCategory.name === 'All' ? '' : selectedCategory.name.toLowerCase(),
   );
 
   useEffect(() => {

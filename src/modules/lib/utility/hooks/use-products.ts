@@ -35,7 +35,7 @@ export interface IQueryParams {
 
 export type PaginationType = "infinite" | "buttons";
 
-export const useProducts = (initialQuery: IQueryParams, paginationType: PaginationType = "infinite", collectionSlug?: string) => {
+export const useProducts = (initialQuery: IQueryParams, paginationType: PaginationType = "infinite", collectionSlug?: string, currentTags?: string) => {
   const [query, setQuery] = useState<IQueryParams>(initialQuery);
   const [loading, setLoading] = useState(true);
   const [fetchingError, setFetchingError] = useState<Error | null>(null);
@@ -48,6 +48,14 @@ export const useProducts = (initialQuery: IQueryParams, paginationType: Paginati
     productCacheIdempotencyTracker,
     clearProductsCacheByKey,
   } = useProductStore();
+
+  useEffect(() => {
+    if (currentTags === undefined) return;
+    setQuery((prev) => ({
+      ...prev,
+      allFilters: { ...prev.allFilters, tags: currentTags } as IFilters,
+    }));
+  }, [currentTags]);
 
   const setFilters = (filters: IProductFilters) => {
     setQuery((prevQuery) => ({
