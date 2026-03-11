@@ -11,7 +11,8 @@ import { useFilterStore } from '@/modules/lib/utility/store/filter.store';
 import { LocationFilter } from './LocationFilter';
 import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 import { filtersToSearchParams } from '@/modules/lib/utility/utility';
-import { useCategoryStore } from '@/modules/lib/utility/store/categories.store';
+import { useStoreCategoryNavView } from '@/modules/lib/utility/hooks/views/use-category-nav-view';
+
 interface ModalProps {
   modalOpen: boolean;
   handleCloseModal: () => void;
@@ -28,7 +29,7 @@ const FilterModal: React.FC<ModalProps> = ({
   const searchParams = useSearchParams();
 
   const { resetFilters, allFilters } = useFilterStore();
-  const { selectedCategory } = useCategoryStore();
+  const { selectedCategory } = useStoreCategoryNavView();
 
   const [sortBy, setSortBy] = useState<string>('');
   const [rating, setRating] = useState<string>('');

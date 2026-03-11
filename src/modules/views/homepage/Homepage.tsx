@@ -57,6 +57,7 @@ const Homepage = ({ initialCollections = [] }: { initialCollections?: ICollectio
 
   useEffect(() => {
     const categoryFromUrl = searchParams.get('category');
+    const hasSearchOrCollection = searchParams.get('search') || searchParams.get('collection');
 
     if (categoryFromUrl) {
       setSelectedCategory({
@@ -64,7 +65,7 @@ const Homepage = ({ initialCollections = [] }: { initialCollections?: ICollectio
         name: categoryFromUrl.toLowerCase(),
         filters: { name: categoryFromUrl.toLowerCase() },
       });
-    } else {
+    } else if (hasSearchOrCollection) {
       setSelectedCategory(emptyCategory);
     }
   }, [searchParams, categories]);
