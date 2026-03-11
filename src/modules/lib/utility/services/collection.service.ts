@@ -17,7 +17,9 @@ class CollectionService {
                 params: {
                     filters: type ? { type } : {},
                     pagination: { limit: 100, page: 1 },
+                    includeProducts: false
                 },
+            
             }
         );
 

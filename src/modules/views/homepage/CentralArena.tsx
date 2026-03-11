@@ -11,7 +11,7 @@ import Button from '@/modules/lib/components/button/Button';
 import { useSearchParams } from 'next/navigation';
 import NoResultMessage from '@/modules/lib/components/error-messages/no-result-found';
 
-const CentralArena = ({ selectedCategory, setSelectedCategory }: any) => {
+const CentralArena = ({ selectedCategory, setSelectedCategory, hasCollections }: any) => {
   const searchParams = useSearchParams();
 
   const {
@@ -23,6 +23,7 @@ const CentralArena = ({ selectedCategory, setSelectedCategory }: any) => {
     refetch,
     setSearch,
     search,
+    setCollection,
   } = useProductListView();
   const { saveVariant, savedVariants, removeSavedVariant } = useSavedVariant();
   const [openReviewId, setOpenReviewId] = useState<string | null>(null);
@@ -30,8 +31,10 @@ const CentralArena = ({ selectedCategory, setSelectedCategory }: any) => {
 
   useEffect(() => {
     const searchFromUrl = searchParams.get('search');
+    const collectionFromUrl = searchParams.get('collection');
 
     setSearch(searchFromUrl || '');
+    setCollection(collectionFromUrl || '');
   }, [searchParams]);
 
   useEffect(() => {
@@ -55,7 +58,7 @@ const CentralArena = ({ selectedCategory, setSelectedCategory }: any) => {
       <section className="md:mt-32 mt-24 w-100p mb-150 pb-90">
         <div className="flex space-between text-20 weight-300 capitalize">
           <h3 className="text-16 md:text-20 weight-600 md:line-height-28 line-height-24 color-#000000E0">
-            Products
+            {hasCollections ? 'Products' : 'Products'}
           </h3>
         </div>
 

@@ -392,6 +392,8 @@
 @layer lo { .\@lo\:placeholder\:text-14::placeholder { font-size: 14px; } } 
 .bg-\#FACE33 { background-color: #FACE33; } 
 .bg-\#FFFFFF4D { background-color: #FFFFFF4D; } 
+.t-64 { top: 64px; } 
+.gap-6 { gap: 6px; } 
 [class~='g|inset:0px']{inset:0px} 
 .z-index-1, .z-1 { z-index: 1; } 
 .h-0 { height: 0px; } 
@@ -427,7 +429,6 @@
 .text-13\.5 { font-size: 13.5px; } 
 .line-height-16 { line-height: 16px; } 
 .color-red { color: red; } 
-.gap-6 { gap: 6px; } 
 .p-4 { padding: 4px; } 
 @layer base {.radius-100 { border-radius: 100px; } } 
 .w-150 { width: 150px; } 
@@ -536,7 +537,6 @@
 .w-60 { width: 60px; } 
 .border-0\.5 { border-width: 0.5px; } 
 .border-\#000000E0 { border-color: #000000E0; } 
-.t-64 { top: 64px; } 
 [class~='g|box-shadow:0px|_|8px|_|16px|_|#494F5E1F;']{box-shadow:0px 8px 16px #494F5E1F;} 
 .text-grey-700 { color: #6B6662; } 
 .px-48 { padding-left: 48px; padding-right: 48px; } 
@@ -1190,7 +1190,9 @@
 @media only screen and (min-width: 768px) { .md\:gap-4 { gap: 4px; } } 
 @media only screen and (min-width: 768px) { .md\:text-16 { font-size: 16px; } } 
 @media only screen and (min-width: 768px) { .md\:line-height-24 { line-height: 24px; } } 
-@media only screen and (min-width: 768px) { .md\:text-15 { font-size: 15px; } } 
+@media only screen and (min-width: 768px) { .md\:t-66\.5 { top: 66.5px; } } 
+@media only screen and (min-width: 768px) { .md\:text-14 { font-size: 14px; } } 
+@media only screen and (min-width: 768px) { .md\:text-26 { font-size: 26px; } } 
 @media only screen and (min-width: 768px) { .md\:max-w-981 { max-width: 981px; } } 
 @media only screen and (min-width: 768px) { .md\:py-10 { padding-top: 10px; padding-bottom: 10px; } } 
 @media only screen and (min-width: 768px) { .md\:pl-35 { padding-left: 35px; } } 
@@ -1307,6 +1309,9 @@
 @media only screen and (min-width: 992px) { .lg\:text-16 { font-size: 16px; } } 
 @media only screen and (min-width: 992px) { .lg\:text-14 { font-size: 14px; } } 
 @media only screen and (min-width: 992px) { .lg\:px-80 { padding-left: 80px; padding-right: 80px; } } 
+@media only screen and (min-width: 992px) { .lg\:t-69\.7 { top: 69.7px; } } 
+@media only screen and (min-width: 992px) { .lg\:grid-2-cols-1fr { grid-template-columns: repeat(2, 1fr); } } 
+@media only screen and (min-width: 992px) { .lg\:grid-col-span-2 { grid-column: span 2; } } 
 
 @media only screen and (min-width: 992px) { .l\:block {    display: block;  } } 
 @media only screen and (min-width: 992px) { .l\:hidden {    display: none;  } } 
