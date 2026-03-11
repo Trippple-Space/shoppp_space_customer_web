@@ -22,7 +22,7 @@ export const useProductListView = () => {
   });
   const { allFilters } = useFilterStore();
 
-  const { products, setPagination, setSearch, query, updateHomePageFilter, loading, fetchingError, refetch } = useProducts({
+  const { products, setPagination, setSearch, setCollection, query, updateHomePageFilter, loading, fetchingError, refetch } = useProducts({
     filters: { type, status: { In: "ACTIVE,OUT_OF_STOCK" }, channel: "ASOEBI_STORE" }, order: {
       priorityScore: "DESC"
     },
@@ -56,7 +56,8 @@ export const useProductListView = () => {
     setSelectedCategory,
     selectedCategory,
     setSearch,
-    search: query.search,   
+    search: query.search,  
+    setCollection, 
     ref,
     refetch
   };

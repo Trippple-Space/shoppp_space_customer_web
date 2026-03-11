@@ -23,12 +23,17 @@ const FabricsCategoryNav = ({
   const currentQuery = Object.fromEntries(searchParams.entries());
 
   const [searchTerm, setSearchTerm] = useState('');
+  const [selectedCollection, setSelectedCollection] = useState<string>('');
 
   useEffect(() => {
     const search = searchParams.get('search');
+    const collection = searchParams.get('collection');
 
     if (search && search !== searchTerm) {
       setSearchTerm(search);
+    }
+    if (collection && collection !== selectedCollection) {
+      setSelectedCollection(collection);
     }
   }, [searchParams]);
 
@@ -110,13 +115,16 @@ const FabricsCategoryNav = ({
           </div>
         </div>
       )}
-      {searchTerm ? (
+      {searchTerm || selectedCollection ? (
         <SearchPageInfo
           searchTerm={searchTerm}
+          selectedCollection={selectedCollection}
           onClearSearch={() => {
             const params = filtersToSearchParams(allFilters, selectedCategory);
             params.delete('search');
+            params.delete('collection')
             setSearchTerm('')
+            setSelectedCollection('')
             router.replace(`${path}?${params.toString()}`);
           }}
         />
