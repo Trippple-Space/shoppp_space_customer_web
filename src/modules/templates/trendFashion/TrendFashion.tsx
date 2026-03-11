@@ -29,7 +29,8 @@ const TrendFashion: FC<TrendFashionProps> = ({
   loading,
   page,
   setPage,
-  totalPages
+  totalPages,
+  initialCollections = []
 }) => {
   return (
     <div className="trend-body font-inter">
@@ -181,7 +182,7 @@ const TrendFashion: FC<TrendFashionProps> = ({
           </section>
         )}
 
-      <Collections storeId={store.id} />
+      <Collections storeId={store.id} initialCollections={initialCollections} />
 
       <section className="exclusive" ref={productsRef}>
         <h2 className="exclusive-header">

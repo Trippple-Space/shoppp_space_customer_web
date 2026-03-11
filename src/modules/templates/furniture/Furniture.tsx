@@ -35,6 +35,7 @@ const Furniture: FC<FurnitureProps> = (props) => {
     page,
     setPage,
     totalPages,
+    initialCollections = [],
   } = props;
 
   return (
@@ -308,7 +309,7 @@ const Furniture: FC<FurnitureProps> = (props) => {
                     </nav>
                 </div> */}
 
-        <Collections storeId={store.id} />
+        <Collections storeId={store.id} initialCollections={initialCollections} />
 
         <section id="popular-section" ref={productsRef}>
           <div id="popular-headings" className="mb-30">

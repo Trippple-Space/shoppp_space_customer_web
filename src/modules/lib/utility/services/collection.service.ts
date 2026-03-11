@@ -17,7 +17,7 @@ class CollectionService {
                 params: {
                     filters: type ? { type } : {},
                     pagination: { limit: 100, page: 1 },
-                    includeProducts: false
+                    includeProducts: true
                 },
             
             }
@@ -29,19 +29,19 @@ class CollectionService {
     }
 
     private getCachedCollections(key: string): ICollection[] | null {
-        const cached = localStorage.getItem(key);
+        const cached = sessionStorage.getItem(key);
         if (!cached) return null;
 
         const parsed = JSON.parse(cached);
         if (Date.now() - parsed.timestamp > this.CACHE_EXPIRY) {
-            localStorage.removeItem(key);
+            sessionStorage.removeItem(key);
             return null;
         }
         return parsed.data as ICollection[];
     }
 
     private cacheCollections(key: string, data: ICollection[]) {
-        localStorage.setItem(
+        sessionStorage.setItem(
             key,
             JSON.stringify({ data, timestamp: Date.now() })
         );

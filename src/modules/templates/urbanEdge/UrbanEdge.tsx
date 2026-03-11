@@ -33,7 +33,8 @@ const UrbanEdge: FC<UrbanEdgeProps> = ({
   loading,
   page,
   setPage,
-  totalPages
+  totalPages,
+  initialCollections = [],
 }) => {
   return (
     <>
@@ -137,7 +138,7 @@ const UrbanEdge: FC<UrbanEdgeProps> = ({
           </section>
         )}
 
-        <Collections storeId={store.id} />
+        <Collections storeId={store.id} initialCollections={initialCollections} />
 
         <section className="py-30 sm:py-40 md:py-50 l:py-60" ref={productsRef}>
           <div className="urbanEdge_product-headings">

@@ -7,6 +7,7 @@ import {
   ProductCategory,
 } from '@/modules/lib/utility/types/product.interface';
 import { Store } from '@/modules/lib/utility/types/store.interface';
+import { ICollection } from '@/modules/lib/utility/types/collection.interface';
 import { FC, ReactNode, useState } from 'react';
 import StoreProductsList from './StoreProductsList';
 import Link from 'next/link';
@@ -21,7 +22,8 @@ const StorefrontLayout: FC<{
   page: number;
   setPage: React.Dispatch<React.SetStateAction<number>>;
   totalPages: number;
-}> = ({ store, children, products, loading, page, setPage, totalPages }) => {
+  initialCollections?: ICollection[];
+}> = ({ store, children, products, loading, page, setPage, totalPages, initialCollections = [] }) => {
   const [selectedCategory, setSelectedCategory] =
     useState<ProductCategory | null>(null);
   const { categories } = useStoreCategoryNavView({ storeId: store.id });
@@ -42,7 +44,7 @@ const StorefrontLayout: FC<{
           </div>
         )}
 
-        <Collections storeId={store.id} />
+        <Collections storeId={store.id} initialCollections={initialCollections} />
 
         <section className="flex flex-col sm:gap-24 gap-20 mx-24 sm:mx-40 md:mx-60 l:mx-100 xl:mx-200">
           <div className="flex flex-row j-content-between a-items-center">

@@ -35,6 +35,7 @@ const SimpleFlow: FC<SimpleFlowProps> = ({
   page,
   setPage,
   totalPages,
+  initialCollections = [],
 }) => {
   return (
     <>
@@ -181,7 +182,7 @@ const SimpleFlow: FC<SimpleFlowProps> = ({
             </section>
           )}
 
-        <Collections storeId={store.id} />
+        <Collections storeId={store.id} initialCollections={initialCollections} />
 
         <section className="simpleFlow__bottomSection" ref={productsRef}>
           <div className="simpleFlow_bottomSectionWrapper">

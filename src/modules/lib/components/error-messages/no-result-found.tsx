@@ -20,7 +20,7 @@ const NoResultMessage = ({
         </h1>
       )}
       {textContent && (
-        <p className="text-14 weight-400 line-height-22 color-#00000073 w-320 px-12 py-5">
+        <p className="text-14 weight-400 line-height-22 color-#00000073 px-12 py-5">
           {textContent}
         </p>
       )}
