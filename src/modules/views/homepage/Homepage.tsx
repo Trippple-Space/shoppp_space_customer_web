@@ -47,16 +47,26 @@ const Homepage = ({ initialCollections = [] }: { initialCollections?: ICollectio
       setLocation(parsed.location.selectedState);
   }, [searchParams]);
 
+  const emptyCategory = {
+    name: '',
+    images: { icon: '', picture: '' },
+    description: '',
+    filters: {},
+    subcategories: [],
+  };
+
   useEffect(() => {
     const categoryFromUrl = searchParams.get('category');
 
-    if (!categoryFromUrl) return;
-
-    setSelectedCategory({
-      ...selectedCategory,
-      name: categoryFromUrl.toLowerCase(),
-      filters: { name: categoryFromUrl.toLowerCase() },
-    });
+    if (categoryFromUrl) {
+      setSelectedCategory({
+        ...selectedCategory,
+        name: categoryFromUrl.toLowerCase(),
+        filters: { name: categoryFromUrl.toLowerCase() },
+      });
+    } else {
+      setSelectedCategory(emptyCategory);
+    }
   }, [searchParams, categories]);
 
   const hasPrice = !!allFilters.price.min || !!allFilters.price.max;
