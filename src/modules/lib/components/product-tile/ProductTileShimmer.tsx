@@ -4,7 +4,7 @@ import React, { FC } from 'react';
 
 const ProductTileShimmer: FC = () => {
   return (
-    <div className="l:w-290 md:w-250 sm:w-220 w-150 mt-30 l:mt-20 flex flex-col gap-14 flex-shrink-0">
+    <div className="l:w-290 md:w-250 sm:w-220 w-150 flex flex-col gap-12 flex-shrink-0">
       <div
         className="ratio-1 radius-10 l:radius-15 overflow-hidden w-full pulsing-multi-color-bg"
         aria-hidden

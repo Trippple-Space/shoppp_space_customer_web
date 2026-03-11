@@ -190,6 +190,7 @@ export const useProducts = (initialQuery: IQueryParams, paginationType: Paginati
   useEffect(() => {
     if (paginationType !== "infinite") return;
     if (!query.pagination) return;
+    if (collectionSlug) return;
 
     if (
       (productsCache[cacheKey]?.data?.length ?? 0) <
