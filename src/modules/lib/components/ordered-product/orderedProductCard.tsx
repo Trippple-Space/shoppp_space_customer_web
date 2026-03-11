@@ -2,6 +2,7 @@ import {
   checkMediaType,
   formatNumberAsPrice,
   getCartItems,
+  getClosestColorName,
 } from '@/modules/lib/utility/utility';
 import React from 'react';
 import Image from '../image/Image';
@@ -51,7 +52,7 @@ function orderedProductCard({ orderedProducts }: any) {
                       ) : null}
                       {item.variant?.properties?.color && (
                         <p className="color-#0000008C text-14">
-                          Color: {item.variant?.properties?.color}
+                          Color: {item?.variant?.properties?.color[0] === '#' ? getClosestColorName(item?.variant?.properties?.color) : item?.variant?.properties?.color}
                         </p>
                       )}
                       {item?.variant?.properties &&

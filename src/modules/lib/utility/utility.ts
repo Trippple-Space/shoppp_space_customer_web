@@ -3,6 +3,7 @@ import { StoreGroupResponse } from "./types/cart.interface";
 import { NewUser, User } from "./types/user.interface";
 import { IFilters } from "./types/product.interface";
 import { ContactFormData } from "./types/contact-us.interface";
+import colors from '@/modules/lib/utility/json-data/colors.json';
 
 export type ImageSrcFolder = "icons" | "logos" | "images";
 export const getImageDir = (folder: ImageSrcFolder, object: string) => {
@@ -588,3 +589,43 @@ export const buildContactSlackMessage = (data: ContactFormData) => ({
 ]
 */
 
+const hexToRgb = (hex: string) =>  {
+  const cleaned = hex.replace('#', '')
+
+  const bigint = parseInt(cleaned, 16)
+
+  return {
+    r: (bigint >> 16) & 255,
+    g: (bigint >> 8) & 255,
+    b: bigint & 255
+  }
+}
+
+const colorDistance = (c1: any, c2: any) => {
+  return Math.sqrt(
+    Math.pow(c1.r - c2.r, 2) +
+    Math.pow(c1.g - c2.g, 2) +
+    Math.pow(c1.b - c2.b, 2)
+  )
+}
+
+export const getClosestColorName = (hex: string) => {
+  if (!hex) return hex
+
+  const target = hexToRgb(hex)
+
+  let closestColor = null
+  let minDistance = Infinity
+
+  for (const color of colors) {
+    const rgb = hexToRgb(color.hex)
+    const distance = colorDistance(target, rgb)
+
+    if (distance < minDistance) {
+      minDistance = distance
+      closestColor = color
+    }
+  }
+
+  return closestColor?.name ?? hex
+}
