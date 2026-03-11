@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { collectionService } from "../services/collection.service";
 import { ICollection, CollectionType } from "../types/collection.interface";
 
@@ -11,25 +11,39 @@ interface UseCollectionsProps {
 export const useCollections = ({ type = null, storeId = "", initialCollections = [] }: UseCollectionsProps) => {
     const [collections, setCollections] = useState<ICollection[]>(initialCollections);
     const [loading, setLoading] = useState(false);
+    const [error, setError] = useState<boolean>(false);
+    const [retryCount, setRetryCount] = useState(0);
+
+    const fetchCollections = useCallback(() => {
+        if (!storeId) return;
+
+        setError(false);
+        setLoading(true);
+
+        collectionService
+            .fetchStoreCollections(storeId, type)
+            .then((data) => {
+                setCollections(data);
+            })
+            .catch(() => {
+                setError(true);
+                setCollections([]);
+            })
+            .finally(() => {
+                setLoading(false);
+            });
+    }, [storeId, type]);
 
     useEffect(() => {
         if (!storeId) return;
-        // Use server-passed data only; skip client fetch when initialCollections were provided
         if (initialCollections.length > 0) return;
 
-        let mounted = true;
-        setLoading(true);
+        fetchCollections();
+    }, [storeId, type, retryCount, fetchCollections]);
 
-        collectionService.fetchStoreCollections(storeId, type)
-            .then((data) => {
-                if (mounted) setCollections(data);
-            })
-            .finally(() => {
-                if (mounted) setLoading(false);
-            });
+    const retry = useCallback(() => {
+        setRetryCount((c) => c + 1);
+    }, []);
 
-        return () => { mounted = false; };
-    }, [storeId, type]);
-
-    return { collections, loading };
+    return { collections, loading, error, retry };
 };

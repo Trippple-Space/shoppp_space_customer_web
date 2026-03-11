@@ -808,6 +808,12 @@
 .grid-col-span-5 { grid-column: span 5; } 
 .w-100p\! { width: 100% !important; } 
 .max-w-100 { max-width: 100px; } 
+.py-48 { padding-top: 48px; padding-bottom: 48px; } 
+.w-56 { width: 56px; } 
+.h-56 { height: 56px; } 
+.h-44 { height: 44px; } 
+.min-w-120 { min-width: 120px; } 
+.hover\:opacity-90:hover { opacity: 90%; } 
 .w-36 { width: 36px; } 
 .mt--30 { margin-top: -30px; } 
 @layer base {.radius-16 { border-radius: 16px; } } 

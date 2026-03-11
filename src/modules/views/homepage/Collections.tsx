@@ -2,9 +2,10 @@ import { useCollections } from '@/modules/lib/utility/hooks/use-collections';
 import CollectionSection from './CollectionSection';
 import { useEffect, useState } from 'react';
 import { ICollection } from '@/modules/lib/utility/types/collection.interface';
+import { TbAlertCircle, TbRefresh } from 'react-icons/tb';
 
 const Collections = ({ storeId, initialCollections = [], setHasCollections }: { storeId: string; initialCollections?: ICollection[]; setHasCollections?: (hasCollections: boolean) => void }) => {
-  const { collections, loading: loadingCollections } = useCollections({
+  const { collections, loading: loadingCollections, error, retry } = useCollections({
     storeId,
     type: null,
     initialCollections,
@@ -19,6 +20,38 @@ const Collections = ({ storeId, initialCollections = [], setHasCollections }: { 
   }, [collections])
 
   if (loadingCollections) return null;
+
+  if (error && collections.length === 0) {
+    return (
+      <div className="md:mt-32 mt-24 w-100p flex flex-col">
+        <div
+          className="flex flex-col items-center justify-center gap-20 py-48 px-24 rounded-16 border border-[#E8E8E8] bg-[#FAFAFA]"
+          role="alert"
+          aria-live="polite"
+        >
+          <span className="flex items-center justify-center w-56 h-56 rounded-full bg-[#FFF3F1] text-[#D4280C]">
+            <TbAlertCircle className="w-32 h-32" aria-hidden />
+          </span>
+          <div className="flex flex-col items-center gap-8 text-center max-w-400">
+            <h3 className="text-18 weight-600 color-#000000E0">
+              Couldn’t load collections
+            </h3>
+            <p className="text-14 weight-400 color-#00000099">
+              Something went wrong. Please try again.
+            </p>
+          </div>
+          <button
+            type="button"
+            onClick={retry}
+            className="flex items-center justify-center gap-8 h-44 min-w-120 px-24 rounded-999 bg-#1677FF color-white text-14 weight-500 hover:opacity-90 transition-opacity"
+          >
+            <TbRefresh className="w-18 h-18" aria-hidden />
+            Try again
+          </button>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="md:mt-32 mt-24 w-100p flex flex-col">
