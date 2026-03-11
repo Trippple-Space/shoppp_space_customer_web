@@ -680,7 +680,6 @@
 [class~='g|will-change:transform']{will-change:transform} 
 .j-items-center { justify-items: center; } 
 .flex-shrink-0 { flex-shrink: 0; } 
-.bg-\#E5E7EB { background-color: #E5E7EB; } 
 .max-w-180 { max-width: 180px; } 
 .max-w-120 { max-width: 120px; } 
 .h-8 { height: 8px; } 
@@ -716,6 +715,7 @@
 .h-21 { height: 21px; } 
 .min-w-20 { min-width: 20px; } 
 .w-40p { width: 40%; } 
+.bg-\#E5E7EB { background-color: #E5E7EB; } 
 .weight-200 { font-weight: 200; } 
 .mb--5 { margin-bottom: -5px; } 
 [class~='g|transform:translate(-50%);']{transform:translate(-50%);} 
