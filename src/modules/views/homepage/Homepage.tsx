@@ -249,7 +249,6 @@ const Homepage = ({ initialCollections = [] }: { initialCollections?: ICollectio
           selectedCategory={selectedCategory}
           setSelectedCategory={setSelectedCategory}
           hasCollections={hasCollections}
-          collectionsLoaded={collectionsLoaded}
         />
       </div>
       <Footer />

@@ -158,7 +158,16 @@ export const useProducts = (initialQuery: IQueryParams, paginationType: Paginati
     }
 
     //infinite scroll
-    if (!productsCache[cacheKey] || productsCache[cacheKey].data.length === 0) {
+    const cached = productsCache[cacheKey];
+    const hasCachedData = cached?.data?.length > 0;
+
+    if (hasCachedData) {
+      setLoading(false);
+      setFetchingError(null);
+      return;
+    }
+
+    if (!cached || cached.data.length === 0) {
       setLoading(true);
       setFetchingError(null);
       productService
