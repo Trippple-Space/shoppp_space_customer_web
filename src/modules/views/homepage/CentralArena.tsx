@@ -11,7 +11,17 @@ import Button from '@/modules/lib/components/button/Button';
 import { useSearchParams } from 'next/navigation';
 import NoResultMessage from '@/modules/lib/components/error-messages/no-result-found';
 
-const CentralArena = ({ selectedCategory, setSelectedCategory, hasCollections }: any) => {
+const CentralArena = ({
+  selectedCategory,
+  setSelectedCategory,
+  hasCollections,
+  collectionsLoaded = true,
+}: {
+  selectedCategory: any;
+  setSelectedCategory: any;
+  hasCollections: boolean;
+  collectionsLoaded?: boolean;
+}) => {
   const searchParams = useSearchParams();
 
   const {
@@ -62,11 +72,17 @@ const CentralArena = ({ selectedCategory, setSelectedCategory, hasCollections }:
           </h3>
         </div>
 
+        {collectionsLoaded ? (
+          <div className="w-100p flex j-content-center mt-10">
+            <DotsLoader />
+          </div>
+        ) : null}
+
         {products.length === 0 && loading ? (
           <div className="w-100p flex j-content-center mt-10">
             <DotsLoader />
           </div>
-        ) : products.length ? (
+        ) : products.length && !collectionsLoaded ? (
           <div className="grid xxlgrid-5-cols xl:grid-4-cols-1fr s:grid-3-cols-1fr grid-2-cols-1fr flex-wrap gap-18 s:gap-20 md:gap-24 w-full relative">
             {products.map((product, index) => {
               if (renderedIds.has(product.id)) return null;

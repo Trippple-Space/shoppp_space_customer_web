@@ -29,7 +29,13 @@ const Homepage = ({ initialCollections = [] }: { initialCollections?: ICollectio
   const { setRate, setPrice, setSort, setLocation, allFilters, resetFilters } =
     useFilterStore();
 
-  const [hasCollections, setHasCollections] = useState(false)
+  const [hasCollections, setHasCollections] = useState(false);
+  const showCollectionsSection = !searchParams.get('search') && !searchParams.get('collection');
+  const [collectionsLoaded, setCollectionsLoaded] = useState(!showCollectionsSection);
+
+  useEffect(() => {
+    if (!showCollectionsSection) setCollectionsLoaded(true);
+  }, [showCollectionsSection]);
 
   useEffect(() => {
     const parsed = searchParamsToFilters(searchParams);
@@ -230,14 +236,20 @@ const Homepage = ({ initialCollections = [] }: { initialCollections?: ICollectio
         )}
       </div>
       <div className="app-width">
-        {!searchParams.get('search') && !searchParams.get('collection') && (
-          <Collections storeId="global" initialCollections={initialCollections} setHasCollections={setHasCollections} />
+        {showCollectionsSection && (
+          <Collections
+            storeId="global"
+            initialCollections={initialCollections}
+            setHasCollections={setHasCollections}
+            onCollectionsLoaded={() => setCollectionsLoaded(true)}
+          />
         )}
 
         <CentralArena
           selectedCategory={selectedCategory}
           setSelectedCategory={setSelectedCategory}
           hasCollections={hasCollections}
+          collectionsLoaded={collectionsLoaded}
         />
       </div>
       <Footer />

@@ -95,6 +95,8 @@ const CollectionSection = ({ collection, index, selectedCollection, setSelectedC
   const showEmptyState = !productsLoading && !hasError && products.length === 0;
   const showProducts = !productsLoading && !hasError && products.length > 0;
 
+  console.log({products})
+
   if (collection.productCount === 0) return null;
 
   return (

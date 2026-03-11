@@ -4,7 +4,17 @@ import { useEffect, useState } from 'react';
 import { ICollection } from '@/modules/lib/utility/types/collection.interface';
 import { TbAlertCircle, TbRefresh } from 'react-icons/tb';
 
-const Collections = ({ storeId, initialCollections = [], setHasCollections }: { storeId: string; initialCollections?: ICollection[]; setHasCollections?: (hasCollections: boolean) => void }) => {
+const Collections = ({
+  storeId,
+  initialCollections = [],
+  setHasCollections,
+  onCollectionsLoaded,
+}: {
+  storeId: string;
+  initialCollections?: ICollection[];
+  setHasCollections?: (hasCollections: boolean) => void;
+  onCollectionsLoaded?: () => void;
+}) => {
   const { collections, loading: loadingCollections, error, retry } = useCollections({
     storeId,
     type: null,
@@ -13,13 +23,26 @@ const Collections = ({ storeId, initialCollections = [], setHasCollections }: { 
 
   const [selectedCollection, setSelectedCollection] = useState<string | null>(null);
 
-  console.log({ collections })
-
   useEffect(() => {
     if (collections.length > 0) {
-      setHasCollections?.(true)
+      setHasCollections?.(true);
     }
-  }, [collections])
+  }, [collections]);
+
+  useEffect(() => {
+    if (!loadingCollections && onCollectionsLoaded) {
+      let rafId1: number | undefined;
+      const rafId2 = requestAnimationFrame(() => {
+        rafId1 = requestAnimationFrame(() => {
+          onCollectionsLoaded();
+        });
+      });
+      return () => {
+        cancelAnimationFrame(rafId2);
+        if (rafId1 != null) cancelAnimationFrame(rafId1);
+      };
+    }
+  }, [loadingCollections, onCollectionsLoaded]);
 
   if (loadingCollections) return null;
 
