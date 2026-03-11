@@ -1,11 +1,13 @@
 import { useCollections } from '@/modules/lib/utility/hooks/use-collections';
 import CollectionSection from './CollectionSection';
 import { useEffect, useState } from 'react';
+import { ICollection } from '@/modules/lib/utility/types/collection.interface';
 
-const Collections = ({ storeId, setHasCollections }: { storeId: string, setHasCollections?: (hasCollections: boolean) => void }) => {
+const Collections = ({ storeId, initialCollections = [], setHasCollections }: { storeId: string; initialCollections?: ICollection[]; setHasCollections?: (hasCollections: boolean) => void }) => {
   const { collections, loading: loadingCollections } = useCollections({
     storeId,
     type: null,
+    initialCollections,
   });
 
   const [selectedCollection, setSelectedCollection] = useState<string | null>(null);

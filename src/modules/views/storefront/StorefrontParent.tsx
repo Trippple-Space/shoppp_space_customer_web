@@ -6,6 +6,7 @@ import React, { FC, useEffect, useRef, useState } from 'react';
 import StorefrontLayout from './StorefrontLayout';
 import StorefrontAbout from './StorefrontAbout';
 import { Store } from '@/modules/lib/utility/types/store.interface';
+import { ICollection } from '@/modules/lib/utility/types/collection.interface';
 import {
   Product,
   ProductCategory,
@@ -25,7 +26,7 @@ import useUserStore from '@/modules/lib/utility/store/user.store';
 import { useGetIPAddress } from '@/modules/lib/utility/hooks/use-get-ip-address';
 import { useLogVisit } from '@/modules/lib/utility/hooks/use-log-visit';
 
-export const StorefrontParent: FC<{ store: Store }> = ({ store }) => {
+export const StorefrontParent: FC<{ store: Store; initialCollections?: ICollection[] }> = ({ store, initialCollections = [] }) => {
   const [selectedCategory, setSelectedCategory] =
     useState<ProductCategory | null>(null);
   const {
@@ -281,6 +282,7 @@ export const StorefrontParent: FC<{ store: Store }> = ({ store }) => {
             page={page}
             setPage={setPage}
             totalPages={totalPages}
+            initialCollections={initialCollections}
           >
             <StorefrontAbout store={store} />
           </StorefrontLayout>
@@ -293,6 +295,7 @@ export const StorefrontParent: FC<{ store: Store }> = ({ store }) => {
           page={page}
           setPage={setPage}
           totalPages={totalPages}
+          initialCollections={initialCollections}
         >
           <StorefrontAbout store={store} />
         </StorefrontLayout>

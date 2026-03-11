@@ -119,7 +119,7 @@ const CollectionSection = ({ collection, index, selectedCollection, setSelectedC
             } whitespace-nowrap gap-14`}
         >
           {products?.length ? (
-            products?.map((product, i) => (
+            products?.slice(0, 10).map((product, i) => (
               <div
                 key={i}
                 className="l:w-290 md:w-250 sm:w-220 w-150 l:mt--20 mt--30"

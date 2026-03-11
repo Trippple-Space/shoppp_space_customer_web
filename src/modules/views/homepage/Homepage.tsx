@@ -17,8 +17,9 @@ import {
 import { TbX } from 'react-icons/tb';
 import { IFilters } from '@/modules/lib/utility/types/product.interface';
 import Collections from './Collections';
+import { ICollection } from '@/modules/lib/utility/types/collection.interface';
 
-const Homepage = () => {
+const Homepage = ({ initialCollections = [] }: { initialCollections?: ICollection[] }) => {
   const searchParams = useSearchParams();
   const router = useRouter();
   const pathname = usePathname();
@@ -230,7 +231,7 @@ const Homepage = () => {
       </div>
       <div className="app-width">
         {!searchParams.get('search') && !searchParams.get('collection') && (
-          <Collections storeId="global" setHasCollections={setHasCollections} />
+          <Collections storeId="global" initialCollections={initialCollections} setHasCollections={setHasCollections} />
         )}
 
         <CentralArena
