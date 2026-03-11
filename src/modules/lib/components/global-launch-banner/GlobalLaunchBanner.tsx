@@ -6,8 +6,11 @@ import { useEffect, useState } from 'react';
 const BANNER_HEIGHT = 44;
 const SCROLL_THRESHOLD = 10;
 
+const TARGET_DATE = new Date('2026-03-30T00:00:00');
+
 export default function GlobalLaunchBanner() {
   const [showBanner, setShowBanner] = useState(false);
+  const [timeLeft, setTimeLeft] = useState('');
 
   useEffect(() => {
     const updateVisibility = () => {
@@ -16,14 +19,43 @@ export default function GlobalLaunchBanner() {
 
     updateVisibility();
     window.addEventListener('scroll', updateVisibility, { passive: true });
+
     return () => window.removeEventListener('scroll', updateVisibility);
+  }, []);
+
+  useEffect(() => {
+    const updateCountdown = () => {
+      const now = new Date().getTime();
+      const distance = TARGET_DATE.getTime() - now;
+
+      if (distance <= 0) {
+        setTimeLeft('00 : 00 : 00 : 00');
+        return;
+      }
+
+      const days = Math.floor(distance / (1000 * 60 * 60 * 24));
+      const hours = Math.floor((distance / (1000 * 60 * 60)) % 24);
+      const minutes = Math.floor((distance / (1000 * 60)) % 60);
+      const seconds = Math.floor((distance / 1000) % 60);
+
+      const format = (n: number) => n.toString().padStart(2, '0');
+
+      setTimeLeft(
+        `${format(days)} : ${format(hours)} : ${format(minutes)} : ${format(seconds)}`
+      );
+    };
+
+    updateCountdown();
+    const interval = setInterval(updateCountdown, 1000);
+
+    return () => clearInterval(interval);
   }, []);
 
   if (!showBanner) return null;
 
   return (
     <div
-      className="fixed top-0 left-0 right-0 z-[99999] flex items-center justify-center px-16 py-10 text-center text-14 leading-20 font-medium md:text-15 md:leading-22 animate-in slide-in-from-bottom-2 duration-200"
+      className="fixed lg:t-69.7 md:t-66.5 t-64 l-0 r-0 flex flex-col items-center justify-center gap-6 px-16 py-10 text-center animate-in slide-in-from-bottom-2 duration-200"
       style={{
         background: '#fedf94',
         color: 'black',
@@ -33,10 +65,14 @@ export default function GlobalLaunchBanner() {
       }}
       role="banner"
     >
-      <span>
+      <span className="text-13 md:text-14 font-medium">
         Asoebi Africa marketplace opens officially by {MARKETPLACE_OPENS_DATE}.
         You might not be able to make purchases yet. Feel free to join our beta testers and explore the site.
       </span>
+
+      <div className="text-20 md:text-26 font-bold tracking-wider">
+        {timeLeft}
+      </div>
     </div>
   );
 }
