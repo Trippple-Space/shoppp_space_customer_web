@@ -2,7 +2,7 @@ import { useCollections } from '@/modules/lib/utility/hooks/use-collections';
 import CollectionSection from './CollectionSection';
 import { useEffect, useState } from 'react';
 
-const Collections = ({ storeId, setHasCollections }: { storeId: string, setHasCollections: (hasCollections: boolean) => void }) => {
+const Collections = ({ storeId, setHasCollections }: { storeId: string, setHasCollections?: (hasCollections: boolean) => void }) => {
   const { collections, loading: loadingCollections } = useCollections({
     storeId,
     type: null,
@@ -12,7 +12,7 @@ const Collections = ({ storeId, setHasCollections }: { storeId: string, setHasCo
 
   useEffect(() => {
     if (collections.length > 0) {
-      setHasCollections(true)
+      setHasCollections?.(true)
     }
   }, [collections])
 
