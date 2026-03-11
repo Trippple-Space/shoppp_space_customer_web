@@ -4,6 +4,7 @@ import {
 import ProductTile from '@/modules/lib/components/product-tile/ProductTile';
 import ProductTileShimmer from '@/modules/lib/components/product-tile/ProductTileShimmer';
 import ScrollButtons from '@/modules/lib/components/scroll-buttons/scrollButtons';
+import NoResultMessage from '@/modules/lib/components/error-messages/no-result-found';
 import { useEffect, useRef } from 'react';
 import { ICollection } from '@/modules/lib/utility/types/collection.interface';
 import { useFilterStore } from '@/modules/lib/utility/store/filter.store';
@@ -89,8 +90,10 @@ const CollectionSection = ({ collection, index, selectedCollection, setSelectedC
 
   const shimmerCount = Math.min(collection.productCount ?? 10, 10);
   const hasError = !!fetchingError;
-  const showShimmers = loading || (!hasError && products.length === 0);
-  const showProducts = !loading && !hasError && products.length > 0;
+  const productsLoading = loading;
+  const showShimmers = productsLoading;
+  const showEmptyState = !productsLoading && !hasError && products.length === 0;
+  const showProducts = !productsLoading && !hasError && products.length > 0;
 
   if (collection.productCount === 0) return null;
 
@@ -126,7 +129,7 @@ const CollectionSection = ({ collection, index, selectedCollection, setSelectedC
       </div>
       <div className="scroll-x no-scrollbar" ref={scrollRef1}>
         <div
-          className={`flex h-fit ${(showShimmers ? shimmerCount > 0 : showProducts) ? 'w-fit' : ''
+          className={`flex h-fit ${showShimmers && shimmerCount > 0 ? 'w-fit' : showProducts ? 'w-fit' : showEmptyState ? 'w-100p a-items-center j-content-center' : ''
             } whitespace-nowrap gap-14`}
         >
           {hasError ? (
@@ -159,6 +162,13 @@ const CollectionSection = ({ collection, index, selectedCollection, setSelectedC
             Array.from({ length: shimmerCount }, (_, i) => (
               <ProductTileShimmer key={`shimmer-${collection.id}-${i}`} />
             ))
+          ) : showEmptyState ? (
+            <div className="flex flex-col a-items-center j-content-center min-w-280 py-32">
+              <NoResultMessage
+                contentTitle="No products in this collection"
+                textContent="There are no products to show for this collection right now."
+              />
+            </div>
           ) : showProducts ? (
             products?.slice(0, 10).map((product, i) => (
               <div
@@ -171,12 +181,16 @@ const CollectionSection = ({ collection, index, selectedCollection, setSelectedC
           ) : null}
         </div>
       </div>
-      <ScrollButtons
-        scrollRef={scrollRef1}
-        page={'productScroll'}
-        scrollLength={hasError ? 1 : showShimmers ? shimmerCount : products.length}
-        component={'products'}
-      />
+      {
+        products.length > 0 && (
+          <ScrollButtons
+            scrollRef={scrollRef1}
+            page={'productScroll'}
+            scrollLength={hasError ? 0 : showShimmers ? shimmerCount : showEmptyState ? 0 : products.length}
+            component={'products'}
+          />
+        )
+      }
     </section>
   );
 };

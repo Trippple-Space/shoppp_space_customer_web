@@ -348,7 +348,6 @@
 .line-height-40 { line-height: 40px; } 
 .my-15 { margin-top: 15px; margin-bottom: 15px; } 
 .color-\#00000073 { color: #00000073; } 
-.w-320 { width: 320px; } 
 .p-20 { padding: 20px; } 
 @layer base {.radius-10 { border-radius: 10px; } } 
 .z-index-2, .z-2 { z-index: 2; } 
@@ -827,6 +826,7 @@
 .h-48 { height: 48px; } 
 .bg-\#FFF3F1 { background-color: #FFF3F1; } 
 .min-w-100 { min-width: 100px; } 
+.py-32 { padding-top: 32px; padding-bottom: 32px; } 
 .mt--30 { margin-top: -30px; } 
 @layer base {.radius-16 { border-radius: 16px; } } 
 .border-whitesmoke { border-color: #F5F5F5; } 
