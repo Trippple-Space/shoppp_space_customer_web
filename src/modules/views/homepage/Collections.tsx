@@ -13,6 +13,8 @@ const Collections = ({ storeId, initialCollections = [], setHasCollections }: { 
 
   const [selectedCollection, setSelectedCollection] = useState<string | null>(null);
 
+  console.log({ collections })
+
   useEffect(() => {
     if (collections.length > 0) {
       setHasCollections?.(true)
