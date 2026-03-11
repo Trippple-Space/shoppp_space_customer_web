@@ -44,12 +44,17 @@ const CollectionSection = ({ collection, index, selectedCollection, setSelectedC
   });
   const { allFilters } = useFilterStore();
 
+  const initialFiltersForCollection = {
+    ...allFilters,
+    tags: selectedCategory.name === 'All' ? '' : selectedCategory.name.toLowerCase(),
+  };
+
   const { products, loading, query, updateHomePageFilter, fetchingError, refetch } = useProducts(
     {
-      filters: { type, status: { In: "ACTIVE,OUT_OF_STOCK" }, channel: "ASOEBI_STORE" }, order: {
-        priorityScore: "DESC"
-      },
+      filters: { type, status: { In: "ACTIVE,OUT_OF_STOCK" }, channel: "ASOEBI_STORE" },
+      order: { priorityScore: "DESC" },
       pagination: { page: 1, limit: 11 },
+      allFilters: initialFiltersForCollection,
     },
     'infinite',
     collection.slug,

@@ -123,7 +123,8 @@ export const useProducts = (initialQuery: IQueryParams, paginationType: Paginati
     JSON.stringify(query.filters ?? {}) +
     JSON.stringify(query.order ?? {}) +
     JSON.stringify(query.allFilters ?? {}) +
-    (query.search ?? "") + (query.collection ?? "");
+    (query.search ?? "") +
+    (query.collection ?? "");
 
   const cacheKey =
     paginationType === "infinite"
