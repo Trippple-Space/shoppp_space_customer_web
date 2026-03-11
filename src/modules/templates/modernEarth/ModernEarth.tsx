@@ -59,6 +59,7 @@ const ModernEarth: React.FC<ModernEarthProps> = (props) => {
     description,
     primaryBtnText,
     offers,
+    initialCollections = [],
   } = props;
 
   return (
@@ -254,7 +255,7 @@ const ModernEarth: React.FC<ModernEarthProps> = (props) => {
         />
 
         <section>
-          <Collections storeId={store.id} />
+          <Collections storeId={store.id} initialCollections={initialCollections} />
         </section>
 
         <section

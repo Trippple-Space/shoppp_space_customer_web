@@ -39,6 +39,7 @@ const ModernLuxe: FC<ModernLuxeProps> = (props) => {
     setPage,
     totalPages,
     offers,
+    initialCollections = [],
   } = props;
 
   return (
@@ -238,7 +239,7 @@ const ModernLuxe: FC<ModernLuxeProps> = (props) => {
         </div>
       </section>
 
-      <Collections storeId={store.id} />
+      <Collections storeId={store.id} initialCollections={initialCollections} />
 
       <section
         className="py-30 sm:py-40 md:py-50 l:py-60 px-20 sm:px-30 m:px-40 max-w-1440 mx-auto"

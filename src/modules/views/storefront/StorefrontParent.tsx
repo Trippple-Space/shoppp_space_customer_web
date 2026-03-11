@@ -195,6 +195,7 @@ export const StorefrontParent: FC<{ store: Store; initialCollections?: ICollecti
     page,
     setPage,
     totalPages,
+    initialCollections,
   };
 
   return (
