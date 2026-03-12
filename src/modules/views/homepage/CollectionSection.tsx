@@ -14,12 +14,12 @@ import { LuArrowRight } from 'react-icons/lu';
 import { TbAlertCircle, TbRefresh } from 'react-icons/tb';
 import { filtersToSearchParams } from '@/modules/lib/utility/utility';
 
-const sectionThemes = [
-  { bg: "#FEFBE8", button: "#FACE33", text: 'black' }, // yellow
-  { bg: "#FFF3F1", button: "#D4280C", text: 'white' }, // red
-  { bg: "#EDF8FF", button: "#1677FF", text: 'white' }, // blue
-  { bg: "#F4F0FF", button: "#7B61FF", text: 'white' }, // purple
-  { bg: "#ECFFF6", button: "#00B96B", text: 'white' }, // green
+const redTheme = { bg: "#FFF3F1", button: "#D4280C", text: 'white' as const };
+const otherThemes = [
+  { bg: "#FEFBE8", button: "#FACE33", text: 'black' as const }, // yellow
+  { bg: "#EDF8FF", button: "#1677FF", text: 'white' as const }, // blue
+  { bg: "#F4F0FF", button: "#7B61FF", text: 'white' as const }, // purple
+  { bg: "#ECFFF6", button: "#00B96B", text: 'white' as const }, // green
 ];
 
 interface Props {
@@ -35,7 +35,9 @@ const CollectionSection = ({ collection, index, selectedCollection, setSelectedC
   const pathname = usePathname();
   const router = useRouter();
 
-  const theme = sectionThemes[index % sectionThemes.length];
+  const nameLower = (collection.name ?? '').toLowerCase();
+  const isLimited = /limited|limit/.test(nameLower);
+  const theme = isLimited ? redTheme : otherThemes[index % otherThemes.length];
   const type = pathname.includes('wears') ? 'wears' : 'fabrics';
 
   const { selectedCategory, setSelectedCategory } = useCategories({
