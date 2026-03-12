@@ -11,7 +11,7 @@ import Button from '@/modules/lib/components/button/Button';
 import { useSearchParams } from 'next/navigation';
 import NoResultMessage from '@/modules/lib/components/error-messages/no-result-found';
 
-const CentralArena = ({ selectedCategory, setSelectedCategory, hasCollections }: any) => {
+const CentralArena = ({ selectedCategory, setSelectedCategory, hasCollections, collectionsLoaded }: any) => {
   const searchParams = useSearchParams();
 
   const {
@@ -62,7 +62,11 @@ const CentralArena = ({ selectedCategory, setSelectedCategory, hasCollections }:
           </h3>
         </div>
 
-        {products.length === 0 && loading ? (
+        {!collectionsLoaded ? (
+          <div className="w-100p flex j-content-center mt-10">
+            <DotsLoader />
+          </div>
+        ) : products.length === 0 && loading ? (
           <div className="w-100p flex j-content-center mt-10">
             <DotsLoader />
           </div>
@@ -105,14 +109,14 @@ const CentralArena = ({ selectedCategory, setSelectedCategory, hasCollections }:
           </div>
         )}
 
-        {products.length > 0 && !fetchingError && !loading && (
+        {products.length > 0 && collectionsLoaded && !fetchingError && !loading && (
           <div ref={ref} className="h-20"></div>
         )}
         <div>
           <p className="w-100p flex j-content-center mt-10">
-            {products.length >= 20 && loading ? <PuffLoader /> : ''}
+            {collectionsLoaded && products.length >= 20 && loading ? <PuffLoader /> : ''}
           </p>
-          {products.length >= 20 && !loading && fetchingError && (
+          {collectionsLoaded && products.length >= 20 && !loading && fetchingError && (
             <div className="mt-60 bg-white grid-col-span-5 text-center">
               <p className="mb-12">{fetchingError.message}</p>
             </div>

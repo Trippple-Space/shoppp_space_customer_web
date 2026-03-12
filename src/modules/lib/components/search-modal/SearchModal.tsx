@@ -1,4 +1,4 @@
-import { usePathname, useRouter } from 'next/navigation';
+import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 import {
   formatNumberAsPrice,
   cx,
@@ -34,9 +34,10 @@ const SearchModal = ({
 
   const router = useRouter();
   const pathname = usePathname();
+  const searchParams = useSearchParams();
 
   const handleShowMore = () => {
-    const params = filtersToSearchParams(allFilters, selectedCategory);
+    const params = filtersToSearchParams(allFilters, selectedCategory, searchParams);
 
     if (searchTerm) {
       params.set('search', searchTerm);
