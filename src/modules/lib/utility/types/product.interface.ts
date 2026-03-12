@@ -39,6 +39,35 @@ export interface Discount {
   updatedAt: string
 }
 
+export interface ProductCatalogue {
+  id: string;
+  createdAt: string;
+  updatedAt: string;
+  productId: string;
+  vendorId: string;
+  mediaUrl: string;
+  mediaType: 'image' | 'video';
+  thumbnailUrl: string | null;
+  caption: string | null;
+  displayOrder: number;
+  status: string;
+  rejectionReason: string | null;
+  source: string;
+  isVerified: boolean;
+  isCelebrityClaimed: boolean;
+  occasionType: string | null;
+  locationType: string | null;
+  featuredPersonType: string | null;
+  eventScale: string | null;
+  engagementScore: number;
+  aiTags: unknown;
+  aiConfidenceScore: unknown;
+  detectedProductIds: unknown;
+  geoLocation: unknown;
+  trendScore: unknown;
+  deletedAt: string | null;
+}
+
 export interface Product {
   longDescription: string;
   shortDescription: string;
@@ -63,6 +92,7 @@ export interface Product {
   tags: Tag[];
   discount: Discount
   meta: any;
+  productCatalogues?: ProductCatalogue[];
 }
 
 export interface ProductsResponse {

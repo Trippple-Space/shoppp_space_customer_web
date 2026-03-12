@@ -35,6 +35,7 @@ import Button from '../button/Button';
 import { useProductTileOrders } from '../../utility/hooks/use-product-tile-orders';
 import { LuChevronRight } from 'react-icons/lu';
 import { buildUserConfigurations } from '../product-detail-modal/productConfigurationsHelper';
+import ProductCatalogueDropdown from './ProductCatalogueDropdown';
 
 interface IProductTile {
   product: Product;
@@ -736,6 +737,7 @@ const ProductTile: FC<IProductTile> = ({
           id="product varients"
           className="l:mt-16 mt-14 l:h-51.2 h-45 flex a-items-center md:gap-6 gap-4 w-full overflow-auto whitespace-nowrap no-scrollbar"
         >
+          <ProductCatalogueDropdown productCatalogues={product?.productCatalogues} />
           {uniqueVariantsFromProductImages.map((variant: any) =>
             variant?.media?.map((mediaItem: any, i: number) => (
               <div
