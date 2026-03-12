@@ -1,6 +1,6 @@
 import { useCollections } from '@/modules/lib/utility/hooks/use-collections';
 import CollectionSection from './CollectionSection';
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { ICollection } from '@/modules/lib/utility/types/collection.interface';
 import { TbAlertCircle, TbRefresh } from 'react-icons/tb';
 
@@ -24,6 +24,8 @@ const Collections = ({
   });
 
   const [selectedCollection, setSelectedCollection] = useState<string | null>(null);
+  const onCollectionsLoadedRef = useRef(onCollectionsLoaded);
+  onCollectionsLoadedRef.current = onCollectionsLoaded;
 
   useEffect(() => {
     if (collections.length > 0) {
@@ -32,12 +34,12 @@ const Collections = ({
   }, [collections]);
 
   useEffect(() => {
-    if (!loadingCollections && onCollectionsLoaded) {
+    if (!loadingCollections && onCollectionsLoadedRef.current) {
       setCollectionsLoaded?.(false);
       let rafId1: number | undefined;
       const rafId2 = requestAnimationFrame(() => {
         rafId1 = requestAnimationFrame(() => {
-          onCollectionsLoaded();
+          onCollectionsLoadedRef.current?.();
         });
       });
       return () => {
@@ -45,7 +47,7 @@ const Collections = ({
         if (rafId1 != null) cancelAnimationFrame(rafId1);
       };
     }
-  }, [loadingCollections, onCollectionsLoaded]);
+  }, [loadingCollections, setCollectionsLoaded]);
 
   if (loadingCollections) return null;
 
