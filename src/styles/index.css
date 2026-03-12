@@ -346,9 +346,10 @@
 .object-fit-scale-down { object-fit: scale-down; } 
 .text-24 { font-size: 24px; } 
 .line-height-40 { line-height: 40px; } 
-.my-15 { margin-top: 15px; margin-bottom: 15px; } 
 .color-\#00000073 { color: #00000073; } 
+.max-w-400 { max-width: 400px; } 
 .p-20 { padding: 20px; } 
+.my-15 { margin-top: 15px; margin-bottom: 15px; } 
 @layer base {.radius-10 { border-radius: 10px; } } 
 .z-index-2, .z-2 { z-index: 2; } 
 .inset-0 { inset: 0px; } 
@@ -501,7 +502,6 @@
 .bg-\#EDFCF7\! { background-color: #EDFCF7 !important; } 
 .w-90p { width: 90%; } 
 .max-w-450 { max-width: 450px; } 
-.max-w-400 { max-width: 400px; } 
 .pb-24 { padding-bottom: 24px; } 
 .mt-2 { margin-top: 2px; } 
 .py-6 { padding-top: 6px; padding-bottom: 6px; } 
@@ -1206,6 +1206,7 @@
 @media only screen and (min-width: 768px) { .md\:gap-4 { gap: 4px; } } 
 @media only screen and (min-width: 768px) { .md\:text-16 { font-size: 16px; } } 
 @media only screen and (min-width: 768px) { .md\:line-height-24 { line-height: 24px; } } 
+@media only screen and (min-width: 768px) { .md\:my-15 { margin-top: 15px; margin-bottom: 15px; } } 
 @media only screen and (min-width: 768px) { .md\:t-66\.5 { top: 66.5px; } } 
 @media only screen and (min-width: 768px) { .md\:text-14 { font-size: 14px; } } 
 @media only screen and (min-width: 768px) { .md\:text-26 { font-size: 26px; } } 

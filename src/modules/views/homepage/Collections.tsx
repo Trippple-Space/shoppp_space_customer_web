@@ -9,11 +9,13 @@ const Collections = ({
   initialCollections = [],
   setHasCollections,
   onCollectionsLoaded,
+  setCollectionsLoaded,
 }: {
   storeId: string;
   initialCollections?: ICollection[];
   setHasCollections?: (hasCollections: boolean) => void;
   onCollectionsLoaded?: () => void;
+  setCollectionsLoaded?: (collectionsLoaded: boolean) => void;
 }) => {
   const { collections, loading: loadingCollections, error, retry } = useCollections({
     storeId,
@@ -31,6 +33,7 @@ const Collections = ({
 
   useEffect(() => {
     if (!loadingCollections && onCollectionsLoaded) {
+      setCollectionsLoaded?.(false);
       let rafId1: number | undefined;
       const rafId2 = requestAnimationFrame(() => {
         rafId1 = requestAnimationFrame(() => {

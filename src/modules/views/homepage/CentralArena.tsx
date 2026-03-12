@@ -11,7 +11,7 @@ import Button from '@/modules/lib/components/button/Button';
 import { useSearchParams } from 'next/navigation';
 import NoResultMessage from '@/modules/lib/components/error-messages/no-result-found';
 
-const CentralArena = ({ selectedCategory, setSelectedCategory, hasCollections }: any) => {
+const CentralArena = ({ selectedCategory, setSelectedCategory, hasCollections, collectionsLoaded }: any) => {
   const searchParams = useSearchParams();
 
   const {

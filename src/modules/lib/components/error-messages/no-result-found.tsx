@@ -15,12 +15,12 @@ const NoResultMessage = ({
         alt="empty"
       />
       {contentTitle && (
-        <h1 className="text-24 l:text-30 line-height-40 my-15 weight-700 text-center">
+        <h1 className="text-24 l:text-30 line-height-40 md:my-15 my-10 weight-700 text-center" style={{textWrap: 'balance', textAlign: 'center'}}>
           {contentTitle}
         </h1>
       )}
       {textContent && (
-        <p className="text-14 weight-400 line-height-22 color-#00000073 px-12 py-5">
+        <p className="text-14 weight-400 line-height-22 color-#00000073 px-12 py-5 max-w-400" style={{textWrap: 'balance', textAlign: 'center'}}>
           {textContent}
         </p>
       )}

@@ -253,6 +253,7 @@ const Homepage = ({ initialCollections = [] }: { initialCollections?: ICollectio
             initialCollections={initialCollections}
             setHasCollections={setHasCollections}
             onCollectionsLoaded={() => setCollectionsLoaded(true)}
+            setCollectionsLoaded={setCollectionsLoaded}
           />
         )}
 
@@ -260,6 +261,7 @@ const Homepage = ({ initialCollections = [] }: { initialCollections?: ICollectio
           selectedCategory={selectedCategory}
           setSelectedCategory={setSelectedCategory}
           hasCollections={hasCollections}
+          collectionsLoaded={collectionsLoaded}
         />
       </div>
       <Footer />
