@@ -85,9 +85,7 @@ const Collections = ({
 
   return (
     <div className="md:mt-32 mt-24 w-100p flex flex-col">
-      <div className='grid md:gap-24 gap-20 lg:grid-2-cols-1fr' style={{
-
-      }}>
+      <div className='grid md:gap-24 gap-20 lg:grid-2-cols-1fr'>
         {collections.map((collection, index) => {
           const isLast = index === collections.length - 1;
           const isOdd = collections.length % 2 === 1;
