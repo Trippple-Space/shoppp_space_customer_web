@@ -383,12 +383,17 @@ const ProductDetailModal = ({
   const handlePreviousImage = () => {
     if (!uniqueVariantsFromProductImages?.length) return;
 
-    const currentIndex = uniqueVariantsFromProductImages.findIndex((v) =>
+    let currentIndex = uniqueVariantsFromProductImages.findIndex((v) =>
       v?.media?.some((m) => m.url === selectedImage)
     );
+    if (currentIndex === -1 && selectedVariant) {
+      currentIndex = uniqueVariantsFromProductImages.findIndex(
+        (v) => v?.id === selectedVariant?.id
+      );
+    }
 
     const prevIndex =
-      currentIndex > 0
+      currentIndex >= 0 && currentIndex > 0
         ? currentIndex - 1
         : uniqueVariantsFromProductImages.length - 1;
 
@@ -396,44 +401,41 @@ const ProductDetailModal = ({
 
     if (!prevVariant) return;
 
+    const firstMedia = prevVariant.media?.[0];
+    setForcedVariantId(prevVariant.id);
     setActiveFilters(buildFiltersFromVariant(prevVariant));
-    setSelectedImage(prevVariant.media?.[0]?.url);
+    setSelectedImage(firstMedia?.url);
+    setSelectedMediaType(firstMedia?.type);
     setImageSource('variant');
   };
 
   const handleNextImage = () => {
     if (!uniqueVariantsFromProductImages?.length) return;
 
-    const currentIndex = uniqueVariantsFromProductImages.findIndex((v) =>
+    let currentIndex = uniqueVariantsFromProductImages.findIndex((v) =>
       v?.media?.some((m) => m.url === selectedImage)
     );
+    if (currentIndex === -1 && selectedVariant) {
+      currentIndex = uniqueVariantsFromProductImages.findIndex(
+        (v) => v?.id === selectedVariant?.id
+      );
+    }
 
     const nextIndex =
-      (currentIndex + 1) % uniqueVariantsFromProductImages.length;
+      currentIndex >= 0
+        ? (currentIndex + 1) % uniqueVariantsFromProductImages.length
+        : 0;
 
     const nextVariant = uniqueVariantsFromProductImages[nextIndex];
 
     if (!nextVariant) return;
 
+    const firstMedia = nextVariant.media?.[0];
+    setForcedVariantId(nextVariant.id);
     setActiveFilters(buildFiltersFromVariant(nextVariant));
-    setSelectedImage(nextVariant.media?.[0]?.url);
+    setSelectedImage(firstMedia?.url);
+    setSelectedMediaType(firstMedia?.type);
     setImageSource('variant');
-  };
-
-  const handleThumbnailClick = (mediaItem: { url: string; type?: string }, vari: ProductVariant) => {
-    const isSameVariant = selectedVariant?.id === vari.id;
-    const isSameImage = selectedImage === mediaItem.url;
-
-    if (isSameVariant && isSameImage) {
-      resetToDefault();
-      return;
-    }
-
-    setForcedVariantId(vari.id);
-    setActiveFilters(buildFiltersFromVariant(vari));
-    setSelectedImage(mediaItem.url);
-    setImageSource('preview');
-    setSelectedMediaType(mediaItem?.type);
   };
 
   const configurationRecords = selectedVariant?.configurationRecords ?? [];
@@ -525,7 +527,7 @@ const ProductDetailModal = ({
                             onMouseOver={() => setIsHover(true)}
                             onMouseOut={() => setIsHover(false)}
                           >
-                            {isHover &&
+                            {(isHover || selectedMediaType === 'video') &&
                               position === 'homepage' &&
                               !variantSelectedImage && (
                                 <div
@@ -556,7 +558,7 @@ const ProductDetailModal = ({
                               )}
                             </div>
 
-                            {isHover &&
+                            {(isHover || selectedMediaType === 'video') &&
                               position === 'homepage' &&
                               !variantSelectedImage && (
                                 <div

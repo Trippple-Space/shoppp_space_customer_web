@@ -784,6 +784,7 @@ const ProductTile: FC<IProductTile> = ({
                     )}
                     onClick={() => {
                       setSelectedVariant(variant);
+                      setRecentlyViewsId(variant.id);
                       setSelectedImage(mediaItem?.url);
                     }}
                     src={mediaItem?.url}

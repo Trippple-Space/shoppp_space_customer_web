@@ -447,22 +447,24 @@ const CheckoutPage = () => {
                               key={j + cartItem?.id}
                             >
                               <div
-                                className={`gap-12 ${store.visible ? 'flex a-items-center' : 'hidden'} relative w-73 h-75`}
+                                className={`gap-12 ${store.visible ? 'flex a-items-center' : 'hidden'}`}
                                 key={j}
                               >
-                                {mediaType === 'image' ? (
-                                  <Image
-                                    src={cartItem.variant.media?.[0].url}
-                                    alt="order image"
-                                    className="w-73 h-75 radius-6 border border-#00000014 object-fit"
-                                  />
-                                ) : (
-                                  <VideoSrc
-                                    className="w-73 h-75 radius-6 border border-#00000014 object-fit"
-                                    src={cartItem.variant.media?.[0].url}
-                                    hasLoader={true}
-                                  />
-                                )}
+                                <div className="w-73 h-75 radius-6 relative overflow-hidden">
+                                  {mediaType === 'image' ? (
+                                    <Image
+                                      src={cartItem.variant.media?.[0].url}
+                                      alt="order image"
+                                      className="w-73 h-75 radius-6 border border-#00000014 object-fit"
+                                    />
+                                  ) : (
+                                    <VideoSrc
+                                      className="w-73 h-75 radius-6 border border-#00000014 object-fit"
+                                      src={cartItem.variant.media?.[0].url}
+                                      hasLoader={true}
+                                    />
+                                  )}
+                                </div>
                                 <div
                                   className={`flex-grow-1 flex flex-col ${Object.keys(cartItem?.variant?.properties ?? {}).length > 2 ? 'gap-2.8' : 'gap-6'} overflow-hidden white-space-nowrap text-overflow-ellipsis`}
                                 >

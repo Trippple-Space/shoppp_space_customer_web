@@ -79,7 +79,7 @@ const VariantModal = ({
           onMouseOver={() => setOnProductTileHover(true)}
           onMouseOut={() => setOnProductTileHover(false)}
         >
-          <Link href={`/products/${variant.productVariant?.product?.slug}`}>
+          <Link href={`/products/${variant.productVariant?.product?.slug}`} className='relative w-full h-full overflow-hidden inline-block'>
             {mediaType === 'image' ? (
               <>
                 {variant.productVariant?.status === 'OUT_OF_STOCK' && (

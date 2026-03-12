@@ -426,6 +426,8 @@
 .scroll-y {    overflow-y: scroll;  } 
 .pb-183 { padding-bottom: 183px; } 
 .w-250 { width: 250px; } 
+.w-70\! { width: 70px !important; } 
+.h-70\! { height: 70px !important; } 
 .text-13\.5 { font-size: 13.5px; } 
 .line-height-16 { line-height: 16px; } 
 .color-red { color: red; } 
@@ -444,8 +446,6 @@
 .h-18 { height: 18px; } 
 .hover\:bg-grey-300:hover { background-color: #E4E1DF; } 
 .color-\#0000008C { color: #0000008C; } 
-.w-70\! { width: 70px !important; } 
-.h-70\! { height: 70px !important; } 
 .gap-2\.8 { gap: 2.8; } 
 .line-height-16\.94 { line-height: 16.94px; } 
 .line-height-18 { line-height: 18px; } 

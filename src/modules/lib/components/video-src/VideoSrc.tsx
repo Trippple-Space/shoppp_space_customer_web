@@ -10,7 +10,7 @@ interface VideoSrcProps {
   src: string;
   poster?: string;
   className?: string;
-  onClick?: (e: React.MouseEvent<HTMLVideoElement>) => void;
+  onClick?: () => void;
   hasLoader?: boolean;
   pulseClassName?: string;
   priority?: boolean;
