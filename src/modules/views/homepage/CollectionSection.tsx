@@ -178,7 +178,7 @@ const CollectionSection = ({ collection, index, selectedCollection, setSelectedC
                 key={i}
                 className="l:w-290 md:w-250 sm:w-220 w-150 l:mt--20 mt--30"
               >
-                <ProductTile product={product} key={i} id={product.id} />
+                <ProductTile product={product} key={i} id={product.id} addToCartVariant="icon" />
               </div>
             ))
           ) : null}

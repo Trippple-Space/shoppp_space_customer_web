@@ -48,6 +48,7 @@ interface IProductTile {
   index?: number;
   selectedCategory?: any;
   setSelectedCategory?: any;
+  addToCartVariant?: 'icon' | 'text';
 }
 
 const ProductTile: FC<IProductTile> = ({
@@ -61,6 +62,7 @@ const ProductTile: FC<IProductTile> = ({
   index,
   selectedCategory,
   setSelectedCategory,
+  addToCartVariant = 'text',
 }) => {
   const pathname =
     typeof window !== 'undefined' ? window.location.pathname : '';
@@ -679,7 +681,11 @@ const ProductTile: FC<IProductTile> = ({
                       border-hidden outline-none s:p-14 p-12 round flex a-items-center j-items-center gap-10`
                     )}
                   >
-                    <PiShoppingCartFill className="s:w-22 w-20 s:h-22 h-20" />
+                    {addToCartVariant === 'icon' ? (
+                      <PiShoppingCartFill className="s:w-22 w-20 s:h-22 h-20" />
+                    ) : (
+                      <span className="text-black font-roboto text-12 s:text-14 weight-500">Add to cart</span>
+                    )}
                   </button>
                 )}
               </div>
