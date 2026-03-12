@@ -679,7 +679,11 @@ const ProductTile: FC<IProductTile> = ({
                       `bg-#FACE33 shadow-0-4-8-0-#00000033 hover:shadow-0-8-8-0-#00000033 text-black! 
                       disabled:bg-gray-200 disabled:cursor-not-allowed hover:scale-1.06 
                       g|transition:0.5s g|will-change:transform pointer font-roboto 
-                      border-hidden outline-none s:p-14 p-12 round flex a-items-center j-items-center gap-10`
+                      border-hidden outline-none flex a-items-center j-items-center gap-10`,
+                      {
+                        'round s:p-14 p-12': addToCartVariant === 'icon',
+                        'radius-10 px-10 py-5 s:py-10 s:px-16': addToCartVariant === 'text',
+                      }
                     )}
                   >
                     {addToCartVariant === 'icon' ? (
