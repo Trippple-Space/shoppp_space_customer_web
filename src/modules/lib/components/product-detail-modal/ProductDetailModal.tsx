@@ -4,7 +4,7 @@ import { IoMdClose } from 'react-icons/io';
 import Link from 'next/link';
 import { Product, ProductVariant } from '../../utility/types/product.interface';
 import { useCart } from '../../utility/hooks/use-cart';
-import { checkMediaType, cx, formatNumberAsPrice } from '../../utility/utility';
+import { cx, formatNumberAsPrice } from '../../utility/utility';
 import QuantitySelector from '../quantity-selector/QuantitySelector';
 import Image from '../image/Image';
 import { MdArrowBackIos, MdArrowForwardIos } from 'react-icons/md';
@@ -68,6 +68,9 @@ const ProductDetailModal = ({
   const [imageSource, setImageSource] = useState<
     'default' | 'variant' | 'preview'
   >('default');
+  const [selectedMediaType, setSelectedMediaType] = useState<string | undefined>(
+    variant?.media?.[0]?.type || product?.variants[0]?.media?.[0]?.type
+  );
 
   const [configurationValues, setConfigurationValues] = useState<
     Record<string, any>
@@ -188,11 +191,17 @@ const ProductDetailModal = ({
   }, [isSelectionComplete, imageSource, variant?.media, product?.variants]);
 
   useEffect(() => {
-    if (selectedVariant?.media?.[0]?.url) {
-      setSelectedImage(selectedVariant.media[0].url);
-      setImageSource('variant');
+    if (!selectedVariant?.media?.[0]?.url) return;
+    if (imageSource === 'preview') {
+      const isCurrentMediaInVariant = selectedVariant.media?.some(
+        (m: { url?: string }) => m.url === selectedImage
+      );
+      if (isCurrentMediaInVariant) return;
     }
-  }, [selectedVariant]);
+    setSelectedImage(selectedVariant.media[0].url);
+    setImageSource('variant');
+    setSelectedMediaType(selectedVariant.media[0]?.type);
+  }, [selectedVariant, imageSource, selectedImage]);
 
   useEffect(() => {
     document.body.style.overflow = openSingleProductModal ? 'hidden' : 'auto';
@@ -316,7 +325,6 @@ const ProductDetailModal = ({
   const displayPrice = selectedVariant?.finalPrice || product?.finalPrice;
   const descriptionLength = product?.longDescription?.split(' ')?.length || 0;
   const maxDisplayDescLength = 20;
-  const mediaType = checkMediaType(selectedImage ?? '') ?? 'image';
 
   const colorMap = Object.fromEntries(
     colorNames.map((c) => [c.name.replaceAll(' ', '').toLowerCase(), c.hex])
@@ -410,6 +418,22 @@ const ProductDetailModal = ({
     setActiveFilters(buildFiltersFromVariant(nextVariant));
     setSelectedImage(nextVariant.media?.[0]?.url);
     setImageSource('variant');
+  };
+
+  const handleThumbnailClick = (mediaItem: { url: string; type?: string }, vari: ProductVariant) => {
+    const isSameVariant = selectedVariant?.id === vari.id;
+    const isSameImage = selectedImage === mediaItem.url;
+
+    if (isSameVariant && isSameImage) {
+      resetToDefault();
+      return;
+    }
+
+    setForcedVariantId(vari.id);
+    setActiveFilters(buildFiltersFromVariant(vari));
+    setSelectedImage(mediaItem.url);
+    setImageSource('preview');
+    setSelectedMediaType(mediaItem?.type);
   };
 
   const configurationRecords = selectedVariant?.configurationRecords ?? [];
@@ -512,20 +536,22 @@ const ProductDetailModal = ({
                                 </div>
                               )}
                             <div
-                              className={`w-full ${variantSelectedImage ? 'l:h-400 h-250' : 'h-350'}`}
+                              className={`w-full ${variantSelectedImage ? 'l:h-400 h-250' : 'h-350'} relative`}
                             >
-                              {mediaType === 'image' ? (
+                              {selectedMediaType === 'image' || !selectedMediaType ? (
                                 <Image
                                   ref={imgRef}
                                   src={selectedImage ?? ''}
                                   alt={product?.name || 'Product'}
                                   className={`object-fit w-full h-full ${selectedVariant?.status === 'OUT_OF_STOCK' ? 'greyscale' : ''}`}
                                   width={10000}
+                                  hasLoader={true}
                                 />
                               ) : (
                                 <VideoSrc
                                   className={`object-fit w-full h-full ${selectedVariant?.status === 'OUT_OF_STOCK' ? 'greyscale' : ''}`}
                                   src={selectedImage ?? ''}
+                                  hasLoader={true}
                                 />
                               )}
                             </div>
@@ -566,10 +592,11 @@ const ProductDetailModal = ({
                                         );
                                         setSelectedImage(mediaItem.url);
                                         setImageSource('preview');
+                                        setSelectedMediaType(mediaItem?.type);
                                       }}
-                                      className="w-90 min-w-90 h-90 pointer"
+                                      className="w-90 min-w-90 h-90 pointer relative"
                                     >
-                                      {mediaType === 'image' ? (
+                                      {mediaItem?.type === 'image' ? (
                                         <Image
                                           src={mediaItem.url}
                                           alt="product-image"
@@ -588,6 +615,7 @@ const ProductDetailModal = ({
                                             }
                                           )}
                                           width={10000}
+                                          hasLoader={true}
                                         />
                                       ) : (
                                         <VideoSrc
@@ -606,6 +634,7 @@ const ProductDetailModal = ({
                                                 ),
                                             }
                                           )}
+                                          hasLoader={true}
                                         />
                                       )}
                                     </div>

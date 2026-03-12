@@ -447,7 +447,7 @@ const CheckoutPage = () => {
                               key={j + cartItem?.id}
                             >
                               <div
-                                className={`gap-12 ${store.visible ? 'flex a-items-center' : 'hidden'}`}
+                                className={`gap-12 ${store.visible ? 'flex a-items-center' : 'hidden'} relative w-73 h-75`}
                                 key={j}
                               >
                                 {mediaType === 'image' ? (
@@ -460,6 +460,7 @@ const CheckoutPage = () => {
                                   <VideoSrc
                                     className="w-73 h-75 radius-6 border border-#00000014 object-fit"
                                     src={cartItem.variant.media?.[0].url}
+                                    hasLoader={true}
                                   />
                                 )}
                                 <div

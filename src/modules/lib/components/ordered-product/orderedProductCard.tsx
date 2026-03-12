@@ -21,7 +21,7 @@ function orderedProductCard({ orderedProducts }: any) {
           return (
             <div className="flex flex-col gap-4 bg-whitesmoke radius-5 p-10">
               <div className="l:flex space-between a-items-start">
-                <div className="flex gap-10 l:w-60p w-90p">
+                <div className="flex gap-10 l:w-60p w-90p relative">
                   {mediaType === 'image' ? (
                     <Image
                       src={item?.variant.media[0].url}
@@ -32,6 +32,7 @@ function orderedProductCard({ orderedProducts }: any) {
                     <VideoSrc
                       className="w-60 h-60 radius-8 object-fit-cover"
                       src={item?.variant.media[0].url}
+                      hasLoader={true}
                     />
                   )}
                   <div className="flex flex-col gap-10 pb-10 l:pb-0">

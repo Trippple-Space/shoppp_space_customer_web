@@ -331,23 +331,31 @@ const ProductTile: FC<IProductTile> = ({
     const hasSize = selectedVariant.size && selectedVariant.size.trim() !== '';
     const hasOtherProperties =
       selectedVariant?.properties &&
-      Object.keys(selectedVariant?.properties).length > 0;
+      Object.entries(selectedVariant.properties).some(([, value]) => {
+        const trimmed = String(value ?? '').trim();
+        return trimmed !== '';
+      });
 
     return hasSize || hasOtherProperties;
   }, [selectedVariant]);
 
   const shouldAddDirectlyToCart = useMemo(() => {
+
     if (!allProperties) return false;
 
     const propertyKeys = Object.keys(allProperties);
     if (propertyKeys.length !== 1) return false;
-
+    
     const firstKey = propertyKeys[0];
     const values = allProperties[firstKey];
 
     if (!Array.isArray(values) || values.length !== 1) return false;
 
-    return true;
+    const singleValue = values[0];
+    const hasNonEmptyValue =
+      typeof singleValue === 'string' && singleValue.trim() !== '';
+
+    return hasNonEmptyValue;
   }, [allProperties]);
 
   const hasCustomerConfiguration = useMemo(() => {
@@ -553,11 +561,14 @@ const ProductTile: FC<IProductTile> = ({
               />
             </div>
           ) : (
-            <VideoSrc
-              className={`absolute w-full h-full a-self-center g|object-fit:cover pointer ${isOutOfStock && 'out-of-stock'
-                }`}
-              src={selectedImage}
-            />
+            <div className="relative w-full h-full">
+              <VideoSrc
+                className={`absolute w-full h-full a-self-center g|object-fit:cover pointer ${isOutOfStock && 'out-of-stock'
+                  }`}
+                src={selectedImage}
+                hasLoader={true}
+              />
+            </div>
           )}
         </Link>
 
@@ -776,6 +787,7 @@ const ProductTile: FC<IProductTile> = ({
                       setSelectedImage(mediaItem?.url);
                     }}
                     src={mediaItem?.url}
+                    hasLoader={true}
                   />
                 )}
               </div>

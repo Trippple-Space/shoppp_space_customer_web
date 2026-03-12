@@ -152,7 +152,7 @@ const MiniCart: React.FC<ModalProps> = ({
                           <div
                             className={`flex j-content-between gap-10 p-12 ${cartItem.variant.status === 'OUT_OF_STOCK' ? 'color-#00000099' : 'color-#0000008C'}`}
                           >
-                            <div className="flex gap-10">
+                            <div className="flex gap-10 relative">
                               {mediaType === 'image' ? (
                                 <Image
                                   src={
@@ -171,6 +171,7 @@ const MiniCart: React.FC<ModalProps> = ({
                                       ? cartItem?.variant?.media[0]?.url
                                       : ''
                                   }
+                                  hasLoader={true}
                                 />
                               )}
                               <div
