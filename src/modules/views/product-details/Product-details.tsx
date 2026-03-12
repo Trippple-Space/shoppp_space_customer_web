@@ -50,6 +50,7 @@ import {
   DisplayProductConfigurations,
   isEmptyValue,
 } from '@/modules/lib/components/product-detail-modal/productConfigurationsHelper';
+import { CatalogueMediaItem } from '@/modules/lib/components/product-tile/ProductCatalogueDropdown';
 
 const ProductDetails = ({ product }: { product: Product }) => {
   const [recentlyViewedVariants, setRecentlyViewedVariants] = useState<
@@ -128,6 +129,18 @@ const ProductDetails = ({ product }: { product: Product }) => {
     return requiredKeys.every((key) => activeFilters[key]);
   }, [filteredVariants, activeFilters]);
 
+  const hasAnySelectableOptions = useMemo(() => {
+    if (!product?.variants?.length) return false;
+
+    return product.variants.some((v) => {
+      if (v.size) return true;
+
+      return Object.values(v.properties || {}).some(
+        (val) => val !== null && val !== undefined && String(val).trim() !== ''
+      );
+    });
+  }, [product?.variants]);
+
   const selectedVariant = useMemo(() => {
     if (isSelectionComplete) {
       return filteredVariants[0];
@@ -137,12 +150,17 @@ const ProductDetails = ({ product }: { product: Product }) => {
       return product.variants.find((v) => v.id === forcedVariantId);
     }
 
+    if (!hasAnySelectableOptions && product?.variants?.length) {
+      return product.variants[0];
+    }
+
     return undefined;
   }, [
     isSelectionComplete,
     filteredVariants,
     forcedVariantId,
     product?.variants,
+    hasAnySelectableOptions,
   ]);
 
   const missingRequiredOptions = useMemo(() => {
@@ -176,18 +194,6 @@ const ProductDetails = ({ product }: { product: Product }) => {
     const firstVariant = product.variants[0];
     return requiredKeysForVariant(firstVariant);
   }, [activeFilters, product?.variants]);
-
-  const hasAnySelectableOptions = useMemo(() => {
-    if (!product?.variants?.length) return false;
-
-    return product.variants.some((v) => {
-      if (v.size) return true;
-
-      return Object.values(v.properties || {}).some(
-        (val) => val !== null && val !== undefined && String(val).trim() !== ''
-      );
-    });
-  }, [product?.variants]);
 
   const uniqueVariantsFromProductImages = useMemo(() => {
     if (!product?.variants?.length) return [];
@@ -345,11 +351,19 @@ const ProductDetails = ({ product }: { product: Product }) => {
   }, [isSelectionComplete, imageSource, product.variants[0]?.media]);
 
   useEffect(() => {
-    if (selectedVariant?.media?.[0]?.url) {
-      setSelectedImage(selectedVariant.media[0].url);
-      setImageSource('variant');
+    if (!selectedVariant?.media?.[0]?.url) return;
+
+    if (imageSource === 'preview') {
+      const isCurrentMediaInVariant = selectedVariant.media?.some(
+        (m: { url?: string }) => m.url === selectedImage
+      );
+
+      if (isCurrentMediaInVariant) return;
     }
-  }, [selectedVariant]);
+
+    setSelectedImage(selectedVariant.media[0].url);
+    setImageSource('variant');
+  }, [selectedVariant, imageSource, selectedImage]);
 
   useEffect(() => {
     if (!selectedVariantItemInCart?.userConfigurations) return;
@@ -436,10 +450,22 @@ const ProductDetails = ({ product }: { product: Product }) => {
   };
 
   const resetToDefault = () => {
-    setForcedVariantId(undefined);
+    // When there are selectable options, reset to the base state (no forced variant).
+    // When there are no selectable options at all, keep the first variant selected
+    // so the user can never end up with an "empty" selection.
+    if (hasAnySelectableOptions) {
+      setForcedVariantId(undefined);
+      setActiveFilters({});
+      setSelectedImage(product.variants[0]?.media?.[0]?.url);
+      setImageSource('default');
+      return;
+    }
+
+    const first = product.variants[0];
+    setForcedVariantId(first.id);
     setActiveFilters({});
-    setSelectedImage(product.variants[0]?.media?.[0]?.url);
-    setImageSource('default');
+    setSelectedImage(first.media?.[0]?.url);
+    setImageSource('variant');
   };
 
   const colorMap = Object.fromEntries(
@@ -764,7 +790,7 @@ const ProductDetails = ({ product }: { product: Product }) => {
             )}
             {
               <div
-                className={`relative w-full h-full cursor-pointer`}
+                className={`relative w-full h-full cursor-pointer overflow-hidden`}
                 onClick={() => {
                   const idx = lightboxImages.findIndex(
                     (u) => u === selectedImage
@@ -790,6 +816,7 @@ const ProductDetails = ({ product }: { product: Product }) => {
                   <VideoSrc
                     className={`flex-grow-1 h-full radius-8 l:radius-t-l-16 l:radius-b-l-16 l:radius-b-r-0 l:radius-t-r-0   w-full h-full a-self-center object-fit-cover ${isOutOfStock && 'out-of-stock'}`}
                     src={selectedImage ?? ''}
+                    hasLoader={true}
                   />
                 )}
               </div>
@@ -802,8 +829,8 @@ const ProductDetails = ({ product }: { product: Product }) => {
           >
             {(uniqueVariantsFromProductImages?.length ?? 0) > 0 && (
               <>
-                {uniqueVariantsFromProductImages.slice(0, 4).map((vari, idx) =>
-                  vari?.media?.map((mediaItem: any) => (
+                {uniqueVariantsFromProductImages.slice(0, 4).map((vari) =>
+                  vari?.media?.map((mediaItem: any, idx) => (
                     <div
                       key={`${vari.id}-${mediaItem.url}`}
                       onClick={() => {
@@ -822,7 +849,7 @@ const ProductDetails = ({ product }: { product: Product }) => {
                       }}
                       className={`l:h-207 ${vari?.status === 'OUT_OF_STOCK' && 'out-of-stock'} relative ${idx <= 3 ? 'block' : 'l:hidden block'}`}
                     >
-                      {mediaType === 'image' ? (
+                      {mediaItem?.type === 'image' ? (
                         <Image
                           src={mediaItem?.url ?? ''}
                           alt="product-image"
@@ -854,6 +881,7 @@ const ProductDetails = ({ product }: { product: Product }) => {
                             }
                           )}
                           src={mediaItem?.url ?? ''}
+                          hasLoader={true}
                         />
                       )}
                     </div>
@@ -862,6 +890,20 @@ const ProductDetails = ({ product }: { product: Product }) => {
               </>
             )}
           </div>
+        </div>
+
+        <div>
+          {(product?.productCatalogues?.length ?? 0) > 0 && (
+            <div className="mt-30">
+              <p className="text-16 weight-600 mb-10">Catalogue</p>
+
+              <div className="grid grid-2-cols-1fr sm:grid-3-cols-1fr md:grid-4-cols-1fr lg:grid-5-cols-1fr xl:grid-6-cols-1fr gap-12">
+                {product?.productCatalogues?.map((item) => (
+                  <CatalogueMediaItem key={item.id} item={item} />
+                ))}
+              </div>
+            </div>
+          )}
         </div>
 
         <div

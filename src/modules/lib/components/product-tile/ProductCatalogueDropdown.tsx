@@ -16,7 +16,7 @@ import {
 } from '@floating-ui/react';
 import Image from '../image/Image';
 
-function CatalogueMediaItem({ item }: { item: ProductCatalogue }) {
+export function CatalogueMediaItem({ item }: { item: ProductCatalogue }) {
   const videoRef = useRef<HTMLVideoElement>(null);
   const imgRef = useRef<HTMLImageElement>(null);
 
@@ -151,8 +151,8 @@ export function ProductCatalogueDropdown({ productCatalogues }: ProductCatalogue
         type="button"
         ref={refs.setReference}
         {...getReferenceProps()}
-        className="l:w-35.2 l:min-w-35.2 l:h-35.2 w-31 min-w-31 h-31 flex a-items-center j-content-center radius-3 md:radius-4 border border-#00000014 bg-#00000006 hover:bg-#0000000D transition-colors shrink-0"
-        aria-label="View Related Media"
+        className="l:w-35.2 l:min-w-35.2 l:h-35.2 w-31 min-w-31 h-31 flex a-items-center j-content-center radius-3 md:radius-4 border border-#00000014 outline-none bg-#00000006 hover:bg-#0000000D transition-colors shrink-0"
+        aria-label="View Catalogue"
       >
         <HiSquares2X2 className="l:w-18 w-16 l:h-18 h-16 color-#0B9378" />
       </button>
@@ -160,7 +160,7 @@ export function ProductCatalogueDropdown({ productCatalogues }: ProductCatalogue
         <FloatingPortal>
           <div
             ref={refs.setFloating}
-            className='pb-10'
+            className='sm:p-10 p-5 sm:pt-14'
             style={{
               ...floatingStyles,
               minWidth: 'min(90vw, 640px)',
@@ -175,8 +175,8 @@ export function ProductCatalogueDropdown({ productCatalogues }: ProductCatalogue
             }}
             {...getFloatingProps()}
           >
-            <div className="p-12">
-              <h3 className="text-14 weight-600 color-#0B9378 uppercase tracking-wider">Related Medias</h3>
+            <div className="p-12 sm:pt-0 pt-5">
+              <h3 className="text-14 weight-600 color-#0B9378 uppercase tracking-wider">Catalogue</h3>
             </div>
             <div
               className="p-10 grid grid-2-cols-1fr sm:grid-3-cols-1fr xl:grid-4-cols-1fr gap-12"

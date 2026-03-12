@@ -17,9 +17,12 @@ const useTransformProduct = (product: Product) => {
     }
 
     Object.entries(variant?.properties || {}).forEach(([key, value]) => {
+      const stringValue = String(value).trim();
+      if (stringValue === '') return;
       if (!allProperties[key]) allProperties[key] = [];
-      const stringValue = String(value);
-      if (!allProperties[key].includes(stringValue)) allProperties[key].push(stringValue);
+      if (!allProperties[key].includes(stringValue)) {
+        allProperties[key].push(stringValue);
+      }
     });
   });
 

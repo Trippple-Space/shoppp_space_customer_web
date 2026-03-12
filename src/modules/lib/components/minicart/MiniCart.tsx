@@ -126,8 +126,8 @@ const MiniCart: React.FC<ModalProps> = ({
                       <button
                         onClick={() => setOpen(false)}
                         className={`g|transition:0.5s py-12 px-24 radius-6 line-height-19 text-center w-full weight-500 border border-none hover:pointer ${isAuthenticated
-                            ? 'bg-green hover:bg-darkgreen text-white'
-                            : 'bg-#F5F5F5 hover:bg-grey-300 text-#333333'
+                          ? 'bg-green hover:bg-darkgreen text-white'
+                          : 'bg-#F5F5F5 hover:bg-grey-300 text-#333333'
                           }`}
                       >
                         Explore products
@@ -152,27 +152,30 @@ const MiniCart: React.FC<ModalProps> = ({
                           <div
                             className={`flex j-content-between gap-10 p-12 ${cartItem.variant.status === 'OUT_OF_STOCK' ? 'color-#00000099' : 'color-#0000008C'}`}
                           >
-                            <div className="flex gap-10">
-                              {mediaType === 'image' ? (
-                                <Image
-                                  src={
-                                    cartItem?.variant?.media
-                                      ? cartItem?.variant?.media[0]?.url
-                                      : ''
-                                  }
-                                  alt="cart image"
-                                  className={`sm:w-80! w-70! sm:h-80! h-70! radius-6 border border-#00000014 object-fit ${cartItem.variant.status == 'OUT_OF_STOCK' ? 'greyscale' : ''}`}
-                                />
-                              ) : (
-                                <VideoSrc
-                                  className={`sm:w-80! w-70! sm:h-80! h-70! radius-6 border border-#00000014 object-fit ${cartItem.variant.status == 'OUT_OF_STOCK' ? 'greyscale' : ''}`}
-                                  src={
-                                    cartItem?.variant?.media
-                                      ? cartItem?.variant?.media[0]?.url
-                                      : ''
-                                  }
-                                />
-                              )}
+                            <div className="flex gap-10 relative">
+                              <div className="sm:w-80! w-70! sm:h-80! h-70! radius-6 relative overflow-hidden">
+                                {mediaType === 'image' ? (
+                                  <Image
+                                    src={
+                                      cartItem?.variant?.media
+                                        ? cartItem?.variant?.media[0]?.url
+                                        : ''
+                                    }
+                                    alt="cart image"
+                                    className={`sm:w-80! w-70! sm:h-80! h-70! radius-6 border border-#00000014 object-fit ${cartItem.variant.status == 'OUT_OF_STOCK' ? 'greyscale' : ''}`}
+                                  />
+                                ) : (
+                                  <VideoSrc
+                                    className={`sm:w-80! w-70! sm:h-80! h-70! radius-6 border border-#00000014 object-fit ${cartItem.variant.status == 'OUT_OF_STOCK' ? 'greyscale' : ''}`}
+                                    src={
+                                      cartItem?.variant?.media
+                                        ? cartItem?.variant?.media[0]?.url
+                                        : ''
+                                    }
+                                    hasLoader={true}
+                                  />
+                                )}
+                              </div>
                               <div
                                 className={`flex flex-col ${Object.keys(cartItem?.variant?.properties ?? {}).length > 2 ? 'gap-2.8' : 'gap-6'}`}
                               >
@@ -207,7 +210,7 @@ const MiniCart: React.FC<ModalProps> = ({
                                   Object.entries(
                                     cartItem.variant?.properties
                                   ).map(([key, value]) => {
-                                    if (key === 'color' || key === 'size')
+                                    if (key === 'color' || key === 'size' || !value)
                                       return null;
                                     return (
                                       <p
