@@ -49,6 +49,7 @@ interface IProductTile {
   index?: number;
   selectedCategory?: any;
   setSelectedCategory?: any;
+  addToCartVariant?: 'icon' | 'text';
 }
 
 const ProductTile: FC<IProductTile> = ({
@@ -62,6 +63,7 @@ const ProductTile: FC<IProductTile> = ({
   index,
   selectedCategory,
   setSelectedCategory,
+  addToCartVariant = 'text',
 }) => {
   const pathname =
     typeof window !== 'undefined' ? window.location.pathname : '';
@@ -688,10 +690,18 @@ const ProductTile: FC<IProductTile> = ({
                       `bg-#FACE33 shadow-0-4-8-0-#00000033 hover:shadow-0-8-8-0-#00000033 text-black! 
                       disabled:bg-gray-200 disabled:cursor-not-allowed hover:scale-1.06 
                       g|transition:0.5s g|will-change:transform pointer font-roboto 
-                      border-hidden outline-none s:p-14 p-12 round flex a-items-center j-items-center gap-10`
+                      border-hidden outline-none flex a-items-center j-items-center gap-10`,
+                      {
+                        'round s:p-14 p-12': addToCartVariant === 'icon',
+                        'radius-10 px-10 py-5 s:py-10 s:px-16': addToCartVariant === 'text',
+                      }
                     )}
                   >
-                    <PiShoppingCartFill className="s:w-22 w-20 s:h-22 h-20" />
+                    {addToCartVariant === 'icon' ? (
+                      <PiShoppingCartFill className="s:w-22 w-20 s:h-22 h-20" />
+                    ) : (
+                      <span className="text-black font-roboto text-12 s:text-14 weight-500">Add to cart</span>
+                    )}
                   </button>
                 )}
               </div>

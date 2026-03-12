@@ -1180,6 +1180,8 @@
 @media only screen and (min-width: 576px) { .s\:w-22 { width: 22px; } } 
 @media only screen and (min-width: 576px) { .s\:h-22 { height: 22px; } } 
 @media only screen and (min-width: 576px) { .s\:p-14 { padding: 14px; } } 
+@media only screen and (min-width: 576px) { .s\:py-10 { padding-top: 10px; padding-bottom: 10px; } } 
+@media only screen and (min-width: 576px) { .s\:px-16 { padding-left: 16px; padding-right: 16px; } } 
 @media only screen and (min-width: 576px) { .s\:l-18 { left: 18px; } } 
 @media only screen and (min-width: 576px) { .s\:b--20 { bottom: -20px; } } 
 @media only screen and (min-width: 576px) { .s\:p-4 { padding: 4px; } } 

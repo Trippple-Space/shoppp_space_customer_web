@@ -31,6 +31,7 @@ const StoreProductsList: FC<{
                 product={product}
                 key={i}
                 id={product.id}
+                addToCartVariant="icon"
                 savedVariants={savedVariants}
                 saveVariant={saveVariant}
                 removeSavedVariant={removeSavedVariant}
