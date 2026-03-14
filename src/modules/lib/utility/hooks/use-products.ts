@@ -30,6 +30,7 @@ export interface IQueryParams {
   // key: any
   allFilters?: IFilters;
   search?: string;
+  collection?: string;
 }
 
 export type PaginationType = "infinite" | "buttons";
@@ -94,6 +95,17 @@ export const useProducts = (initialQuery: IQueryParams, paginationType: Paginati
     }));
   };
 
+  const setCollection = (collection?: string) => {
+    setQuery((prev) => ({
+      ...prev,
+      collection,
+      pagination: {
+        page: 1,
+        limit: prev.pagination?.limit ?? 20,
+      },
+    }));
+  };
+
   const refetch = () => {
     clearProductsCacheByKey(cacheKey);
     setRefetchToken((t) => t + 1);
@@ -111,7 +123,7 @@ export const useProducts = (initialQuery: IQueryParams, paginationType: Paginati
     JSON.stringify(query.filters ?? {}) +
     JSON.stringify(query.order ?? {}) +
     JSON.stringify(query.allFilters ?? {}) +
-    (query.search ?? "");
+    (query.search ?? "") + (query.collection ?? "");
 
   const cacheKey =
     paginationType === "infinite"
@@ -131,7 +143,7 @@ export const useProducts = (initialQuery: IQueryParams, paginationType: Paginati
       setFetchingError(null);
 
       productService
-        .fetchProducts(query, query.allFilters, collectionSlug)
+        .fetchProducts(query, query.allFilters, collectionSlug = query.collection ? query.collection : collectionSlug)
         .then((fetchedProducts) => {
           setProductsCache(cacheKey, {
             data: fetchedProducts.data,
@@ -149,7 +161,7 @@ export const useProducts = (initialQuery: IQueryParams, paginationType: Paginati
       setLoading(true);
       setFetchingError(null);
       productService
-        .fetchProducts(query, query.allFilters, collectionSlug)
+        .fetchProducts(query, query.allFilters, collectionSlug = query.collection ? query.collection : collectionSlug)
         .then((fetchedProducts) => {
           setProductsCache(cacheKey, {
             data: fetchedProducts.data,
@@ -170,7 +182,8 @@ export const useProducts = (initialQuery: IQueryParams, paginationType: Paginati
     productsCache[cacheKey]?.data?.length,
     JSON.stringify(query.allFilters),
     query.pagination,
-    query.search
+    query.search,
+    query.collection
   ]);
 
   useEffect(() => {
@@ -184,7 +197,7 @@ export const useProducts = (initialQuery: IQueryParams, paginationType: Paginati
       setLoading(true);
       setFetchingError(null);
       productService
-        .fetchProducts(query, query.allFilters, collectionSlug)
+        .fetchProducts(query, query.allFilters, collectionSlug = query.collection ? query.collection : collectionSlug)
         .then((fetchedProducts) => {
           const previous = productsCache[cacheKey];
 
@@ -217,6 +230,7 @@ export const useProducts = (initialQuery: IQueryParams, paginationType: Paginati
     JSON.stringify(query.pagination ?? {}),
     JSON.stringify(query.allFilters),
     JSON.stringify(query.search ?? ''),
+    JSON.stringify(query.collection ?? ''),
     refetchToken
   ]);
 
@@ -228,6 +242,7 @@ export const useProducts = (initialQuery: IQueryParams, paginationType: Paginati
     setOrdering,
     setPagination,
     setSearch,
+    setCollection,
     query,
     loading,
     fetchingError,

@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import FabricsCategoryNav from '@/modules/lib/components/nav-bar/category-nav/FabricsCategoryNav';
 import Footer from '@/modules/lib/components/footer/Footer';
 import HomepageNavBar from '@/modules/lib/components/nav-bar/HomepageNavBar';
@@ -27,6 +27,8 @@ const Homepage = () => {
     useStoreCategoryNavView();
   const { setRate, setPrice, setSort, setLocation, allFilters, resetFilters } =
     useFilterStore();
+
+  const [hasCollections, setHasCollections] = useState(false)
 
   useEffect(() => {
     const parsed = searchParamsToFilters(searchParams);
@@ -127,9 +129,11 @@ const Homepage = () => {
 
     const params = new URLSearchParams(searchParams as any);
     const searchTerm = params.get('search');
+    const collection = params.get('collection')
 
     const newParams = new URLSearchParams();
     if (searchTerm) newParams.set('search', searchTerm);
+    if (collection) newParams. set('collection', collection);
 
     router.replace(`${pathname}?${newParams.toString()}`, { scroll: false });
   };
@@ -168,7 +172,7 @@ const Homepage = () => {
 
                   {hasPrice && (
                     <p className="bg-white h-33 min-w-121 flex gap-8 a-items-center j-content-between radius-999 p-10">
-                      <span className="text-14 weight-500" style={{textWrap: "nowrap"}}>
+                      <span className="text-14 weight-500" style={{ textWrap: "nowrap" }}>
                         {getPriceLabel()}
                       </span>
                       <TbX
@@ -225,11 +229,14 @@ const Homepage = () => {
         )}
       </div>
       <div className="app-width">
-        <Collections storeId="0199c43e-1060-7180-acc2-71771c1944e7" />
+        {!searchParams.get('search') && !searchParams.get('collection') && (
+          <Collections storeId="global" setHasCollections={setHasCollections} />
+        )}
 
         <CentralArena
           selectedCategory={selectedCategory}
           setSelectedCategory={setSelectedCategory}
+          hasCollections={hasCollections}
         />
       </div>
       <Footer />
