@@ -35,6 +35,7 @@ import Button from '../button/Button';
 import { useProductTileOrders } from '../../utility/hooks/use-product-tile-orders';
 import { LuChevronRight } from 'react-icons/lu';
 import { buildUserConfigurations } from '../product-detail-modal/productConfigurationsHelper';
+import ProductCatalogueDropdown from './ProductCatalogueDropdown';
 
 interface IProductTile {
   product: Product;
@@ -48,6 +49,7 @@ interface IProductTile {
   index?: number;
   selectedCategory?: any;
   setSelectedCategory?: any;
+  addToCartVariant?: 'icon' | 'text';
 }
 
 const ProductTile: FC<IProductTile> = ({
@@ -61,6 +63,7 @@ const ProductTile: FC<IProductTile> = ({
   index,
   selectedCategory,
   setSelectedCategory,
+  addToCartVariant = 'text',
 }) => {
   const pathname =
     typeof window !== 'undefined' ? window.location.pathname : '';
@@ -330,23 +333,31 @@ const ProductTile: FC<IProductTile> = ({
     const hasSize = selectedVariant.size && selectedVariant.size.trim() !== '';
     const hasOtherProperties =
       selectedVariant?.properties &&
-      Object.keys(selectedVariant?.properties).length > 0;
+      Object.entries(selectedVariant.properties).some(([, value]) => {
+        const trimmed = String(value ?? '').trim();
+        return trimmed !== '';
+      });
 
     return hasSize || hasOtherProperties;
   }, [selectedVariant]);
 
   const shouldAddDirectlyToCart = useMemo(() => {
+
     if (!allProperties) return false;
 
     const propertyKeys = Object.keys(allProperties);
     if (propertyKeys.length !== 1) return false;
-
+    
     const firstKey = propertyKeys[0];
     const values = allProperties[firstKey];
 
     if (!Array.isArray(values) || values.length !== 1) return false;
 
-    return true;
+    const singleValue = values[0];
+    const hasNonEmptyValue =
+      typeof singleValue === 'string' && singleValue.trim() !== '';
+
+    return hasNonEmptyValue;
   }, [allProperties]);
 
   const hasCustomerConfiguration = useMemo(() => {
@@ -552,11 +563,14 @@ const ProductTile: FC<IProductTile> = ({
               />
             </div>
           ) : (
-            <VideoSrc
-              className={`absolute w-full h-full a-self-center g|object-fit:cover pointer ${isOutOfStock && 'out-of-stock'
-                }`}
-              src={selectedImage}
-            />
+            <div className="relative w-full h-full">
+              <VideoSrc
+                className={`absolute w-full h-full a-self-center g|object-fit:cover pointer ${isOutOfStock && 'out-of-stock'
+                  }`}
+                src={selectedImage}
+                hasLoader={true}
+              />
+            </div>
           )}
         </Link>
 
@@ -676,10 +690,18 @@ const ProductTile: FC<IProductTile> = ({
                       `bg-#FACE33 shadow-0-4-8-0-#00000033 hover:shadow-0-8-8-0-#00000033 text-black! 
                       disabled:bg-gray-200 disabled:cursor-not-allowed hover:scale-1.06 
                       g|transition:0.5s g|will-change:transform pointer font-roboto 
-                      border-hidden outline-none s:p-14 p-12 round flex a-items-center j-items-center gap-10`
+                      border-hidden outline-none flex a-items-center j-items-center gap-10`,
+                      {
+                        'round s:p-14 p-12': addToCartVariant === 'icon',
+                        'radius-10 px-10 py-5 s:py-10 s:px-16': addToCartVariant === 'text',
+                      }
                     )}
                   >
-                    <PiShoppingCartFill className="s:w-22 w-20 s:h-22 h-20" />
+                    {addToCartVariant === 'icon' ? (
+                      <PiShoppingCartFill className="s:w-22 w-20 s:h-22 h-20" />
+                    ) : (
+                      <span className="text-black font-roboto text-12 s:text-14 weight-500">Add to cart</span>
+                    )}
                   </button>
                 )}
               </div>
@@ -730,6 +752,7 @@ const ProductTile: FC<IProductTile> = ({
           id="product varients"
           className="l:mt-16 mt-14 l:h-51.2 h-45 flex a-items-center md:gap-6 gap-4 w-full overflow-auto whitespace-nowrap no-scrollbar"
         >
+          <ProductCatalogueDropdown productCatalogues={product?.productCatalogues} />
           {uniqueVariantsFromProductImages.map((variant: any) =>
             variant?.media?.map((mediaItem: any, i: number) => (
               <div
@@ -771,9 +794,11 @@ const ProductTile: FC<IProductTile> = ({
                     )}
                     onClick={() => {
                       setSelectedVariant(variant);
+                      setRecentlyViewsId(variant.id);
                       setSelectedImage(mediaItem?.url);
                     }}
                     src={mediaItem?.url}
+                    hasLoader={true}
                   />
                 )}
               </div>

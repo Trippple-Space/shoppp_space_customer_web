@@ -3,6 +3,7 @@ import {
   ellipseText,
   formatNumberAsPrice,
   getCartItems,
+  getClosestColorName,
   getLastFiveIdChars,
 } from '@/modules/lib/utility/utility';
 import { IoMdClose } from 'react-icons/io';
@@ -120,19 +121,22 @@ const OrderedProductModal = ({
                           )}
                           key={i}
                         >
-                          <div className="flex gap-10 l:w-60p">
-                            {mediaType === 'image' ? (
-                              <Image
-                                src={item?.variant.media[0].url}
-                                alt={item.variant?.product?.name || ''}
-                                className="w-80 h-80 xl:w-70 xl:h-70 radius-8 object-fit-cover"
-                              />
-                            ) : (
-                              <VideoSrc
-                                className="w-80 h-80 xl:w-70 xl:h-70 radius-8 object-fit-cover"
-                                src={item?.variant.media[0].url}
-                              />
-                            )}
+                          <div className="flex gap-10 l:w-60p relative">
+                            <div className='w-80 h-80 xl:w-70 xl:h-70 radius-8 relative overflow-hidden'>
+                              {mediaType === 'image' ? (
+                                <Image
+                                  src={item?.variant.media[0].url}
+                                  alt={item.variant?.product?.name || ''}
+                                  className="w-80 h-80 xl:w-70 xl:h-70 radius-8 object-fit-cover"
+                                />
+                              ) : (
+                                <VideoSrc
+                                  className="w-80 h-80 xl:w-70 xl:h-70 radius-8 object-fit-cover"
+                                  src={item?.variant.media[0].url}
+                                  hasLoader={true}
+                                />
+                              )}
+                            </div>
                             <div className="flex flex-col gap-6">
                               <div className="flex flex-col gap-3">
                                 <div
@@ -158,7 +162,7 @@ const OrderedProductModal = ({
                                 ) : null}
                                 {item.variant?.properties?.color && (
                                   <p className="color-#0000008C text-12 w-fit">
-                                    Color: {item.variant?.properties?.color}
+                                    Color: {item?.variant?.properties?.color[0] === '#' ? getClosestColorName(item?.variant?.properties?.color) : item?.variant?.properties?.color}
                                   </p>
                                 )}
                                 {item?.variant?.properties &&

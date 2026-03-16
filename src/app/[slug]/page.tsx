@@ -1,15 +1,14 @@
 export const dynamic = "force-dynamic";
 export const dynamicParams = true;
 
-import { storeService } from "@/modules/lib/utility/services/store.service";
 import React from "react";
 import type { Metadata } from 'next'
 import { StorefrontParent } from "@/modules/views/storefront/StorefrontParent";
-import { redirect } from "next/navigation";
 import config from "env";
 import UnknownVendor from "@/modules/views/unknown-routes/unknown-vendor";
 import endpoints from "@/modules/lib/utility/endpoints";
 import { buildEndpoint } from "@/modules/lib/utility/utility";
+import { getCollections } from "@/modules/lib/utility/server/collections.server";
 
 async function getStore(slug: string) {
   try {
@@ -101,9 +100,11 @@ export default async function storeFront({
   return <UnknownVendor /> 
   }
 
+  const initialCollections = await getCollections(store.id, config.API_HOST);
+
   return (
     <>
-      <StorefrontParent store={store} />
+      <StorefrontParent store={store} initialCollections={initialCollections} />
     </>
   );
 }

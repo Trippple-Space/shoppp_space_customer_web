@@ -75,11 +75,11 @@ const VariantModal = ({
       <div className="mt-30 l:mt-20 w-full">
         <div
           id="image"
-          className="relative ratio-1 radius-10 g|overflow:hidden l:radius-15 l:w-250 w-200"
+          className="relative ratio-1 radius-10 g|overflow:hidden l:radius-15 l:w-250 w-200 relative"
           onMouseOver={() => setOnProductTileHover(true)}
           onMouseOut={() => setOnProductTileHover(false)}
         >
-          <Link href={`/products/${variant.productVariant?.product?.slug}`}>
+          <Link href={`/products/${variant.productVariant?.product?.slug}`} className='relative w-full h-full overflow-hidden inline-block'>
             {mediaType === 'image' ? (
               <>
                 {variant.productVariant?.status === 'OUT_OF_STOCK' && (
@@ -99,6 +99,7 @@ const VariantModal = ({
               <VideoSrc
                 className={`absolute w-full h-full a-self-center g|object-fit:cover pointer ${variant.productVariant.status === 'OUT_OF_STOCK' && 'out-of-stock'}`}
                 src={selectedImage}
+                hasLoader={true}
               />
             )}
           </Link>

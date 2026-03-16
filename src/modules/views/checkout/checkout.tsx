@@ -13,6 +13,7 @@ import {
   checkMediaType,
   displayStockUnit,
   formatNumberAsPrice,
+  getClosestColorName,
 } from '@/modules/lib/utility/utility';
 import { PiCaretDown, PiCaretUp } from 'react-icons/pi';
 import Link from 'next/link';
@@ -259,28 +260,28 @@ const CheckoutPage = () => {
           setAllAddressDeliveryPrice((prev) =>
             prev.some((item) => item.addressId === selectedAddress.id)
               ? prev.map((item) =>
-                  item.addressId === selectedAddress.id
-                    ? {
-                        addressId: selectedAddress.id,
-                        deliveryOptions: updatedOptions,
-                        coordinates: {
-                          lat,
-                          lon,
-                        },
-                      }
-                    : item
-                )
-              : [
-                  ...prev,
-                  {
+                item.addressId === selectedAddress.id
+                  ? {
                     addressId: selectedAddress.id,
                     deliveryOptions: updatedOptions,
                     coordinates: {
                       lat,
                       lon,
                     },
+                  }
+                  : item
+              )
+              : [
+                ...prev,
+                {
+                  addressId: selectedAddress.id,
+                  deliveryOptions: updatedOptions,
+                  coordinates: {
+                    lat,
+                    lon,
                   },
-                ]
+                },
+              ]
           );
           setCalculatingFee(false);
         }
@@ -304,9 +305,9 @@ const CheckoutPage = () => {
     if (cartItem?.variant?.product?.discount?.activeEndDate) {
       return (
         new Date(cartItem?.variant?.product?.discount?.activeStartDate) <=
-          new Date(new Date().setHours(new Date().getHours() + 1)) &&
+        new Date(new Date().setHours(new Date().getHours() + 1)) &&
         new Date(new Date().setHours(new Date().getHours() + 1)) <=
-          new Date(cartItem?.variant?.product?.discount?.activeEndDate)
+        new Date(cartItem?.variant?.product?.discount?.activeEndDate)
       );
     }
   };
@@ -449,18 +450,21 @@ const CheckoutPage = () => {
                                 className={`gap-12 ${store.visible ? 'flex a-items-center' : 'hidden'}`}
                                 key={j}
                               >
-                                {mediaType === 'image' ? (
-                                  <Image
-                                    src={cartItem.variant.media?.[0].url}
-                                    alt="order image"
-                                    className="w-73 h-75 radius-6 border border-#00000014 object-fit"
-                                  />
-                                ) : (
-                                  <VideoSrc
-                                    className="w-73 h-75 radius-6 border border-#00000014 object-fit"
-                                    src={cartItem.variant.media?.[0].url}
-                                  />
-                                )}
+                                <div className="w-73 h-75 radius-6 relative overflow-hidden">
+                                  {mediaType === 'image' ? (
+                                    <Image
+                                      src={cartItem.variant.media?.[0].url}
+                                      alt="order image"
+                                      className="w-73 h-75 radius-6 border border-#00000014 object-fit"
+                                    />
+                                  ) : (
+                                    <VideoSrc
+                                      className="w-73 h-75 radius-6 border border-#00000014 object-fit"
+                                      src={cartItem.variant.media?.[0].url}
+                                      hasLoader={true}
+                                    />
+                                  )}
+                                </div>
                                 <div
                                   className={`flex-grow-1 flex flex-col ${Object.keys(cartItem?.variant?.properties ?? {}).length > 2 ? 'gap-2.8' : 'gap-6'} overflow-hidden white-space-nowrap text-overflow-ellipsis`}
                                 >
@@ -480,7 +484,7 @@ const CheckoutPage = () => {
                                       className={`weight-400 color-#0000008C capitalize ${Object.keys(cartItem?.variant?.properties ?? {}).length > 2 ? 'text-13.5 line-height-16' : 'text-14 line-height-16.94'}`}
                                     >
                                       Color:{' '}
-                                      {cartItem?.variant?.properties?.color}
+                                      {cartItem?.variant?.properties?.color[0] === '#' ? getClosestColorName(cartItem?.variant?.properties?.color) : cartItem?.variant?.properties?.color}
                                     </p>
                                   )}
                                   {cartItem?.variant?.size && (
@@ -511,11 +515,11 @@ const CheckoutPage = () => {
                                     >
                                       {isValidDiscount(cartItem)
                                         ? formatNumberAsPrice(
-                                            cartItem.discountedPrice
-                                          )
+                                          cartItem.discountedPrice
+                                        )
                                         : formatNumberAsPrice(
-                                            cartItem.totalPrice
-                                          )}
+                                          cartItem.totalPrice
+                                        )}
                                     </p>
                                     {isValidDiscount(cartItem) && (
                                       <p
@@ -534,7 +538,7 @@ const CheckoutPage = () => {
                                         await removeFromCart(cartItem?.id);
                                         setAllAddressDeliveryPrice([]);
                                         //setShouldUpdateFee(true);
-                                      } catch (error) {}
+                                      } catch (error) { }
                                     }}
                                   >
                                     Remove
@@ -556,7 +560,7 @@ const CheckoutPage = () => {
                                             !recordValue ||
                                             typeof recordValue !== 'object' ||
                                             Object.keys(recordValue).length ===
-                                              0
+                                            0
                                           )
                                             return null;
 
@@ -613,20 +617,20 @@ const CheckoutPage = () => {
                         subTotal={cart.subTotal}
                         shippingFee={
                           selectedAddress &&
-                          selectedDeliveryOptionDetails &&
-                          'price' in selectedDeliveryOptionDetails
+                            selectedDeliveryOptionDetails &&
+                            'price' in selectedDeliveryOptionDetails
                             ? selectedDeliveryOptionDetails.price
                             : undefined
                         }
                         total={
                           selectedAddress
                             ? cart.total +
-                              (selectedDeliveryOptionDetails &&
+                            (selectedDeliveryOptionDetails &&
                               'price' in selectedDeliveryOptionDetails &&
                               typeof selectedDeliveryOptionDetails.price ===
-                                'number'
-                                ? selectedDeliveryOptionDetails.price
-                                : 0)
+                              'number'
+                              ? selectedDeliveryOptionDetails.price
+                              : 0)
                             : ''
                         }
                         cart={cart}
@@ -664,12 +668,12 @@ const CheckoutPage = () => {
                             <span className="md:hidden sm:block hidden sm:weight-600 weight-700 sm:text-16 text-14 sm:line-height-22 line-height-19">
                               {formatNumberAsPrice(
                                 cart.total +
-                                  (selectedDeliveryOptionDetails &&
+                                (selectedDeliveryOptionDetails &&
                                   'price' in selectedDeliveryOptionDetails &&
                                   typeof selectedDeliveryOptionDetails.price ===
-                                    'number'
-                                    ? selectedDeliveryOptionDetails.price
-                                    : 0)
+                                  'number'
+                                  ? selectedDeliveryOptionDetails.price
+                                  : 0)
                               )}
                             </span>
                           )}
@@ -717,30 +721,30 @@ const CheckoutPage = () => {
                                   : 'Add an address to proceed to payment'
                             }
                           >
-                          <span className="">
-                            Proceed to payment{' '}
-                            {!showSummary && (
-                              <span className="sm:hidden weight-700">
-                                (
-                                {formatNumberAsPrice(
-                                  cart.total +
+                            <span className="">
+                              Proceed to payment{' '}
+                              {!showSummary && (
+                                <span className="sm:hidden weight-700">
+                                  (
+                                  {formatNumberAsPrice(
+                                    cart.total +
                                     (selectedDeliveryOptionDetails &&
-                                    'price' in selectedDeliveryOptionDetails &&
-                                    typeof selectedDeliveryOptionDetails.price ===
+                                      'price' in selectedDeliveryOptionDetails &&
+                                      typeof selectedDeliveryOptionDetails.price ===
                                       'number'
                                       ? selectedDeliveryOptionDetails.price
                                       : 0)
-                                )}
-                                )
-                              </span>
-                            )}
-                          </span>
-                          <PuffLoader
-                            size={15}
-                            loading={isPaymentLoading}
-                            className="ml-10"
-                          />
-                        </button>
+                                  )}
+                                  )
+                                </span>
+                              )}
+                            </span>
+                            <PuffLoader
+                              size={15}
+                              loading={isPaymentLoading}
+                              className="ml-10"
+                            />
+                          </button>
                         </div>
                       </div>
                     </div>

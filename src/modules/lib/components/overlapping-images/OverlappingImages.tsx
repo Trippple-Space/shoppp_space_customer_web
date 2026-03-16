@@ -18,7 +18,7 @@ const OverlappingImages = ({ orderItem }: any) => {
           media && (
             <div
               className={classNames(
-                `absolute radius-100 border border-2 border-white overflow-hidden bg-white w-40 h-40`
+                `absolute radius-100 border border-2 border-white overflow-hidden bg-white w-40 h-40 relative`
               )}
               style={{
                 right: `${idx * 15}px`, // Position from left
@@ -38,6 +38,7 @@ const OverlappingImages = ({ orderItem }: any) => {
                   <VideoSrc
                     className='w-40 h-40 object-contain'
                     src={media.url}
+                    hasLoader={true}
                   />
               }
             </div>

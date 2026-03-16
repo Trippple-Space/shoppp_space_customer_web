@@ -1,4 +1,4 @@
-import { usePathname, useRouter } from 'next/navigation';
+import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 import {
   formatNumberAsPrice,
   cx,
@@ -12,6 +12,7 @@ import { useRecentlyViewedActions } from '../../utility/hooks/use-recently-viewe
 import { useRecentVariantStore } from '../../utility/store/recentVariant.store';
 import { useFilterStore } from '../../utility/store/filter.store';
 import { useCategoryStore } from '../../utility/store/categories.store';
+import VideoSrc from '../video-src/VideoSrc';
 
 const SearchModal = ({
   searchResults,
@@ -34,9 +35,10 @@ const SearchModal = ({
 
   const router = useRouter();
   const pathname = usePathname();
+  const searchParams = useSearchParams();
 
   const handleShowMore = () => {
-    const params = filtersToSearchParams(allFilters, selectedCategory);
+    const params = filtersToSearchParams(allFilters, selectedCategory, searchParams);
 
     if (searchTerm) {
       params.set('search', searchTerm);
@@ -66,14 +68,31 @@ const SearchModal = ({
                     handleFetchProduct(product.slug);
                   }}
                 >
-                  <Image
-                    src={
+
+                  <div className="w-50 min-w-50 h-50 radius-6 object-fit-cover relative">
+                    {
                       product?.variants?.[product?.variants?.length - 1 || 0]
-                        ?.media?.[0]?.url
+                        ?.media?.[0]?.type === 'image' ? (
+                        <Image
+                          src={
+                            product?.variants?.[product?.variants?.length - 1 || 0]
+                              ?.media?.[0]?.url
+                          }
+                          className="w-50 min-w-50 h-50 radius-6 object-fit-cover"
+                          alt={product.name}
+                        />
+                      ) : (
+                        <VideoSrc
+                          src={
+                            product?.variants?.[product?.variants?.length - 1 || 0]
+                              ?.media?.[0]?.url
+                          }
+                          className="w-50 min-w-50 h-50 radius-6 object-fit-cover"
+                          hasLoader={true}
+                        />
+                      )
                     }
-                    alt={product.name}
-                    className="w-50 min-w-50 h-50 radius-6 object-fit-cover"
-                  />
+                  </div>
                   <div className="flex flex-col a-items-start gap-4">
                     <p className="color-#000000 text-left text-14 weight-500">
                       {product.name}

@@ -5,6 +5,7 @@ import {
   checkMediaType,
   displayStockUnit,
   formatNumberAsPrice,
+  getClosestColorName,
 } from '@/modules/lib/utility/utility';
 import { useRouter } from 'next/navigation';
 import React, { useEffect, useState } from 'react';
@@ -76,9 +77,9 @@ const MiniCart: React.FC<ModalProps> = ({
     if (cartItem?.variant?.product?.discount?.activeEndDate) {
       return (
         new Date(cartItem?.variant?.product?.discount?.activeStartDate) <=
-          new Date(new Date().setHours(new Date().getHours() + 1)) &&
+        new Date(new Date().setHours(new Date().getHours() + 1)) &&
         new Date(new Date().setHours(new Date().getHours() + 1)) <=
-          new Date(cartItem?.variant?.product?.discount?.activeEndDate)
+        new Date(cartItem?.variant?.product?.discount?.activeEndDate)
       );
     }
   };
@@ -110,7 +111,7 @@ const MiniCart: React.FC<ModalProps> = ({
               <div className="flex flex-col pb-183">
                 {!cart.cartItems.length ? (
                   <div className="mx-auto text-center flex flex-col a-items-center gap-16 py-24">
-                    <NoResultMessage textContent='Continue shopping to discover our best deals!'/>
+                    <NoResultMessage textContent='Continue shopping to discover our best deals!' />
 
                     <div className="flex flex-col gap-8 text-14 w-250 mx-auto">
                       {!isAuthenticated && (
@@ -124,11 +125,10 @@ const MiniCart: React.FC<ModalProps> = ({
 
                       <button
                         onClick={() => setOpen(false)}
-                        className={`g|transition:0.5s py-12 px-24 radius-6 line-height-19 text-center w-full weight-500 border border-none hover:pointer ${
-                          isAuthenticated
-                            ? 'bg-green hover:bg-darkgreen text-white'
-                            : 'bg-#F5F5F5 hover:bg-grey-300 text-#333333'
-                        }`}
+                        className={`g|transition:0.5s py-12 px-24 radius-6 line-height-19 text-center w-full weight-500 border border-none hover:pointer ${isAuthenticated
+                          ? 'bg-green hover:bg-darkgreen text-white'
+                          : 'bg-#F5F5F5 hover:bg-grey-300 text-#333333'
+                          }`}
                       >
                         Explore products
                       </button>
@@ -152,27 +152,30 @@ const MiniCart: React.FC<ModalProps> = ({
                           <div
                             className={`flex j-content-between gap-10 p-12 ${cartItem.variant.status === 'OUT_OF_STOCK' ? 'color-#00000099' : 'color-#0000008C'}`}
                           >
-                            <div className="flex gap-10">
-                              {mediaType === 'image' ? (
-                                <Image
-                                  src={
-                                    cartItem?.variant?.media
-                                      ? cartItem?.variant?.media[0]?.url
-                                      : ''
-                                  }
-                                  alt="cart image"
-                                  className={`sm:w-80! w-70! sm:h-80! h-70! radius-6 border border-#00000014 object-fit ${cartItem.variant.status == 'OUT_OF_STOCK' ? 'greyscale' : ''}`}
-                                />
-                              ) : (
-                                <VideoSrc
-                                  className={`sm:w-80! w-70! sm:h-80! h-70! radius-6 border border-#00000014 object-fit ${cartItem.variant.status == 'OUT_OF_STOCK' ? 'greyscale' : ''}`}
-                                  src={
-                                    cartItem?.variant?.media
-                                      ? cartItem?.variant?.media[0]?.url
-                                      : ''
-                                  }
-                                />
-                              )}
+                            <div className="flex gap-10 relative">
+                              <div className="sm:w-80! w-70! sm:h-80! h-70! radius-6 relative overflow-hidden">
+                                {mediaType === 'image' ? (
+                                  <Image
+                                    src={
+                                      cartItem?.variant?.media
+                                        ? cartItem?.variant?.media[0]?.url
+                                        : ''
+                                    }
+                                    alt="cart image"
+                                    className={`sm:w-80! w-70! sm:h-80! h-70! radius-6 border border-#00000014 object-fit ${cartItem.variant.status == 'OUT_OF_STOCK' ? 'greyscale' : ''}`}
+                                  />
+                                ) : (
+                                  <VideoSrc
+                                    className={`sm:w-80! w-70! sm:h-80! h-70! radius-6 border border-#00000014 object-fit ${cartItem.variant.status == 'OUT_OF_STOCK' ? 'greyscale' : ''}`}
+                                    src={
+                                      cartItem?.variant?.media
+                                        ? cartItem?.variant?.media[0]?.url
+                                        : ''
+                                    }
+                                    hasLoader={true}
+                                  />
+                                )}
+                              </div>
                               <div
                                 className={`flex flex-col ${Object.keys(cartItem?.variant?.properties ?? {}).length > 2 ? 'gap-2.8' : 'gap-6'}`}
                               >
@@ -194,7 +197,7 @@ const MiniCart: React.FC<ModalProps> = ({
                                     className={`weight-400 capitalize ${Object.keys(cartItem?.variant?.properties ?? {}).length > 2 ? 'text-13.5 line-height-16' : 'text-14 line-height-16.94'}`}
                                   >
                                     Color:{' '}
-                                    {cartItem?.variant?.properties?.color}
+                                    {cartItem?.variant?.properties?.color[0] === '#' ? getClosestColorName(cartItem?.variant?.properties?.color) : cartItem?.variant?.properties?.color}
                                   </p>
                                 )}
                                 {cartItem?.variant?.size && (
@@ -207,7 +210,7 @@ const MiniCart: React.FC<ModalProps> = ({
                                   Object.entries(
                                     cartItem.variant?.properties
                                   ).map(([key, value]) => {
-                                    if (key === 'color' || key === 'size')
+                                    if (key === 'color' || key === 'size' || !value)
                                       return null;
                                     return (
                                       <p
@@ -231,7 +234,7 @@ const MiniCart: React.FC<ModalProps> = ({
 
                           {cartItem?.userConfigurations &&
                             Object.keys(cartItem.userConfigurations).length >
-                              0 && (
+                            0 && (
                               <div className="px-12 pb-12">
                                 <div className="pt-10 flex flex-col gap-6">
                                   <div className="flex gap-8 flex-wrap relative">
@@ -268,8 +271,8 @@ const MiniCart: React.FC<ModalProps> = ({
                               >
                                 {isValidDiscount(cartItem)
                                   ? formatNumberAsPrice(
-                                      cartItem.discountedPrice
-                                    )
+                                    cartItem.discountedPrice
+                                  )
                                   : formatNumberAsPrice(cartItem.totalPrice)}
                               </p>
                               {isValidDiscount(cartItem) && (
@@ -294,7 +297,7 @@ const MiniCart: React.FC<ModalProps> = ({
                                     onClick={() => decrement(cartItem)}
                                   >
                                     {cartItem?.quantity ===
-                                    cartItem?.variant?.minPurchaseQuantity ? (
+                                      cartItem?.variant?.minPurchaseQuantity ? (
                                       <PiTrashSimple className="w-20 h-20 color-#00000099" />
                                     ) : (
                                       <PiMinus className="w-20 h-20 color-#00000099" />
@@ -334,7 +337,7 @@ const MiniCart: React.FC<ModalProps> = ({
                         {/* {formatNumberAsPrice(cart?.cartItems
                           .filter(item => item.variant.status !== 'OUT_OF_STOCK')
                           .reduce((acc, item) => acc + item.totalPrice, 0))} */}
-                        {}
+                        { }
                       </span>
                     </p>
                     <p className="weight-400 text-14 line-height-22 color-#00000099">

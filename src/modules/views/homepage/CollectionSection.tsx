@@ -2,22 +2,24 @@ import {
   useProducts,
 } from '@/modules/lib/utility/hooks/use-products';
 import ProductTile from '@/modules/lib/components/product-tile/ProductTile';
+import ProductTileShimmer from '@/modules/lib/components/product-tile/ProductTileShimmer';
 import ScrollButtons from '@/modules/lib/components/scroll-buttons/scrollButtons';
-import Link from 'next/link';
+import NoResultMessage from '@/modules/lib/components/error-messages/no-result-found';
 import { useEffect, useRef } from 'react';
 import { ICollection } from '@/modules/lib/utility/types/collection.interface';
 import { useFilterStore } from '@/modules/lib/utility/store/filter.store';
 import { useCategories } from '@/modules/lib/utility/hooks/use-categories';
 import { usePathname, useRouter } from 'next/navigation';
 import { LuArrowRight } from 'react-icons/lu';
+import { TbAlertCircle, TbRefresh } from 'react-icons/tb';
 import { filtersToSearchParams } from '@/modules/lib/utility/utility';
 
-const sectionThemes = [
-  { bg: "#FEFBE8", button: "#FACE33", text: 'black' }, // yellow
-  { bg: "#FFF3F1", button: "#D4280C", text: 'white' }, // red
-  { bg: "#EDF8FF", button: "#1677FF", text: 'white' }, // blue
-  { bg: "#F4F0FF", button: "#7B61FF", text: 'white' }, // purple
-  { bg: "#ECFFF6", button: "#00B96B", text: 'white' }, // green
+const redTheme = { bg: "#FFF3F1", button: "#D4280C", text: 'white' as const };
+const otherThemes = [
+  { bg: "#FEFBE8", button: "#FACE33", text: 'black' as const }, // yellow
+  { bg: "#EDF8FF", button: "#1677FF", text: 'white' as const }, // blue
+  { bg: "#F4F0FF", button: "#7B61FF", text: 'white' as const }, // purple
+  { bg: "#ECFFF6", button: "#00B96B", text: 'white' as const }, // green
 ];
 
 interface Props {
@@ -33,7 +35,9 @@ const CollectionSection = ({ collection, index, selectedCollection, setSelectedC
   const pathname = usePathname();
   const router = useRouter();
 
-  const theme = sectionThemes[index % sectionThemes.length];
+  const nameLower = (collection.name ?? '').toLowerCase();
+  const isLimited = /limited|limit/.test(nameLower);
+  const theme = isLimited ? redTheme : otherThemes[index % otherThemes.length];
   const type = pathname.includes('wears') ? 'wears' : 'fabrics';
 
   const { selectedCategory, setSelectedCategory } = useCategories({
@@ -43,15 +47,21 @@ const CollectionSection = ({ collection, index, selectedCollection, setSelectedC
   });
   const { allFilters } = useFilterStore();
 
-  const { products, loading, query, updateHomePageFilter } = useProducts(
+  const initialFiltersForCollection = {
+    ...allFilters,
+    tags: selectedCategory.name === 'All' ? '' : selectedCategory.name.toLowerCase(),
+  };
+
+  const { products, loading, query, updateHomePageFilter, fetchingError, refetch } = useProducts(
     {
-      filters: { type, status: { In: "ACTIVE,OUT_OF_STOCK" }, channel: "ASOEBI_STORE" }, order: {
-        priorityScore: "DESC"
-      },
+      filters: { type, status: { In: "ACTIVE,OUT_OF_STOCK" }, channel: "ASOEBI_STORE" },
+      order: { priorityScore: "DESC" },
       pagination: { page: 1, limit: 11 },
+      allFilters: initialFiltersForCollection,
     },
     'infinite',
     collection.slug,
+    selectedCategory.name === 'All' ? '' : selectedCategory.name.toLowerCase(),
   );
 
   useEffect(() => {
@@ -81,7 +91,14 @@ const CollectionSection = ({ collection, index, selectedCollection, setSelectedC
     router.replace(`${pathname}?${params.toString()}`);
   };
 
-  if (loading || !products.length) return null;
+  const shimmerCount = Math.min(collection.productCount ?? 10, 10);
+  const hasError = !!fetchingError;
+  const productsLoading = loading;
+  const showShimmers = productsLoading;
+  const showEmptyState = !productsLoading && !hasError && products.length === 0;
+  const showProducts = !productsLoading && !hasError && products.length > 0;
+
+  if (collection.productCount === 0) return null;
 
   return (
     <section
@@ -98,7 +115,7 @@ const CollectionSection = ({ collection, index, selectedCollection, setSelectedC
           </p>
         </div>
 
-        {products?.length > 10 && (
+        {!loading && !hasError && products?.length > 10 && (
           <p
             onClick={() => {
               handleShowMore(collection.slug)
@@ -115,31 +132,68 @@ const CollectionSection = ({ collection, index, selectedCollection, setSelectedC
       </div>
       <div className="scroll-x no-scrollbar" ref={scrollRef1}>
         <div
-          className={`flex h-fit ${products?.length && 'w-fit'
+          className={`flex h-fit ${showShimmers && shimmerCount > 0 ? 'w-fit' : showProducts ? 'w-fit' : showEmptyState ? 'w-100p a-items-center j-content-center' : ''
             } whitespace-nowrap gap-14`}
         >
-          {products?.length ? (
-            products?.map((product, i) => (
+          {hasError ? (
+            <div
+              className="flex flex-col a-items-center j-content-center gap-20 py-40 px-24 radius-12 border border-#E8E8E8 bg-#FAFAFA min-w-280 max-w-100p"
+              role="alert"
+              aria-live="polite"
+            >
+              <span className="flex a-items-center j-content-center w-48 h-48 radius-999 bg-#FFF3F1 color-#D4280C">
+                <TbAlertCircle className="w-28 h-28" aria-hidden />
+              </span>
+              <div className="flex flex-col a-items-center gap-8 text-center">
+                <h4 className="text-16 weight-600 color-#000000E0">
+                  Couldn’t load products
+                </h4>
+                <p className="text-14 weight-400 color-#00000099">
+                  Something went wrong loading this collection. Try again.
+                </p>
+              </div>
+              <button
+                type="button"
+                onClick={() => refetch()}
+                className="flex a-items-center j-content-center gap-8 h-40 min-w-100 px-20 radius-999 bg-#1677FF color-white text-14 weight-500"
+              >
+                <TbRefresh className="w-16 h-16" aria-hidden />
+                Try again
+              </button>
+            </div>
+          ) : showShimmers ? (
+            Array.from({ length: shimmerCount }, (_, i) => (
+              <ProductTileShimmer key={`shimmer-${collection.id}-${i}`} />
+            ))
+          ) : showEmptyState ? (
+            <div className="flex flex-col a-items-center j-content-center min-w-280 py-32">
+              <NoResultMessage
+                contentTitle="No products in this collection"
+                textContent="There are no products to show for this collection right now."
+              />
+            </div>
+          ) : showProducts ? (
+            products?.slice(0, 10).map((product, i) => (
               <div
                 key={i}
                 className="l:w-290 md:w-250 sm:w-220 w-150 l:mt--20 mt--30"
               >
-                <ProductTile product={product} key={i} id={product.id} />
+                <ProductTile product={product} key={i} id={product.id} addToCartVariant="icon" />
               </div>
             ))
-          ) : (
-            <div className="mt-60 text-center flex-grow-1">
-              No products found for {collection.name}
-            </div>
-          )}
+          ) : null}
         </div>
       </div>
-      <ScrollButtons
-        scrollRef={scrollRef1}
-        page={'productScroll'}
-        scrollLength={products.length}
-        component={'products'}
-      />
+      {
+        products.length > 0 && (
+          <ScrollButtons
+            scrollRef={scrollRef1}
+            page={'productScroll'}
+            scrollLength={hasError ? 0 : showShimmers ? shimmerCount : showEmptyState ? 0 : products.length}
+            component={'products'}
+          />
+        )
+      }
     </section>
   );
 };

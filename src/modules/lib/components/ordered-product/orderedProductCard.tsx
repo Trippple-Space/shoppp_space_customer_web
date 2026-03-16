@@ -2,6 +2,7 @@ import {
   checkMediaType,
   formatNumberAsPrice,
   getCartItems,
+  getClosestColorName,
 } from '@/modules/lib/utility/utility';
 import React from 'react';
 import Image from '../image/Image';
@@ -20,19 +21,22 @@ function orderedProductCard({ orderedProducts }: any) {
           return (
             <div className="flex flex-col gap-4 bg-whitesmoke radius-5 p-10">
               <div className="l:flex space-between a-items-start">
-                <div className="flex gap-10 l:w-60p w-90p">
-                  {mediaType === 'image' ? (
-                    <Image
-                      src={item?.variant.media[0].url}
-                      alt={item.variant?.product?.name || ''}
-                      className="w-60 h-60 radius-8 object-fit-cover"
-                    />
-                  ) : (
-                    <VideoSrc
-                      className="w-60 h-60 radius-8 object-fit-cover"
-                      src={item?.variant.media[0].url}
-                    />
-                  )}
+                <div className="flex gap-10 l:w-60p w-90p relative">
+                  <div className="w-60 h-60 radius-8 relative overflow-hidden">
+                    {mediaType === 'image' ? (
+                      <Image
+                        src={item?.variant.media[0].url}
+                        alt={item.variant?.product?.name || ''}
+                        className="w-60 h-60 radius-8 object-fit-cover"
+                      />
+                    ) : (
+                      <VideoSrc
+                        className="w-60 h-60 radius-8 object-fit-cover"
+                        src={item?.variant.media[0].url}
+                        hasLoader={true}
+                      />
+                    )}
+                  </div>
                   <div className="flex flex-col gap-10 pb-10 l:pb-0">
                     <div className="flex flex-col gap-3">
                       <p className="weight-600 text-14 w-fit">
@@ -51,7 +55,7 @@ function orderedProductCard({ orderedProducts }: any) {
                       ) : null}
                       {item.variant?.properties?.color && (
                         <p className="color-#0000008C text-14">
-                          Color: {item.variant?.properties?.color}
+                          Color: {item?.variant?.properties?.color[0] === '#' ? getClosestColorName(item?.variant?.properties?.color) : item?.variant?.properties?.color}
                         </p>
                       )}
                       {item?.variant?.properties &&
