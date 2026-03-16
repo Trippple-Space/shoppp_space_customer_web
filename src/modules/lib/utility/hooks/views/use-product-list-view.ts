@@ -37,16 +37,17 @@ export const useProductListView = () => {
   }, [allFilters, JSON.stringify(query.allFilters), JSON.stringify(query.filters), selectedCategory.name])
 
   useEffect(() => {
-    if (inView) {
-      if (products.length >= 20 && products.length % 20 === 0) {
-        setPage((prev) => prev + 1);
-      }
+    if (!inView) return;
+    if (loading) return;
+
+    if (products.length >= limit && products.length % limit === 0) {
+      setPage((prev) => prev + 1);
     }
-  }, [inView]);
+  }, [inView, loading, products.length]);
 
   useEffect(() => {
     setPagination({ page, limit });
-  }, [page, inView]);
+  }, [page]);
 
   return {
     type,

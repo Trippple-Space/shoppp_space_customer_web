@@ -1112,7 +1112,7 @@ const ProductDetails = ({ product }: { product: Product }) => {
                 <div className="flex flex-col gap-2">
                   <p className="weight-500 text-16">Delivery Within Lagos</p>
                   <p className="text-14 color-#00000099">
-                    Receive your product within 4 hours after payment
+                    Receive your product within 24 -72 hours after payment
                     confirmation.
                   </p>
                 </div>
