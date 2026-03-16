@@ -165,7 +165,7 @@ const ProductDetailModal = ({
     return requiredKeysForVariant(firstVariant);
   }, [openSingleProductModal, activeFilters, product?.variants]);
 
-  const hasAnySelectableOptions = useMemo(() => {
+  /* const hasAnySelectableOptions = useMemo(() => {
     if (!product?.variants?.length) return false;
 
     return product.variants.some((v) => {
@@ -175,7 +175,7 @@ const ProductDetailModal = ({
         (val) => val !== null && val !== undefined && String(val).trim() !== ''
       );
     });
-  }, [product?.variants]);
+  }, [product?.variants]); */
 
   const selectedVariantItemInCart = cart.cartItems.find(
     (item) => item.variant.id === selectedVariant?.id
@@ -229,20 +229,14 @@ const ProductDetailModal = ({
         setSelectedImage(firstMedia);
         setImageSource('variant');
       }
-    } else {
-      if (!hasAnySelectableOptions && product?.variants?.length) {
-        const first = product.variants[0];
+    } else if (product?.variants?.length) {
+      const first = product.variants[0];
+      const filters = buildFiltersFromVariant(first);
 
-        setForcedVariantId(first.id);
-        setActiveFilters({});
-        setSelectedImage(first.media?.[0]?.url);
-        setImageSource('variant');
-        return;
-      }
-
-      setActiveFilters({});
-      setSelectedImage(product?.variants[0]?.media?.[0]?.url);
-      setImageSource('default');
+      setForcedVariantId(first.id);
+      setActiveFilters(filters);
+      setSelectedImage(first.media?.[0]?.url);
+      setImageSource('variant');
     }
   }, [openSingleProductModal]);
 
@@ -688,7 +682,7 @@ const ProductDetailModal = ({
                               Select color:
                             </p>
 
-                            <div className="mt-10 flex gap-6 a-items-center">
+                            <div className="mt-10 flex gap-6 a-items-center overflow-auto no-scrollbar">
                               {allPropertiesWithSize?.color.map((color) => {
                                 const hex = colorMap[color.replaceAll(' ', '')];
                                 const active = activeFilters.color === color;
@@ -702,7 +696,7 @@ const ProductDetailModal = ({
                                     key={color}
                                     onClick={() => toggleFilter('color', color)}
                                     className={classNames(
-                                      'w-32 h-32 round border transition',
+                                      'w-32 min-w-32 h-32 round border transition',
                                       {
                                         'border-3 border-#0B9378 border-solid':
                                           active,
@@ -733,7 +727,7 @@ const ProductDetailModal = ({
                                   Select {prop}:
                                 </p>
 
-                                <div className="flex gap-6 overflow-auto">
+                                <div className="flex gap-6 overflow-auto no-scrollbar">
                                   {values.map((value) => {
                                     const active =
                                       activeFilters[prop] === value;

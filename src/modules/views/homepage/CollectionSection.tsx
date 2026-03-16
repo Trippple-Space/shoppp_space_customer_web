@@ -55,7 +55,7 @@ const CollectionSection = ({ collection, index, selectedCollection, setSelectedC
   const { products, loading, query, updateHomePageFilter, fetchingError, refetch } = useProducts(
     {
       filters: { type, status: { In: "ACTIVE,OUT_OF_STOCK" }, channel: "ASOEBI_STORE" },
-      order: { priorityScore: "DESC" },
+      order: { priorityScore: "DESC", createdAt: "DESC" },
       pagination: { page: 1, limit: 11 },
       allFilters: initialFiltersForCollection,
     },

@@ -43,10 +43,14 @@ const BaseCategoryNav: FC<IBaseCategoryNav> = ({
           {categories?.map((category, i) => {
             const isActive =
               category?.name.toLowerCase() === activeOption.toLowerCase();
+            const isSyntheticAll =
+              category?.name?.toLowerCase?.()?.trim() === 'all' &&
+              !category?.images?.icon &&
+              !category?.images?.picture;
 
             return (
               <div
-                key={i}
+                key={isSyntheticAll ? 'all' : i}
                 className={`${
                   page === 'home' ? 's:w-90 w-71' : 's:w-116 w-96'
                 } flex j-content-center`}
@@ -61,7 +65,26 @@ const BaseCategoryNav: FC<IBaseCategoryNav> = ({
                   }}
                   className="flex flex-col a-items-center gap-7 space-between w-fit cursor-pointer"
                 >
-                  {!!category.images?.icon || category.images?.picture ? (
+                  {isSyntheticAll ? (
+                    <div
+                      className={cx(
+                        'flex a-items-center j-content-center bg-#00000008 border',
+                        page === 'home'
+                          ? 'w-47.02 h-46 round'
+                          : 's:w-100 w-80 h-64 radius-6',
+                        isActive ? 'border-2 border-green' : 'border-#00000026'
+                      )}
+                    >
+                      <span
+                        className={cx(
+                          'weight-600 text-small capitalize',
+                          isActive ? 'text-green' : 'color-#00000099'
+                        )}
+                      >
+                        All
+                      </span>
+                    </div>
+                  ) : !!category.images?.icon || category.images?.picture ? (
                     <ImageAlt
                       className={`${
                         page === 'home'
