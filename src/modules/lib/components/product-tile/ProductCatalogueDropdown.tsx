@@ -40,10 +40,9 @@ export function CatalogueMediaItem({ item }: { item: ProductCatalogue }) {
   }, [item.mediaType, item.id]);
 
   const wrapperStyle: React.CSSProperties = {
-    borderRadius: 10,
     overflow: 'hidden',
     background: 'rgba(0,0,0,0.04)',
-    paddingBottom: 5
+    /* paddingBottom: 5 */
   };
 
   const tags: string[] = [];
@@ -64,7 +63,7 @@ export function CatalogueMediaItem({ item }: { item: ProductCatalogue }) {
             style={{ width: '100%', height: '100%', display: 'block', objectFit: 'cover' }}
           />
         </div>
-        {(item.caption || tags.length > 0) && (
+        {/* (item.caption || tags.length > 0) && (
           <div className="px-8 py-6">
             {tags.length > 0 && (
               <div className="flex flex-wrap gap-4">
@@ -79,7 +78,7 @@ export function CatalogueMediaItem({ item }: { item: ProductCatalogue }) {
               <p className="text-11 color-#00000099">{item.caption}</p>
             )}
           </div>
-        )}
+        ) */}
       </div>
     );
   }
@@ -96,7 +95,7 @@ export function CatalogueMediaItem({ item }: { item: ProductCatalogue }) {
           width={10000}
         />
       </div>
-      {(item.caption || tags.length > 0) && (
+      {/* (item.caption || tags.length > 0) && (
         <div className="px-8 py-6">
           {tags.length > 0 && (
             <div className="flex flex-wrap gap-4">
@@ -111,7 +110,7 @@ export function CatalogueMediaItem({ item }: { item: ProductCatalogue }) {
             <p className="text-11 color-#00000099">{item.caption}</p>
           )}
         </div>
-      )}
+      ) */}
     </div>
   );
 }
@@ -132,8 +131,8 @@ export function ProductCatalogueDropdown({ productCatalogues }: ProductCatalogue
   const { refs, floatingStyles, context } = useFloating({
     open,
     onOpenChange: setOpen,
-    placement: 'bottom-start',
-    middleware: [offset(8), flip(), shift({ padding: 12 })],
+    placement: 'top-start',
+    middleware: [offset(8), flip({ fallbackPlacements: ['bottom-start'] }), shift({ padding: 12 })],
   });
   const hover = useHover(context, {
     handleClose: safePolygon(),
@@ -163,8 +162,8 @@ export function ProductCatalogueDropdown({ productCatalogues }: ProductCatalogue
             className='sm:p-10 p-5 sm:pt-14'
             style={{
               ...floatingStyles,
-              minWidth: 'min(90vw, 640px)',
-              maxWidth: 'min(92vw, 720px)',
+              minWidth: 'min(90vw, 560px)',
+              maxWidth: 'min(92vw, 640px)',
               maxHeight: 'min(80vh, 560px)',
               overflow: 'auto',
               zIndex: 9999,
@@ -179,7 +178,7 @@ export function ProductCatalogueDropdown({ productCatalogues }: ProductCatalogue
               <h3 className="text-14 weight-600 color-#0B9378 uppercase tracking-wider">Catalogue</h3>
             </div>
             <div
-              className="p-10 grid grid-2-cols-1fr sm:grid-3-cols-1fr xl:grid-4-cols-1fr gap-12"
+              className="p-10 grid grid-3-cols-1fr sm:grid-4-cols-1fr xl:grid-5-cols-1fr gap-3"
             >
               {cataloguesSorted.map((item) => (
                 <div key={item.id} style={{

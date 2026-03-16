@@ -640,6 +640,7 @@
 .l-20 { left: 20px; } 
 .h-350 { height: 350px; } 
 .w-32 { width: 32px; } 
+.min-w-32 { min-width: 32px; } 
 .h-32 { height: 32px; } 
 .opacity-40 { opacity: 40%; } 
 .bg-\#DEFFF9\! { background-color: #DEFFF9 !important; } 
@@ -1099,7 +1100,7 @@
 @media only screen and (min-width: 576px) { .sm\:w-80p { width: 80%; } } 
 @media only screen and (min-width: 576px) { .sm\:p-10 { padding: 10px; } } 
 @media only screen and (min-width: 576px) { .sm\:pt-14 { padding-top: 14px; } } 
-@media only screen and (min-width: 576px) { .sm\:grid-3-cols-1fr { grid-template-columns: repeat(3, 1fr); } } 
+@media only screen and (min-width: 576px) { .sm\:grid-4-cols-1fr { grid-template-columns: repeat(4, 1fr); } } 
 @media only screen and (min-width: 576px) { .sm\:text-10 { font-size: 10px; } } 
 @media only screen and (min-width: 576px) { .sm\:r-1 { right: 1px; } } 
 @media only screen and (min-width: 576px) { .sm\:w-220 { width: 220px; } } 
@@ -1163,6 +1164,7 @@
 @media only screen and (min-width: 576px) { .sm\:gap-28 { gap: 28px; } } 
 @media only screen and (min-width: 576px) { .sm\:inline-block {    display: inline-block;  } } 
 @media only screen and (min-width: 576px) { .sm\:mb--2 { margin-bottom: -2px; } } 
+@media only screen and (min-width: 576px) { .sm\:grid-3-cols-1fr { grid-template-columns: repeat(3, 1fr); } } 
 
 @media only screen and (min-width: 576px) { .s\:gap-12 { gap: 12px; } } 
 @media only screen and (min-width: 576px) { .s\:w-90 { width: 90px; } } 
@@ -1306,7 +1308,7 @@
 @media only screen and (min-width: 768px) { .md\:mx-30 { margin-left: 30px; margin-right: 30px; } } 
 @media only screen and (min-width: 768px) { .md\:px-50 { padding-left: 50px; padding-right: 50px; } } 
 @media only screen and (min-width: 768px) { .md\:h-420 { height: 420px; } } 
-@media only screen and (min-width: 768px) { .md\:grid-4-cols-1fr { grid-template-columns: repeat(4, 1fr); } } 
+@media only screen and (min-width: 768px) { .md\:grid-5-cols-1fr { grid-template-columns: repeat(5, 1fr); } } 
 @media only screen and (min-width: 768px) { .md\:px-30 { padding-left: 30px; padding-right: 30px; } } 
 @media only screen and (min-width: 768px) { .md\:px-20 { padding-left: 20px; padding-right: 20px; } } 
 @media only screen and (min-width: 768px) { .md\:h-125 { height: 125px; } } 
@@ -1334,7 +1336,7 @@
 @media only screen and (min-width: 992px) { .lg\:t-69\.7 { top: 69.7px; } } 
 @media only screen and (min-width: 992px) { .lg\:grid-2-cols-1fr { grid-template-columns: repeat(2, 1fr); } } 
 @media only screen and (min-width: 992px) { .lg\:grid-col-span-2 { grid-column: span 2; } } 
-@media only screen and (min-width: 992px) { .lg\:grid-5-cols-1fr { grid-template-columns: repeat(5, 1fr); } } 
+@media only screen and (min-width: 992px) { .lg\:grid-6-cols-1fr { grid-template-columns: repeat(6, 1fr); } } 
 
 @media only screen and (min-width: 992px) { .l\:block {    display: block;  } } 
 @media only screen and (min-width: 992px) { .l\:hidden {    display: none;  } } 
@@ -1589,9 +1591,10 @@
 @media only screen and (min-width: 1200px) { .xl\:w-10 { width: 10px; } } 
 @media only screen and (min-width: 1200px) { .xl\:white-space-nowrap { white-space: nowrap; } } 
 @media only screen and (min-width: 1200px) { .xl\:w-50p { width: 50%; } } 
-@media only screen and (min-width: 1200px) { .xl\:grid-4-cols-1fr { grid-template-columns: repeat(4, 1fr); } } 
+@media only screen and (min-width: 1200px) { .xl\:grid-5-cols-1fr { grid-template-columns: repeat(5, 1fr); } } 
 @media only screen and (min-width: 1200px) { .xl\:pl-80 { padding-left: 80px; } } 
 @media only screen and (min-width: 1200px) { .xl\:pr-80 { padding-right: 80px; } } 
+@media only screen and (min-width: 1200px) { .xl\:grid-4-cols-1fr { grid-template-columns: repeat(4, 1fr); } } 
 @media only screen and (min-width: 1200px) { .xl\:px-60 { padding-left: 60px; padding-right: 60px; } } 
-@media only screen and (min-width: 1200px) { .xl\:grid-6-cols-1fr { grid-template-columns: repeat(6, 1fr); } } 
+@media only screen and (min-width: 1200px) { .xl\:grid-7-cols-1fr { grid-template-columns: repeat(7, 1fr); } } 
 @media only screen and (min-width: 1200px) { .xl\:px-200 { padding-left: 200px; padding-right: 200px; } } 
