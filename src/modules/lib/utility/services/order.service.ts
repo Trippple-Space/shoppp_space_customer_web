@@ -5,6 +5,7 @@ import http from "../http";
 import { buildEndpoint, convertUserResponse } from "../utility";
 import config from "env";
 import { IQueryParams } from "../hooks/use-products";
+import { authService } from "./auth.service";
 
 class OrderService {
      fetchOrders(query: IQueryParams): Promise<Order[]> {
@@ -28,7 +29,7 @@ class OrderService {
                     url.searchParams.append(key, query[key])
                );
 
-               const token = localStorage.getItem("token");
+               const token = authService.getAuthCredentials();
                const headers = {
                     "Content-Type": "application/json",
                     Authorization: `Bearer ${token}`,
@@ -72,7 +73,7 @@ class OrderService {
                     url.searchParams.append(key, query[key])
                );
 
-               const token = localStorage.getItem("token");
+               const token = authService.getAuthCredentials();
                const headers = {
                     "Content-Type": "application/json",
                     Authorization: `Bearer ${token}`,

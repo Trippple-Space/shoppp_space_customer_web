@@ -427,8 +427,8 @@ export const ConfigPill = ({ title, value }: { title: string; value: any }) => {
   const { refs, floatingStyles, context } = useFloating({
     open,
     onOpenChange: setOpen,
-    placement: 'bottom-start',
-    middleware: [offset(8), flip(), shift({ padding: 8 })],
+    placement: 'top-start',
+    middleware: [offset(8), flip({ fallbackPlacements: ['bottom-start'] }), shift({ padding: 8 })],
   });
 
   const hover = useHover(context, {

@@ -5,7 +5,7 @@
  */
 
 const productionConfig = {
-    API_HOST: 'https://api-ephemeral.asoebi.africa/api/v1',
+    API_HOST: 'https://api.asoebi.africa/api/v1',
     VENDOR_CENTER_HOST: 'https://vendor.asoebi.africa',
     VENDOR_CENTER_SIGNUP: 'https://vendor.asoebi.africa/auth/signup',
     LANDING_PAGE_HOST: 'https://vendor.asoebi.africa/landing-page'
