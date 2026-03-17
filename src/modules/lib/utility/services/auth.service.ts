@@ -9,6 +9,7 @@ import { toast } from "sonner";
 import { paths } from "../paths";
 import envConfig from "env";
 import { convertUserResponse } from "../utility";
+import { setAuthCookie, getAuthToken, clearAuthCookie, getCookieDomain } from "../auth-cookie";
 
 
 class AuthService {
@@ -28,6 +29,7 @@ class AuthService {
 
   signOut() {
     localStorage.removeItem('token')
+    clearAuthCookie();
     localStorage.removeItem("variantId");
     localStorage.removeItem("variantIdMinimumPurchase");
     // window.location.reload()
@@ -50,11 +52,14 @@ class AuthService {
   }
 
   storeAuthCredentials({ token }: { token: string }) {
-    localStorage.setItem('token', token)
+    localStorage.setItem('token', token);
+    if (getCookieDomain()) {
+      setAuthCookie(token);
+    }
   }
 
   getAuthCredentials() {
-    return localStorage.getItem('token')
+    return getAuthToken();
   }
 
   signUp(registrationDetails: RegistrationDetails): Promise<User> {
@@ -181,8 +186,7 @@ class AuthService {
         toast.success("OTP verified successfully.");
 
         const { token, user } = response.data;
-        
-        localStorage.setItem("token", token);
+        this.storeAuthCredentials({ token });
 
         return { token, user: convertUserResponse(user) };
       })

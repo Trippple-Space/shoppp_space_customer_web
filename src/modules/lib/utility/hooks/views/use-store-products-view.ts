@@ -11,7 +11,8 @@ export const useStoreProductsView = (selectedCategory?: any) => {
 
   const { products, updateFilters, setPagination, loading, fetchingError, refetch, meta } = useProducts({
     filters: { store: { slug }, status: { In: "ACTIVE,OUT_OF_STOCK" } }, order: {
-      priorityScore: "DESC"
+      priorityScore: "DESC",
+      createdAt: "DESC"
     },
     pagination: { page, limit }
   }, 'buttons');

@@ -1,6 +1,7 @@
 import axios, { AxiosError } from "axios";
 import envConfig from "env";
 import { toast } from "sonner";
+import { getAuthToken } from "./auth-cookie";
 
 
 const http = axios.create({
@@ -38,7 +39,7 @@ const retryCountCache: { [key: string]: number } = {};
 
 http.interceptors.request.use((config: any) => {
     config.headers['Content-Type'] = 'application/json'
-    config.headers['Authorization'] = `Bearer ${localStorage.getItem('token')}`;
+    config.headers['Authorization'] = `Bearer ${getAuthToken()}`;
 
 
 

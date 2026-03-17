@@ -897,7 +897,7 @@ const ProductDetails = ({ product }: { product: Product }) => {
             <div className="mt-30">
               <p className="text-16 weight-600 mb-10">Catalogue</p>
 
-              <div className="grid grid-2-cols-1fr sm:grid-3-cols-1fr md:grid-4-cols-1fr lg:grid-5-cols-1fr xl:grid-6-cols-1fr gap-12">
+              <div className="grid grid-3-cols-1fr sm:grid-4-cols-1fr md:grid-5-cols-1fr lg:grid-6-cols-1fr xl:grid-7-cols-1fr gap-3">
                 {product?.productCatalogues?.map((item) => (
                   <CatalogueMediaItem key={item.id} item={item} />
                 ))}
@@ -1112,7 +1112,7 @@ const ProductDetails = ({ product }: { product: Product }) => {
                 <div className="flex flex-col gap-2">
                   <p className="weight-500 text-16">Delivery Within Lagos</p>
                   <p className="text-14 color-#00000099">
-                    Receive your product within 4 hours after payment
+                    Receive your product within 24 -72 hours after payment
                     confirmation.
                   </p>
                 </div>

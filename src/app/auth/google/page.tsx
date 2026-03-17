@@ -5,6 +5,7 @@ import { useSearchParams } from 'next/navigation'
 import { toast } from 'sonner'
 import { useAuthGuard } from '@/modules/lib/utility/hooks/use-auth-guard'
 import { paths } from '@/modules/lib/utility/paths'
+import { authService } from '@/modules/lib/utility/services/auth.service'
 
 function Page() {
   const searchParams = useSearchParams()
@@ -15,7 +16,7 @@ function Page() {
     const prevDest = searchParams.get('source')
 
     if (token) {
-      localStorage.setItem('token', token)
+      authService.storeAuthCredentials({ token })
       toast.success('Login Successful')
       window.dispatchEvent(new Event("googleLoginSuccessful"))
 

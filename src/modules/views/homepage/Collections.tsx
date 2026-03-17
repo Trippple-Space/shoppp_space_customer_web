@@ -3,6 +3,7 @@ import CollectionSection from './CollectionSection';
 import { useEffect, useRef, useState } from 'react';
 import { ICollection } from '@/modules/lib/utility/types/collection.interface';
 import { TbAlertCircle, TbRefresh } from 'react-icons/tb';
+import Button from '@/modules/lib/components/button/Button';
 
 const Collections = ({
   storeId,
@@ -55,7 +56,7 @@ const Collections = ({
     return (
       <div className="md:mt-32 mt-24 w-100p flex flex-col">
         <div
-          className="flex flex-col items-center justify-center gap-20 py-48 px-24 rounded-16 border border-[#E8E8E8] bg-[#FAFAFA]"
+          className="flex flex-col items-center justify-center gap-20 py-48 px-24 rounded-16 bg-[#FAFAFA]"
           role="alert"
           aria-live="polite"
         >
@@ -70,37 +71,34 @@ const Collections = ({
               Something went wrong. Please try again.
             </p>
           </div>
-          <button
-            type="button"
-            onClick={retry}
-            className="flex items-center justify-center gap-8 h-44 min-w-120 px-24 rounded-999 bg-#1677FF color-white text-14 weight-500 hover:opacity-90 transition-opacity"
-          >
+          <Button onClick={retry} className="px-24 py-8 min-w-120 flex items-center justify-center gap-8">
             <TbRefresh className="w-18 h-18" aria-hidden />
             Try again
-          </button>
+          </Button>
         </div>
       </div>
     );
   }
 
   return (
-    <div className="md:mt-32 mt-24 w-100p flex flex-col">
-      <div className='grid md:gap-24 gap-20 lg:grid-2-cols-1fr'>
-        {collections.map((collection, index) => {
-          const isLast = index === collections.length - 1;
-          const isOdd = collections.length % 2 === 1;
+    collections.length > 0 ? (
+      <div className="md:mt-32 mt-24 w-100p flex flex-col">
+        <div className='grid md:gap-24 gap-20 lg:grid-2-cols-1fr'>
+          {collections.map((collection, index) => {
+            const isLast = index === collections.length - 1;
+            const isOdd = collections.length % 2 === 1;
 
-          return (
-            <div key={collection.id} className={isLast && isOdd ? 'lg:grid-col-span-2' : ''} style={{
-              minWidth: 0
-            }}>
-              <CollectionSection collection={collection} index={index} selectedCollection={selectedCollection} setSelectedCollection={setSelectedCollection} />
-            </div>
-          )
-        })}
-      </div>
-    </div >
-  );
+            return (
+              <div key={collection.id} className={isLast && isOdd ? 'lg:grid-col-span-2' : ''} style={{
+                minWidth: 0
+              }}>
+                <CollectionSection collection={collection} index={index} selectedCollection={selectedCollection} setSelectedCollection={setSelectedCollection} />
+              </div>
+            )
+          })}
+        </div>
+      </div >
+    ) : null)
 };
 
 export default Collections;
