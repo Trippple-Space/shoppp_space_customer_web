@@ -13,6 +13,7 @@ import { usePathname, useRouter } from 'next/navigation';
 import { LuArrowRight } from 'react-icons/lu';
 import { TbAlertCircle, TbRefresh } from 'react-icons/tb';
 import { filtersToSearchParams } from '@/modules/lib/utility/utility';
+import Button from '@/modules/lib/components/button/Button';
 
 const redTheme = { bg: "#FFF3F1", button: "#D4280C", text: 'white' as const };
 const otherThemes = [
@@ -47,9 +48,21 @@ const CollectionSection = ({ collection, index, selectedCollection, setSelectedC
   });
   const { allFilters } = useFilterStore();
 
+  const selectedTags = (() => {
+    const categoryName = selectedCategory?.name ?? '';
+    if (!categoryName || categoryName === 'All') return [];
+    return categoryName
+      .split(',')
+      .map((t) => t.trim())
+      .filter(Boolean)
+      .map((t) => t.toLowerCase());
+  })();
+
+  const tagsFilter = selectedTags.length ? selectedTags.join(',') : '';
+
   const initialFiltersForCollection = {
     ...allFilters,
-    tags: selectedCategory.name === 'All' ? '' : selectedCategory.name.toLowerCase(),
+    tags: tagsFilter,
   };
 
   const { products, loading, query, updateHomePageFilter, fetchingError, refetch } = useProducts(
@@ -61,16 +74,13 @@ const CollectionSection = ({ collection, index, selectedCollection, setSelectedC
     },
     'infinite',
     collection.slug,
-    selectedCategory.name === 'All' ? '' : selectedCategory.name.toLowerCase(),
+    tagsFilter,
   );
 
   useEffect(() => {
     const updatedFilters = {
       ...allFilters,
-      tags:
-        selectedCategory.name === 'All'
-          ? ''
-          : selectedCategory.name.toLowerCase(),
+      tags: tagsFilter,
     };
 
     updateHomePageFilter(updatedFilters);
@@ -152,14 +162,11 @@ const CollectionSection = ({ collection, index, selectedCollection, setSelectedC
                   Something went wrong loading this collection. Try again.
                 </p>
               </div>
-              <button
-                type="button"
-                onClick={() => refetch()}
-                className="flex a-items-center j-content-center gap-8 h-40 min-w-100 px-20 radius-999 bg-#1677FF color-white text-14 weight-500"
-              >
-                <TbRefresh className="w-16 h-16" aria-hidden />
+
+              <Button onClick={() => refetch()} className="px-24 py-8 min-w-120 flex items-center justify-center gap-8">
+                <TbRefresh className="w-18 h-18" aria-hidden />
                 Try again
-              </button>
+              </Button>
             </div>
           ) : showShimmers ? (
             Array.from({ length: shimmerCount }, (_, i) => (

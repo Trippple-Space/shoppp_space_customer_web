@@ -9,7 +9,6 @@ export async function getCollections(
   try {
     const url =
       apiBase +
-      "/" +
       buildEndpoint(endpoints.COLLECTIONS_BY_STORE, { storeId }) +
       "?pagination[limit]=100&pagination[page]=1&includeProducts=false";
 

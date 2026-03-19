@@ -74,8 +74,16 @@ const Homepage = ({ initialCollections = [] }: { initialCollections?: ICollectio
   const hasRating = !!allFilters.rating.rateBy;
   const hasLocation = !!allFilters.location.selectedState;
   const hasOffers = allFilters.showOffers;
-  const hasCategory =
-    !!selectedCategory.name && selectedCategory.name !== 'All';
+  const selectedCategoryLabels = (() => {
+    const name = selectedCategory?.name ?? '';
+    if (!name || name === 'All') return [];
+    return name
+      .split(',')
+      .map((t) => t.trim())
+      .filter(Boolean);
+  })();
+
+  const hasCategory = selectedCategoryLabels.length > 0;
 
   const getPriceLabel = () => {
     const { min, max } = allFilters.price;
@@ -128,6 +136,27 @@ const Homepage = ({ initialCollections = [] }: { initialCollections?: ICollectio
     });
   };
 
+  const clearOneCategoryPill = (labelToRemove: string) => {
+    const current = selectedCategoryLabels;
+
+    const next = current.filter(
+      (l) => l.toLowerCase() !== labelToRemove.toLowerCase()
+    );
+
+    if (!next.length) {
+      clearCategory();
+      return;
+    }
+
+    const nextName = next.join(',');
+
+    setSelectedCategory({
+      ...(selectedCategory ?? {}),
+      name: nextName,
+      filters: { name: nextName.toLowerCase() },
+    });
+  };
+
   const clearAllFilters = () => {
     resetFilters('price');
     resetFilters('rating');
@@ -176,17 +205,21 @@ const Homepage = ({ initialCollections = [] }: { initialCollections?: ICollectio
                   <p className="text-14 weight-500">Active:</p>
                 </div>
                 <div className="flex gap-12 flex-wrap a-items-center">
-                  {hasCategory && (
-                    <p className="bg-white h-33 min-w-121 flex gap-8 a-items-center j-content-between radius-999 p-10">
-                      <span className="text-14 weight-500 capitalize">
-                        {selectedCategory.name}
-                      </span>
-                      <TbX
-                        className="w-15 h-15 cursor-pointer"
-                        onClick={() => clearCategory()}
-                      />
-                    </p>
-                  )}
+                  {hasCategory &&
+                    selectedCategoryLabels.map((label) => (
+                      <p
+                        key={label}
+                        className="bg-white h-33 min-w-121 flex gap-8 a-items-center j-content-between radius-999 p-10"
+                      >
+                        <span className="text-14 weight-500 capitalize">
+                          {label}
+                        </span>
+                        <TbX
+                          className="w-15 h-15 cursor-pointer"
+                          onClick={() => clearOneCategoryPill(label)}
+                        />
+                      </p>
+                    ))}
 
                   {hasPrice && (
                     <p className="bg-white h-33 min-w-121 flex gap-8 a-items-center j-content-between radius-999 p-10">

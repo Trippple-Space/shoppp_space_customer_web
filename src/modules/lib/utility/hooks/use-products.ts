@@ -35,7 +35,12 @@ export interface IQueryParams {
 
 export type PaginationType = "infinite" | "buttons";
 
-export const useProducts = (initialQuery: IQueryParams, paginationType: PaginationType = "infinite", collectionSlug?: string, currentTags?: string) => {
+export const useProducts = (
+  initialQuery: IQueryParams,
+  paginationType: PaginationType = "infinite",
+  collectionSlug?: string,
+  currentTags?: string | string[]
+) => {
   const [query, setQuery] = useState<IQueryParams>(initialQuery);
   const [loading, setLoading] = useState(true);
   const [fetchingError, setFetchingError] = useState<Error | null>(null);
@@ -106,7 +111,7 @@ export const useProducts = (initialQuery: IQueryParams, paginationType: Paginati
   const setCollection = (collection?: string) => {
     setQuery((prev) => ({
       ...prev,
-      collection,
+      collection: collection?.trim() ? collection : undefined,
       pagination: {
         page: 1,
         limit: prev.pagination?.limit ?? 20,
