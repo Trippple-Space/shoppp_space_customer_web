@@ -189,6 +189,38 @@ const ProductTile: FC<IProductTile> = ({
   const [isOverflowing, setIsOverflowing] = useState(false);
   const [showAllTags, setShowAllTags] = useState(false);
 
+  const handleTagSelection = (tagLabel: string) => {
+    if (!setSelectedCategory) return;
+
+    const clicked = String(tagLabel ?? '').trim();
+    if (!clicked) return;
+
+    const currentRaw = String(selectedCategory?.name ?? '').trim();
+    const current =
+      !currentRaw || currentRaw.toLowerCase() === 'all'
+        ? []
+        : currentRaw
+            .split(',')
+            .map((t: string) => t.trim())
+            .filter(Boolean);
+
+    const clickedIndex = current.findIndex(
+      (t: string) => t.toLowerCase() === clicked.toLowerCase()
+    );
+
+    const next =
+      clickedIndex >= 0
+        ? current.filter((_, i) => i !== clickedIndex)
+        : [...current, clicked];
+
+    const nextName = next.length ? next.join(',') : 'All';
+
+    setSelectedCategory({
+      ...(selectedCategory ?? {}),
+      name: nextName,
+    });
+  };
+
   const {
     addToCart,
     cart,
@@ -916,14 +948,7 @@ const ProductTile: FC<IProductTile> = ({
                       if (el) tagRefs.current[i] = el;
                     }}
                     className="text-green md:text-12 text-10 inline-block radius-5 mx-2 my-1 pointer hover:underline lowercase"
-                    onClick={() => {
-                      console.log(selectedCategory);
-                      //to be fixed later (on fix on the backend)
-                      setSelectedCategory({
-                        ...selectedCategory,
-                        name: tag.label,
-                      });
-                    }}
+                    onClick={() => handleTagSelection(tag.label)}
                   >
                     #{tag.label}
                   </span>
@@ -949,14 +974,7 @@ const ProductTile: FC<IProductTile> = ({
                     <span
                       key={i}
                       className="text-green text-12 lowercase pointer hover:underline"
-                      onClick={() => {
-                        console.log(selectedCategory);
-                        //to be fixed later (on fix on the backend)
-                        setSelectedCategory({
-                          ...selectedCategory,
-                          name: tag.label,
-                        });
-                      }}
+                      onClick={() => handleTagSelection(tag.label)}
                     >
                       #{tag.label}
                     </span>

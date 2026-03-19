@@ -30,7 +30,16 @@ export const useProductListView = () => {
   });
 
   useEffect(() => {
-    const updatedFilters = { ...allFilters, tags: selectedCategory.name === "All" ? "" : selectedCategory.name.toLowerCase() };
+    const categoryName = selectedCategory?.name ?? "";
+    const tags = categoryName && categoryName !== "All"
+      ? categoryName
+          .split(",")
+          .map((t) => t.trim())
+          .filter(Boolean)
+          .map((t) => t.toLowerCase())
+      : [];
+
+    const updatedFilters = { ...allFilters, tags: tags.length ? tags : "" };
 
     updateHomePageFilter(updatedFilters);
     setPage(1);
