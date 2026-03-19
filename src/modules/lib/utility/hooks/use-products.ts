@@ -111,7 +111,7 @@ export const useProducts = (
   const setCollection = (collection?: string) => {
     setQuery((prev) => ({
       ...prev,
-      collection,
+      collection: collection?.trim() ? collection : undefined,
       pagination: {
         page: 1,
         limit: prev.pagination?.limit ?? 20,

@@ -91,8 +91,7 @@ export const buildFilterParams = (filters: any) => {
     if (cleaned.length === 1) {
       params["filters[tags][label]"] = cleaned[0];
     } else if (cleaned.length > 1) {
-      // Multiple tags: backend expects In filter
-      params["filters[tags][label][In]"] = cleaned.join(",");
+      params["filters[tags][label][In][]"] = cleaned;
     }
   }
 
