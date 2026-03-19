@@ -25,7 +25,12 @@ const BaseCategoryNav: FC<IBaseCategoryNav> = ({
   const scrollRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
-    setActiveOption(selectedCategory?.name || 'All');
+    const name = selectedCategory?.name ?? '';
+    const active =
+      name && name !== 'All' && name.includes(',')
+        ? name.split(',')[0].trim()
+        : name;
+    setActiveOption(active || 'All');
   }, [selectedCategory]);
 
   return (
@@ -52,7 +57,7 @@ const BaseCategoryNav: FC<IBaseCategoryNav> = ({
               <div
                 key={isSyntheticAll ? 'all' : i}
                 className={`${
-                  page === 'home' ? 's:w-90 w-71' : 's:w-116 w-96'
+                  page === 'home' ? 's:min-w-90 min-w-71' : 's:min-w-116 min-w-96'
                 } flex j-content-center`}
               >
                 <div

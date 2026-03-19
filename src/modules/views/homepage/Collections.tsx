@@ -56,11 +56,11 @@ const Collections = ({
     return (
       <div className="md:mt-32 mt-24 w-100p flex flex-col">
         <div
-          className="flex flex-col items-center justify-center gap-20 py-48 px-24 rounded-16 bg-[#FAFAFA]"
+          className="flex flex-col items-center justify-center gap-20 py-48 px-24 rounded-16 bg-#FAFAFA"
           role="alert"
           aria-live="polite"
         >
-          <span className="flex items-center justify-center w-56 h-56 rounded-full bg-[#FFF3F1] text-[#D4280C]">
+          <span className="flex items-center justify-center w-56 h-56 rounded-full bg-#FFF3F1 text-#D4280C">
             <TbAlertCircle className="w-32 h-32" aria-hidden />
           </span>
           <div className="flex flex-col items-center gap-8 text-center max-w-400">

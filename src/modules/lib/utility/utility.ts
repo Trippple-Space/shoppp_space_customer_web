@@ -74,8 +74,26 @@ export const buildFilterParams = (filters: any) => {
     params["filters[price][LessThanOrEqual]"] = price.max;
   }
 
-  if (tags) {
-    params["filters[tags][label]"] = tags
+  if (tags !== undefined && tags !== null && tags !== "") {
+    const asArray = Array.isArray(tags)
+      ? tags
+      : typeof tags === "string"
+        ? tags.includes(",")
+          ? tags.split(",")
+          : [tags]
+        : [String(tags)];
+
+    const cleaned = asArray
+      .map((t: any) => String(t).trim())
+      .filter(Boolean);
+
+    // Single tag: keep old behavior
+    if (cleaned.length === 1) {
+      params["filters[tags][label]"] = cleaned[0];
+    } else if (cleaned.length > 1) {
+      // Multiple tags: backend expects In filter
+      params["filters[tags][label][In]"] = cleaned.join(",");
+    }
   }
 
   if (rating?.rateBy) {
