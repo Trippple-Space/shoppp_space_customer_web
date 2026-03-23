@@ -20,18 +20,13 @@ import { FaEye } from 'react-icons/fa6';
 import ProductDetailModal from '../product-detail-modal/ProductDetailModal';
 import { PiShoppingCartFill, PiStorefront } from 'react-icons/pi';
 import { SavedVariant } from '../../utility/types/SavedVariant.interface';
-import MiniReview from '@/modules/views/product-details/reviews/MiniReview';
 import { IFetchedReview } from '../../utility/types/review.interface';
-import useGetRatingStats from '../../utility/hooks/use-get-rating-stats';
 import useTransformProduct, {
   getVariantValue,
 } from '../../utility/hooks/use-transform-product';
 import {
   useRecentlyViewedActions,
-  useRecentlyViewedVariant,
 } from '../../utility/hooks/use-recently-viewed';
-import { useOrders } from '../../utility/hooks/use-orders';
-import Button from '../button/Button';
 import { useProductTileOrders } from '../../utility/hooks/use-product-tile-orders';
 import { LuChevronRight } from 'react-icons/lu';
 import { buildUserConfigurations } from '../product-detail-modal/productConfigurationsHelper';
@@ -50,6 +45,7 @@ interface IProductTile {
   selectedCategory?: any;
   setSelectedCategory?: any;
   addToCartVariant?: 'icon' | 'text';
+  isStoreBased?: boolean;
 }
 
 const ProductTile: FC<IProductTile> = ({
@@ -64,6 +60,7 @@ const ProductTile: FC<IProductTile> = ({
   selectedCategory,
   setSelectedCategory,
   addToCartVariant = 'text',
+  isStoreBased = false,
 }) => {
   const pathname =
     typeof window !== 'undefined' ? window.location.pathname : '';
@@ -200,9 +197,9 @@ const ProductTile: FC<IProductTile> = ({
       !currentRaw || currentRaw.toLowerCase() === 'all'
         ? []
         : currentRaw
-            .split(',')
-            .map((t: string) => t.trim())
-            .filter(Boolean);
+          .split(',')
+          .map((t: string) => t.trim())
+          .filter(Boolean);
 
     const clickedIndex = current.findIndex(
       (t: string) => t.toLowerCase() === clicked.toLowerCase()
@@ -379,7 +376,7 @@ const ProductTile: FC<IProductTile> = ({
 
     const propertyKeys = Object.keys(allProperties);
     if (propertyKeys.length !== 1) return false;
-    
+
     const firstKey = propertyKeys[0];
     const values = allProperties[firstKey];
 
@@ -407,6 +404,23 @@ const ProductTile: FC<IProductTile> = ({
       .filter((tag: any) => !tag.label?.includes('pill:'))
       .filter((tag: any) => !tag.label?.includes('collection:'));
   }, [product?.tags]);
+
+  const activeTagSet = useMemo(() => {
+    const raw = String(selectedCategory?.name ?? '').trim();
+    if (!raw || raw.toLowerCase() === 'all') return new Set<string>();
+
+    return new Set(
+      raw
+        .split(',')
+        .map((t) => t.trim().toLowerCase())
+        .filter(Boolean)
+    );
+  }, [selectedCategory?.name]);
+
+  const isTagActive = (tagLabel: string) => {
+    const key = String(tagLabel ?? '').trim().toLowerCase();
+    return activeTagSet.has(key);
+  };
 
   const [visibleTagCount, setVisibleTagCount] = useState(visibleTags.length);
 
@@ -483,7 +497,7 @@ const ProductTile: FC<IProductTile> = ({
 
     setVisibleTagCount(count);
     setIsOverflowing(count < visibleTags.length);
-  }, [visibleTags, selectedVariant?.id]);
+  }, [visibleTags, selectedVariant?.id, selectedCategory?.name]);
 
   useEffect(() => {
     recalculateVisibleTags();
@@ -866,24 +880,29 @@ const ProductTile: FC<IProductTile> = ({
             {product.name}
           </Link>
         </div>
-        <div className="flex a-items-center gap-10 l:gap-18 text-dimgrey py-6 border-y border-#00000014">
-          <Link
-            href={storeUrl}
-            target="_blank"
-            className="flex gap-6 a-items-center color-#00000099 capitalize"
-          >
-            <PiStorefront className="md:w-16 w-14 md:h-16 h-14" />
-            <p className="md:text-12 text-10 weight-400 md:line-height-20 line-height-12.1">
-              {product?.store?.name}
-            </p>
-          </Link>
-          {!!product.reviewRating && (
-            <div className="flex gap-3 items-center">
-              <AiFillStar className="w-12" />
-              <span className="l:text-16 text-12">{product.reviewRating}</span>
-            </div>
-          )}
-        </div>
+        {
+          !isStoreBased ?
+            (
+              <div className="flex a-items-center gap-10 l:gap-18 text-dimgrey py-6 border-y border-#00000014">
+                <Link
+                  href={storeUrl}
+                  target="_blank"
+                  className="flex gap-6 a-items-center color-#00000099 capitalize"
+                >
+                  <PiStorefront className="md:w-16 w-14 md:h-16 h-14" />
+                  <p className="md:text-12 text-10 weight-400 md:line-height-20 line-height-12.1">
+                    {product?.store?.name}
+                  </p>
+                </Link>
+                {!!product.reviewRating && (
+                  <div className="flex gap-3 items-center">
+                    <AiFillStar className="w-12" />
+                    <span className="l:text-16 text-12">{product.reviewRating}</span>
+                  </div>
+                )}
+              </div>
+            )
+            : null}
         <div ref={rowRef} className="flex j-content-between gap-15">
           <div
             ref={priceRef}
@@ -941,18 +960,28 @@ const ProductTile: FC<IProductTile> = ({
             >
               {visibleTags
                 .slice(0, visibleTagCount)
-                .map((tag: any, i: number) => (
-                  <span
-                    key={i}
-                    ref={(el) => {
-                      if (el) tagRefs.current[i] = el;
-                    }}
-                    className="text-green md:text-12 text-10 inline-block radius-5 mx-2 my-1 pointer hover:underline lowercase"
-                    onClick={() => handleTagSelection(tag.label)}
-                  >
-                    #{tag.label}
-                  </span>
-                ))}
+                .map((tag: any, i: number) => {
+                  const active = isTagActive(tag.label);
+
+                  return (
+                    <span
+                      key={i}
+                      ref={(el) => {
+                        if (el) tagRefs.current[i] = el;
+                      }}
+                      className={classNames(
+                        'md:text-12 text-10 inline-block radius-5 mx-2 my-1 pointer hover:underline lowercase',
+                        {
+                          'text-green': !active,
+                          'color-#000000E0 bg-green-50 weight-600': active,
+                        }
+                      )}
+                      onClick={() => handleTagSelection(tag.label)}
+                    >
+                      #{tag.label}
+                    </span>
+                  );
+                })}
             </div>
 
             {isOverflowing && (
@@ -973,7 +1002,10 @@ const ProductTile: FC<IProductTile> = ({
                   {visibleTags.map((tag: any, i: number) => (
                     <span
                       key={i}
-                      className="text-green text-12 lowercase pointer hover:underline"
+                      className={classNames('text-12 lowercase pointer hover:underline', {
+                        'text-green': !isTagActive(tag.label),
+                        'color-#000000E0 bg-green-50 weight-600': isTagActive(tag.label),
+                      })}
                       onClick={() => handleTagSelection(tag.label)}
                     >
                       #{tag.label}

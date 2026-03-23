@@ -24,7 +24,7 @@ const StoreProductsList: FC<{
           <DotsLoader />
         </div>
       ) : products.length ? (
-        <div className="grid l:grid-4-cols-1fr sm:grid-3-cols-1fr grid-2-cols-1fr l:gap-20 sm:gap-10 gap-20 w-full">
+        <div className="grid xxlgrid-5-cols xl:grid-4-cols-1fr s:grid-3-cols-1fr grid-2-cols-1fr gap-18 s:gap-20 md:gap-24 w-full">
           {products.map((product, i) => (
             <div key={i} className="l:mt--20 mt--30 w-full overflow-hidden">
               <ProductTile
@@ -35,6 +35,7 @@ const StoreProductsList: FC<{
                 savedVariants={savedVariants}
                 saveVariant={saveVariant}
                 removeSavedVariant={removeSavedVariant}
+                isStoreBased={true}
                 /* selectedCategory={selectedCategory}
                 setSelectedCategory={setSelectedCategory} */
               />

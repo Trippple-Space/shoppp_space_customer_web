@@ -242,11 +242,21 @@ const ProductDetails = ({ product }: { product: Product }) => {
     return Array.from(map.values()).concat(rest);
   }, [product?.variants, allPropertiesWithSize]);
 
-  const allImages = uniqueVariantsFromProductImages?.flatMap((variant) =>
-    variant.media.map((media) => media.url)
-  );
-  const uniqueImages = Array.from(new Set(allImages));
-  const lightboxImages = uniqueImages.length ? uniqueImages : [''];
+  const allImages =
+    uniqueVariantsFromProductImages?.flatMap((variant) =>
+      variant.media.map((media) => media.url)
+    ) ?? [];
+  const uniqueImages = Array.from(new Set(allImages.filter(Boolean)));
+
+  const catalogueImages =
+    (product?.productCatalogues ?? [])
+      .map((catalogue) => catalogue.mediaUrl)
+      .filter(Boolean) ?? [];
+
+  const allLightboxImages = [...uniqueImages, ...catalogueImages];
+  const lightboxImages = allLightboxImages.length
+    ? Array.from(new Set(allLightboxImages))
+    : [''];
   const lightboxTotal = lightboxImages.length;
 
   const { saveVariant, savedVariants, removeSavedVariant } = useSavedVariant();
@@ -899,7 +909,17 @@ const ProductDetails = ({ product }: { product: Product }) => {
 
               <div className="grid grid-3-cols-1fr sm:grid-4-cols-1fr md:grid-5-cols-1fr lg:grid-6-cols-1fr xl:grid-7-cols-1fr gap-3">
                 {product?.productCatalogues?.map((item) => (
-                  <CatalogueMediaItem key={item.id} item={item} />
+                  <CatalogueMediaItem
+                    key={item.id}
+                    item={item}
+                    onClick={() => {
+                      const idx = lightboxImages.findIndex(
+                        (u) => u === item.mediaUrl
+                      );
+                      setLightboxIndex(idx >= 0 ? idx : 0);
+                      setShowLightbox(true);
+                    }}
+                  />
                 ))}
               </div>
             </div>

@@ -31,7 +31,7 @@ const StorefrontAbout = ({ store }: { store: Store }) => {
     <>
       <StorefrontNavBar store={store} />
       <div className="bg-white w-full mt-132">
-        <div className="px-24 sm:px-40 md:px-60 l:px-100 xl:px-200 flex flex-col">
+        <div className="flex flex-col app-width max-w-1440 mx-auto">
           <section className="flex flex-row j-content-between gap-30">
             <div className="flex flex-col gap-32 l:w-500">
               <div className="flex flex-row gap-14">

@@ -29,8 +29,8 @@ const StorefrontLayout: FC<{
   const { categories } = useStoreCategoryNavView({ storeId: store.id });
 
   return (
-    <div>
-      <div className="flex flex-col md:gap-36 sm:gap-28 gap-32 pb-100">
+    <div className='h-full flex flex-col justify-end'>
+      <div className="flex flex-col md:gap-36 sm:gap-28 gap-32 pb-100 flex-grow-1">
         <div className="">{children}</div>
 
         {!!categories?.length && (
@@ -46,7 +46,7 @@ const StorefrontLayout: FC<{
 
         <Collections storeId={store.id} initialCollections={initialCollections} />
 
-        <section className="flex flex-col sm:gap-24 gap-20 mx-24 sm:mx-40 md:mx-60 l:mx-100 xl:mx-200">
+        <section className="flex flex-col sm:gap-24 gap-20 app-width max-w-1440 mx-auto">
           <div className="flex flex-row j-content-between a-items-center">
             <h3 className="sm:text-24 text-16 weight-600">Featured products</h3>
             {products?.length > 4 && (
