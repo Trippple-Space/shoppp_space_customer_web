@@ -16,7 +16,13 @@ import {
 } from '@floating-ui/react';
 import Image from '../image/Image';
 
-export function CatalogueMediaItem({ item }: { item: ProductCatalogue }) {
+export function CatalogueMediaItem({
+  item,
+  onClick,
+}: {
+  item: ProductCatalogue;
+  onClick?: () => void;
+}) {
   const videoRef = useRef<HTMLVideoElement>(null);
   const imgRef = useRef<HTMLImageElement>(null);
 
@@ -42,6 +48,7 @@ export function CatalogueMediaItem({ item }: { item: ProductCatalogue }) {
   const wrapperStyle: React.CSSProperties = {
     overflow: 'hidden',
     background: 'rgba(0,0,0,0.04)',
+    cursor: onClick ? 'pointer' : undefined,
     /* paddingBottom: 5 */
   };
 
@@ -61,6 +68,7 @@ export function CatalogueMediaItem({ item }: { item: ProductCatalogue }) {
             playsInline
             className="w-100p h-100p block g|object-fit:cover"
             style={{ width: '100%', height: '100%', display: 'block', objectFit: 'cover' }}
+            onClick={onClick}
           />
         </div>
         {/* (item.caption || tags.length > 0) && (
@@ -93,6 +101,7 @@ export function CatalogueMediaItem({ item }: { item: ProductCatalogue }) {
           alt={item.caption ?? 'Catalogue'}
           hasLoader={true}
           width={10000}
+          onClick={onClick}
         />
       </div>
       {/* (item.caption || tags.length > 0) && (

@@ -4,7 +4,6 @@ import {
 import ProductTile from '@/modules/lib/components/product-tile/ProductTile';
 import ProductTileShimmer from '@/modules/lib/components/product-tile/ProductTileShimmer';
 import ScrollButtons from '@/modules/lib/components/scroll-buttons/scrollButtons';
-import NoResultMessage from '@/modules/lib/components/error-messages/no-result-found';
 import { useEffect, useRef } from 'react';
 import { ICollection } from '@/modules/lib/utility/types/collection.interface';
 import { useFilterStore } from '@/modules/lib/utility/store/filter.store';
@@ -109,6 +108,7 @@ const CollectionSection = ({ collection, index, selectedCollection, setSelectedC
   const showProducts = !productsLoading && !hasError && products.length > 0;
 
   if (collection.productCount === 0) return null;
+  if (showEmptyState) return null;
 
   return (
     <section
@@ -172,13 +172,6 @@ const CollectionSection = ({ collection, index, selectedCollection, setSelectedC
             Array.from({ length: shimmerCount }, (_, i) => (
               <ProductTileShimmer key={`shimmer-${collection.id}-${i}`} />
             ))
-          ) : showEmptyState ? (
-            <div className="flex flex-col a-items-center j-content-center min-w-280 py-32">
-              <NoResultMessage
-                contentTitle="No products in this collection"
-                textContent="There are no products to show for this collection right now."
-              />
-            </div>
           ) : showProducts ? (
             products?.slice(0, 10).map((product, i) => (
               <div
