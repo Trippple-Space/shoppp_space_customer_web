@@ -42,7 +42,7 @@ const BaseCategoryNav: FC<IBaseCategoryNav> = ({
       <div className="scroll-x no-scrollbar" ref={scrollRef}>
         <div
           className={`flex h-fit w-fit whitespace-nowrap ${
-            page === 'store' && 's:gap-12 gap-8'
+            page === 'store' ? 's:gap-12 gap-8' : 'gap-8'
           }`}
         >
           {categories?.map((category, i) => {
