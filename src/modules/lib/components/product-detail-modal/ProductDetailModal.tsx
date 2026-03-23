@@ -485,7 +485,7 @@ const ProductDetailModal = ({
         <>
           <div className="relative no-scrollbar w-full h-full flex flex-col j-content-center a-items-center">
             <div
-              className={`fixed bg-white z-20 w-94p sm:w-80p l:w-65p  xl:w-50p  radius-8 no-scrollbar`}
+              className={`fixed bg-white z-20 w-94p sm:w-80p l:w-65p xl:w-50p max-w-900 radius-8 no-scrollbar`}
               style={{
                 height: 'fit-content',
                 maxHeight: 'calc(100vh - 80px)',

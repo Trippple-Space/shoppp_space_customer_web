@@ -635,6 +635,7 @@
 @layer base {.radius-99 { border-radius: 99px; } } 
 .bg-\#FFD699 { background-color: #FFD699; } 
 .w-94p { width: 94%; } 
+.max-w-900 { max-width: 900px; } 
 .b-45p { bottom: 45%; } 
 .color-\#A9A9A9 { color: #A9A9A9; } 
 .bg-\#D3D3D3 { background-color: #D3D3D3; } 
