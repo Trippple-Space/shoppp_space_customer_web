@@ -146,18 +146,25 @@ export const useProducts = (
       `_page_${query.pagination?.page ?? 1}` +
       `_limit_${query.pagination?.limit ?? 0}`;
 
+  const effectiveCollectionSlug = query.collection
+    ? query.collection
+    : collectionSlug;
+
   useEffect(() => {
     if (!query.pagination) return;
 
     //buttons scroll
     if (paginationType === "buttons") {
-      if (productsCache[cacheKey]) return;
+      if (productsCache[cacheKey]) {
+        setLoading(false);
+        return;
+      }
 
       setLoading(true);
       setFetchingError(null);
 
       productService
-        .fetchProducts(query, query.allFilters, collectionSlug = query.collection ? query.collection : collectionSlug)
+        .fetchProducts(query, query.allFilters, effectiveCollectionSlug)
         .then((fetchedProducts) => {
           setProductsCache(cacheKey, {
             data: fetchedProducts.data,
@@ -184,7 +191,7 @@ export const useProducts = (
       setLoading(true);
       setFetchingError(null);
       productService
-        .fetchProducts(query, query.allFilters, collectionSlug = query.collection ? query.collection : collectionSlug)
+        .fetchProducts(query, query.allFilters, effectiveCollectionSlug)
         .then((fetchedProducts) => {
           setProductsCache(cacheKey, {
             data: fetchedProducts.data,
@@ -221,7 +228,7 @@ export const useProducts = (
       setLoading(true);
       setFetchingError(null);
       productService
-        .fetchProducts(query, query.allFilters, collectionSlug = query.collection ? query.collection : collectionSlug)
+        .fetchProducts(query, query.allFilters, effectiveCollectionSlug)
         .then((fetchedProducts) => {
           const previous = productsCache[cacheKey];
 
