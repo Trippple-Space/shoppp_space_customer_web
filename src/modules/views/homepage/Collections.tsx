@@ -4,6 +4,7 @@ import { useEffect, useRef, useState } from 'react';
 import { ICollection } from '@/modules/lib/utility/types/collection.interface';
 import { TbAlertCircle, TbRefresh } from 'react-icons/tb';
 import Button from '@/modules/lib/components/button/Button';
+import cx from 'classnames';
 
 const Collections = ({
   storeId,
@@ -16,6 +17,7 @@ const Collections = ({
   subHeadingClassName = '',
   hasMargin = '',
   hasAppWidth = true,
+  onAllCollectionsEmptyChange,
 }: { 
   storeId: string;
   initialCollections?: ICollection[];
@@ -27,6 +29,7 @@ const Collections = ({
   subHeadingClassName?: string;
   hasMargin?: string;
   hasAppWidth?: boolean;
+  onAllCollectionsEmptyChange?: (allEmpty: boolean) => void;
 }) => {
   const { collections, loading: loadingCollections, error, retry } = useCollections({
     storeId,
@@ -35,8 +38,18 @@ const Collections = ({
   });
 
   const [selectedCollection, setSelectedCollection] = useState<string | null>(null);
+  const [collectionEmptyState, setCollectionEmptyState] = useState<Record<string, boolean>>({});
   const onCollectionsLoadedRef = useRef(onCollectionsLoaded);
   onCollectionsLoadedRef.current = onCollectionsLoaded;
+
+  useEffect(() => {
+    setCollectionEmptyState(
+      collections.reduce<Record<string, boolean>>((acc, collection) => {
+        acc[collection.id] = collection.productCount === 0;
+        return acc;
+      }, {})
+    );
+  }, [collections]);
 
   useEffect(() => {
     if (collections.length > 0) {
@@ -60,11 +73,32 @@ const Collections = ({
     }
   }, [loadingCollections, setCollectionsLoaded]);
 
+  const allCollectionsEmpty =
+    collections.length > 0 && collections.every((collection) => collectionEmptyState[collection.id] === true);
+  const visibleCollectionIds = collections
+    .filter((collection) => !collectionEmptyState[collection.id])
+    .map((collection) => collection.id);
+
+  useEffect(() => {
+    onAllCollectionsEmptyChange?.(allCollectionsEmpty);
+  }, [allCollectionsEmpty, onAllCollectionsEmptyChange]);
+
+  const containerClassName = cx(
+    !isStoreBased
+      ? "w-100p"
+      : hasAppWidth
+        ? "app-width max-w-1440 mx-auto"
+        : "",
+    !allCollectionsEmpty && !isStoreBased && "md:mt-32 mt-24",
+    !allCollectionsEmpty && hasMargin,
+    "flex flex-col"
+  );
+
   if (loadingCollections) return null;
 
   if (error && collections.length === 0) {
     return (
-      <div className={`${!isStoreBased ? 'md:mt-32 mt-24 w-100p' : `${hasAppWidth ? 'app-width max-w-1440 mx-auto' : ''}`} ${hasMargin} flex flex-col`}>
+      <div className={containerClassName}>
         <div
           className="flex flex-col items-center justify-center gap-20 py-48 px-24 rounded-16 bg-#FAFAFA"
           role="alert"
@@ -92,14 +126,17 @@ const Collections = ({
 
   return (
     collections.length > 0 ? (
-      <div className={`${!isStoreBased ? 'md:mt-32 mt-24 w-100p' : `${hasAppWidth ? 'app-width max-w-1440 mx-auto' : ''}`} ${hasMargin} flex flex-col`}>
+      <div className={containerClassName}>
         <div className='grid md:gap-24 gap-20 lg:grid-2-cols-1fr'>
           {collections.map((collection, index) => {
-            const isLast = index === collections.length - 1;
-            const isOdd = collections.length % 2 === 1;
+            const visibleIndex = visibleCollectionIds.indexOf(collection.id);
+            const isVisible = visibleIndex !== -1;
+            const isLastVisible = visibleIndex === visibleCollectionIds.length - 1;
+            const hasOddVisibleCount = visibleCollectionIds.length % 2 === 1;
+            const shouldSpan = isVisible && isLastVisible && hasOddVisibleCount;
 
             return (
-              <div key={collection.id} className={isLast && isOdd ? 'lg:grid-col-span-2' : ''} style={{
+              <div key={collection.id} className={cx(shouldSpan && 'lg:grid-col-span-2', !isVisible && 'hidden')} style={{
                 minWidth: 0
               }}>
                 <CollectionSection
@@ -110,6 +147,12 @@ const Collections = ({
                   isStoreBased={isStoreBased}
                   headingClassName={headingClassName}
                   subHeadingClassName={subHeadingClassName}
+                  onCollectionEmptyStateChange={(collectionId, isEmpty) => {
+                    setCollectionEmptyState((prev) => {
+                      if (prev[collectionId] === isEmpty) return prev;
+                      return { ...prev, [collectionId]: isEmpty };
+                    });
+                  }}
                 />
               </div>
             )
