@@ -60,6 +60,7 @@ const ModernEarth: React.FC<ModernEarthProps> = (props) => {
     primaryBtnText,
     offers,
     initialCollections = [],
+    showCollectionsSection = true,
   } = props;
 
   return (
@@ -254,12 +255,21 @@ const ModernEarth: React.FC<ModernEarthProps> = (props) => {
           hideDefaultCart={true}
         />
 
-        <section>
-          <Collections storeId={store.id} initialCollections={initialCollections} />
-        </section>
+        {showCollectionsSection && (
+          <section>
+            <Collections
+              storeId={store.id}
+              initialCollections={initialCollections}
+              isStoreBased={true}
+              headingClassName="font-dmSans"
+              subHeadingClassName="font-dmSans"
+              hasMargin="md:mt-50 mt-24"
+            />
+          </section>
+        )}
 
         <section
-          className="py-20 sm:py-40 md:py-80 l:py-120 px-16 sm:px-25 font-dmSans max-w-1440 mx-auto"
+          className="py-30 md:py-40 l:py-80 px-16 sm:px-25 font-dmSans max-w-1440 mx-auto"
           ref={productsRef}
         >
           <h2 className="mb-4 md:mb-10 font-bold text-26 md:text-32 sm:text-40 l:text-50 text-center">

@@ -1,6 +1,6 @@
 import React from 'react';
 import { Store } from '@/modules/lib/utility/types/store.interface';
-import { Product, ProductCategory } from '@/modules/lib/utility/types/product.interface';
+import { ICategory, Product, ProductCategory } from '@/modules/lib/utility/types/product.interface';
 import { IFetchedReview } from '@/modules/lib/utility/types/review.interface';
 import { ICollection } from '@/modules/lib/utility/types/collection.interface';
 
@@ -45,4 +45,6 @@ export interface BaseStorefrontProps {
     handleCategoryChange?: (category: ProductCategory) => void;
 
     initialCollections?: ICollection[];
+    initialCategories?: ICategory[];
+    showCollectionsSection?: boolean;
 }

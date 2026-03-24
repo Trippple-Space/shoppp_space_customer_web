@@ -3,12 +3,12 @@ import StorefrontFooter from '@/modules/lib/components/footer/StorefrontFooter';
 import FabricsCategoryNav from '@/modules/lib/components/nav-bar/category-nav/FabricsCategoryNav';
 import { useStoreCategoryNavView } from '@/modules/lib/utility/hooks/views/use-category-nav-view';
 import {
+  ICategory,
   Product,
-  ProductCategory,
 } from '@/modules/lib/utility/types/product.interface';
 import { Store } from '@/modules/lib/utility/types/store.interface';
 import { ICollection } from '@/modules/lib/utility/types/collection.interface';
-import { FC, ReactNode, useState } from 'react';
+import { FC, ReactNode } from 'react';
 import StoreProductsList from './StoreProductsList';
 import Link from 'next/link';
 import { GoArrowRight } from 'react-icons/go';
@@ -23,10 +23,24 @@ const StorefrontLayout: FC<{
   setPage: React.Dispatch<React.SetStateAction<number>>;
   totalPages: number;
   initialCollections?: ICollection[];
-}> = ({ store, children, products, loading, page, setPage, totalPages, initialCollections = [] }) => {
-  const [selectedCategory, setSelectedCategory] =
-    useState<ProductCategory | null>(null);
-  const { categories } = useStoreCategoryNavView({ storeId: store.id });
+  initialCategories?: ICategory[];
+  showCollectionsSection?: boolean;
+}> = ({
+  store,
+  children,
+  products,
+  loading,
+  page,
+  setPage,
+  totalPages,
+  initialCollections = [],
+  initialCategories = [],
+  showCollectionsSection = true,
+}) => {
+  const { categories, selectedCategory, setSelectedCategory } = useStoreCategoryNavView({
+    storeId: store.id,
+    initialCategories,
+  });
 
   return (
     <div className='h-full flex flex-col justify-end'>
@@ -37,6 +51,7 @@ const StorefrontLayout: FC<{
           <div className="sm:py-20 py-16">
             <FabricsCategoryNav
               categories={categories}
+              selectedCategory={selectedCategory}
               setSelectedCategory={setSelectedCategory}
               page={'store'}
               key={categories}
@@ -44,7 +59,13 @@ const StorefrontLayout: FC<{
           </div>
         )}
 
-        <Collections storeId={store.id} initialCollections={initialCollections} />
+        {showCollectionsSection && (
+          <Collections
+            storeId={store.id}
+            initialCollections={initialCollections}
+            isStoreBased={true}
+          />
+        )}
 
         <section className="flex flex-col sm:gap-24 gap-20 app-width max-w-1440 mx-auto">
           <div className="flex flex-row j-content-between a-items-center">

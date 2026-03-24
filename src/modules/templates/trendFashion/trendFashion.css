@@ -320,7 +320,7 @@
 .exclusive {
   max-width: 1440px;
   margin: 0 auto;
-  margin-top: 50px;
+  /* margin-top: 50px; */
   padding: 40px 70px;
 }
 

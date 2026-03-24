@@ -35,6 +35,7 @@ const UrbanEdge: FC<UrbanEdgeProps> = ({
   setPage,
   totalPages,
   initialCollections = [],
+  showCollectionsSection = true,
 }) => {
   return (
     <>
@@ -138,7 +139,16 @@ const UrbanEdge: FC<UrbanEdgeProps> = ({
           </section>
         )}
 
-        <Collections storeId={store.id} initialCollections={initialCollections} />
+        {showCollectionsSection && (
+          <Collections
+            storeId={store.id}
+            initialCollections={initialCollections}
+            isStoreBased={true}
+            headingClassName="font-poppins"
+            subHeadingClassName="font-poppins"
+            hasAppWidth={false}
+          />
+        )}
 
         <section className="py-30 sm:py-40 md:py-50 l:py-60" ref={productsRef}>
           <div className="urbanEdge_product-headings">

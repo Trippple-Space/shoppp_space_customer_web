@@ -6,8 +6,8 @@ import { AxiosResponse } from "axios";
 class CollectionService {
     CACHE_EXPIRY = 60 * 60 * 1000; // 1 hour
 
-    async fetchStoreCollections(storeId: string, type: "fabrics" | "wears" | null = null): Promise<ICollection[]> {
-        const cacheKey = `store/collections_${storeId}_${type ?? "all"}`;
+    async fetchStoreCollections(storeId: string, _type: "fabrics" | "wears" | null = null): Promise<ICollection[]> {
+        const cacheKey = `store/collections_${storeId}_all`;
         const cached = this.getCachedCollections(cacheKey);
         if (cached) return cached;
 
@@ -15,7 +15,6 @@ class CollectionService {
             endpoints.COLLECTIONS_BY_STORE.replace(":storeId", storeId),
             {
                 params: {
-                    filters: type ? { type } : {},
                     pagination: { limit: 100, page: 1 },
                     includeProducts: true
                 },

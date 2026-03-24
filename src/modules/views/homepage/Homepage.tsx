@@ -18,14 +18,29 @@ import { TbX } from 'react-icons/tb';
 import { IFilters } from '@/modules/lib/utility/types/product.interface';
 import Collections from './Collections';
 import { ICollection } from '@/modules/lib/utility/types/collection.interface';
+import { ICategory } from '@/modules/lib/utility/types/product.interface';
 
-const Homepage = ({ initialCollections = [] }: { initialCollections?: ICollection[] }) => {
+const EMPTY_CATEGORY: ICategory = {
+  name: '',
+  images: { icon: '', picture: '' },
+  description: '',
+  filters: {},
+  subcategories: [],
+};
+
+const Homepage = ({
+  initialCollections = [],
+  initialCategories = [],
+}: {
+  initialCollections?: ICollection[];
+  initialCategories?: ICategory[];
+}) => {
   const searchParams = useSearchParams();
   const router = useRouter();
   const pathname = usePathname();
 
   const { categories, setSelectedCategory, selectedCategory } =
-    useStoreCategoryNavView();
+    useStoreCategoryNavView({ initialCategories });
   const { setRate, setPrice, setSort, setLocation, allFilters, resetFilters } =
     useFilterStore();
 
@@ -47,28 +62,26 @@ const Homepage = ({ initialCollections = [] }: { initialCollections?: ICollectio
       setLocation(parsed.location.selectedState);
   }, [searchParams]);
 
-  const emptyCategory = {
-    name: '',
-    images: { icon: '', picture: '' },
-    description: '',
-    filters: {},
-    subcategories: [],
-  };
-
   useEffect(() => {
     const categoryFromUrl = searchParams.get('category');
     const hasSearchOrCollection = searchParams.get('search') || searchParams.get('collection');
+    const selectedName = (selectedCategory?.name || '').trim().toLowerCase();
 
     if (categoryFromUrl) {
-      setSelectedCategory({
-        ...selectedCategory,
-        name: categoryFromUrl.toLowerCase(),
-        filters: { name: categoryFromUrl.toLowerCase() },
-      });
+      const normalizedCategory = categoryFromUrl.trim().toLowerCase();
+      if (selectedName !== normalizedCategory) {
+        setSelectedCategory({
+          ...selectedCategory,
+          name: normalizedCategory,
+          filters: { name: normalizedCategory },
+        });
+      }
     } else if (hasSearchOrCollection) {
-      setSelectedCategory(emptyCategory);
+      if (selectedName) {
+        setSelectedCategory(EMPTY_CATEGORY);
+      }
     }
-  }, [searchParams, categories]);
+  }, [searchParams, selectedCategory, setSelectedCategory]);
 
   const hasPrice = !!allFilters.price.min || !!allFilters.price.max;
   const hasRating = !!allFilters.rating.rateBy;

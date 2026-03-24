@@ -30,7 +30,8 @@ const TrendFashion: FC<TrendFashionProps> = ({
   page,
   setPage,
   totalPages,
-  initialCollections = []
+  initialCollections = [],
+  showCollectionsSection = true,
 }) => {
   return (
     <div className="trend-body font-inter">
@@ -182,7 +183,14 @@ const TrendFashion: FC<TrendFashionProps> = ({
           </section>
         )}
 
-      <Collections storeId={store.id} initialCollections={initialCollections} />
+      {showCollectionsSection && (
+        <Collections
+          storeId={store.id}
+          initialCollections={initialCollections}
+          isStoreBased={true}
+          hasMargin="md:mt-50 mt-24"
+        />
+      )}
 
       <section className="exclusive" ref={productsRef}>
         <h2 className="exclusive-header">
