@@ -4,7 +4,7 @@ import { ILayout } from '../layout'
 
 const layout: FC<ILayout> = ({children}) => {
   return (
-    <div> {children} </div>
+    <div className='h-full'> {children} </div>
   )
 }
 

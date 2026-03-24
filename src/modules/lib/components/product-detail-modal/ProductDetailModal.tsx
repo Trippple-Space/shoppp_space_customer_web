@@ -51,11 +51,11 @@ const ProductDetailModal = ({
   const { groupedData, availableColors, productImages, allProperties } = product
     ? useTransformProduct(product)
     : {
-        groupedData: {},
-        availableColors: [],
-        productImages: [],
-        allProperties: {},
-      };
+      groupedData: {},
+      availableColors: [],
+      productImages: [],
+      allProperties: {},
+    };
 
   const [activeFilters, setActiveFilters] = useState<Record<string, string>>(
     {}
@@ -485,7 +485,7 @@ const ProductDetailModal = ({
         <>
           <div className="relative no-scrollbar w-full h-full flex flex-col j-content-center a-items-center">
             <div
-              className={`fixed bg-white z-20 w-94p sm:w-80p l:w-65p  xl:w-50p  radius-8 no-scrollbar`}
+              className={`fixed bg-white z-20 w-94p sm:w-80p l:w-65p xl:w-50p max-w-900 radius-8 no-scrollbar`}
               style={{
                 height: 'fit-content',
                 maxHeight: 'calc(100vh - 80px)',
@@ -539,13 +539,15 @@ const ProductDetailModal = ({
                                   ref={imgRef}
                                   src={selectedImage ?? ''}
                                   alt={product?.name || 'Product'}
-                                  className={`object-fit w-full h-full ${selectedVariant?.status === 'OUT_OF_STOCK' ? 'greyscale' : ''}`}
+                                  style={{ objectFit: 'contain' }}
+                                  className={`w-full h-full ${selectedVariant?.status === 'OUT_OF_STOCK' ? 'greyscale' : ''}`}
                                   width={10000}
                                   hasLoader={true}
                                 />
                               ) : (
                                 <VideoSrc
-                                  className={`object-fit w-full h-full ${selectedVariant?.status === 'OUT_OF_STOCK' ? 'greyscale' : ''}`}
+                                  /* style={{ objectFit: 'contain' }} */
+                                  className={`w-full h-full ${selectedVariant?.status === 'OUT_OF_STOCK' ? 'greyscale' : ''}`}
                                   src={selectedImage ?? ''}
                                   hasLoader={true}
                                 />
@@ -565,7 +567,7 @@ const ProductDetailModal = ({
                           </div>
                           {!variantSelectedImage &&
                             (uniqueVariantsFromProductImages?.length ?? 0) >
-                              0 && (
+                            0 && (
                               <div className="flex gap-10 py-5 overflow-x-auto a-items-center no-scrollbar w-full">
                                 {uniqueVariantsFromProductImages.map((vari) =>
                                   vari?.media?.map((mediaItem: any) => (
@@ -597,10 +599,9 @@ const ProductDetailModal = ({
                                           src={mediaItem.url}
                                           alt="product-image"
                                           className={cx(
-                                            `object-fit w-full h-full overflow-hidden ${
-                                              vari.status === 'OUT_OF_STOCK'
-                                                ? 'greyscale'
-                                                : ''
+                                            `object-fit w-full h-full overflow-hidden ${vari.status === 'OUT_OF_STOCK'
+                                              ? 'greyscale'
+                                              : ''
                                             }`,
                                             {
                                               'border border-green border-2':
@@ -617,10 +618,9 @@ const ProductDetailModal = ({
                                         <VideoSrc
                                           src={mediaItem.url}
                                           className={cx(
-                                            `object-fit w-full h-full overflow-hidden ${
-                                              vari.status === 'OUT_OF_STOCK'
-                                                ? 'greyscale'
-                                                : ''
+                                            `object-fit w-full h-full overflow-hidden ${vari.status === 'OUT_OF_STOCK'
+                                              ? 'greyscale'
+                                              : ''
                                             }`,
                                             {
                                               'border border-green border-2':
@@ -677,40 +677,40 @@ const ProductDetailModal = ({
                         {allPropertiesWithSize?.color?.filter(
                           (v) => v.trim() !== ''
                         )?.length > 0 && (
-                          <div className="mt-12">
-                            <p className="text-left text-14 weight-400">
-                              Select color:
-                            </p>
+                            <div className="mt-12">
+                              <p className="text-left text-14 weight-400">
+                                Select color:
+                              </p>
 
-                            <div className="mt-10 flex gap-6 a-items-center overflow-auto no-scrollbar">
-                              {allPropertiesWithSize?.color.map((color) => {
-                                const hex = colorMap[color.replaceAll(' ', '')];
-                                const active = activeFilters.color === color;
-                                const compatible = isOptionCompatible(
-                                  'color',
-                                  color
-                                );
+                              <div className="mt-10 flex gap-6 a-items-center overflow-auto no-scrollbar">
+                                {allPropertiesWithSize?.color.map((color) => {
+                                  const hex = colorMap[color.replaceAll(' ', '')];
+                                  const active = activeFilters.color === color;
+                                  const compatible = isOptionCompatible(
+                                    'color',
+                                    color
+                                  );
 
-                                return (
-                                  <div
-                                    key={color}
-                                    onClick={() => toggleFilter('color', color)}
-                                    className={classNames(
-                                      'w-32 min-w-32 h-32 round border transition',
-                                      {
-                                        'border-3 border-#0B9378 border-solid':
-                                          active,
-                                        'opacity-40 cursor-not-allowed':
-                                          !compatible,
-                                      }
-                                    )}
-                                    style={{ background: hex || color }}
-                                  />
-                                );
-                              })}
+                                  return (
+                                    <div
+                                      key={color}
+                                      onClick={() => toggleFilter('color', color)}
+                                      className={classNames(
+                                        'w-32 min-w-32 h-32 round border transition',
+                                        {
+                                          'border-3 border-#0B9378 border-solid':
+                                            active,
+                                          'opacity-40 cursor-not-allowed':
+                                            !compatible,
+                                        }
+                                      )}
+                                      style={{ background: hex || color }}
+                                    />
+                                  );
+                                })}
+                              </div>
                             </div>
-                          </div>
-                        )}
+                          )}
 
                         {Object.entries(allPropertiesWithSize).map(
                           ([prop, values]) => {
@@ -747,10 +747,10 @@ const ProductDetailModal = ({
                                         className={cx(
                                           'px-10 py-7 radius-6 border transition whitespace-nowrap text-12',
                                           active &&
-                                            'bg-#DEFFF9! color-#0B9378! border-3 border-#0B9378 border-solid',
+                                          'bg-#DEFFF9! color-#0B9378! border-3 border-#0B9378 border-solid',
                                           !active && compatible && 'bg-#F3F3F3',
                                           !compatible &&
-                                            'bg-#F3F3F3 opacity-40 cursor-not-allowed'
+                                          'bg-#F3F3F3 opacity-40 cursor-not-allowed'
                                         )}
                                       >
                                         {value}
@@ -852,7 +852,7 @@ const ProductDetailModal = ({
                                   localStorage.setItem(
                                     'variantIdMinimumPurchase',
                                     selectedVariant?.minPurchaseQuantity.toString() ||
-                                      '1'
+                                    '1'
                                   );
                                   if (userConfigurations) {
                                     localStorage.setItem(

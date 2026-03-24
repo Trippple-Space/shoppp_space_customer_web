@@ -91,7 +91,7 @@ export const buildFilterParams = (filters: any) => {
     if (cleaned.length === 1) {
       params["filters[tags][label]"] = cleaned[0];
     } else if (cleaned.length > 1) {
-      params["filters[tags][label][In][]"] = cleaned;
+      params["filters[tags][label][]"] = cleaned;
     }
   }
 

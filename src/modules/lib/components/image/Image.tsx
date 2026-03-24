@@ -19,6 +19,7 @@ export interface IImageProps {
   pulseClassName?: string;
   priority?: boolean;
   fetchPriority?: 'high' | 'low' | 'auto';
+  style?: React.CSSProperties;
 }
 
 const extractSize = (
@@ -45,6 +46,7 @@ const Image = React.forwardRef<HTMLImageElement, IImageProps>(
       pulseClassName,
       priority,
       fetchPriority,
+      style,
     },
     ref
   ) => {
@@ -87,6 +89,7 @@ const Image = React.forwardRef<HTMLImageElement, IImageProps>(
             fill={fill}
             priority={priority}
             fetchPriority={fetchPriority}
+            style={style}
           />
         ) : (
           <img
@@ -107,6 +110,7 @@ const Image = React.forwardRef<HTMLImageElement, IImageProps>(
             width={autoWidth}
             height={autoHeight}
             onLoad={() => setLoaded(true)}
+            style={style}
           />
         )}
       </>

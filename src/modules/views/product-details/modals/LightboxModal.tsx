@@ -22,6 +22,8 @@ const LightboxModal = ({
   isLoginModal,
   setShowShareModal,
 }: any) => {
+  const currentMediaType = checkMediaType(lightboxImages?.[lightboxIndex] ?? '');
+
   return (
     <AnimatePresence>
       {showLightbox && (
@@ -103,8 +105,17 @@ const LightboxModal = ({
                 <MdOutlineNavigateBefore className="color-#fffafaec" />
               </button>
 
-              {(checkMediaType(lightboxImages[lightboxIndex]) ??
-              'image' === 'image') ? (
+              {currentMediaType === 'video' ? (
+                <VideoSrc
+                  className={`flex-grow-1 h-full w-full h-full a-self-center ${
+                    isOutOfStock && 'out-of-stock'
+                  } ${styles.media}`}
+                  src={lightboxImages[lightboxIndex]}
+                  autoPlay
+                  loop
+                  hasLoader={false}
+                />
+              ) : (
                 <Image
                   src={lightboxImages[lightboxIndex]}
                   className={`flex-grow-1 h-full w-full h-full a-self-center ${
@@ -113,13 +124,6 @@ const LightboxModal = ({
                   alt={''}
                   ref={imgRef}
                   width={10000}
-                />
-              ) : (
-                <VideoSrc
-                  className={`flex-grow-1 h-full w-full h-full a-self-center ${
-                    isOutOfStock && 'out-of-stock'
-                  } ${styles.media}`}
-                  src={lightboxImages[lightboxIndex]}
                 />
               )}
 

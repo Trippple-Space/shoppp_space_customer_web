@@ -14,6 +14,9 @@ interface VideoSrcProps {
   hasLoader?: boolean;
   pulseClassName?: string;
   priority?: boolean;
+  style?: React.CSSProperties;
+  autoPlay?: boolean;
+  loop?: boolean;
 }
 
 const VideoSrc: React.FC<VideoSrcProps> = ({
@@ -24,9 +27,22 @@ const VideoSrc: React.FC<VideoSrcProps> = ({
   hasLoader = true,
   pulseClassName,
   priority = false,
+  style,
+  autoPlay = false,
+  loop = false,
 }) => {
   const videoRef = useRef<HTMLVideoElement>(null);
   const [loaded, setLoaded] = useState(false);
+  const shouldPreload = priority || autoPlay;
+
+  React.useEffect(() => {
+    if (!autoPlay) return;
+
+    const el = videoRef.current;
+    if (!el) return;
+
+    el.play().catch(() => {});
+  }, [autoPlay, src]);
 
   const handleMouseEnter = () => {
     if (videoRef.current) {
@@ -35,6 +51,8 @@ const VideoSrc: React.FC<VideoSrcProps> = ({
   };
 
   const handleMouseLeave = () => {
+    if (autoPlay) return;
+
     if (videoRef.current) {
       videoRef.current.pause();
       videoRef.current.currentTime = 0; 
@@ -58,7 +76,9 @@ const VideoSrc: React.FC<VideoSrcProps> = ({
             ref={videoRef}
             src={src}
             poster={poster}
-            {...getVideoLoadingProps(priority)}
+            playsInline
+            loop={loop}
+            {...getVideoLoadingProps(shouldPreload)}
             className={classNames(
               'absolute inset-0 w-full h-full transition-opacity duration-500',
               loaded ? 'opacity-100' : 'opacity-0',
@@ -67,9 +87,11 @@ const VideoSrc: React.FC<VideoSrcProps> = ({
             onMouseEnter={handleMouseEnter}
             onMouseLeave={handleMouseLeave}
             onLoadedData={() => setLoaded(true)}
-            preload={priority ? 'auto' : 'metadata'}
+            preload={shouldPreload ? 'auto' : 'metadata'}
             muted
+            autoPlay={autoPlay}
             onClick={onClick}
+            style={style}
           />
         </div>
       ) : (
@@ -77,13 +99,17 @@ const VideoSrc: React.FC<VideoSrcProps> = ({
           ref={videoRef}
           src={src}
           poster={poster}
-          {...getVideoLoadingProps(priority)}
+          playsInline
+          loop={loop}
+          {...getVideoLoadingProps(shouldPreload)}
           className={className}
           onMouseEnter={handleMouseEnter}
           onMouseLeave={handleMouseLeave}
-          preload={priority ? 'auto' : 'metadata'}
+          preload={shouldPreload ? 'auto' : 'metadata'}
           muted
+          autoPlay={autoPlay}
           onClick={onClick}
+          style={style}
         />
       )}
     </>
