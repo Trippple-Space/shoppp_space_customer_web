@@ -1,6 +1,7 @@
 /** Marketplace opens officially on this date; purchases disabled until then */
 export const MARKETPLACE_OPENS_DATE = 'March 30th';
-export const MARKETPLACE_PURCHASES_ENABLED = new Date() < new Date('2024-03-30');
+/* export const MARKETPLACE_PURCHASES_ENABLED = new Date() < new Date('2024-03-30'); */
+export const MARKETPLACE_PURCHASES_ENABLED = true;
 
 export const deliveryOptions = {
     standard: {
