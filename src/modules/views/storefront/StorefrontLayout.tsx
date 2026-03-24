@@ -44,7 +44,11 @@ const StorefrontLayout: FC<{
           </div>
         )}
 
-        <Collections storeId={store.id} initialCollections={initialCollections} isStoreBased={true} />
+        <Collections
+          storeId={store.id}
+          initialCollections={initialCollections}
+          isStoreBased={true}
+        />
 
         <section className="flex flex-col sm:gap-24 gap-20 app-width max-w-1440 mx-auto">
           <div className="flex flex-row j-content-between a-items-center">

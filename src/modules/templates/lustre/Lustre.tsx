@@ -239,7 +239,17 @@ const ModernLuxe: FC<ModernLuxeProps> = (props) => {
         </div>
       </section>
 
-      <Collections storeId={store.id} initialCollections={initialCollections} />
+      <div className='px-20 sm:px-30 m:px-40 max-w-1440 mx-auto'>
+        <Collections
+          storeId={store.id}
+          initialCollections={initialCollections}
+          isStoreBased={true}
+          headingClassName="font-arial weight-500"
+          subHeadingClassName="font-arial"
+          hasMargin="md:mt-50 mt-24"
+          hasAppWidth={false}
+        />
+      </div>
 
       <section
         className="py-30 sm:py-40 md:py-50 l:py-60 px-20 sm:px-30 m:px-40 max-w-1440 mx-auto"

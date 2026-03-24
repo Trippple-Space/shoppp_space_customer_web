@@ -822,7 +822,6 @@
 .h-56 { height: 56px; } 
 .bg-\#FFF3F1 { background-color: #FFF3F1; } 
 .min-w-120 { min-width: 120px; } 
-.mt-0 { margin-top: 0px; } 
 .w-36 { width: 36px; } 
 .py-40 { padding-top: 40px; padding-bottom: 40px; } 
 .border-\#E8E8E8 { border-color: #E8E8E8; } 
@@ -1280,7 +1279,7 @@
 @media only screen and (min-width: 768px) { .md\:opacity-0 { opacity: 0%; } } 
 @media only screen and (min-width: 768px) { .md\:w-50p { width: 50%; } } 
 @media only screen and (min-width: 768px) { .md\:py-50 { padding-top: 50px; padding-bottom: 50px; } } 
-@media only screen and (min-width: 768px) { .md\:py-80 { padding-top: 80px; padding-bottom: 80px; } } 
+@media only screen and (min-width: 768px) { .md\:py-40 { padding-top: 40px; padding-bottom: 40px; } } 
 @media only screen and (min-width: 768px) { .md\:mb-10 { margin-bottom: 10px; } } 
 @media only screen and (min-width: 768px) { .md\:text-32 { font-size: 32px; } } 
 @media only screen and (min-width: 768px) { .md\:mb-60 { margin-bottom: 60px; } } 
@@ -1490,8 +1489,9 @@
 @media only screen and (min-width: 992px) { .l\:max-w-250 { max-width: 250px; } } 
 @media only screen and (min-width: 992px) { .l\:r-60 { right: 60px; } } 
 @media only screen and (min-width: 992px) { .l\:py-60 { padding-top: 60px; padding-bottom: 60px; } } 
-@media only screen and (min-width: 992px) { .l\:py-120 { padding-top: 120px; padding-bottom: 120px; } } 
+@media only screen and (min-width: 992px) { .l\:py-80 { padding-top: 80px; padding-bottom: 80px; } } 
 @media only screen and (min-width: 992px) { .l\:text-50 { font-size: 50px; } } 
+@media only screen and (min-width: 992px) { .l\:px-24 { padding-left: 24px; padding-right: 24px; } } 
 @media only screen and (min-width: 992px) { .l\:r-7p { right: 7%; } } 
 @media only screen and (min-width: 992px) { .l\:w-45\.8p { width: 45.8%; } } 
 @media only screen and (min-width: 992px) { .l\:w-54\.2p { width: 54.2%; } } 
@@ -1519,7 +1519,6 @@
 @media only screen and (min-width: 992px) { [class~='l:g|max-height:480px']{max-height:480px} } 
 @media only screen and (min-width: 992px) { .l\:overflow-visible { overflow: visible; } } 
 @media only screen and (min-width: 992px) { .l\:j-content-between { justify-content: space-between; } } 
-@media only screen and (min-width: 992px) { .l\:px-24 { padding-left: 24px; padding-right: 24px; } } 
 @media only screen and (min-width: 992px) { .l\:radius-t-l-16 { border-top-left-radius: 16px;  } } 
 @media only screen and (min-width: 992px) { .l\:radius-b-l-16 { border-bottom-left-radius: 16px;  } } 
 @media only screen and (min-width: 992px) { .l\:radius-b-r-0 { border-bottom-right-radius: 0px;  } } 

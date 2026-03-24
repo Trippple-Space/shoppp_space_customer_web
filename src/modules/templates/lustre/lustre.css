@@ -208,7 +208,7 @@
 
 .modernLuxe__vertical-text {
   position: absolute;
-  left: -155px;
+  left: -50px;
   top: 50%;
   transform: translateY(50%);
   transform: rotate(-90deg);

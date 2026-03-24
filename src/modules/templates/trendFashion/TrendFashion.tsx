@@ -182,7 +182,12 @@ const TrendFashion: FC<TrendFashionProps> = ({
           </section>
         )}
 
-      <Collections storeId={store.id} initialCollections={initialCollections} />
+      <Collections
+        storeId={store.id}
+        initialCollections={initialCollections}
+        isStoreBased={true}
+        hasMargin="md:mt-50 mt-24"
+      />
 
       <section className="exclusive" ref={productsRef}>
         <h2 className="exclusive-header">
