@@ -29,13 +29,9 @@ const FabricsCategoryNav = ({
     const search = searchParams.get('search');
     const collection = searchParams.get('collection');
 
-    if (search && search !== searchTerm) {
-      setSearchTerm(search);
-    }
-    if (collection && collection !== selectedCollection) {
-      setSelectedCollection(collection);
-    }
-  }, [searchParams]);
+    setSearchTerm(search ?? '');
+    setSelectedCollection(collection ?? '');
+  }, [path, searchParams]);
 
   return (
     <div

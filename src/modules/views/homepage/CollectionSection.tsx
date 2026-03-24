@@ -8,11 +8,12 @@ import { useEffect, useRef } from 'react';
 import { ICollection } from '@/modules/lib/utility/types/collection.interface';
 import { useFilterStore } from '@/modules/lib/utility/store/filter.store';
 import { useCategories } from '@/modules/lib/utility/hooks/use-categories';
-import { usePathname, useRouter } from 'next/navigation';
+import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 import { LuArrowRight } from 'react-icons/lu';
 import { TbAlertCircle, TbRefresh } from 'react-icons/tb';
 import { filtersToSearchParams } from '@/modules/lib/utility/utility';
 import Button from '@/modules/lib/components/button/Button';
+import cx from 'classnames';
 
 const redTheme = { bg: "#FFF3F1", button: "#D4280C", text: 'white' as const };
 const otherThemes = [
@@ -27,23 +28,41 @@ interface Props {
   index: number;
   setSelectedCollection: (coll: string) => void
   selectedCollection: string | null
+  isStoreBased?: boolean
+  storeId?: string
+  headingClassName?: string
+  subHeadingClassName?: string
+  onCollectionEmptyStateChange?: (collectionId: string, isEmpty: boolean) => void
 }
 
-const CollectionSection = ({ collection, index, selectedCollection, setSelectedCollection }: Props) => {
+const CollectionSection = ({
+  collection,
+  index,
+  selectedCollection,
+  setSelectedCollection,
+  isStoreBased = false,
+  storeId = '',
+  headingClassName = '',
+  subHeadingClassName = '',
+  onCollectionEmptyStateChange,
+}: Props) => {
   const scrollRef1 = useRef<HTMLDivElement>(null);
 
   const pathname = usePathname();
   const router = useRouter();
+  const searchParams = useSearchParams();
 
   const nameLower = (collection.name ?? '').toLowerCase();
   const isLimited = /limited|limit/.test(nameLower);
   const theme = isLimited ? redTheme : otherThemes[index % otherThemes.length];
   const type = pathname.includes('wears') ? 'wears' : 'fabrics';
+  const categoryType = isStoreBased ? null : type;
+  const categoryLabel = isStoreBased ? 'STORE' : 'GLOBAL';
 
   const { selectedCategory, setSelectedCategory } = useCategories({
-    type,
-    storeId: '',
-    label: 'GLOBAL',
+    type: categoryType,
+    storeId: isStoreBased ? storeId : '',
+    label: categoryLabel,
   });
   const { allFilters } = useFilterStore();
 
@@ -58,18 +77,20 @@ const CollectionSection = ({ collection, index, selectedCollection, setSelectedC
   })();
 
   const tagsFilter = selectedTags.length ? selectedTags.join(',') : '';
+  const searchFromPath = (searchParams.get('search') ?? '').trim();
 
   const initialFiltersForCollection = {
     ...allFilters,
     tags: tagsFilter,
   };
 
-  const { products, loading, query, updateHomePageFilter, fetchingError, refetch } = useProducts(
+  const { products, loading, query, updateHomePageFilter, setSearch, fetchingError, refetch } = useProducts(
     {
-      filters: { type, status: { In: "ACTIVE,OUT_OF_STOCK" }, channel: "ASOEBI_STORE" },
+      filters: { ...(isStoreBased ? {} : {type}), status: { In: "ACTIVE,OUT_OF_STOCK" }, channel: "ASOEBI_STORE" },
       order: { priorityScore: "DESC", createdAt: "DESC" },
       pagination: { page: 1, limit: 11 },
       allFilters: initialFiltersForCollection,
+      search: searchFromPath || undefined,
     },
     'infinite',
     collection.slug,
@@ -90,6 +111,11 @@ const CollectionSection = ({ collection, index, selectedCollection, setSelectedC
     selectedCategory.name,
   ]);
 
+  useEffect(() => {
+    const nextSearch = (searchParams.get('search') ?? '').trim();
+    setSearch(nextSearch || undefined);
+  }, [searchParams.toString()]);
+
   const handleShowMore = (collection?: string) => {
     const params = filtersToSearchParams(allFilters, selectedCategory);
 
@@ -106,6 +132,13 @@ const CollectionSection = ({ collection, index, selectedCollection, setSelectedC
   const showShimmers = productsLoading;
   const showEmptyState = !productsLoading && !hasError && products.length === 0;
   const showProducts = !productsLoading && !hasError && products.length > 0;
+  const isCollectionEmpty = collection.productCount === 0 || showEmptyState;
+  const headingHasWeightClass = /\bweight-\S+/.test(headingClassName);
+  const subHeadingHasWeightClass = /\bweight-\S+/.test(subHeadingClassName);
+
+  useEffect(() => {
+    onCollectionEmptyStateChange?.(collection.id, isCollectionEmpty);
+  }, [collection.id, isCollectionEmpty, onCollectionEmptyStateChange]);
 
   if (collection.productCount === 0) return null;
   if (showEmptyState) return null;
@@ -117,10 +150,22 @@ const CollectionSection = ({ collection, index, selectedCollection, setSelectedC
     >
       <div className="flex flex-row j-content-between a-items-center gap-24">
         <div className='flex flex-col gap-2'>
-          <h3 className="text-16 md:text-20 weight-600 md:line-height-28 line-height-24 color-#000000E0">
+          <h3
+            className={cx(
+              "text-16 md:text-20 md:line-height-28 line-height-24 color-#000000E0",
+              !headingHasWeightClass && "weight-600",
+              headingClassName
+            )}
+          >
             {collection.name}
           </h3>
-          <p className="color-#00000099 text-14 weight-400">
+          <p
+            className={cx(
+              "color-#00000099 text-14",
+              !subHeadingHasWeightClass && "weight-400",
+              subHeadingClassName
+            )}
+          >
             {collection.description}
           </p>
         </div>
@@ -143,7 +188,7 @@ const CollectionSection = ({ collection, index, selectedCollection, setSelectedC
       <div className="scroll-x no-scrollbar" ref={scrollRef1}>
         <div
           className={`flex h-fit ${showShimmers && shimmerCount > 0 ? 'w-fit' : showProducts ? 'w-fit' : showEmptyState ? 'w-100p a-items-center j-content-center' : ''
-            } whitespace-nowrap gap-14`}
+            } whitespace-nowrap sm:gap-20 gap-14`}
         >
           {hasError ? (
             <div
@@ -170,7 +215,7 @@ const CollectionSection = ({ collection, index, selectedCollection, setSelectedC
             </div>
           ) : showShimmers ? (
             Array.from({ length: shimmerCount }, (_, i) => (
-              <ProductTileShimmer key={`shimmer-${collection.id}-${i}`} />
+              <ProductTileShimmer key={`shimmer-${collection.id}-${i}`} isStoreBased={isStoreBased} />
             ))
           ) : showProducts ? (
             products?.slice(0, 10).map((product, i) => (
@@ -178,7 +223,7 @@ const CollectionSection = ({ collection, index, selectedCollection, setSelectedC
                 key={i}
                 className="l:w-290 md:w-250 sm:w-220 w-150 l:mt--20 mt--30"
               >
-                <ProductTile product={product} key={i} id={product.id} addToCartVariant="icon" />
+                <ProductTile product={product} key={i} id={product.id} addToCartVariant="icon" isStoreBased={isStoreBased} />
               </div>
             ))
           ) : null}

@@ -36,6 +36,7 @@ const SimpleFlow: FC<SimpleFlowProps> = ({
   setPage,
   totalPages,
   initialCollections = [],
+  showCollectionsSection = true,
 }) => {
   return (
     <>
@@ -182,7 +183,17 @@ const SimpleFlow: FC<SimpleFlowProps> = ({
             </section>
           )}
 
-        <Collections storeId={store.id} initialCollections={initialCollections} />
+        {showCollectionsSection && (
+          <div className='px-16 l:px-24 max-w-1440 mx-auto'>
+            <Collections
+              storeId={store.id}
+              initialCollections={initialCollections}
+              isStoreBased={true}
+              hasMargin="md:my-50 my-24"
+              hasAppWidth={false}
+            />
+          </div>
+        )}
 
         <section className="simpleFlow__bottomSection" ref={productsRef}>
           <div className="simpleFlow_bottomSectionWrapper">
