@@ -27,6 +27,7 @@ export const useProductListView = () => {
       priorityScore: "DESC",
       createdAt: "DESC"
     },
+    pagination: { page: 1, limit },
   });
 
   useEffect(() => {
