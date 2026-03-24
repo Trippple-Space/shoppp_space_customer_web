@@ -26,12 +26,16 @@ import SimpleFlow from '@/modules/templates/simpleFlow/SimpleFlow';
 import useUserStore from '@/modules/lib/utility/store/user.store';
 import { useGetIPAddress } from '@/modules/lib/utility/hooks/use-get-ip-address';
 import { useLogVisit } from '@/modules/lib/utility/hooks/use-log-visit';
+import { useSearchParams } from 'next/navigation';
 
 export const StorefrontParent: FC<{
   store: Store;
   initialCollections?: ICollection[];
   initialCategories?: ICategory[];
 }> = ({ store, initialCollections = [], initialCategories = [] }) => {
+  const searchParams = useSearchParams();
+  const showCollectionsSection =
+    !searchParams.get('search') && !searchParams.get('collection');
   const [selectedCategory, setSelectedCategory] =
     useState<ProductCategory | null>(null);
   const {
@@ -42,7 +46,7 @@ export const StorefrontParent: FC<{
     page,
     setPage,
     totalPages,
-  } = useStoreProductsView(selectedCategory);
+  } = useStoreProductsView(store.id);
   const [filteredProducts, setFilteredProducts] = useState<Product[]>([]);
   const [openReviewId, setOpenReviewId] = useState<string | null>(null);
   const [cartOpen, setCartOpen] = useState(false);
@@ -202,6 +206,7 @@ export const StorefrontParent: FC<{
     totalPages,
     initialCollections,
     initialCategories,
+    showCollectionsSection,
   };
 
   return (
@@ -291,6 +296,7 @@ export const StorefrontParent: FC<{
             totalPages={totalPages}
             initialCollections={initialCollections}
             initialCategories={initialCategories}
+            showCollectionsSection={showCollectionsSection}
           >
             <StorefrontAbout store={store} />
           </StorefrontLayout>
@@ -305,6 +311,7 @@ export const StorefrontParent: FC<{
           totalPages={totalPages}
           initialCollections={initialCollections}
           initialCategories={initialCategories}
+          showCollectionsSection={showCollectionsSection}
         >
           <StorefrontAbout store={store} />
         </StorefrontLayout>

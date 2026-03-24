@@ -46,4 +46,5 @@ export interface BaseStorefrontProps {
 
     initialCollections?: ICollection[];
     initialCategories?: ICategory[];
+    showCollectionsSection?: boolean;
 }

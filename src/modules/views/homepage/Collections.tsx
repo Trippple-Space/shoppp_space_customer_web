@@ -145,6 +145,7 @@ const Collections = ({
                   selectedCollection={selectedCollection}
                   setSelectedCollection={setSelectedCollection}
                   isStoreBased={isStoreBased}
+                  storeId={storeId}
                   headingClassName={headingClassName}
                   subHeadingClassName={subHeadingClassName}
                   onCollectionEmptyStateChange={(collectionId, isEmpty) => {

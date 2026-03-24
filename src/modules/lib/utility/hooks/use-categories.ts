@@ -55,12 +55,26 @@ export const useCategories = ({
 
   const cat = selectedCategory[`${type}_${label}_${storeId}`] ?? {}
   const setCat = (category: ICategory) => {
+    const currentName = (cat?.name ?? '').trim().toLowerCase();
+    const nextName = (category?.name ?? '').trim().toLowerCase();
+    const currentFilterName = ((cat as any)?.filters?.name ?? '').trim().toLowerCase();
+    const nextFilterName = ((category as any)?.filters?.name ?? '').trim().toLowerCase();
+
+    if (currentName === nextName && currentFilterName === nextFilterName) {
+      return;
+    }
+
     setSelectedCategory(type, label, storeId, category)
 
     const existingParams = new URLSearchParams(searchParams as any);
 
     const params = filtersToSearchParams(allFilters, category, existingParams);
-    router.replace(`${pathname}?${params.toString()}`, {
+    const nextUrl = `${pathname}?${params.toString()}`;
+    const currentUrl = `${pathname}?${existingParams.toString()}`;
+
+    if (nextUrl === currentUrl) return;
+
+    router.replace(nextUrl, {
       scroll: false,
     });
   }

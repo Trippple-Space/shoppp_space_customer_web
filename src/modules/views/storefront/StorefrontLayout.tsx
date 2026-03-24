@@ -5,11 +5,10 @@ import { useStoreCategoryNavView } from '@/modules/lib/utility/hooks/views/use-c
 import {
   ICategory,
   Product,
-  ProductCategory,
 } from '@/modules/lib/utility/types/product.interface';
 import { Store } from '@/modules/lib/utility/types/store.interface';
 import { ICollection } from '@/modules/lib/utility/types/collection.interface';
-import { FC, ReactNode, useState } from 'react';
+import { FC, ReactNode } from 'react';
 import StoreProductsList from './StoreProductsList';
 import Link from 'next/link';
 import { GoArrowRight } from 'react-icons/go';
@@ -25,6 +24,7 @@ const StorefrontLayout: FC<{
   totalPages: number;
   initialCollections?: ICollection[];
   initialCategories?: ICategory[];
+  showCollectionsSection?: boolean;
 }> = ({
   store,
   children,
@@ -35,10 +35,9 @@ const StorefrontLayout: FC<{
   totalPages,
   initialCollections = [],
   initialCategories = [],
+  showCollectionsSection = true,
 }) => {
-  const [selectedCategory, setSelectedCategory] =
-    useState<ProductCategory | null>(null);
-  const { categories } = useStoreCategoryNavView({
+  const { categories, selectedCategory, setSelectedCategory } = useStoreCategoryNavView({
     storeId: store.id,
     initialCategories,
   });
@@ -52,6 +51,7 @@ const StorefrontLayout: FC<{
           <div className="sm:py-20 py-16">
             <FabricsCategoryNav
               categories={categories}
+              selectedCategory={selectedCategory}
               setSelectedCategory={setSelectedCategory}
               page={'store'}
               key={categories}
@@ -59,11 +59,13 @@ const StorefrontLayout: FC<{
           </div>
         )}
 
-        <Collections
-          storeId={store.id}
-          initialCollections={initialCollections}
-          isStoreBased={true}
-        />
+        {showCollectionsSection && (
+          <Collections
+            storeId={store.id}
+            initialCollections={initialCollections}
+            isStoreBased={true}
+          />
+        )}
 
         <section className="flex flex-col sm:gap-24 gap-20 app-width max-w-1440 mx-auto">
           <div className="flex flex-row j-content-between a-items-center">
