@@ -18,14 +18,21 @@ import { TbX } from 'react-icons/tb';
 import { IFilters } from '@/modules/lib/utility/types/product.interface';
 import Collections from './Collections';
 import { ICollection } from '@/modules/lib/utility/types/collection.interface';
+import { ICategory } from '@/modules/lib/utility/types/product.interface';
 
-const Homepage = ({ initialCollections = [] }: { initialCollections?: ICollection[] }) => {
+const Homepage = ({
+  initialCollections = [],
+  initialCategories = [],
+}: {
+  initialCollections?: ICollection[];
+  initialCategories?: ICategory[];
+}) => {
   const searchParams = useSearchParams();
   const router = useRouter();
   const pathname = usePathname();
 
   const { categories, setSelectedCategory, selectedCategory } =
-    useStoreCategoryNavView();
+    useStoreCategoryNavView({ initialCategories });
   const { setRate, setPrice, setSort, setLocation, allFilters, resetFilters } =
     useFilterStore();
 

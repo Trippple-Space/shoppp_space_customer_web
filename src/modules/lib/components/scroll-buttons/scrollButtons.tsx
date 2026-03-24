@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef, useCallback, FC } from "react";
+import { useState, useEffect, useCallback, FC } from "react";
 import { HiOutlineChevronLeft, HiOutlineChevronRight } from "react-icons/hi2";
 
 interface IScrollButtons {
@@ -14,9 +14,11 @@ const ScrollButtons: FC<IScrollButtons> = ({
   scrollLength,
   component,
 }) => {
-  const [showScrollButtons, setShowScrollButtons] = useState(false);
-  const [showLeftButton, setShowLeftButton] = useState(false);
-  const [showRightButton, setShowRightButton] = useState(false);
+  const [buttonsState, setButtonsState] = useState({
+    showScrollButtons: false,
+    showLeftButton: false,
+    showRightButton: false,
+  });
 
   const scrollCategories = useCallback((direction: any) => {
     if (scrollRef) {
@@ -35,51 +37,55 @@ const ScrollButtons: FC<IScrollButtons> = ({
   }, []);
 
   const checkOverflowAndPosition = useCallback(() => {
-    const categoriesWidth = screen.width >= 576 ? 90 : 71;
-    const storeFrontCats = screen.width >= 576 ? 125 : 96;
-    const storeProductsWidth = screen.width >= 992 ? 300 : 242;
+    const target = scrollRef?.current;
+    if (!target) return;
+    const scrollWidth = target.scrollWidth;
+    const clientWidth = target.clientWidth;
+    const hasOverflow = scrollWidth > clientWidth;
+    const atStart = target.scrollLeft <= 0;
+    const atEnd =
+      Math.ceil(target.scrollLeft + clientWidth) >= Math.floor(scrollWidth);
 
-    const scrollContainerWidth =
-      page === "home"
-        ? categoriesWidth * scrollLength
-        : page === "store"
-        ? storeFrontCats * scrollLength
-        : storeProductsWidth * scrollLength;
+    const next = {
+      showScrollButtons: hasOverflow,
+      showLeftButton: hasOverflow && !atStart,
+      showRightButton: hasOverflow && !atEnd,
+    };
 
-    if (scrollRef.current) {
-      const hasOverflow =
-        scrollContainerWidth > scrollRef.current.parentElement.clientWidth;
-      setShowScrollButtons(hasOverflow);
-
-      const atStart = scrollRef.current.scrollLeft === 0;
-      const atEnd =
-        Math.round(scrollRef.current.scrollLeft) +
-          scrollRef.current.clientWidth >=
-        scrollContainerWidth;
-
-      setShowLeftButton(!atStart);
-      setShowRightButton(!atEnd);
-    }
-  }, []);
+    setButtonsState((prev) => {
+      if (
+        prev.showScrollButtons === next.showScrollButtons &&
+        prev.showLeftButton === next.showLeftButton &&
+        prev.showRightButton === next.showRightButton
+      ) {
+        return prev;
+      }
+      return next;
+    });
+  }, [scrollRef]);
 
   useEffect(() => {
     checkOverflowAndPosition();
     window.addEventListener("resize", checkOverflowAndPosition);
 
     return () => window.removeEventListener("resize", checkOverflowAndPosition);
-  }, []);
+  }, [checkOverflowAndPosition]);
 
   useEffect(() => {
-    if (scrollRef) {
-      scrollRef?.current.addEventListener("scroll", checkOverflowAndPosition);
+    const target = scrollRef?.current;
+    if (!target) return;
+
+    target.addEventListener("scroll", checkOverflowAndPosition);
+    return () => {
+      target.removeEventListener("scroll", checkOverflowAndPosition);
     }
-  }, []);
+  }, [scrollRef, checkOverflowAndPosition]);
 
   return (
     <>
-      {showScrollButtons && (
+      {buttonsState.showScrollButtons && (
         <>
-          {showLeftButton && (
+          {buttonsState.showLeftButton && (
             <div
               onClick={() => scrollCategories("left")}
               className={`${
@@ -96,7 +102,7 @@ const ScrollButtons: FC<IScrollButtons> = ({
             </div>
           )}
 
-          {showRightButton && (
+          {buttonsState.showRightButton && (
             <div
               onClick={() => scrollCategories("right")}
               className={`${

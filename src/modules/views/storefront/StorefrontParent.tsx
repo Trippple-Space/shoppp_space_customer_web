@@ -8,6 +8,7 @@ import StorefrontAbout from './StorefrontAbout';
 import { Store } from '@/modules/lib/utility/types/store.interface';
 import { ICollection } from '@/modules/lib/utility/types/collection.interface';
 import {
+  ICategory,
   Product,
   ProductCategory,
 } from '@/modules/lib/utility/types/product.interface';
@@ -26,7 +27,11 @@ import useUserStore from '@/modules/lib/utility/store/user.store';
 import { useGetIPAddress } from '@/modules/lib/utility/hooks/use-get-ip-address';
 import { useLogVisit } from '@/modules/lib/utility/hooks/use-log-visit';
 
-export const StorefrontParent: FC<{ store: Store; initialCollections?: ICollection[] }> = ({ store, initialCollections = [] }) => {
+export const StorefrontParent: FC<{
+  store: Store;
+  initialCollections?: ICollection[];
+  initialCategories?: ICategory[];
+}> = ({ store, initialCollections = [], initialCategories = [] }) => {
   const [selectedCategory, setSelectedCategory] =
     useState<ProductCategory | null>(null);
   const {
@@ -196,6 +201,7 @@ export const StorefrontParent: FC<{ store: Store; initialCollections?: ICollecti
     setPage,
     totalPages,
     initialCollections,
+    initialCategories,
   };
 
   return (
@@ -284,6 +290,7 @@ export const StorefrontParent: FC<{ store: Store; initialCollections?: ICollecti
             setPage={setPage}
             totalPages={totalPages}
             initialCollections={initialCollections}
+            initialCategories={initialCategories}
           >
             <StorefrontAbout store={store} />
           </StorefrontLayout>
@@ -297,6 +304,7 @@ export const StorefrontParent: FC<{ store: Store; initialCollections?: ICollecti
           setPage={setPage}
           totalPages={totalPages}
           initialCollections={initialCollections}
+          initialCategories={initialCategories}
         >
           <StorefrontAbout store={store} />
         </StorefrontLayout>
