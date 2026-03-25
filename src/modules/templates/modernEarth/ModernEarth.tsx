@@ -61,6 +61,8 @@ const ModernEarth: React.FC<ModernEarthProps> = (props) => {
     offers,
     initialCollections = [],
     showCollectionsSection = true,
+    selectedCategory,
+    setSelectedCategory,
   } = props;
 
   return (
@@ -288,6 +290,8 @@ const ModernEarth: React.FC<ModernEarthProps> = (props) => {
             page={page}
             onPageChange={setPage}
             totalPages={totalPages}
+            selectedCategory={selectedCategory}
+            setSelectedCategory={setSelectedCategory}
           />
         </section>
 

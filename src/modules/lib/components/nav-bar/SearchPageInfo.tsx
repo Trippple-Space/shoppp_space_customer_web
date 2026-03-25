@@ -1,5 +1,8 @@
+'use client';
+
 import React from 'react';
 import { FiX } from 'react-icons/fi';
+import { useSearchParams } from 'next/navigation';
 
 type SearchPageInfoProps = {
   searchTerm?: string;
@@ -7,7 +10,14 @@ type SearchPageInfoProps = {
   onClearSearch: () => void;
 };
 
-const SearchPageInfo = ({ searchTerm, selectedCollection, onClearSearch }: SearchPageInfoProps) => {
+const SearchPageInfo = ({ onClearSearch, searchTerm, selectedCollection }: SearchPageInfoProps) => {
+  const searchParams = useSearchParams();
+
+  const searchFromUrl = (searchParams.get('search') ?? '').trim();
+  const collectionFromUrl = (searchParams.get('collection') ?? '').trim();
+
+  if (!searchFromUrl && !collectionFromUrl) return null;
+
   return (
     <div className="bg-#F3F3F3 py-12 px-24 flex flex-col a-items-center j-content-center gap-16 sm:radius-55 radius-30 font-inter relative">
       <button
@@ -20,21 +30,21 @@ const SearchPageInfo = ({ searchTerm, selectedCollection, onClearSearch }: Searc
       </button>
 
       {
-        selectedCollection &&
+        collectionFromUrl &&
         <div className="flex flex-col gap-8 a-items-center j-content-center">
-          <h5 className="sm:text-32 text-20 weight-600 capitalize">{selectedCollection.replaceAll('-', ' ')}</h5>
+          <h5 className="sm:text-32 text-20 weight-600 capitalize">{collectionFromUrl.replaceAll('-', ' ')}</h5>
           <p className="sm:text-16 text-14 weight-400">
-            Browse all {searchTerm ? `'${searchTerm}' in` : 'products in'}  {selectedCollection.replaceAll('-', ' ')} collection
+            Browse all {searchFromUrl ? `'${searchFromUrl}' in` : 'products in'}  {collectionFromUrl.replaceAll('-', ' ')} collection
           </p>
         </div>
       }
 
       {
-        searchTerm && !selectedCollection &&
+        searchFromUrl && !collectionFromUrl &&
         <div className="flex flex-col gap-8 a-items-center j-content-center">
-          <h5 className="sm:text-32 text-20 weight-600 capitalize">{searchTerm}</h5>
+          <h5 className="sm:text-32 text-20 weight-600 capitalize">{searchFromUrl}</h5>
           <p className="sm:text-16 text-14 weight-400">
-            Browse all {searchTerm} results
+            Browse all {searchFromUrl} results
           </p>
         </div>
       }

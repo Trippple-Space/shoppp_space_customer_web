@@ -90,6 +90,8 @@ const StorefrontLayout: FC<{
               page={page}
               onPageChange={setPage}
               totalPages={totalPages}
+              selectedCategory={selectedCategory}
+              setSelectedCategory={setSelectedCategory}
             />
           </section>
         </div>

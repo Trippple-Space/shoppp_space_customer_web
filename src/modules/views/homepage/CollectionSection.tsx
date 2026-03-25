@@ -85,7 +85,7 @@ const CollectionSection = ({
 
   const { products, loading, query, updateHomePageFilter, setSearch, fetchingError, refetch } = useProducts(
     {
-      filters: { ...(isStoreBased ? {} : {type}), status: { In: "ACTIVE,OUT_OF_STOCK" }, channel: "ASOEBI_STORE" },
+      filters: { ...(isStoreBased ? {} : { type }), status: { In: "ACTIVE,OUT_OF_STOCK" }, channel: "ASOEBI_STORE" },
       order: { priorityScore: "DESC", createdAt: "DESC" },
       pagination: { page: 1, limit: 11 },
       allFilters: initialFiltersForCollection,
@@ -131,13 +131,13 @@ const CollectionSection = ({
   const showShimmers = productsLoading;
   const showEmptyState = !productsLoading && !hasError && products.length === 0;
   const showProducts = !productsLoading && !hasError && products.length > 0;
- /*  const isCollectionEmpty = collection.productCount === 0 || showEmptyState; */
+  /*  const isCollectionEmpty = collection.productCount === 0 || showEmptyState; */
   const headingHasWeightClass = /\bweight-\S+/.test(headingClassName);
   const subHeadingHasWeightClass = /\bweight-\S+/.test(subHeadingClassName);
 
- /*  useEffect(() => {
-    onCollectionEmptyStateChange?.(collection.id, isCollectionEmpty);
-  }, [collection.id, isCollectionEmpty, onCollectionEmptyStateChange]); */
+  /*  useEffect(() => {
+     onCollectionEmptyStateChange?.(collection.id, isCollectionEmpty);
+   }, [collection.id, isCollectionEmpty, onCollectionEmptyStateChange]); */
 
   if (collection.productCount === 0) return null;
   if (showEmptyState) return null;
@@ -169,7 +169,9 @@ const CollectionSection = ({
           </p>
         </div>
 
-        {!loading && !hasError && products?.length > 10 && (
+        {/* products?.length > 10 && */}
+
+        {!loading && !hasError && (
           <p
             onClick={() => {
               handleShowMore(collection.slug)
@@ -222,7 +224,15 @@ const CollectionSection = ({
                 key={i}
                 className="l:w-290 md:w-250 sm:w-220 w-150 l:mt--20 mt--30"
               >
-                <ProductTile product={product} key={i} id={product.id} addToCartVariant="icon" isStoreBased={isStoreBased} />
+                <ProductTile
+                  product={product}
+                  key={i}
+                  id={product.id}
+                  addToCartVariant="icon"
+                  isStoreBased={isStoreBased}
+                  selectedCategory={selectedCategory}
+                  setSelectedCategory={setSelectedCategory}
+                />
               </div>
             ))
           ) : null}
