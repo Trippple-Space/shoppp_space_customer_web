@@ -3,6 +3,7 @@ import StorefrontFooter from '@/modules/lib/components/footer/StorefrontFooter';
 import FabricsCategoryNav from '@/modules/lib/components/nav-bar/category-nav/FabricsCategoryNav';
 import { useStoreCategoryNavView } from '@/modules/lib/utility/hooks/views/use-category-nav-view';
 import {
+  ICategory,
   Product,
   ProductCategory,
 } from '@/modules/lib/utility/types/product.interface';
@@ -23,10 +24,24 @@ const StorefrontLayout: FC<{
   setPage: React.Dispatch<React.SetStateAction<number>>;
   totalPages: number;
   initialCollections?: ICollection[];
-}> = ({ store, children, products, loading, page, setPage, totalPages, initialCollections = [] }) => {
+  initialCategories?: ICategory[];
+}> = ({
+  store,
+  children,
+  products,
+  loading,
+  page,
+  setPage,
+  totalPages,
+  initialCollections = [],
+  initialCategories = [],
+}) => {
   const [selectedCategory, setSelectedCategory] =
     useState<ProductCategory | null>(null);
-  const { categories } = useStoreCategoryNavView({ storeId: store.id });
+  const { categories } = useStoreCategoryNavView({
+    storeId: store.id,
+    initialCategories,
+  });
 
   return (
     <div className='h-full flex flex-col justify-end'>

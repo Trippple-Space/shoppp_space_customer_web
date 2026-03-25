@@ -80,11 +80,7 @@ const CollectionSection = ({
 
   const { products, loading, query, updateHomePageFilter, fetchingError, refetch } = useProducts(
     {
-      filters: {
-        ...(isStoreBased ? {} : { type }),
-        status: { In: "ACTIVE,OUT_OF_STOCK" },
-        channel: "ASOEBI_STORE",
-      },
+      filters: { ...(isStoreBased ? {} : {type}), status: { In: "ACTIVE,OUT_OF_STOCK" }, channel: "ASOEBI_STORE" },
       order: { priorityScore: "DESC", createdAt: "DESC" },
       pagination: { page: 1, limit: 11 },
       allFilters: initialFiltersForCollection,
@@ -180,7 +176,7 @@ const CollectionSection = ({
       <div className="scroll-x no-scrollbar" ref={scrollRef1}>
         <div
           className={`flex h-fit ${showShimmers && shimmerCount > 0 ? 'w-fit' : showProducts ? 'w-fit' : showEmptyState ? 'w-100p a-items-center j-content-center' : ''
-            } whitespace-nowrap gap-14`}
+            } whitespace-nowrap sm:gap-20 gap-14`}
         >
           {hasError ? (
             <div
@@ -207,7 +203,7 @@ const CollectionSection = ({
             </div>
           ) : showShimmers ? (
             Array.from({ length: shimmerCount }, (_, i) => (
-              <ProductTileShimmer key={`shimmer-${collection.id}-${i}`} />
+              <ProductTileShimmer key={`shimmer-${collection.id}-${i}`} isStoreBased={isStoreBased} />
             ))
           ) : showProducts ? (
             products?.slice(0, 10).map((product, i) => (

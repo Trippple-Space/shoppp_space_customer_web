@@ -2,7 +2,7 @@
 
 import React, { FC } from 'react';
 
-const ProductTileShimmer: FC = () => {
+const ProductTileShimmer: FC<{ isStoreBased?: boolean }> = ({ isStoreBased = false }) => {
   return (
     <div className="l:w-290 md:w-250 sm:w-220 w-150 flex flex-col gap-12 flex-shrink-0">
       <div
@@ -19,7 +19,9 @@ const ProductTileShimmer: FC = () => {
         ))}
       </div>
       <div className="md:mt-16 mt-20 h-20 w-full max-w-180 pulsing-multi-color-bg radius-4" aria-hidden />
-      <div className="h-24 w-full max-w-120 pulsing-multi-color-bg radius-4" aria-hidden />
+      {
+        !isStoreBased ? (<div className="h-24 w-full max-w-120 pulsing-multi-color-bg radius-4" aria-hidden />) : null
+      }
       <div className="h-24 w-80 pulsing-multi-color-bg radius-4" aria-hidden />
     </div>
   );

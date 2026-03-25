@@ -1,7 +1,7 @@
 import { productService } from "../services/product.service";
 import { useCategoryStore } from "../store/categories.store";
 import { ICategory, ProductCategory } from "../types/product.interface";
-import { useEffect, useState, useRef } from "react";
+import { useEffect } from "react";
 import { filtersToSearchParams } from "../utility";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { useFilterStore } from "../store/filter.store";
@@ -10,11 +10,13 @@ import { useFilterStore } from "../store/filter.store";
 export const useCategories = ({
   type = "fabrics",
   storeId = "",
-  label = "GLOBAL"
+  label = "GLOBAL",
+  initialCategories = [],
 }: {
   type: "fabrics" | "wears" | null;
   storeId?: string,
-  label: "GLOBAL" | "STORE"
+  label: "GLOBAL" | "STORE",
+  initialCategories?: ICategory[]
 }) => {
   const router = useRouter();
   const pathname = usePathname();
@@ -22,8 +24,6 @@ export const useCategories = ({
 
   const {
     categoriesCache,
-    setCurrentCategoryList,
-    currentCategoryList,
     setCategoriesCache,
     selectedCategory,
     setSelectedCategory
@@ -31,21 +31,27 @@ export const useCategories = ({
 
   const { allFilters } = useFilterStore();
 
-  //console.log('START:', { type, storeId, label, len: currentCategoryList?.length })
   useEffect(() => {
-    if (!categoriesCache[`${type}_${label}_${storeId}`]) {
-      productService
-        .fetchProductCategories(type, label, storeId)
-        .then((cat: ProductCategory) => {
-          setCategoriesCache(type, label, storeId, cat?.categories ?? []);
-          setCurrentCategoryList(cat?.categories ?? [])
-        });
-    } else {
-      //console.log(categoriesCache[`${type}_${label}_${storeId}`])
-      setCurrentCategoryList(categoriesCache[`${type}_${label}_${storeId}`])
+    const cacheKey = `${type}_${label}_${storeId}`;
+    const cachedCategories = categoriesCache[cacheKey];
+
+    if (cachedCategories) return;
+
+    if (initialCategories.length > 0) {
+      setCategoriesCache(type, label, storeId, initialCategories);
+      return;
     }
-    //console.log('EFFECT:', { type, storeId, label, len: currentCategoryList?.length })
-  }, [type, storeId, label]);
+
+    productService
+      .fetchProductCategories(type, label, storeId)
+      .then((cat: ProductCategory) => {
+        const nextCategories = cat?.categories ?? [];
+        setCategoriesCache(type, label, storeId, nextCategories);
+      });
+  }, [type, storeId, label, initialCategories, categoriesCache, setCategoriesCache]);
+
+  const cacheKey = `${type}_${label}_${storeId}`;
+  const currentCategoryList = categoriesCache[cacheKey] ?? [];
 
   const cat = selectedCategory[`${type}_${label}_${storeId}`] ?? {}
   const setCat = (category: ICategory) => {

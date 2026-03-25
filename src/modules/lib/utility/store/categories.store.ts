@@ -35,7 +35,12 @@ export const useCategoryStore = create<CategoryStore>((set) => ({
             },
         })),
     setCurrentCategoryList: (categoryList) =>
-        set((state) => ({
-            currentCategoryList: categoryList,
-        })),
+        set((state) => {
+            if (state.currentCategoryList === categoryList) {
+                return state;
+            }
+            return {
+                currentCategoryList: categoryList,
+            };
+        }),
 }));

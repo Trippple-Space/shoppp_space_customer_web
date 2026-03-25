@@ -9,34 +9,90 @@ import { SavedVariant } from "../types/SavedVariant.interface";
 
 class ProductService {
      CACHE_EXPIRY = 60 * 60 * 1000; // 1 hour
+     inFlightCategoryRequests: Partial<Record<string, Promise<ProductCategory>>> = {};
 
      async fetchProductCategories(
           type: "fabrics" | "wears" | null,
           label = "GLOBAL",
           storeId = ""
      ) {
-          const cacheKey = `product/categories_${type}_${label}_${storeId}`;
+          const cacheKey = storeId
+               ? `product/categories_storefront_both_${label}_${storeId}`
+               : `product/categories_${type}_${label}_${storeId}`;
           const cachedData = this.getCachedCategories(cacheKey);
 
           if (cachedData) {
                return cachedData;
           }
 
-          return new Promise((resolve) => {
-               http.get(endpoints.PRODUCT_CATEGORIES, {
-                    params: {
-                         filters: {
-                              type,
-                              label: "GLOBAL",
+          if (this.inFlightCategoryRequests[cacheKey]) {
+               return this.inFlightCategoryRequests[cacheKey];
+          }
+
+          this.inFlightCategoryRequests[cacheKey] = (async () => {
+               if (storeId) {
+                    const baseFilters: Record<string, string> = { storeId };
+                    if (label) baseFilters.label = label;
+
+                    const [fabricsRes, wearsRes] = await Promise.all([
+                         http.get(endpoints.PRODUCT_CATEGORIES, {
+                              params: { filters: { ...baseFilters, type: "fabrics" } },
+                         }),
+                         http.get(endpoints.PRODUCT_CATEGORIES, {
+                              params: { filters: { ...baseFilters, type: "wears" } },
+                         }),
+                    ]);
+
+                    const fabricsCategory: ProductCategory | undefined = fabricsRes.data?.data?.[0];
+                    const wearsCategory: ProductCategory | undefined = wearsRes.data?.data?.[0];
+                    const mergedCategories = [
+                         ...(fabricsCategory?.categories ?? []),
+                         ...(wearsCategory?.categories ?? []),
+                    ].filter(
+                         (category, index, arr) =>
+                              index ===
+                              arr.findIndex(
+                                   (item) =>
+                                        item?.name?.toLowerCase?.().trim() ===
+                                        category?.name?.toLowerCase?.().trim()
+                              )
+                    );
+
+                    const mergedCategory: ProductCategory = {
+                         ...(fabricsCategory ?? wearsCategory ?? {
+                              id: "",
+                              label,
+                              type: null,
+                              categories: [],
                               storeId,
-                         },
+                         }),
+                         type: null,
+                         categories: mergedCategories,
+                    };
+
+                    this.cacheCategories(cacheKey, mergedCategory);
+                    return mergedCategory;
+               }
+
+               const categoryFilters: Record<string, string> = {};
+               if (type) categoryFilters.type = type;
+               if (label) categoryFilters.label = label;
+
+               const response: AxiosResponse = await http.get(endpoints.PRODUCT_CATEGORIES, {
+                    params: {
+                         filters: categoryFilters,
                     },
-               }).then((response: AxiosResponse) => {
-                    const fetchedCategories: ProductCategory = response.data?.data?.[0];
-                    this.cacheCategories(cacheKey, fetchedCategories);
-                    resolve(fetchedCategories);
                });
-          });
+               const fetchedCategories: ProductCategory = response.data?.data?.[0];
+               this.cacheCategories(cacheKey, fetchedCategories);
+               return fetchedCategories;
+          })();
+
+          try {
+               return await this.inFlightCategoryRequests[cacheKey];
+          } finally {
+               delete this.inFlightCategoryRequests[cacheKey];
+          }
      }
 
      getCachedCategories(key: string) {
