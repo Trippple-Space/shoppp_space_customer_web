@@ -11,12 +11,14 @@ const Collections = ({
   setHasCollections,
   onCollectionsLoaded,
   setCollectionsLoaded,
+  isStoreBased = false,
 }: {
   storeId: string;
   initialCollections?: ICollection[];
   setHasCollections?: (hasCollections: boolean) => void;
   onCollectionsLoaded?: () => void;
   setCollectionsLoaded?: (collectionsLoaded: boolean) => void;
+  isStoreBased?: boolean;
 }) => {
   const { collections, loading: loadingCollections, error, retry } = useCollections({
     storeId,
@@ -54,7 +56,7 @@ const Collections = ({
 
   if (error && collections.length === 0) {
     return (
-      <div className="md:mt-32 mt-24 w-100p flex flex-col">
+      <div className={`${!isStoreBased ? 'md:mt-32 mt-24 w-100p' : 'mt-0 app-width max-w-1440 mx-auto'} flex flex-col`}>
         <div
           className="flex flex-col items-center justify-center gap-20 py-48 px-24 rounded-16 bg-#FAFAFA"
           role="alert"
@@ -82,7 +84,7 @@ const Collections = ({
 
   return (
     collections.length > 0 ? (
-      <div className="md:mt-32 mt-24 w-100p flex flex-col">
+      <div className={`${!isStoreBased ? 'md:mt-32 mt-24 w-100p' : 'mt-0 app-width max-w-1440 mx-auto'} flex flex-col`}>
         <div className='grid md:gap-24 gap-20 lg:grid-2-cols-1fr'>
           {collections.map((collection, index) => {
             const isLast = index === collections.length - 1;
@@ -92,7 +94,7 @@ const Collections = ({
               <div key={collection.id} className={isLast && isOdd ? 'lg:grid-col-span-2' : ''} style={{
                 minWidth: 0
               }}>
-                <CollectionSection collection={collection} index={index} selectedCollection={selectedCollection} setSelectedCollection={setSelectedCollection} />
+                <CollectionSection collection={collection} index={index} selectedCollection={selectedCollection} setSelectedCollection={setSelectedCollection} isStoreBased={isStoreBased} />
               </div>
             )
           })}

@@ -27,9 +27,10 @@ interface Props {
   index: number;
   setSelectedCollection: (coll: string) => void
   selectedCollection: string | null
+  isStoreBased?: boolean
 }
 
-const CollectionSection = ({ collection, index, selectedCollection, setSelectedCollection }: Props) => {
+const CollectionSection = ({ collection, index, selectedCollection, setSelectedCollection, isStoreBased = false }: Props) => {
   const scrollRef1 = useRef<HTMLDivElement>(null);
 
   const pathname = usePathname();
@@ -66,7 +67,11 @@ const CollectionSection = ({ collection, index, selectedCollection, setSelectedC
 
   const { products, loading, query, updateHomePageFilter, fetchingError, refetch } = useProducts(
     {
-      filters: { type, status: { In: "ACTIVE,OUT_OF_STOCK" }, channel: "ASOEBI_STORE" },
+      filters: {
+        ...(isStoreBased ? {} : { type }),
+        status: { In: "ACTIVE,OUT_OF_STOCK" },
+        channel: "ASOEBI_STORE",
+      },
       order: { priorityScore: "DESC", createdAt: "DESC" },
       pagination: { page: 1, limit: 11 },
       allFilters: initialFiltersForCollection,
