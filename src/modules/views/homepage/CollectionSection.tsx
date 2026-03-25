@@ -169,9 +169,7 @@ const CollectionSection = ({
           </p>
         </div>
 
-        {/* products?.length > 10 && */}
-
-        {!loading && !hasError && (
+        {!loading && !hasError && products?.length > 10 && (
           <p
             onClick={() => {
               handleShowMore(collection.slug)
