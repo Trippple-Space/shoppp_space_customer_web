@@ -36,6 +36,8 @@ const UrbanEdge: FC<UrbanEdgeProps> = ({
   totalPages,
   initialCollections = [],
   showCollectionsSection = true,
+  selectedCategory,
+  setSelectedCategory,
 }) => {
   return (
     <>
@@ -167,6 +169,8 @@ const UrbanEdge: FC<UrbanEdgeProps> = ({
             page={page}
             onPageChange={setPage}
             totalPages={totalPages}
+            selectedCategory={selectedCategory}
+            setSelectedCategory={setSelectedCategory}
           />
         </section>
         <div className="urbanEdge__floating">

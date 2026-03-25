@@ -215,6 +215,8 @@ export const ProductSearch: React.FC<ProductSearchProps> = ({
         <SearchModal
           searchResults={searchResults}
           position=""
+          searchTerm={searchTerm}
+          setOpenSearchModal={setOpenSearchModal}
           handleFetchProduct={handleFetchProduct}
         />
       );

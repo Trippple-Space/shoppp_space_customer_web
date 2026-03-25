@@ -25,13 +25,25 @@ const FabricsCategoryNav = ({
   const [searchTerm, setSearchTerm] = useState('');
   const [selectedCollection, setSelectedCollection] = useState<string>('');
 
+  /*  useEffect(() => {
+     const search = searchParams.get('search');
+     const collection = searchParams.get('collection');
+ 
+     setSearchTerm(search ?? '');
+     setSelectedCollection(collection ?? '');
+   }, [path, searchParams]); */
+
   useEffect(() => {
     const search = searchParams.get('search');
     const collection = searchParams.get('collection');
 
-    setSearchTerm(search ?? '');
-    setSelectedCollection(collection ?? '');
-  }, [path, searchParams]);
+    if (search && search !== searchTerm) {
+      setSearchTerm(search);
+    }
+    if (collection && collection !== selectedCollection) {
+      setSelectedCollection(collection);
+    }
+  }, [searchParams]);
 
   return (
     <div

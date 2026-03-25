@@ -1,7 +1,10 @@
 import React, { FC } from 'react';
 import { DotsLoader } from '@/modules/lib/components/dots-loader/DotsLoader';
 import ProductTile from '@/modules/lib/components/product-tile/ProductTile';
-import { Product } from '@/modules/lib/utility/types/product.interface';
+import {
+  ICategory,
+  Product,
+} from '@/modules/lib/utility/types/product.interface';
 import { Store } from '@/modules/lib/utility/types/store.interface';
 import StorePagination from '@/modules/lib/components/pagination/StorePagination';
 import NoResultMessage from '@/modules/lib/components/error-messages/no-result-found';
@@ -14,7 +17,18 @@ const StoreProductsList: FC<{
   page: number;
   totalPages: number;
   onPageChange: (page: number) => void;
-}> = ({ products, store, loading, page, totalPages, onPageChange }) => {
+  selectedCategory?: ICategory;
+  setSelectedCategory?: (category: ICategory) => void;
+}> = ({
+  products,
+  store,
+  loading,
+  page,
+  totalPages,
+  onPageChange,
+  selectedCategory,
+  setSelectedCategory,
+}) => {
   const { saveVariant, savedVariants, removeSavedVariant } = useSavedVariant();
 
   return (
@@ -36,8 +50,8 @@ const StoreProductsList: FC<{
                 saveVariant={saveVariant}
                 removeSavedVariant={removeSavedVariant}
                 isStoreBased={true}
-                /* selectedCategory={selectedCategory}
-                setSelectedCategory={setSelectedCategory} */
+                selectedCategory={selectedCategory}
+                setSelectedCategory={setSelectedCategory}
               />
             </div>
           ))}

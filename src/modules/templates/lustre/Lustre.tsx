@@ -41,6 +41,8 @@ const ModernLuxe: FC<ModernLuxeProps> = (props) => {
     offers,
     initialCollections = [],
     showCollectionsSection = true,
+    selectedCategory,
+    setSelectedCategory,
   } = props;
 
   return (
@@ -272,6 +274,8 @@ const ModernLuxe: FC<ModernLuxeProps> = (props) => {
           page={page}
           onPageChange={setPage}
           totalPages={totalPages}
+          selectedCategory={selectedCategory}
+          setSelectedCategory={setSelectedCategory}
         />
       </section>
 

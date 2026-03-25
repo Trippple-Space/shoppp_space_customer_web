@@ -20,7 +20,7 @@ const ProductTileShimmer: FC<{ isStoreBased?: boolean }> = ({ isStoreBased = fal
       </div>
       <div className="md:mt-16 mt-20 h-20 w-full max-w-180 pulsing-multi-color-bg radius-4" aria-hidden />
       {
-        isStoreBased ? (<div className="h-24 w-full max-w-120 pulsing-multi-color-bg radius-4" aria-hidden />) : null
+        !isStoreBased ? (<div className="h-24 w-full max-w-120 pulsing-multi-color-bg radius-4" aria-hidden />) : null
       }
       <div className="h-24 w-80 pulsing-multi-color-bg radius-4" aria-hidden />
     </div>
