@@ -37,6 +37,8 @@ const Furniture: FC<FurnitureProps> = (props) => {
     totalPages,
     initialCollections = [],
     showCollectionsSection = true,
+    selectedCategory,
+    setSelectedCategory,
   } = props;
 
   return (
@@ -335,6 +337,8 @@ const Furniture: FC<FurnitureProps> = (props) => {
             page={page}
             onPageChange={setPage}
             totalPages={totalPages}
+            selectedCategory={selectedCategory}
+            setSelectedCategory={setSelectedCategory}
           />
         </section>
       </div>

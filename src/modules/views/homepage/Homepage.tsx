@@ -20,14 +20,6 @@ import Collections from './Collections';
 import { ICollection } from '@/modules/lib/utility/types/collection.interface';
 import { ICategory } from '@/modules/lib/utility/types/product.interface';
 
-const EMPTY_CATEGORY: ICategory = {
-  name: '',
-  images: { icon: '', picture: '' },
-  description: '',
-  filters: {},
-  subcategories: [],
-};
-
 const Homepage = ({
   initialCollections = [],
   initialCategories = [],
@@ -40,7 +32,7 @@ const Homepage = ({
   const pathname = usePathname();
 
   const { categories, setSelectedCategory, selectedCategory } =
-    useStoreCategoryNavView({ initialCategories });
+    useStoreCategoryNavView();
   const { setRate, setPrice, setSort, setLocation, allFilters, resetFilters } =
     useFilterStore();
 
@@ -62,7 +54,15 @@ const Homepage = ({
       setLocation(parsed.location.selectedState);
   }, [searchParams]);
 
-  useEffect(() => {
+  const emptyCategory = {
+    name: '',
+    images: { icon: '', picture: '' },
+    description: '',
+    filters: {},
+    subcategories: [],
+  };
+
+  /* useEffect(() => {
     const categoryFromUrl = searchParams.get('category');
     const hasSearchOrCollection = searchParams.get('search') || searchParams.get('collection');
     const selectedName = (selectedCategory?.name || '').trim().toLowerCase();
@@ -81,7 +81,22 @@ const Homepage = ({
         setSelectedCategory(EMPTY_CATEGORY);
       }
     }
-  }, [searchParams, selectedCategory, setSelectedCategory]);
+  }, [searchParams, selectedCategory, setSelectedCategory]); */
+
+  useEffect(() => {
+    const categoryFromUrl = searchParams.get('category');
+    const hasSearchOrCollection = searchParams.get('search') || searchParams.get('collection');
+
+    if (categoryFromUrl) {
+      setSelectedCategory({
+        ...selectedCategory,
+        name: categoryFromUrl.toLowerCase(),
+        filters: { name: categoryFromUrl.toLowerCase() },
+      });
+    } else if (hasSearchOrCollection) {
+      setSelectedCategory(emptyCategory);
+    }
+  }, [searchParams, categories]);
 
   const hasPrice = !!allFilters.price.min || !!allFilters.price.max;
   const hasRating = !!allFilters.rating.rateBy;
@@ -193,7 +208,7 @@ const Homepage = ({
 
     const newParams = new URLSearchParams();
     if (searchTerm) newParams.set('search', searchTerm);
-    if (collection) newParams. set('collection', collection);
+    if (collection) newParams.set('collection', collection);
 
     router.replace(`${pathname}?${newParams.toString()}`, { scroll: false });
   };

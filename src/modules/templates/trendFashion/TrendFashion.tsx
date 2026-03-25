@@ -32,6 +32,8 @@ const TrendFashion: FC<TrendFashionProps> = ({
   totalPages,
   initialCollections = [],
   showCollectionsSection = true,
+  selectedCategory,
+  setSelectedCategory,
 }) => {
   return (
     <div className="trend-body font-inter">
@@ -209,6 +211,8 @@ const TrendFashion: FC<TrendFashionProps> = ({
           page={page}
           totalPages={totalPages}
           onPageChange={setPage}
+          selectedCategory={selectedCategory}
+          setSelectedCategory={setSelectedCategory}
         />
       </section>
 

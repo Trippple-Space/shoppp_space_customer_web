@@ -17,8 +17,8 @@ const Collections = ({
   subHeadingClassName = '',
   hasMargin = '',
   hasAppWidth = true,
-  onAllCollectionsEmptyChange,
-}: { 
+  /* onAllCollectionsEmptyChange, */
+}: {
   storeId: string;
   initialCollections?: ICollection[];
   setHasCollections?: (hasCollections: boolean) => void;
@@ -29,7 +29,7 @@ const Collections = ({
   subHeadingClassName?: string;
   hasMargin?: string;
   hasAppWidth?: boolean;
-  onAllCollectionsEmptyChange?: (allEmpty: boolean) => void;
+  /* onAllCollectionsEmptyChange?: (allEmpty: boolean) => void; */
 }) => {
   const { collections, loading: loadingCollections, error, retry } = useCollections({
     storeId,
@@ -38,18 +38,18 @@ const Collections = ({
   });
 
   const [selectedCollection, setSelectedCollection] = useState<string | null>(null);
-  const [collectionEmptyState, setCollectionEmptyState] = useState<Record<string, boolean>>({});
+  /* const [collectionEmptyState, setCollectionEmptyState] = useState<Record<string, boolean>>({}); */
   const onCollectionsLoadedRef = useRef(onCollectionsLoaded);
   onCollectionsLoadedRef.current = onCollectionsLoaded;
 
-  useEffect(() => {
-    setCollectionEmptyState(
-      collections.reduce<Record<string, boolean>>((acc, collection) => {
-        acc[collection.id] = collection.productCount === 0;
-        return acc;
-      }, {})
-    );
-  }, [collections]);
+  /*  useEffect(() => {
+     setCollectionEmptyState(
+       collections.reduce<Record<string, boolean>>((acc, collection) => {
+         acc[collection.id] = collection.productCount === 0;
+         return acc;
+       }, {})
+     );
+   }, [collections]); */
 
   useEffect(() => {
     if (collections.length > 0) {
@@ -73,7 +73,7 @@ const Collections = ({
     }
   }, [loadingCollections, setCollectionsLoaded]);
 
-  const allCollectionsEmpty =
+  /* const allCollectionsEmpty =
     collections.length > 0 && collections.every((collection) => collectionEmptyState[collection.id] === true);
   const visibleCollectionIds = collections
     .filter((collection) => !collectionEmptyState[collection.id])
@@ -92,13 +92,15 @@ const Collections = ({
     !allCollectionsEmpty && !isStoreBased && "md:mt-32 mt-24",
     !allCollectionsEmpty && hasMargin,
     "flex flex-col"
-  );
+  ); */
+
+  {/* <div className={containerClassName}> */ }
 
   if (loadingCollections) return null;
 
   if (error && collections.length === 0) {
     return (
-      <div className={containerClassName}>
+      <div className={`${!isStoreBased ? 'md:mt-32 mt-24 w-100p' : `${hasAppWidth ? 'app-width max-w-1440 mx-auto' : ''}`} ${hasMargin} flex flex-col`}>
         <div
           className="flex flex-col items-center justify-center gap-20 py-48 px-24 rounded-16 bg-#FAFAFA"
           role="alert"
@@ -126,17 +128,24 @@ const Collections = ({
 
   return (
     collections.length > 0 ? (
-      <div className={containerClassName}>
+      <div className={`${!isStoreBased ? 'md:mt-32 mt-24 w-100p' : `${hasAppWidth ? 'app-width max-w-1440 mx-auto' : ''}`} ${hasMargin} flex flex-col`}>
         <div className='grid md:gap-24 gap-20 lg:grid-2-cols-1fr'>
           {collections.map((collection, index) => {
-            const visibleIndex = visibleCollectionIds.indexOf(collection.id);
+            /* const visibleIndex = visibleCollectionIds.indexOf(collection.id);
             const isVisible = visibleIndex !== -1;
             const isLastVisible = visibleIndex === visibleCollectionIds.length - 1;
             const hasOddVisibleCount = visibleCollectionIds.length % 2 === 1;
-            const shouldSpan = isVisible && isLastVisible && hasOddVisibleCount;
+            const shouldSpan = isVisible && isLastVisible && hasOddVisibleCount; */
+
+            {/* <div key={collection.id} className={cx(shouldSpan && 'lg:grid-col-span-2', !isVisible && 'hidden')} style={{
+              minWidth: 0
+            }}>
+ */}
+            const isLast = index === collections.length - 1;
+            const isOdd = collections.length % 2 === 1;
 
             return (
-              <div key={collection.id} className={cx(shouldSpan && 'lg:grid-col-span-2', !isVisible && 'hidden')} style={{
+              <div key={collection.id} className={isLast && isOdd ? 'lg:grid-col-span-2' : ''} style={{
                 minWidth: 0
               }}>
                 <CollectionSection
@@ -148,12 +157,12 @@ const Collections = ({
                   storeId={storeId}
                   headingClassName={headingClassName}
                   subHeadingClassName={subHeadingClassName}
-                  onCollectionEmptyStateChange={(collectionId, isEmpty) => {
-                    setCollectionEmptyState((prev) => {
-                      if (prev[collectionId] === isEmpty) return prev;
-                      return { ...prev, [collectionId]: isEmpty };
-                    });
-                  }}
+                /* onCollectionEmptyStateChange={(collectionId, isEmpty) => {
+                  setCollectionEmptyState((prev) => {
+                    if (prev[collectionId] === isEmpty) return prev;
+                    return { ...prev, [collectionId]: isEmpty };
+                  });
+                }} */
                 />
               </div>
             )

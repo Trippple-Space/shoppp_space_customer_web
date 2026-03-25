@@ -7,13 +7,8 @@ import StorefrontLayout from './StorefrontLayout';
 import StorefrontAbout from './StorefrontAbout';
 import { Store } from '@/modules/lib/utility/types/store.interface';
 import { ICollection } from '@/modules/lib/utility/types/collection.interface';
-import {
-  ICategory,
-  Product,
-  ProductCategory,
-} from '@/modules/lib/utility/types/product.interface';
+import { ICategory, Product } from '@/modules/lib/utility/types/product.interface';
 import { useStoreProductsView } from '@/modules/lib/utility/hooks/views/use-store-products-view';
-import { useCategoryFilter } from '@/modules/lib/utility/hooks/use-category-filter';
 import useReviews from '@/modules/lib/utility/hooks/use-reviews';
 import { useProductSold } from '@/modules/lib/utility/hooks/use-product-sold';
 import ModernEarth from '@/modules/templates/modernEarth/ModernEarth';
@@ -27,6 +22,9 @@ import useUserStore from '@/modules/lib/utility/store/user.store';
 import { useGetIPAddress } from '@/modules/lib/utility/hooks/use-get-ip-address';
 import { useLogVisit } from '@/modules/lib/utility/hooks/use-log-visit';
 import { useSearchParams } from 'next/navigation';
+import { useStoreCategoryNavView } from '@/modules/lib/utility/hooks/views/use-category-nav-view';
+import { useFilterStore } from '@/modules/lib/utility/store/filter.store';
+import { searchParamsToFilters } from '@/modules/lib/utility/utility';
 
 export const StorefrontParent: FC<{
   store: Store;
@@ -36,8 +34,60 @@ export const StorefrontParent: FC<{
   const searchParams = useSearchParams();
   const showCollectionsSection =
     !searchParams.get('search') && !searchParams.get('collection');
-  const [selectedCategory, setSelectedCategory] =
-    useState<ProductCategory | null>(null);
+
+  const { categories, selectedCategory, setSelectedCategory } =
+    useStoreCategoryNavView({ storeId: store.id });
+  const { setRate, setPrice, setSort, setLocation, resetFilters, setShowOffers } =
+    useFilterStore();
+
+  const emptyCategory = {
+    name: '',
+    images: { icon: '', picture: '' },
+    description: '',
+    filters: {},
+    subcategories: [],
+  };
+
+  useEffect(() => {
+    const parsed = searchParamsToFilters(searchParams);
+
+    if (parsed.rating?.rateBy) setRate(parsed.rating.rateBy);
+    else resetFilters('rating');
+
+    if (parsed.price?.min || parsed.price?.max) setPrice(parsed.price);
+    else resetFilters('price');
+
+    if (parsed.sort?.sortBy) setSort(parsed.sort.sortBy);
+    else resetFilters('sort');
+
+    if (parsed.location?.selectedState)
+      setLocation(parsed.location.selectedState);
+    else resetFilters('location');
+
+    if (searchParams.get('offers') === 'true') {
+      const { allFilters } = useFilterStore.getState();
+      if (!allFilters.showOffers) setShowOffers();
+    } else {
+      resetFilters('showOffers');
+    }
+  }, [searchParams]);
+
+  useEffect(() => {
+    const categoryFromUrl = searchParams.get('category');
+    const hasSearchOrCollection =
+      searchParams.get('search') || searchParams.get('collection');
+
+    if (categoryFromUrl) {
+      setSelectedCategory({
+        ...selectedCategory,
+        name: categoryFromUrl.toLowerCase(),
+        filters: { name: categoryFromUrl.toLowerCase() },
+      });
+    } else if (hasSearchOrCollection) {
+      setSelectedCategory(emptyCategory);
+    }
+  }, [searchParams, categories]);
+
   const {
     products,
     loading,
@@ -47,7 +97,6 @@ export const StorefrontParent: FC<{
     setPage,
     totalPages,
   } = useStoreProductsView(store.id);
-  const [filteredProducts, setFilteredProducts] = useState<Product[]>([]);
   const [openReviewId, setOpenReviewId] = useState<string | null>(null);
   const [cartOpen, setCartOpen] = useState(false);
   const [userProfileDropdown, setUserProfileDropdown] =
@@ -59,25 +108,7 @@ export const StorefrontParent: FC<{
   const [nextTwoDiscounts, setNextTwoDiscounts] = useState<Product[]>([]);
   const [discountText, setDiscountText] = useState('');
 
-  const updateFilters = (filteredProducts: Product[]) => {
-    setFilteredProducts(filteredProducts);
-  };
-  const { handleCategoryChange } = useCategoryFilter(products, updateFilters);
   const { allReviews } = useReviews();
-
-  useEffect(() => {
-    const filterProducts = () => {
-      if (selectedCategory) {
-        handleCategoryChange(selectedCategory);
-      } else {
-        if (products.length > 0) {
-          setFilteredProducts(products);
-        }
-      }
-    };
-
-    filterProducts();
-  }, [selectedCategory, products]);
 
   const handleUserProfileDropdown = () => {
     setUserProfileDropdown((prev) => !prev);
@@ -142,7 +173,7 @@ export const StorefrontParent: FC<{
       setDiscountText('');
       setNextTwoDiscounts(products.slice(1, 3));
     }
-  }, []);
+  }, [products]);
 
   useEffect(() => {
     // Define the function to be triggered after 1 minute
@@ -194,12 +225,12 @@ export const StorefrontParent: FC<{
     setMenuOpen,
     selectedCategory,
     setSelectedCategory,
-    handleCategoryChange,
+    handleCategoryChange: setSelectedCategory,
     template,
     productsRef,
     scrollToProducts,
     loading,
-    products: filteredProducts,
+    products,
 
     page,
     setPage,
@@ -227,11 +258,10 @@ export const StorefrontParent: FC<{
               { image: store?.meta?.heroImage2 },
               {
                 text: `${discountText}`,
-                subText: `${
-                  discountText
+                subText: `${discountText
                     ? 'on selected products'
                     : 'Check back soon for upcoming deals!'
-                }`,
+                  }`,
               },
               { image: store?.meta?.heroImage3 },
               { image: store?.meta?.heroImage4 },
@@ -246,9 +276,9 @@ export const StorefrontParent: FC<{
               {
                 price: formatNumberAsPrice(
                   firstDiscount?.discountedPrice ||
-                    firstDiscount?.finalPrice ||
-                    products[0]?.variants[0]?.discountedPrice ||
-                    products[0]?.variants[0]?.finalPrice
+                  firstDiscount?.finalPrice ||
+                  products[0]?.variants[0]?.discountedPrice ||
+                  products[0]?.variants[0]?.finalPrice
                 ),
                 image:
                   firstDiscount?.variants[0]?.media[0]?.url ||
@@ -261,9 +291,9 @@ export const StorefrontParent: FC<{
               {
                 price: formatNumberAsPrice(
                   nextTwoDiscounts[0]?.discountedPrice ||
-                    nextTwoDiscounts[0]?.finalPrice ||
-                    products[1]?.variants[0]?.discountedPrice ||
-                    products[1]?.variants[0]?.finalPrice
+                  nextTwoDiscounts[0]?.finalPrice ||
+                  products[1]?.variants[0]?.discountedPrice ||
+                  products[1]?.variants[0]?.finalPrice
                 ),
                 image:
                   nextTwoDiscounts[0]?.variants[0]?.media[0]?.url ||
@@ -272,9 +302,9 @@ export const StorefrontParent: FC<{
               {
                 price: formatNumberAsPrice(
                   nextTwoDiscounts[1]?.discountedPrice ||
-                    nextTwoDiscounts[1]?.finalPrice ||
-                    products[2]?.variants[0]?.discountedPrice ||
-                    products[2]?.variants[0]?.finalPrice
+                  nextTwoDiscounts[1]?.finalPrice ||
+                  products[2]?.variants[0]?.discountedPrice ||
+                  products[2]?.variants[0]?.finalPrice
                 ),
                 image:
                   nextTwoDiscounts[1]?.variants[0]?.media[0]?.url ||
@@ -289,7 +319,7 @@ export const StorefrontParent: FC<{
         ) : (
           <StorefrontLayout
             store={store}
-            products={filteredProducts}
+            products={products}
             loading={loading}
             page={page}
             setPage={setPage}
@@ -297,6 +327,9 @@ export const StorefrontParent: FC<{
             initialCollections={initialCollections}
             initialCategories={initialCategories}
             showCollectionsSection={showCollectionsSection}
+            categories={categories}
+            selectedCategory={selectedCategory}
+            setSelectedCategory={setSelectedCategory}
           >
             <StorefrontAbout store={store} />
           </StorefrontLayout>
@@ -304,7 +337,7 @@ export const StorefrontParent: FC<{
       ) : (
         <StorefrontLayout
           store={store}
-          products={filteredProducts}
+          products={products}
           loading={loading}
           page={page}
           setPage={setPage}
@@ -312,6 +345,9 @@ export const StorefrontParent: FC<{
           initialCollections={initialCollections}
           initialCategories={initialCategories}
           showCollectionsSection={showCollectionsSection}
+          categories={categories}
+          selectedCategory={selectedCategory}
+          setSelectedCategory={setSelectedCategory}
         >
           <StorefrontAbout store={store} />
         </StorefrontLayout>

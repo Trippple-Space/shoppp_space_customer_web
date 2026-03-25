@@ -32,7 +32,7 @@ interface Props {
   storeId?: string
   headingClassName?: string
   subHeadingClassName?: string
-  onCollectionEmptyStateChange?: (collectionId: string, isEmpty: boolean) => void
+  /* onCollectionEmptyStateChange?: (collectionId: string, isEmpty: boolean) => void */
 }
 
 const CollectionSection = ({
@@ -44,7 +44,7 @@ const CollectionSection = ({
   storeId = '',
   headingClassName = '',
   subHeadingClassName = '',
-  onCollectionEmptyStateChange,
+  /* onCollectionEmptyStateChange, */
 }: Props) => {
   const scrollRef1 = useRef<HTMLDivElement>(null);
 
@@ -56,11 +56,10 @@ const CollectionSection = ({
   const isLimited = /limited|limit/.test(nameLower);
   const theme = isLimited ? redTheme : otherThemes[index % otherThemes.length];
   const type = pathname.includes('wears') ? 'wears' : 'fabrics';
-  const categoryType = isStoreBased ? null : type;
   const categoryLabel = isStoreBased ? 'STORE' : 'GLOBAL';
 
   const { selectedCategory, setSelectedCategory } = useCategories({
-    type: categoryType,
+    type,
     storeId: isStoreBased ? storeId : '',
     label: categoryLabel,
   });
@@ -86,7 +85,7 @@ const CollectionSection = ({
 
   const { products, loading, query, updateHomePageFilter, setSearch, fetchingError, refetch } = useProducts(
     {
-      filters: { ...(isStoreBased ? {} : {type}), status: { In: "ACTIVE,OUT_OF_STOCK" }, channel: "ASOEBI_STORE" },
+      filters: { ...(isStoreBased ? {} : { type }), status: { In: "ACTIVE,OUT_OF_STOCK" }, channel: "ASOEBI_STORE" },
       order: { priorityScore: "DESC", createdAt: "DESC" },
       pagination: { page: 1, limit: 11 },
       allFilters: initialFiltersForCollection,
@@ -108,7 +107,7 @@ const CollectionSection = ({
     allFilters,
     JSON.stringify(query.allFilters),
     JSON.stringify(query.filters),
-    selectedCategory.name,
+    selectedCategory?.name,
   ]);
 
   useEffect(() => {
@@ -132,13 +131,13 @@ const CollectionSection = ({
   const showShimmers = productsLoading;
   const showEmptyState = !productsLoading && !hasError && products.length === 0;
   const showProducts = !productsLoading && !hasError && products.length > 0;
-  const isCollectionEmpty = collection.productCount === 0 || showEmptyState;
+  /*  const isCollectionEmpty = collection.productCount === 0 || showEmptyState; */
   const headingHasWeightClass = /\bweight-\S+/.test(headingClassName);
   const subHeadingHasWeightClass = /\bweight-\S+/.test(subHeadingClassName);
 
-  useEffect(() => {
-    onCollectionEmptyStateChange?.(collection.id, isCollectionEmpty);
-  }, [collection.id, isCollectionEmpty, onCollectionEmptyStateChange]);
+  /*  useEffect(() => {
+     onCollectionEmptyStateChange?.(collection.id, isCollectionEmpty);
+   }, [collection.id, isCollectionEmpty, onCollectionEmptyStateChange]); */
 
   if (collection.productCount === 0) return null;
   if (showEmptyState) return null;
@@ -223,7 +222,15 @@ const CollectionSection = ({
                 key={i}
                 className="l:w-290 md:w-250 sm:w-220 w-150 l:mt--20 mt--30"
               >
-                <ProductTile product={product} key={i} id={product.id} addToCartVariant="icon" isStoreBased={isStoreBased} />
+                <ProductTile
+                  product={product}
+                  key={i}
+                  id={product.id}
+                  addToCartVariant="icon"
+                  isStoreBased={isStoreBased}
+                  selectedCategory={selectedCategory}
+                  setSelectedCategory={setSelectedCategory}
+                />
               </div>
             ))
           ) : null}

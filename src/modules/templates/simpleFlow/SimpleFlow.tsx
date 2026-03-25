@@ -37,6 +37,8 @@ const SimpleFlow: FC<SimpleFlowProps> = ({
   totalPages,
   initialCollections = [],
   showCollectionsSection = true,
+  selectedCategory,
+  setSelectedCategory,
 }) => {
   return (
     <>
@@ -215,6 +217,8 @@ const SimpleFlow: FC<SimpleFlowProps> = ({
               page={page}
               onPageChange={setPage}
               totalPages={totalPages}
+              selectedCategory={selectedCategory}
+              setSelectedCategory={setSelectedCategory}
             />
           </div>
         </section>
