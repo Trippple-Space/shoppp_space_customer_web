@@ -62,6 +62,16 @@ const BaseCategoryNav: FC<IBaseCategoryNav> = ({
               >
                 <div
                   onClick={() => {
+                    if (isActive) {
+                      setActiveOption('All');
+                      setSelectedCategory({
+                        ...category,
+                        name: 'All',
+                        filters: {},
+                      });
+                      return;
+                    }
+
                     setActiveOption(category?.name);
                     setSelectedCategory({
                       ...category,

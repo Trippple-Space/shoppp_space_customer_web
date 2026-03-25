@@ -25,6 +25,14 @@ const FabricsCategoryNav = ({
   const [searchTerm, setSearchTerm] = useState('');
   const [selectedCollection, setSelectedCollection] = useState<string>('');
 
+  /*  useEffect(() => {
+     const search = searchParams.get('search');
+     const collection = searchParams.get('collection');
+ 
+     setSearchTerm(search ?? '');
+     setSelectedCollection(collection ?? '');
+   }, [path, searchParams]); */
+
   useEffect(() => {
     const search = searchParams.get('search');
     const collection = searchParams.get('collection');
