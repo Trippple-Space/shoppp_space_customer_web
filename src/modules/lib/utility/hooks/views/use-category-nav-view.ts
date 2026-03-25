@@ -3,8 +3,6 @@ import { useCategories } from "../use-categories";
 import { usePathname } from "next/navigation";
 import { ICategory } from "../../types/product.interface";
 
-const EMPTY_CATEGORIES: ICategory[] = [];
-
 const ALL_CATEGORY: ICategory = {
   name: "All",
   filters: {},
@@ -21,20 +19,15 @@ function ensureAllCategory(list: ICategory[]): ICategory[] {
   return hasAll ? list : [ALL_CATEGORY, ...list];
 }
 
-export const useStoreCategoryNavView = ({
-  storeId = '',
-  initialCategories = EMPTY_CATEGORIES,
-} = { storeId: '', initialCategories: EMPTY_CATEGORIES }) => {
+export const useStoreCategoryNavView = ({ storeId = '' } = { storeId: '' }) => {
   const label = storeId === '' ? "GLOBAL" : "STORE";
   const pathname = usePathname();
   const isWearsRoute = pathname.includes("wears");
-  const categoryType = storeId ? null : (isWearsRoute ? "wears" : "fabrics");
   const { currentCategoryList, selectedCategory, setSelectedCategory } =
     useCategories({
-      type: categoryType,
+      type: isWearsRoute ? "wears" : "fabrics",
       label: label as "GLOBAL" | "STORE",
       storeId,
-      initialCategories,
     });
   const categories = useMemo(
     () => ensureAllCategory(currentCategoryList),
