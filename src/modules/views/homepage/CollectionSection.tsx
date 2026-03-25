@@ -8,7 +8,7 @@ import { useEffect, useRef } from 'react';
 import { ICollection } from '@/modules/lib/utility/types/collection.interface';
 import { useFilterStore } from '@/modules/lib/utility/store/filter.store';
 import { useCategories } from '@/modules/lib/utility/hooks/use-categories';
-import { usePathname, useRouter } from 'next/navigation';
+import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 import { LuArrowRight } from 'react-icons/lu';
 import { TbAlertCircle, TbRefresh } from 'react-icons/tb';
 import { filtersToSearchParams } from '@/modules/lib/utility/utility';
@@ -29,6 +29,7 @@ interface Props {
   setSelectedCollection: (coll: string) => void
   selectedCollection: string | null
   isStoreBased?: boolean
+  storeId?: string
   headingClassName?: string
   subHeadingClassName?: string
   /* onCollectionEmptyStateChange?: (collectionId: string, isEmpty: boolean) => void */
@@ -40,6 +41,7 @@ const CollectionSection = ({
   selectedCollection,
   setSelectedCollection,
   isStoreBased = false,
+  storeId = '',
   headingClassName = '',
   subHeadingClassName = '',
   /* onCollectionEmptyStateChange, */
@@ -48,16 +50,18 @@ const CollectionSection = ({
 
   const pathname = usePathname();
   const router = useRouter();
+  const searchParams = useSearchParams();
 
   const nameLower = (collection.name ?? '').toLowerCase();
   const isLimited = /limited|limit/.test(nameLower);
   const theme = isLimited ? redTheme : otherThemes[index % otherThemes.length];
   const type = pathname.includes('wears') ? 'wears' : 'fabrics';
+  const categoryLabel = isStoreBased ? 'STORE' : 'GLOBAL';
 
   const { selectedCategory, setSelectedCategory } = useCategories({
     type,
-    storeId: '',
-    label: 'GLOBAL',
+    storeId: isStoreBased ? storeId : '',
+    label: categoryLabel,
   });
   const { allFilters } = useFilterStore();
 
@@ -72,18 +76,20 @@ const CollectionSection = ({
   })();
 
   const tagsFilter = selectedTags.length ? selectedTags.join(',') : '';
+  const searchFromPath = (searchParams.get('search') ?? '').trim();
 
   const initialFiltersForCollection = {
     ...allFilters,
     tags: tagsFilter,
   };
 
-  const { products, loading, query, updateHomePageFilter, fetchingError, refetch } = useProducts(
+  const { products, loading, query, updateHomePageFilter, setSearch, fetchingError, refetch } = useProducts(
     {
       filters: { ...(isStoreBased ? {} : {type}), status: { In: "ACTIVE,OUT_OF_STOCK" }, channel: "ASOEBI_STORE" },
       order: { priorityScore: "DESC", createdAt: "DESC" },
       pagination: { page: 1, limit: 11 },
       allFilters: initialFiltersForCollection,
+      search: searchFromPath || undefined,
     },
     'infinite',
     collection.slug,
@@ -101,8 +107,13 @@ const CollectionSection = ({
     allFilters,
     JSON.stringify(query.allFilters),
     JSON.stringify(query.filters),
-    selectedCategory.name,
+    selectedCategory?.name,
   ]);
+
+  useEffect(() => {
+    const nextSearch = (searchParams.get('search') ?? '').trim();
+    setSearch(nextSearch || undefined);
+  }, [searchParams.toString()]);
 
   const handleShowMore = (collection?: string) => {
     const params = filtersToSearchParams(allFilters, selectedCategory);

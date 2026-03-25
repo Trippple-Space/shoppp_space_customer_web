@@ -32,7 +32,7 @@ const Homepage = ({
   const pathname = usePathname();
 
   const { categories, setSelectedCategory, selectedCategory } =
-    useStoreCategoryNavView({ initialCategories });
+    useStoreCategoryNavView();
   const { setRate, setPrice, setSort, setLocation, allFilters, resetFilters } =
     useFilterStore();
 
@@ -61,6 +61,27 @@ const Homepage = ({
     filters: {},
     subcategories: [],
   };
+
+  /* useEffect(() => {
+    const categoryFromUrl = searchParams.get('category');
+    const hasSearchOrCollection = searchParams.get('search') || searchParams.get('collection');
+    const selectedName = (selectedCategory?.name || '').trim().toLowerCase();
+
+    if (categoryFromUrl) {
+      const normalizedCategory = categoryFromUrl.trim().toLowerCase();
+      if (selectedName !== normalizedCategory) {
+        setSelectedCategory({
+          ...selectedCategory,
+          name: normalizedCategory,
+          filters: { name: normalizedCategory },
+        });
+      }
+    } else if (hasSearchOrCollection) {
+      if (selectedName) {
+        setSelectedCategory(EMPTY_CATEGORY);
+      }
+    }
+  }, [searchParams, selectedCategory, setSelectedCategory]); */
 
   useEffect(() => {
     const categoryFromUrl = searchParams.get('category');
@@ -187,7 +208,7 @@ const Homepage = ({
 
     const newParams = new URLSearchParams();
     if (searchTerm) newParams.set('search', searchTerm);
-    if (collection) newParams. set('collection', collection);
+    if (collection) newParams.set('collection', collection);
 
     router.replace(`${pathname}?${newParams.toString()}`, { scroll: false });
   };

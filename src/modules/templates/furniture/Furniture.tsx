@@ -36,6 +36,7 @@ const Furniture: FC<FurnitureProps> = (props) => {
     setPage,
     totalPages,
     initialCollections = [],
+    showCollectionsSection = true,
   } = props;
 
   return (
@@ -309,13 +310,15 @@ const Furniture: FC<FurnitureProps> = (props) => {
                     </nav>
                 </div> */}
 
-        <Collections
-          storeId={store.id}
-          initialCollections={initialCollections}
-          isStoreBased={true}
-          headingClassName="font-nunitoSans weight-400"
-          subHeadingClassName="font-nunitoSans"
-        />
+        {showCollectionsSection && (
+          <Collections
+            storeId={store.id}
+            initialCollections={initialCollections}
+            isStoreBased={true}
+            headingClassName="font-nunitoSans weight-400"
+            subHeadingClassName="font-nunitoSans"
+          />
+        )}
 
         <section id="popular-section" ref={productsRef}>
           <div id="popular-headings" className="mb-30">
