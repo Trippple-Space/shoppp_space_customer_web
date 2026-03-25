@@ -13,6 +13,7 @@ import { LuArrowRight } from 'react-icons/lu';
 import { TbAlertCircle, TbRefresh } from 'react-icons/tb';
 import { filtersToSearchParams } from '@/modules/lib/utility/utility';
 import Button from '@/modules/lib/components/button/Button';
+import cx from 'classnames';
 
 const redTheme = { bg: "#FFF3F1", button: "#D4280C", text: 'white' as const };
 const otherThemes = [
@@ -28,9 +29,19 @@ interface Props {
   setSelectedCollection: (coll: string) => void
   selectedCollection: string | null
   isStoreBased?: boolean
+  headingClassName?: string
+  subHeadingClassName?: string
 }
 
-const CollectionSection = ({ collection, index, selectedCollection, setSelectedCollection, isStoreBased = false }: Props) => {
+const CollectionSection = ({
+  collection,
+  index,
+  selectedCollection,
+  setSelectedCollection,
+  isStoreBased = false,
+  headingClassName = '',
+  subHeadingClassName = '',
+}: Props) => {
   const scrollRef1 = useRef<HTMLDivElement>(null);
 
   const pathname = usePathname();
@@ -111,6 +122,8 @@ const CollectionSection = ({ collection, index, selectedCollection, setSelectedC
   const showShimmers = productsLoading;
   const showEmptyState = !productsLoading && !hasError && products.length === 0;
   const showProducts = !productsLoading && !hasError && products.length > 0;
+  const headingHasWeightClass = /\bweight-\S+/.test(headingClassName);
+  const subHeadingHasWeightClass = /\bweight-\S+/.test(subHeadingClassName);
 
   if (collection.productCount === 0) return null;
   if (showEmptyState) return null;
@@ -122,10 +135,22 @@ const CollectionSection = ({ collection, index, selectedCollection, setSelectedC
     >
       <div className="flex flex-row j-content-between a-items-center gap-24">
         <div className='flex flex-col gap-2'>
-          <h3 className="text-16 md:text-20 weight-600 md:line-height-28 line-height-24 color-#000000E0">
+          <h3
+            className={cx(
+              "text-16 md:text-20 md:line-height-28 line-height-24 color-#000000E0",
+              !headingHasWeightClass && "weight-600",
+              headingClassName
+            )}
+          >
             {collection.name}
           </h3>
-          <p className="color-#00000099 text-14 weight-400">
+          <p
+            className={cx(
+              "color-#00000099 text-14",
+              !subHeadingHasWeightClass && "weight-400",
+              subHeadingClassName
+            )}
+          >
             {collection.description}
           </p>
         </div>
@@ -183,7 +208,7 @@ const CollectionSection = ({ collection, index, selectedCollection, setSelectedC
                 key={i}
                 className="l:w-290 md:w-250 sm:w-220 w-150 l:mt--20 mt--30"
               >
-                <ProductTile product={product} key={i} id={product.id} addToCartVariant="icon" />
+                <ProductTile product={product} key={i} id={product.id} addToCartVariant="icon" isStoreBased={isStoreBased} />
               </div>
             ))
           ) : null}
