@@ -25,6 +25,10 @@ import { useSearchParams } from 'next/navigation';
 import { useStoreCategoryNavView } from '@/modules/lib/utility/hooks/views/use-category-nav-view';
 import { useFilterStore } from '@/modules/lib/utility/store/filter.store';
 import { searchParamsToFilters } from '@/modules/lib/utility/utility';
+import SavedItemsModal from '@/modules/lib/components/nav-bar/profile-modal/SavedItems';
+import OrdersModal from '@/modules/lib/components/nav-bar/profile-modal/OrdersModal';
+import RecentlySearchItems from '@/modules/lib/components/nav-bar/profile-modal/RecentlySearchItems ';
+import RecentlyViewedItems from '@/modules/lib/components/nav-bar/profile-modal/RecentlyViewedItems ';
 
 export const StorefrontParent: FC<{
   store: Store;
@@ -118,6 +122,10 @@ export const StorefrontParent: FC<{
     setUserProfileDropdown(false);
   };
 
+  const openSavedItemsModal = () => {
+    setProfileModal('saved items');
+  };
+
   const { productSold } = useProductSold(store?.id);
   const template = store?.meta?.template;
   const productsRef = useRef<HTMLElement | null>(null);
@@ -134,6 +142,21 @@ export const StorefrontParent: FC<{
     if (productsRef.current) {
       productsRef.current.scrollIntoView({ behavior: 'smooth' });
     }
+  };
+
+  const getFirstImageUrl = (product?: Product | null) => {
+    const medias = product?.variants?.[0]?.media ?? [];
+    return medias.find(
+      (media: any) => media?.url && !/\.(mp4|webm|mov|avi|mkv)$/i.test(media.url)
+    )?.url;
+  };
+
+  const getNextImageFromProducts = (startIndex: number) => {
+    for (let i = startIndex; i < products.length; i++) {
+      const imageUrl = getFirstImageUrl(products[i]);
+      if (imageUrl) return imageUrl;
+    }
+    return undefined;
   };
 
   useEffect(() => {
@@ -209,6 +232,7 @@ export const StorefrontParent: FC<{
 
   const commonTemplateProps = {
     store,
+    categories,
     allReviews,
     openReviewId,
     setOpenReviewId,
@@ -231,6 +255,7 @@ export const StorefrontParent: FC<{
     scrollToProducts,
     loading,
     products,
+    openSavedItemsModal,
 
     page,
     setPage,
@@ -259,8 +284,8 @@ export const StorefrontParent: FC<{
               {
                 text: `${discountText}`,
                 subText: `${discountText
-                    ? 'on selected products'
-                    : 'Check back soon for upcoming deals!'
+                  ? 'on selected products'
+                  : 'Check back soon for upcoming deals!'
                   }`,
               },
               { image: store?.meta?.heroImage3 },
@@ -281,8 +306,7 @@ export const StorefrontParent: FC<{
                   products[0]?.variants[0]?.finalPrice
                 ),
                 image:
-                  firstDiscount?.variants[0]?.media[0]?.url ||
-                  products[0]?.variants[0]?.media[0]?.url,
+                  getFirstImageUrl(firstDiscount) || getNextImageFromProducts(0),
               },
               {
                 text: `${discountText}`,
@@ -296,8 +320,8 @@ export const StorefrontParent: FC<{
                   products[1]?.variants[0]?.finalPrice
                 ),
                 image:
-                  nextTwoDiscounts[0]?.variants[0]?.media[0]?.url ||
-                  products[1]?.variants[0]?.media[0]?.url,
+                  getFirstImageUrl(nextTwoDiscounts[0]) ||
+                  getNextImageFromProducts(1),
               },
               {
                 price: formatNumberAsPrice(
@@ -307,8 +331,8 @@ export const StorefrontParent: FC<{
                   products[2]?.variants[0]?.finalPrice
                 ),
                 image:
-                  nextTwoDiscounts[1]?.variants[0]?.media[0]?.url ||
-                  products[2]?.variants[0]?.media[0]?.url,
+                  getFirstImageUrl(nextTwoDiscounts[1]) ||
+                  getNextImageFromProducts(2),
               },
             ]}
           />
@@ -351,6 +375,31 @@ export const StorefrontParent: FC<{
         >
           <StorefrontAbout store={store} />
         </StorefrontLayout>
+      )}
+
+      {profileModal && (
+        <>
+          <OrdersModal
+            modalOpen={profileModal === 'orders'}
+            handleCloseModal={() => setProfileModal('')}
+            data={undefined}
+          />
+          <RecentlySearchItems
+            modalOpen={profileModal === 'recently searched'}
+            handleCloseModal={() => setProfileModal('')}
+            data={undefined}
+          />
+          <RecentlyViewedItems
+            modalOpen={profileModal === 'recently viewed'}
+            handleCloseModal={() => setProfileModal('')}
+            data={undefined}
+          />
+          <SavedItemsModal
+            modalOpen={profileModal === 'saved items'}
+            handleCloseModal={() => setProfileModal('')}
+            data={undefined}
+          />
+        </>
       )}
     </>
   );

@@ -14,6 +14,7 @@ import Collections from '@/modules/views/homepage/Collections';
 import StoreProductsList from '@/modules/views/storefront/StoreProductsList';
 import { BaseStorefrontProps } from '@/modules/lib/utility/types/storefront-template.interface';
 import { ProductSearch } from '@/modules/lib/components/search-input/StoreFrontProductSearch';
+import FabricsCategoryNav from '@/modules/lib/components/nav-bar/category-nav/FabricsCategoryNav';
 
 type ModernEarthProps = BaseStorefrontProps & {
   title: string;
@@ -63,6 +64,8 @@ const ModernEarth: React.FC<ModernEarthProps> = (props) => {
     showCollectionsSection = true,
     selectedCategory,
     setSelectedCategory,
+    openSavedItemsModal,
+    categories,
   } = props;
 
   return (
@@ -123,7 +126,10 @@ const ModernEarth: React.FC<ModernEarthProps> = (props) => {
               >
                 <LuUser className="w-24 h-24" />
               </span>
-              <span className="relative flex flex-col a-items-center j-content-center">
+              <span className="relative flex flex-col a-items-center j-content-center" onClick={() => {
+                if (openSavedItemsModal) openSavedItemsModal();
+                else setProfileModal('saved items');
+              }}>
                 <span
                   className="w-16 h-16 bg-black border border-white flex flex-col a-items-center j-content-center absolute r--7 t--3.5 font-inter"
                   style={{
@@ -211,11 +217,10 @@ const ModernEarth: React.FC<ModernEarthProps> = (props) => {
               {offers.map((offer, i) => (
                 <div
                   key={i}
-                  className={`modernEarth__offer relative ${
-                    offer.text || offer.subText
-                      ? 'modernEarth__offer--highlight'
-                      : ''
-                  }`}
+                  className={`modernEarth__offer relative ${offer.text || offer.subText
+                    ? 'modernEarth__offer--highlight'
+                    : ''
+                    }`}
                 >
                   {offer.price && (
                     <span className="modernEarth__price">{offer.price}</span>
@@ -257,6 +262,18 @@ const ModernEarth: React.FC<ModernEarthProps> = (props) => {
           hideDefaultCart={true}
         />
 
+        {!!categories?.length && (
+          <div className="sm:pt-30 pt-20">
+            <FabricsCategoryNav
+              categories={categories}
+              selectedCategory={selectedCategory}
+              setSelectedCategory={setSelectedCategory}
+              page={'store'}
+              key={categories}
+            />
+          </div>
+        )}
+
         {showCollectionsSection && (
           <section>
             <Collections
@@ -271,7 +288,7 @@ const ModernEarth: React.FC<ModernEarthProps> = (props) => {
         )}
 
         <section
-          className="py-30 md:py-40 l:py-80 px-16 sm:px-25 font-dmSans max-w-1440 mx-auto"
+          className="py-30 md:py-40 l:py-50 px-16 sm:px-25 font-dmSans max-w-1440 mx-auto"
           ref={productsRef}
         >
           <h2 className="mb-4 md:mb-10 font-bold text-26 md:text-32 sm:text-40 l:text-50 text-center">

@@ -10,6 +10,7 @@ import StoreProductsList from '@/modules/views/storefront/StoreProductsList';
 import Collections from '@/modules/views/homepage/Collections';
 import { BaseStorefrontProps } from '@/modules/lib/utility/types/storefront-template.interface';
 import { ProductSearch } from '@/modules/lib/components/search-input/StoreFrontProductSearch';
+import FabricsCategoryNav from '@/modules/lib/components/nav-bar/category-nav/FabricsCategoryNav';
 
 type FurnitureProps = BaseStorefrontProps & {
   productSold: number;
@@ -24,6 +25,7 @@ const Furniture: FC<FurnitureProps> = (props) => {
     setMenuOpen,
     userProfileDropdown,
     setProfileModal,
+    openSavedItemsModal,
     handleUserProfileDropdown,
     handleCloseDropdown,
     products,
@@ -37,6 +39,8 @@ const Furniture: FC<FurnitureProps> = (props) => {
     totalPages,
     initialCollections = [],
     showCollectionsSection = true,
+
+    categories,
     selectedCategory,
     setSelectedCategory,
   } = props;
@@ -88,7 +92,13 @@ const Furniture: FC<FurnitureProps> = (props) => {
                     alt="cart-icon"
                   />
                 </span>
-                <span className="cursor-pointer">
+                <span
+                  className="cursor-pointer"
+                  onClick={() => {
+                    if (openSavedItemsModal) openSavedItemsModal();
+                    else setProfileModal('saved items');
+                  }}
+                >
                   <img
                     className="user-icon"
                     src="/images/templates/minimal-template/icons/heart.svg"
@@ -191,29 +201,28 @@ const Furniture: FC<FurnitureProps> = (props) => {
 
                 <div className="hero-image furniture-flex" id="hero-image4">
                   <div id="hero-image-users-images" className="furniture-flex">
-                    {[0, 1, 2].map((i) => {
-                      const media = products[i]?.variants[0]?.media[0];
-                      if (!media?.url) return null;
-
-                      const isVideo = media.url.match(
-                        /\.(mp4|webm|mov|avi|mkv)$/i
+                    {(() => {
+                      const videoRegex = /\.(mp4|webm|mov|avi|mkv)$/i;
+                      const mediaStream = products.flatMap(
+                        (product) => product?.variants?.[0]?.media ?? []
                       );
-                      <video src={media.url} controls width="300" />;
+                      const imageUrls = mediaStream
+                        .map((media: any) => media?.url)
+                        .filter(Boolean)
+                        .filter((url: string) => !videoRegex.test(url));
 
-                      return (
-                        <div key={i}>
-                          {isVideo ? (
-                            <video src={media.url} muted autoPlay loop />
-                          ) : (
+                      return [0, 1, 2].map((slotIndex) => (
+                        <div key={slotIndex}>
+                          {imageUrls[slotIndex] ? (
                             <img
-                              src={media.url}
-                              alt={`media-${i}`}
+                              src={imageUrls[slotIndex]}
+                              alt={`media-${slotIndex}`}
                               width="300"
                             />
-                          )}
+                          ) : null}
                         </div>
-                      );
-                    })}
+                      ));
+                    })()}
                   </div>
                   <p id="items-sold">
                     <span>{productSold || '30'} +</span>
@@ -311,6 +320,18 @@ const Furniture: FC<FurnitureProps> = (props) => {
                         </div>
                     </nav>
                 </div> */}
+
+        {!!categories?.length && (
+          <div className="">
+            <FabricsCategoryNav
+              categories={categories}
+              selectedCategory={selectedCategory}
+              setSelectedCategory={setSelectedCategory}
+              page={'store'}
+              key={categories}
+            />
+          </div>
+        )}
 
         {showCollectionsSection && (
           <Collections
