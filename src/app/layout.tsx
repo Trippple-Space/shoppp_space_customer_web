@@ -14,6 +14,7 @@ import {
 // import { useAuthGuard } from '@/modules/lib/utility/hooks/use-auth-guard';
 import GlobalArena from '@/modules/lib/components/global-arena/GlobalArena';
 import GlobalLaunchBanner from '@/modules/lib/components/global-launch-banner/GlobalLaunchBanner';
+import InstagramFollowFloating from '@/modules/lib/components/instagram-follow-floating/InstagramFollowFloating';
 import { PHProvider } from './providers';
 import dynamic from 'next/dynamic';
 import '@smastrom/react-rating/style.css';
@@ -101,6 +102,7 @@ export default function RootLayout({
           <PostHogPageView />
           <GlobalArena />
           <GlobalLaunchBanner />
+          <InstagramFollowFloating />
           {/* <div className="fixed w-full b-60 z-3">
             <div className="max-w-1000 mx-auto flex text-14 l:text-16 bg-yellow-50 text-green p-10 max-w-1100 mx-auto ">
               <BsInfoCircle className="inline-block w-fit text-26 mr-10 mt--2" />

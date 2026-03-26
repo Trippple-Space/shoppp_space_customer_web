@@ -182,6 +182,8 @@ const ProductTile: FC<IProductTile> = ({
   const chevronRef = useRef<HTMLDivElement>(null);
   const tagsContainerRef = useRef<HTMLDivElement>(null);
   const tagRefs = useRef<HTMLSpanElement[]>([]);
+  const longPressTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const longPressTriggeredRef = useRef(false);
 
   const [isOverflowing, setIsOverflowing] = useState(false);
   const [showAllTags, setShowAllTags] = useState(false);
@@ -302,6 +304,37 @@ const ProductTile: FC<IProductTile> = ({
       setIsToAddProperties(false);
     }
   };
+
+  const handleLongPressOpenProductModal = () => {
+    handleCloseProductModal();
+    if (selectedVariant) {
+      setRecentlyViewsId(selectedVariant.id);
+    }
+  };
+
+  const clearLongPressTimeout = () => {
+    if (longPressTimeoutRef.current) {
+      clearTimeout(longPressTimeoutRef.current);
+      longPressTimeoutRef.current = null;
+    }
+  };
+
+  const startLongPress = () => {
+    longPressTriggeredRef.current = false;
+    clearLongPressTimeout();
+    longPressTimeoutRef.current = setTimeout(() => {
+      longPressTriggeredRef.current = true;
+      handleLongPressOpenProductModal();
+    }, 450);
+  };
+
+  const endLongPress = () => {
+    clearLongPressTimeout();
+  };
+
+  useEffect(() => {
+    return () => clearLongPressTimeout();
+  }, []);
 
   function handleLogin(
     variantId: string,
@@ -589,8 +622,23 @@ const ProductTile: FC<IProductTile> = ({
         className="relative ratio-1 radius-10 g|overflow:hidden l:radius-15 w-full"
         onMouseOver={() => setOnProductTileHover(true)}
         onMouseOut={() => setOnProductTileHover(false)}
+        onMouseDown={startLongPress}
+        onMouseUp={endLongPress}
+        onMouseLeave={endLongPress}
+        onTouchStart={startLongPress}
+        onTouchEnd={endLongPress}
+        onTouchMove={endLongPress}
+        onTouchCancel={endLongPress}
       >
-        <Link href={`/products/${product?.slug}`}>
+        <Link
+          href={`/products/${product?.slug}`}
+          onClick={(e) => {
+            if (longPressTriggeredRef.current) {
+              e.preventDefault();
+              longPressTriggeredRef.current = false;
+            }
+          }}
+        >
           {mediaType === 'image' ? (
             <div className="relative w-full h-full">
               {isOutOfStock && (

@@ -391,6 +391,7 @@
 .px-0 { padding-left: 0px; padding-right: 0px; } 
 @layer lo { .\@lo\:placeholder\:text-14::placeholder { font-size: 14px; } } 
 .bg-\#FACE33 { background-color: #FACE33; } 
+.color-\#FF7070 { color: #FF7070; } 
 .bg-\#FFFFFF4D { background-color: #FFFFFF4D; } 
 .t-64 { top: 64px; } 
 .gap-6 { gap: 6px; } 
