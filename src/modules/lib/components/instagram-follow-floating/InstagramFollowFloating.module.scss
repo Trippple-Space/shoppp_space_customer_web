@@ -191,17 +191,12 @@
 /* MOBILE */
 @media (max-width: 480px) {
   .wrapper {
-    padding: 10px;
-    gap: 0;
+    padding: 10px 12px;
+    gap: 8px;
+    left: 10px;
   }
 
   .text {
-    display: none;
-  }
-
-  /* optional: expand on tap/hover */
-  .wrapper:active .text {
-    display: inline;
-    margin-left: 8px;
+    font-size: 12px;
   }
 }
