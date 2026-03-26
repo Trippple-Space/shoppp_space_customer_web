@@ -30,7 +30,9 @@ const RecentlyViewedItems: React.FC<ModalProps> = ({
         return (
           <div className="text-16 weight-400 text-grey-700 h-full">
             {recentVariants.length === 0 ? (
-              <NoResultMessage textContent="Continue shopping to discover our best deals!" />
+              <div className='h-full flex flex-col a-items-center j-content-center'>
+                <NoResultMessage textContent="Continue shopping to discover our best deals!" />
+              </div>
             ) : (
               recentVariants.map((recentVariant) => (
                 <div className="pb-20 mb-20 border-b border-1 border-grey-300">
