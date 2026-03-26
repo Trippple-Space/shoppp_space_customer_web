@@ -144,6 +144,21 @@ export const StorefrontParent: FC<{
     }
   };
 
+  const getFirstImageUrl = (product?: Product | null) => {
+    const medias = product?.variants?.[0]?.media ?? [];
+    return medias.find(
+      (media: any) => media?.url && !/\.(mp4|webm|mov|avi|mkv)$/i.test(media.url)
+    )?.url;
+  };
+
+  const getNextImageFromProducts = (startIndex: number) => {
+    for (let i = startIndex; i < products.length; i++) {
+      const imageUrl = getFirstImageUrl(products[i]);
+      if (imageUrl) return imageUrl;
+    }
+    return undefined;
+  };
+
   useEffect(() => {
     const now = new Date();
     const discounted = products.filter((p) => {
@@ -291,8 +306,7 @@ export const StorefrontParent: FC<{
                   products[0]?.variants[0]?.finalPrice
                 ),
                 image:
-                  firstDiscount?.variants[0]?.media[0]?.url ||
-                  products[0]?.variants[0]?.media[0]?.url,
+                  getFirstImageUrl(firstDiscount) || getNextImageFromProducts(0),
               },
               {
                 text: `${discountText}`,
@@ -306,8 +320,8 @@ export const StorefrontParent: FC<{
                   products[1]?.variants[0]?.finalPrice
                 ),
                 image:
-                  nextTwoDiscounts[0]?.variants[0]?.media[0]?.url ||
-                  products[1]?.variants[0]?.media[0]?.url,
+                  getFirstImageUrl(nextTwoDiscounts[0]) ||
+                  getNextImageFromProducts(1),
               },
               {
                 price: formatNumberAsPrice(
@@ -317,8 +331,8 @@ export const StorefrontParent: FC<{
                   products[2]?.variants[0]?.finalPrice
                 ),
                 image:
-                  nextTwoDiscounts[1]?.variants[0]?.media[0]?.url ||
-                  products[2]?.variants[0]?.media[0]?.url,
+                  getFirstImageUrl(nextTwoDiscounts[1]) ||
+                  getNextImageFromProducts(2),
               },
             ]}
           />
