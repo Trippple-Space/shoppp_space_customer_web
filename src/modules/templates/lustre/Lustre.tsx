@@ -9,6 +9,7 @@ import Collections from '@/modules/views/homepage/Collections';
 import StoreProductsList from '@/modules/views/storefront/StoreProductsList';
 import { BaseStorefrontProps } from '@/modules/lib/utility/types/storefront-template.interface';
 import { ProductSearch } from '@/modules/lib/components/search-input/StoreFrontProductSearch';
+import FabricsCategoryNav from '@/modules/lib/components/nav-bar/category-nav/FabricsCategoryNav';
 
 type ModernLuxeProps = BaseStorefrontProps & {
   offers: {
@@ -43,6 +44,7 @@ const ModernLuxe: FC<ModernLuxeProps> = (props) => {
     showCollectionsSection = true,
     selectedCategory,
     setSelectedCategory,
+    categories,
   } = props;
 
   return (
@@ -241,6 +243,18 @@ const ModernLuxe: FC<ModernLuxeProps> = (props) => {
           </div>
         </div>
       </section>
+
+      {!!categories?.length && (
+        <div className="sm:pt-20 pt-16">
+          <FabricsCategoryNav
+            categories={categories}
+            selectedCategory={selectedCategory}
+            setSelectedCategory={setSelectedCategory}
+            page={'store'}
+            key={categories}
+          />
+        </div>
+      )}
 
       {showCollectionsSection && (
         <div className='px-20 sm:px-30 m:px-40 max-w-1440 mx-auto'>

@@ -1,7 +1,7 @@
 import { productService } from "../services/product.service";
-import { useCategoryStore } from "../store/categories.store";
+import { CATEGORY_CACHE_TTL_MS, useCategoryStore } from "../store/categories.store";
 import { ICategory, ProductCategory } from "../types/product.interface";
-import { useEffect, useState, useRef } from "react";
+import { useEffect } from "react";
 import { filtersToSearchParams } from "../utility";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { useFilterStore } from "../store/filter.store";
@@ -33,7 +33,12 @@ export const useCategories = ({
 
   //console.log('START:', { type, storeId, label, len: currentCategoryList?.length })
   useEffect(() => {
-    if (!categoriesCache[`${type}_${label}_${storeId}`]) {
+    const cacheKey = `${type}_${label}_${storeId}`;
+    const cacheEntry = categoriesCache[cacheKey];
+    const isCacheFresh =
+      !!cacheEntry && Date.now() - cacheEntry.cachedAt < CATEGORY_CACHE_TTL_MS;
+
+    if (!isCacheFresh) {
       productService
         .fetchProductCategories(type, label, storeId)
         .then((cat: ProductCategory) => {
@@ -42,10 +47,10 @@ export const useCategories = ({
         });
     } else {
       //console.log(categoriesCache[`${type}_${label}_${storeId}`])
-      setCurrentCategoryList(categoriesCache[`${type}_${label}_${storeId}`])
+      setCurrentCategoryList(cacheEntry.categories)
     }
     //console.log('EFFECT:', { type, storeId, label, len: currentCategoryList?.length })
-  }, [type, storeId, label]);
+  }, [type, storeId, label, categoriesCache, setCategoriesCache, setCurrentCategoryList]);
 
   const cat = selectedCategory[`${type}_${label}_${storeId}`] ?? {}
   const setCat = (category: ICategory) => {

@@ -19,6 +19,8 @@ export interface BaseStorefrontProps {
     profileModal: string;
     setProfileModal: React.Dispatch<React.SetStateAction<string>>;
 
+    openSavedItemsModal?: () => void;
+
     menuOpen: boolean;
     setMenuOpen: React.Dispatch<React.SetStateAction<boolean>>;
 
@@ -38,6 +40,7 @@ export interface BaseStorefrontProps {
     setOpenReviewId?: React.Dispatch<React.SetStateAction<string | null>>;
     allReviews?: IFetchedReview[];
 
+    categories?: ICategory[];
     selectedCategory?: ICategory;
     setSelectedCategory?: (category: ICategory) => void;
     handleCategoryChange?: (category: ICategory) => void;

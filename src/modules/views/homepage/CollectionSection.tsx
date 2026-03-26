@@ -32,7 +32,7 @@ interface Props {
   storeId?: string
   headingClassName?: string
   subHeadingClassName?: string
-  /* onCollectionEmptyStateChange?: (collectionId: string, isEmpty: boolean) => void */
+  onCollectionEmptyStateChange?: (collectionId: string, isEmpty: boolean) => void
 }
 
 const CollectionSection = ({
@@ -44,7 +44,7 @@ const CollectionSection = ({
   storeId = '',
   headingClassName = '',
   subHeadingClassName = '',
-  /* onCollectionEmptyStateChange, */
+  onCollectionEmptyStateChange,
 }: Props) => {
   const scrollRef1 = useRef<HTMLDivElement>(null);
 
@@ -131,13 +131,13 @@ const CollectionSection = ({
   const showShimmers = productsLoading;
   const showEmptyState = !productsLoading && !hasError && products.length === 0;
   const showProducts = !productsLoading && !hasError && products.length > 0;
-  /*  const isCollectionEmpty = collection.productCount === 0 || showEmptyState; */
+   const isCollectionEmpty = collection.productCount === 0 || showEmptyState;
   const headingHasWeightClass = /\bweight-\S+/.test(headingClassName);
   const subHeadingHasWeightClass = /\bweight-\S+/.test(subHeadingClassName);
 
-  /*  useEffect(() => {
+   useEffect(() => {
      onCollectionEmptyStateChange?.(collection.id, isCollectionEmpty);
-   }, [collection.id, isCollectionEmpty, onCollectionEmptyStateChange]); */
+   }, [collection.id, isCollectionEmpty, onCollectionEmptyStateChange]);
 
   if (collection.productCount === 0) return null;
   if (showEmptyState) return null;
