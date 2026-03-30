@@ -1,6 +1,6 @@
 import { productService } from '@/modules/lib/utility/services/product.service';
 import ProductDetails from '@/modules/views/product-details/Product-details';
-import React from 'react';
+import React, { Suspense } from 'react';
 import type { Metadata } from 'next';
 
 export async function generateMetadata({
@@ -117,7 +117,9 @@ export default async function product_details({
 
     return (
       <div>
-        <ProductDetails product={product} />
+        <Suspense fallback={null}>
+          <ProductDetails product={product} />
+        </Suspense>
       </div>
     );
   } catch (error) {
