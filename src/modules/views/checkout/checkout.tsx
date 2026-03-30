@@ -167,10 +167,9 @@ const CheckoutPage = () => {
   };
 
   useEffect(() => {
-    if (user) {
-      fetchAddresses(user?.id);
-    }
-  }, [cart]);
+    if (!user?.id) return;
+    fetchAddresses(user.id);
+  }, [user?.id, fetchAddresses]);
 
   useEffect(() => {
     const checkScreenWidth = () => {
@@ -497,7 +496,23 @@ const CheckoutPage = () => {
                                     Object.entries(
                                       cartItem.variant?.properties ?? {}
                                     ).map(([key, value]) => {
-                                      if (key === 'color' || key === 'size') return null;
+                                      if (
+                                        key === 'color' ||
+                                        key === 'size' ||
+                                        value === null ||
+                                        value === undefined ||
+                                        (typeof value === 'string' &&
+                                          value.trim() === '') ||
+                                        (Array.isArray(value) &&
+                                          value.filter(
+                                            (v) =>
+                                              String(v ?? '').trim() !== ''
+                                          ).length === 0) ||
+                                        (typeof value === 'object' &&
+                                          !Array.isArray(value) &&
+                                          Object.keys(value).length === 0)
+                                      )
+                                        return null;
                                       return (
                                         <p
                                           key={key}
