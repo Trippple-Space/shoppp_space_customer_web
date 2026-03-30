@@ -1,7 +1,11 @@
 import { Order } from '@/modules/lib/utility/types/order.interface'
 import OrderProcess from './OrderProcess'
 import { useState } from 'react'
-import { getStatusText, onGoingOrderStatus } from '@/modules/lib/utility/utility'
+import {
+  getOrderTimelineStepDate,
+  getStatusText,
+  onGoingOrderStatus
+} from '@/modules/lib/utility/utility'
 
 const OrderProgressDetails = ({
   singleOrder
@@ -17,7 +21,7 @@ const OrderProgressDetails = ({
     singleOrder.status.toUpperCase()
   )
 
- 
+
 
 
   return (
@@ -27,7 +31,7 @@ const OrderProgressDetails = ({
           <>
             <OrderProcess
               text='Order placed'
-              date={singleOrder.delivery.deliveryWindowStart}
+              date={getOrderTimelineStepDate(singleOrder, 'ONGOING')}
               active={true}
               styles='b-10 h-0 z-0'
               singleOrder={singleOrder}
@@ -45,27 +49,36 @@ const OrderProgressDetails = ({
 
             {viewTimeline && (
               <>
-                  <OrderProcess
-                    text='Pending Confirmation'
-                    date={singleOrder.delivery.deliveryWindowStart}
-                    active={singleOrder.status === 'DELIVERED'}
-                    singleOrder={singleOrder}
-                  />
                 <OrderProcess
-                  text='Your order has been recieved'
-                  date={singleOrder.delivery.deliveryWindowStart}
+                  text={getStatusText('PENDING_CONFIRMATION')}
+                  date={getOrderTimelineStepDate(
+                    singleOrder,
+                    'PENDING_CONFIRMATION'
+                  )}
                   active={singleOrder.status === 'DELIVERED'}
                   singleOrder={singleOrder}
                 />
                 <OrderProcess
-                  text='waiting to be shipped'
-                  date={singleOrder.delivery.deliveryWindowStart}
+                  text={getStatusText('ACKNOWLEDGED')}
+                  date={getOrderTimelineStepDate(singleOrder, 'ACKNOWLEDGED')}
                   active={singleOrder.status === 'DELIVERED'}
                   singleOrder={singleOrder}
                 />
                 <OrderProcess
-                  text='Out for delivery'
-                  date={singleOrder.delivery.deliveryWindowStart}
+                  text={getStatusText('WAITING_TO_BE_SHIPPED')}
+                  date={getOrderTimelineStepDate(
+                    singleOrder,
+                    'WAITING_TO_BE_SHIPPED'
+                  )}
+                  active={singleOrder.status === 'DELIVERED'}
+                  singleOrder={singleOrder}
+                />
+                <OrderProcess
+                  text={getStatusText('OUT_FOR_DELIVERY')}
+                  date={getOrderTimelineStepDate(
+                    singleOrder,
+                    'OUT_FOR_DELIVERY'
+                  )}
                   active={singleOrder.status === 'DELIVERED'}
                   singleOrder={singleOrder}
                 />
@@ -74,7 +87,7 @@ const OrderProgressDetails = ({
 
             <OrderProcess
               text='Delivered'
-              date={singleOrder.delivery.deliveryWindowStart}
+              date={getOrderTimelineStepDate(singleOrder, 'DELIVERED')}
               active={true}
               styles='t-0 h-50'
               singleOrder={singleOrder}
@@ -84,14 +97,18 @@ const OrderProgressDetails = ({
           <>
             <OrderProcess
               text='Order placed'
-              date={singleOrder.delivery.createAt}
+              date={getOrderTimelineStepDate(singleOrder, 'ONGOING')}
               active={true}
               styles='b-10 h-200 z-0'
               singleOrder={singleOrder}
             />
             <OrderProcess
               text='Cancelled-Payment Unsuccessful'
-              date={singleOrder.delivery.deliveryWindowStart}
+              date={
+                singleOrder.cancelledAt ??
+                singleOrder.updatedAt ??
+                getOrderTimelineStepDate(singleOrder, 'ONGOING')
+              }
               active={true}
               styles='t-0 h-60 bg-#D4280C weight-600 overflow'
               singleOrder={singleOrder}
@@ -110,7 +127,11 @@ const OrderProgressDetails = ({
               <OrderProcess
                 key={index}
                 text={getStatusText(status)}
-                date={singleOrder.delivery.deliveryWindowStart}
+                date={
+                  currentStatusIndex >= 0 && index <= currentStatusIndex
+                    ? getOrderTimelineStepDate(singleOrder, status)
+                    : ''
+                }
                 active={index <= currentStatusIndex}
                 singleOrder={singleOrder}
                 styles={index === 0 ? 'b-1 z-0' : 't-0 h-80'}
