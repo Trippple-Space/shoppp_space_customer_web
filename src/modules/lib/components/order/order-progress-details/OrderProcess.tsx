@@ -1,5 +1,9 @@
 import { Order } from '@/modules/lib/utility/types/order.interface'
-import { formatDate } from '@/modules/lib/utility/utility'
+import {
+  formatDate,
+  isValidTimelineDate,
+  parseApiInstant
+} from '@/modules/lib/utility/utility'
 import classNames from 'classnames'
 import { PiDotsThreeOutline } from 'react-icons/pi'
 import Modal from '../../modal/modal'
@@ -179,9 +183,11 @@ const OrderProcess = ({
             >
               {text}
             </p>
-            <p className={classNames(`text-12 text-danger`)}>
-              {formatDate(new Date(date))}
-            </p>
+            {isValidTimelineDate(date) && (
+              <p className={classNames(`text-12 text-danger`)}>
+                {formatDate(parseApiInstant(date))}
+              </p>
+            )}
           </>
         ) : (
           <p
@@ -194,16 +200,18 @@ const OrderProcess = ({
           </p>
         )}
 
-        {!isTimelineView && text !== 'Cancelled-Payment Unsuccessful' && (
-          <p
-            className={classNames(`text-12`, {
-              'color-#00000066': !active,
-              'color-#00000099': active
-            })}
-          >
-            {formatDate(new Date(date))}
-          </p>
-        )}
+        {!isTimelineView &&
+          text !== 'Cancelled-Payment Unsuccessful' &&
+          isValidTimelineDate(date) && (
+            <p
+              className={classNames(`text-12`, {
+                'color-#00000066': !active,
+                'color-#00000099': active
+              })}
+            >
+              {formatDate(parseApiInstant(date))}
+            </p>
+          )}
 
         {singleOrder.status === 'ONGOING' && text === 'Order placed' && (
           <>
