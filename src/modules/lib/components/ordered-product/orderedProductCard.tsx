@@ -61,7 +61,22 @@ function orderedProductCard({ orderedProducts }: any) {
                       {item?.variant?.properties &&
                         Object.entries(item.variant?.properties).map(
                           ([key, value]) => {
-                            if (key === 'color' || key === 'size') return null;
+                            if (
+                              key === 'color' ||
+                              key === 'size' ||
+                              value === null ||
+                              value === undefined ||
+                              (typeof value === 'string' &&
+                                value.trim() === '') ||
+                              (Array.isArray(value) &&
+                                value.filter(
+                                  (v) => String(v ?? '').trim() !== ''
+                                ).length === 0) ||
+                              (typeof value === 'object' &&
+                                !Array.isArray(value) &&
+                                Object.keys(value).length === 0)
+                            )
+                              return null;
                             return (
                               <p
                                 key={key}
@@ -77,7 +92,7 @@ function orderedProductCard({ orderedProducts }: any) {
                 </div>
                 <div className="flex space-between flex-row-reverse l:grid gap-5 pt-5 border-t border-t-#00000014 l:border-none">
                   <p className="text-14 weight-500">
-                    {formatNumberAsPrice(item.totalPrice)}
+                    {formatNumberAsPrice(item?.discountedPrice || item.totalPrice)}
                   </p>
                   <p className="text-12 text-right"> X {item.quantity}</p>
                 </div>
