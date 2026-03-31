@@ -92,7 +92,7 @@ function orderedProductCard({ orderedProducts }: any) {
                 </div>
                 <div className="flex space-between flex-row-reverse l:grid gap-5 pt-5 border-t border-t-#00000014 l:border-none">
                   <p className="text-14 weight-500">
-                    {formatNumberAsPrice(item.totalPrice)}
+                    {formatNumberAsPrice(item?.discountedPrice || item.totalPrice)}
                   </p>
                   <p className="text-12 text-right"> X {item.quantity}</p>
                 </div>

@@ -100,7 +100,7 @@ const OrderProgressCard = ({ orders }: OrderProgressProp) => {
                         Total Amount
                       </p>
                       <p className='color-black text-right weight-600'>
-                        {formatNumberAsPrice(order?.cart?.total)}
+                        {formatNumberAsPrice(order?.totalDiscountPrice || order?.totalAmount)}
                       </p>
                     </div>
                   </div>

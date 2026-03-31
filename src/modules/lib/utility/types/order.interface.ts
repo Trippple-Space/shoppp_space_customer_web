@@ -30,6 +30,8 @@ export interface Order {
      delivery: Delivery;
      deliveryFee: number;
      totalAmount: number;
+     totalDiscountPrice?: number;
+     totalDiscountValue?: number;
      cancellationReason: string | null;
      createdAt?: string;
      updatedAt?: string;
