@@ -102,10 +102,23 @@ const CentralArena = ({ selectedCategory, setSelectedCategory, hasCollections, c
           </div>
         ) : (
           <div className="mt-60 bg-white grid-col-span-5 text-center">
-            <NoResultMessage
-              textContent={`It seems we can’t find any results based on your ${search ? 'search.' : 'filters.'}`}
-              contentTitle="No results found"
-            />
+            {selectedCategory || search ? (
+              <NoResultMessage
+                textContent={`Hey lovelies 🤍
+We couldn’t find what you’re looking for right now.
+
+Asoebi Africa has just launched and we’re currently onboarding vendors across Lagos. If you can’t find what you’re searching for yet, chances are you’ll find it the next time you check.
+
+Your convenience is our priority.`}
+                contentTitle="Nothing here just yet"
+                contentStyle={{maxWidth: '500px'}}
+              />
+            ) : (
+              <NoResultMessage
+                textContent={`It seems we can’t find any results based on your ${search ? 'search.' : 'filters.'}`}
+                contentTitle="No results found"
+              />
+            )}
           </div>
         )}
 
