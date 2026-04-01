@@ -62,27 +62,6 @@ const Homepage = ({
     subcategories: [],
   };
 
-  /* useEffect(() => {
-    const categoryFromUrl = searchParams.get('category');
-    const hasSearchOrCollection = searchParams.get('search') || searchParams.get('collection');
-    const selectedName = (selectedCategory?.name || '').trim().toLowerCase();
-
-    if (categoryFromUrl) {
-      const normalizedCategory = categoryFromUrl.trim().toLowerCase();
-      if (selectedName !== normalizedCategory) {
-        setSelectedCategory({
-          ...selectedCategory,
-          name: normalizedCategory,
-          filters: { name: normalizedCategory },
-        });
-      }
-    } else if (hasSearchOrCollection) {
-      if (selectedName) {
-        setSelectedCategory(EMPTY_CATEGORY);
-      }
-    }
-  }, [searchParams, selectedCategory, setSelectedCategory]); */
-
   useEffect(() => {
     const categoryFromUrl = searchParams.get('category');
     const hasSearchOrCollection = searchParams.get('search') || searchParams.get('collection');

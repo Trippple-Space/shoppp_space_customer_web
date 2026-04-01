@@ -102,7 +102,7 @@ const CentralArena = ({ selectedCategory, setSelectedCategory, hasCollections, c
           </div>
         ) : (
           <div className="mt-60 bg-white grid-col-span-5 text-center">
-            {selectedCategory || search ? (
+            {selectedCategory || search || type === 'fabrics' ? (
               <NoResultMessage
                 textContent={`Hey lovelies 🤍
 We couldn’t find what you’re looking for right now.
@@ -111,7 +111,7 @@ Asoebi Africa has just launched and we’re currently onboarding vendors across 
 
 Your convenience is our priority.`}
                 contentTitle="Nothing here just yet"
-                contentStyle={{maxWidth: '500px'}}
+                contentStyle={{ maxWidth: '500px' }}
               />
             ) : (
               <NoResultMessage
