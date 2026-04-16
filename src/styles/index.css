@@ -834,6 +834,7 @@
 .max-w-100p { max-width: 100%; } 
 .w-48 { width: 48px; } 
 .h-48 { height: 48px; } 
+.gap-38 { gap: 38px; } 
 .mt--30 { margin-top: -30px; } 
 @layer base {.radius-16 { border-radius: 16px; } } 
 .border-whitesmoke { border-color: #F5F5F5; } 
@@ -1199,6 +1200,7 @@
 @media only screen and (min-width: 576px) { .s\:text-18 { font-size: 18px; } } 
 @media only screen and (min-width: 576px) { .s\:grid-3-cols-1fr { grid-template-columns: repeat(3, 1fr); } } 
 @media only screen and (min-width: 576px) { .s\:gap-20 { gap: 20px; } } 
+@media only screen and (min-width: 576px) { .s\:gap-40 { gap: 40px; } } 
 @media only screen and (min-width: 576px) { .s\:py-25 { padding-top: 25px; padding-bottom: 25px; } } 
 @media only screen and (min-width: 576px) { .s\:px-15 { padding-left: 15px; padding-right: 15px; } } 
 @media only screen and (min-width: 576px) { .s\:gap-15 { gap: 15px; } } 
@@ -1316,6 +1318,7 @@
 @media only screen and (min-width: 768px) { .md\:line-height-22 { line-height: 22px; } } 
 @media only screen and (min-width: 768px) { .md\:px-40 { padding-left: 40px; padding-right: 40px; } } 
 @media only screen and (min-width: 768px) { .md\:mt-32 { margin-top: 32px; } } 
+@media only screen and (min-width: 768px) { .md\:gap-44 { gap: 44px; } } 
 @media only screen and (min-width: 768px) { .md\:mt-30 { margin-top: 30px; } } 
 @media only screen and (min-width: 768px) { .md\:mx-30 { margin-left: 30px; margin-right: 30px; } } 
 @media only screen and (min-width: 768px) { .md\:px-50 { padding-left: 50px; padding-right: 50px; } } 
