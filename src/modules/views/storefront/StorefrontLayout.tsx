@@ -48,7 +48,7 @@ const StorefrontLayout: FC<{
           <div className="">{children}</div>
 
           {!!categories?.length && (
-            <div className="sm:py-20 py-16">
+            <div className="sm:py-20 py-16 max-w-1440 mx-auto">
               <FabricsCategoryNav
                 categories={categories}
                 selectedCategory={selectedCategory}
