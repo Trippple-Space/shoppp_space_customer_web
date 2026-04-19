@@ -59,15 +59,23 @@ const CollectionSection = ({
   const isLimited = /limited|limit/.test(nameLower);
   const fallbackTheme = isLimited ? redTheme : otherThemes[index % otherThemes.length];
   const layoutConfig = collection.meta?.simpleLayoutView ?? {};
+  const configuredProductsToShow = layoutConfig.productsToShow;
+  const hasExplicitProductsToShow = configuredProductsToShow != null;
   const theme = {
     bg: layoutConfig.bgColor || fallbackTheme.bg,
     button: layoutConfig.buttonColor || fallbackTheme.button,
     text: layoutConfig.buttonTextColor || fallbackTheme.text,
   };
   const productsToShow = Math.min(
-    Math.max(layoutConfig.productsToShow ?? DEFAULT_PRODUCTS_TO_SHOW, 1),
+    Math.max(configuredProductsToShow ?? DEFAULT_PRODUCTS_TO_SHOW, 1),
     MAX_PRODUCTS_TO_SHOW
   );
+  const productFetchLimit = hasExplicitProductsToShow
+    ? productsToShow + 1
+    : 11;
+  const showMoreThreshold = hasExplicitProductsToShow
+    ? productsToShow
+    : DEFAULT_PRODUCTS_TO_SHOW;
   const layoutRows = Math.min(
     Math.max(layoutConfig.layoutRows ?? 1, 1),
     MAX_LAYOUT_ROWS
@@ -104,7 +112,7 @@ const CollectionSection = ({
     {
       filters: { ...(isStoreBased ? {} : { type }), status: { In: "ACTIVE,OUT_OF_STOCK" }, channel: "ASOEBI_STORE" },
       order: { priorityScore: "DESC", createdAt: "DESC" },
-      pagination: { page: 1, limit: Math.max(productsToShow, 11) },
+      pagination: { page: 1, limit: productFetchLimit },
       allFilters: initialFiltersForCollection,
       search: searchFromPath || undefined,
     },
@@ -199,7 +207,7 @@ const CollectionSection = ({
           </p>
         </div>
 
-        {!loading && !hasError && products?.length > 10 && (
+        {!loading && !hasError && products?.length > showMoreThreshold && (
           <p
             onClick={() => {
               handleShowMore(collection.slug)
