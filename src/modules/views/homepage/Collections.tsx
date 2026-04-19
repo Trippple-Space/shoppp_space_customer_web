@@ -1,6 +1,6 @@
 import { useCollections } from '@/modules/lib/utility/hooks/use-collections';
 import CollectionSection from './CollectionSection';
-import { useEffect, useRef, useState } from 'react';
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { ICollection } from '@/modules/lib/utility/types/collection.interface';
 import { TbAlertCircle, TbRefresh } from 'react-icons/tb';
 import Button from '@/modules/lib/components/button/Button';
@@ -17,7 +17,7 @@ const Collections = ({
   subHeadingClassName = '',
   hasMargin = '',
   hasAppWidth = true,
-  /* onAllCollectionsEmptyChange, */
+  onAllCollectionsEmptyChange,
 }: {
   storeId: string;
   initialCollections?: ICollection[];
@@ -29,7 +29,7 @@ const Collections = ({
   subHeadingClassName?: string;
   hasMargin?: string;
   hasAppWidth?: boolean;
-  /* onAllCollectionsEmptyChange?: (allEmpty: boolean) => void; */
+  onAllCollectionsEmptyChange?: (allEmpty: boolean) => void;
 }) => {
   const { collections, loading: loadingCollections, error, retry } = useCollections({
     storeId,
@@ -38,18 +38,28 @@ const Collections = ({
   });
 
   const [selectedCollection, setSelectedCollection] = useState<string | null>(null);
-  /* const [collectionEmptyState, setCollectionEmptyState] = useState<Record<string, boolean>>({}); */
+  const [collectionEmptyState, setCollectionEmptyState] = useState<Record<string, boolean>>({});
   const onCollectionsLoadedRef = useRef(onCollectionsLoaded);
   onCollectionsLoadedRef.current = onCollectionsLoaded;
 
-  /*  useEffect(() => {
-     setCollectionEmptyState(
-       collections.reduce<Record<string, boolean>>((acc, collection) => {
-         acc[collection.id] = collection.productCount === 0;
-         return acc;
-       }, {})
-     );
-   }, [collections]); */
+  const handleCollectionEmptyStateChange = useCallback(
+    (collectionId: string, isEmpty: boolean) => {
+      setCollectionEmptyState((prev) => {
+        if (prev[collectionId] === isEmpty) return prev;
+        return { ...prev, [collectionId]: isEmpty };
+      });
+    },
+    []
+  );
+
+  useEffect(() => {
+    setCollectionEmptyState(
+      collections.reduce<Record<string, boolean>>((acc, collection) => {
+        acc[collection.id] = collection.productCount === 0;
+        return acc;
+      }, {})
+    );
+  }, [collections]);
 
   useEffect(() => {
     if (collections.length > 0) {
@@ -73,11 +83,50 @@ const Collections = ({
     }
   }, [loadingCollections, setCollectionsLoaded]);
 
-  /* const allCollectionsEmpty =
+  const allCollectionsEmpty =
     collections.length > 0 && collections.every((collection) => collectionEmptyState[collection.id] === true);
-  const visibleCollectionIds = collections
+  const sortedCollections = [...collections].sort((a, b) => {
+    const aPriority = a.meta?.simpleLayoutView?.priorityScore;
+    const bPriority = b.meta?.simpleLayoutView?.priorityScore;
+    if (typeof aPriority === 'number' && typeof bPriority === 'number') {
+      return aPriority - bPriority;
+    }
+    if (typeof aPriority === 'number') return -1;
+    if (typeof bPriority === 'number') return 1;
+    return 0;
+  });
+  const visibleCollectionIds = sortedCollections
     .filter((collection) => !collectionEmptyState[collection.id])
     .map((collection) => collection.id);
+  const visibleCollections = sortedCollections.filter(
+    (collection) => !collectionEmptyState[collection.id]
+  );
+  const shouldSpanByCollectionId = useMemo(() => {
+    const spanMap: Record<string, boolean> = {};
+    let currentRowCol = 0;
+
+    visibleCollections.forEach((collection, index) => {
+      const isForced = collection.meta?.simpleLayoutView?.shouldSpanFullWidth === true;
+      const nextIsForced =
+        visibleCollections[index + 1]?.meta?.simpleLayoutView?.shouldSpanFullWidth === true;
+      let shouldSpan = isForced;
+
+      // Prevent a single half-width card sitting above a forced full-width row.
+      if (!isForced && nextIsForced && currentRowCol === 0) {
+        shouldSpan = true;
+      }
+
+      if (shouldSpan) {
+        currentRowCol = 0;
+      } else {
+        currentRowCol = currentRowCol === 0 ? 1 : 0;
+      }
+
+      spanMap[collection.id] = shouldSpan;
+    });
+
+    return spanMap;
+  }, [visibleCollections]);
 
   useEffect(() => {
     onAllCollectionsEmptyChange?.(allCollectionsEmpty);
@@ -92,15 +141,13 @@ const Collections = ({
     !allCollectionsEmpty && !isStoreBased && "md:mt-32 mt-24",
     !allCollectionsEmpty && hasMargin,
     "flex flex-col"
-  ); */
-
-  {/* <div className={containerClassName}> */ }
+  );
 
   if (loadingCollections) return null;
 
   if (error && collections.length === 0) {
     return (
-      <div className={`${!isStoreBased ? 'md:mt-32 mt-24 w-100p' : `${hasAppWidth ? 'app-width max-w-1440 mx-auto' : ''}`} ${hasMargin} flex flex-col`}>
+      <div className={containerClassName}>
         <div
           className="flex flex-col items-center justify-center gap-20 py-48 px-24 rounded-16 bg-#FAFAFA"
           role="alert"
@@ -128,24 +175,15 @@ const Collections = ({
 
   return (
     collections.length > 0 ? (
-      <div className={`${!isStoreBased ? 'md:mt-32 mt-24 w-100p' : `${hasAppWidth ? 'app-width max-w-1440 mx-auto' : ''}`} ${hasMargin} flex flex-col`}>
+      <div className={containerClassName}>
         <div className='grid md:gap-24 gap-20 lg:grid-2-cols-1fr'>
-          {collections.map((collection, index) => {
-            /* const visibleIndex = visibleCollectionIds.indexOf(collection.id);
+          {sortedCollections.map((collection, index) => {
+            const visibleIndex = visibleCollectionIds.indexOf(collection.id);
             const isVisible = visibleIndex !== -1;
-            const isLastVisible = visibleIndex === visibleCollectionIds.length - 1;
-            const hasOddVisibleCount = visibleCollectionIds.length % 2 === 1;
-            const shouldSpan = isVisible && isLastVisible && hasOddVisibleCount; */
-
-            {/* <div key={collection.id} className={cx(shouldSpan && 'lg:grid-col-span-2', !isVisible && 'hidden')} style={{
-              minWidth: 0
-            }}>
- */}
-            const isLast = index === collections.length - 1;
-            const isOdd = collections.length % 2 === 1;
+            const shouldSpan = shouldSpanByCollectionId[collection.id] === true;
 
             return (
-              <div key={collection.id} className={isLast && isOdd ? 'lg:grid-col-span-2' : ''} style={{
+              <div key={collection.id} className={cx(shouldSpan && 'lg:grid-col-span-2', !isVisible && 'hidden')} style={{
                 minWidth: 0
               }}>
                 <CollectionSection
@@ -157,12 +195,7 @@ const Collections = ({
                   storeId={storeId}
                   headingClassName={headingClassName}
                   subHeadingClassName={subHeadingClassName}
-                /* onCollectionEmptyStateChange={(collectionId, isEmpty) => {
-                  setCollectionEmptyState((prev) => {
-                    if (prev[collectionId] === isEmpty) return prev;
-                    return { ...prev, [collectionId]: isEmpty };
-                  });
-                }} */
+                  onCollectionEmptyStateChange={handleCollectionEmptyStateChange}
                 />
               </div>
             )

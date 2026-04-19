@@ -5,6 +5,15 @@ export interface ICollectionMeta {
     season?: string;
     tags?: string[];
     displayOrder?: number;
+    simpleLayoutView?: {
+        bgColor?: string;
+        buttonColor?: string;
+        buttonTextColor?: 'white' | 'black';
+        shouldSpanFullWidth?: boolean;
+        priorityScore?: number;
+        layoutRows?: number;
+        productsToShow?: number;
+    };
 }
 
 export interface IStore {

@@ -1,6 +1,10 @@
 import Image from '../image/Image'
 import Icon from '../icon/Icon'
-import { formatDate, formatNumberAsPrice } from '../../utility/utility'
+import {
+  formatDate,
+  formatNumberAsPrice,
+  parseApiInstant
+} from '../../utility/utility'
 import { useCart } from '../../utility/hooks/use-cart'
 import QuantitySelector from '../quantity-selector/QuantitySelector'
 import { SavedVariant } from '../../utility/types/SavedVariant.interface'
@@ -45,7 +49,11 @@ const SavedVariantsCard: React.FC<any> = ({ savedVariant, removeSavedVariant, re
         <div className='line-height-28'>
           <h2 className='text-16 l:text-18 weight-400 text-grey-900'>{savedVariant?.variant.product?.name || recentVariant?.productVariant.product?.name}</h2>
           <h1 className='text-16 weight-400 text-grey-900'>{formatNumberAsPrice(savedVariant?.variant.product?.price ?? 0) || formatNumberAsPrice(recentVariant?.productVariant.product?.price ?? 0)}</h1>
-          <p className='text-12'>{savedVariant ? formatDate(new Date(savedVariant?.savedAt)) : formatDate(new Date(recentVariant.createdAt))}</p>
+          <p className='text-12'>
+            {savedVariant
+              ? formatDate(parseApiInstant(savedVariant?.savedAt))
+              : formatDate(parseApiInstant(recentVariant.createdAt))}
+          </p>
 
           {
             showRemove &&

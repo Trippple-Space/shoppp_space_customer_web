@@ -8,7 +8,7 @@ import {
   getClosestColorName,
 } from '@/modules/lib/utility/utility';
 import { useRouter } from 'next/navigation';
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { paths } from '../../utility/paths';
 import { CartItem } from '../../utility/types/cart.interface';
 import {
@@ -58,13 +58,39 @@ const MiniCart: React.FC<ModalProps> = ({
 
   const { signOut } = useNavbarView();
   const { isAuthenticated } = useUserStore();
+  const hasFetchedCartAfterAuth = useRef(false);
+  const hasFetchedCartForCurrentOpen = useRef(false);
 
   useEffect(() => {
-    if (isAuthenticated) {
-      removeDiscountCode();
-      fetchCart();
+    if (!isAuthenticated) {
+      hasFetchedCartAfterAuth.current = false;
+      return;
     }
-  }, [open]);
+
+    if (hasFetchedCartAfterAuth.current) return;
+
+    hasFetchedCartAfterAuth.current = true;
+    removeDiscountCode();
+    fetchCart();
+  }, [isAuthenticated, removeDiscountCode, fetchCart]);
+
+  useEffect(() => {
+    if (!isAuthenticated) {
+      hasFetchedCartForCurrentOpen.current = false;
+      return;
+    }
+
+    if (!open) {
+      hasFetchedCartForCurrentOpen.current = false;
+      return;
+    }
+
+    if (hasFetchedCartForCurrentOpen.current) return;
+
+    hasFetchedCartForCurrentOpen.current = true;
+    removeDiscountCode();
+    fetchCart();
+  }, [open, isAuthenticated, removeDiscountCode, fetchCart]);
 
   const checkoutCart = () => {
     cart.cartItems

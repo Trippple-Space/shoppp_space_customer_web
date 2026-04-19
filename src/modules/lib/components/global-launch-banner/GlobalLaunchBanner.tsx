@@ -10,6 +10,7 @@ const TARGET_DATE = new Date('2026-03-30T00:00:00');
 
 export default function GlobalLaunchBanner() {
   const [showBanner, setShowBanner] = useState(false);
+  const [isBeforeLaunch, setIsBeforeLaunch] = useState(true);
   const [timeLeft, setTimeLeft] = useState('');
 
   useEffect(() => {
@@ -27,6 +28,8 @@ export default function GlobalLaunchBanner() {
     const updateCountdown = () => {
       const now = new Date().getTime();
       const distance = TARGET_DATE.getTime() - now;
+
+      setIsBeforeLaunch(distance > 0);
 
       if (distance <= 0) {
         setTimeLeft('00 : 00 : 00 : 00');
@@ -51,7 +54,7 @@ export default function GlobalLaunchBanner() {
     return () => clearInterval(interval);
   }, []);
 
-  if (!showBanner) return null;
+  if (!isBeforeLaunch || !showBanner) return null;
 
   return (
     <div
