@@ -86,14 +86,31 @@ const Collections = ({
   const allCollectionsEmpty =
     collections.length > 0 && collections.every((collection) => collectionEmptyState[collection.id] === true);
   const sortedCollections = [...collections].sort((a, b) => {
-    const aPriority = a.meta?.simpleLayoutView?.priorityScore;
-    const bPriority = b.meta?.simpleLayoutView?.priorityScore;
-    if (typeof aPriority === 'number' && typeof bPriority === 'number') {
-      return aPriority - bPriority;
+    const toPriority = (value: unknown): number | null => {
+      if (typeof value === 'number' && Number.isFinite(value)) return value;
+      if (typeof value === 'string' && value.trim() !== '') {
+        const parsed = Number(value);
+        if (Number.isFinite(parsed)) return parsed;
+      }
+      return null;
+    };
+
+    const aPriority = toPriority(a.meta?.simpleLayoutView?.priorityScore);
+    const bPriority = toPriority(b.meta?.simpleLayoutView?.priorityScore);
+
+    // Higher priorityScore should render first.
+    if (aPriority !== null && bPriority !== null) {
+      if (bPriority !== aPriority) return bPriority - aPriority;
+    } else if (aPriority !== null) {
+      return -1;
+    } else if (bPriority !== null) {
+      return 1;
     }
-    if (typeof aPriority === 'number') return -1;
-    if (typeof bPriority === 'number') return 1;
-    return 0;
+
+    // Keep ordering deterministic when priority is same/missing.
+    const aCreatedAt = new Date(a.createdAt ?? 0).getTime();
+    const bCreatedAt = new Date(b.createdAt ?? 0).getTime();
+    return bCreatedAt - aCreatedAt;
   });
   const visibleCollectionIds = sortedCollections
     .filter((collection) => !collectionEmptyState[collection.id])
