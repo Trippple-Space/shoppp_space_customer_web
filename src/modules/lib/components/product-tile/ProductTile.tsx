@@ -598,7 +598,7 @@ const ProductTile: FC<IProductTile> = ({
   );
 
   return (
-    <div className="mt-30 l:mt-20 w-full overflow-hidden">
+    <div className="mt-30 l:mt-20 w-full min-w-0 overflow-hidden">
       {showOnBoardingModal && indexCount && (
         <div
           onClick={(e) => e.stopPropagation()}

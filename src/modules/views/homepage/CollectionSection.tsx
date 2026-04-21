@@ -4,7 +4,7 @@ import {
 import ProductTile from '@/modules/lib/components/product-tile/ProductTile';
 import ProductTileShimmer from '@/modules/lib/components/product-tile/ProductTileShimmer';
 import ScrollButtons from '@/modules/lib/components/scroll-buttons/scrollButtons';
-import { useEffect, useRef } from 'react';
+import { useEffect, useMemo, useRef } from 'react';
 import { ICollection } from '@/modules/lib/utility/types/collection.interface';
 import { useFilterStore } from '@/modules/lib/utility/store/filter.store';
 import { useCategories } from '@/modules/lib/utility/hooks/use-categories';
@@ -22,6 +22,9 @@ const otherThemes = [
   { bg: "#F4F0FF", button: "#7B61FF", text: 'white' as const }, // purple
   { bg: "#ECFFF6", button: "#00B96B", text: 'white' as const }, // green
 ];
+const DEFAULT_PRODUCTS_TO_SHOW = 10;
+const MAX_PRODUCTS_TO_SHOW = 30;
+const MAX_LAYOUT_ROWS = 5;
 
 interface Props {
   collection: ICollection;
@@ -46,7 +49,7 @@ const CollectionSection = ({
   subHeadingClassName = '',
   onCollectionEmptyStateChange,
 }: Props) => {
-  const scrollRef1 = useRef<HTMLDivElement>(null);
+  const scrollRefs = useRef<Array<HTMLDivElement | null>>([]);
 
   const pathname = usePathname();
   const router = useRouter();
@@ -54,7 +57,32 @@ const CollectionSection = ({
 
   const nameLower = (collection.name ?? '').toLowerCase();
   const isLimited = /limited|limit/.test(nameLower);
-  const theme = isLimited ? redTheme : otherThemes[index % otherThemes.length];
+  const fallbackTheme = isLimited ? redTheme : otherThemes[index % otherThemes.length];
+  const layoutConfig = collection.meta?.simpleLayoutView ?? {};
+  const configuredProductsToShow = layoutConfig.productsToShow;
+  const hasExplicitProductsToShow = configuredProductsToShow != null;
+  const theme = {
+    bg: layoutConfig.bgColor || fallbackTheme.bg,
+    button: layoutConfig.buttonColor || fallbackTheme.button,
+    text: layoutConfig.buttonTextColor || fallbackTheme.text,
+  };
+  const productsToShow = Math.min(
+    Math.max(configuredProductsToShow ?? DEFAULT_PRODUCTS_TO_SHOW, 1),
+    MAX_PRODUCTS_TO_SHOW
+  );
+  const productFetchLimit = hasExplicitProductsToShow
+    ? productsToShow + 1
+    : 11;
+  const showMoreThreshold = hasExplicitProductsToShow
+    ? productsToShow
+    : DEFAULT_PRODUCTS_TO_SHOW;
+  const horizontalScroll = layoutConfig.horizontalScroll !== false;
+  const shouldSpan = layoutConfig.shouldSpanFullWidth === true;
+  const layoutRows = Math.min(
+    Math.max(layoutConfig.layoutRows ?? 1, 1),
+    MAX_LAYOUT_ROWS
+  );
+  const effectiveLayoutRows = horizontalScroll ? layoutRows : 1;
   const type = pathname.includes('wears') ? 'wears' : 'fabrics';
   const categoryLabel = isStoreBased ? 'STORE' : 'GLOBAL';
 
@@ -87,7 +115,7 @@ const CollectionSection = ({
     {
       filters: { ...(isStoreBased ? {} : { type }), status: { In: "ACTIVE,OUT_OF_STOCK" }, channel: "ASOEBI_STORE" },
       order: { priorityScore: "DESC", createdAt: "DESC" },
-      pagination: { page: 1, limit: 11 },
+      pagination: { page: 1, limit: productFetchLimit },
       allFilters: initialFiltersForCollection,
       search: searchFromPath || undefined,
     },
@@ -125,12 +153,25 @@ const CollectionSection = ({
     router.replace(`${pathname}?${params.toString()}`);
   };
 
-  const shimmerCount = Math.min(collection.productCount ?? 10, 10);
+  const shimmerCount = Math.min(collection.productCount ?? productsToShow, productsToShow);
   const hasError = !!fetchingError;
   const productsLoading = loading;
   const showShimmers = productsLoading;
   const showEmptyState = !productsLoading && !hasError && products.length === 0;
   const showProducts = !productsLoading && !hasError && products.length > 0;
+  const displayedProducts = useMemo(
+    () => products?.slice(0, productsToShow) ?? [],
+    [products, productsToShow]
+  );
+  const productsPerRow = Math.max(1, Math.ceil(displayedProducts.length / effectiveLayoutRows));
+  const productRows = useMemo(
+    () =>
+      Array.from({ length: effectiveLayoutRows }, (_, rowIndex) =>
+        displayedProducts.slice(rowIndex * productsPerRow, (rowIndex + 1) * productsPerRow)
+      ).filter((row) => row.length > 0),
+    [displayedProducts, effectiveLayoutRows, productsPerRow]
+  );
+  const shimmerPerRow = Math.max(1, Math.ceil(shimmerCount / effectiveLayoutRows));
    const isCollectionEmpty = collection.productCount === 0 || showEmptyState;
   const headingHasWeightClass = /\bweight-\S+/.test(headingClassName);
   const subHeadingHasWeightClass = /\bweight-\S+/.test(subHeadingClassName);
@@ -169,7 +210,7 @@ const CollectionSection = ({
           </p>
         </div>
 
-        {!loading && !hasError && products?.length > 10 && (
+        {!loading && !hasError && products?.length > showMoreThreshold && (
           <p
             onClick={() => {
               handleShowMore(collection.slug)
@@ -184,68 +225,87 @@ const CollectionSection = ({
         )}
 
       </div>
-      <div className="scroll-x no-scrollbar" ref={scrollRef1}>
+      {hasError ? (
         <div
-          className={`flex h-fit ${showShimmers && shimmerCount > 0 ? 'w-fit' : showProducts ? 'w-fit' : showEmptyState ? 'w-100p a-items-center j-content-center' : ''
-            } whitespace-nowrap sm:gap-20 gap-14`}
+          className="flex flex-col a-items-center j-content-center gap-20 py-40 px-24 radius-12 border border-#E8E8E8 bg-#FAFAFA min-w-280 max-w-100p"
+          role="alert"
+          aria-live="polite"
         >
-          {hasError ? (
-            <div
-              className="flex flex-col a-items-center j-content-center gap-20 py-40 px-24 radius-12 border border-#E8E8E8 bg-#FAFAFA min-w-280 max-w-100p"
-              role="alert"
-              aria-live="polite"
-            >
-              <span className="flex a-items-center j-content-center w-48 h-48 radius-999 bg-#FFF3F1 color-#D4280C">
-                <TbAlertCircle className="w-28 h-28" aria-hidden />
-              </span>
-              <div className="flex flex-col a-items-center gap-8 text-center">
-                <h4 className="text-16 weight-600 color-#000000E0">
-                  Couldn’t load products
-                </h4>
-                <p className="text-14 weight-400 color-#00000099">
-                  Something went wrong loading this collection. Try again.
-                </p>
-              </div>
+          <span className="flex a-items-center j-content-center w-48 h-48 radius-999 bg-#FFF3F1 color-#D4280C">
+            <TbAlertCircle className="w-28 h-28" aria-hidden />
+          </span>
+          <div className="flex flex-col a-items-center gap-8 text-center">
+            <h4 className="text-16 weight-600 color-#000000E0">
+              Couldn’t load products
+            </h4>
+            <p className="text-14 weight-400 color-#00000099">
+              Something went wrong loading this collection. Try again.
+            </p>
+          </div>
 
-              <Button onClick={() => refetch()} className="px-24 py-8 min-w-120 flex items-center justify-center gap-8">
-                <TbRefresh className="w-18 h-18" aria-hidden />
-                Try again
-              </Button>
-            </div>
-          ) : showShimmers ? (
-            Array.from({ length: shimmerCount }, (_, i) => (
-              <ProductTileShimmer key={`shimmer-${collection.id}-${i}`} isStoreBased={isStoreBased} />
-            ))
-          ) : showProducts ? (
-            products?.slice(0, 10).map((product, i) => (
-              <div
-                key={i}
-                className="l:w-290 md:w-250 sm:w-220 w-150 l:mt--20 mt--30"
-              >
-                <ProductTile
-                  product={product}
-                  key={i}
-                  id={product.id}
-                  addToCartVariant="icon"
-                  isStoreBased={isStoreBased}
-                  selectedCategory={selectedCategory}
-                  setSelectedCategory={setSelectedCategory}
-                />
-              </div>
-            ))
-          ) : null}
+          <Button onClick={() => refetch()} className="px-24 py-8 min-w-120 flex items-center justify-center gap-8">
+            <TbRefresh className="w-18 h-18" aria-hidden />
+            Try again
+          </Button>
         </div>
-      </div>
-      {
-        products.length > 0 && (
-          <ScrollButtons
-            scrollRef={scrollRef1}
-            page={'productScroll'}
-            scrollLength={hasError ? 0 : showShimmers ? shimmerCount : showEmptyState ? 0 : products.length}
-            component={'products'}
-          />
-        )
-      }
+      ) : (
+        <div className="flex flex-col gap-38 s:gap-40 md:gap-44">
+          {(showShimmers ? Array.from({ length: effectiveLayoutRows }, (_, idx) => idx) : productRows.map((_, idx) => idx)).map((rowIndex) => {
+            const rowProducts = showShimmers
+              ? []
+              : productRows[rowIndex] ?? [];
+            return (
+              <div key={`${collection.id}-row-${rowIndex}`} className="relative">
+                <div className={horizontalScroll ? "scroll-x no-scrollbar" : ""} ref={(el) => {
+                  scrollRefs.current[rowIndex] = el;
+                }}>
+                  <div
+                    className={`h-fit ${horizontalScroll
+                      ? 'flex'
+                      : shouldSpan
+                        ? 'grid xxlgrid-5-cols xl:grid-4-cols-1fr s:grid-3-cols-1fr grid-2-cols-1fr flex-wrap'
+                        : 'grid xxlgrid-3-cols-1fr grid-2-cols-1fr flex-wrap'} ${showShimmers ? (horizontalScroll ? 'w-fit' : 'w-100p') : showProducts ? (horizontalScroll ? 'w-fit' : 'w-100p') : showEmptyState ? 'w-100p a-items-center j-content-center' : ''
+                      } ${horizontalScroll ? 'whitespace-nowrap' : ''} gap-18 s:gap-20 md:gap-24`}
+                  >
+                    {showShimmers
+                      ? Array.from({ length: shimmerPerRow }, (_, i) => (
+                        <ProductTileShimmer
+                          key={`shimmer-${collection.id}-${rowIndex}-${i}`}
+                          isStoreBased={isStoreBased}
+                          horizontalScroll={horizontalScroll}
+                        />
+                      ))
+                      : rowProducts.map((product, i) => (
+                        <div
+                          key={`${product.id}-${i}`}
+                          className={`${horizontalScroll ? "l:w-290 md:w-250 sm:w-220 w-150" : "min-w-0"} l:mt--20 mt--30`}
+                        >
+                          <ProductTile
+                            product={product}
+                            key={product.id}
+                            id={product.id}
+                            addToCartVariant="icon"
+                            isStoreBased={isStoreBased}
+                            selectedCategory={selectedCategory}
+                            setSelectedCategory={setSelectedCategory}
+                          />
+                        </div>
+                      ))}
+                  </div>
+                </div>
+                {horizontalScroll && (showShimmers || rowProducts.length > 0) && (
+                  <ScrollButtons
+                    scrollRef={{ current: scrollRefs.current[rowIndex] }}
+                    page={`productScroll-${rowIndex}`}
+                    scrollLength={showShimmers ? shimmerPerRow : rowProducts.length}
+                    component={'products'}
+                  />
+                )}
+              </div>
+            );
+          })}
+        </div>
+      )}
     </section>
   );
 };
