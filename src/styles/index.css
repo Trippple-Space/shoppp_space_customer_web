@@ -664,6 +664,7 @@
 .bg-\#00000006 { background-color: #00000006; } 
 .hover\:bg-\#0000000D:hover { background-color: #0000000D; } 
 .uppercase {    text-transform: uppercase;  } 
+.min-w-0 { min-width: 0px; } 
 .b-70p { bottom: 70%; } 
 .mt-14 { margin-top: 14px; } 
 .h-45 { height: 45px; } 
@@ -835,8 +836,8 @@
 .w-48 { width: 48px; } 
 .h-48 { height: 48px; } 
 .gap-38 { gap: 38px; } 
-.mt--30 { margin-top: -30px; } 
 @layer base {.radius-16 { border-radius: 16px; } } 
+.mt--30 { margin-top: -30px; } 
 .border-whitesmoke { border-color: #F5F5F5; } 
 .min-w-121 { min-width: 121px; } 
 .grid-2-cols-auto { grid-template-columns: repeat(2, auto); } 
