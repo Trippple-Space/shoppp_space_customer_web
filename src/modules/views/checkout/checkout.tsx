@@ -118,6 +118,9 @@ const CheckoutPage = () => {
   const [devOptions, setDevOptions] = useState<string>();
   const [showSummary, setshowSummary] = useState(true);
   const [devAddressError, setDevAddressError] = useState(false);
+  const [enableOrderWhatsApp, setEnableOrderWhatsApp] = useState(false);
+  const [orderWhatsAppNumber, setOrderWhatsAppNumber] = useState('');
+  const [orderWhatsAppError, setOrderWhatsAppError] = useState('');
 
   const [shouldUpdateFee, setShouldUpdateFee] = useState(false);
   const lastAddressRef = useRef<string | null>(null);
@@ -300,6 +303,19 @@ const CheckoutPage = () => {
     }
   }, [selectedAddress, shouldUpdateFee]);
 
+  useEffect(() => {
+    if (!selectedAddress) return;
+    if (!enableOrderWhatsApp) {
+      setOrderWhatsAppNumber(selectedAddress.contactNo || '');
+      setOrderWhatsAppError('');
+    }
+  }, [selectedAddress, enableOrderWhatsApp]);
+
+  const isValidOrderWhatsAppNumber = (value: string) => {
+    const normalized = value.replace(/[^\d+]/g, '').trim();
+    return /^\+?\d{10,15}$/.test(normalized);
+  };
+
   const isValidDiscount = (cartItem: CartItem) => {
     if (cartItem?.variant?.product?.discount?.activeEndDate) {
       return (
@@ -393,6 +409,57 @@ const CheckoutPage = () => {
                     </p>
                   )}
                 </div>
+
+                {
+                  selectedAddress && (
+                    <div className="py-20 px-24 border border-#00000014 flex flex-col gap-14 radius-8">
+                      <h2 className="color-#000000E0 md:text-20 text-16 weight-600 line-height-24">
+                        WhatsApp updates for this order
+                      </h2>
+                      <label className="flex gap-10 a-items-start pointer w-fit">
+                        <input
+                          type="checkbox"
+                          checked={enableOrderWhatsApp}
+                          onChange={(e) => {
+                            const checked = e.target.checked;
+                            setEnableOrderWhatsApp(checked);
+                            if (!checked) {
+                              setOrderWhatsAppError('');
+                            } else if (!orderWhatsAppNumber && selectedAddress) {
+                              setOrderWhatsAppNumber(selectedAddress.contactNo || '');
+                            }
+                          }}
+                          className="mt-4 accent-#0B9378"
+                        />
+                        <span className="weight-400 text-14 line-height-22 color-#00000099">
+                          Send WhatsApp notifications for this order.
+                        </span>
+                      </label>
+                      {enableOrderWhatsApp && (
+                        <div className="flex flex-col gap-6">
+                          <input
+                            type="tel"
+                            value={orderWhatsAppNumber}
+                            onChange={(e) => {
+                              setOrderWhatsAppNumber(e.target.value);
+                              if (orderWhatsAppError) setOrderWhatsAppError('');
+                            }}
+                            placeholder="Enter WhatsApp number"
+                            className="w-full border border-#0000001F @lo:focus:border-#0B9378 @lo:outline-none radius-6 px-12 py-10 text-14 line-height-22"
+                          />
+                          <p className="weight-400 text-12 line-height-18 color-#00000099">
+                            Use a different number only if needed.
+                          </p>
+                          {orderWhatsAppError && (
+                            <p className="weight-400 text-14 line-height-22 color-#D4280C">
+                              {orderWhatsAppError}
+                            </p>
+                          )}
+                        </div>
+                      )}
+                    </div>
+                  )
+                }
 
                 {devOptions === 'smaller' && (
                   <DeliveryOptions
@@ -720,9 +787,31 @@ const CheckoutPage = () => {
                                 }
                               } else {
                                 if (selectedDeliveryOption !== null) {
+                                  if (enableOrderWhatsApp) {
+                                    if (!orderWhatsAppNumber.trim()) {
+                                      setOrderWhatsAppError(
+                                        'Please enter a WhatsApp number for this order.'
+                                      );
+                                      toast.error(
+                                        'Please enter a WhatsApp number for this order.'
+                                      );
+                                      return;
+                                    }
+                                    if (!isValidOrderWhatsAppNumber(orderWhatsAppNumber)) {
+                                      setOrderWhatsAppError(
+                                        'Please enter a valid WhatsApp number.'
+                                      );
+                                      toast.error('Please enter a valid WhatsApp number.');
+                                      return;
+                                    }
+                                  }
                                   payWithPaystack({
                                     addressId: selectedAddress?.id,
                                     deliveryOption: selectedDeliveryOption,
+                                    customerWhatsAppOptIn: enableOrderWhatsApp,
+                                    customerWhatsAppNumber: enableOrderWhatsApp
+                                      ? orderWhatsAppNumber.trim()
+                                      : undefined,
                                   });
                                 }
                               }
