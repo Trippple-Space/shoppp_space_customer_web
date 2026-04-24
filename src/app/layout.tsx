@@ -1,6 +1,7 @@
 // "use client"
 
 import '../styles/styles.scss';
+import Script from 'next/script';
 import {
   Inter,
   Roboto,
@@ -97,7 +98,30 @@ export default function RootLayout({
       lang="en"
       className={`${inter.variable} ${roboto.variable} ${lora.variable} ${robotoMono.variable} ${dmSans.variable} ${volkhov.variable} ${poppins.variable} ${youngSerif.variable} bg-white font-inter h-full`}
     >
+      <head>
+        <Script id="meta-pixel-client" strategy="afterInteractive">
+          {`!function(f,b,e,v,n,t,s)
+{if(f.fbq)return;n=f.fbq=function(){n.callMethod?
+n.callMethod.apply(n,arguments):n.queue.push(arguments)};
+if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';
+n.queue=[];t=b.createElement(e);t.async=!0;
+t.src=v;s=b.getElementsByTagName(e)[0];
+s.parentNode.insertBefore(t,s)}(window, document,'script',
+'https://connect.facebook.net/en_US/fbevents.js');
+fbq('init', '2220527635148334');
+fbq('track', 'PageView');`}
+        </Script>
+      </head>
       <body className="@lo:weight-300 @lo:text-dimgrey h-full">
+        <noscript>
+          <img
+            height="1"
+            width="1"
+            style={{ display: 'none' }}
+            src="https://www.facebook.com/tr?id=2220527635148334&ev=PageView&noscript=1"
+            alt=""
+          />
+        </noscript>
         <PHProvider>
           <PostHogPageView />
           <GlobalArena />
