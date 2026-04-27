@@ -1,6 +1,7 @@
 'use client';
 
 import Footer from '@/modules/lib/components/footer/Footer';
+import Image from '@/modules/lib/components/image/Image';
 import HomepageNavBar from '@/modules/lib/components/nav-bar/HomepageNavBar';
 import PuffLoader from '@/modules/lib/components/puff-loader/PuffLoader';
 import { paymentService } from '@/modules/lib/utility/services/payment.service';
@@ -8,7 +9,7 @@ import {
   SharedCheckoutItem,
   SharedCheckoutSummaryResponse,
 } from '@/modules/lib/utility/types/payment.interface';
-import { formatNumberAsPrice } from '@/modules/lib/utility/utility';
+import { displayStockUnit, formatNumberAsPrice } from '@/modules/lib/utility/utility';
 import React, { useEffect, useMemo, useState } from 'react';
 import { toast } from 'sonner';
 
@@ -75,17 +76,81 @@ const SharedPaymentPage = ({ shareToken }: SharedPaymentPageProps) => {
   };
 
   const renderLineItem = (item: SharedCheckoutItem, key: string) => {
-    const size = Object.keys(item.size || {}).length
-      ? ` (${Object.values(item.size).join(', ')})`
-      : '';
+    const resolvedSize =
+      typeof item.size === 'string'
+        ? item.size
+        : item.size && Object.keys(item.size).length > 0
+          ? Object.values(item.size).join(', ')
+          : '';
+    const visibleProperties = Object.entries(item.properties ?? {}).filter(
+      ([propertyKey, propertyValue]) => {
+        if (
+          propertyKey.toLowerCase() === 'size' ||
+          propertyValue === null ||
+          propertyValue === undefined
+        ) {
+          return false;
+        }
+
+        if (typeof propertyValue === 'string') {
+          return propertyValue.trim().length > 0;
+        }
+
+        if (Array.isArray(propertyValue)) {
+          return propertyValue.some((value) => String(value ?? '').trim().length > 0);
+        }
+
+        if (typeof propertyValue === 'object') {
+          return Object.keys(propertyValue as Record<string, unknown>).length > 0;
+        }
+
+        return true;
+      }
+    );
 
     return (
-      <div key={key} className="flex space-between gap-12 text-14 line-height-20">
-        <div className="color-#000000CC">
-          {item.quantity}x {item.productName}
-          {size}
+      <div key={key} className="flex gap-12 a-items-center">
+        <div className="w-73 h-75 radius-6 overflow-hidden border border-#00000014 bg-#F5F5F5 flex a-items-center j-content-center">
+          {item.variantImage ? (
+            <Image
+              src={item.variantImage}
+              alt={item.productName || 'Product image'}
+              className="w-73 h-75 object-fit"
+            />
+          ) : (
+            <span className="text-12 color-#00000066">No image</span>
+          )}
         </div>
-        <div className="weight-500">{formatNumberAsPrice(item.lineTotal)}</div>
+        <div className="flex-grow-1 flex flex-col gap-4 overflow-hidden">
+          <p className="weight-600 text-14 line-height-22 color-#000000E0 text-overflow-ellipsis white-space-nowrap overflow-hidden">
+            {item.productName}
+          </p>
+          <p className="weight-400 text-14 line-height-20 color-#0000008C">
+            Quantity:{' '}
+            {`${item.quantity} ${displayStockUnit('piece')}${item.quantity > 1 ? 's' : ''}`}
+          </p>
+          {resolvedSize && (
+            <p className="weight-400 text-13 line-height-18 color-#0000008C">
+              Size: {resolvedSize}
+            </p>
+          )}
+          {visibleProperties.map(([propertyKey, propertyValue]) => (
+            <p
+              key={propertyKey}
+              className="weight-400 text-13 line-height-18 capitalize color-#0000008C"
+            >
+              {propertyKey}:{' '}
+              {Array.isArray(propertyValue)
+                ? propertyValue.join(', ')
+                : typeof propertyValue === 'object'
+                  ? Object.values(propertyValue as Record<string, unknown>).join(', ')
+                  : String(propertyValue)}
+            </p>
+          ))}
+        </div>
+        <p className="weight-600 text-16 line-height-24 color-#000000E0">
+          {formatNumberAsPrice(item.lineTotal)}
+        </p>
       </div>
     );
   };
@@ -93,7 +158,7 @@ const SharedPaymentPage = ({ shareToken }: SharedPaymentPageProps) => {
   return (
     <>
       <HomepageNavBar />
-      <div className="bg-#F5F5F5 min-h-100vh py-40 px-16">
+      <div className="bg-#F5F5F5 min-h-100vh py-40 pb-96 px-16 mt-64">
         <div className="mx-auto max-w-760 bg-white radius-12 p-24 md:p-32 flex flex-col gap-20">
           <h1 className="text-24 line-height-32 weight-600">Shared payment</h1>
 
@@ -104,56 +169,88 @@ const SharedPaymentPage = ({ shareToken }: SharedPaymentPageProps) => {
           )}
 
           {!loading && errorMessage && (
-            <p className="text-16 line-height-24 color-#B91C1C">{errorMessage}</p>
+            <div className="border border-#FECACA bg-#FEF2F2 radius-10 p-20 flex flex-col gap-12">
+              <div className="flex a-items-center gap-10">
+                <div className="w-28 h-28 radius-100p bg-#FEE2E2 color-#B91C1C flex a-items-center j-content-center weight-700">
+                  !
+                </div>
+                <p className="text-18 line-height-26 weight-600 color-#991B1B">
+                  Payment link unavailable
+                </p>
+              </div>
+              <p className="text-15 line-height-22 color-#B91C1C">{errorMessage}</p>
+              <p className="text-14 line-height-20 color-#991B1BCC">
+                Please confirm the link is correct or request a new one from the user.
+              </p>
+            </div>
           )}
 
           {!loading && !errorMessage && summary && (
             <>
-              <div className="flex flex-col gap-6">
-                <p className="text-14 color-#00000099 line-height-20">
-                  Status: <span className="weight-600 color-#000000D9">{summary.status}</span>
-                </p>
+              <div className="flex flex-col gap-10">
+                <div className="flex a-items-center gap-8">
+                  <span
+                    className={`text-12 line-height-18 weight-600 px-10 py-4 radius-999 ${
+                      summary.paid
+                        ? 'bg-#ECFDF3 color-#027A48'
+                        : 'bg-#EFF8FF color-#175CD3'
+                    }`}
+                  >
+                    {summary.status.replace('_', ' ') || (summary.paid ? 'PAID' : 'PENDING')}
+                  </span>
+                </div>
                 {summary.message && (
                   <p className="text-14 color-#00000099 line-height-20">{summary.message}</p>
                 )}
               </div>
 
-              <div className="border border-#00000014 radius-10 p-16 flex flex-col gap-16">
-                {summary.stores.map((store) => (
-                  <div key={store.storeId} className="flex flex-col gap-10">
-                    <p className="text-16 weight-600 line-height-24">{store.storeName}</p>
-                    <div className="flex flex-col gap-8">
-                      {store.items.map((item, index) =>
-                        renderLineItem(item, `${store.storeId}-${item.variantId}-${index}`)
-                      )}
+              {Array.isArray(summary.stores) && summary.stores.length > 0 && (
+                <div className="border border-#00000014 radius-10 p-16 flex flex-col gap-16">
+                  {summary.stores.map((store) => (
+                    <div key={store.storeId} className="flex flex-col gap-10">
+                      <p className="text-16 weight-600 line-height-24 color-#00000099">
+                        {store.storeName}
+                      </p>
+                      <div className="flex flex-col gap-8">
+                        {store.items.map((item, index) =>
+                          renderLineItem(item, `${store.storeId}-${item.variantId}-${index}`)
+                        )}
+                      </div>
                     </div>
-                  </div>
-                ))}
-              </div>
+                  ))}
+                </div>
+              )}
 
-              <div className="border border-#00000014 radius-10 p-16 flex flex-col gap-10">
-                <div className="flex space-between text-14 line-height-20">
-                  <span>Subtotal</span>
-                  <span>{formatNumberAsPrice(summary.cartSubTotal)}</span>
+              {!summary.paid && (
+                <div className="border border-#00000014 radius-10 p-16 flex flex-col gap-10">
+                  <div className="flex space-between text-14 line-height-20">
+                    <span>Subtotal</span>
+                    <span>{formatNumberAsPrice(summary.cartSubTotal)}</span>
+                  </div>
+                  <div className="flex space-between text-14 line-height-20">
+                    <span>Delivery fee</span>
+                    <span>{formatNumberAsPrice(summary.deliveryFee)}</span>
+                  </div>
+                  <div className="flex space-between text-14 line-height-20">
+                    <span>Cart total</span>
+                    <span>{formatNumberAsPrice(summary.cartTotal)}</span>
+                  </div>
+                  <div className="flex space-between text-16 line-height-24 weight-600 border-t border-#00000014 pt-10">
+                    <span>Total to pay</span>
+                    <span>{formatNumberAsPrice(totalToPay)}</span>
+                  </div>
                 </div>
-                <div className="flex space-between text-14 line-height-20">
-                  <span>Delivery fee</span>
-                  <span>{formatNumberAsPrice(summary.deliveryFee)}</span>
-                </div>
-                <div className="flex space-between text-14 line-height-20">
-                  <span>Cart total</span>
-                  <span>{formatNumberAsPrice(summary.cartTotal)}</span>
-                </div>
-                <div className="flex space-between text-16 line-height-24 weight-600 border-t border-#00000014 pt-10">
-                  <span>Total to pay</span>
-                  <span>{formatNumberAsPrice(totalToPay)}</span>
-                </div>
-              </div>
+              )}
 
               {summary.paid ? (
-                <p className="text-16 line-height-24 color-#0B9378 weight-500">
-                  This payment has already been completed.
-                </p>
+                <div className="border border-#A6F4C5 bg-#ECFDF3 radius-10 p-18 flex flex-col gap-8">
+                  <p className="text-18 line-height-26 color-#027A48 weight-600">
+                    Payment already completed
+                  </p>
+                  <p className="text-14 line-height-22 color-#027A48CC">
+                    This checkout has already been paid. You do not need to make another payment.
+                  </p>
+                </div>
               ) : (
                 <div className="flex flex-col gap-12">
                   <input
@@ -170,7 +267,7 @@ const SharedPaymentPage = ({ shareToken }: SharedPaymentPageProps) => {
                       paying ? 'bg-#D1D5DB color-#6B7280 cursor-not-allowed' : 'bg-#0B9378 pointer'
                     }`}
                   >
-                    Pay with Paystack
+                    Proceed to payment
                     <PuffLoader loading={paying} size={14} className="ml-8" />
                   </button>
                 </div>

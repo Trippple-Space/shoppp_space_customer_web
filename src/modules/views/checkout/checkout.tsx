@@ -25,6 +25,7 @@ import OrderSummary from '@/modules/lib/components/order-summary/OrderSummary';
 import { CartItem } from '@/modules/lib/utility/types/cart.interface';
 import { useCalculatedeliveryFee } from '@/modules/lib/utility/hooks/use-calculate-deliveryFee';
 import { DeliveryOption } from '@/modules/lib/utility/types/delivery.interface';
+import { ShareLinkResponse } from '@/modules/lib/utility/types/payment.interface';
 import VideoSrc from '@/modules/lib/components/video-src/VideoSrc';
 import { toast } from 'sonner';
 import { ConfigPill } from '@/modules/lib/components/product-detail-modal/productConfigurationsHelper';
@@ -126,6 +127,8 @@ const CheckoutPage = () => {
   const [enableOrderWhatsApp, setEnableOrderWhatsApp] = useState(false);
   const [orderWhatsAppNumber, setOrderWhatsAppNumber] = useState('');
   const [orderWhatsAppError, setOrderWhatsAppError] = useState('');
+  const [cachedShareLinkResponse, setCachedShareLinkResponse] =
+    useState<ShareLinkResponse | null>(null);
 
   const [shouldUpdateFee, setShouldUpdateFee] = useState(false);
   const lastAddressRef = useRef<string | null>(null);
@@ -315,6 +318,15 @@ const CheckoutPage = () => {
       setOrderWhatsAppError('');
     }
   }, [selectedAddress, enableOrderWhatsApp]);
+
+  useEffect(() => {
+    setCachedShareLinkResponse(null);
+  }, [
+    selectedAddress?.id,
+    selectedDeliveryOption,
+    cart.total,
+    cart.cartItems.length,
+  ]);
 
   const isValidOrderWhatsAppNumber = (value: string) => {
     const normalized = value.replace(/[^\d+]/g, '').trim();
@@ -624,6 +636,7 @@ const CheckoutPage = () => {
                                       try {
                                         await removeFromCart(cartItem?.id);
                                         setAllAddressDeliveryPrice([]);
+                                        setCachedShareLinkResponse(null);
                                         //setShouldUpdateFee(true);
                                       } catch (error) { }
                                     }}
@@ -857,7 +870,7 @@ const CheckoutPage = () => {
                             </button>
                           </div>
                           <button
-                            onClick={() => {
+                            onClick={async () => {
                               if (canProceedToPayment || selectedDeliveryOption === null) return;
                               if (enableOrderWhatsApp) {
                                 if (!orderWhatsAppNumber.trim()) {
@@ -877,7 +890,30 @@ const CheckoutPage = () => {
                                   return;
                                 }
                               }
-                              sharePaymentLink({
+                              if (cachedShareLinkResponse?.shareToken) {
+                                const shareLink = `${window.location.origin}/pay/${cachedShareLinkResponse.shareToken}`;
+                                if (typeof navigator.share === 'function') {
+                                  try {
+                                    await navigator.share({
+                                      title: 'Asoebi checkout payment link',
+                                      text: 'Complete this order payment using the link below.',
+                                      url: shareLink,
+                                    });
+                                    return;
+                                  } catch (error) {
+                                    const shareError = error as { name?: string };
+                                    if (shareError?.name === 'AbortError') {
+                                      return;
+                                    }
+                                  }
+                                }
+
+                                await navigator.clipboard.writeText(shareLink);
+                                toast.success('Payment link copied to clipboard');
+                                return;
+                              }
+
+                              const shareResponse = await sharePaymentLink({
                                 addressId: selectedAddress?.id,
                                 deliveryOption: selectedDeliveryOption,
                                 customerWhatsAppOptIn: enableOrderWhatsApp,
@@ -885,9 +921,12 @@ const CheckoutPage = () => {
                                   ? orderWhatsAppNumber.trim()
                                   : undefined,
                               });
+                              if (shareResponse) {
+                                setCachedShareLinkResponse(shareResponse);
+                              }
                             }}
                             disabled={canProceedToPayment || isSharingPaymentLink}
-                            className={`w-full sm:w-fit border md:text-16 text-14 weight-500 md:line-height-22 line-height-19 md:px-24 px-16 py-12 radius-6 bg-white ${canProceedToPayment || isSharingPaymentLink ? 'border-#D1D5DB color-#9CA3AF cursor-not-allowed' : 'border-#0B9378 color-#0B9378 pointer'}`}
+                            className={`md:w-full sm:w-fit w-full border md:text-16 text-14 weight-500 md:line-height-22 line-height-19 md:px-24 px-16 py-12 radius-6 m:flex a-items-center j-content-center gap-8 l:float-right ${canProceedToPayment || isSharingPaymentLink ? 'border-#D1D5DB color-#9CA3AF bg-#F9FAFB cursor-not-allowed' : 'border-#0B9378 color-#0B9378 bg-white pointer hover:bg-#F0FDF9'}`}
                             title={
                               canProceedToPayment
                                 ? 'Complete checkout details to share payment link'
@@ -898,7 +937,7 @@ const CheckoutPage = () => {
                             <PuffLoader
                               size={14}
                               loading={isSharingPaymentLink}
-                              className="ml-10"
+                              className={isSharingPaymentLink ? 'ml-4' : 'hidden'}
                             />
                           </button>
                         </div>

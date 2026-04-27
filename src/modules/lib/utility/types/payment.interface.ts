@@ -17,7 +17,9 @@ export interface SharedCheckoutItem {
   productName: string;
   productSlug: string;
   variantId: string;
-  size: Record<string, string | number | boolean>;
+  variantImage?: string | null;
+  size: string | Record<string, string | number | boolean> | null;
+  properties?: Record<string, unknown> | null;
 }
 
 export interface SharedCheckoutStore {

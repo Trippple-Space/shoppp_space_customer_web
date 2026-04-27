@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { paymentService } from "../services/payment.service";
 import { Address } from "../types/address.interface";
+import { ShareLinkResponse } from "../types/payment.interface";
 import { toast } from "sonner";
 import { deliveryOptions } from "../constants";
 
@@ -15,6 +16,28 @@ const usePayment = () => {
   const [loading, setLoading] = useState<boolean>(false);
   const [sharing, setSharing] = useState<boolean>(false);
   const [error, setError] = useState<string | null>(null);
+
+  const shareOrCopyLink = async (shareLink: string) => {
+    if (typeof navigator !== "undefined" && typeof navigator.share === "function") {
+      try {
+        await navigator.share({
+          title: "Asoebi checkout payment link",
+          text: "Complete this order payment using the link below.",
+          url: shareLink,
+        });
+        return;
+      } catch (error) {
+        const shareError = error as { name?: string };
+        // If user cancels native share, avoid showing an error toast.
+        if (shareError?.name === "AbortError") {
+          return;
+        }
+      }
+    }
+
+    await navigator.clipboard.writeText(shareLink);
+    toast.success("Payment link copied to clipboard");
+  };
 
   const redirectToPaystack = (paymentLink: string) => {
     try {
@@ -62,20 +85,21 @@ const usePayment = () => {
 
   const sharePaymentLink = async (
     paymentDetails: PaymentDetails
-  ): Promise<void> => {
+  ): Promise<ShareLinkResponse | null> => {
     if (!paymentDetails.addressId) {
       toast.error("Please select an address to proceed");
-      return;
+      return null;
     }
 
     try {
       setSharing(true);
       const result = await paymentService.createShareLink(paymentDetails);
       const shareLink = `${window.location.origin}/pay/${result.shareToken}`;
-      await navigator.clipboard.writeText(shareLink);
-      toast.success("Payment link copied to clipboard");
+      await shareOrCopyLink(shareLink);
+      return result;
     } catch (error) {
       toast.error("Error creating share payment link");
+      return null;
     } finally {
       setSharing(false);
     }
