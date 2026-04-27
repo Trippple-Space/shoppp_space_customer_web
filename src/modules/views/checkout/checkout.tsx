@@ -350,7 +350,7 @@ const CheckoutPage = () => {
   return (
     <>
       <HomepageNavBar parent={'checkout'} />
-      <div className="md:pt-69.6 pt-64 sm:mb-60 mb-111 h-full">
+      <div className="md:pt-69.6 pt-74.6 sm:mb-60 mb-111 overflow-hidden" style={{ height: 'calc(100dvh)' }}>
         {fetching ? (
           <div
             className="w-100p flex flex-col a-items-center j-content-center mt-10"
@@ -369,7 +369,7 @@ const CheckoutPage = () => {
             >
               <div
                 ref={rightScrollRef}
-                className={`flex-grow-1 l:w-54.2p md:w-50p h-full overflow-auto no-scrollbar md:pt-44 sm:pt-32 pt-24 xl:pl-80 l:pl-70 md:pl-60 sm:pl-40 pl-24 xl:pr-80 l:pr-70 sm:pr-40 pr-24 flex flex-col gap-28 bg-white md:pb-90 ${showSummary ? `${selectedAddress ? 'sm:pb-320 pb-350' : 'sm:pb-200 pb-247'}` : 'sm:pb-99 pb-147'}`}
+                className={`flex-grow-1 l:w-54.2p md:w-50p h-full overflow-auto no-scrollbar md:pt-44 sm:pt-32 pt-24 xl:pl-80 l:pl-70 md:pl-60 sm:pl-40 pl-24 xl:pr-80 l:pr-70 sm:pr-40 pr-24 flex flex-col gap-28 bg-white md:pb-90 ${showSummary ? `${selectedAddress ? 'sm:pb-320 pb-410' : 'sm:pb-200 pb-327'}` : 'sm:pb-99 pb-217'}`}
               >
                 <div className="flex flex-col gap-6">
                   <h1 className="weight-600 md:text-24 text-20 md:line-height-32 line-heigth-28">
