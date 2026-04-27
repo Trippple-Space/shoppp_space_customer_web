@@ -18,7 +18,22 @@ const AddressModal: React.FC<ModalProps> = () => {
   return (
     <div>
   
-      <Modal isOpen={isAddressModalOpen} onClose={() => { }} extraClass={{ overflow: 'auto' }} extraModalClass={{ backgroundColor: '#00000073' }} className="h-fit md:w-fit sm:w-90p w-98p no-scrollbar">
+      <Modal
+        isOpen={isAddressModalOpen}
+        onClose={() => { }}
+        extraClass={{
+          overflowY: 'auto',
+          position: 'relative',
+          maxHeight: 'calc(100dvh - 24px)',
+          WebkitOverflowScrolling: 'touch'
+        }}
+        extraModalClass={{
+          backgroundColor: '#00000073',
+          paddingTop: 'max(12px, env(safe-area-inset-top))',
+          paddingBottom: 'max(12px, env(safe-area-inset-bottom))'
+        }}
+        className="h-fit md:w-fit sm:w-90p w-98p no-scrollbar"
+      >
         
         <div className='l:w-720 md:w-650 h-fit relative' style={{ maxHeight: 'calc(100dvh - 90px)' }}>
           <div className='relative w-full'>
