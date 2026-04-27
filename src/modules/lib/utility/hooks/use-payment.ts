@@ -11,7 +11,20 @@ export interface PaymentDetails {
 
 const usePayment = () => {
   const [loading, setLoading] = useState<boolean>(false);
+  const [sharing, setSharing] = useState<boolean>(false);
   const [error, setError] = useState<string | null>(null);
+
+  const redirectToPaystack = (paymentLink: string) => {
+    try {
+      const parsedUrl = new URL(paymentLink);
+      if (!parsedUrl.hostname.includes("paystack.com")) {
+        throw new Error("Invalid paystack url");
+      }
+      window.location.assign(parsedUrl.toString());
+    } catch {
+      toast.error("Invalid payment link returned");
+    }
+  };
 
   const payWithPaystack = async (
     paymentDetails: PaymentDetails
@@ -24,7 +37,7 @@ const usePayment = () => {
       setLoading(true);
       const result = await paymentService.payWithPaystack(paymentDetails);
 
-      window.location.href = result.paymentLink;
+      redirectToPaystack(result.paymentLink);
     } catch (error) {
       toast.error("Error processing Paystack payment");
     } finally {
@@ -45,11 +58,27 @@ const usePayment = () => {
     }
   };
 
+  const sharePaymentLink = async (): Promise<void> => {
+    try {
+      setSharing(true);
+      const result = await paymentService.createShareLink();
+      const shareLink = `${window.location.origin}/pay/${result.shareToken}`;
+      await navigator.clipboard.writeText(shareLink);
+      toast.success("Payment link copied to clipboard");
+    } catch (error) {
+      toast.error("Error creating share payment link");
+    } finally {
+      setSharing(false);
+    }
+  };
+
   return {
     loading,
+    sharing,
     error,
     payWithPaystack,
     payWithFlutterwave,
+    sharePaymentLink,
   };
 };
 
