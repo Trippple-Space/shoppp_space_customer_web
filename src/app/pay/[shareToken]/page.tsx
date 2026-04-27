@@ -11,6 +11,16 @@ type SharePageParams = {
 const getToken = (shareToken?: string | string[]) =>
   Array.isArray(shareToken) ? shareToken[0] : shareToken || '';
 
+const getSharerFirstName = (summary: any): string | null => {
+  const firstName =
+    summary?.sharedByFirstName || '';
+
+  if (typeof firstName !== 'string') return null;
+  const trimmed = firstName.trim();
+  if (!trimmed) return null;
+  return trimmed.split(/\s+/)[0];
+};
+
 const getSharedSummary = async (shareToken: string) => {
   if (!shareToken) return null;
 
@@ -41,10 +51,13 @@ export async function generateMetadata({
 
   const firstItem = summary?.stores?.[0]?.items?.[0];
   const firstImage = firstItem?.variantImage;
-  const title = 'Asoebi shared checkout payment';
+  const sharerFirstName = getSharerFirstName(summary);
+  const title = sharerFirstName
+    ? `${sharerFirstName} wants you to complete a payment on Asoebi Africa`
+    : 'Complete a payment on Asoebi Africa';
   const description =
     summary?.message ||
-    `Help complete this order payment on Asoebi${firstItem?.productName ? ` - starting with ${firstItem.productName}` : ''}.`;
+    `Help complete this order payment on Asoebi Africa${firstItem?.productName ? ` - starting with ${firstItem.productName}` : ''}.`;
 
   return {
     title,
@@ -53,6 +66,8 @@ export async function generateMetadata({
       title,
       description,
       images: firstImage ? [{ url: firstImage }] : undefined,
+      siteName: 'Asoebi Africa',
+      url: `https://asoebi.africa/pay/${shareToken}`,
     },
     twitter: {
       card: firstImage ? 'summary_large_image' : 'summary',

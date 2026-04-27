@@ -32,6 +32,7 @@ export interface SharedCheckoutStore {
 export interface SharedCheckoutSummaryResponse {
   status: string;
   paid: boolean;
+  sharedByFirstName?: string;
   message: string;
   deliveryOption: string;
   totalToPaySmallestUnit: number;
