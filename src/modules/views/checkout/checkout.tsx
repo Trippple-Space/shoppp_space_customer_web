@@ -99,7 +99,12 @@ const CheckoutPage = () => {
     useCart();
   const { openAddressModal, selectedAddress } = useAddress();
   const { fetchAddresses } = useAddressStore();
-  const { loading: isPaymentLoading, payWithPaystack } = usePayment();
+  const {
+    loading: isPaymentLoading,
+    sharing: isSharingPaymentLink,
+    payWithPaystack,
+    sharePaymentLink,
+  } = usePayment();
   const { calculateFee } = useCalculatedeliveryFee();
   const [calculatingFee, setCalculatingFee] = useState<boolean>(true);
   const selectedDeliveryOptionDetails = selectedDeliveryOption
@@ -745,7 +750,7 @@ const CheckoutPage = () => {
                             Marketplace opens officially by {MARKETPLACE_OPENS_DATE}. Purchases are not available yet.
                           </p>
                         )}
-                        <div className="flex gap-14 a-items-center sm:j-content-end w-full">
+                        <div className="flex flex-col gap-12 a-items-center sm:j-content-end w-full">
                           {!showSummary && (
                             <span className="md:hidden sm:block hidden sm:weight-600 weight-700 sm:text-16 text-14 sm:line-height-22 line-height-19">
                               {formatNumberAsPrice(
@@ -759,34 +764,35 @@ const CheckoutPage = () => {
                               )}
                             </span>
                           )}
-                          <button
-                            onClick={() => {
-                              if (!MARKETPLACE_PURCHASES_ENABLED) return;
-                              if (canProceedToPayment) {
-                                if (!selectedAddress) {
-                                  setDevAddressError(true);
-                                  rightScrollRef.current?.scrollTo({
-                                    top: 0,
-                                    behavior: 'smooth',
-                                  });
-                                  toast.error(
-                                    'You need to add a delivery address to continue to payment.'
-                                  );
-                                } else if (!selectedDeliveryOption) {
-                                  leftScrollRef.current?.scrollTo({
-                                    top: 0,
-                                    behavior: 'smooth',
-                                  });
-                                  rightScrollRef.current?.scrollTo({
-                                    top: 300,
-                                    behavior: 'smooth',
-                                  });
-                                  toast.error(
-                                    'You need to select a delivery option to continue to payment.'
-                                  );
-                                }
-                              } else {
-                                if (selectedDeliveryOption !== null) {
+                          <div className="flex gap-14 a-items-center sm:j-content-end w-full">
+                            <button
+                              onClick={() => {
+                                if (!MARKETPLACE_PURCHASES_ENABLED) return;
+                                if (canProceedToPayment) {
+                                  if (!selectedAddress) {
+                                    setDevAddressError(true);
+                                    rightScrollRef.current?.scrollTo({
+                                      top: 0,
+                                      behavior: 'smooth',
+                                    });
+                                    toast.error(
+                                      'You need to add a delivery address to continue to payment.'
+                                    );
+                                  } else if (!selectedDeliveryOption) {
+                                    leftScrollRef.current?.scrollTo({
+                                      top: 0,
+                                      behavior: 'smooth',
+                                    });
+                                    rightScrollRef.current?.scrollTo({
+                                      top: 300,
+                                      behavior: 'smooth',
+                                    });
+                                    toast.error(
+                                      'You need to select a delivery option to continue to payment.'
+                                    );
+                                  }
+                                } else {
+                                  if (selectedDeliveryOption !== null) {
                                   if (enableOrderWhatsApp) {
                                     if (!orderWhatsAppNumber.trim()) {
                                       setOrderWhatsAppError(
@@ -805,47 +811,93 @@ const CheckoutPage = () => {
                                       return;
                                     }
                                   }
-                                  payWithPaystack({
-                                    addressId: selectedAddress?.id,
-                                    deliveryOption: selectedDeliveryOption,
+                                    payWithPaystack({
+                                      addressId: selectedAddress?.id,
+                                      deliveryOption: selectedDeliveryOption,
                                     customerWhatsAppOptIn: enableOrderWhatsApp,
                                     customerWhatsAppNumber: enableOrderWhatsApp
                                       ? orderWhatsAppNumber.trim()
                                       : undefined,
-                                  });
+                                    });
+                                  }
+                                }
+                              }}
+                              className={`md:w-full sm:w-fit w-full border-none m:flex text-white md:text-16 text-14 weight-500 md:line-height-22 line-height-19 md:px-24 px-16 py-12 radius-6 l:float-right j-content-center ${!showSummary && 'sm:mt-0 mt-56'} ${canProceedToPayment ? 'bg-#D1D5DB opacity-80 g|box-shadow:inset|_|0px|_|2px|_|4px|_|#0000001A color-#6B7280 cursor-not-allowed' : 'bg-#0B9378 pointer'}`}
+                              title={
+                                !MARKETPLACE_PURCHASES_ENABLED
+                                  ? `Purchases available from ${MARKETPLACE_OPENS_DATE}`
+                                  : selectedAddress
+                                    ? ''
+                                    : 'Add an address to proceed to payment'
+                              }
+                            >
+                              <span className="">
+                                Proceed to payment{' '}
+                                {!showSummary && (
+                                  <span className="sm:hidden weight-700">
+                                    (
+                                    {formatNumberAsPrice(
+                                      cart.total +
+                                      (selectedDeliveryOptionDetails &&
+                                        'price' in selectedDeliveryOptionDetails &&
+                                        typeof selectedDeliveryOptionDetails.price ===
+                                          'number'
+                                        ? selectedDeliveryOptionDetails.price
+                                        : 0)
+                                    )}
+                                    )
+                                  </span>
+                                )}
+                              </span>
+                              <PuffLoader
+                                size={15}
+                                loading={isPaymentLoading}
+                                className="ml-10"
+                              />
+                            </button>
+                          </div>
+                          <button
+                            onClick={() => {
+                              if (canProceedToPayment || selectedDeliveryOption === null) return;
+                              if (enableOrderWhatsApp) {
+                                if (!orderWhatsAppNumber.trim()) {
+                                  setOrderWhatsAppError(
+                                    'Please enter a WhatsApp number for this order.'
+                                  );
+                                  toast.error(
+                                    'Please enter a WhatsApp number for this order.'
+                                  );
+                                  return;
+                                }
+                                if (!isValidOrderWhatsAppNumber(orderWhatsAppNumber)) {
+                                  setOrderWhatsAppError(
+                                    'Please enter a valid WhatsApp number.'
+                                  );
+                                  toast.error('Please enter a valid WhatsApp number.');
+                                  return;
                                 }
                               }
+                              sharePaymentLink({
+                                addressId: selectedAddress?.id,
+                                deliveryOption: selectedDeliveryOption,
+                                customerWhatsAppOptIn: enableOrderWhatsApp,
+                                customerWhatsAppNumber: enableOrderWhatsApp
+                                  ? orderWhatsAppNumber.trim()
+                                  : undefined,
+                              });
                             }}
-                            className={`md:w-full sm:w-fit w-full border-none m:flex text-white md:text-16 text-14 weight-500 md:line-height-22 line-height-19 md:px-24 px-16 py-12 radius-6 l:float-right j-content-center ${!showSummary && 'sm:mt-0 mt-56'} ${canProceedToPayment ? 'bg-#D1D5DB opacity-80 g|box-shadow:inset|_|0px|_|2px|_|4px|_|#0000001A color-#6B7280 cursor-not-allowed' : 'bg-#0B9378 pointer'}`}
+                            disabled={canProceedToPayment || isSharingPaymentLink}
+                            className={`w-full sm:w-fit border md:text-16 text-14 weight-500 md:line-height-22 line-height-19 md:px-24 px-16 py-12 radius-6 bg-white ${canProceedToPayment || isSharingPaymentLink ? 'border-#D1D5DB color-#9CA3AF cursor-not-allowed' : 'border-#0B9378 color-#0B9378 pointer'}`}
                             title={
-                              !MARKETPLACE_PURCHASES_ENABLED
-                                ? `Purchases available from ${MARKETPLACE_OPENS_DATE}`
-                                : selectedAddress
-                                  ? ''
-                                  : 'Add an address to proceed to payment'
+                              canProceedToPayment
+                                ? 'Complete checkout details to share payment link'
+                                : 'Copy share payment link'
                             }
                           >
-                            <span className="">
-                              Proceed to payment{' '}
-                              {!showSummary && (
-                                <span className="sm:hidden weight-700">
-                                  (
-                                  {formatNumberAsPrice(
-                                    cart.total +
-                                    (selectedDeliveryOptionDetails &&
-                                      'price' in selectedDeliveryOptionDetails &&
-                                      typeof selectedDeliveryOptionDetails.price ===
-                                      'number'
-                                      ? selectedDeliveryOptionDetails.price
-                                      : 0)
-                                  )}
-                                  )
-                                </span>
-                              )}
-                            </span>
+                            <span>Share payment link</span>
                             <PuffLoader
-                              size={15}
-                              loading={isPaymentLoading}
+                              size={14}
+                              loading={isSharingPaymentLink}
                               className="ml-10"
                             />
                           </button>
