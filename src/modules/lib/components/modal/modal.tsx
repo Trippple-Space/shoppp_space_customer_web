@@ -56,6 +56,7 @@ const Modal: React.FC<ModalProps> = ({ isOpen, onClose, children, extraModalClas
     display: 'flex',
     justifyContent: 'center',
     alignItems: 'center',
+    top: 0,
     left: 0,
     width: '100%',
     backgroundColor: '#00000073',
@@ -68,11 +69,11 @@ const Modal: React.FC<ModalProps> = ({ isOpen, onClose, children, extraModalClas
   const modalContentStyle: any = {
     backgroundColor: '#fff',
     borderRadius: '8px',
-    overflowY: 'scroll',
+    maxHeight: '90vh',
+    overflowY: 'auto',
 
     scrollbarWidth: "none",
     msOverflowStyle: "none",
-    position: 'absolute',
     ...extraClass
   };
 

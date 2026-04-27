@@ -22,7 +22,7 @@ export const useProductListView = () => {
   });
   const { allFilters } = useFilterStore();
 
-  const { products, setPagination, setSearch, setCollection, query, updateHomePageFilter, loading, fetchingError, refetch } = useProducts({
+  const { products, setPagination, setSearch, setCollection, query, updateHomePageFilter, loading, fetchingError, refetch, meta } = useProducts({
     filters: { type, status: { In: "ACTIVE,OUT_OF_STOCK" }, channel: "ASOEBI_STORE" }, order: {
       priorityScore: "DESC",
       createdAt: "DESC"
@@ -51,10 +51,12 @@ export const useProductListView = () => {
     if (!inView) return;
     if (loading) return;
 
-    if (products.length >= limit && products.length % limit === 0) {
+    const totalPages = meta?.totalPages ?? 1;
+    const currentPage = meta?.currentPage ?? page;
+    if (currentPage < totalPages) {
       setPage((prev) => prev + 1);
     }
-  }, [inView, loading, products.length]);
+  }, [inView, loading, meta?.currentPage, meta?.totalPages, page]);
 
   useEffect(() => {
     setPagination({ page, limit });

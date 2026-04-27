@@ -130,17 +130,44 @@ class ProductService {
                          params: { ...queryWithoutAllFilters, ...filterParams },
                     })
                     .then((response) => {
-                         const productsWithOrderedVariants = response.data.data.map((product) => {
+                         const rawProducts = response.data.data;
+                         const requestedPage = Math.max(1, query.pagination?.page ?? 1);
+                         const requestedLimit = Math.max(1, query.pagination?.limit ?? 20);
+                         const looksUnpaginated =
+                              !!query.pagination &&
+                              rawProducts.length > requestedLimit &&
+                              (response.data.meta?.itemCount ?? rawProducts.length) > requestedLimit;
+
+                         const paginatedProducts = looksUnpaginated
+                              ? rawProducts.slice(
+                                   (requestedPage - 1) * requestedLimit,
+                                   requestedPage * requestedLimit
+                              )
+                              : rawProducts;
+
+                         const productsWithOrderedVariants = paginatedProducts.map((product) => {
                               product.variants = product.variants.sort((a, b) => {
                                    if (a.status === 'OUT_OF_STOCK' && b.status !== 'OUT_OF_STOCK') return 1;
                                    if (a.status !== 'OUT_OF_STOCK' && b.status === 'OUT_OF_STOCK') return -1;
                                    return 0;
                               });
                               return product;
-                         })
+                         });
+
+                         const normalizedMeta = looksUnpaginated
+                              ? {
+                                   ...(response.data.meta ?? {}),
+                                   totalItems: rawProducts.length,
+                                   itemCount: productsWithOrderedVariants.length,
+                                   itemsPerPage: requestedLimit,
+                                   totalPages: Math.max(1, Math.ceil(rawProducts.length / requestedLimit)),
+                                   currentPage: requestedPage,
+                              }
+                              : response.data.meta;
+
                          resolve({
                               data: productsWithOrderedVariants,
-                              meta: response.data.meta
+                              meta: normalizedMeta
                          });
                     })
                     .catch(reject);

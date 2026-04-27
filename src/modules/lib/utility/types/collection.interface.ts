@@ -9,6 +9,7 @@ export interface ICollectionMeta {
         bgColor?: string;
         buttonColor?: string;
         buttonTextColor?: 'white' | 'black';
+        horizontalScroll?: boolean;
         shouldSpanFullWidth?: boolean;
         priorityScore?: number;
         layoutRows?: number;

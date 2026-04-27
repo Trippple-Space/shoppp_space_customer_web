@@ -59,19 +59,30 @@ const CollectionSection = ({
   const isLimited = /limited|limit/.test(nameLower);
   const fallbackTheme = isLimited ? redTheme : otherThemes[index % otherThemes.length];
   const layoutConfig = collection.meta?.simpleLayoutView ?? {};
+  const configuredProductsToShow = layoutConfig.productsToShow;
+  const hasExplicitProductsToShow = configuredProductsToShow != null;
   const theme = {
     bg: layoutConfig.bgColor || fallbackTheme.bg,
     button: layoutConfig.buttonColor || fallbackTheme.button,
     text: layoutConfig.buttonTextColor || fallbackTheme.text,
   };
   const productsToShow = Math.min(
-    Math.max(layoutConfig.productsToShow ?? DEFAULT_PRODUCTS_TO_SHOW, 1),
+    Math.max(configuredProductsToShow ?? DEFAULT_PRODUCTS_TO_SHOW, 1),
     MAX_PRODUCTS_TO_SHOW
   );
+  const productFetchLimit = hasExplicitProductsToShow
+    ? productsToShow + 1
+    : 11;
+  const showMoreThreshold = hasExplicitProductsToShow
+    ? productsToShow
+    : DEFAULT_PRODUCTS_TO_SHOW;
+  const horizontalScroll = layoutConfig.horizontalScroll !== false;
+  const shouldSpan = layoutConfig.shouldSpanFullWidth === true;
   const layoutRows = Math.min(
     Math.max(layoutConfig.layoutRows ?? 1, 1),
     MAX_LAYOUT_ROWS
   );
+  const effectiveLayoutRows = horizontalScroll ? layoutRows : 1;
   const type = pathname.includes('wears') ? 'wears' : 'fabrics';
   const categoryLabel = isStoreBased ? 'STORE' : 'GLOBAL';
 
@@ -104,7 +115,7 @@ const CollectionSection = ({
     {
       filters: { ...(isStoreBased ? {} : { type }), status: { In: "ACTIVE,OUT_OF_STOCK" }, channel: "ASOEBI_STORE" },
       order: { priorityScore: "DESC", createdAt: "DESC" },
-      pagination: { page: 1, limit: Math.max(productsToShow, 11) },
+      pagination: { page: 1, limit: productFetchLimit },
       allFilters: initialFiltersForCollection,
       search: searchFromPath || undefined,
     },
@@ -152,15 +163,15 @@ const CollectionSection = ({
     () => products?.slice(0, productsToShow) ?? [],
     [products, productsToShow]
   );
-  const productsPerRow = Math.max(1, Math.ceil(displayedProducts.length / layoutRows));
+  const productsPerRow = Math.max(1, Math.ceil(displayedProducts.length / effectiveLayoutRows));
   const productRows = useMemo(
     () =>
-      Array.from({ length: layoutRows }, (_, rowIndex) =>
+      Array.from({ length: effectiveLayoutRows }, (_, rowIndex) =>
         displayedProducts.slice(rowIndex * productsPerRow, (rowIndex + 1) * productsPerRow)
       ).filter((row) => row.length > 0),
-    [displayedProducts, layoutRows, productsPerRow]
+    [displayedProducts, effectiveLayoutRows, productsPerRow]
   );
-  const shimmerPerRow = Math.max(1, Math.ceil(shimmerCount / layoutRows));
+  const shimmerPerRow = Math.max(1, Math.ceil(shimmerCount / effectiveLayoutRows));
    const isCollectionEmpty = collection.productCount === 0 || showEmptyState;
   const headingHasWeightClass = /\bweight-\S+/.test(headingClassName);
   const subHeadingHasWeightClass = /\bweight-\S+/.test(subHeadingClassName);
@@ -199,7 +210,7 @@ const CollectionSection = ({
           </p>
         </div>
 
-        {!loading && !hasError && products?.length > 10 && (
+        {!loading && !hasError && products?.length > showMoreThreshold && (
           <p
             onClick={() => {
               handleShowMore(collection.slug)
@@ -239,27 +250,35 @@ const CollectionSection = ({
         </div>
       ) : (
         <div className="flex flex-col gap-38 s:gap-40 md:gap-44">
-          {(showShimmers ? Array.from({ length: layoutRows }, (_, idx) => idx) : productRows.map((_, idx) => idx)).map((rowIndex) => {
+          {(showShimmers ? Array.from({ length: effectiveLayoutRows }, (_, idx) => idx) : productRows.map((_, idx) => idx)).map((rowIndex) => {
             const rowProducts = showShimmers
               ? []
               : productRows[rowIndex] ?? [];
             return (
               <div key={`${collection.id}-row-${rowIndex}`} className="relative">
-                <div className="scroll-x no-scrollbar" ref={(el) => {
+                <div className={horizontalScroll ? "scroll-x no-scrollbar" : ""} ref={(el) => {
                   scrollRefs.current[rowIndex] = el;
                 }}>
                   <div
-                    className={`flex h-fit ${showShimmers ? 'w-fit' : showProducts ? 'w-fit' : showEmptyState ? 'w-100p a-items-center j-content-center' : ''
-                      } whitespace-nowrap sm:gap-20 gap-14`}
+                    className={`h-fit ${horizontalScroll
+                      ? 'flex'
+                      : shouldSpan
+                        ? 'grid xxlgrid-5-cols xl:grid-4-cols-1fr s:grid-3-cols-1fr grid-2-cols-1fr flex-wrap'
+                        : 'grid xxlgrid-3-cols-1fr grid-2-cols-1fr flex-wrap'} ${showShimmers ? (horizontalScroll ? 'w-fit' : 'w-100p') : showProducts ? (horizontalScroll ? 'w-fit' : 'w-100p') : showEmptyState ? 'w-100p a-items-center j-content-center' : ''
+                      } ${horizontalScroll ? 'whitespace-nowrap' : ''} gap-18 s:gap-20 md:gap-24`}
                   >
                     {showShimmers
                       ? Array.from({ length: shimmerPerRow }, (_, i) => (
-                        <ProductTileShimmer key={`shimmer-${collection.id}-${rowIndex}-${i}`} isStoreBased={isStoreBased} />
+                        <ProductTileShimmer
+                          key={`shimmer-${collection.id}-${rowIndex}-${i}`}
+                          isStoreBased={isStoreBased}
+                          horizontalScroll={horizontalScroll}
+                        />
                       ))
                       : rowProducts.map((product, i) => (
                         <div
                           key={`${product.id}-${i}`}
-                          className="l:w-290 md:w-250 sm:w-220 w-150 l:mt--20 mt--30"
+                          className={`${horizontalScroll ? "l:w-290 md:w-250 sm:w-220 w-150" : "min-w-0"} l:mt--20 mt--30`}
                         >
                           <ProductTile
                             product={product}
@@ -274,7 +293,7 @@ const CollectionSection = ({
                       ))}
                   </div>
                 </div>
-                {(showShimmers || rowProducts.length > 0) && (
+                {horizontalScroll && (showShimmers || rowProducts.length > 0) && (
                   <ScrollButtons
                     scrollRef={{ current: scrollRefs.current[rowIndex] }}
                     page={`productScroll-${rowIndex}`}
