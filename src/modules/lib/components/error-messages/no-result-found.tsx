@@ -3,9 +3,11 @@ import Image from '../image/Image';
 const NoResultMessage = ({
   textContent,
   contentTitle,
+  contentStyle,
 }: {
   textContent?: string;
   contentTitle?: string;
+  contentStyle?: React.CSSProperties;
 }) => {
   return (
     <div className="flex flex-col a-items-center gap-8 py-16">
@@ -20,7 +22,7 @@ const NoResultMessage = ({
         </h1>
       )}
       {textContent && (
-        <p className="text-14 weight-400 line-height-22 color-#00000073 px-12 py-5 max-w-400" style={{textWrap: 'balance', textAlign: 'center'}}>
+        <p className={`text-14 weight-400 line-height-22 color-#00000073 px-12 py-5 max-w-400`} style={{textWrap: 'balance', textAlign: 'center', whiteSpace: 'pre-line', ...contentStyle}}>
           {textContent}
         </p>
       )}

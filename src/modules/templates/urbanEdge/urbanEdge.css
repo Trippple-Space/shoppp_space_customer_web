@@ -125,6 +125,10 @@
   font-weight: light;
 }
 
+.urbanEdge_product-headings {
+  margin-bottom: 20px;
+}
+
 .urbanEdge_product-headings h3 {
   font-size: 40px;
   font-weight: 500;
@@ -137,7 +141,7 @@
   font-weight: 400;
   color: #8A8A8A;
   max-width: 620px;
-  margin: 10px auto 0 auto;
+  margin: 0 auto 0 auto;
 }
 
 .urbanEdge__floating {

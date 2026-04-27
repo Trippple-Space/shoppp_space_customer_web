@@ -3,8 +3,16 @@ import React from "react";
 import { HiOutlineLocationMarker } from "react-icons/hi";
 import { TbMail, TbPhone } from "react-icons/tb";
 import { Store } from "../../utility/types/store.interface";
+import useNewsletterSubscribe from "./useNewsletterSubscribe";
 
 const StorefrontFooter: React.FC<{ store: Store }> = ({ store }) => {
+  const {
+    loading,
+    newsletterError,
+    clearNewsletterError,
+    handleNewsletterSubmit,
+  } = useNewsletterSubscribe({ mode: "email-only" });
+
   return (
     <footer className="bg-black">
       <div className="py-20 lg:px-80 sm:px-40 px-24 text-white flex flex-col sm:gap-35 gap-28 max-w-1440 mx-auto">
@@ -17,7 +25,7 @@ const StorefrontFooter: React.FC<{ store: Store }> = ({ store }) => {
                 <span className="text-16">{store?.user?.mobile || store?.profile?.phoneNumbers?.[0]}</span>
               </Link>
               <Link
-                href={`https://maps.google.com/?q=${store?.meta?.settings?.location?.coordinates?.lat},${store?.meta?.settings?.location?.coordinates?.lon}`}
+                href={`https://maps.google.com/?q=${store?.meta?.settings?.location?.coordinates?.lat || store?.meta?.coordinates?.lat},${store?.meta?.settings?.location?.coordinates?.lon || store?.meta?.coordinates?.lon}`}
                 target="_blank"
                 rel="noopener noreferrer"
                 className="flex flex-row gap-8 w-fit"
@@ -29,27 +37,35 @@ const StorefrontFooter: React.FC<{ store: Store }> = ({ store }) => {
               </Link>
             </p>
           </div>
-          <div className="flex flex-col gap-12 l:max-w-461 max-w-416 w-full">
+          <form
+            onSubmit={handleNewsletterSubmit}
+            className="flex flex-col gap-12 l:max-w-461 max-w-416 w-full"
+          >
             <p className="weight-600 text-16">Subscribe for latest updates</p>
             <div className="flex j-content-end gap-8">
               <div className="bg-white flex a-items-center gap-12 px-12 radius-6 border border-#00000026 sm:flex-grow-1 w-full">
                 <TbMail className="w-24 min-w-24 h-24 color-#00000099" />
                 <input
                   type="email"
-                  name="subscribe"
-                  id="subscribe"
+                  name="email"
+                  id="email"
                   placeholder="Enter your email"
                   className="py-12 px-0 border-none outline-none @lo:placeholder:sm:text-16 @lo:placeholder:text-14 w-full"
+                  onChange={clearNewsletterError}
                 />
               </div>
               <button
                 type="submit"
+                disabled={loading}
                 className="py-12 px-16 bg-#FACE33 radius-6 weight-600 text-16 border border-none text-#000000E0"
               >
-                Subscribe
+                {loading ? "Subscribing..." : "Subscribe"}
               </button>
             </div>
-          </div>
+            {newsletterError && (
+              <p className="text-14 color-#FF7070">{newsletterError}</p>
+            )}
+          </form>
         </div>
         <hr className="bg-#FFFFFF4D" />
         <div>

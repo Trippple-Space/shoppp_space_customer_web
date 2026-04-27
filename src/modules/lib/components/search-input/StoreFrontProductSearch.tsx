@@ -215,6 +215,8 @@ export const ProductSearch: React.FC<ProductSearchProps> = ({
         <SearchModal
           searchResults={searchResults}
           position=""
+          searchTerm={searchTerm}
+          setOpenSearchModal={setOpenSearchModal}
           handleFetchProduct={handleFetchProduct}
         />
       );
@@ -228,27 +230,27 @@ export const ProductSearch: React.FC<ProductSearchProps> = ({
     );
   };
 
-  const desktopContainerClass: string = (() => {
-    switch (variant) {
-      case 'modernEarth':
-        return 'absolute hidden md:block min-w-200 max-w-400 h-300 bg-white border border-#00000014 radius-4 t-44 z-8';
-
-      case 'modernLuxe':
-        return 'modernLuxe__searchContent md:absolute hidden md:block md:w-100p min-w-200 md:h-200 md:bg-white md:h-400 overflow-auto no-scrollbar radius-4 t-65 z-8';
-
-      case 'simple':
-        return '';
-
-      default:
-        return 'search-box-input hidden md:block md:absolute min-w-200 md:h-200 overflow-auto no-scrollbar md:bg-white md:border md:border-#00000014 radius-4 t-65 mt-3 z-8';
-    }
-  })();
+  const hasDesktopContainer = variant !== 'simple';
 
   return (
     <>
       {renderTrigger()}
-      {openSearchModal && desktopContainerClass && (
-        <div className={desktopContainerClass}>
+      {openSearchModal && variant === 'modernEarth' && (
+        <div className="absolute hidden md:block min-w-250 max-w-400 h-300 bg-white border border-#00000014 radius-4 t-50 mt--3 z-8 overflow-auto no-scrollbar">
+          <div className="flex flex-col gap-42 w-95p mx-auto py-12">
+            {renderResultContent()}
+          </div>
+        </div>
+      )}
+      {openSearchModal && variant === 'modernLuxe' && (
+        <div className="modernLuxe__searchContent md:absolute hidden md:block md:w-100p min-w-200 md:h-200 md:bg-white md:h-400 overflow-auto no-scrollbar radius-4 t-65 z-8">
+          <div className="flex flex-col gap-42 w-95p mx-auto py-12">
+            {renderResultContent()}
+          </div>
+        </div>
+      )}
+      {openSearchModal && variant === 'furniture' && (
+        <div className="search-box-input hidden md:block md:absolute min-w-200 md:h-200 overflow-auto no-scrollbar md:bg-white md:border md:border-#00000014 radius-4 t-65 mt-3 z-8">
           <div className="flex flex-col gap-42 w-95p mx-auto py-12">
             {renderResultContent()}
           </div>
@@ -257,15 +259,15 @@ export const ProductSearch: React.FC<ProductSearchProps> = ({
       {openSearchModal && (
         <>
           <div
-            className={`fixed inset-0 bg-black opacity-70 z-7 ${desktopContainerClass ? 'md:opacity-0' : ''}`}
+            className={`fixed inset-0 bg-black opacity-70 z-7 ${hasDesktopContainer ? 'md:opacity-0' : ''}`}
             onClick={handleOpenSearchModal}
           />
 
           <div
-            className={`fixed l-50p g|transform:translate(-50%); w-90p h-70 md:w-50p h-60p t-70 mt-30 bg-white z-8 flex flex-col radius-30 pb-20 relative ${desktopContainerClass ? 'md:hidden md:radius-20' : ''}`}
+            className={`fixed l-50p g|transform:translate(-50%); w-90p h-70 md:w-50p h-60p t-70 mt-30 bg-white z-8 flex flex-col radius-30 pb-20 relative ${hasDesktopContainer ? 'md:hidden md:radius-20' : ''}`}
           >
             <div
-              className={` w-100p flex j-content-center pb-20 ${desktopContainerClass ? 'md:hidden' : ''}`}
+              className={` w-100p flex j-content-center pb-20 ${hasDesktopContainer ? 'md:hidden' : ''}`}
             >
               <div className="flex j-content-center relative a-items-center mt-20 w-80p">
                 <input

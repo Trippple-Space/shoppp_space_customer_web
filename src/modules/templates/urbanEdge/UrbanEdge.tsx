@@ -10,6 +10,7 @@ import { PiShoppingCart } from 'react-icons/pi';
 import StoreProductsList from '@/modules/views/storefront/StoreProductsList';
 import Collections from '@/modules/views/homepage/Collections';
 import { BaseStorefrontProps } from '@/modules/lib/utility/types/storefront-template.interface';
+import FabricsCategoryNav from '@/modules/lib/components/nav-bar/category-nav/FabricsCategoryNav';
 
 type UrbanEdgeProps = BaseStorefrontProps & {
   cart?: Cart;
@@ -35,6 +36,10 @@ const UrbanEdge: FC<UrbanEdgeProps> = ({
   setPage,
   totalPages,
   initialCollections = [],
+  showCollectionsSection = true,
+  selectedCategory,
+  setSelectedCategory,
+  categories,
 }) => {
   return (
     <>
@@ -48,7 +53,7 @@ const UrbanEdge: FC<UrbanEdgeProps> = ({
           </div>
 
           <div className="urbanEgde__rightButtons">
-            
+
             {cart?.cartItems ? (
               ''
             ) : (
@@ -138,7 +143,28 @@ const UrbanEdge: FC<UrbanEdgeProps> = ({
           </section>
         )}
 
-        <Collections storeId={store.id} initialCollections={initialCollections} />
+        {!!categories?.length && (
+          <div className="sm:pt-20 sm:pb-30 pt-16 pb-20">
+            <FabricsCategoryNav
+              categories={categories}
+              selectedCategory={selectedCategory}
+              setSelectedCategory={setSelectedCategory}
+              page={'store'}
+              key={categories}
+            />
+          </div>
+        )}
+
+        {showCollectionsSection && (
+          <Collections
+            storeId={store.id}
+            initialCollections={initialCollections}
+            isStoreBased={true}
+            headingClassName="font-poppins"
+            subHeadingClassName="font-poppins"
+            hasAppWidth={false}
+          />
+        )}
 
         <section className="py-30 sm:py-40 md:py-50 l:py-60" ref={productsRef}>
           <div className="urbanEdge_product-headings">
@@ -157,6 +183,8 @@ const UrbanEdge: FC<UrbanEdgeProps> = ({
             page={page}
             onPageChange={setPage}
             totalPages={totalPages}
+            selectedCategory={selectedCategory}
+            setSelectedCategory={setSelectedCategory}
           />
         </section>
         <div className="urbanEdge__floating">

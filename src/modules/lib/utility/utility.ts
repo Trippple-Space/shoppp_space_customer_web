@@ -3,6 +3,7 @@ import { StoreGroupResponse } from "./types/cart.interface";
 import { NewUser, User } from "./types/user.interface";
 import { IFilters } from "./types/product.interface";
 import { ContactFormData } from "./types/contact-us.interface";
+import type { Delivery, Order } from "./types/order.interface";
 import colors from '@/modules/lib/utility/json-data/colors.json';
 
 export type ImageSrcFolder = "icons" | "logos" | "images";
@@ -74,8 +75,25 @@ export const buildFilterParams = (filters: any) => {
     params["filters[price][LessThanOrEqual]"] = price.max;
   }
 
-  if (tags) {
-    params["filters[tags][label]"] = tags
+  if (tags !== undefined && tags !== null && tags !== "") {
+    const asArray = Array.isArray(tags)
+      ? tags
+      : typeof tags === "string"
+        ? tags.includes(",")
+          ? tags.split(",")
+          : [tags]
+        : [String(tags)];
+
+    const cleaned = asArray
+      .map((t: any) => String(t).trim())
+      .filter(Boolean);
+
+    // Single tag: keep old behavior
+    if (cleaned.length === 1) {
+      params["filters[tags][label]"] = cleaned[0];
+    } else if (cleaned.length > 1) {
+      params["filters[tags][label][]"] = cleaned;
+    }
   }
 
   if (rating?.rateBy) {
@@ -257,8 +275,68 @@ export const formatDate = (date: Date): string => {
   return `${dayWithSuffix} ${month}, ${year}. ${hours}:${minutes}${ampm}`;
 };
 
+export function parseApiInstant(value: string): Date {
+  const s = value.trim();
+  if (!s) return new Date(NaN);
+  const hasExplicitZone =
+    /[zZ]$/.test(s) || /[+-]\d{2}:\d{2}$/.test(s);
+  if (/^\d{4}-\d{2}-\d{2}T/.test(s) && !hasExplicitZone) {
+    return new Date(`${s}Z`);
+  }
+  return new Date(s);
+}
+
+/** ISO string suitable for OrderProcess; empty if unknown */
+export function isValidTimelineDate(value: string | undefined): boolean {
+  if (!value || typeof value !== "string") return false;
+  return !Number.isNaN(Date.parse(value));
+}
+
+/** Same delivery timestamp source as admin (`delivery.createdAt`) with client `createAt` fallback */
+export function getDeliveryRecordCreatedAt(delivery: Delivery): string {
+  return delivery.createdAt ?? delivery.createAt ?? "";
+}
+
+/**
+ * Per-step timestamps aligned with admin `OrdersDetails` / `orderStatuses`
+ * (createdAt, payment.createdAt, updatedAt, delivery record, dateTimeDelivered).
+ */
+export function getOrderTimelineStepDate(
+  order: Order,
+  stepStatus: string
+): string {
+  const status = stepStatus.toUpperCase();
+  const delivery = order.delivery;
+  const deliveryCreated = getDeliveryRecordCreatedAt(delivery);
+  const payment = order.payment;
+
+  switch (status) {
+    case "ONGOING":
+      return order.createdAt ?? "";
+    case "PENDING_CONFIRMATION":
+      return order.updatedAt ?? "";
+    case "CONFIRMED":
+    case "ACKNOWLEDGED":
+      return order.updatedAt ?? "";
+    case "WAITING_TO_BE_SHIPPED":
+      return deliveryCreated;
+    case "OUT_FOR_DELIVERY":
+      return deliveryCreated;
+    case "DELIVERED":
+      if (
+        order.channel === "ONLINE_STORE" &&
+        payment?.deliveryOption === "pickup"
+      ) {
+        return deliveryCreated;
+      }
+      return delivery.dateTimeDelivered ?? "";
+    default:
+      return "";
+  }
+}
+
 export function formatTime(timestamp: string): string {
-  const date = new Date(timestamp);
+  const date = parseApiInstant(timestamp);
   let hours = date.getHours();
   const minutes = date.getMinutes();
   const ampm = hours >= 12 ? "PM" : "AM";

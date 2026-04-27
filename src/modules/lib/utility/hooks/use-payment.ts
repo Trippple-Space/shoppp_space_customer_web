@@ -7,6 +7,8 @@ import { deliveryOptions } from "../constants";
 export interface PaymentDetails {
   addressId?: Address["id"];
   deliveryOption: keyof typeof deliveryOptions;
+  customerWhatsAppOptIn?: boolean;
+  customerWhatsAppNumber?: string;
 }
 
 const usePayment = () => {

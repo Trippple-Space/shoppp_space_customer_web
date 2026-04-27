@@ -9,17 +9,22 @@ export interface Store {
      heading: string;
      subHeading: string;
      meta: null | StoreMeta;
-     user?: {[key:string]:any};
-     profile?: {[key:string]:any};
-     registrationProposal?: {[key:string]:any};
+     user?: { [key: string]: any };
+     profile?: { [key: string]: any };
+     registrationProposal?: { [key: string]: any };
      categories?: string[]
 }
 
 interface StoreMeta {
      heroImage1: string;
-          heroImage2: string;
-          heroImage3: string;
-          heroImage4: string;
+     heroImage2: string;
+     heroImage3: string;
+     heroImage4: string;
+     coordinates: {
+          lat: string;
+          lon: string;
+          source: string;
+     }
      settings: {
           firstName: string;
           lastName: string;
@@ -29,13 +34,13 @@ interface StoreMeta {
           location: {
                state: string;
                address: string;
-               coordinates:{
-                    lat:string;
+               coordinates: {
+                    lat: string;
                     lon: string;
                     source: string;
                }
           };
      };
      template: any
-     templateFields: {[key:string]:any};
+     templateFields: { [key: string]: any };
 }

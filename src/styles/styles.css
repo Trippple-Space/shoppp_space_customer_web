@@ -96,6 +96,12 @@
   .font-youngSerif {
     font-family: var(--font-youngSerif);
   }
+  .font-nunitoSans {
+    font-family: "Nunito Sans", sans-serif;
+  }
+  .font-arial {
+    font-family: Arial, sans-serif;
+  }
 
   .custom-progress {
     background-color: #EAEAEA;

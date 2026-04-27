@@ -9,6 +9,7 @@ import StoreProductsList from '@/modules/views/storefront/StoreProductsList';
 import Collections from '@/modules/views/homepage/Collections';
 import { BaseStorefrontProps } from '@/modules/lib/utility/types/storefront-template.interface';
 import MiniCart from '@/modules/lib/components/minicart/MiniCart';
+import FabricsCategoryNav from '@/modules/lib/components/nav-bar/category-nav/FabricsCategoryNav';
 
 type TrendFashionProps = BaseStorefrontProps;
 
@@ -30,7 +31,11 @@ const TrendFashion: FC<TrendFashionProps> = ({
   page,
   setPage,
   totalPages,
-  initialCollections = []
+  initialCollections = [],
+  showCollectionsSection = true,
+  selectedCategory,
+  setSelectedCategory,
+  categories,
 }) => {
   return (
     <div className="trend-body font-inter">
@@ -92,7 +97,7 @@ const TrendFashion: FC<TrendFashionProps> = ({
           <div className="hero-text">
             <h1>{store?.heading || ''}</h1>
             <p>{store?.subHeading || ''}</p>
-            <button>Learn More</button>
+            <button onClick={scrollToProducts}>Learn More</button>
           </div>
 
           <div className="side-buttons">
@@ -182,7 +187,26 @@ const TrendFashion: FC<TrendFashionProps> = ({
           </section>
         )}
 
-      <Collections storeId={store.id} initialCollections={initialCollections} />
+      {!!categories?.length && (
+        <div className="sm:py-20 py-16 sm:mt-15 mt-10">
+          <FabricsCategoryNav
+            categories={categories}
+            selectedCategory={selectedCategory}
+            setSelectedCategory={setSelectedCategory}
+            page={'store'}
+            key={categories}
+          />
+        </div>
+      )}
+
+      {showCollectionsSection && (
+        <Collections
+          storeId={store.id}
+          initialCollections={initialCollections}
+          isStoreBased={true}
+          hasMargin={`${!categories?.length ? 'md:mt-50 mt-24' : 'mt-30 sm:mt-40'}`}
+        />
+      )}
 
       <section className="exclusive" ref={productsRef}>
         <h2 className="exclusive-header">
@@ -201,6 +225,8 @@ const TrendFashion: FC<TrendFashionProps> = ({
           page={page}
           totalPages={totalPages}
           onPageChange={setPage}
+          selectedCategory={selectedCategory}
+          setSelectedCategory={setSelectedCategory}
         />
       </section>
 

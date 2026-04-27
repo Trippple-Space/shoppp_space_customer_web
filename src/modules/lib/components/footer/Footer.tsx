@@ -9,65 +9,20 @@ import Image from '../image/Image';
 import Link from 'next/link';
 import config from '../../../../../env';
 import { paths } from '../../utility/paths';
-import { toast } from 'sonner';
+import useNewsletterSubscribe from './useNewsletterSubscribe';
 
 const Footer = () => {
   const [isFooterOpen, setIsFooterOpen] = useState(false);
-  const [loading, setLoading] = useState(false);
-  const [newsletterError, setNewsletterError] = useState('');
   const currentDate = new Date();
+  const {
+    loading,
+    newsletterError,
+    clearNewsletterError,
+    handleNewsletterSubmit,
+  } = useNewsletterSubscribe({ mode: 'full' });
 
   const handleCloseFooter = () => {
     setIsFooterOpen(false);
-  };
-
-  const handleNewsletterSubmit = async (
-    e: React.FormEvent<HTMLFormElement>
-  ) => {
-    e.preventDefault();
-    setNewsletterError('');
-    setLoading(true);
-
-    const form = e.currentTarget;
-    const formData = new FormData(form);
-
-    const firstName = formData.get('firstName');
-    const lastName = formData.get('lastName');
-    const email = formData.get('email');
-
-    const firstNameValue =
-      typeof firstName === 'string' ? firstName.trim() : '';
-    const lastNameValue = typeof lastName === 'string' ? lastName.trim() : '';
-    const emailValue = typeof email === 'string' ? email.trim() : '';
-
-    if (!firstNameValue || !lastNameValue || !emailValue) {
-      setNewsletterError('All fields are required');
-      return;
-    }
-
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    if (!emailRegex.test(emailValue)) {
-      setNewsletterError('Please enter a valid email address');
-      return;
-    }
-
-    const res = await fetch('/api/subscribe', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({
-        email: emailValue,
-        name: `${firstNameValue} ${lastNameValue}`,
-      }),
-    });
-
-    setLoading(false);
-
-    if (res.ok) {
-      toast.success('Subscribed successfully');
-      form.reset();
-    } else {
-      toast.error('Something went wrong. Try again.');
-    }
   };
 
   return (
@@ -192,14 +147,14 @@ const Footer = () => {
                       placeholder="First name"
                       name="firstName"
                       className="w-50p bg-lightest-grey border radius-10 border-1 text-grey text-14 weight-400 opacity-60 border-lighter-grey l:py-15  py-12 px-15 outline-grey-400"
-                      onChange={() => setNewsletterError('')}
+                      onChange={clearNewsletterError}
                     />
                     <input
                       type="text"
                       placeholder="Last name"
                       name="lastName"
                       className="w-50p bg-lightest-grey border radius-10 border-1 text-grey text-14 weight-400 opacity-60 border-lighter-grey l:py-15 py-12 px-20 outline-grey-400"
-                      onChange={() => setNewsletterError('')}
+                      onChange={clearNewsletterError}
                     />
                   </div>
 
@@ -209,7 +164,7 @@ const Footer = () => {
                       name="email"
                       placeholder="Enter your email address..."
                       className="w-100p bg-lightest-grey border radius-10 border-1 text-grey text-14 weight-400 opacity-60 border-lighter-grey l:py-15 py-12 px-15 px-20 outline-grey-400"
-                      onChange={() => setNewsletterError('')}
+                      onChange={clearNewsletterError}
                     />
                   </div>
                   {newsletterError && (

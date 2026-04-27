@@ -11,6 +11,7 @@ import StoreProductsList from '@/modules/views/storefront/StoreProductsList';
 import Collections from '@/modules/views/homepage/Collections';
 import { BaseStorefrontProps } from '@/modules/lib/utility/types/storefront-template.interface';
 import { ProductSearch } from '@/modules/lib/components/search-input/StoreFrontProductSearch';
+import FabricsCategoryNav from '@/modules/lib/components/nav-bar/category-nav/FabricsCategoryNav';
 
 type SimpleFlowProps = BaseStorefrontProps & {
   cart?: Cart;
@@ -36,6 +37,10 @@ const SimpleFlow: FC<SimpleFlowProps> = ({
   setPage,
   totalPages,
   initialCollections = [],
+  showCollectionsSection = true,
+  selectedCategory,
+  setSelectedCategory,
+  categories,
 }) => {
   return (
     <>
@@ -182,7 +187,29 @@ const SimpleFlow: FC<SimpleFlowProps> = ({
             </section>
           )}
 
-        <Collections storeId={store.id} initialCollections={initialCollections} />
+        {!!categories?.length && (
+          <div className="sm:py-30 py-20">
+            <FabricsCategoryNav
+              categories={categories}
+              selectedCategory={selectedCategory}
+              setSelectedCategory={setSelectedCategory}
+              page={'store'}
+              key={categories}
+            />
+          </div>
+        )}
+
+        {showCollectionsSection && (
+          <div className={`px-16 l:px-24 max-w-1440 mx-auto ${!categories?.length ? "md:my-50 my-24" : "md:mb-50 mb-24"}`}>
+            <Collections
+              storeId={store.id}
+              initialCollections={initialCollections}
+              isStoreBased={true}
+              hasMargin=""
+              hasAppWidth={false}
+            />
+          </div>
+        )}
 
         <section className="simpleFlow__bottomSection" ref={productsRef}>
           <div className="simpleFlow_bottomSectionWrapper">
@@ -204,6 +231,8 @@ const SimpleFlow: FC<SimpleFlowProps> = ({
               page={page}
               onPageChange={setPage}
               totalPages={totalPages}
+              selectedCategory={selectedCategory}
+              setSelectedCategory={setSelectedCategory}
             />
           </div>
         </section>

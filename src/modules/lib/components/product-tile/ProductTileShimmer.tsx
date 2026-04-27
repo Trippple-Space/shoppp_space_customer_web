@@ -2,9 +2,14 @@
 
 import React, { FC } from 'react';
 
-const ProductTileShimmer: FC = () => {
+const ProductTileShimmer: FC<{ isStoreBased?: boolean; horizontalScroll?: boolean }> = ({
+  isStoreBased = false,
+  horizontalScroll = true,
+}) => {
   return (
-    <div className="l:w-290 md:w-250 sm:w-220 w-150 flex flex-col gap-12 flex-shrink-0">
+    <div
+      className={`${horizontalScroll ? 'l:w-290 md:w-250 sm:w-220 w-150 flex-shrink-0' : 'w-full'} flex flex-col gap-12`}
+    >
       <div
         className="ratio-1 radius-10 l:radius-15 overflow-hidden w-full pulsing-multi-color-bg"
         aria-hidden
@@ -19,7 +24,9 @@ const ProductTileShimmer: FC = () => {
         ))}
       </div>
       <div className="md:mt-16 mt-20 h-20 w-full max-w-180 pulsing-multi-color-bg radius-4" aria-hidden />
-      <div className="h-24 w-full max-w-120 pulsing-multi-color-bg radius-4" aria-hidden />
+      {
+        !isStoreBased ? (<div className="h-24 w-full max-w-120 pulsing-multi-color-bg radius-4" aria-hidden />) : null
+      }
       <div className="h-24 w-80 pulsing-multi-color-bg radius-4" aria-hidden />
     </div>
   );

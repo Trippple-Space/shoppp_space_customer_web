@@ -9,6 +9,7 @@ import Collections from '@/modules/views/homepage/Collections';
 import StoreProductsList from '@/modules/views/storefront/StoreProductsList';
 import { BaseStorefrontProps } from '@/modules/lib/utility/types/storefront-template.interface';
 import { ProductSearch } from '@/modules/lib/components/search-input/StoreFrontProductSearch';
+import FabricsCategoryNav from '@/modules/lib/components/nav-bar/category-nav/FabricsCategoryNav';
 
 type ModernLuxeProps = BaseStorefrontProps & {
   offers: {
@@ -40,6 +41,10 @@ const ModernLuxe: FC<ModernLuxeProps> = (props) => {
     totalPages,
     offers,
     initialCollections = [],
+    showCollectionsSection = true,
+    selectedCategory,
+    setSelectedCategory,
+    categories,
   } = props;
 
   return (
@@ -239,7 +244,31 @@ const ModernLuxe: FC<ModernLuxeProps> = (props) => {
         </div>
       </section>
 
-      <Collections storeId={store.id} initialCollections={initialCollections} />
+      {!!categories?.length && (
+        <div className="sm:pt-20 pt-16">
+          <FabricsCategoryNav
+            categories={categories}
+            selectedCategory={selectedCategory}
+            setSelectedCategory={setSelectedCategory}
+            page={'store'}
+            key={categories}
+          />
+        </div>
+      )}
+
+      {showCollectionsSection && (
+        <div className='px-20 sm:px-30 m:px-40 max-w-1440 mx-auto'>
+          <Collections
+            storeId={store.id}
+            initialCollections={initialCollections}
+            isStoreBased={true}
+            headingClassName="font-arial weight-500"
+            subHeadingClassName="font-arial"
+            hasMargin="md:mt-50 mt-24"
+            hasAppWidth={false}
+          />
+        </div>
+      )}
 
       <section
         className="py-30 sm:py-40 md:py-50 l:py-60 px-20 sm:px-30 m:px-40 max-w-1440 mx-auto"
@@ -259,6 +288,8 @@ const ModernLuxe: FC<ModernLuxeProps> = (props) => {
           page={page}
           onPageChange={setPage}
           totalPages={totalPages}
+          selectedCategory={selectedCategory}
+          setSelectedCategory={setSelectedCategory}
         />
       </section>
 

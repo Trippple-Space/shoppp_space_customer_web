@@ -1,11 +1,21 @@
-import { useState, useEffect, useRef, useCallback, FC } from "react";
+import { useState, useEffect, useCallback, FC, RefObject } from "react";
 import { HiOutlineChevronLeft, HiOutlineChevronRight } from "react-icons/hi2";
 
+type ScrollDirection = "left" | "right";
+
 interface IScrollButtons {
-  scrollRef: any;
-  page: any;
-  scrollLength: number;
-  component: any;
+  scrollRef: RefObject<HTMLDivElement | null>;
+  page?: any;
+  scrollLength?: number;
+  component?: any;
+
+  stepPx?: number;
+  stepMultiplier?: number; 
+  behavior?: ScrollBehavior;
+  leftButtonClassName?: string;
+  rightButtonClassName?: string;
+  leftIconClassName?: string;
+  rightIconClassName?: string;
 }
 
 const ScrollButtons: FC<IScrollButtons> = ({
@@ -13,101 +23,142 @@ const ScrollButtons: FC<IScrollButtons> = ({
   page,
   scrollLength,
   component,
+  stepPx,
+  stepMultiplier,
+  behavior = "smooth",
+  leftButtonClassName,
+  rightButtonClassName,
+  leftIconClassName,
+  rightIconClassName,
 }) => {
-  const [showScrollButtons, setShowScrollButtons] = useState(false);
-  const [showLeftButton, setShowLeftButton] = useState(false);
-  const [showRightButton, setShowRightButton] = useState(false);
+  const [buttonsState, setButtonsState] = useState({
+    showLeftButton: false,
+    showRightButton: false,
+    isLeftDisabled: true,
+    isRightDisabled: true,
+  });
 
-  const scrollCategories = useCallback((direction: any) => {
-    if (scrollRef) {
-      scrollRef.current.scrollBy({
-        behavior: "smooth",
-        left:
-          direction === "left"
-            ? component === "categories"
-              ? -180
-              : -400
-            : component === "categories"
-            ? 180
-            : 400,
-      });
-    }
-  }, []);
+  const getDefaultStepMultiplier = useCallback(() => {
+    return component === "categories" ? 0.55 : 0.85;
+  }, [component]);
+
+  const scrollByDirection = useCallback(
+    (direction: ScrollDirection) => {
+      const target = scrollRef?.current;
+      if (!target) return;
+
+      const maxScrollLeft = Math.max(0, target.scrollWidth - target.clientWidth);
+
+      const multiplier =
+        typeof stepMultiplier === "number" ? stepMultiplier : getDefaultStepMultiplier();
+      const computedStep =
+        typeof stepPx === "number" ? stepPx : target.clientWidth * multiplier;
+
+      const delta = direction === "left" ? -computedStep : computedStep;
+      const nextLeft = Math.max(
+        0,
+        Math.min(target.scrollLeft + delta, maxScrollLeft)
+      );
+
+      target.scrollTo({ left: nextLeft, behavior });
+    },
+    [behavior, scrollRef, stepMultiplier, stepPx, getDefaultStepMultiplier]
+  );
 
   const checkOverflowAndPosition = useCallback(() => {
-    const categoriesWidth = screen.width >= 576 ? 90 : 71;
-    const storeFrontCats = screen.width >= 576 ? 125 : 96;
-    const storeProductsWidth = screen.width >= 992 ? 300 : 242;
+    const target = scrollRef?.current;
+    if (!target) return;
 
-    const scrollContainerWidth =
-      page === "home"
-        ? categoriesWidth * scrollLength
-        : page === "store"
-        ? storeFrontCats * scrollLength
-        : storeProductsWidth * scrollLength;
+    const tolerance = 2; // px; fixes premature "at start/end" detection
+    const maxScrollLeft = Math.max(0, target.scrollWidth - target.clientWidth);
 
-    if (scrollRef.current) {
-      const hasOverflow =
-        scrollContainerWidth > scrollRef.current.parentElement.clientWidth;
-      setShowScrollButtons(hasOverflow);
+    const hasOverflow = maxScrollLeft > tolerance;
+    const isLeftDisabled = !hasOverflow || target.scrollLeft <= tolerance;
+    const isRightDisabled = !hasOverflow || target.scrollLeft >= maxScrollLeft - tolerance;
 
-      const atStart = scrollRef.current.scrollLeft === 0;
-      const atEnd =
-        Math.round(scrollRef.current.scrollLeft) +
-          scrollRef.current.clientWidth >=
-        scrollContainerWidth;
+    const next = {
+      showLeftButton: hasOverflow,
+      showRightButton: hasOverflow,
+      isLeftDisabled,
+      isRightDisabled,
+    };
 
-      setShowLeftButton(!atStart);
-      setShowRightButton(!atEnd);
-    }
-  }, []);
+    setButtonsState((prev) => {
+      if (
+        prev.showLeftButton === next.showLeftButton &&
+        prev.showRightButton === next.showRightButton &&
+        prev.isLeftDisabled === next.isLeftDisabled &&
+        prev.isRightDisabled === next.isRightDisabled
+      ) {
+        return prev;
+      }
+      return next;
+    });
+  }, [scrollRef]);
 
   useEffect(() => {
     checkOverflowAndPosition();
     window.addEventListener("resize", checkOverflowAndPosition);
 
     return () => window.removeEventListener("resize", checkOverflowAndPosition);
-  }, []);
+  }, [checkOverflowAndPosition]);
 
   useEffect(() => {
-    if (scrollRef) {
-      scrollRef?.current.addEventListener("scroll", checkOverflowAndPosition);
-    }
-  }, []);
+    const target = scrollRef?.current;
+    if (!target) return;
+
+    target.addEventListener("scroll", checkOverflowAndPosition);
+    return () => {
+      target.removeEventListener("scroll", checkOverflowAndPosition);
+    };
+  }, [scrollRef, checkOverflowAndPosition]);
+
+  useEffect(() => {
+    checkOverflowAndPosition();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [checkOverflowAndPosition, scrollLength, page, component]);
 
   return (
     <>
-      {showScrollButtons && (
+      {(buttonsState.showLeftButton || buttonsState.showRightButton) && (
         <>
-          {showLeftButton && (
+          {buttonsState.showLeftButton && (
             <div
-              onClick={() => scrollCategories("left")}
+              onClick={() => !buttonsState.isLeftDisabled && scrollByDirection("left")}
+              aria-disabled={buttonsState.isLeftDisabled}
               className={`${
                 component === "categories"
-                  ? "t-10p l--10  px-6 py-6 l:bg-white bg-#F5F5F5 sm:flex hidden"
+                  ? "t-10p l--10 px-6 py-6 l:bg-white bg-#F5F5F5 sm:flex hidden"
                   : "t-40p l-0 p-12 bg-#FFFFFFCC md:flex hidden"
-              } absolute z-1 l:border border-#00000014 pointer round j-content-center items-center margin-left:12px;`}
+              } absolute z-1 l:border border-#00000014 pointer round j-content-center items-center margin-left:12px; ${
+                buttonsState.isLeftDisabled ? "opacity-0 pointer-events-none" : ""
+              } ${leftButtonClassName ?? ""}`}
             >
               <HiOutlineChevronLeft
                 className={
-                  component === "categories" ? "w-16 h-16" : "w-24 h-24"
+                  leftIconClassName ??
+                  (component === "categories" ? "w-16 h-16" : "w-24 h-24")
                 }
               />
             </div>
           )}
 
-          {showRightButton && (
+          {buttonsState.showRightButton && (
             <div
-              onClick={() => scrollCategories("right")}
+              onClick={() => !buttonsState.isRightDisabled && scrollByDirection("right")}
+              aria-disabled={buttonsState.isRightDisabled}
               className={`${
                 component === "categories"
-                  ? "t-10p r--10  px-6 py-6 l:bg-white bg-#F5F5F5 sm:flex hidden"
+                  ? "t-10p r--10 px-6 py-6 l:bg-white bg-#F5F5F5 sm:flex hidden"
                   : "t-40p r-0 p-12 bg-#FFFFFFCC md:flex hidden"
-              } absolute z-1 l:border border-#00000014 pointer round j-content-center items-center margin-left:12px;`}
+              } absolute z-1 l:border border-#00000014 pointer round j-content-center items-center margin-left:12px; ${
+                buttonsState.isRightDisabled ? "opacity-0 pointer-events-none" : ""
+              } ${rightButtonClassName ?? ""}`}
             >
               <HiOutlineChevronRight
                 className={
-                  component === "categories" ? "w-16 h-16" : "w-24 h-24"
+                  rightIconClassName ??
+                  (component === "categories" ? "w-16 h-16" : "w-24 h-24")
                 }
               />
             </div>

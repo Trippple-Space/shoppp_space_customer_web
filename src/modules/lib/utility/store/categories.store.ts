@@ -1,15 +1,21 @@
 import { create } from 'zustand';
 import { ICategory } from '../types/product.interface';
 
+export const CATEGORY_CACHE_TTL_MS = 10 * 60 * 1000;
+
+export interface CategoryCacheEntry {
+    categories: ICategory[];
+    cachedAt: number;
+}
 
 interface CategoryStore {
-    categoriesCache: Record<string, any>;
+    categoriesCache: Record<string, CategoryCacheEntry>;
     selectedCategory: {
         [x: string]: ICategory;
     }
     currentCategoryList: ICategory[];
     products: Record<string, any>;
-    setCategoriesCache: (type: string | null, label: string, storeId: string, categories: any) => void;
+    setCategoriesCache: (type: string | null, label: string, storeId: string, categories: ICategory[]) => void;
     setSelectedCategory: (type: string | null, label: string, storeId: string, category: ICategory) => void;
     setCurrentCategoryList: (categoryList: ICategory[]) => void;
 }
@@ -31,11 +37,19 @@ export const useCategoryStore = create<CategoryStore>((set) => ({
         set((state) => ({
             categoriesCache: {
                 ...state.categoriesCache,
-                [`${type}_${label}_${storeId}`]: categories ?? [],
+                [`${type}_${label}_${storeId}`]: {
+                    categories: categories ?? [],
+                    cachedAt: Date.now(),
+                },
             },
         })),
     setCurrentCategoryList: (categoryList) =>
-        set((state) => ({
-            currentCategoryList: categoryList,
-        })),
+        set((state) => {
+            if (state.currentCategoryList === categoryList) {
+                return state;
+            }
+            return {
+                currentCategoryList: categoryList,
+            };
+        }),
 }));

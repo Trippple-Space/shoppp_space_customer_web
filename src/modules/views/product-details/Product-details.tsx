@@ -6,6 +6,7 @@ import { AiFillHeart, AiOutlineHeart } from 'react-icons/ai';
 import HomepageNavBar from '@/modules/lib/components/nav-bar/HomepageNavBar';
 import QuantitySelector from '@/modules/lib/components/quantity-selector/QuantitySelector';
 import VariantModal from '@/modules/lib/components/variant-modal/VariantModal';
+import { useAuthGuard } from '@/modules/lib/utility/hooks/use-auth-guard';
 import { useCart } from '@/modules/lib/utility/hooks/use-cart';
 import { useSavedVariant } from '@/modules/lib/utility/hooks/use-saved-variants';
 import useTransformProduct, {
@@ -30,6 +31,7 @@ import {
 import { Rating, Star } from '@smastrom/react-rating';
 import classNames from 'classnames';
 import Link from 'next/link';
+import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 import { HiOutlineShoppingBag } from 'react-icons/hi2';
 import { LuGrid2X2 } from 'react-icons/lu';
 import { PiGlobeHemisphereEast, PiStorefront, PiTruck } from 'react-icons/pi';
@@ -87,6 +89,7 @@ const ProductDetails = ({ product }: { product: Product }) => {
   const [isEditingConfiguration, setIsEditingConfiguration] = useState(false);
 
   const imgRef = useRef<HTMLImageElement>(null);
+  const rateProductDeepLinkHandled = useRef(false);
 
   const variantIds = useMemo(
     () => product?.variants.map((v) => v.id),
@@ -242,11 +245,21 @@ const ProductDetails = ({ product }: { product: Product }) => {
     return Array.from(map.values()).concat(rest);
   }, [product?.variants, allPropertiesWithSize]);
 
-  const allImages = uniqueVariantsFromProductImages?.flatMap((variant) =>
-    variant.media.map((media) => media.url)
-  );
-  const uniqueImages = Array.from(new Set(allImages));
-  const lightboxImages = uniqueImages.length ? uniqueImages : [''];
+  const allImages =
+    uniqueVariantsFromProductImages?.flatMap((variant) =>
+      variant.media.map((media) => media.url)
+    ) ?? [];
+  const uniqueImages = Array.from(new Set(allImages.filter(Boolean)));
+
+  const catalogueImages =
+    (product?.productCatalogues ?? [])
+      .map((catalogue) => catalogue.mediaUrl)
+      .filter(Boolean) ?? [];
+
+  const allLightboxImages = [...uniqueImages, ...catalogueImages];
+  const lightboxImages = allLightboxImages.length
+    ? Array.from(new Set(allLightboxImages))
+    : [''];
   const lightboxTotal = lightboxImages.length;
 
   const { saveVariant, savedVariants, removeSavedVariant } = useSavedVariant();
@@ -259,6 +272,12 @@ const ProductDetails = ({ product }: { product: Product }) => {
     isLoginModal,
     isAuthenticated,
   } = useCart();
+
+  const { checking: authChecking } = useAuthGuard();
+
+  const searchParams = useSearchParams();
+  const router = useRouter();
+  const pathname = usePathname();
 
   const {
     reviews,
@@ -289,6 +308,34 @@ const ProductDetails = ({ product }: { product: Product }) => {
       }
     })();
   }, [isAuthenticated]);
+
+  useEffect(() => {
+    if (authChecking) return;
+    if (rateProductDeepLinkHandled.current) return;
+    if (searchParams.get('rateProduct') !== 'true') return;
+
+    rateProductDeepLinkHandled.current = true;
+
+    if (isAuthenticated) {
+      setIsReviewModalOpen(true);
+    } else {
+      isLoginModal();
+    }
+
+    const params = new URLSearchParams(searchParams.toString());
+    params.delete('rateProduct');
+    const query = params.toString();
+    router.replace(query ? `${pathname}?${query}` : pathname, {
+      scroll: false,
+    });
+  }, [
+    authChecking,
+    searchParams,
+    pathname,
+    router,
+    isAuthenticated,
+    isLoginModal,
+  ]);
 
   useEffect(() => {
     if (isAuthenticated) {
@@ -899,7 +946,17 @@ const ProductDetails = ({ product }: { product: Product }) => {
 
               <div className="grid grid-3-cols-1fr sm:grid-4-cols-1fr md:grid-5-cols-1fr lg:grid-6-cols-1fr xl:grid-7-cols-1fr gap-3">
                 {product?.productCatalogues?.map((item) => (
-                  <CatalogueMediaItem key={item.id} item={item} />
+                  <CatalogueMediaItem
+                    key={item.id}
+                    item={item}
+                    onClick={() => {
+                      const idx = lightboxImages.findIndex(
+                        (u) => u === item.mediaUrl
+                      );
+                      setLightboxIndex(idx >= 0 ? idx : 0);
+                      setShowLightbox(true);
+                    }}
+                  />
                 ))}
               </div>
             </div>

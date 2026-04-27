@@ -22,15 +22,25 @@ export const useProductListView = () => {
   });
   const { allFilters } = useFilterStore();
 
-  const { products, setPagination, setSearch, setCollection, query, updateHomePageFilter, loading, fetchingError, refetch } = useProducts({
+  const { products, setPagination, setSearch, setCollection, query, updateHomePageFilter, loading, fetchingError, refetch, meta } = useProducts({
     filters: { type, status: { In: "ACTIVE,OUT_OF_STOCK" }, channel: "ASOEBI_STORE" }, order: {
       priorityScore: "DESC",
       createdAt: "DESC"
     },
+    /* pagination: { page: 1, limit }, */
   });
 
   useEffect(() => {
-    const updatedFilters = { ...allFilters, tags: selectedCategory.name === "All" ? "" : selectedCategory.name.toLowerCase() };
+    const categoryName = selectedCategory?.name ?? "";
+    const tags = categoryName && categoryName !== "All"
+      ? categoryName
+          .split(",")
+          .map((t) => t.trim())
+          .filter(Boolean)
+          .map((t) => t.toLowerCase())
+      : [];
+
+    const updatedFilters = { ...allFilters, tags: tags.length ? tags : "" };
 
     updateHomePageFilter(updatedFilters);
     setPage(1);
@@ -41,10 +51,12 @@ export const useProductListView = () => {
     if (!inView) return;
     if (loading) return;
 
-    if (products.length >= limit && products.length % limit === 0) {
+    const totalPages = meta?.totalPages ?? 1;
+    const currentPage = meta?.currentPage ?? page;
+    if (currentPage < totalPages) {
       setPage((prev) => prev + 1);
     }
-  }, [inView, loading, products.length]);
+  }, [inView, loading, meta?.currentPage, meta?.totalPages, page]);
 
   useEffect(() => {
     setPagination({ page, limit });

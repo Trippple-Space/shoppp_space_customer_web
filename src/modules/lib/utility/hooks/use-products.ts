@@ -35,7 +35,12 @@ export interface IQueryParams {
 
 export type PaginationType = "infinite" | "buttons";
 
-export const useProducts = (initialQuery: IQueryParams, paginationType: PaginationType = "infinite", collectionSlug?: string, currentTags?: string) => {
+export const useProducts = (
+  initialQuery: IQueryParams,
+  paginationType: PaginationType = "infinite",
+  collectionSlug?: string,
+  currentTags?: string | string[]
+) => {
   const [query, setQuery] = useState<IQueryParams>(initialQuery);
   const [loading, setLoading] = useState(true);
   const [fetchingError, setFetchingError] = useState<Error | null>(null);
@@ -106,7 +111,7 @@ export const useProducts = (initialQuery: IQueryParams, paginationType: Paginati
   const setCollection = (collection?: string) => {
     setQuery((prev) => ({
       ...prev,
-      collection,
+      collection: collection?.trim() ? collection : undefined,
       pagination: {
         page: 1,
         limit: prev.pagination?.limit ?? 20,
@@ -141,18 +146,25 @@ export const useProducts = (initialQuery: IQueryParams, paginationType: Paginati
       `_page_${query.pagination?.page ?? 1}` +
       `_limit_${query.pagination?.limit ?? 0}`;
 
+  const effectiveCollectionSlug = query.collection
+    ? query.collection
+    : collectionSlug;
+
   useEffect(() => {
     if (!query.pagination) return;
 
     //buttons scroll
     if (paginationType === "buttons") {
-      if (productsCache[cacheKey]) return;
+      if (productsCache[cacheKey]) {
+        setLoading(false);
+        return;
+      }
 
       setLoading(true);
       setFetchingError(null);
 
       productService
-        .fetchProducts(query, query.allFilters, collectionSlug = query.collection ? query.collection : collectionSlug)
+        .fetchProducts(query, query.allFilters, effectiveCollectionSlug)
         .then((fetchedProducts) => {
           setProductsCache(cacheKey, {
             data: fetchedProducts.data,
@@ -179,7 +191,7 @@ export const useProducts = (initialQuery: IQueryParams, paginationType: Paginati
       setLoading(true);
       setFetchingError(null);
       productService
-        .fetchProducts(query, query.allFilters, collectionSlug = query.collection ? query.collection : collectionSlug)
+        .fetchProducts(query, query.allFilters, effectiveCollectionSlug)
         .then((fetchedProducts) => {
           setProductsCache(cacheKey, {
             data: fetchedProducts.data,
@@ -216,7 +228,7 @@ export const useProducts = (initialQuery: IQueryParams, paginationType: Paginati
       setLoading(true);
       setFetchingError(null);
       productService
-        .fetchProducts(query, query.allFilters, collectionSlug = query.collection ? query.collection : collectionSlug)
+        .fetchProducts(query, query.allFilters, effectiveCollectionSlug)
         .then((fetchedProducts) => {
           const previous = productsCache[cacheKey];
 

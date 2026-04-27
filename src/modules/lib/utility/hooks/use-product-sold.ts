@@ -1,22 +1,24 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { visitService } from "../services/visit.service";
 import useUserStore from "../store/user.store";
 
 export const useProductSold = (storeID: string) => {
   const [productSold, setProductSold] = useState();
-  const getProductSold = async () => {
-    if (storeID) {
-      await visitService
-        .getProductSold(storeID)
-        .then((res: any) => {
+
+  useEffect(() => {
+    const getProductSold = async () => {
+      if (storeID) {
+        try {
+          const res = await visitService.getProductSold(storeID);
           setProductSold(res);
-        })
-        .catch((error) => {
+        } catch (error) {
           //console.error("failed to get product sold", error);
-        });
-    }
-  };
-  getProductSold();
+        }
+      }
+    };
+    getProductSold();
+    // Only run once on mount or when storeID changes
+  }, [storeID]);
 
   return { productSold };
 };

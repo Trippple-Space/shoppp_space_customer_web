@@ -9,6 +9,7 @@ import UnknownVendor from "@/modules/views/unknown-routes/unknown-vendor";
 import endpoints from "@/modules/lib/utility/endpoints";
 import { buildEndpoint } from "@/modules/lib/utility/utility";
 import { getCollections } from "@/modules/lib/utility/server/collections.server";
+import { getCategories } from "@/modules/lib/utility/server/categories.server";
 
 async function getStore(slug: string) {
   try {
@@ -101,10 +102,19 @@ export default async function storeFront({
   }
 
   const initialCollections = await getCollections(store.id, config.API_HOST);
+  const initialCategories = await getCategories(config.API_HOST, {
+    type: "both",
+    label: "STORE",
+    storeId: store.id,
+  });
 
   return (
     <>
-      <StorefrontParent store={store} initialCollections={initialCollections} />
+      <StorefrontParent
+        store={store}
+        initialCollections={initialCollections}
+        initialCategories={initialCategories}
+      />
     </>
   );
 }
