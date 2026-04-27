@@ -857,7 +857,35 @@ const CheckoutPage = () => {
                             </button>
                           </div>
                           <button
-                            onClick={sharePaymentLink}
+                            onClick={() => {
+                              if (canProceedToPayment || selectedDeliveryOption === null) return;
+                              if (enableOrderWhatsApp) {
+                                if (!orderWhatsAppNumber.trim()) {
+                                  setOrderWhatsAppError(
+                                    'Please enter a WhatsApp number for this order.'
+                                  );
+                                  toast.error(
+                                    'Please enter a WhatsApp number for this order.'
+                                  );
+                                  return;
+                                }
+                                if (!isValidOrderWhatsAppNumber(orderWhatsAppNumber)) {
+                                  setOrderWhatsAppError(
+                                    'Please enter a valid WhatsApp number.'
+                                  );
+                                  toast.error('Please enter a valid WhatsApp number.');
+                                  return;
+                                }
+                              }
+                              sharePaymentLink({
+                                addressId: selectedAddress?.id,
+                                deliveryOption: selectedDeliveryOption,
+                                customerWhatsAppOptIn: enableOrderWhatsApp,
+                                customerWhatsAppNumber: enableOrderWhatsApp
+                                  ? orderWhatsAppNumber.trim()
+                                  : undefined,
+                              });
+                            }}
                             disabled={canProceedToPayment || isSharingPaymentLink}
                             className={`w-full sm:w-fit border md:text-16 text-14 weight-500 md:line-height-22 line-height-19 md:px-24 px-16 py-12 radius-6 bg-white ${canProceedToPayment || isSharingPaymentLink ? 'border-#D1D5DB color-#9CA3AF cursor-not-allowed' : 'border-#0B9378 color-#0B9378 pointer'}`}
                             title={

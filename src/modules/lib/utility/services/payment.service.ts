@@ -17,8 +17,8 @@ class PaymentService {
     return response.data;
   }
 
-  async createShareLink(): Promise<ShareLinkResponse> {
-    const response = await http.post(endpoints.PAYMENT_SHARE_LINK);
+  async createShareLink(paymentDetails: PaymentDetails): Promise<ShareLinkResponse> {
+    const response = await http.post(endpoints.PAYMENT_SHARE_LINK, paymentDetails);
     return response.data;
   }
 

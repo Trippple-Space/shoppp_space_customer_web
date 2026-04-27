@@ -60,10 +60,17 @@ const usePayment = () => {
     }
   };
 
-  const sharePaymentLink = async (): Promise<void> => {
+  const sharePaymentLink = async (
+    paymentDetails: PaymentDetails
+  ): Promise<void> => {
+    if (!paymentDetails.addressId) {
+      toast.error("Please select an address to proceed");
+      return;
+    }
+
     try {
       setSharing(true);
-      const result = await paymentService.createShareLink();
+      const result = await paymentService.createShareLink(paymentDetails);
       const shareLink = `${window.location.origin}/pay/${result.shareToken}`;
       await navigator.clipboard.writeText(shareLink);
       toast.success("Payment link copied to clipboard");
