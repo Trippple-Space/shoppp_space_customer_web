@@ -12,22 +12,49 @@ export async function generateMetadata({
     const product = await productService.fetchProductBySlug(params.slug, {});
 
     const extractProductProperties = () => {
+      const hasValue = (value: unknown) => {
+        if (value === null || value === undefined) return false;
+        if (typeof value === 'string') return value.trim().length > 0;
+        if (Array.isArray(value)) {
+          return value.some(
+            (item) => typeof item === 'string' && item.trim().length > 0
+          );
+        }
+        if (typeof value === 'object') return Object.keys(value).length > 0;
+        return true;
+      };
+
+      const normalizeValue = (value: unknown) => {
+        if (typeof value === 'string') return value.trim();
+        if (Array.isArray(value)) {
+          return value
+            .map((item) =>
+              typeof item === 'string' ? item.trim() : String(item).trim()
+            )
+            .filter(Boolean)
+            .join(', ');
+        }
+        return String(value).trim();
+      };
+
       const sizes = new Set<string>();
       const colors = new Set<string>();
       const customProperties: Record<string, Set<string>> = {};
 
       product.variants.forEach((variant) => {
-        if (variant?.size) sizes.add(variant?.size);
+        if (hasValue(variant?.size)) sizes.add(String(variant?.size).trim());
 
-        if (variant?.properties?.color) colors.add(variant?.properties?.color);
+        if (hasValue(variant?.properties?.color)) {
+          colors.add(String(variant?.properties?.color).trim());
+        }
 
         if (variant?.properties) {
           Object.entries(variant?.properties).forEach(([key, value]) => {
             if (key === 'color' || key === 'size') return;
+            if (!hasValue(value)) return;
             if (!customProperties[key]) customProperties[key] = new Set();
-            customProperties[key].add(
-              Array.isArray(value) ? value.join(', ') : String(value)
-            );
+            const normalizedValue = normalizeValue(value);
+            if (normalizedValue) customProperties[key].add(normalizedValue);
           });
         }
       });
@@ -46,7 +73,12 @@ export async function generateMetadata({
 
     const { sizes, colors, customProperties } = extractProductProperties();
 
+    const storeName = product?.store?.name?.trim() || 'Asoebi Africa';
+
     const customPropsString = Object.entries(customProperties)
+      .filter(
+        ([key, values]) => key.trim().length > 0 && Array.isArray(values) && values.length > 0
+      )
       .map(([key, values]) => `${key}: ${values.join(', ')}`)
       .join('. ');
 
@@ -57,26 +89,45 @@ export async function generateMetadata({
       0;
     const priceFormatted =
       priceAmount > 0 ? `₦${Number(priceAmount).toLocaleString('en')}` : '';
-    const priceSuffix = priceFormatted ? ` Price: ${priceFormatted}.` : '';
+    const descriptionParts = [
+      product?.longDescription?.trim() || product?.name?.trim(),
+      sizes.length > 0 ? `Available sizes: ${sizes.join(', ')}.` : '',
+      colors.length > 0 ? `Available colors: ${colors.join(', ')}.` : '',
+      customPropsString ? `${customPropsString}.` : '',
+    ].filter(Boolean);
 
     const descriptionBase =
-      `${product?.longDescription}. ${sizes ? `Available sizes: ${sizes.join(', ')}.` : ''} ${colors ? `Available colors: ${colors.join(', ')}.` : ''} ${customPropsString}.` ||
-      `${product?.name}. ${sizes ? `Available sizes: ${sizes.join(', ')}.` : ''} ${colors ? `Available colors: ${colors.join(', ')}.` : ''} ${customPropsString}. - Check out this piece on Asoebi Africa`;
-    const descriptionWithPrice = `${descriptionBase}${priceSuffix}`;
+      descriptionParts.join(' ') ||
+      `${product?.name}. Check out this piece on ${storeName}.`;
+
+    const descriptionWithPrice = priceFormatted
+      ? `Price: ${priceFormatted}. ${descriptionBase}`
+      : descriptionBase;
+      
+    const getFirstImagePreviewUrl = () => {
+      for (const variant of product?.variants ?? []) {
+        for (const mediaItem of variant?.media ?? []) {
+          const mediaUrl = mediaItem?.url?.trim();
+          if (!mediaUrl) continue;
+          if (mediaItem?.type === 'image') return mediaUrl;
+        }
+      }
+      return 'asoebi-stacked-logo.svg';
+    };
+
+    const previewImageUrl = getFirstImagePreviewUrl();
 
     return {
-      title: `${product?.name} - Asoebi Africa`,
+      title: `${product?.name} - ${storeName}`,
       description: descriptionWithPrice,
       openGraph: {
-        title: `${product?.name} - Asoebi Africa`,
+        title: `${product?.name} - ${storeName}`,
         description: descriptionWithPrice,
         url: `https://asoebi.africa/products/${params.slug}`,
-        siteName: 'Asoebi Africa',
+        siteName: storeName,
         images: [
           {
-            url:
-              product?.variants?.[0]?.media?.[0]?.url ||
-              'asoebi-stacked-logo.svg',
+            url: previewImageUrl,
             alt: product?.name,
             height: 630,
             width: 1200,
@@ -85,11 +136,9 @@ export async function generateMetadata({
       },
       twitter: {
         card: 'summary_large_image',
-        title: `${product?.name} - Asoebi Africa`,
+        title: `${product?.name} - ${storeName}`,
         description: descriptionWithPrice,
-        images: [
-          product?.variants?.[0]?.media?.[0]?.url || 'asoebi-stacked-logo.svg',
-        ],
+        images: [previewImageUrl],
       },
       ...(priceAmount > 0 && {
         other: {
