@@ -84,12 +84,16 @@ const SavedVariantsCard: React.FC<any> = ({ savedVariant, removeSavedVariant, re
               if (savedVariant) {
                 addToCart(
                   savedVariant.variantId,
-                  savedVariant.variant.minPurchaseQuantity || 1
+                  savedVariant.variant.minPurchaseQuantity || 1,
+                  undefined,
+                  savedVariant.variant
                 )
               } else {
                 addToCart(
                   recentVariant.productVariantId,
-                  recentVariant.productVariant.minPurchaseQuantity || 1
+                  recentVariant.productVariant.minPurchaseQuantity || 1,
+                  undefined,
+                  recentVariant.productVariant
                 )
               }
             }

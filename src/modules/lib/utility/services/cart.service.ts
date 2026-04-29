@@ -4,6 +4,12 @@ import http from "../http";
 import { BuyAgain, Cart, CartItem, StoreGroupResponse } from "../types/cart.interface";
 import { toast } from "sonner";
 
+type AppendCartItem = {
+    variantId: string;
+    quantity: number;
+    userConfigurations?: Record<string, any>;
+};
+
 class CartService {
     fetchCart(isCheckout?: boolean): Promise<Cart> {
         return new Promise((resolve, reject) => {
@@ -121,6 +127,31 @@ class CartService {
                         }).finally(() => {
                             toast.success("Cart updated successfully", { duration: 2000 });
                         })
+                })
+                .catch((error) => {
+                    reject(error);
+                });
+        });
+    }
+
+    appendToCart(items: AppendCartItem[]): Promise<Cart> {
+        return new Promise((resolve, reject) => {
+            http.post(endpoints.APPENDCART, { items })
+                .then((response) => {
+                    const res = response.data;
+                    const cartData = res.cart;
+                    const combinedItems: CartItem[] = cartData.storeGroups?.flatMap((group: StoreGroupResponse) => group.items) ?? [];
+
+                    const combinedCart: Cart = {
+                        ...cartData,
+                        cartItems: combinedItems,
+                        storeGroups: cartData.storeGroups.map((group: StoreGroupResponse) => ({
+                            ...group,
+                            items: group.items
+                        })),
+                    };
+
+                    resolve(combinedCart);
                 })
                 .catch((error) => {
                     reject(error);

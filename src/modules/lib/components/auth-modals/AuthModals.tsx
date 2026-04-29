@@ -10,6 +10,9 @@ import { useLoginView } from '../../utility/hooks/use-login';
 import { useVerifyEmail } from '../../utility/hooks/use-verify-email';
 import { useRequestOtp } from '../../utility/hooks/use-request-otp';
 import { useVerifyOtpLogin } from '../../utility/hooks/use-verify-otp-login';
+import useUserStore from '../../utility/store/user.store';
+import { authService } from '../../utility/services/auth.service';
+import { syncGuestStateAfterAuth } from '../../utility/guest-session';
 
 export default function AuthModals() {
   const [step, setStep] = useState(1);
@@ -17,6 +20,8 @@ export default function AuthModals() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [method, setMethod] = useState<'password' | 'otp'>('password');
+  const [otpPurpose, setOtpPurpose] = useState<'login' | 'signup'>('login');
+  const [signupOtpToken, setSignupOtpToken] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState(false);
 
   const { verify, loading: verifyingEmail } = useVerifyEmail();
@@ -24,7 +29,8 @@ export default function AuthModals() {
   const { verifyOtp, loading: verifyingOtp } = useVerifyOtpLogin(() =>
     setStep(4)
   );
-  const { isLoginModal } = useCartStore();
+  const { authenticateUser } = useUserStore();
+  const { isLoginModal, fetchCart } = useCartStore();
   const { formHandler: loginFormHandler } = useLoginView(isLoginModal, {
     shouldRedirect: false,
     onSuccess: () => setStep(4),
@@ -95,7 +101,21 @@ export default function AuthModals() {
           />
         )}
 
-        {step === 2 && hasAccount === false && <StepTwoNew email={email} />}
+        {step === 2 && hasAccount === false && (
+          <StepTwoNew
+            email={email}
+            onOtpSent={(token) => {
+              setOtpPurpose('signup');
+              setMethod('otp');
+              setSignupOtpToken(token);
+              setPassword('');
+              setStep(3);
+            }}
+            onVerified={() => {
+              setStep(4);
+            }}
+          />
+        )}
 
         {step === 3 && (
           <StepThreeAuth
@@ -111,7 +131,21 @@ export default function AuthModals() {
               }
 
               if (method === 'otp') {
-                await verifyOtp(password, otpToken!);
+                if (otpPurpose === 'signup' && signupOtpToken) {
+                  const response = await authService.verifyOtp({
+                    token: signupOtpToken,
+                    otp: password,
+                  });
+
+                  if (response?.user) {
+                    authenticateUser(response.user);
+                    await syncGuestStateAfterAuth(response.user.id);
+                    fetchCart();
+                    setStep(4);
+                  }
+                } else if (otpToken) {
+                  await verifyOtp(password, otpToken);
+                }
               }
 
               setIsLoading(false)

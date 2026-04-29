@@ -1,7 +1,9 @@
 import { create } from "zustand";
 import { cartService } from "../services/cart.service";
 import { BuyAgain, Cart, CartItem } from "../types/cart.interface";
+import { ProductVariant } from "../types/product.interface";
 import { toast } from "sonner";
+import { guestSession } from "../guest-session";
 
 type CartStore = {
   cart: Cart;
@@ -10,7 +12,12 @@ type CartStore = {
   showLoginModal: boolean;
   pendingRequests: Record<string, number>;
   fetchCart: (isCheckout?: boolean) => void;
-  addToCart: (variantId: string, quantity?: number, userConfigurations?: Record<string, any>) => void;
+  addToCart: (
+    variantId: string,
+    quantity?: number,
+    userConfigurations?: Record<string, any>,
+    variantSnapshot?: ProductVariant
+  ) => void;
   incrementCartItem: (variantId: string, quantity?: number, userConfigurations?: Record<string, any>) => void;
   decrementCartItem: (variantId: string, quantity?: number, userConfigurations?: Record<string, any>) => void;
   removeFromCart: (variantId: string) => void;
@@ -56,7 +63,17 @@ export const useCartStore = create<CartStore>((set, get) => ({
   },
 
   // Add to cart (non-optimistic, waits for backend)
-  addToCart: async (variantId, quantity = 1, userConfigurations) => {
+  addToCart: async (variantId, quantity = 1, userConfigurations, variantSnapshot) => {
+    const isGuest = !localStorage.getItem("token");
+    if (isGuest) {
+      guestSession.appendCartMutation({
+        variantId,
+        quantity,
+        userConfigurations,
+        variantSnapshot,
+      });
+      return;
+    }
     try {
       const updatedCart = await cartService.addToCart(variantId, quantity, userConfigurations);
       set({ cart: updatedCart });
@@ -67,6 +84,11 @@ export const useCartStore = create<CartStore>((set, get) => ({
 
   // Increment item quantity (optimistic)
   incrementCartItem: async (variantId, quantity = 1, userConfigurations) => {
+    const isGuest = !localStorage.getItem("token");
+    if (isGuest) {
+      guestSession.appendCartMutation({ variantId, quantity, userConfigurations });
+      return;
+    }
     const prevCart = get().cart;
 
     // Immediately reflect UI changes
@@ -100,6 +122,15 @@ export const useCartStore = create<CartStore>((set, get) => ({
 
   // Decrement item quantity (optimistic)
   decrementCartItem: async (variantId, quantity = 1, userConfigurations) => {
+    const isGuest = !localStorage.getItem("token");
+    if (isGuest) {
+      guestSession.appendCartMutation({
+        variantId,
+        quantity: -Math.abs(quantity),
+        userConfigurations,
+      });
+      return;
+    }
     const prevCart = get().cart;
 
     // Update UI immediately
@@ -134,7 +165,30 @@ export const useCartStore = create<CartStore>((set, get) => ({
 
   // Remove item from cart (non-optimistic)
   removeFromCart: async (variantId: string) => {
+    const isGuest = !localStorage.getItem("token");
     const prevCart = get().cart;
+    const cartItem = prevCart.cartItems.find((item) => item.id === variantId);
+    const fallbackVariantId = variantId.startsWith("guest-")
+      ? variantId.replace("guest-", "")
+      : variantId;
+    const variantToRemove = cartItem?.variant?.id || fallbackVariantId;
+    if (isGuest && cartItem?.variant?.id) {
+      guestSession.appendCartMutation({
+        variantId: cartItem.variant.id,
+        quantity: -Math.abs(cartItem.quantity || 1),
+      });
+      return;
+    }
+    if (isGuest && variantToRemove) {
+      const qtyToRemove = guestSession.getCartQuantityForVariant(variantToRemove);
+      if (qtyToRemove > 0) {
+        guestSession.appendCartMutation({
+          variantId: variantToRemove,
+          quantity: -Math.abs(qtyToRemove),
+        });
+      }
+      return;
+    }
     const optimisticCart = {
       ...prevCart,
       cartItems: prevCart.cartItems.filter(

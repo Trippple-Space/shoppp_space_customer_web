@@ -26,6 +26,9 @@ export default function CookieConsentBanner() {
 
   return (
     <div
+      data-cookie-consent="true"
+      onMouseDown={(e) => e.stopPropagation()}
+      onClick={(e) => e.stopPropagation()}
       className="fixed b-0 l-0 r-0 flex flex-wrap items-center justify-center gap-6 px-16 py-10 text-center md:flex-nowrap md:justify-between md:gap-10"
       style={{
         background: '#f5f5f5',
@@ -49,7 +52,10 @@ export default function CookieConsentBanner() {
       </p>
       <button
         type="button"
-        onClick={handleAccept}
+        onClick={(e) => {
+          e.stopPropagation();
+          handleAccept();
+        }}
         className="shrink-0 rounded-6 bg-black px-16 py-8 text-13 font-medium text-white hover:opacity-90"
       >
         Accept

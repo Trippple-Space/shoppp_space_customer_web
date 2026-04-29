@@ -1544,6 +1544,7 @@
 @media only screen and (min-width: 992px) { .l\:pl-70 { padding-left: 70px; } } 
 @media only screen and (min-width: 992px) { .l\:pr-70 { padding-right: 70px; } } 
 @media only screen and (min-width: 992px) { .l\:float-right {    float: right;  } } 
+@media only screen and (min-width: 992px) { .l\:pb-126 { padding-bottom: 126px; } } 
 @media only screen and (min-width: 992px) { .l\:py-18 { padding-top: 18px; padding-bottom: 18px; } } 
 @media only screen and (min-width: 992px) { .l\:mt--20 { margin-top: -20px; } } 
 @media only screen and (min-width: 992px) { .l\:t-150 { top: 150px; } } 

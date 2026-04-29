@@ -8,7 +8,7 @@ import {
   getClosestColorName,
 } from '@/modules/lib/utility/utility';
 import { useRouter } from 'next/navigation';
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useMemo, useRef, useState } from 'react';
 import { paths } from '../../utility/paths';
 import { CartItem } from '../../utility/types/cart.interface';
 import {
@@ -52,6 +52,7 @@ const MiniCart: React.FC<ModalProps> = ({
     removeDiscountCode,
     fetchCart,
     fetching,
+    isLoginModal,
   } = useCart();
 
   const router = useRouter();
@@ -60,6 +61,8 @@ const MiniCart: React.FC<ModalProps> = ({
   const { isAuthenticated } = useUserStore();
   const hasFetchedCartAfterAuth = useRef(false);
   const hasFetchedCartForCurrentOpen = useRef(false);
+
+  const shouldShowSubtotalLoader = isAuthenticated && fetching;
 
   useEffect(() => {
     if (!isAuthenticated) {
@@ -93,6 +96,14 @@ const MiniCart: React.FC<ModalProps> = ({
   }, [open, isAuthenticated, removeDiscountCode, fetchCart]);
 
   const checkoutCart = () => {
+    if (!isAuthenticated) {
+      if (typeof window !== 'undefined') {
+        sessionStorage.setItem('post-auth-redirect', paths.checkout);
+      }
+      setOpen(false);
+      isLoginModal();
+      return;
+    }
     cart.cartItems
       .filter((item) => item.variant.status === 'OUT_OF_STOCK')
       .forEach((item) => removeFromCart(item.id));
@@ -208,7 +219,8 @@ const MiniCart: React.FC<ModalProps> = ({
                                 <p
                                   className={`weight-600 sm:text-16 text-14 sm:line-height-24 line-height-22 ${cartItem.variant.status === 'OUT_OF_STOCK' ? 'color-#00000099' : 'color-#000000E0'}`}
                                 >
-                                  {cartItem?.variant?.product?.name}{' '}
+                                  {cartItem?.variant?.product?.name ||
+                                    'Selected item'}{' '}
                                 </p>
                                 <p
                                   className={`weight-400 ${Object.keys(cartItem?.variant?.properties ?? {}).length > 2 ? 'text-13.5 line-height-16' : 'text-14 line-height-16.94'}`}
@@ -355,7 +367,7 @@ const MiniCart: React.FC<ModalProps> = ({
                     <p className="py-12 flex a-items-center space-between text-16 line-height-24">
                       <span className="weight-400">Subtotal</span>
                       <span className="weight-500" key={cart.id}>
-                        {fetching ? (
+                        {shouldShowSubtotalLoader ? (
                           <div className="bg-#00000014 w-100 h-30 radius-6 animate-pulse"></div>
                         ) : (
                           formatNumberAsPrice(cart.totalDiscountedPrice)

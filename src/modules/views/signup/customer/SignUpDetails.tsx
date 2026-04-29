@@ -6,14 +6,31 @@ import { useSignUpView } from '@/modules/lib/utility/hooks/use-signup';
 import { cx } from '@/modules/lib/utility/utility';
 import Icon from '@/modules/lib/components/icon/Icon';
 
-const SignUpDetails = ({ email }: { email?: string }) => {
-  const { formikInitial } = useSignUpView();
+const SignUpDetails = ({
+  email,
+  redirectOnOtpSent = true,
+  redirectOnVerified = true,
+  onOtpSent,
+  onVerified,
+}: {
+  email?: string;
+  redirectOnOtpSent?: boolean;
+  redirectOnVerified?: boolean;
+  onOtpSent?: (token: string, email: string) => void;
+  onVerified?: () => void;
+}) => {
+  const { formikInitial } = useSignUpView({
+    redirectOnOtpSent,
+    redirectOnVerified,
+    onOtpSent,
+    onVerified,
+  });
 
   useEffect(() => {
     if (email && !formikInitial.values.email) {
       formikInitial.setFieldValue('email', email);
     }
-  }, []);
+  }, [email, formikInitial.values.email]);
 
   useEffect(() => {
     const handleGlobalKeyDown = (e: KeyboardEvent) => {

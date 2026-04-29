@@ -25,6 +25,10 @@ const Modal: React.FC<ModalProps> = ({ isOpen, onClose, children, extraModalClas
 
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
+      const target = event.target as HTMLElement | null;
+      if (target?.closest('[data-cookie-consent="true"]')) {
+        return;
+      }
       if (modalRef.current && !modalRef.current.contains(event.target as Node)) {
         onClose();
       }
