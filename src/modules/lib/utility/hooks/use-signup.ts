@@ -4,11 +4,9 @@ import { FormikConfig, useFormik } from "formik";
 import { toast } from "sonner";
 import * as Yup from "yup";
 import { authService } from "@/modules/lib/utility/services/auth.service";
-import { RegistrationDetails } from "@/modules/lib/utility/types/auth.interface";
 import { paths } from "@/modules/lib/utility/paths";
-import { useLoginView } from "./use-login";
 import useUserStore from "../store/user.store";
-import { useRouteGuard } from "./use-route-guard";
+import { syncGuestStateAfterAuth } from "../guest-session";
 import { useCartStore } from "../store/cart.store";
 
 
@@ -39,12 +37,18 @@ const passwordCreationSchema = Yup.object().shape({
 
 
 
-export const useSignUpView = () => {
+export const useSignUpView = (options?: {
+  redirectOnOtpSent?: boolean;
+  redirectOnVerified?: boolean;
+  onOtpSent?: (token: string, email: string) => void;
+  onVerified?: () => void;
+}) => {
   const router = useRouter();
   const searchParams = useSearchParams();
-  const { formHandler: loginFormHandler } = useLoginView()
-  const { isAuthenticated, authenticateUser } = useUserStore()
-  //const { isLoginModal } = useCartStore()
+  const { authenticateUser } = useUserStore()
+  const fetchCart = useCartStore((state) => state.fetchCart);
+  const redirectOnOtpSent = options?.redirectOnOtpSent ?? true;
+  const redirectOnVerified = options?.redirectOnVerified ?? true;
 
   const [step, setStep] = useState<"initial" | "verify" | "createPassword">("initial");
 
@@ -62,9 +66,15 @@ export const useSignUpView = () => {
         fullname: values.fullname,
         email: values.email
       });
+      if (!response?.token) {
+        return;
+      }
       localStorage.setItem('signup-email', values.email);
-      router.push(`${paths.verify}?token=${response.token}`);
-      //isLoginModal()
+      if (redirectOnOtpSent) {
+        router.push(`${paths.verify}?token=${response.token}`);
+      } else {
+        options?.onOtpSent?.(response.token, values.email);
+      }
 
     }
   } as FormikConfig<Pick<{ fullname: string; email: string; }, "fullname" | "email">>);
@@ -77,10 +87,23 @@ export const useSignUpView = () => {
     onSubmit: async (values: { otp: string }) => {
       const tokenFromUrl = searchParams.get("token") || "";
       const response = await authService.verifyOtp({ token: tokenFromUrl, otp: values.otp });
-      localStorage.setItem("create-password-token", response.createPasswordToken);
-      setToken(response.createPasswordToken);
-      router.push(paths.create_password);
-      setStep("createPassword");
+      if (response?.token && response?.user) {
+        authenticateUser(response.user);
+        await syncGuestStateAfterAuth(response.user.id);
+        fetchCart();
+        options?.onVerified?.();
+        if (redirectOnVerified) {
+          router.push(paths.asoebi_wears);
+        }
+        return;
+      }
+
+      if (response?.createPasswordToken) {
+        localStorage.setItem("create-password-token", response.createPasswordToken);
+        setToken(response.createPasswordToken);
+        router.push(paths.create_password);
+        setStep("createPassword");
+      }
     }
   } as FormikConfig<{ otp: string }>);
 
@@ -94,18 +117,32 @@ export const useSignUpView = () => {
       if (otpFromUrl) {
         authService
           .verifyOtp({ token: tokenFromUrl, otp: otpFromUrl })
-          .then((response) => {
-            localStorage.setItem("create-password-token", response.createPasswordToken);
-            setToken(response.token);
-            toast.success("OTP verified via link successfully.");
-            setStep("createPassword");
-            router.push(paths.create_password);
+          .then(async (response) => {
+            if (response?.token && response?.user) {
+              authenticateUser(response.user);
+              await syncGuestStateAfterAuth(response.user.id);
+              fetchCart();
+              options?.onVerified?.();
+              toast.success("OTP verified successfully.");
+              if (redirectOnVerified) {
+                router.push(paths.asoebi_wears);
+              }
+              return;
+            }
+
+            if (response?.createPasswordToken) {
+              localStorage.setItem("create-password-token", response.createPasswordToken);
+              setToken(response.token);
+              toast.success("OTP verified via link successfully.");
+              setStep("createPassword");
+              router.push(paths.create_password);
+            }
           })
       } else {
         setStep("verify");
       }
     }
-  }, [router, searchParams]);
+  }, [router, searchParams, authenticateUser, options, redirectOnVerified]);
 
   //STEP 3: CREATE PASSWORD
 
@@ -136,7 +173,10 @@ export const useSignUpView = () => {
             const tempEmail = localStorage.getItem('signup-email');
             authService.signIn({ email: tempEmail ?? '', password: payload.password }).then((response) => {
               authenticateUser(response.user);
-              useRouteGuard(isAuthenticated, paths.homepage)
+              syncGuestStateAfterAuth(response.user.id).finally(() => {
+                fetchCart();
+                router.push(paths.asoebi_wears);
+              });
             });
           } else {
             //toast.error(res?.message || "Something went wrong. Please try again.");

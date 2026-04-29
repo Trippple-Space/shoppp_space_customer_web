@@ -35,6 +35,7 @@ import {
   MARKETPLACE_OPENS_DATE,
   MARKETPLACE_PURCHASES_ENABLED,
 } from '@/modules/lib/utility/constants';
+import { useCartStore } from '@/modules/lib/utility/store/cart.store';
 
 type DeliveryOptionKey = 'standard' | 'express' | 'vendorManaged';
 type addressDeliveryPrice = {
@@ -96,6 +97,7 @@ const CheckoutPage = () => {
     keyof typeof deliveryOptions | null
   >(null);
   const { user, isAuthenticated } = useUserStore();
+  const isLoginModal = useCartStore((state) => state.isLoginModal);
   const { cart, removeFromCart, removeDiscountCode, fetchCart, fetching } =
     useCart();
   const { openAddressModal, selectedAddress } = useAddress();
@@ -780,6 +782,16 @@ const CheckoutPage = () => {
                           <div className="flex gap-14 a-items-center sm:j-content-end w-full">
                             <button
                               onClick={() => {
+                                if (!isAuthenticated) {
+                                  if (typeof window !== 'undefined') {
+                                    sessionStorage.setItem(
+                                      'post-auth-redirect',
+                                      paths.checkout
+                                    );
+                                  }
+                                  isLoginModal();
+                                  return;
+                                }
                                 if (!MARKETPLACE_PURCHASES_ENABLED) return;
                                 if (canProceedToPayment) {
                                   if (!selectedAddress) {
@@ -871,6 +883,16 @@ const CheckoutPage = () => {
                           </div>
                           <button
                             onClick={async () => {
+                              if (!isAuthenticated) {
+                                if (typeof window !== 'undefined') {
+                                  sessionStorage.setItem(
+                                    'post-auth-redirect',
+                                    paths.checkout
+                                  );
+                                }
+                                isLoginModal();
+                                return;
+                              }
                               if (canProceedToPayment || selectedDeliveryOption === null) return;
                               if (enableOrderWhatsApp) {
                                 if (!orderWhatsAppNumber.trim()) {

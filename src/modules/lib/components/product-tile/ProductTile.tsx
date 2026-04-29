@@ -10,7 +10,6 @@ import {
   formatNumberAsPrice,
   handleFlyToCart,
   onGoingOrderStatusQuery,
-  saveVariantToLocalStorage,
 } from '../../utility/utility';
 import { useCart } from '../../utility/hooks/use-cart';
 import QuantitySelector from '../quantity-selector/QuantitySelector';
@@ -31,6 +30,9 @@ import { useProductTileOrders } from '../../utility/hooks/use-product-tile-order
 import { LuChevronRight } from 'react-icons/lu';
 import { buildUserConfigurations } from '../product-detail-modal/productConfigurationsHelper';
 import ProductCatalogueDropdown from './ProductCatalogueDropdown';
+import { guestSession } from '../../utility/guest-session';
+import { CartItem } from '../../utility/types/cart.interface';
+import { useSavedVariant } from '../../utility/hooks/use-saved-variants';
 
 interface IProductTile {
   product: Product;
@@ -176,6 +178,7 @@ const ProductTile: FC<IProductTile> = ({
   const [selectedVariant, setSelectedVariant] = useState<ProductVariant>(
     uniqueVariantsFromProductImages[0] ?? product?.variants?.[0]
   );
+  const [guestCartVersion, setGuestCartVersion] = useState(0);
 
   const rowRef = useRef<HTMLDivElement>(null);
   const priceRef = useRef<HTMLDivElement>(null);
@@ -229,6 +232,11 @@ const ProductTile: FC<IProductTile> = ({
     isLoginModal,
     fetching: cartFetching,
   } = useCart();
+  const {
+    saveVariant: fallbackSaveVariant,
+    removeSavedVariant: fallbackRemoveSavedVariant,
+    savedVariants: fallbackSavedVariants,
+  } = useSavedVariant();
   const imgRef = useRef<HTMLImageElement>(null);
 
   /* const variantIds = useMemo(
@@ -238,9 +246,37 @@ const ProductTile: FC<IProductTile> = ({
   const { reviewStat, loading: statsLoading } = useGetRatingStats(variantIds); */
   const { addVariant } = useRecentlyViewedActions();
 
-  const selectedVariantItemInCart = cart.cartItems.find(
-    (item) => item.variant.id === selectedVariant?.id
-  );
+  const selectedVariantItemInCart = useMemo(() => {
+    const existing = cart.cartItems.find(
+      (item) => item.variant.id === selectedVariant?.id
+    );
+    if (existing || !selectedVariant) {
+      return existing;
+    }
+    if (isAuthenticated) {
+      return undefined;
+    }
+
+    const guestQty = guestSession.getCartQuantityForVariant(selectedVariant.id);
+    if (guestQty <= 0) {
+      return undefined;
+    }
+
+    return {
+      id: `guest-${selectedVariant.id}`,
+      productId: selectedVariant.product?.id ?? '',
+      quantity: guestQty,
+      variant: selectedVariant,
+      totalPrice: selectedVariant.finalPrice * guestQty,
+      discountedPrice: selectedVariant.discountedPrice * guestQty,
+      userConfigurations:
+        guestSession.getLatestUserConfigurations(selectedVariant.id) ?? {},
+      createdAt: '',
+      discountValue: 0,
+      lastUpdated: '',
+      meta: null,
+    } as CartItem;
+  }, [cart.cartItems, selectedVariant, isAuthenticated, guestCartVersion]);
 
   useEffect(() => {
     setSelectedImage(product?.variants?.[0]?.media?.[0]?.url);
@@ -285,16 +321,24 @@ const ProductTile: FC<IProductTile> = ({
     return normal.slice(0, 2);
   }, [configPills, topTwoPills]);
 
-  const isSaved = savedVariants?.find(
-    (item: SavedVariant) => item.variantId === selectedVariant?.id
+  const activeVariantId = selectedVariant?.id ?? product?.variants?.[0]?.id;
+  const resolvedSavedVariants = savedVariants ?? fallbackSavedVariants;
+  const resolvedSaveVariant = saveVariant ?? fallbackSaveVariant;
+  const resolvedRemoveSavedVariant =
+    removeSavedVariant ?? fallbackRemoveSavedVariant;
+
+  const isSaved = resolvedSavedVariants?.find(
+    (item: SavedVariant) => item.variantId === activeVariantId
   );
   const mediaType = checkMediaType(selectedImage) ?? 'image';
 
   const handleSave = () => {
+    console.log('egooo')
+    if (!activeVariantId) return;
     if (isSaved) {
-      removeSavedVariant && removeSavedVariant(selectedVariant?.id);
+      resolvedRemoveSavedVariant && resolvedRemoveSavedVariant(activeVariantId);
     } else {
-      saveVariant && saveVariant(selectedVariant?.id);
+      resolvedSaveVariant && resolvedSaveVariant(activeVariantId);
     }
   };
 
@@ -336,51 +380,11 @@ const ProductTile: FC<IProductTile> = ({
     return () => clearLongPressTimeout();
   }, []);
 
-  function handleLogin(
-    variantId: string,
-    minimumPurchase: number,
-    userConfigurations?: Record<string, any>
-  ) {
-    saveVariantToLocalStorage(
-      variantId,
-      minimumPurchase.toString(),
-      userConfigurations
-    );
-    isLoginModal();
-  }
-
   useEffect(() => {
     if (recentlyViewedId && isAuthenticated) {
       addVariant(recentlyViewedId, 'view');
     }
   }, [recentlyViewedId, isAuthenticated]);
-
-  useEffect(() => {
-    if (isAuthenticated) {
-      const variantId = localStorage.getItem('variantId');
-      const variantIdMinimumPurchase = localStorage.getItem(
-        'variantIdMinimumPurchase'
-      );
-      const storedConfig = localStorage.getItem('userConfigurations');
-      const userConfigurations: Record<string, any> | null = storedConfig
-        ? JSON.parse(storedConfig)
-        : null;
-
-      if (variantId && variantIdMinimumPurchase) {
-        const parsedMinimumPurchase = parseInt(variantIdMinimumPurchase, 10);
-        if (variantId && !isNaN(parsedMinimumPurchase)) {
-          addToCart(
-            variantId,
-            parsedMinimumPurchase,
-            userConfigurations ?? undefined
-          );
-        }
-        localStorage.removeItem('variantId');
-        localStorage.removeItem('variantIdMinimumPurchase');
-        localStorage.removeItem('userConfigurations');
-      }
-    }
-  }, [isAuthenticated]);
 
   const isOutOfStock = selectedVariant?.status === 'OUT_OF_STOCK';
   const isDiscounted =
@@ -459,6 +463,13 @@ const ProductTile: FC<IProductTile> = ({
 
   const [showOnBoardingModal, setShowOnBoardingModal] = useState(false);
   const indexCount = index === 0;
+
+  useEffect(() => {
+    const handleGuestCartUpdate = () => setGuestCartVersion((value) => value + 1);
+    window.addEventListener('guest-cart-updated', handleGuestCartUpdate);
+    return () =>
+      window.removeEventListener('guest-cart-updated', handleGuestCartUpdate);
+  }, []);
 
   useEffect(() => {
     const isDataLoading = orderFetching || cartFetching;
@@ -758,25 +769,21 @@ const ProductTile: FC<IProductTile> = ({
                         handleCloseProductModal();
                       } else {
                         setShowOnBoardingModal(false);
-                        if (isAuthenticated) {
-                          if (!localStorage.getItem('seenMiniCart')) {
-                            window.dispatchEvent(
-                              new Event('showMiniCartOnboarding')
-                            );
-                            localStorage.setItem('seenMiniCart', 'true');
-                          }
-                          addToCart(
-                            selectedVariant.id,
-                            selectedVariant.minPurchaseQuantity || 1,
-                            userConfigurations
+                        if (!localStorage.getItem('seenMiniCart')) {
+                          window.dispatchEvent(
+                            new Event('showMiniCartOnboarding')
                           );
-                        } else {
-                          handleLogin(
-                            selectedVariant.id,
-                            selectedVariant.minPurchaseQuantity || 1,
-                            userConfigurations
-                          );
+                          localStorage.setItem('seenMiniCart', 'true');
                         }
+                        addToCart(
+                          selectedVariant.id,
+                          selectedVariant.minPurchaseQuantity || 1,
+                          userConfigurations,
+                          {
+                            ...selectedVariant,
+                            product: selectedVariant.product ?? product,
+                          }
+                        );
                       }
                     }}
                     disabled={!selectedImage}
@@ -807,7 +814,11 @@ const ProductTile: FC<IProductTile> = ({
         <div
           id="favorite icon"
           className="absolute z-1 t-0 r-0 mr-10 mt-10 l:mr-15 l:mt-15 text-24 l:text-34"
-          onClick={isAuthenticated ? handleSave : () => isLoginModal()}
+          onClick={(e) => {
+            e.preventDefault();
+            e.stopPropagation();
+            handleSave();
+          }}
           style={{
             background: isSaved ? 'rgba(0,0,0,0.25)' : 'rgba(255,255,255,0.7)',
             borderRadius: '50%',

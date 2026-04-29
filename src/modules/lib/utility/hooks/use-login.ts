@@ -9,6 +9,8 @@ import useUserStore from "@/store/user.store";
 import { User } from "../types/user.interface";
 import { useRouteGuard } from "./use-route-guard";
 import { emailRegex } from "../utility";
+import { syncGuestStateAfterAuth } from "../guest-session";
+import { useCartStore } from "../store/cart.store";
 
 const LoginValidationSchema = Yup.object().shape({
     email: Yup.string()
@@ -24,7 +26,7 @@ const LoginValidationSchema = Yup.object().shape({
 
 const formikLoginConfig = (
     router: any,
-    callback?: (user: User) => void,
+    callback?: (user: User) => Promise<void> | void,
     isLoginModal?: any
 ): FormikConfig<LoginCredentials> => ({
     initialValues: {
@@ -35,7 +37,7 @@ const formikLoginConfig = (
         try {
             const { user } = await authService.signIn(values);
             toast.success(`Welcome ${user.profile.firstName}`);
-            callback?.(user);
+            await callback?.(user);
             //isLoginModal?.();
         } catch (err: any) {
             if (err.response?.data?.message === 'Your password has not been set' || err.response?.data?.message === 'Account not verified' || err.response?.data?.message === 'Password not set') {
@@ -54,11 +56,14 @@ const formikLoginConfig = (
 export const useLoginView = (isLoginModal?: any, options?: { shouldRedirect?: boolean; onSuccess?: () => void }) => {
     const router = useRouter()
     const { isAuthenticated, authenticateUser } = useUserStore()
+    const fetchCart = useCartStore((state) => state.fetchCart);
 
     const shouldRedirect = options?.shouldRedirect ?? true;
 
-    const formHandler = useFormik(formikLoginConfig(router, (user) => {
+    const formHandler = useFormik(formikLoginConfig(router, async (user) => {
         authenticateUser(user)
+        await syncGuestStateAfterAuth(user.id)
+        fetchCart()
         options?.onSuccess?.();
     }, isLoginModal))
 

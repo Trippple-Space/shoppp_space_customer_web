@@ -5,13 +5,15 @@ import Link from 'next/link';
 import useUserStore from '@/modules/lib/utility/store/user.store';
 import { paths } from '@/modules/lib/utility/paths';
 import Image from '@/modules/lib/components/image/Image';
+import { useCartStore } from '@/modules/lib/utility/store/cart.store';
 
 const EmptyCheckout = () => {
   const { user } = useUserStore();
+  const isLoginModal = useCartStore((state) => state.isLoginModal);
 
   return (
     <>
-      <div className="w-100p h-100p mx-auto flex flex-col items-center j-content-center p-20 l:p-70">
+      <div className="w-100p h-100p mx-auto flex flex-col items-center j-content-center p-20 l:p-70 l:pb-126">
         <Image
           src="empty-tray.png"
           className="w-80p l:100p h-250 my-10 object-fit-scale-down"
@@ -27,6 +29,20 @@ const EmptyCheckout = () => {
             ? 'Looks like you have not added any items yet.'
             : 'Sign in to continue your checkout and view your cart.'}
         </p>
+        {!user && (
+          <button
+            type="button"
+            onClick={() => {
+              if (typeof window !== 'undefined') {
+                sessionStorage.setItem('post-auth-redirect', paths.checkout);
+              }
+              isLoginModal();
+            }}
+            className="bg-green radius-10 text-white text-16 weight-500 mt-20 py-12 px-20 border-none pointer"
+          >
+            Sign in / Create account
+          </button>
+        )}
 
         <Link
           href={paths.homepage}

@@ -21,6 +21,8 @@ import {
   isEmptyValue,
 } from './productConfigurationsHelper';
 import { createPortal } from 'react-dom';
+import { guestSession } from '../../utility/guest-session';
+import { CartItem } from '../../utility/types/cart.interface';
 
 interface ProductDetailModalProp {
   openSingleProductModal: boolean;
@@ -78,6 +80,7 @@ const ProductDetailModal = ({
 
   const [isHover, setIsHover] = useState(false);
   const [isEditingConfiguration, setIsEditingConfiguration] = useState(false);
+  const [guestCartVersion, setGuestCartVersion] = useState(0);
 
   const imgRef = useRef<HTMLImageElement>(null);
   const didInitFromVariantRef = useRef(false);
@@ -177,9 +180,44 @@ const ProductDetailModal = ({
     });
   }, [product?.variants]); */
 
-  const selectedVariantItemInCart = cart.cartItems.find(
-    (item) => item.variant.id === selectedVariant?.id
-  );
+  const selectedVariantItemInCart = useMemo(() => {
+    const existing = cart.cartItems.find(
+      (item) => item.variant.id === selectedVariant?.id
+    );
+    if (existing || !selectedVariant) {
+      return existing;
+    }
+    if (isAuthenticated) {
+      return undefined;
+    }
+
+    const guestQty = guestSession.getCartQuantityForVariant(selectedVariant.id);
+    if (guestQty <= 0) {
+      return undefined;
+    }
+
+    return {
+      id: `guest-${selectedVariant.id}`,
+      productId: selectedVariant.product?.id ?? '',
+      quantity: guestQty,
+      variant: selectedVariant,
+      totalPrice: selectedVariant.finalPrice * guestQty,
+      discountedPrice: selectedVariant.discountedPrice * guestQty,
+      userConfigurations:
+        guestSession.getLatestUserConfigurations(selectedVariant.id) ?? {},
+      createdAt: '',
+      discountValue: 0,
+      lastUpdated: '',
+      meta: null,
+    } as CartItem;
+  }, [cart.cartItems, selectedVariant, isAuthenticated, guestCartVersion]);
+
+  useEffect(() => {
+    const handleGuestCartUpdate = () => setGuestCartVersion((value) => value + 1);
+    window.addEventListener('guest-cart-updated', handleGuestCartUpdate);
+    return () =>
+      window.removeEventListener('guest-cart-updated', handleGuestCartUpdate);
+  }, []);
 
   useEffect(() => {
     if (!isSelectionComplete && imageSource === 'variant') {
@@ -824,43 +862,31 @@ const ProductDetailModal = ({
                                 !areRequiredCustomerFieldsFilled
                               }
                               onClick={() => {
-                                if (isAuthenticated) {
-                                  if (!localStorage.getItem('seenMiniCart')) {
-                                    window.dispatchEvent(
-                                      new Event('showMiniCartOnboarding')
-                                    );
-                                    localStorage.setItem(
-                                      'seenMiniCart',
-                                      'true'
-                                    );
-                                  }
-                                  if (
-                                    selectedVariant &&
-                                    selectedVariant.status !== 'OUT_OF_STOCK'
-                                  ) {
-                                    addToCart(
-                                      selectedVariant?.id ?? '0',
-                                      selectedVariant?.minPurchaseQuantity || 1,
-                                      userConfigurations
-                                    );
-                                  }
-                                } else {
-                                  localStorage.setItem(
-                                    'variantId',
-                                    selectedVariant?.id.toString() ?? '0'
+                                if (!localStorage.getItem('seenMiniCart')) {
+                                  window.dispatchEvent(
+                                    new Event('showMiniCartOnboarding')
                                   );
                                   localStorage.setItem(
-                                    'variantIdMinimumPurchase',
-                                    selectedVariant?.minPurchaseQuantity.toString() ||
-                                    '1'
+                                    'seenMiniCart',
+                                    'true'
                                   );
-                                  if (userConfigurations) {
-                                    localStorage.setItem(
-                                      'userConfigurations',
-                                      JSON.stringify(userConfigurations)
-                                    );
-                                  }
-                                  isLoginModal();
+                                }
+                                if (
+                                  selectedVariant &&
+                                  selectedVariant.status !== 'OUT_OF_STOCK'
+                                ) {
+                                  addToCart(
+                                    selectedVariant?.id ?? '0',
+                                    selectedVariant?.minPurchaseQuantity || 1,
+                                    userConfigurations,
+                                    selectedVariant
+                                      ? {
+                                          ...selectedVariant,
+                                          product:
+                                            selectedVariant.product ?? product,
+                                        }
+                                      : undefined
+                                  );
                                 }
                               }}
                             >

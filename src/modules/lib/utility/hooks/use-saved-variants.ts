@@ -11,7 +11,7 @@ export const useSavedVariant = () => {
     const {fetchSavedVariants, savedVariants, saveVariant, removeSavedVariant, clearSavedVariants, showLoginModal, isLoginModal, fetching, } = useSavedVariantStore()
 
     useEffect(() => {
-        if (isAuthenticated && !fetching) {
+        if (!fetching) {
             fetchSavedVariants();
         }
     }, [isAuthenticated]);

@@ -32,7 +32,7 @@ export default function StepThreeAuth({
       </button>
 
       <div className="flex flex-col">
-        <h2 className="text-22 sm:text-32 weight-600 text-black font-inter">
+        <h2 className="text-22 sm:text-32 weight-600 text-black font-inter mb-10">
           {method === 'password'
             ? 'Enter your password'
             : 'Enter your one-time code'}

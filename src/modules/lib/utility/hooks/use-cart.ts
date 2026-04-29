@@ -1,9 +1,10 @@
-import { useEffect } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { useCartStore } from "../store/cart.store";
 import { CartItem } from "../types/cart.interface";
 import { useAuthGuard } from "./use-auth-guard";
 import useUserStore from "../store/user.store";
 import { toast } from "sonner";
+import { guestSession } from "../guest-session";
 
 export const useCart = (isCheckout?: boolean) => {
      const {
@@ -22,6 +23,20 @@ export const useCart = (isCheckout?: boolean) => {
           applyingCode
      } = useCartStore();
      const { isAuthenticated } = useUserStore();
+     const [guestCartVersion, setGuestCartVersion] = useState(0);
+
+     useEffect(() => {
+          const handleGuestCartUpdate = () => setGuestCartVersion((value) => value + 1);
+          window.addEventListener('guest-cart-updated', handleGuestCartUpdate);
+          return () => window.removeEventListener('guest-cart-updated', handleGuestCartUpdate);
+     }, []);
+
+     const effectiveCart = useMemo(() => {
+          if (isAuthenticated) {
+               return cart;
+          }
+          return guestSession.getGuestCart();
+     }, [isAuthenticated, cart, guestCartVersion]);
 
      const increment = (cartItem: CartItem, userConfigurations?: Record<string, any>) => {
           if (cartItem.quantity >= cartItem.variant.stock) {
@@ -48,7 +63,7 @@ export const useCart = (isCheckout?: boolean) => {
      }, [isAuthenticated]);
 
      return {
-          cart,
+          cart: effectiveCart,
           addToCart,
           buyAgain,
           removeFromCart,
