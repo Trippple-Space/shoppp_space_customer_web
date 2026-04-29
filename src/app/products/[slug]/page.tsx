@@ -91,19 +91,19 @@ export async function generateMetadata({
       priceAmount > 0 ? `₦${Number(priceAmount).toLocaleString('en')}` : '';
     const descriptionParts = [
       product?.longDescription?.trim() || product?.name?.trim(),
-      sizes.length > 0 ? `Available sizes: ${sizes.join(', ')}.` : '',
-      colors.length > 0 ? `Available colors: ${colors.join(', ')}.` : '',
-      customPropsString ? `${customPropsString}.` : '',
+      sizes.length > 0 ? `Available sizes: ${sizes.join(', ')}\n` : '',
+      colors.length > 0 ? `Available colors: ${colors.join(', ')}\n` : '',
+      customPropsString ? `${customPropsString}\n` : '',
     ].filter(Boolean);
 
     const descriptionBase =
-      descriptionParts.join(' ') ||
-      `${product?.name}. Check out this piece on ${storeName}.`;
+      descriptionParts.join('\n') ||
+      `${product?.name}\nCheck out this piece on ${storeName}.`;
 
     const descriptionWithPrice = priceFormatted
-      ? `Price: ${priceFormatted}. ${descriptionBase}`
+      ? `Price: ${priceFormatted}\n${descriptionBase}`
       : descriptionBase;
-      
+
     const getFirstImagePreviewUrl = () => {
       for (const variant of product?.variants ?? []) {
         for (const mediaItem of variant?.media ?? []) {
