@@ -91,9 +91,9 @@ export async function generateMetadata({
       priceAmount > 0 ? `₦${Number(priceAmount).toLocaleString('en')}` : '';
     const descriptionParts = [
       product?.longDescription?.trim() || product?.name?.trim(),
-      sizes.length > 0 ? `Available sizes: ${sizes.join(', ')}\n` : '',
-      colors.length > 0 ? `Available colors: ${colors.join(', ')}\n` : '',
-      customPropsString ? `${customPropsString}\n` : '',
+      sizes.length > 0 ? `Available sizes: ${sizes.join(', ')}` : '',
+      colors.length > 0 ? `Available colors: ${colors.join(', ')}` : '',
+      customPropsString ? `${customPropsString}` : '',
     ].filter(Boolean);
 
     const descriptionBase =
