@@ -24,6 +24,10 @@ import useUserStore from '../../utility/store/user.store';
 import VideoSrc from '../video-src/VideoSrc';
 import { ConfigPill } from '../product-detail-modal/productConfigurationsHelper';
 import NoResultMessage from '../error-messages/no-result-found';
+import {
+  getLineDisplayPrices,
+  getStrikethroughAmounts,
+} from '../../utility/visible-discount';
 
 interface ModalProps {
   isOpen?: boolean;
@@ -110,17 +114,6 @@ const MiniCart: React.FC<ModalProps> = ({
     router.push(paths.checkout);
   };
 
-  const isValidDiscount = (cartItem: CartItem) => {
-    if (cartItem?.variant?.product?.discount?.activeEndDate) {
-      return (
-        new Date(cartItem?.variant?.product?.discount?.activeStartDate) <=
-        new Date(new Date().setHours(new Date().getHours() + 1)) &&
-        new Date(new Date().setHours(new Date().getHours() + 1)) <=
-        new Date(cartItem?.variant?.product?.discount?.activeEndDate)
-      );
-    }
-  };
-
   return (
     <div className="w-fit">
       <Modal
@@ -174,6 +167,11 @@ const MiniCart: React.FC<ModalProps> = ({
                 ) : (
                   <div className="p-24 flex flex-col gap-16">
                     {cart.cartItems.map((cartItem: CartItem, i) => {
+                      const linePrices = getLineDisplayPrices({
+                        totalPrice: Number(cartItem?.totalPrice ?? 0),
+                        discountedPrice: Number(cartItem?.discountedPrice ?? 0),
+                        variant: cartItem?.variant,
+                      });
                       const mediaType =
                         checkMediaType(
                           cartItem.variant?.media
@@ -307,18 +305,21 @@ const MiniCart: React.FC<ModalProps> = ({
                               <p
                                 className={`weight-600 md:text-20 sm:text-16 text-14 md:line-height-28 sm:line-height-24 line-height-22 ${cartItem.variant.status === 'OUT_OF_STOCK' ? 'color-#00000099' : ''}`}
                               >
-                                {isValidDiscount(cartItem)
-                                  ? formatNumberAsPrice(
-                                    cartItem.discountedPrice
-                                  )
-                                  : formatNumberAsPrice(cartItem.totalPrice)}
+                                {formatNumberAsPrice(linePrices.displayPrice)}
                               </p>
-                              {isValidDiscount(cartItem) && (
-                                <p
-                                  className={`weight-400 md:text-16 sm:text-12 text-10 md:line-height-24 sm:line-height-20 line-height-18 line-through color-#00000099  ${cartItem.variant.status === 'OUT_OF_STOCK' ? 'color-#00000099' : ''}`}
-                                >
-                                  {formatNumberAsPrice(cartItem.totalPrice)}
-                                </p>
+                              {linePrices.hasSlash && (
+                                <div className="flex flex-wrap md:gap-8 gap-4 a-items-center">
+                                  {getStrikethroughAmounts(linePrices).map(
+                                    (amount, idx) => (
+                                      <p
+                                        key={idx}
+                                        className={`weight-400 md:text-16 sm:text-12 text-10 md:line-height-24 sm:line-height-20 line-height-18 line-through color-#00000099  ${cartItem.variant.status === 'OUT_OF_STOCK' ? 'color-#00000099' : ''}`}
+                                      >
+                                        {formatNumberAsPrice(amount)}
+                                      </p>
+                                    )
+                                  )}
+                                </div>
                               )}
                             </div>
                             <div className="border border-#00000014 flex space-between a-items-center  p-4 radius-100 bg-#F5F5F5 w-150">
