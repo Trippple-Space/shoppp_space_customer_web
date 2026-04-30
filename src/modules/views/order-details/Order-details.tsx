@@ -6,7 +6,7 @@ import {
   getLastFiveIdChars,
   getStoreNames
 } from '@/modules/lib/utility/utility'
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useMemo, useState } from 'react'
 import Image from '../../lib/components/image/Image'
 import { GoArrowLeft, GoHome } from 'react-icons/go'
 import { MdKeyboardArrowDown } from 'react-icons/md'
@@ -24,6 +24,10 @@ import OrderTabContent from '@/modules/lib/components/order/OrderTabContent'
 import PuffLoader from '@/modules/lib/components/puff-loader/PuffLoader'
 import { useOrders } from '@/modules/lib/utility/hooks/use-orders'
 import { useCart } from '@/modules/lib/utility/hooks/use-cart'
+import {
+  getOrderDisplayDiscountTotal,
+  sumOrderCartReferenceSubtotal,
+} from '@/modules/lib/utility/visible-discount'
 
 interface OrderDetailsProps {
   orderId: string
@@ -95,6 +99,24 @@ const OrderDetails = ({ orderId }: OrderDetailsProps) => {
     buyAgain(buyAgainItems)
   }
   const isOngoing = singleOrder?.status !== 'CANCELLED' && singleOrder?.status !== 'DELIVERED' && singleOrder?.status !== 'RETURNED'
+
+  const orderCartItems = useMemo(
+    () =>
+      singleOrder
+        ? getCartItems(singleOrder.cart?.storeGroups || [])
+        : [],
+    [singleOrder]
+  )
+
+  const orderDisplaySubtotal = useMemo(
+    () => sumOrderCartReferenceSubtotal(orderCartItems),
+    [orderCartItems]
+  )
+
+  const orderDisplayDiscount = useMemo(
+    () => getOrderDisplayDiscountTotal(orderCartItems),
+    [orderCartItems]
+  )
 
   return (
     <>
@@ -242,25 +264,20 @@ const OrderDetails = ({ orderId }: OrderDetailsProps) => {
                                   Subtotal
                                 </p>
                                 <p className='text-16'>
-                                  {formatNumberAsPrice(
-                                    singleOrder.cart.subTotal
-                                  )}
+                                  {formatNumberAsPrice(orderDisplaySubtotal)}
                                 </p>
                               </div>
-                              {
-                                singleOrder.cart.totalDiscountValue ?
+                              {orderDisplayDiscount > 0 ? (
                                 <div className='flex space-between'>
                                   <p className='color-#000000E0 weight-400'>
                                     Discount
                                   </p>
                                   <p className='text-16'>
-                                    − {formatNumberAsPrice(
-                                      singleOrder.cart.totalDiscountValue
-                                    )}
+                                    −{' '}
+                                    {formatNumberAsPrice(orderDisplayDiscount)}
                                   </p>
                                 </div>
-                                : null
-                              }
+                              ) : null}
                               <div className='flex space-between border-b border-b-#00000014 pb-10'>
                                 <p className='color-#000000E0 weight-400'>
                                   Delivery

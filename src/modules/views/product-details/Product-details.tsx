@@ -55,6 +55,10 @@ import {
 import { CatalogueMediaItem } from '@/modules/lib/components/product-tile/ProductCatalogueDropdown';
 import { guestSession } from '@/modules/lib/utility/guest-session';
 import { CartItem } from '@/modules/lib/utility/types/cart.interface';
+import {
+  getStrikethroughAmounts,
+  getVariantDisplayPrices,
+} from '@/modules/lib/utility/visible-discount';
 
 const ProductDetails = ({ product }: { product: Product }) => {
   const [recentlyViewedVariants, setRecentlyViewedVariants] = useState<
@@ -459,7 +463,10 @@ const ProductDetails = ({ product }: { product: Product }) => {
   const descriptionLength = product?.longDescription?.split(' ')?.length || 0;
   const maxDisplayDescLength = 144;
 
-  const isDiscounted = new Date() <= new Date(product?.discount?.activeEndDate);
+  const variantDisplayPrices = getVariantDisplayPrices({
+    variant: selectedVariant ?? product.variants[0],
+    product,
+  });
 
   const isOutOfStock = selectedVariant?.status === 'OUT_OF_STOCK';
 
@@ -655,13 +662,25 @@ const ProductDetails = ({ product }: { product: Product }) => {
   const addToCartBtn = () => {
     return (
       <div className="flex flex-col gap-16">
-        <p className="text-24 weight-600">
-          {formatNumberAsPrice(
-            selectedVariant?.finalPrice ??
-            product.variants[0]?.finalPrice ??
-            product.price
+        <div className="flex flex-col gap-8">
+          <p className="text-24 weight-600">
+            {formatNumberAsPrice(variantDisplayPrices.displayPrice)}
+          </p>
+          {variantDisplayPrices.hasSlash && (
+            <div className="flex flex-wrap gap-8 a-items-center">
+              {getStrikethroughAmounts(variantDisplayPrices).map(
+                (amount, idx) => (
+                  <p
+                    key={idx}
+                    className="weight-400 text-16 color-#00000099 line-through"
+                  >
+                    {formatNumberAsPrice(amount)}
+                  </p>
+                )
+              )}
+            </div>
           )}
-        </p>
+        </div>
 
         {!selectedVariant &&
           (missingRequiredOptions.length > 0 ||
@@ -963,26 +982,21 @@ const ProductDetails = ({ product }: { product: Product }) => {
             </div>
             <div className="flex flex-col gap-12 border-b  border-#00000014 pb-15">
               <p className="weight-400 text-28">
-                {isDiscounted
-                  ? formatNumberAsPrice(
-                    selectedVariant?.discountedPrice ??
-                    product.variants[0]?.discountedPrice ??
-                    0
-                  )
-                  : formatNumberAsPrice(
-                    selectedVariant?.finalPrice ??
-                    product.variants[0]?.finalPrice ??
-                    0
-                  )}
+                {formatNumberAsPrice(variantDisplayPrices.displayPrice)}
               </p>
-              {isDiscounted && (
-                <p className="weight-400 text-16 color-#00000099 line-through">
-                  {formatNumberAsPrice(
-                    selectedVariant?.finalPrice ??
-                    product.variants[0]?.finalPrice ??
-                    0
+              {variantDisplayPrices.hasSlash && (
+                <div className="flex flex-wrap gap-8 a-items-center">
+                  {getStrikethroughAmounts(variantDisplayPrices).map(
+                    (amount, idx) => (
+                      <p
+                        key={idx}
+                        className="weight-400 text-16 color-#00000099 line-through"
+                      >
+                        {formatNumberAsPrice(amount)}
+                      </p>
+                    )
                   )}
-                </p>
+                </div>
               )}
               <div className="flex flex-col l:flex-row l:a-items-center l:j-content-between gap-12 w-100p">
                 <div className="flex a-items-center gap-12">

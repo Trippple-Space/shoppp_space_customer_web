@@ -8,6 +8,10 @@ import React from 'react';
 import Image from '../image/Image';
 import VideoSrc from '../video-src/VideoSrc';
 import { ConfigPill } from '../product-detail-modal/productConfigurationsHelper';
+import {
+  getLineDisplayPrices,
+  getStrikethroughAmounts,
+} from '@/modules/lib/utility/visible-discount';
 
 function orderedProductCard({ orderedProducts }: any) {
   const cartItems = getCartItems(orderedProducts?.cart?.storeGroups);
@@ -17,6 +21,12 @@ function orderedProductCard({ orderedProducts }: any) {
         {cartItems.map((item: any) => {
           const mediaType =
             checkMediaType(item?.variant.media[0].url) ?? 'image';
+          const linePrices = getLineDisplayPrices({
+            totalPrice: Number(item?.totalPrice ?? 0),
+            discountedPrice: Number(item?.discountedPrice ?? 0),
+            variant: item?.variant,
+            orderHistory: true,
+          });
 
           return (
             <div className="flex flex-col gap-4 bg-whitesmoke radius-5 p-10">
@@ -91,9 +101,25 @@ function orderedProductCard({ orderedProducts }: any) {
                   </div>
                 </div>
                 <div className="flex space-between flex-row-reverse l:grid gap-5 pt-5 border-t border-t-#00000014 l:border-none">
-                  <p className="text-14 weight-500">
-                    {formatNumberAsPrice(item?.discountedPrice || item.totalPrice)}
-                  </p>
+                  <div className="flex flex-col a-items-end">
+                    <p className="text-14 weight-500">
+                      {formatNumberAsPrice(linePrices.displayPrice)}
+                    </p>
+                    {linePrices.hasSlash && (
+                      <div className="flex flex-col gap-2 a-items-end">
+                        {getStrikethroughAmounts(linePrices).map(
+                          (amount, idx) => (
+                            <p
+                              key={idx}
+                              className="text-12 color-#00000099 line-through"
+                            >
+                              {formatNumberAsPrice(amount)}
+                            </p>
+                          )
+                        )}
+                      </div>
+                    )}
+                  </div>
                   <p className="text-12 text-right"> X {item.quantity}</p>
                 </div>
               </div>

@@ -36,6 +36,10 @@ import {
   MARKETPLACE_PURCHASES_ENABLED,
 } from '@/modules/lib/utility/constants';
 import { useCartStore } from '@/modules/lib/utility/store/cart.store';
+import {
+  getLineDisplayPrices,
+  getStrikethroughAmounts,
+} from '@/modules/lib/utility/visible-discount';
 
 type DeliveryOptionKey = 'standard' | 'express' | 'vendorManaged';
 type addressDeliveryPrice = {
@@ -335,17 +339,6 @@ const CheckoutPage = () => {
     return /^\+?\d{10,15}$/.test(normalized);
   };
 
-  const isValidDiscount = (cartItem: CartItem) => {
-    if (cartItem?.variant?.product?.discount?.activeEndDate) {
-      return (
-        new Date(cartItem?.variant?.product?.discount?.activeStartDate) <=
-        new Date(new Date().setHours(new Date().getHours() + 1)) &&
-        new Date(new Date().setHours(new Date().getHours() + 1)) <=
-        new Date(cartItem?.variant?.product?.discount?.activeEndDate)
-      );
-    }
-  };
-
   const hasItems =
     cart && Array.isArray(cart.cartItems) && cart.cartItems.length > 0;
 
@@ -522,6 +515,11 @@ const CheckoutPage = () => {
                       )}
                       {store.items.length > 0 &&
                         store.items.map((cartItem: any, j: number) => {
+                          const linePrices = getLineDisplayPrices({
+                            totalPrice: Number(cartItem?.totalPrice ?? 0),
+                            discountedPrice: Number(cartItem?.discountedPrice ?? 0),
+                            variant: cartItem?.variant,
+                          });
                           const mediaType =
                             checkMediaType(cartItem.variant.media?.[0].url) ??
                             'image';
@@ -614,22 +612,21 @@ const CheckoutPage = () => {
                                     <p
                                       className={`weight-600 md:text-20 sm:text-16 text-14 md:line-height-28 sm:line-height-24 line-height-22 ${cartItem.variant.status === 'OUT_OF_STOCK' ? 'color-#00000099' : ''}`}
                                     >
-                                      {isValidDiscount(cartItem)
-                                        ? formatNumberAsPrice(
-                                          cartItem.discountedPrice
-                                        )
-                                        : formatNumberAsPrice(
-                                          cartItem.totalPrice
-                                        )}
+                                      {formatNumberAsPrice(linePrices.displayPrice)}
                                     </p>
-                                    {isValidDiscount(cartItem) && (
-                                      <p
-                                        className={`weight-400 md:text-16 sm:text-12 text-10 md:line-height-24 sm:line-height-20 line-height-18 line-through color-#00000099  ${cartItem.variant.status === 'OUT_OF_STOCK' ? 'color-#00000099' : ''}`}
-                                      >
-                                        {formatNumberAsPrice(
-                                          cartItem.totalPrice
+                                    {linePrices.hasSlash && (
+                                      <div className="flex flex-wrap gap-6 a-items-center">
+                                        {getStrikethroughAmounts(linePrices).map(
+                                          (amount, idx) => (
+                                            <p
+                                              key={idx}
+                                              className={`weight-400 md:text-16 sm:text-12 text-10 md:line-height-24 sm:line-height-20 line-height-18 line-through color-#00000099  ${cartItem.variant.status === 'OUT_OF_STOCK' ? 'color-#00000099' : ''}`}
+                                            >
+                                              {formatNumberAsPrice(amount)}
+                                            </p>
+                                          )
                                         )}
-                                      </p>
+                                      </div>
                                     )}
                                   </div>
                                   <p

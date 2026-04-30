@@ -33,6 +33,10 @@ import ProductCatalogueDropdown from './ProductCatalogueDropdown';
 import { guestSession } from '../../utility/guest-session';
 import { CartItem } from '../../utility/types/cart.interface';
 import { useSavedVariant } from '../../utility/hooks/use-saved-variants';
+import {
+  getStrikethroughAmounts,
+  getVariantDisplayPrices,
+} from '../../utility/visible-discount';
 
 interface IProductTile {
   product: Product;
@@ -333,7 +337,6 @@ const ProductTile: FC<IProductTile> = ({
   const mediaType = checkMediaType(selectedImage) ?? 'image';
 
   const handleSave = () => {
-    console.log('egooo')
     if (!activeVariantId) return;
     if (isSaved) {
       resolvedRemoveSavedVariant && resolvedRemoveSavedVariant(activeVariantId);
@@ -387,11 +390,10 @@ const ProductTile: FC<IProductTile> = ({
   }, [recentlyViewedId, isAuthenticated]);
 
   const isOutOfStock = selectedVariant?.status === 'OUT_OF_STOCK';
-  const isDiscounted =
-    new Date(product?.discount?.activeStartDate) <=
-    new Date(new Date().setHours(new Date().getHours() + 1)) &&
-    new Date(new Date().setHours(new Date().getHours() + 1)) <=
-    new Date(product?.discount?.activeEndDate);
+  const variantDisplayPrices = getVariantDisplayPrices({
+    variant: selectedVariant,
+    product,
+  });
 
   const hasProperties = useMemo(() => {
     if (!selectedVariant) return false;
@@ -968,18 +970,21 @@ const ProductTile: FC<IProductTile> = ({
             className="flex md:gap-8 md:a-items-center md:flex-row flex-col"
           >
             <p className="md:text-16 text-12 weight-600 md:line-height-24 line-height-20">
-              {isDiscounted
-                ? formatNumberAsPrice(selectedVariant?.discountedPrice)
-                : formatNumberAsPrice(
-                  selectedVariant?.finalPrice ?? product.finalPrice ?? 0
-                )}
+              {formatNumberAsPrice(variantDisplayPrices.displayPrice)}
             </p>
-            {isDiscounted && (
-              <p className="md:text-12 text-10 weight-400 md:line-height-20 color-#00000099 line-through">
-                {formatNumberAsPrice(
-                  selectedVariant?.finalPrice ?? product.finalPrice ?? 0
+            {variantDisplayPrices.hasSlash && (
+              <div className="flex flex-wrap gap-6 md:gap-8 a-items-center">
+                {getStrikethroughAmounts(variantDisplayPrices).map(
+                  (amount, idx) => (
+                    <p
+                      key={idx}
+                      className="md:text-12 text-10 weight-400 md:line-height-20 color-#00000099 line-through"
+                    >
+                      {formatNumberAsPrice(amount)}
+                    </p>
+                  )
                 )}
-              </p>
+              </div>
             )}
           </div>
 
