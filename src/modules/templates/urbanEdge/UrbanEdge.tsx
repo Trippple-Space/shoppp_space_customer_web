@@ -32,6 +32,8 @@ const UrbanEdge: FC<UrbanEdgeProps> = ({
   productsRef,
   cart,
   loading,
+  fetchingError,
+  onProductsRetry,
   page,
   setPage,
   totalPages,
@@ -185,6 +187,8 @@ const UrbanEdge: FC<UrbanEdgeProps> = ({
             totalPages={totalPages}
             selectedCategory={selectedCategory}
             setSelectedCategory={setSelectedCategory}
+            fetchingError={fetchingError}
+            onRetry={onProductsRetry}
           />
         </section>
         <div className="urbanEdge__floating">

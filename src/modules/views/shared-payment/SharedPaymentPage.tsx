@@ -115,14 +115,14 @@ const SharedPaymentPage = ({ shareToken }: SharedPaymentPageProps) => {
             <Image
               src={item.variantImage}
               alt={item.productName || 'Product image'}
-              className="w-73 h-75 object-fit"
+              className="w-73 h-75 min-w-73 min-h-75 object-fit"
             />
           ) : (
             <span className="text-12 color-#00000066">No image</span>
           )}
         </div>
-        <div className="flex-grow-1 flex flex-col gap-4 overflow-hidden">
-          <p className="weight-600 text-14 line-height-22 color-#000000E0 text-overflow-ellipsis white-space-nowrap overflow-hidden">
+        <div className="min-w-0 flex-grow-1 flex flex-col gap-4 overflow-hidden">
+          <p className="min-w-0 weight-600 text-14 line-height-22 color-#000000E0 text-overflow-ellipsis white-space-nowrap overflow-hidden">
             {item.productName}
           </p>
           <p className="weight-400 text-14 line-height-20 color-#0000008C">
@@ -159,7 +159,7 @@ const SharedPaymentPage = ({ shareToken }: SharedPaymentPageProps) => {
     <>
       <HomepageNavBar />
       <div className="bg-#F5F5F5 min-h-100vh py-40 pb-96 px-16 mt-64">
-        <div className="mx-auto max-w-760 bg-white radius-12 p-24 md:p-32 flex flex-col gap-20">
+        <div className="mx-auto max-w-760 bg-white radius-12 p-16 sm:p-24 md:p-32 flex flex-col gap-20">
           <h1 className="text-24 line-height-32 weight-600">Shared payment</h1>
 
           {loading && (
@@ -225,16 +225,16 @@ const SharedPaymentPage = ({ shareToken }: SharedPaymentPageProps) => {
                 <div className="border border-#00000014 radius-10 p-16 flex flex-col gap-10">
                   <div className="flex space-between text-14 line-height-20">
                     <span>Subtotal</span>
-                    <span>{formatNumberAsPrice(summary.cartSubTotal)}</span>
+                    <span>{formatNumberAsPrice(summary.cartTotal)}</span>
                   </div>
                   <div className="flex space-between text-14 line-height-20">
                     <span>Delivery fee</span>
                     <span>{formatNumberAsPrice(summary.deliveryFee)}</span>
                   </div>
-                  <div className="flex space-between text-14 line-height-20">
+                  {/* <div className="flex space-between text-14 line-height-20">
                     <span>Cart total</span>
                     <span>{formatNumberAsPrice(summary.cartTotal)}</span>
-                  </div>
+                  </div> */}
                   <div className="flex space-between text-16 line-height-24 weight-600 border-t border-#00000014 pt-10">
                     <span>Total to pay</span>
                     <span>{formatNumberAsPrice(totalToPay)}</span>
