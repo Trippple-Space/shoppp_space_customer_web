@@ -4,6 +4,8 @@ import { SavedVariant } from '../types/SavedVariant.interface';
 import useUserStore from './user.store';
 import { guestSession } from '../guest-session';
 
+let fetchSavedVariantsInFlight: Promise<void> | null = null;
+
 type SavedVariantStore = {
     savedVariants: SavedVariant[];
     fetching: boolean;
@@ -33,13 +35,21 @@ export const useSavedVariantStore = create<SavedVariantStore>((set) => ({
             set({ savedVariants: guestSavedVariants, fetching: false });
             return;
         }
-        try {
-            set({ fetching: true });
-            const savedVariants = await productService.fetchSavedVariants();
-            set({ savedVariants, fetching: false });
-        } catch (error) {   
-            set({ fetching: false });
+        if (fetchSavedVariantsInFlight) {
+            return fetchSavedVariantsInFlight;
         }
+        fetchSavedVariantsInFlight = (async () => {
+            try {
+                set({ fetching: true });
+                const savedVariants = await productService.fetchSavedVariants();
+                set({ savedVariants, fetching: false });
+            } catch (error) {
+                set({ fetching: false });
+            } finally {
+                fetchSavedVariantsInFlight = null;
+            }
+        })();
+        return fetchSavedVariantsInFlight;
     },
     saveVariant: async (productVariantId?: string) => {
         if (!productVariantId) {

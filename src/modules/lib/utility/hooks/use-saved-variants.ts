@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import useUserStore from "../store/user.store";
 import { useSavedVariantStore } from "../store/savedVariant.store";
 

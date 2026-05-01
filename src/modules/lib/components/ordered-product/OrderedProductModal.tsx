@@ -19,9 +19,11 @@ import PuffLoader from '../puff-loader/PuffLoader';
 import VideoSrc from '../video-src/VideoSrc';
 import { ConfigPill } from '../product-detail-modal/productConfigurationsHelper';
 import {
+  getOrderLevelDiscountTotalFromCart,
   getLineDisplayPrices,
-  getOrderDisplayDiscountTotal,
+  hasOrderLevelDiscountInCart,
   getStrikethroughAmounts,
+  sumOrderCartPayableTotal,
   sumOrderCartReferenceSubtotal,
 } from '../../utility/visible-discount';
 
@@ -40,8 +42,13 @@ const OrderedProductModal = ({
   };
 
   const cartItems = getCartItems(order?.cart?.storeGroups || []);
-  const orderDisplaySubtotal = sumOrderCartReferenceSubtotal(cartItems);
-  const orderDisplayDiscount = getOrderDisplayDiscountTotal(cartItems);
+  const hasOrderDiscount = hasOrderLevelDiscountInCart(order?.cart);
+  const orderDisplaySubtotal = hasOrderDiscount
+    ? sumOrderCartReferenceSubtotal(cartItems)
+    : sumOrderCartPayableTotal(cartItems);
+  const orderDisplayDiscount = hasOrderDiscount
+    ? getOrderLevelDiscountTotalFromCart(order?.cart)
+    : 0;
 
   const buyOrdersAgain = async (cartItems: CartItem[]) => {
     const buyAgainItems: BuyAgain[] = [];
