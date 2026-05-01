@@ -25,7 +25,9 @@ import PuffLoader from '@/modules/lib/components/puff-loader/PuffLoader'
 import { useOrders } from '@/modules/lib/utility/hooks/use-orders'
 import { useCart } from '@/modules/lib/utility/hooks/use-cart'
 import {
-  getOrderDisplayDiscountTotal,
+  getOrderLevelDiscountTotalFromCart,
+  hasOrderLevelDiscountInCart,
+  sumOrderCartPayableTotal,
   sumOrderCartReferenceSubtotal,
 } from '@/modules/lib/utility/visible-discount'
 
@@ -108,14 +110,25 @@ const OrderDetails = ({ orderId }: OrderDetailsProps) => {
     [singleOrder]
   )
 
+  const hasOrderDiscount = useMemo(
+    () => hasOrderLevelDiscountInCart(singleOrder?.cart),
+    [singleOrder?.cart]
+  )
+
   const orderDisplaySubtotal = useMemo(
-    () => sumOrderCartReferenceSubtotal(orderCartItems),
-    [orderCartItems]
+    () =>
+      hasOrderDiscount
+        ? sumOrderCartReferenceSubtotal(orderCartItems)
+        : sumOrderCartPayableTotal(orderCartItems),
+    [hasOrderDiscount, orderCartItems]
   )
 
   const orderDisplayDiscount = useMemo(
-    () => getOrderDisplayDiscountTotal(orderCartItems),
-    [orderCartItems]
+    () =>
+      hasOrderDiscount
+        ? getOrderLevelDiscountTotalFromCart(singleOrder?.cart)
+        : 0,
+    [hasOrderDiscount, singleOrder?.cart]
   )
 
   return (

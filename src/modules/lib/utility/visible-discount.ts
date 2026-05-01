@@ -220,6 +220,70 @@ export const getOrderDisplayDiscountTotal = (
   return Number(Math.max(0, ref - pay).toFixed(2));
 };
 
+type OrderDiscountCartLike = {
+  systemDiscountCode?: string | null;
+  systemDiscountValue?: number | null;
+  storeGroups?: Array<{
+    discountCode?: string | null;
+    storeDiscountValue?: number | null;
+    items?: Array<{ discountValue?: number | null }> | null;
+  }> | null;
+};
+
+const hasNonEmptyCode = (code?: string | null): boolean =>
+  typeof code === 'string' && code.trim().length > 0;
+
+const getStoreProductDiscountTotal = (
+  store?: { items?: Array<{ discountValue?: number | null }> | null } | null
+): number => {
+  if (!store?.items?.length) return 0;
+  let total = 0;
+  for (const item of store.items) {
+    total += toNumber(item?.discountValue);
+  }
+  return Number(total.toFixed(2));
+};
+
+/**
+ * True when a cart has order-level discounts (promo/system), excluding product-level discounts.
+ */
+export const hasOrderLevelDiscountInCart = (
+  cart?: OrderDiscountCartLike | null
+): boolean => {
+  if (!cart) return false;
+  if (hasNonEmptyCode(cart.systemDiscountCode)) return true;
+  return (
+    cart.storeGroups?.some((store) => hasNonEmptyCode(store?.discountCode)) ??
+    false
+  );
+};
+
+/**
+ * Order-only discount amount for summaries. Product discounts are excluded since they are represented via slashed line prices.
+ */
+export const getOrderLevelDiscountTotalFromCart = (
+  cart?: OrderDiscountCartLike | null
+): number => {
+  if (!cart) return 0;
+
+  let total = 0;
+
+  if (hasNonEmptyCode(cart.systemDiscountCode)) {
+    total += toNumber(cart.systemDiscountValue);
+  }
+
+  if (cart.storeGroups?.length) {
+    for (const store of cart.storeGroups) {
+      if (!hasNonEmptyCode(store?.discountCode)) continue;
+      const storeDiscountValue = toNumber(store?.storeDiscountValue);
+      const productDiscountValue = getStoreProductDiscountTotal(store);
+      total += Math.max(0, storeDiscountValue - productDiscountValue);
+    }
+  }
+
+  return Number(total.toFixed(2));
+};
+
 export const getVariantDisplayPrices = ({
   variant,
   product,
