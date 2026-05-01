@@ -35,6 +35,11 @@ export interface IQueryParams {
 
 export type PaginationType = "infinite" | "buttons";
 
+function normalizeFetchError(error: unknown): Error {
+  if (error instanceof Error) return error;
+  return new Error(typeof error === "string" ? error : "Request failed");
+}
+
 export const useProducts = (
   initialQuery: IQueryParams,
   paginationType: PaginationType = "infinite",
@@ -44,7 +49,9 @@ export const useProducts = (
   const [query, setQuery] = useState<IQueryParams>(initialQuery);
   const [loading, setLoading] = useState(true);
   const [fetchingError, setFetchingError] = useState<Error | null>(null);
+  const [loadMoreError, setLoadMoreError] = useState<Error | null>(null);
   const [refetchToken, setRefetchToken] = useState(0);
+  const [loadMoreRetryToken, setLoadMoreRetryToken] = useState(0);
 
   const {
     productsCache,
@@ -119,18 +126,6 @@ export const useProducts = (
     }));
   };
 
-  const refetch = () => {
-    clearProductsCacheByKey(cacheKey);
-    setRefetchToken((t) => t + 1);
-    setQuery((prev) => ({
-      ...prev,
-      pagination: {
-        page: 1,
-        limit: prev.pagination?.limit ?? 20,
-      },
-    }));
-  };
-
   const baseCacheKey =
     (collectionSlug ? `collection_${collectionSlug}_` : "products_") +
     JSON.stringify(query.filters ?? {}) +
@@ -150,6 +145,26 @@ export const useProducts = (
     ? query.collection
     : collectionSlug;
 
+  const refetch = () => {
+    setFetchingError(null);
+    setLoadMoreError(null);
+    clearProductsCacheByKey(cacheKey);
+    setRefetchToken((t) => t + 1);
+    setLoadMoreRetryToken(0);
+    setQuery((prev) => ({
+      ...prev,
+      pagination: {
+        page: 1,
+        limit: prev.pagination?.limit ?? 20,
+      },
+    }));
+  };
+
+  const retryLoadMore = () => {
+    setLoadMoreError(null);
+    setLoadMoreRetryToken((t) => t + 1);
+  };
+
   useEffect(() => {
     if (!query.pagination) return;
 
@@ -162,16 +177,18 @@ export const useProducts = (
 
       setLoading(true);
       setFetchingError(null);
+      setLoadMoreError(null);
 
       productService
         .fetchProducts(query, query.allFilters, effectiveCollectionSlug)
         .then((fetchedProducts) => {
+          setLoadMoreError(null);
           setProductsCache(cacheKey, {
             data: fetchedProducts.data,
             meta: fetchedProducts.meta
           });
         })
-        .catch(setFetchingError)
+        .catch((e) => setFetchingError(normalizeFetchError(e)))
         .finally(() => setLoading(false));
 
       return;
@@ -184,22 +201,25 @@ export const useProducts = (
     if (hasCachedData) {
       setLoading(false);
       setFetchingError(null);
+      setLoadMoreError(null);
       return;
     }
 
     if (!cached || cached.data.length === 0) {
       setLoading(true);
       setFetchingError(null);
+      setLoadMoreError(null);
       productService
         .fetchProducts(query, query.allFilters, effectiveCollectionSlug)
         .then((fetchedProducts) => {
+          setLoadMoreError(null);
           setProductsCache(cacheKey, {
             data: fetchedProducts.data,
             meta: fetchedProducts.meta
           });
         })
         .catch((error) => {
-          setFetchingError(error);
+          setFetchingError(normalizeFetchError(error));
           setLoading(false);
         })
         .finally(() => {
@@ -227,11 +247,13 @@ export const useProducts = (
     ) {
       setLoading(true);
       setFetchingError(null);
+      setLoadMoreError(null);
       productService
         .fetchProducts(query, query.allFilters, effectiveCollectionSlug)
         .then((fetchedProducts) => {
           const previous = productsCache[cacheKey];
 
+          setLoadMoreError(null);
           setProductsCache(cacheKey, {
             data: [
               ...(previous?.data ?? []),
@@ -251,7 +273,7 @@ export const useProducts = (
             )
           );
         }).catch((error) => {
-          setFetchingError(error);
+          setLoadMoreError(normalizeFetchError(error));
           setLoading(false);
         }).finally(() => {
           setLoading(false);
@@ -262,7 +284,8 @@ export const useProducts = (
     JSON.stringify(query.allFilters),
     JSON.stringify(query.search ?? ''),
     JSON.stringify(query.collection ?? ''),
-    refetchToken
+    refetchToken,
+    loadMoreRetryToken
   ]);
 
   return {
@@ -277,7 +300,9 @@ export const useProducts = (
     query,
     loading,
     fetchingError,
+    loadMoreError,
     refetch,
+    retryLoadMore,
     meta: productsCache[cacheKey]?.meta
     // paginationLoading
   };

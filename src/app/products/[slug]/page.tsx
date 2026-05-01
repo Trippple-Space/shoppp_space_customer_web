@@ -1,5 +1,6 @@
 import { productService } from '@/modules/lib/utility/services/product.service';
 import ProductDetails from '@/modules/views/product-details/Product-details';
+import ProductLoadError from '@/modules/views/product-details/ProductLoadError';
 import React, { Suspense } from 'react';
 import type { Metadata } from 'next';
 
@@ -172,7 +173,8 @@ export default async function product_details({
       </div>
     );
   } catch (error) {
-    // console.error('Error fetching product details:', error)
-    return <div>Error fetching product details</div>;
+    const message =
+      error instanceof Error ? error.message : typeof error === 'string' ? error : 'Request failed';
+    return <ProductLoadError message={message} />;
   }
 }

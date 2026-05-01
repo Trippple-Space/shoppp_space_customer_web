@@ -101,6 +101,11 @@ export const StorefrontParent: FC<{
     setPage,
     totalPages,
   } = useStoreProductsView(store.id);
+
+  const handleProductsRetry = () => {
+    setPage(1);
+    refetch();
+  };
   const [openReviewId, setOpenReviewId] = useState<string | null>(null);
   const [cartOpen, setCartOpen] = useState(false);
   const [userProfileDropdown, setUserProfileDropdown] =
@@ -263,6 +268,8 @@ export const StorefrontParent: FC<{
     initialCollections,
     initialCategories,
     showCollectionsSection,
+    fetchingError,
+    onProductsRetry: handleProductsRetry,
   };
 
   return (
@@ -354,6 +361,8 @@ export const StorefrontParent: FC<{
             categories={categories}
             selectedCategory={selectedCategory}
             setSelectedCategory={setSelectedCategory}
+            fetchingError={fetchingError}
+            onProductsRetry={handleProductsRetry}
           >
             <StorefrontAbout store={store} />
           </StorefrontLayout>
@@ -372,6 +381,8 @@ export const StorefrontParent: FC<{
           categories={categories}
           selectedCategory={selectedCategory}
           setSelectedCategory={setSelectedCategory}
+          fetchingError={fetchingError}
+          onProductsRetry={handleProductsRetry}
         >
           <StorefrontAbout store={store} />
         </StorefrontLayout>

@@ -26,6 +26,8 @@ export interface BaseStorefrontProps {
 
     products: Product[];
     loading: boolean;
+    fetchingError?: Error | null;
+    onProductsRetry?: () => void;
 
     template?: any;
     scrollToProducts: () => void;
