@@ -53,11 +53,14 @@ export const useProductListView = () => {
     if (loadMoreError) return;
 
     const totalPages = meta?.totalPages ?? 1;
+    // Do not depend on `page` here: when `page` updates, `meta.currentPage` can still
+    // reflect the last completed fetch, so `meta ?? page` prefers stale meta and this
+    // effect would fire multiple times in one scroll (pages N, N+1, N+2 in parallel).
     const currentPage = meta?.currentPage ?? page;
     if (currentPage < totalPages) {
       setPage((prev) => prev + 1);
     }
-  }, [inView, loading, loadMoreError, meta?.currentPage, meta?.totalPages, page]);
+  }, [inView, loading, loadMoreError, meta?.currentPage, meta?.totalPages]);
 
   useEffect(() => {
     setPagination({ page, limit });
