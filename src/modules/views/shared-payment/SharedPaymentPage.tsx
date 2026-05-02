@@ -225,7 +225,11 @@ const SharedPaymentPage = ({ shareToken }: SharedPaymentPageProps) => {
                 <div className="border border-#00000014 radius-10 p-16 flex flex-col gap-10">
                   <div className="flex space-between text-14 line-height-20">
                     <span>Subtotal</span>
-                    <span>{formatNumberAsPrice(summary.cartTotal)}</span>
+                    <span>{formatNumberAsPrice(summary.cartTotalDiscountValue ?? summary.cartTotal)}</span>
+                  </div>
+                  <div className="flex space-between text-14 line-height-20">
+                    <span>Discount</span>
+                    <span>- {formatNumberAsPrice(summary.cartTotalDiscountValue ?? 0)}</span>
                   </div>
                   <div className="flex space-between text-14 line-height-20">
                     <span>Delivery fee</span>

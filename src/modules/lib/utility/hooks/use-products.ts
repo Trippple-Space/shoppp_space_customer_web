@@ -251,16 +251,16 @@ export const useProducts = (
       productService
         .fetchProducts(query, query.allFilters, effectiveCollectionSlug)
         .then((fetchedProducts) => {
-          const previous = productsCache[cacheKey];
+          const { productsCache: latestCache, productCacheIdempotencyTracker: latestTracker } =
+            useProductStore.getState();
+          const previous = latestCache[cacheKey];
+          const seenIds = latestTracker[cacheKey] ?? {};
 
           setLoadMoreError(null);
           setProductsCache(cacheKey, {
             data: [
               ...(previous?.data ?? []),
-              ...fetchedProducts.data.filter(
-                (product) =>
-                  !productCacheIdempotencyTracker?.[cacheKey]?.[product.id]
-              ),
+              ...fetchedProducts.data.filter((product) => !seenIds[product.id]),
             ],
             meta: fetchedProducts.meta
           });
