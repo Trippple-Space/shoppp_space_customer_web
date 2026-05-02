@@ -37,6 +37,7 @@ export interface SharedCheckoutSummaryResponse {
   deliveryOption: string;
   totalToPaySmallestUnit: number;
   cartSubTotal: number;
+  cartTotalDiscountValue?: number;
   cartTotal: number;
   deliveryFee: number;
   stores: SharedCheckoutStore[];
