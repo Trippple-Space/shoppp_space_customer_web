@@ -53,6 +53,12 @@ import {
   isEmptyValue,
 } from '@/modules/lib/components/product-detail-modal/productConfigurationsHelper';
 import { CatalogueMediaItem } from '@/modules/lib/components/product-tile/ProductCatalogueDropdown';
+import { guestSession } from '@/modules/lib/utility/guest-session';
+import { CartItem } from '@/modules/lib/utility/types/cart.interface';
+import {
+  getStrikethroughAmounts,
+  getVariantDisplayPrices,
+} from '@/modules/lib/utility/visible-discount';
 
 const ProductDetails = ({ product }: { product: Product }) => {
   const [recentlyViewedVariants, setRecentlyViewedVariants] = useState<
@@ -81,6 +87,7 @@ const ProductDetails = ({ product }: { product: Product }) => {
   >('default');
 
   const [savedToggle, setSavedToggle] = useState(false);
+  const [guestCartVersion, setGuestCartVersion] = useState(0);
 
   const [configurationValues, setConfigurationValues] = useState<
     Record<string, any>
@@ -295,9 +302,44 @@ const ProductDetails = ({ product }: { product: Product }) => {
     filters: { status: { In: `${onGoingOrderStatusQuery},DELIVERED` } },
   });
 
-  const selectedVariantItemInCart = cart.cartItems.find(
-    (item) => item.variant.id === selectedVariant?.id
-  );
+  const selectedVariantItemInCart = useMemo(() => {
+    const existing = cart.cartItems.find(
+      (item) => item.variant.id === selectedVariant?.id
+    );
+    if (existing || !selectedVariant) {
+      return existing;
+    }
+    if (isAuthenticated) {
+      return undefined;
+    }
+
+    const guestQty = guestSession.getCartQuantityForVariant(selectedVariant.id);
+    if (guestQty <= 0) {
+      return undefined;
+    }
+
+    return {
+      id: `guest-${selectedVariant.id}`,
+      productId: selectedVariant.product?.id ?? '',
+      quantity: guestQty,
+      variant: selectedVariant,
+      totalPrice: selectedVariant.finalPrice * guestQty,
+      discountedPrice: selectedVariant.discountedPrice * guestQty,
+      userConfigurations:
+        guestSession.getLatestUserConfigurations(selectedVariant.id) ?? {},
+      createdAt: '',
+      discountValue: 0,
+      lastUpdated: '',
+      meta: null,
+    } as CartItem;
+  }, [cart.cartItems, selectedVariant, isAuthenticated, guestCartVersion]);
+
+  useEffect(() => {
+    const handleGuestCartUpdate = () => setGuestCartVersion((value) => value + 1);
+    window.addEventListener('guest-cart-updated', handleGuestCartUpdate);
+    return () =>
+      window.removeEventListener('guest-cart-updated', handleGuestCartUpdate);
+  }, []);
 
   useEffect(() => {
     (async () => {
@@ -336,34 +378,6 @@ const ProductDetails = ({ product }: { product: Product }) => {
     isAuthenticated,
     isLoginModal,
   ]);
-
-  useEffect(() => {
-    if (isAuthenticated) {
-      const variantId = localStorage.getItem('variantId');
-      const variantIdMinimumPurchase = localStorage.getItem(
-        'variantIdMinimumPurchase'
-      );
-      const storedConfig = localStorage.getItem('userConfigurations');
-      const userConfigurations: Record<string, any> | null = storedConfig
-        ? JSON.parse(storedConfig)
-        : null;
-
-      if (variantId && variantIdMinimumPurchase) {
-        const parsedMinimumPurchase = parseInt(variantIdMinimumPurchase, 10);
-
-        if (variantId && !isNaN(parsedMinimumPurchase)) {
-          addToCart(
-            variantId,
-            parsedMinimumPurchase,
-            userConfigurations ?? undefined
-          );
-        }
-        localStorage.removeItem('variantId');
-        localStorage.removeItem('variantIdMinimumPurchase');
-        localStorage.removeItem('userConfigurations');
-      }
-    }
-  }, [isAuthenticated]);
 
   useEffect(() => {
     if (!showLightbox) return;
@@ -449,7 +463,10 @@ const ProductDetails = ({ product }: { product: Product }) => {
   const descriptionLength = product?.longDescription?.split(' ')?.length || 0;
   const maxDisplayDescLength = 144;
 
-  const isDiscounted = new Date() <= new Date(product?.discount?.activeEndDate);
+  const variantDisplayPrices = getVariantDisplayPrices({
+    variant: selectedVariant ?? product.variants[0],
+    product,
+  });
 
   const isOutOfStock = selectedVariant?.status === 'OUT_OF_STOCK';
 
@@ -528,26 +545,6 @@ const ProductDetails = ({ product }: { product: Product }) => {
     return desc;
   };
 
-  const handleLogin = (
-    variantId: string,
-    minimumPurchase: number,
-    userConfigurations?: Record<string, any>
-  ) => {
-    localStorage.setItem('variantId', variantId.toString());
-    localStorage.setItem(
-      'variantIdMinimumPurchase',
-      minimumPurchase.toString()
-    );
-    if (userConfigurations) {
-      localStorage.setItem(
-        'userConfigurations',
-        JSON.stringify(userConfigurations)
-      );
-    }
-
-    isLoginModal();
-  };
-
   const currentVariantId = selectedVariant?.id || product.variants[0]?.id;
 
   const isSaved = savedVariants?.some(
@@ -558,6 +555,9 @@ const ProductDetails = ({ product }: { product: Product }) => {
     let variantToSave = selectedVariant;
     if (!variantToSave) {
       variantToSave = product.variants[0];
+    }
+    if (!variantToSave?.id) {
+      return;
     }
     const variantId = variantToSave.id;
 
@@ -662,13 +662,25 @@ const ProductDetails = ({ product }: { product: Product }) => {
   const addToCartBtn = () => {
     return (
       <div className="flex flex-col gap-16">
-        <p className="text-24 weight-600">
-          {formatNumberAsPrice(
-            selectedVariant?.finalPrice ??
-            product.variants[0]?.finalPrice ??
-            product.price
+        <div className="flex flex-col gap-8">
+          <p className="text-24 weight-600">
+            {formatNumberAsPrice(variantDisplayPrices.displayPrice)}
+          </p>
+          {variantDisplayPrices.hasSlash && (
+            <div className="flex flex-wrap gap-8 a-items-center">
+              {getStrikethroughAmounts(variantDisplayPrices).map(
+                (amount, idx) => (
+                  <p
+                    key={idx}
+                    className="weight-400 text-16 color-#00000099 line-through"
+                  >
+                    {formatNumberAsPrice(amount)}
+                  </p>
+                )
+              )}
+            </div>
           )}
-        </p>
+        </div>
 
         {!selectedVariant &&
           (missingRequiredOptions.length > 0 ||
@@ -700,26 +712,24 @@ const ProductDetails = ({ product }: { product: Product }) => {
               `text-white border-none l:px-24 l:py-12 py-15 w-100p radius-6 ${!selectedVariant || isOutOfStock || !areRequiredCustomerFieldsFilled ? 'bg-gray-300 cursor-not-allowed' : 'bg-#0B9378 hover:bg-darkgreen pointer'}`
             )}
             onClick={() => {
-              if (isAuthenticated) {
-                if (orders.length == 0 && cart.cartItems.length == 0) {
-                  handleFlyToCart(imgRef);
-                }
-                if (
-                  selectedVariant &&
-                  selectedVariant.status !== 'OUT_OF_STOCK' &&
-                  areRequiredCustomerFieldsFilled
-                ) {
-                  addToCart(
-                    selectedVariant?.id ?? 0,
-                    selectedVariant?.minPurchaseQuantity || 1,
-                    userConfigurations
-                  );
-                }
-              } else {
-                handleLogin(
-                  selectedVariant?.id ?? '',
+              if (orders.length == 0 && cart.cartItems.length == 0) {
+                handleFlyToCart(imgRef);
+              }
+              if (
+                selectedVariant &&
+                selectedVariant.status !== 'OUT_OF_STOCK' &&
+                areRequiredCustomerFieldsFilled
+              ) {
+                addToCart(
+                  selectedVariant?.id ?? 0,
                   selectedVariant?.minPurchaseQuantity || 1,
-                  userConfigurations
+                  userConfigurations,
+                  selectedVariant
+                    ? {
+                        ...selectedVariant,
+                        product: selectedVariant.product ?? product,
+                      }
+                    : undefined
                 );
               }
             }}
@@ -805,7 +815,7 @@ const ProductDetails = ({ product }: { product: Product }) => {
             </p>
             <p
               className="cursor-pointer flex a-items-center gap-8 text-15 weight-400 color-#00000099"
-              onClick={isAuthenticated ? handleSave : () => isLoginModal()}
+              onClick={handleSave}
             >
               {isSaved ? (
                 <AiFillHeart className="w-20 h-20" />
@@ -972,26 +982,21 @@ const ProductDetails = ({ product }: { product: Product }) => {
             </div>
             <div className="flex flex-col gap-12 border-b  border-#00000014 pb-15">
               <p className="weight-400 text-28">
-                {isDiscounted
-                  ? formatNumberAsPrice(
-                    selectedVariant?.discountedPrice ??
-                    product.variants[0]?.discountedPrice ??
-                    0
-                  )
-                  : formatNumberAsPrice(
-                    selectedVariant?.finalPrice ??
-                    product.variants[0]?.finalPrice ??
-                    0
-                  )}
+                {formatNumberAsPrice(variantDisplayPrices.displayPrice)}
               </p>
-              {isDiscounted && (
-                <p className="weight-400 text-16 color-#00000099 line-through">
-                  {formatNumberAsPrice(
-                    selectedVariant?.finalPrice ??
-                    product.variants[0]?.finalPrice ??
-                    0
+              {variantDisplayPrices.hasSlash && (
+                <div className="flex flex-wrap gap-8 a-items-center">
+                  {getStrikethroughAmounts(variantDisplayPrices).map(
+                    (amount, idx) => (
+                      <p
+                        key={idx}
+                        className="weight-400 text-16 color-#00000099 line-through"
+                      >
+                        {formatNumberAsPrice(amount)}
+                      </p>
+                    )
                   )}
-                </p>
+                </div>
               )}
               <div className="flex flex-col l:flex-row l:a-items-center l:j-content-between gap-12 w-100p">
                 <div className="flex a-items-center gap-12">

@@ -9,6 +9,11 @@ import { Store } from '@/modules/lib/utility/types/store.interface';
 import StorePagination from '@/modules/lib/components/pagination/StorePagination';
 import NoResultMessage from '@/modules/lib/components/error-messages/no-result-found';
 import { useSavedVariant } from '@/modules/lib/utility/hooks/use-saved-variants';
+import DataFetchErrorPanel from '@/modules/lib/components/data-fetch-error/DataFetchErrorPanel';
+import {
+  classifyFetchError,
+  getProductFetchErrorCopy,
+} from '@/modules/lib/utility/fetch-error';
 
 const StoreProductsList: FC<{
   products: Product[];
@@ -19,6 +24,8 @@ const StoreProductsList: FC<{
   onPageChange: (page: number) => void;
   selectedCategory?: ICategory;
   setSelectedCategory?: (category: ICategory) => void;
+  fetchingError?: Error | null;
+  onRetry?: () => void;
 }> = ({
   products,
   store,
@@ -28,14 +35,29 @@ const StoreProductsList: FC<{
   onPageChange,
   selectedCategory,
   setSelectedCategory,
+  fetchingError,
+  onRetry,
 }) => {
   const { saveVariant, savedVariants, removeSavedVariant } = useSavedVariant();
 
+  const showInitialLoader = loading && products.length === 0;
+  const showFatalError = !!fetchingError && !loading && products.length === 0;
+  const errorKind = fetchingError ? classifyFetchError(fetchingError) : 'unknown';
+  const errorCopy = getProductFetchErrorCopy(errorKind);
+
   return (
     <>
-      {loading ? (
+      {showInitialLoader ? (
         <div className="w-100p flex j-content-center mt-10">
           <DotsLoader />
+        </div>
+      ) : showFatalError ? (
+        <div className="mt-24 w-full">
+          <DataFetchErrorPanel
+            title={errorCopy.title}
+            description={errorCopy.description}
+            onRetry={onRetry}
+          />
         </div>
       ) : products.length ? (
         <div className="grid xxlgrid-5-cols xl:grid-4-cols-1fr s:grid-3-cols-1fr grid-2-cols-1fr gap-18 s:gap-20 md:gap-24 w-full">

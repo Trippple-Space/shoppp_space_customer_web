@@ -25,6 +25,7 @@ import OrderSummary from '@/modules/lib/components/order-summary/OrderSummary';
 import { CartItem } from '@/modules/lib/utility/types/cart.interface';
 import { useCalculatedeliveryFee } from '@/modules/lib/utility/hooks/use-calculate-deliveryFee';
 import { DeliveryOption } from '@/modules/lib/utility/types/delivery.interface';
+import { ShareLinkResponse } from '@/modules/lib/utility/types/payment.interface';
 import VideoSrc from '@/modules/lib/components/video-src/VideoSrc';
 import { toast } from 'sonner';
 import { ConfigPill } from '@/modules/lib/components/product-detail-modal/productConfigurationsHelper';
@@ -34,6 +35,11 @@ import {
   MARKETPLACE_OPENS_DATE,
   MARKETPLACE_PURCHASES_ENABLED,
 } from '@/modules/lib/utility/constants';
+import { useCartStore } from '@/modules/lib/utility/store/cart.store';
+import {
+  getLineDisplayPrices,
+  getStrikethroughAmounts,
+} from '@/modules/lib/utility/visible-discount';
 
 type DeliveryOptionKey = 'standard' | 'express' | 'vendorManaged';
 type addressDeliveryPrice = {
@@ -95,11 +101,17 @@ const CheckoutPage = () => {
     keyof typeof deliveryOptions | null
   >(null);
   const { user, isAuthenticated } = useUserStore();
+  const isLoginModal = useCartStore((state) => state.isLoginModal);
   const { cart, removeFromCart, removeDiscountCode, fetchCart, fetching } =
     useCart();
   const { openAddressModal, selectedAddress } = useAddress();
   const { fetchAddresses } = useAddressStore();
-  const { loading: isPaymentLoading, payWithPaystack } = usePayment();
+  const {
+    loading: isPaymentLoading,
+    sharing: isSharingPaymentLink,
+    payWithPaystack,
+    sharePaymentLink,
+  } = usePayment();
   const { calculateFee } = useCalculatedeliveryFee();
   const [calculatingFee, setCalculatingFee] = useState<boolean>(true);
   const selectedDeliveryOptionDetails = selectedDeliveryOption
@@ -118,6 +130,11 @@ const CheckoutPage = () => {
   const [devOptions, setDevOptions] = useState<string>();
   const [showSummary, setshowSummary] = useState(true);
   const [devAddressError, setDevAddressError] = useState(false);
+  const [enableOrderWhatsApp, setEnableOrderWhatsApp] = useState(false);
+  const [orderWhatsAppNumber, setOrderWhatsAppNumber] = useState('');
+  const [orderWhatsAppError, setOrderWhatsAppError] = useState('');
+  const [cachedShareLinkResponse, setCachedShareLinkResponse] =
+    useState<ShareLinkResponse | null>(null);
 
   const [shouldUpdateFee, setShouldUpdateFee] = useState(false);
   const lastAddressRef = useRef<string | null>(null);
@@ -300,15 +317,26 @@ const CheckoutPage = () => {
     }
   }, [selectedAddress, shouldUpdateFee]);
 
-  const isValidDiscount = (cartItem: CartItem) => {
-    if (cartItem?.variant?.product?.discount?.activeEndDate) {
-      return (
-        new Date(cartItem?.variant?.product?.discount?.activeStartDate) <=
-        new Date(new Date().setHours(new Date().getHours() + 1)) &&
-        new Date(new Date().setHours(new Date().getHours() + 1)) <=
-        new Date(cartItem?.variant?.product?.discount?.activeEndDate)
-      );
+  useEffect(() => {
+    if (!selectedAddress) return;
+    if (!enableOrderWhatsApp) {
+      setOrderWhatsAppNumber(selectedAddress.contactNo || '');
+      setOrderWhatsAppError('');
     }
+  }, [selectedAddress, enableOrderWhatsApp]);
+
+  useEffect(() => {
+    setCachedShareLinkResponse(null);
+  }, [
+    selectedAddress?.id,
+    selectedDeliveryOption,
+    cart.total,
+    cart.cartItems.length,
+  ]);
+
+  const isValidOrderWhatsAppNumber = (value: string) => {
+    const normalized = value.replace(/[^\d+]/g, '').trim();
+    return /^\+?\d{10,15}$/.test(normalized);
   };
 
   const hasItems =
@@ -317,7 +345,7 @@ const CheckoutPage = () => {
   return (
     <>
       <HomepageNavBar parent={'checkout'} />
-      <div className="md:pt-69.6 pt-64 sm:mb-60 mb-111 h-full">
+      <div className="md:pt-69.6 pt-74.6 sm:mb-60 mb-111 overflow-hidden" style={{ height: 'calc(100dvh)' }}>
         {fetching ? (
           <div
             className="w-100p flex flex-col a-items-center j-content-center mt-10"
@@ -336,7 +364,7 @@ const CheckoutPage = () => {
             >
               <div
                 ref={rightScrollRef}
-                className={`flex-grow-1 l:w-54.2p md:w-50p h-full overflow-auto no-scrollbar md:pt-44 sm:pt-32 pt-24 xl:pl-80 l:pl-70 md:pl-60 sm:pl-40 pl-24 xl:pr-80 l:pr-70 sm:pr-40 pr-24 flex flex-col gap-28 bg-white md:pb-90 ${showSummary ? `${selectedAddress ? 'sm:pb-320 pb-350' : 'sm:pb-200 pb-247'}` : 'sm:pb-99 pb-147'}`}
+                className={`flex-grow-1 l:w-54.2p md:w-50p h-full overflow-auto no-scrollbar md:pt-44 sm:pt-32 pt-24 xl:pl-80 l:pl-70 md:pl-60 sm:pl-40 pl-24 xl:pr-80 l:pr-70 sm:pr-40 pr-24 flex flex-col gap-28 bg-white md:pb-90 ${showSummary ? `${selectedAddress ? 'sm:pb-320 pb-410' : 'sm:pb-200 pb-327'}` : 'sm:pb-99 pb-217'}`}
               >
                 <div className="flex flex-col gap-6">
                   <h1 className="weight-600 md:text-24 text-20 md:line-height-32 line-heigth-28">
@@ -394,6 +422,57 @@ const CheckoutPage = () => {
                   )}
                 </div>
 
+                {
+                  selectedAddress && (
+                    <div className="py-20 px-24 border border-#00000014 flex flex-col gap-14 radius-8">
+                      <h2 className="color-#000000E0 md:text-20 text-16 weight-600 line-height-24">
+                        WhatsApp updates for this order
+                      </h2>
+                      <label className="flex gap-10 a-items-start pointer w-fit">
+                        <input
+                          type="checkbox"
+                          checked={enableOrderWhatsApp}
+                          onChange={(e) => {
+                            const checked = e.target.checked;
+                            setEnableOrderWhatsApp(checked);
+                            if (!checked) {
+                              setOrderWhatsAppError('');
+                            } else if (!orderWhatsAppNumber && selectedAddress) {
+                              setOrderWhatsAppNumber(selectedAddress.contactNo || '');
+                            }
+                          }}
+                          className="mt-4 accent-#0B9378"
+                        />
+                        <span className="weight-400 text-14 line-height-22 color-#00000099">
+                          Send WhatsApp notifications for this order.
+                        </span>
+                      </label>
+                      {enableOrderWhatsApp && (
+                        <div className="flex flex-col gap-6">
+                          <input
+                            type="tel"
+                            value={orderWhatsAppNumber}
+                            onChange={(e) => {
+                              setOrderWhatsAppNumber(e.target.value);
+                              if (orderWhatsAppError) setOrderWhatsAppError('');
+                            }}
+                            placeholder="Enter WhatsApp number"
+                            className="w-full border border-#0000001F @lo:focus:border-#0B9378 @lo:outline-none radius-6 px-12 py-10 text-14 line-height-22"
+                          />
+                          <p className="weight-400 text-12 line-height-18 color-#00000099">
+                            Use a different number only if needed.
+                          </p>
+                          {orderWhatsAppError && (
+                            <p className="weight-400 text-14 line-height-22 color-#D4280C">
+                              {orderWhatsAppError}
+                            </p>
+                          )}
+                        </div>
+                      )}
+                    </div>
+                  )
+                }
+
                 {devOptions === 'smaller' && (
                   <DeliveryOptions
                     deliveryOptions={deliveryOptions}
@@ -436,6 +515,11 @@ const CheckoutPage = () => {
                       )}
                       {store.items.length > 0 &&
                         store.items.map((cartItem: any, j: number) => {
+                          const linePrices = getLineDisplayPrices({
+                            totalPrice: Number(cartItem?.totalPrice ?? 0),
+                            discountedPrice: Number(cartItem?.discountedPrice ?? 0),
+                            variant: cartItem?.variant,
+                          });
                           const mediaType =
                             checkMediaType(cartItem.variant.media?.[0].url) ??
                             'image';
@@ -528,22 +612,21 @@ const CheckoutPage = () => {
                                     <p
                                       className={`weight-600 md:text-20 sm:text-16 text-14 md:line-height-28 sm:line-height-24 line-height-22 ${cartItem.variant.status === 'OUT_OF_STOCK' ? 'color-#00000099' : ''}`}
                                     >
-                                      {isValidDiscount(cartItem)
-                                        ? formatNumberAsPrice(
-                                          cartItem.discountedPrice
-                                        )
-                                        : formatNumberAsPrice(
-                                          cartItem.totalPrice
-                                        )}
+                                      {formatNumberAsPrice(linePrices.displayPrice)}
                                     </p>
-                                    {isValidDiscount(cartItem) && (
-                                      <p
-                                        className={`weight-400 md:text-16 sm:text-12 text-10 md:line-height-24 sm:line-height-20 line-height-18 line-through color-#00000099  ${cartItem.variant.status === 'OUT_OF_STOCK' ? 'color-#00000099' : ''}`}
-                                      >
-                                        {formatNumberAsPrice(
-                                          cartItem.totalPrice
+                                    {linePrices.hasSlash && (
+                                      <div className="flex flex-wrap gap-6 a-items-center">
+                                        {getStrikethroughAmounts(linePrices).map(
+                                          (amount, idx) => (
+                                            <p
+                                              key={idx}
+                                              className={`weight-400 md:text-16 sm:text-12 text-10 md:line-height-24 sm:line-height-20 line-height-18 line-through color-#00000099  ${cartItem.variant.status === 'OUT_OF_STOCK' ? 'color-#00000099' : ''}`}
+                                            >
+                                              {formatNumberAsPrice(amount)}
+                                            </p>
+                                          )
                                         )}
-                                      </p>
+                                      </div>
                                     )}
                                   </div>
                                   <p
@@ -552,6 +635,7 @@ const CheckoutPage = () => {
                                       try {
                                         await removeFromCart(cartItem?.id);
                                         setAllAddressDeliveryPrice([]);
+                                        setCachedShareLinkResponse(null);
                                         //setShouldUpdateFee(true);
                                       } catch (error) { }
                                     }}
@@ -678,7 +762,7 @@ const CheckoutPage = () => {
                             Marketplace opens officially by {MARKETPLACE_OPENS_DATE}. Purchases are not available yet.
                           </p>
                         )}
-                        <div className="flex gap-14 a-items-center sm:j-content-end w-full">
+                        <div className="flex flex-col gap-12 a-items-center sm:j-content-end w-full">
                           {!showSummary && (
                             <span className="md:hidden sm:block hidden sm:weight-600 weight-700 sm:text-16 text-14 sm:line-height-22 line-height-19">
                               {formatNumberAsPrice(
@@ -692,72 +776,187 @@ const CheckoutPage = () => {
                               )}
                             </span>
                           )}
+                          <div className="flex gap-14 a-items-center sm:j-content-end w-full">
+                            <button
+                              onClick={() => {
+                                if (!isAuthenticated) {
+                                  if (typeof window !== 'undefined') {
+                                    sessionStorage.setItem(
+                                      'post-auth-redirect',
+                                      paths.checkout
+                                    );
+                                  }
+                                  isLoginModal();
+                                  return;
+                                }
+                                if (!MARKETPLACE_PURCHASES_ENABLED) return;
+                                if (canProceedToPayment) {
+                                  if (!selectedAddress) {
+                                    setDevAddressError(true);
+                                    rightScrollRef.current?.scrollTo({
+                                      top: 0,
+                                      behavior: 'smooth',
+                                    });
+                                    toast.error(
+                                      'You need to add a delivery address to continue to payment.'
+                                    );
+                                  } else if (!selectedDeliveryOption) {
+                                    leftScrollRef.current?.scrollTo({
+                                      top: 0,
+                                      behavior: 'smooth',
+                                    });
+                                    rightScrollRef.current?.scrollTo({
+                                      top: 300,
+                                      behavior: 'smooth',
+                                    });
+                                    toast.error(
+                                      'You need to select a delivery option to continue to payment.'
+                                    );
+                                  }
+                                } else {
+                                  if (selectedDeliveryOption !== null) {
+                                  if (enableOrderWhatsApp) {
+                                    if (!orderWhatsAppNumber.trim()) {
+                                      setOrderWhatsAppError(
+                                        'Please enter a WhatsApp number for this order.'
+                                      );
+                                      toast.error(
+                                        'Please enter a WhatsApp number for this order.'
+                                      );
+                                      return;
+                                    }
+                                    if (!isValidOrderWhatsAppNumber(orderWhatsAppNumber)) {
+                                      setOrderWhatsAppError(
+                                        'Please enter a valid WhatsApp number.'
+                                      );
+                                      toast.error('Please enter a valid WhatsApp number.');
+                                      return;
+                                    }
+                                  }
+                                    payWithPaystack({
+                                      addressId: selectedAddress?.id,
+                                      deliveryOption: selectedDeliveryOption,
+                                    customerWhatsAppOptIn: enableOrderWhatsApp,
+                                    customerWhatsAppNumber: enableOrderWhatsApp
+                                      ? orderWhatsAppNumber.trim()
+                                      : undefined,
+                                    });
+                                  }
+                                }
+                              }}
+                              className={`md:w-full sm:w-fit w-full border-none m:flex text-white md:text-16 text-14 weight-500 md:line-height-22 line-height-19 md:px-24 px-16 py-12 radius-6 l:float-right j-content-center ${!showSummary && 'sm:mt-0 mt-56'} ${canProceedToPayment ? 'bg-#D1D5DB opacity-80 g|box-shadow:inset|_|0px|_|2px|_|4px|_|#0000001A color-#6B7280 cursor-not-allowed' : 'bg-#0B9378 pointer'}`}
+                              title={
+                                !MARKETPLACE_PURCHASES_ENABLED
+                                  ? `Purchases available from ${MARKETPLACE_OPENS_DATE}`
+                                  : selectedAddress
+                                    ? ''
+                                    : 'Add an address to proceed to payment'
+                              }
+                            >
+                              <span className="">
+                                Proceed to payment{' '}
+                                {!showSummary && (
+                                  <span className="sm:hidden weight-700">
+                                    (
+                                    {formatNumberAsPrice(
+                                      cart.total +
+                                      (selectedDeliveryOptionDetails &&
+                                        'price' in selectedDeliveryOptionDetails &&
+                                        typeof selectedDeliveryOptionDetails.price ===
+                                          'number'
+                                        ? selectedDeliveryOptionDetails.price
+                                        : 0)
+                                    )}
+                                    )
+                                  </span>
+                                )}
+                              </span>
+                              <PuffLoader
+                                size={15}
+                                loading={isPaymentLoading}
+                                className="ml-10"
+                              />
+                            </button>
+                          </div>
                           <button
-                            onClick={() => {
-                              if (!MARKETPLACE_PURCHASES_ENABLED) return;
-                              if (canProceedToPayment) {
-                                if (!selectedAddress) {
-                                  setDevAddressError(true);
-                                  rightScrollRef.current?.scrollTo({
-                                    top: 0,
-                                    behavior: 'smooth',
-                                  });
-                                  toast.error(
-                                    'You need to add a delivery address to continue to payment.'
-                                  );
-                                } else if (!selectedDeliveryOption) {
-                                  leftScrollRef.current?.scrollTo({
-                                    top: 0,
-                                    behavior: 'smooth',
-                                  });
-                                  rightScrollRef.current?.scrollTo({
-                                    top: 300,
-                                    behavior: 'smooth',
-                                  });
-                                  toast.error(
-                                    'You need to select a delivery option to continue to payment.'
+                            onClick={async () => {
+                              if (!isAuthenticated) {
+                                if (typeof window !== 'undefined') {
+                                  sessionStorage.setItem(
+                                    'post-auth-redirect',
+                                    paths.checkout
                                   );
                                 }
-                              } else {
-                                if (selectedDeliveryOption !== null) {
-                                  payWithPaystack({
-                                    addressId: selectedAddress?.id,
-                                    deliveryOption: selectedDeliveryOption,
-                                  });
+                                isLoginModal();
+                                return;
+                              }
+                              if (canProceedToPayment || selectedDeliveryOption === null) return;
+                              if (enableOrderWhatsApp) {
+                                if (!orderWhatsAppNumber.trim()) {
+                                  setOrderWhatsAppError(
+                                    'Please enter a WhatsApp number for this order.'
+                                  );
+                                  toast.error(
+                                    'Please enter a WhatsApp number for this order.'
+                                  );
+                                  return;
+                                }
+                                if (!isValidOrderWhatsAppNumber(orderWhatsAppNumber)) {
+                                  setOrderWhatsAppError(
+                                    'Please enter a valid WhatsApp number.'
+                                  );
+                                  toast.error('Please enter a valid WhatsApp number.');
+                                  return;
                                 }
                               }
+                              if (cachedShareLinkResponse?.shareToken) {
+                                const shareLink = `${window.location.origin}/pay/${cachedShareLinkResponse.shareToken}`;
+                                if (typeof navigator.share === 'function') {
+                                  try {
+                                    await navigator.share({
+                                      title: 'Asoebi checkout payment link',
+                                      text: 'Complete this order payment using the link below.',
+                                      url: shareLink,
+                                    });
+                                    return;
+                                  } catch (error) {
+                                    const shareError = error as { name?: string };
+                                    if (shareError?.name === 'AbortError') {
+                                      return;
+                                    }
+                                  }
+                                }
+
+                                await navigator.clipboard.writeText(shareLink);
+                                toast.success('Payment link copied to clipboard');
+                                return;
+                              }
+
+                              const shareResponse = await sharePaymentLink({
+                                addressId: selectedAddress?.id,
+                                deliveryOption: selectedDeliveryOption,
+                                customerWhatsAppOptIn: enableOrderWhatsApp,
+                                customerWhatsAppNumber: enableOrderWhatsApp
+                                  ? orderWhatsAppNumber.trim()
+                                  : undefined,
+                              });
+                              if (shareResponse) {
+                                setCachedShareLinkResponse(shareResponse);
+                              }
                             }}
-                            className={`md:w-full sm:w-fit w-full border-none m:flex text-white md:text-16 text-14 weight-500 md:line-height-22 line-height-19 md:px-24 px-16 py-12 radius-6 l:float-right j-content-center ${!showSummary && 'sm:mt-0 mt-56'} ${canProceedToPayment ? 'bg-#D1D5DB opacity-80 g|box-shadow:inset|_|0px|_|2px|_|4px|_|#0000001A color-#6B7280 cursor-not-allowed' : 'bg-#0B9378 pointer'}`}
+                            disabled={canProceedToPayment || isSharingPaymentLink}
+                            className={`md:w-full sm:w-fit w-full border md:text-16 text-14 weight-500 md:line-height-22 line-height-19 md:px-24 px-16 py-12 radius-6 m:flex a-items-center j-content-center gap-8 l:float-right ${canProceedToPayment || isSharingPaymentLink ? 'border-#D1D5DB color-#9CA3AF bg-#F9FAFB cursor-not-allowed' : 'border-#0B9378 color-#0B9378 bg-white pointer hover:bg-#F0FDF9'}`}
                             title={
-                              !MARKETPLACE_PURCHASES_ENABLED
-                                ? `Purchases available from ${MARKETPLACE_OPENS_DATE}`
-                                : selectedAddress
-                                  ? ''
-                                  : 'Add an address to proceed to payment'
+                              canProceedToPayment
+                                ? 'Complete checkout details to share payment link'
+                                : 'Copy share payment link'
                             }
                           >
-                            <span className="">
-                              Proceed to payment{' '}
-                              {!showSummary && (
-                                <span className="sm:hidden weight-700">
-                                  (
-                                  {formatNumberAsPrice(
-                                    cart.total +
-                                    (selectedDeliveryOptionDetails &&
-                                      'price' in selectedDeliveryOptionDetails &&
-                                      typeof selectedDeliveryOptionDetails.price ===
-                                      'number'
-                                      ? selectedDeliveryOptionDetails.price
-                                      : 0)
-                                  )}
-                                  )
-                                </span>
-                              )}
-                            </span>
+                            <span>Share payment link</span>
                             <PuffLoader
-                              size={15}
-                              loading={isPaymentLoading}
-                              className="ml-10"
+                              size={14}
+                              loading={isSharingPaymentLink}
+                              className={isSharingPaymentLink ? 'ml-4' : 'hidden'}
                             />
                           </button>
                         </div>

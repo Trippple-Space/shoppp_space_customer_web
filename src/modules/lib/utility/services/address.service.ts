@@ -41,6 +41,20 @@ class AddressService {
     });
   }
 
+  createAddressesBulk(userId: string, addresses: Address[]): Promise<Address[]> {
+    return new Promise((resolve, reject) => {
+      http.post(buildEndpoint(endpoints.USER_ADDRESSES_BULK, { userId }), {
+        addresses,
+      })
+        .then((response) => {
+          resolve(response.data);
+        })
+        .catch((error) => {
+          reject(error);
+        });
+    });
+  }
+
   updateAddress(userId: string, addressId: string, updatedData: Partial<Address>): Promise<Address> {
     return new Promise((resolve, reject) => {
       http.patch(buildEndpoint(endpoints.USER_ADDRESSES, {userId}, `/${addressId}`), updatedData)

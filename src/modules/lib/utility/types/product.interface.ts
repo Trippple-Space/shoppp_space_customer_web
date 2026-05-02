@@ -35,6 +35,7 @@ export interface Discount {
   minOrderAmount: number | string,
   minOrderQuantity: number | string,
   channel: string[],
+  isVisualDiscount?: boolean,
   createdAt: string,
   updatedAt: string
 }

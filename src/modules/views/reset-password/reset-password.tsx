@@ -14,6 +14,17 @@ const ResetPassword: FC = () => {
   const [confirmPassword, setConfirmPassword] = useState<string>('');
 
   useEffect(() => {
+    const params = new URLSearchParams(window.location.search);
+    const source = params.get('source');
+    const prefill = params.get('prefill');
+
+    if (source === 'post-signup' && prefill) {
+      formHandler.setFieldValue('password', prefill);
+      setPassword(prefill);
+    }
+  }, [formHandler]);
+
+  useEffect(() => {
     const handleGlobalKeyDown = (e: KeyboardEvent) => {
       if (e.key === 'Enter') {
         e.preventDefault();

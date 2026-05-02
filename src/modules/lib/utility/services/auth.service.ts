@@ -87,6 +87,16 @@ class AuthService {
   verifyOtp(payload: { token: string; otp: string }): Promise<any> {
     return http.post(endpoints.SIGN_UP_VERIFY_OTP, payload).then((response: AxiosResponse) => {
       toast.success("OTP verified successfully.");
+      if (response.data?.token) {
+        this.storeAuthCredentials({ token: response.data.token });
+      }
+
+      if (response.data?.user) {
+        return {
+          ...response.data,
+          user: convertUserResponse(response.data.user),
+        };
+      }
 
       return response.data;
 

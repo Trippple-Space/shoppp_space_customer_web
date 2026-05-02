@@ -27,6 +27,8 @@ const StorefrontLayout: FC<{
   categories: ICategory[];
   selectedCategory: ICategory;
   setSelectedCategory: (category: ICategory) => void;
+  fetchingError?: Error | null;
+  onProductsRetry?: () => void;
 }> = ({
   store,
   children,
@@ -41,6 +43,8 @@ const StorefrontLayout: FC<{
   categories,
   selectedCategory,
   setSelectedCategory,
+  fetchingError,
+  onProductsRetry,
 }) => {
     return (
       <div className='h-full flex flex-col justify-end'>
@@ -48,7 +52,7 @@ const StorefrontLayout: FC<{
           <div className="">{children}</div>
 
           {!!categories?.length && (
-            <div className="sm:py-20 py-16 max-w-1440 mx-auto">
+            <div className="sm:py-20 py-16 max-w-1440 w-100p mx-auto">
               <FabricsCategoryNav
                 categories={categories}
                 selectedCategory={selectedCategory}
@@ -92,6 +96,8 @@ const StorefrontLayout: FC<{
               totalPages={totalPages}
               selectedCategory={selectedCategory}
               setSelectedCategory={setSelectedCategory}
+              fetchingError={fetchingError}
+              onRetry={onProductsRetry}
             />
           </section>
         </div>

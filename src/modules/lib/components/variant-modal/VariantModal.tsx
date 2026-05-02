@@ -11,10 +11,11 @@ import classNames from 'classnames';
 import { AiFillHeart, AiFillStar, AiOutlineHeart } from 'react-icons/ai';
 import {
   formatNumberAsPrice,
-  saveVariantToLocalStorage,
 } from '../../utility/utility';
 import ProductDetailModal from '../product-detail-modal/ProductDetailModal';
 import { SavedVariant } from '../../utility/types/SavedVariant.interface';
+import { guestSession } from '../../utility/guest-session';
+import { CartItem } from '../../utility/types/cart.interface';
 
 interface IVariantModal {
   variant: RecentlyViewed;
@@ -40,6 +41,7 @@ const VariantModal = ({
 
   const [onProductTileHover, setOnProductTileHover] = useState(false);
   const [openSingleProductModal, setOpenSingleProductModal] = useState(false);
+  const [guestCartVersion, setGuestCartVersion] = useState(0);
 
   const [mediaType, setMediaType] = useState<string>('image');
   const [selectedImage, setSelectedImage] = useState(
@@ -50,25 +52,56 @@ const VariantModal = ({
     setOpenSingleProductModal((prev) => !prev);
   };
 
-  const selectedVariantItemInCart = cart.cartItems.find(
-    (item) => item.variant.id === variant.productVariantId
-  );
+  const selectedVariantItemInCart = React.useMemo(() => {
+    const existing = cart.cartItems.find(
+      (item) => item.variant.id === variant.productVariantId
+    );
+    if (existing) {
+      return existing;
+    }
+    if (isAuthenticated) {
+      return undefined;
+    }
+
+    const guestQty = guestSession.getCartQuantityForVariant(variant.productVariantId);
+    if (guestQty <= 0) {
+      return undefined;
+    }
+
+    return {
+      id: `guest-${variant.productVariantId}`,
+      productId: variant.productVariant.product?.id ?? '',
+      quantity: guestQty,
+      variant: variant.productVariant as any,
+      totalPrice: variant.productVariant.finalPrice * guestQty,
+      discountedPrice: variant.productVariant.discountedPrice * guestQty,
+      userConfigurations:
+        guestSession.getLatestUserConfigurations(variant.productVariantId) ?? {},
+      createdAt: '',
+      discountValue: 0,
+      lastUpdated: '',
+      meta: null,
+    } as CartItem;
+  }, [cart.cartItems, variant, isAuthenticated, guestCartVersion]);
+
+  React.useEffect(() => {
+    const handleGuestCartUpdate = () => setGuestCartVersion((value) => value + 1);
+    window.addEventListener('guest-cart-updated', handleGuestCartUpdate);
+    return () =>
+      window.removeEventListener('guest-cart-updated', handleGuestCartUpdate);
+  }, []);
 
   const isSaved = savedVariants?.find(
     (item: SavedVariant) => item.variantId === variant?.productVariantId
   );
   const handleSave = () => {
+    if (!variant?.productVariantId) return;
     if (isSaved) {
-      removeSavedVariant && removeSavedVariant(variant?.productVariantId);
+      removeSavedVariant && removeSavedVariant(variant.productVariantId);
     } else {
-      saveVariant && saveVariant(variant?.productVariantId);
+      saveVariant && saveVariant(variant.productVariantId);
     }
   };
-
-  function handleLogin(variantId: string, minimumPurchase: number) {
-    saveVariantToLocalStorage(variantId, minimumPurchase.toString());
-    isLoginModal();
-  }
 
   return (
     <>
@@ -137,17 +170,18 @@ const VariantModal = ({
                   {variant.productVariant.status !== 'OUT_OF_STOCK' ? (
                     <button
                       onClick={() => {
-                        if (isAuthenticated) {
-                          if (!localStorage.getItem('seenMiniCart')) {
-                            window.dispatchEvent(
-                              new Event('showMiniCartOnboarding')
-                            );
-                            localStorage.setItem('seenMiniCart', 'true');
-                          }
-                          addToCart(variant.productVariantId, 1);
-                        } else {
-                          handleLogin(variant.productVariantId, 1);
+                        if (!localStorage.getItem('seenMiniCart')) {
+                          window.dispatchEvent(
+                            new Event('showMiniCartOnboarding')
+                          );
+                          localStorage.setItem('seenMiniCart', 'true');
                         }
+                        addToCart(
+                          variant.productVariantId,
+                          1,
+                          undefined,
+                          variant.productVariant
+                        );
                       }}
                       disabled={!selectedImage}
                       className={classNames(
@@ -166,7 +200,7 @@ const VariantModal = ({
           <div
             id="favorite icon"
             className="absolute t-0 r-0 mr-5 mt-10 l:mr-10 text-24 text-white cursor-pointer"
-            onClick={isAuthenticated ? handleSave : () => isLoginModal()}
+            onClick={handleSave}
           >
             {isSaved ? (
               <AiFillHeart className="shadow w-25 h-25" />

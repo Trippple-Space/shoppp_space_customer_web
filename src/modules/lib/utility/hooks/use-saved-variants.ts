@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import useUserStore from "../store/user.store";
 import { useSavedVariantStore } from "../store/savedVariant.store";
 
@@ -11,7 +11,7 @@ export const useSavedVariant = () => {
     const {fetchSavedVariants, savedVariants, saveVariant, removeSavedVariant, clearSavedVariants, showLoginModal, isLoginModal, fetching, } = useSavedVariantStore()
 
     useEffect(() => {
-        if (isAuthenticated && !fetching) {
+        if (!fetching) {
             fetchSavedVariants();
         }
     }, [isAuthenticated]);

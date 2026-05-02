@@ -18,6 +18,14 @@ import { useCart } from '../../utility/hooks/use-cart';
 import PuffLoader from '../puff-loader/PuffLoader';
 import VideoSrc from '../video-src/VideoSrc';
 import { ConfigPill } from '../product-detail-modal/productConfigurationsHelper';
+import {
+  getOrderLevelDiscountTotalFromCart,
+  getLineDisplayPrices,
+  hasOrderLevelDiscountInCart,
+  getStrikethroughAmounts,
+  sumOrderCartPayableTotal,
+  sumOrderCartReferenceSubtotal,
+} from '../../utility/visible-discount';
 
 const OrderedProductModal = ({
   handleOrderModal,
@@ -34,6 +42,13 @@ const OrderedProductModal = ({
   };
 
   const cartItems = getCartItems(order?.cart?.storeGroups || []);
+  const hasOrderDiscount = hasOrderLevelDiscountInCart(order?.cart);
+  const orderDisplaySubtotal = hasOrderDiscount
+    ? sumOrderCartReferenceSubtotal(cartItems)
+    : sumOrderCartPayableTotal(cartItems);
+  const orderDisplayDiscount = hasOrderDiscount
+    ? getOrderLevelDiscountTotalFromCart(order?.cart)
+    : 0;
 
   const buyOrdersAgain = async (cartItems: CartItem[]) => {
     const buyAgainItems: BuyAgain[] = [];
@@ -112,6 +127,12 @@ const OrderedProductModal = ({
                   {cartItems.map((item: CartItem, i) => {
                     const mediaType =
                       checkMediaType(item?.variant.media[0].url) ?? 'image';
+                    const linePrices = getLineDisplayPrices({
+                      totalPrice: Number(item?.totalPrice ?? 0),
+                      discountedPrice: Number(item?.discountedPrice ?? 0),
+                      variant: item?.variant,
+                      orderHistory: true,
+                    });
 
                     return (
                       <div className="flex flex-col gap-4 bg-whitesmoke radius-8 p-10">
@@ -199,9 +220,25 @@ const OrderedProductModal = ({
                             </div>
                           </div>
                           <div className="l:grid flex flex-col a-items-end w-100p l:w-fit gap-5 mt-10 l:mt-0">
-                            <p className="text-14 weight-500">
-                              {formatNumberAsPrice(item.totalPrice)}
-                            </p>
+                            <div className="flex flex-col a-items-end">
+                              <p className="text-14 weight-500">
+                                {formatNumberAsPrice(linePrices.displayPrice)}
+                              </p>
+                              {linePrices.hasSlash && (
+                                <div className="flex flex-col gap-2 a-items-end">
+                                  {getStrikethroughAmounts(linePrices).map(
+                                    (amount, idx) => (
+                                      <p
+                                        key={idx}
+                                        className="text-12 color-#00000099 line-through"
+                                      >
+                                        {formatNumberAsPrice(amount)}
+                                      </p>
+                                    )
+                                  )}
+                                </div>
+                              )}
+                            </div>
                             <p className="text-12 weight-600 color-#0000008C text-right">
                               {' '}
                               X {item.quantity}
@@ -249,14 +286,14 @@ const OrderedProductModal = ({
                   <div className="flex space-between">
                     <p className="color-#000000E0 weight-400">Subtotal</p>
                     <p className="text-16 weight-400">
-                      {formatNumberAsPrice(order.cart?.subTotal)}
+                      {formatNumberAsPrice(orderDisplaySubtotal)}
                     </p>
                   </div>
-                  {order.cart?.totalDiscountValue ? (
+                  {orderDisplayDiscount > 0 ? (
                     <div className="flex space-between">
                       <p className="color-#000000E0 weight-400">Discount</p>
                       <p className="text-16 weight-400">
-                        − {formatNumberAsPrice(order.cart?.totalDiscountValue)}
+                        − {formatNumberAsPrice(orderDisplayDiscount)}
                       </p>
                     </div>
                   ) : null}

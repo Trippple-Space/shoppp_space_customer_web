@@ -22,7 +22,7 @@ export const useProductListView = () => {
   });
   const { allFilters } = useFilterStore();
 
-  const { products, setPagination, setSearch, setCollection, query, updateHomePageFilter, loading, fetchingError, refetch, meta } = useProducts({
+  const { products, setPagination, setSearch, setCollection, query, updateHomePageFilter, loading, fetchingError, loadMoreError, refetch, retryLoadMore, meta } = useProducts({
     filters: { type, status: { In: "ACTIVE,OUT_OF_STOCK" }, channel: "ASOEBI_STORE" }, order: {
       priorityScore: "DESC",
       createdAt: "DESC"
@@ -50,13 +50,14 @@ export const useProductListView = () => {
   useEffect(() => {
     if (!inView) return;
     if (loading) return;
+    if (loadMoreError) return;
 
     const totalPages = meta?.totalPages ?? 1;
     const currentPage = meta?.currentPage ?? page;
     if (currentPage < totalPages) {
       setPage((prev) => prev + 1);
     }
-  }, [inView, loading, meta?.currentPage, meta?.totalPages, page]);
+  }, [inView, loading, loadMoreError, meta?.currentPage, meta?.totalPages, page]);
 
   useEffect(() => {
     setPagination({ page, limit });
@@ -67,12 +68,14 @@ export const useProductListView = () => {
     products,
     loading,
     fetchingError,
+    loadMoreError,
     setSelectedCategory,
     selectedCategory,
     setSearch,
     search: query.search,  
     setCollection, 
     ref,
-    refetch
+    refetch,
+    retryLoadMore,
   };
 };

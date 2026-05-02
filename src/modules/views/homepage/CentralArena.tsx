@@ -7,9 +7,13 @@ import { DotsLoader } from '@/modules/lib/components/dots-loader/DotsLoader';
 import PuffLoader from '@/modules/lib/components/puff-loader/PuffLoader';
 import { useSavedVariant } from '@/modules/lib/utility/hooks/use-saved-variants';
 import { toast } from 'sonner';
-import Button from '@/modules/lib/components/button/Button';
 import { useSearchParams } from 'next/navigation';
 import NoResultMessage from '@/modules/lib/components/error-messages/no-result-found';
+import DataFetchErrorPanel from '@/modules/lib/components/data-fetch-error/DataFetchErrorPanel';
+import {
+  classifyFetchError,
+  getProductFetchErrorCopy,
+} from '@/modules/lib/utility/fetch-error';
 
 const CentralArena = ({ selectedCategory, setSelectedCategory, hasCollections, collectionsLoaded }: any) => {
   const searchParams = useSearchParams();
@@ -20,7 +24,9 @@ const CentralArena = ({ selectedCategory, setSelectedCategory, hasCollections, c
     ref,
     loading,
     fetchingError,
+    loadMoreError,
     refetch,
+    retryLoadMore,
     setSearch,
     search,
     setCollection,
@@ -28,6 +34,11 @@ const CentralArena = ({ selectedCategory, setSelectedCategory, hasCollections, c
   const { saveVariant, savedVariants, removeSavedVariant } = useSavedVariant();
   const [openReviewId, setOpenReviewId] = useState<string | null>(null);
   const renderedIds = new Set<string>();
+
+  const listErrorKind = fetchingError ? classifyFetchError(fetchingError) : 'unknown';
+  const listErrorCopy = getProductFetchErrorCopy(listErrorKind);
+  const loadMoreKind = loadMoreError ? classifyFetchError(loadMoreError) : 'unknown';
+  const loadMoreCopy = getProductFetchErrorCopy(loadMoreKind);
 
   useEffect(() => {
     const searchFromUrl = searchParams.get('search');
@@ -93,12 +104,12 @@ const CentralArena = ({ selectedCategory, setSelectedCategory, hasCollections, c
             })}
           </div>
         ) : fetchingError ? (
-          <div className="mt-60 bg-white grid-col-span-5 text-center">
-            <p className="mb-12">{fetchingError.message}</p>
-
-            <Button onClick={refetch} className="px-16 py-8 w-100p! max-w-100">
-              Retry
-            </Button>
+          <div className="mt-32 w-full max-w-520 mx-auto">
+            <DataFetchErrorPanel
+              title={listErrorCopy.title}
+              description={listErrorCopy.description}
+              onRetry={refetch}
+            />
           </div>
         ) : (
           <div className="mt-60 bg-white grid-col-span-5 text-center">
@@ -129,9 +140,15 @@ Your convenience is our priority.`}
           <p className="w-100p flex j-content-center mt-10">
             {collectionsLoaded && products.length >= 20 && loading ? <PuffLoader /> : ''}
           </p>
-          {collectionsLoaded && products.length >= 20 && !loading && fetchingError && (
-            <div className="mt-60 bg-white grid-col-span-5 text-center">
-              <p className="mb-12">{fetchingError.message}</p>
+          {collectionsLoaded && products.length >= 20 && !loading && loadMoreError && (
+            <div className="mt-24 w-full max-w-560 mx-auto">
+              <DataFetchErrorPanel
+                compact
+                title="Couldn’t load more products"
+                description={loadMoreCopy.description}
+                onRetry={retryLoadMore}
+                retryLabel="Try again"
+              />
             </div>
           )}
         </div>

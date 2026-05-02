@@ -34,6 +34,8 @@ const Furniture: FC<FurnitureProps> = (props) => {
     productsRef,
     productSold,
     loading,
+    fetchingError,
+    onProductsRetry,
     page,
     setPage,
     totalPages,
@@ -360,6 +362,8 @@ const Furniture: FC<FurnitureProps> = (props) => {
             totalPages={totalPages}
             selectedCategory={selectedCategory}
             setSelectedCategory={setSelectedCategory}
+            fetchingError={fetchingError}
+            onRetry={onProductsRetry}
           />
         </section>
       </div>

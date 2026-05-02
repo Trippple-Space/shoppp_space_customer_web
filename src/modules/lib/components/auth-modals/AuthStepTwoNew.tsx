@@ -5,12 +5,26 @@ import { FcGoogle } from 'react-icons/fc';
 import { HiOutlineArrowNarrowRight } from 'react-icons/hi';
 import { useGoogleOauth } from '../../utility/hooks/use-google-oauth';
 
-export default function StepTwoNew({ email }: { email?: string }) {
+export default function StepTwoNew({
+  email,
+  onOtpSent,
+  onVerified,
+}: {
+  email?: string;
+  onOtpSent?: (token: string, email: string) => void;
+  onVerified?: () => void;
+}) {
   const { googleOauthInitializer } = useGoogleOauth();
 
   return (
     <div className="w-full flex flex-col gap-29 py-20">
-      <SignUpDetails email={email} />
+      <SignUpDetails
+        email={email}
+        redirectOnOtpSent={false}
+        redirectOnVerified={false}
+        onOtpSent={(token, submittedEmail) => onOtpSent?.(token, submittedEmail)}
+        onVerified={onVerified}
+      />
 
       <div className="w-full flex flex-col gap-10">
         <div className="flex a-items-center w-full mb-10 mt--3">

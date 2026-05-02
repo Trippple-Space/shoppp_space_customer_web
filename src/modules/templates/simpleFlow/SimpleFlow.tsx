@@ -33,6 +33,8 @@ const SimpleFlow: FC<SimpleFlowProps> = ({
   productsRef,
   cart,
   loading,
+  fetchingError,
+  onProductsRetry,
   page,
   setPage,
   totalPages,
@@ -233,6 +235,8 @@ const SimpleFlow: FC<SimpleFlowProps> = ({
               totalPages={totalPages}
               selectedCategory={selectedCategory}
               setSelectedCategory={setSelectedCategory}
+              fetchingError={fetchingError}
+              onRetry={onProductsRetry}
             />
           </div>
         </section>

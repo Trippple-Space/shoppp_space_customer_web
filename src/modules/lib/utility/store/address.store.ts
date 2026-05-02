@@ -3,6 +3,8 @@ import { Address } from "../types/address.interface";
 import { addressService } from "../services/address.service";
 import { User } from "../types/user.interface";
 import { toast } from "sonner";
+import useUserStore from "./user.store";
+import { guestSession } from "../guest-session";
 
 interface AddressStore {
   isAddressModalOpen: boolean;
@@ -34,6 +36,17 @@ const useAddressStore = create<AddressStore>((set) => ({
   closeAddressModal: () => set({ isAddressModalOpen: false }),
 
   fetchAddresses: async (userId: string) => {
+    const { isAuthenticated } = useUserStore.getState();
+    if (!isAuthenticated) {
+      const addresses = guestSession.getAddresses();
+      const defaultAddress =
+        addresses.find((address) => address.isDefault) || addresses[0] || null;
+      set({
+        addresses,
+        selectedAddressId: defaultAddress?.id || null,
+      });
+      return;
+    }
     try {
       const fetchedAddresses = await addressService.fetchAddresses(userId);
 
@@ -49,6 +62,13 @@ const useAddressStore = create<AddressStore>((set) => ({
   },
 
   selectAddress: (id: string) => {
+    const { isAuthenticated } = useUserStore.getState();
+    if (!isAuthenticated) {
+      const addresses = guestSession.getAddresses();
+      guestSession.setAddresses(
+        addresses.map((address) => ({ ...address, isDefault: address.id === id }))
+      );
+    }
     set({ selectedAddressId: id });
   },
 
@@ -57,6 +77,18 @@ const useAddressStore = create<AddressStore>((set) => ({
     addressId: string,
     updatedData: Partial<Address>
   ) => {
+    const { isAuthenticated } = useUserStore.getState();
+    if (!isAuthenticated) {
+      const nextAddresses = guestSession.getAddresses().map((address) => {
+        if (address.id !== addressId) {
+          return updatedData.isDefault ? { ...address, isDefault: false } : address;
+        }
+        return { ...address, ...updatedData };
+      });
+      guestSession.setAddresses(nextAddresses);
+      set({ addresses: nextAddresses, addressToUpdateId: null });
+      return;
+    }
     try {
       const updatedAddress = await addressService.updateAddress(
         userId,
@@ -91,6 +123,22 @@ const useAddressStore = create<AddressStore>((set) => ({
   },
 
   createAddress: async (userId: string, newAddress: Address) => {
+    const { isAuthenticated } = useUserStore.getState();
+    if (!isAuthenticated) {
+      const existing = guestSession.getAddresses();
+      const guestAddress = {
+        ...newAddress,
+        id: `guest-${Date.now()}`,
+        userId: "guest",
+      } as Address;
+      const nextAddresses = [...existing, guestAddress].map((address) => ({
+        ...address,
+        isDefault: guestAddress.isDefault ? address.id === guestAddress.id : address.isDefault,
+      }));
+      guestSession.setAddresses(nextAddresses);
+      set({ addresses: nextAddresses });
+      return guestAddress;
+    }
     try {
       const address = await addressService.createAddress(userId, newAddress);
 
@@ -126,6 +174,15 @@ const useAddressStore = create<AddressStore>((set) => ({
   },
 
   deleteAddress: async (userId: string, addressId: string) => {
+    const { isAuthenticated } = useUserStore.getState();
+    if (!isAuthenticated) {
+      const nextAddresses = guestSession
+        .getAddresses()
+        .filter((address) => address.id !== addressId);
+      guestSession.setAddresses(nextAddresses);
+      set({ addresses: nextAddresses });
+      return;
+    }
     try {
       await addressService.deleteAddress(userId, addressId);
       set((state) => ({

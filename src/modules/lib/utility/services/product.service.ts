@@ -290,6 +290,16 @@ class ProductService {
                })
           })
      }
+
+     saveVariantsBulk(variantIds: string[]): Promise<{ addedVariantIds: string[]; skippedVariantIds: string[] }> {
+          return new Promise((resolve, reject) => {
+               http.post(endpoints.SAVED_VARIANT_BULK, { variantIds }).then((response: AxiosResponse) => {
+                    resolve(response.data);
+               }).catch((error) => {
+                    reject(error);
+               });
+          });
+     }
      removeSavedVariant(productVariantId: string) {
           return new Promise((resolve, reject) => {
                http.delete(`${endpoints.SAVED_VARIANT}/${productVariantId}`).then((response: AxiosResponse) => {

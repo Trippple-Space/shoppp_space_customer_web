@@ -28,6 +28,8 @@ const TrendFashion: FC<TrendFashionProps> = ({
   scrollToProducts,
   productsRef,
   loading,
+  fetchingError,
+  onProductsRetry,
   page,
   setPage,
   totalPages,
@@ -227,6 +229,8 @@ const TrendFashion: FC<TrendFashionProps> = ({
           onPageChange={setPage}
           selectedCategory={selectedCategory}
           setSelectedCategory={setSelectedCategory}
+          fetchingError={fetchingError}
+          onRetry={onProductsRetry}
         />
       </section>
 

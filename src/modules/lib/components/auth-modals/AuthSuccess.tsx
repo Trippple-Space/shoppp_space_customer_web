@@ -4,10 +4,30 @@ import { useEffect, useState } from 'react';
 import { useCartStore } from '../../utility/store/cart.store';
 import { IoShieldCheckmarkSharp } from 'react-icons/io5';
 import { HiOutlineArrowNarrowRight } from 'react-icons/hi';
+import { useRouter } from 'next/navigation';
+import { paths } from '../../utility/paths';
 
 export default function StepSuccess() {
   const isLoginModal = useCartStore((s) => s.isLoginModal);
+  const router = useRouter();
   const [progress, setProgress] = useState(0);
+  const getPostAuthRedirect = () =>
+    typeof window !== 'undefined'
+      ? sessionStorage.getItem('post-auth-redirect')
+      : null;
+  const clearPostAuthRedirect = () => {
+    if (typeof window !== 'undefined') {
+      sessionStorage.removeItem('post-auth-redirect');
+    }
+  };
+  const closeAndRedirect = () => {
+    const redirectPath = getPostAuthRedirect();
+    clearPostAuthRedirect();
+    isLoginModal();
+    if (redirectPath) {
+      router.push(redirectPath);
+    }
+  };
 
   useEffect(() => {
     const interval = setInterval(() => {
@@ -18,8 +38,8 @@ export default function StepSuccess() {
     }, 50);
     
     const timeout = setTimeout(() => {
-      isLoginModal();
-    }, 2500); 
+      closeAndRedirect();
+    }, 2500);
 
     return () => {
       clearInterval(interval);
@@ -52,7 +72,7 @@ export default function StepSuccess() {
 
       <div className="w-full max-w-500 mx-auto flex flex-col a-items-center gap-40">
         <button
-          onClick={isLoginModal}
+          onClick={closeAndRedirect}
           className="bg-green text-white p-12 l:py-15 radius-14 w-full border text-14 mt-10 hover:pointer font-inter hover:bg-darkgreen g|transition:0.5s disabled:bg-grey weight-400 flex a-items-center j-content-center gap-5"
         >
           Continue shopping
@@ -63,7 +83,7 @@ export default function StepSuccess() {
           If you’re not redirected automatically{' '}
           <span
             className="color-#0EA17F cursor-pointer weight-600 hover:underline"
-            onClick={isLoginModal}
+            onClick={closeAndRedirect}
           >
             Click Here.
           </span>
