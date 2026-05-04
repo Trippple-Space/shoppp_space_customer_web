@@ -1,7 +1,6 @@
 import { useEffect, useMemo, useState } from "react";
 import { useCartStore } from "../store/cart.store";
 import { CartItem } from "../types/cart.interface";
-import { useAuthGuard } from "./use-auth-guard";
 import useUserStore from "../store/user.store";
 import { toast } from "sonner";
 import { guestSession } from "../guest-session";
@@ -22,7 +21,8 @@ export const useCart = (isCheckout?: boolean) => {
           removeDiscountCode,
           applyingCode
      } = useCartStore();
-     const { isAuthenticated } = useUserStore();
+     const { isAuthenticated, user } = useUserStore();
+     const hasSession = Boolean(isAuthenticated && user);
      const [guestCartVersion, setGuestCartVersion] = useState(0);
 
      useEffect(() => {
@@ -32,11 +32,11 @@ export const useCart = (isCheckout?: boolean) => {
      }, []);
 
      const effectiveCart = useMemo(() => {
-          if (isAuthenticated) {
+          if (hasSession) {
                return cart;
           }
           return guestSession.getGuestCart();
-     }, [isAuthenticated, cart, guestCartVersion]);
+     }, [hasSession, cart, guestCartVersion]);
 
      const increment = (cartItem: CartItem, userConfigurations?: Record<string, any>) => {
           if (cartItem.quantity >= cartItem.variant.stock) {
@@ -57,10 +57,10 @@ export const useCart = (isCheckout?: boolean) => {
 
 
      useEffect(() => {
-          if (!cart.id && isAuthenticated && !fetching) {
+          if (!cart.id && hasSession && !fetching) {
                fetchCart(isCheckout);
           }
-     }, [isAuthenticated]);
+     }, [hasSession, cart.id, fetching, fetchCart, isCheckout]);
 
      return {
           cart: effectiveCart,
