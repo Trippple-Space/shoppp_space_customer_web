@@ -4,6 +4,12 @@ import { BuyAgain, Cart, CartItem } from "../types/cart.interface";
 import { ProductVariant } from "../types/product.interface";
 import { toast } from "sonner";
 import { guestSession } from "../guest-session";
+import useUserStore from "./user.store";
+
+const shouldUseGuestCart = () => {
+  const { isAuthenticated, user } = useUserStore.getState();
+  return !isAuthenticated || user == null;
+};
 
 type CartStore = {
   cart: Cart;
@@ -64,7 +70,7 @@ export const useCartStore = create<CartStore>((set, get) => ({
 
   // Add to cart (non-optimistic, waits for backend)
   addToCart: async (variantId, quantity = 1, userConfigurations, variantSnapshot) => {
-    const isGuest = !localStorage.getItem("token");
+    const isGuest = shouldUseGuestCart();
     if (isGuest) {
       guestSession.appendCartMutation({
         variantId,
@@ -84,7 +90,7 @@ export const useCartStore = create<CartStore>((set, get) => ({
 
   // Increment item quantity (optimistic)
   incrementCartItem: async (variantId, quantity = 1, userConfigurations) => {
-    const isGuest = !localStorage.getItem("token");
+    const isGuest = shouldUseGuestCart();
     if (isGuest) {
       guestSession.appendCartMutation({ variantId, quantity, userConfigurations });
       return;
@@ -122,7 +128,7 @@ export const useCartStore = create<CartStore>((set, get) => ({
 
   // Decrement item quantity (optimistic)
   decrementCartItem: async (variantId, quantity = 1, userConfigurations) => {
-    const isGuest = !localStorage.getItem("token");
+    const isGuest = shouldUseGuestCart();
     if (isGuest) {
       guestSession.appendCartMutation({
         variantId,
@@ -165,7 +171,7 @@ export const useCartStore = create<CartStore>((set, get) => ({
 
   // Remove item from cart (non-optimistic)
   removeFromCart: async (variantId: string) => {
-    const isGuest = !localStorage.getItem("token");
+    const isGuest = shouldUseGuestCart();
     const prevCart = get().cart;
     const cartItem = prevCart.cartItems.find((item) => item.id === variantId);
     const fallbackVariantId = variantId.startsWith("guest-")
