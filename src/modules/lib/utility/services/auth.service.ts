@@ -153,7 +153,9 @@ class AuthService {
   }
 
   googleOauth() {
-    window.open(`${envConfig.API_HOST}/${endpoints.GOOGLE_OAUTH_INITIALIZER}?source=${window.location.href}`, '_blank', 'noopener,noreferrer')
+    const source = encodeURIComponent(window.location.href);
+    const googleOauthUrl = `${envConfig.API_HOST}/${endpoints.GOOGLE_OAUTH_INITIALIZER}?source=${source}`;
+    window.location.assign(googleOauthUrl);
 
   }
 
