@@ -530,28 +530,28 @@ const CheckoutPage = () => {
                               key={j + cartItem?.id}
                             >
                               <div
-                                className={`gap-12 ${store.visible ? 'flex a-items-center' : 'hidden'}`}
+                                className={`gap-12 ${store.visible ? 'flex a-items-start' : 'hidden'}`}
                                 key={j}
                               >
-                                <div className="w-73 h-75 radius-6 relative overflow-hidden">
+                                <div className="w-73 h-75 min-w-73 min-h-75 radius-6 relative overflow-hidden">
                                   {mediaType === 'image' ? (
                                     <Image
                                       src={cartItem.variant.media?.[0].url}
                                       alt="order image"
-                                      className="w-73 h-75 radius-6 border border-#00000014 object-fit"
+                                      className="w-73 h-75 min-w-73 min-h-75 radius-6 border border-#00000014 object-fit"
                                     />
                                   ) : (
                                     <VideoSrc
-                                      className="w-73 h-75 radius-6 border border-#00000014 object-fit"
+                                      className="w-73 h-75 min-w-73 min-h-75 radius-6 border border-#00000014 object-fit"
                                       src={cartItem.variant.media?.[0].url}
                                       hasLoader={true}
                                     />
                                   )}
                                 </div>
                                 <div
-                                  className={`flex-grow-1 flex flex-col ${Object.keys(cartItem?.variant?.properties ?? {}).length > 2 ? 'gap-2.8' : 'gap-6'} overflow-hidden white-space-nowrap text-overflow-ellipsis`}
+                                  className={`min-w-0 flex-grow-1 flex flex-col ${Object.keys(cartItem?.variant?.properties ?? {}).length > 2 ? 'gap-2.8' : 'gap-6'} overflow-hidden white-space-nowrap text-overflow-ellipsis`}
                                 >
-                                  <p className="weight-600 text-14 line-height-22 color-#000000E0">
+                                  <p className="min-w-0 w-full truncate weight-600 text-14 line-height-22 color-#000000E0">
                                     {cartItem?.variant?.product?.name}
                                   </p>
                                   <p
@@ -608,7 +608,7 @@ const CheckoutPage = () => {
                                     })}
                                 </div>
                                 <div className="flex flex-col gap-10 a-items-end">
-                                  <div className="flex a-items-center gap-8">
+                                  <div className="flex sm:flex-row flex-col sm:a-items-center a-items-end gap-8">
                                     <p
                                       className={`weight-600 md:text-20 sm:text-16 text-14 md:line-height-28 sm:line-height-24 line-height-22 ${cartItem.variant.status === 'OUT_OF_STOCK' ? 'color-#00000099' : ''}`}
                                     >

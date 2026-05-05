@@ -800,6 +800,7 @@
 @layer lo { .\@lo\:focus\:border-\#0B9378:focus { border-color: #0B9378; } } 
 .w-73 { width: 73px; } 
 .h-75 { height: 75px; } 
+.min-w-73 { min-width: 73px; } 
 .max-w-661 { max-width: 661px; } 
 .pt-24 { padding-top: 24px; } 
 .pl-24 { padding-left: 24px; } 
@@ -956,9 +957,8 @@
 @media only screen and (min-width: 992px) { .btn-lg { padding-top: 18px; padding-bottom: 18px;  } } 
 }
  
-.min-w-73 { min-width: 73px; } 
 .min-h-100vh { min-height: 100vh; } 
-.pb-96 { padding-bottom: 96px; } 
+.pb-76 { padding-bottom: 76px; } 
 .mt-64 { margin-top: 64px; } 
 .max-w-760 { max-width: 760px; } 
 .line-height-32 { line-height: 32px; } 
@@ -1197,6 +1197,9 @@
 @media only screen and (min-width: 576px) { .sm\:w-14 { width: 14px; } } 
 @media only screen and (min-width: 576px) { .sm\:h-14 { height: 14px; } } 
 @media only screen and (min-width: 576px) { .sm\:px-10 { padding-left: 10px; padding-right: 10px; } } 
+@media only screen and (min-width: 576px) { .sm\:pb-96 { padding-bottom: 96px; } } 
+@media only screen and (min-width: 576px) { .sm\:px-16 { padding-left: 16px; padding-right: 16px; } } 
+@media only screen and (min-width: 576px) { .sm\:p-16 { padding: 16px; } } 
 @media only screen and (min-width: 576px) { .sm\:w-80 { width: 80px; } } 
 @media only screen and (min-width: 576px) { .sm\:h-80 { height: 80px; } } 
 @media only screen and (min-width: 576px) { .sm\:text-35 { font-size: 35px; } } 
