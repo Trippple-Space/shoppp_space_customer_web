@@ -134,7 +134,7 @@ const UserProfileDropdown: FC<IUserProfileDropdown> = ({
 
             <div className="flex flex-col py-20 weight-400 text-16 line-height-24 border-t border-1 border-#00000014">
               <Link
-                href={`${config.LANDING_PAGE_HOST}`}
+                href={config.VENDOR_CENTER_SIGNUP}
                 target="_blank"
                 className="py-10 px-24 hover:bg-grey-100 g|transition:0.3s"
               >
