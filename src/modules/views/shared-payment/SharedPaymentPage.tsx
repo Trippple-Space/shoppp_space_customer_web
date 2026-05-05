@@ -4,12 +4,17 @@ import Footer from '@/modules/lib/components/footer/Footer';
 import Image from '@/modules/lib/components/image/Image';
 import HomepageNavBar from '@/modules/lib/components/nav-bar/HomepageNavBar';
 import PuffLoader from '@/modules/lib/components/puff-loader/PuffLoader';
+import VideoSrc from '@/modules/lib/components/video-src/VideoSrc';
 import { paymentService } from '@/modules/lib/utility/services/payment.service';
 import {
   SharedCheckoutItem,
   SharedCheckoutSummaryResponse,
 } from '@/modules/lib/utility/types/payment.interface';
-import { displayStockUnit, formatNumberAsPrice } from '@/modules/lib/utility/utility';
+import {
+  checkMediaType,
+  displayStockUnit,
+  formatNumberAsPrice,
+} from '@/modules/lib/utility/utility';
 import React, { useEffect, useMemo, useState } from 'react';
 import { toast } from 'sonner';
 
@@ -50,6 +55,14 @@ const SharedPaymentPage = ({ shareToken }: SharedPaymentPageProps) => {
     if (!summary) return 0;
     return summary.totalToPaySmallestUnit / 100;
   }, [summary]);
+  const subtotal = useMemo(() => {
+    if (!summary) return 0;
+    return summary.cartSubTotal ?? summary.cartTotal;
+  }, [summary]);
+  const discountValue = useMemo(() => {
+    if (!summary) return 0;
+    return Math.max(summary.cartTotalDiscountValue ?? 0, 0);
+  }, [summary]);
 
   const handlePay = async () => {
     if (!summary || summary.paid) return;
@@ -76,6 +89,7 @@ const SharedPaymentPage = ({ shareToken }: SharedPaymentPageProps) => {
   };
 
   const renderLineItem = (item: SharedCheckoutItem, key: string) => {
+    const mediaType = checkMediaType(item.variantImage ?? '') ?? 'image';
     const resolvedSize =
       typeof item.size === 'string'
         ? item.size
@@ -110,22 +124,30 @@ const SharedPaymentPage = ({ shareToken }: SharedPaymentPageProps) => {
 
     return (
       <div key={key} className="flex gap-12 a-items-center">
-        <div className="w-73 h-75 radius-6 overflow-hidden border border-#00000014 bg-#F5F5F5 flex a-items-center j-content-center">
+        <div className="w-73 h-75 min-w-73 min-h-75 radius-6 overflow-hidden border border-#00000014 bg-#F5F5F5 flex a-items-center j-content-center">
           {item.variantImage ? (
+            mediaType === 'video' ? (
+              <VideoSrc
+                className="w-73 h-75 min-w-73 min-h-75 object-fit"
+                src={item.variantImage}
+                hasLoader={true}
+              />
+            ) : (
             <Image
               src={item.variantImage}
               alt={item.productName || 'Product image'}
               className="w-73 h-75 min-w-73 min-h-75 object-fit"
             />
+            )
           ) : (
             <span className="text-12 color-#00000066">No image</span>
           )}
         </div>
         <div className="min-w-0 flex-grow-1 flex flex-col gap-4 overflow-hidden">
-          <p className="min-w-0 weight-600 text-14 line-height-22 color-#000000E0 text-overflow-ellipsis white-space-nowrap overflow-hidden">
+          <p className="min-w-0 w-full truncate weight-600 text-14 line-height-22 color-#000000E0">
             {item.productName}
           </p>
-          <p className="weight-400 text-14 line-height-20 color-#0000008C">
+          <p className="weight-400 sm:text-14 text-13.5 line-height-20 color-#0000008C">
             Quantity:{' '}
             {`${item.quantity} ${displayStockUnit('piece')}${item.quantity > 1 ? 's' : ''}`}
           </p>
@@ -148,7 +170,7 @@ const SharedPaymentPage = ({ shareToken }: SharedPaymentPageProps) => {
             </p>
           ))}
         </div>
-        <p className="weight-600 text-16 line-height-24 color-#000000E0">
+        <p className="self-end sm:self-auto weight-600 sm:text-16 text-14 line-height-24 color-#000000E0">
           {formatNumberAsPrice(item.lineTotal)}
         </p>
       </div>
@@ -158,8 +180,8 @@ const SharedPaymentPage = ({ shareToken }: SharedPaymentPageProps) => {
   return (
     <>
       <HomepageNavBar />
-      <div className="bg-#F5F5F5 min-h-100vh py-40 pb-96 px-16 mt-64">
-        <div className="mx-auto max-w-760 bg-white radius-12 p-16 sm:p-24 md:p-32 flex flex-col gap-20">
+      <div className="bg-#F5F5F5 min-h-100vh sm:py-40 py-20 sm:pb-96 pb-76 sm:px-16 px-8 mt-64">
+        <div className="mx-auto max-w-760 bg-white radius-12 p-10 sm:p-24 md:p-32 flex flex-col gap-20">
           <h1 className="text-24 line-height-32 weight-600">Shared payment</h1>
 
           {loading && (
@@ -205,7 +227,7 @@ const SharedPaymentPage = ({ shareToken }: SharedPaymentPageProps) => {
               </div>
 
               {Array.isArray(summary.stores) && summary.stores.length > 0 && (
-                <div className="border border-#00000014 radius-10 p-16 flex flex-col gap-16">
+                <div className="border border-#00000014 radius-10 p-10 sm:p-16 flex flex-col gap-16">
                   {summary.stores.map((store) => (
                     <div key={store.storeId} className="flex flex-col gap-10">
                       <p className="text-16 weight-600 line-height-24 color-#00000099">
@@ -222,15 +244,17 @@ const SharedPaymentPage = ({ shareToken }: SharedPaymentPageProps) => {
               )}
 
               {!summary.paid && (
-                <div className="border border-#00000014 radius-10 p-16 flex flex-col gap-10">
+                <div className="border border-#00000014 radius-10 p-10 sm:p-16 flex flex-col gap-10">
                   <div className="flex space-between text-14 line-height-20">
                     <span>Subtotal</span>
-                    <span>{formatNumberAsPrice(summary.cartTotalDiscountValue ?? summary.cartTotal)}</span>
+                    <span>{formatNumberAsPrice(subtotal)}</span>
                   </div>
-                  <div className="flex space-between text-14 line-height-20">
-                    <span>Discount</span>
-                    <span>- {formatNumberAsPrice(summary.cartTotalDiscountValue ?? 0)}</span>
-                  </div>
+                  {discountValue > 0 && (
+                    <div className="flex space-between text-14 line-height-20">
+                      <span>Discount</span>
+                      <span>- {formatNumberAsPrice(discountValue)}</span>
+                    </div>
+                  )}
                   <div className="flex space-between text-14 line-height-20">
                     <span>Delivery fee</span>
                     <span>{formatNumberAsPrice(summary.deliveryFee)}</span>
