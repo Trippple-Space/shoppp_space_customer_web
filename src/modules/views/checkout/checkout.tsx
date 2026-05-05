@@ -776,6 +776,14 @@ const CheckoutPage = () => {
                               )}
                             </span>
                           )}
+                          <div className="py-16 px-20 radius-8 border border-#F59E0B33 bg-#FFFBEB flex flex-col gap-6">
+                            <h2 className="text-16 line-height-24 weight-600 color-#92400E">
+                              Return policy
+                            </h2>
+                            <p className="text-14 line-height-22 weight-400 color-#B45309">
+                              Please inspect your order upon delivery. Returns can only be made while the rider is still present, and cannot be processed once the rider leaves.
+                            </p>
+                          </div>
                           <div className="flex gap-14 a-items-center sm:j-content-end w-full">
                             <button
                               onClick={() => {
@@ -815,31 +823,31 @@ const CheckoutPage = () => {
                                   }
                                 } else {
                                   if (selectedDeliveryOption !== null) {
-                                  if (enableOrderWhatsApp) {
-                                    if (!orderWhatsAppNumber.trim()) {
-                                      setOrderWhatsAppError(
-                                        'Please enter a WhatsApp number for this order.'
-                                      );
-                                      toast.error(
-                                        'Please enter a WhatsApp number for this order.'
-                                      );
-                                      return;
+                                    if (enableOrderWhatsApp) {
+                                      if (!orderWhatsAppNumber.trim()) {
+                                        setOrderWhatsAppError(
+                                          'Please enter a WhatsApp number for this order.'
+                                        );
+                                        toast.error(
+                                          'Please enter a WhatsApp number for this order.'
+                                        );
+                                        return;
+                                      }
+                                      if (!isValidOrderWhatsAppNumber(orderWhatsAppNumber)) {
+                                        setOrderWhatsAppError(
+                                          'Please enter a valid WhatsApp number.'
+                                        );
+                                        toast.error('Please enter a valid WhatsApp number.');
+                                        return;
+                                      }
                                     }
-                                    if (!isValidOrderWhatsAppNumber(orderWhatsAppNumber)) {
-                                      setOrderWhatsAppError(
-                                        'Please enter a valid WhatsApp number.'
-                                      );
-                                      toast.error('Please enter a valid WhatsApp number.');
-                                      return;
-                                    }
-                                  }
                                     payWithPaystack({
                                       addressId: selectedAddress?.id,
                                       deliveryOption: selectedDeliveryOption,
-                                    customerWhatsAppOptIn: enableOrderWhatsApp,
-                                    customerWhatsAppNumber: enableOrderWhatsApp
-                                      ? orderWhatsAppNumber.trim()
-                                      : undefined,
+                                      customerWhatsAppOptIn: enableOrderWhatsApp,
+                                      customerWhatsAppNumber: enableOrderWhatsApp
+                                        ? orderWhatsAppNumber.trim()
+                                        : undefined,
                                     });
                                   }
                                 }
@@ -863,7 +871,7 @@ const CheckoutPage = () => {
                                       (selectedDeliveryOptionDetails &&
                                         'price' in selectedDeliveryOptionDetails &&
                                         typeof selectedDeliveryOptionDetails.price ===
-                                          'number'
+                                        'number'
                                         ? selectedDeliveryOptionDetails.price
                                         : 0)
                                     )}
