@@ -1,8 +1,68 @@
-import { productService } from '@/modules/lib/utility/services/product.service';
 import ProductDetails from '@/modules/views/product-details/Product-details';
 import ProductLoadError from '@/modules/views/product-details/ProductLoadError';
 import React, { Suspense } from 'react';
 import type { Metadata } from 'next';
+import endpoints from '@/modules/lib/utility/endpoints';
+import config from 'env';
+import { buildEndpoint } from '@/modules/lib/utility/utility';
+import { Product } from '@/modules/lib/utility/types/product.interface';
+
+export const dynamic = 'force-dynamic';
+const PRODUCT_CACHE_TAG_PREFIX = 'product-details';
+const PRODUCT_CACHE_DURATION_SECONDS = 60 * 60 * 24;
+
+const getProductCacheTags = (slug: string) => [
+  PRODUCT_CACHE_TAG_PREFIX,
+  `${PRODUCT_CACHE_TAG_PREFIX}:${slug}`,
+];
+
+async function fetchProductCacheVersion(): Promise<number> {
+  try {
+    const response = await fetch(`${config.API_HOST}/products/cache-version`, {
+      cache: 'no-store',
+    });
+
+    if (!response.ok) {
+      return 0;
+    }
+
+    const payload = (await response.json()) as { version?: number };
+    return typeof payload.version === 'number' ? payload.version : 0;
+  } catch {
+    return 0;
+  }
+}
+
+async function fetchProductBySlugWithTag(slug: string): Promise<Product> {
+  const cacheVersion = await fetchProductCacheVersion();
+  const url = new URL(
+    buildEndpoint(config.API_HOST + '/' + endpoints.PRODUCT, {
+      slug,
+    })
+  );
+  url.searchParams.set('cv', String(cacheVersion));
+
+  const response = await fetch(url.toString(), {
+    next: {
+      tags: getProductCacheTags(slug),
+      revalidate: PRODUCT_CACHE_DURATION_SECONDS,
+    },
+  });
+
+  if (!response.ok) {
+    throw new Error(`HTTP error! Status: ${response.status}`);
+  }
+
+  const product = (await response.json()) as Product;
+  return {
+    ...product,
+    variants: product.variants.sort((a, b) => {
+      if (a.status === 'OUT_OF_STOCK' && b.status !== 'OUT_OF_STOCK') return 1;
+      if (a.status !== 'OUT_OF_STOCK' && b.status === 'OUT_OF_STOCK') return -1;
+      return 0;
+    }),
+  };
+}
 
 export async function generateMetadata({
   params,
@@ -10,7 +70,7 @@ export async function generateMetadata({
   params: { slug: string };
 }): Promise<Metadata> {
   try {
-    const product = await productService.fetchProductBySlug(params.slug, {});
+    const product = await fetchProductBySlugWithTag(params.slug);
 
     const extractProductProperties = () => {
       const hasValue = (value: unknown) => {
@@ -163,7 +223,7 @@ export default async function product_details({
   params: { slug: string };
 }) {
   try {
-    const product = await productService.fetchProductBySlug(params.slug, {});
+    const product = await fetchProductBySlugWithTag(params.slug);
 
     return (
       <div>
