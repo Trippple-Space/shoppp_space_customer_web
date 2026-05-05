@@ -22,12 +22,16 @@ function Page() {
 
   useEffect(() => {
     const handleGoogleAuth = async () => {
-    const token = searchParams.get('token')
+      const token = searchParams.get('token')
       const prevDestRaw = searchParams.get('source')
       const prevDest = prevDestRaw ? decodeURIComponent(prevDestRaw) : ''
+      const postAuthRedirect =
+        typeof window !== 'undefined'
+          ? sessionStorage.getItem('post-auth-redirect')
+          : null
 
-    if (token) {
-      authService.storeAuthCredentials({ token })
+      if (token) {
+        authService.storeAuthCredentials({ token })
         const authUser = await authService.validateAuth()
         if (!authUser) {
           toast.error('Could not complete Google login. Please try again.')
@@ -42,16 +46,24 @@ function Page() {
         toast.success('Login Successful')
         window.dispatchEvent(new Event("googleLoginSuccessful"))
 
-      if (prevDest?.includes('auth')) {
-        setTimeout(() => {
-          window.location.replace(paths.homepage)
-        }, 1000)
-      } else if (prevDest) {
-        setTimeout(() => {
-          window.location.replace(prevDest)
-        }, 3000)
+        if (postAuthRedirect) {
+          sessionStorage.removeItem('post-auth-redirect')
+          setTimeout(() => {
+            window.location.replace(postAuthRedirect)
+          }, 1000)
+          return
+        }
+
+        if (prevDest?.includes('auth')) {
+          setTimeout(() => {
+            window.location.replace(paths.homepage)
+          }, 1000)
+        } else if (prevDest) {
+          setTimeout(() => {
+            window.location.replace(prevDest)
+          }, 3000)
+        }
       }
-    }
     }
 
     handleGoogleAuth()
