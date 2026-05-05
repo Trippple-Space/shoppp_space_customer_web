@@ -128,7 +128,7 @@ const CheckoutPage = () => {
   const canProceedToPayment =
     !MARKETPLACE_PURCHASES_ENABLED || !formReadyForPayment;
   const [devOptions, setDevOptions] = useState<string>();
-  const [showSummary, setshowSummary] = useState(true);
+  const [showSummary, setshowSummary] = useState(false);
   const [devAddressError, setDevAddressError] = useState(false);
   const [enableOrderWhatsApp, setEnableOrderWhatsApp] = useState(false);
   const [orderWhatsAppNumber, setOrderWhatsAppNumber] = useState('');
@@ -364,7 +364,7 @@ const CheckoutPage = () => {
             >
               <div
                 ref={rightScrollRef}
-                className={`flex-grow-1 l:w-54.2p md:w-50p h-full overflow-auto no-scrollbar md:pt-44 sm:pt-32 pt-24 xl:pl-80 l:pl-70 md:pl-60 sm:pl-40 pl-24 xl:pr-80 l:pr-70 sm:pr-40 pr-24 flex flex-col gap-28 bg-white md:pb-90 ${showSummary ? `${selectedAddress ? 'sm:pb-320 pb-410' : 'sm:pb-200 pb-327'}` : 'sm:pb-99 pb-217'}`}
+                className={`flex-grow-1 l:w-54.2p md:w-50p h-full overflow-auto no-scrollbar md:pt-44 sm:pt-32 pt-24 xl:pl-80 l:pl-70 md:pl-60 sm:pl-40 pl-24 xl:pr-80 l:pr-70 sm:pr-40 pr-24 flex flex-col gap-28 bg-white md:pb-90 ${showSummary ? `${selectedAddress ? 'md:pb-320 sm:pb-370 pb-410' : 'md:pb-200 sm:pb-240 pb-327'}` : 'md:pb-99 sm:pb-121 pb-217'}`}
               >
                 <div className="flex flex-col gap-6">
                   <h1 className="weight-600 md:text-24 text-20 md:line-height-32 line-heigth-28">
@@ -487,6 +487,18 @@ const CheckoutPage = () => {
                     selectedAddress={selectedAddress}
                   />
                 )}
+
+                <div className="md:hidden block">
+                  <div className="py-16 px-20 radius-8 border border-#F59E0B33 bg-#FFFBEB flex flex-col gap-6">
+                    <h2 className="text-16 line-height-24 weight-600 color-#92400E">
+                      Return policy
+                    </h2>
+                    <p className="text-14 line-height-22 weight-400 color-#B45309">
+                      Please inspect your order upon delivery. Returns can only be made while the rider is still present, and cannot be processed once the rider leaves.
+                    </p>
+                  </div>
+                </div>
+
                 <div className="flex flex-col gap-14">
                   {allCartItems.storeGroups?.map((store, i: number) => (
                     <div className="flex flex-col gap-16" key={i}>
@@ -705,12 +717,13 @@ const CheckoutPage = () => {
                       selectedAddress={selectedAddress}
                     />
                   )}
+
                   <div className="md:py-20 py-12 md:px-24 sm:px-40 px-24 md:border border-t border-#00000014 md:bg-white bg-#F5F5F5 md:radius-8 flex flex-col sm:gap-24 gap-20">
                     <h2 className="color-#000000E0 text-20 line-height-28 weight-600 md:block hidden">
                       Payment Summary
                     </h2>
                     <div
-                      className={`${showSummary ? 'block' : 'md:block hidden'}`}
+                      className={`${showSummary ? 'block mt-40' : 'md:block hidden'}`}
                     >
                       <OrderSummary
                         subTotal={cart.subTotal}
@@ -738,7 +751,7 @@ const CheckoutPage = () => {
                     </div>
                     <div className="flex sm:flex-row flex-col sm:gap-0 gap-20 space-between a-items-center">
                       <div
-                        className={`absolute t-0 sm:w-fit w-full sm:px-0 px-24 bg-#F5F5F5 pt-12 md:hidden block ${showSummary ? 'sm:b-20 sm:g|top:auto pt-22' : 'sm:t-10'}`}
+                        className={`absolute t-0 sm:w-fit w-full sm:px-0 px-24 bg-#F5F5F5 pt-12 md:hidden block ${showSummary ? 'pt-22' : ''}`}
                       >
                         <p
                           className={`md:hidden flex gap-12 a-items-center color-#00000099 sm:w-fit w-full space-between pointer ${showSummary && 'border-b border-b-#00000014 sm:border-b-#F5F5F5 pb-20 sm:pb-0'}`}
@@ -762,7 +775,7 @@ const CheckoutPage = () => {
                             Marketplace opens officially by {MARKETPLACE_OPENS_DATE}. Purchases are not available yet.
                           </p>
                         )}
-                        <div className="flex flex-col gap-12 a-items-center sm:j-content-end w-full">
+                        <div className="flex flex-col gap-12 a-items-end sm:j-content-end w-full">
                           {!showSummary && (
                             <span className="md:hidden sm:block hidden sm:weight-600 weight-700 sm:text-16 text-14 sm:line-height-22 line-height-19">
                               {formatNumberAsPrice(
@@ -776,15 +789,17 @@ const CheckoutPage = () => {
                               )}
                             </span>
                           )}
-                          <div className="py-16 px-20 radius-8 border border-#F59E0B33 bg-#FFFBEB flex flex-col gap-6">
-                            <h2 className="text-16 line-height-24 weight-600 color-#92400E">
-                              Return policy
-                            </h2>
-                            <p className="text-14 line-height-22 weight-400 color-#B45309">
-                              Please inspect your order upon delivery. Returns can only be made while the rider is still present, and cannot be processed once the rider leaves.
-                            </p>
+                          <div className="md:block hidden">
+                            <div className="py-16 px-20 radius-8 border border-#F59E0B33 bg-#FFFBEB flex flex-col gap-6">
+                              <h2 className="text-16 line-height-24 weight-600 color-#92400E">
+                                Return policy
+                              </h2>
+                              <p className="text-14 line-height-22 weight-400 color-#B45309">
+                                Please inspect your order upon delivery. Returns can only be made while the rider is still present, and cannot be processed once the rider leaves.
+                              </p>
+                            </div>
                           </div>
-                          <div className="flex gap-14 a-items-center sm:j-content-end w-full">
+                          <div className="flex md:flex-col sm:flex-row flex-col gap-14 a-items-center md:j-content-end justify-between w-full">
                             <button
                               onClick={() => {
                                 if (!isAuthenticated) {
@@ -852,7 +867,7 @@ const CheckoutPage = () => {
                                   }
                                 }
                               }}
-                              className={`md:w-full sm:w-fit w-full border-none m:flex text-white md:text-16 text-14 weight-500 md:line-height-22 line-height-19 md:px-24 px-16 py-12 radius-6 l:float-right j-content-center ${!showSummary && 'sm:mt-0 mt-56'} ${canProceedToPayment ? 'bg-#D1D5DB opacity-80 g|box-shadow:inset|_|0px|_|2px|_|4px|_|#0000001A color-#6B7280 cursor-not-allowed' : 'bg-#0B9378 pointer'}`}
+                              className={`w-full border-none m:flex text-white md:text-16 text-14 weight-500 md:line-height-22 line-height-19 md:px-24 px-16 py-12 radius-6 l:float-right j-content-center ${!showSummary && 'sm:mt-0 mt-56'} ${canProceedToPayment ? 'bg-#D1D5DB opacity-80 g|box-shadow:inset|_|0px|_|2px|_|4px|_|#0000001A color-#6B7280 cursor-not-allowed' : 'bg-#0B9378 pointer'}`}
                               title={
                                 !MARKETPLACE_PURCHASES_ENABLED
                                   ? `Purchases available from ${MARKETPLACE_OPENS_DATE}`
@@ -885,88 +900,89 @@ const CheckoutPage = () => {
                                 className="ml-10"
                               />
                             </button>
-                          </div>
-                          <button
-                            onClick={async () => {
-                              if (!isAuthenticated) {
-                                if (typeof window !== 'undefined') {
-                                  sessionStorage.setItem(
-                                    'post-auth-redirect',
-                                    paths.checkout
-                                  );
-                                }
-                                isLoginModal();
-                                return;
-                              }
-                              if (canProceedToPayment || selectedDeliveryOption === null) return;
-                              if (enableOrderWhatsApp) {
-                                if (!orderWhatsAppNumber.trim()) {
-                                  setOrderWhatsAppError(
-                                    'Please enter a WhatsApp number for this order.'
-                                  );
-                                  toast.error(
-                                    'Please enter a WhatsApp number for this order.'
-                                  );
+
+                            <button
+                              onClick={async () => {
+                                if (!isAuthenticated) {
+                                  if (typeof window !== 'undefined') {
+                                    sessionStorage.setItem(
+                                      'post-auth-redirect',
+                                      paths.checkout
+                                    );
+                                  }
+                                  isLoginModal();
                                   return;
                                 }
-                                if (!isValidOrderWhatsAppNumber(orderWhatsAppNumber)) {
-                                  setOrderWhatsAppError(
-                                    'Please enter a valid WhatsApp number.'
-                                  );
-                                  toast.error('Please enter a valid WhatsApp number.');
-                                  return;
-                                }
-                              }
-                              if (cachedShareLinkResponse?.shareToken) {
-                                const shareLink = `${window.location.origin}/pay/${cachedShareLinkResponse.shareToken}`;
-                                if (typeof navigator.share === 'function') {
-                                  try {
-                                    await navigator.share({
-                                      title: 'Asoebi checkout payment link',
-                                      text: 'Complete this order payment using the link below.',
-                                      url: shareLink,
-                                    });
+                                if (canProceedToPayment || selectedDeliveryOption === null) return;
+                                if (enableOrderWhatsApp) {
+                                  if (!orderWhatsAppNumber.trim()) {
+                                    setOrderWhatsAppError(
+                                      'Please enter a WhatsApp number for this order.'
+                                    );
+                                    toast.error(
+                                      'Please enter a WhatsApp number for this order.'
+                                    );
                                     return;
-                                  } catch (error) {
-                                    const shareError = error as { name?: string };
-                                    if (shareError?.name === 'AbortError') {
-                                      return;
-                                    }
+                                  }
+                                  if (!isValidOrderWhatsAppNumber(orderWhatsAppNumber)) {
+                                    setOrderWhatsAppError(
+                                      'Please enter a valid WhatsApp number.'
+                                    );
+                                    toast.error('Please enter a valid WhatsApp number.');
+                                    return;
                                   }
                                 }
+                                if (cachedShareLinkResponse?.shareToken) {
+                                  const shareLink = `${window.location.origin}/pay/${cachedShareLinkResponse.shareToken}`;
+                                  if (typeof navigator.share === 'function') {
+                                    try {
+                                      await navigator.share({
+                                        title: 'Asoebi checkout payment link',
+                                        text: 'Complete this order payment using the link below.',
+                                        url: shareLink,
+                                      });
+                                      return;
+                                    } catch (error) {
+                                      const shareError = error as { name?: string };
+                                      if (shareError?.name === 'AbortError') {
+                                        return;
+                                      }
+                                    }
+                                  }
 
-                                await navigator.clipboard.writeText(shareLink);
-                                toast.success('Payment link copied to clipboard');
-                                return;
-                              }
+                                  await navigator.clipboard.writeText(shareLink);
+                                  toast.success('Payment link copied to clipboard');
+                                  return;
+                                }
 
-                              const shareResponse = await sharePaymentLink({
-                                addressId: selectedAddress?.id,
-                                deliveryOption: selectedDeliveryOption,
-                                customerWhatsAppOptIn: enableOrderWhatsApp,
-                                customerWhatsAppNumber: enableOrderWhatsApp
-                                  ? orderWhatsAppNumber.trim()
-                                  : undefined,
-                              });
-                              if (shareResponse) {
-                                setCachedShareLinkResponse(shareResponse);
+                                const shareResponse = await sharePaymentLink({
+                                  addressId: selectedAddress?.id,
+                                  deliveryOption: selectedDeliveryOption,
+                                  customerWhatsAppOptIn: enableOrderWhatsApp,
+                                  customerWhatsAppNumber: enableOrderWhatsApp
+                                    ? orderWhatsAppNumber.trim()
+                                    : undefined,
+                                });
+                                if (shareResponse) {
+                                  setCachedShareLinkResponse(shareResponse);
+                                }
+                              }}
+                              disabled={canProceedToPayment || isSharingPaymentLink}
+                              className={`w-full border md:text-16 text-14 weight-500 md:line-height-22 line-height-19 md:px-24 px-16 py-12 radius-6 m:flex a-items-center j-content-center gap-8 l:float-right ${canProceedToPayment || isSharingPaymentLink ? 'border-#D1D5DB color-#9CA3AF bg-#F9FAFB cursor-not-allowed' : 'border-#0B9378 color-#0B9378 bg-white pointer hover:bg-#F0FDF9'}`}
+                              title={
+                                canProceedToPayment
+                                  ? 'Complete checkout details to share payment link'
+                                  : 'Copy share payment link'
                               }
-                            }}
-                            disabled={canProceedToPayment || isSharingPaymentLink}
-                            className={`md:w-full sm:w-fit w-full border md:text-16 text-14 weight-500 md:line-height-22 line-height-19 md:px-24 px-16 py-12 radius-6 m:flex a-items-center j-content-center gap-8 l:float-right ${canProceedToPayment || isSharingPaymentLink ? 'border-#D1D5DB color-#9CA3AF bg-#F9FAFB cursor-not-allowed' : 'border-#0B9378 color-#0B9378 bg-white pointer hover:bg-#F0FDF9'}`}
-                            title={
-                              canProceedToPayment
-                                ? 'Complete checkout details to share payment link'
-                                : 'Copy share payment link'
-                            }
-                          >
-                            <span>Share payment link</span>
-                            <PuffLoader
-                              size={14}
-                              loading={isSharingPaymentLink}
-                              className={isSharingPaymentLink ? 'ml-4' : 'hidden'}
-                            />
-                          </button>
+                            >
+                              <span>Share payment link</span>
+                              <PuffLoader
+                                size={14}
+                                loading={isSharingPaymentLink}
+                                className={isSharingPaymentLink ? 'ml-4' : 'hidden'}
+                              />
+                            </button>
+                          </div>
                         </div>
                       </div>
                     </div>
