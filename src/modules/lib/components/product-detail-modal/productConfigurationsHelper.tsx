@@ -1,5 +1,12 @@
-import { FC, useState } from 'react';
+import { FC, useEffect, useState, type ReactNode } from 'react';
+import { createPortal } from 'react-dom';
+import { IoMdClose } from 'react-icons/io';
+import { HiPlus } from 'react-icons/hi2';
 import { ConfigurationRecord } from '../../utility/types/product.interface';
+import {
+  isCustomerConfigurationInput,
+  isVendorConfigurationDefault,
+} from '../../utility/configuration-field-target';
 import {
   useFloating,
   offset,
@@ -18,6 +25,27 @@ export const isEmptyValue = (v: any) => {
   if (Array.isArray(v)) return v.length === 0;
   if (typeof v === 'object') return Object.keys(v).length === 0;
   return false;
+};
+
+export const isCustomerInputForField = (field: any): boolean => {
+  const vf = field?.valueFormat;
+  if (!vf) return false;
+  if (isCustomerConfigurationInput(vf.targetUserType)) return true;
+  if (vf.type === 'arrayOfImages') return true;
+  return false;
+};
+
+const CustomerBlobThumb = ({ file }: { file: File }) => {
+  const [src, setSrc] = useState('');
+  useEffect(() => {
+    const u = URL.createObjectURL(file);
+    setSrc(u);
+    return () => URL.revokeObjectURL(u);
+  }, [file]);
+  if (!src) return null;
+  return (
+    <img src={src} alt="" className="h-full w-full object-cover" />
+  );
 };
 
 export const renderCustomerField = (
@@ -86,19 +114,76 @@ export const renderCustomerField = (
   }
 
   if (vf.type === 'arrayOfImages') {
+    const raw = configurationValues[fieldKey];
+    const list: unknown[] = Array.isArray(raw)
+      ? raw
+      : raw === undefined || raw === null
+        ? []
+        : [raw];
+
+    const uploadInputId = `cfg-array-images-${fieldKey}`;
+
     return (
-      <input
-        type="file"
-        multiple
-        accept="image/*"
-        style={commonStyle}
-        onChange={(e) =>
-          handleConfigChange(
-            fieldKey,
-            e.target.files ? Array.from(e.target.files) : []
-          )
-        }
-      />
+      <div className="flex flex-wrap gap-6 a-items-center">
+        {list.map((item, idx) => (
+          <div
+            key={`${fieldKey}-img-${idx}`}
+            className="relative h-46 w-46 shrink-0 overflow-hidden radius-8 border border-#ddd bg-#fafafa"
+          >
+            {typeof item === 'string' ? (
+              <img
+                src={item}
+                alt=""
+                className="h-full w-full object-cover"
+              />
+            ) : item instanceof File ? (
+              <CustomerBlobThumb file={item} />
+            ) : null}
+            <button
+              type="button"
+              className="absolute r-0 t-0 radius-bl-8 bg-black opacity-50 px-1 text-10 text-white"
+              aria-label="Remove"
+              onClick={() =>
+                handleConfigChange(
+                  fieldKey,
+                  list.filter((_, i) => i !== idx)
+                )
+              }
+            >
+              <IoMdClose className="h-10 w-10" aria-hidden />
+            </button>
+          </div>
+        ))}
+        <label
+          htmlFor={uploadInputId}
+          aria-label="Add images"
+          style={{ position: 'relative' }}
+          className="flex h-44 w-44 shrink-0 cursor-pointer a-items-center j-content-center radius-8 border border-dashed border-#0B9378 bg-#fafafa color-#0B9378 hover:bg-#EDFCF7"
+        >
+          <HiPlus className="h-24 w-24" aria-hidden />
+          <input
+            id={uploadInputId}
+            type="file"
+            multiple
+            accept="image/*"
+            tabIndex={-1}
+            style={{
+              position: 'absolute',
+              inset: 0,
+              width: '100%',
+              height: '100%',
+              opacity: 0,
+              cursor: 'pointer',
+            }}
+            onChange={(e) => {
+              const files = e.target.files;
+              if (!files?.length) return;
+              handleConfigChange(fieldKey, [...list, ...Array.from(files)]);
+              e.target.value = '';
+            }}
+          />
+        </label>
+      </div>
     );
   }
 
@@ -114,42 +199,47 @@ export const buildUserConfigurations = (
   configurationRecords.forEach((record: any) => {
     const schemaName = record?.description?.toLowerCase().replaceAll(' ', '_');
 
-    const customerFields =
-      record.customerDataForm?.filter(
-        (f: any) => f.valueFormat?.targetUserType === 'customer'
-      ) || [];
-
-    const vendorFields =
-      record.customerDataForm?.filter(
-        (f: any) => f.valueFormat?.targetUserType !== 'customer'
-      ) || [];
-
     const valuesForSchema: Record<string, any> = {};
 
-    customerFields.forEach((field: any) => {
-      const { fieldName, type } = field.valueFormat;
-      const value = configurationValues[fieldName];
+    for (const field of record.customerDataForm ?? []) {
+      const vf = field.valueFormat;
+      const fieldName = vf.fieldName;
+      const target = vf.targetUserType as string | undefined;
+      const vendorDefault = vf.defaultValue;
+      const customerInput = configurationValues[fieldName];
 
-      if (isEmptyValue(value)) return;
-
-      if (type === 'string' || type === 'number') {
-        valuesForSchema[fieldName] = value;
-        return;
+      if (target === 'vendor') {
+        if (!isEmptyValue(vendorDefault)) {
+          valuesForSchema[fieldName] = vendorDefault;
+        }
+        continue;
       }
 
-      if (type === 'array') {
-        valuesForSchema[fieldName] = value;
-        return;
+      if (target === 'customer') {
+        if (!isEmptyValue(customerInput)) {
+          valuesForSchema[fieldName] = customerInput;
+        }
+        continue;
       }
-    });
 
-    vendorFields.forEach((field: any) => {
-      const { fieldName, defaultValue } = field.valueFormat;
+      if (target === 'both') {
+        const hasVendor = !isEmptyValue(vendorDefault);
+        const hasCustomer = !isEmptyValue(customerInput);
 
-      if (isEmptyValue(defaultValue)) return;
+        if (!hasVendor && !hasCustomer) continue;
 
-      valuesForSchema[fieldName] = defaultValue;
-    });
+        if (hasVendor && hasCustomer) {
+          valuesForSchema[fieldName] = {
+            vendor: vendorDefault,
+            customer: customerInput,
+          };
+        } else if (hasVendor) {
+          valuesForSchema[fieldName] = vendorDefault;
+        } else {
+          valuesForSchema[fieldName] = customerInput;
+        }
+      }
+    }
 
     if (Object.keys(valuesForSchema).length > 0) {
       result[schemaName] = valuesForSchema;
@@ -158,6 +248,42 @@ export const buildUserConfigurations = (
 
   return result;
 };
+
+/** Upload File entries for customer/both arrayOfImages fields before JSON cart payload */
+export async function resolveConfigurationImageFilesForCart(
+  configurationValues: Record<string, any>,
+  configurationRecords: ConfigurationRecord[],
+  upload: (file: File) => Promise<string>
+): Promise<Record<string, any>> {
+  const next = { ...configurationValues };
+  const fieldNames = new Set<string>();
+
+  for (const record of configurationRecords ?? []) {
+    for (const field of record.customerDataForm ?? []) {
+      const vf = field.valueFormat;
+      if (vf.type !== 'arrayOfImages') continue;
+      if (!isCustomerInputForField(field)) continue;
+      fieldNames.add(vf.fieldName);
+    }
+  }
+
+  for (const key of Array.from(fieldNames)) {
+    const val = next[key];
+    if (val == null) continue;
+    const arr = Array.isArray(val) ? val : [val];
+    const urls: string[] = [];
+    for (const item of arr) {
+      if (item instanceof File) {
+        urls.push(await upload(item));
+      } else if (typeof item === 'string' && item.trim().length > 0) {
+        urls.push(item);
+      }
+    }
+    next[key] = urls;
+  }
+
+  return next;
+}
 
 interface IDisplayProductConfigurations {
   configurationRecords: ConfigurationRecord[];
@@ -178,144 +304,302 @@ export const DisplayProductConfigurations: FC<
   isEditingConfiguration = true,
   onEditConfiguration,
 }) => {
-  return (
-    configurationRecords.length > 0 && (
-      <div className="flex flex-col gap-16">
-        {configurationRecords.map((record) => {
-          const customerFields =
-            record.customerDataForm?.filter(
-              (f: any) => f.valueFormat?.targetUserType === 'customer'
-            ) || [];
+    const [fullViewUrl, setFullViewUrl] = useState<string | null>(null);
 
-          const vendorFields =
-            record.customerDataForm?.filter(
-              (f: any) => f.valueFormat?.targetUserType !== 'customer'
-            ) || [];
+    useEffect(() => {
+      if (!fullViewUrl) return;
+      const onKey = (e: KeyboardEvent) => {
+        if (e.key === 'Escape') setFullViewUrl(null);
+      };
+      window.addEventListener('keydown', onKey);
+      return () => window.removeEventListener('keydown', onKey);
+    }, [fullViewUrl]);
 
-          const visibleVendorFields = vendorFields.filter((f: any) => {
-            const v = f.valueFormat?.defaultValue;
-            return !isEmptyValue(v);
-          });
+    if (!configurationRecords.length) return null;
 
-          if (!customerFields.length && !visibleVendorFields.length)
-            return null;
+    return (
+      <>
+        <div className="flex flex-col gap-16">
+          {configurationRecords.map((record) => {
+            const customerFields =
+              record.customerDataForm?.filter((f: any) =>
+                isCustomerInputForField(f)
+              ) || [];
 
-          return (
-            <div
-              key={record.id}
-              className={`flex flex-col ${userConfigurations && !isEditingConfiguration ? 'gap-4' : 'gap-12'}`}
-            >
-              <div className="flex flex-col gap-6 p-10 radius-6 bg-#F0F9FF border border-#91D5FF">
-                <p className="text-12 weight-400 color-#003A8C">
-                  This product is a{' '}
-                  <span className="weight-500">{record.description}</span>{' '}
-                  product.
-                </p>
+            const vendorFields =
+              record.customerDataForm?.filter((f: any) =>
+                isVendorConfigurationDefault(f.valueFormat?.targetUserType)
+              ) || [];
 
-                {visibleVendorFields.length > 0 && (
-                  <div className="flex flex-col gap-4">
-                    {visibleVendorFields.map((field: any) => {
-                      const value = field.valueFormat?.defaultValue;
+            const visibleVendorFields = vendorFields.filter((f: any) => {
+              const v = f.valueFormat?.defaultValue;
+              return !isEmptyValue(v);
+            });
 
-                      const displayValue = Array.isArray(value)
-                        ? value.join(', ')
-                        : String(value);
+            if (!customerFields.length && !visibleVendorFields.length)
+              return null;
 
-                      return (
-                        <div
-                          key={field.valueFormat.fieldName}
-                          className="text-12 color-#003A8C"
-                        >
-                          <span className="weight-500">
-                            {field.keyFormat?.defaultValue}:
-                          </span>{' '}
-                          <span>{displayValue}</span>
-                        </div>
-                      );
-                    })}
-                  </div>
-                )}
+            return (
+              <div
+                key={record.id}
+                className={`flex flex-col ${userConfigurations && !isEditingConfiguration ? 'gap-4' : 'gap-12'}`}
+              >
+                <div className="flex flex-col gap-6 p-10 radius-6 bg-#F0F9FF border border-#91D5FF">
+                  <p className="text-12 weight-500 color-#003A8C mb-4">
+                    This product is a{' '}
+                    <span className="weight-700">{record.description}</span>{' '}
+                    product.
+                  </p>
 
-                {!userConfigurations &&
-                  customerFields.some((f: any) => f.valueFormat?.required) && (
-                    <p className="text-11 color-#003A8C">
-                      Please fill all required fields below to continue.
-                    </p>
-                  )}
-              </div>
-              {customerFields.length > 0 && (
-                <>
-                  {userConfigurations &&
-                  !isEditingConfiguration &&
-                  record.description &&
-                  userConfigurations[
-                    record.description.toLowerCase().replaceAll(' ', '_')
-                  ] ? (
-                    <UserConfigurationSummary
-                      userConfigurations={{
-                        [record.description.toLowerCase().replaceAll(' ', '_')]:
-                          userConfigurations[
-                            record.description
-                              .toLowerCase()
-                              .replaceAll(' ', '_')
-                          ],
-                      }}
-                      onEdit={onEditConfiguration ?? (() => {})}
-                    />
-                  ) : (
-                    <div className="flex flex-col gap-10">
-                      {customerFields.map((field: any) => {
-                        const hasError =
-                          field.valueFormat?.required &&
-                          (() => {
-                            const key = field.valueFormat.fieldName;
-                            const val = configurationValues[key];
+                  {visibleVendorFields.length > 0 && (
+                    <div className="flex flex-col gap-5">
+                      {visibleVendorFields.map((field: any) => {
+                        const value = field.valueFormat?.defaultValue;
+                        const vf = field.valueFormat;
 
-                            if (field.valueFormat.type === 'array') {
-                              if (!val || typeof val !== 'object') return true;
-                              return field.valueFormat.defaultValue.some(
-                                (k: string) => isEmptyValue(val[k])
-                              );
-                            }
+                        if (
+                          vf?.type === 'arrayOfImages' &&
+                          Array.isArray(value) &&
+                          value.length > 0 &&
+                          value.every((x: unknown) => typeof x === 'string')
+                        ) {
+                          return (
+                            <div
+                              key={field.valueFormat.fieldName}
+                              className="text-12 color-#003A8C"
+                            >
+                              <span className="weight-700">
+                                {field.keyFormat?.defaultValue}:
+                              </span>
+                              <div className="mt-2 flex flex-wrap gap-2">
+                                {(value as string[]).map((url, i) => (
+                                  <button
+                                    key={i}
+                                    type="button"
+                                    className="h-64 w-64 cursor-zoom-in overflow-hidden rounded border border-#91D5FF p-0 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-#1677FF"
+                                    onClick={() => setFullViewUrl(url)}
+                                    aria-label="View image full size"
+                                  >
+                                    <img
+                                      src={url}
+                                      alt=""
+                                      className="h-full w-full object-cover"
+                                    />
+                                  </button>
+                                ))}
+                              </div>
+                            </div>
+                          );
+                        }
 
-                            return isEmptyValue(val);
-                          })();
+                        const displayValue = Array.isArray(value)
+                          ? value.join(', ')
+                          : String(value);
 
                         return (
                           <div
                             key={field.valueFormat.fieldName}
-                            className="flex flex-col gap-4"
+                            className="text-12 color-#003A8C"
                           >
-                            <label className="text-12 weight-400">
-                              {field.keyFormat?.defaultValue}
-                              {field.valueFormat?.required && (
-                                <span style={{ color: 'red' }}> *</span>
-                              )}
-                            </label>
-
-                            {renderCustomerField(
-                              field,
-                              configurationValues,
-                              handleConfigChange
-                            )}
-
-                            {hasError && (
-                              <span className="text-11 color-#D4380D">
-                                This field is required
-                              </span>
-                            )}
+                            <span className="weight-700">
+                              {field.keyFormat?.defaultValue}:
+                            </span>{' '}
+                            <span>{displayValue}</span>
                           </div>
                         );
                       })}
                     </div>
                   )}
-                </>
-              )}
-            </div>
-          );
-        })}
-      </div>
-    )
+
+                  {!userConfigurations &&
+                    customerFields.some((f: any) => f.valueFormat?.required) && (
+                      <p className="text-11 color-#003A8C mt-5">
+                        Please fill all required fields below to continue.
+                      </p>
+                    )}
+                </div>
+                {customerFields.length > 0 && (
+                  <>
+                    {userConfigurations &&
+                      !isEditingConfiguration &&
+                      record.description &&
+                      userConfigurations[
+                      record.description.toLowerCase().replaceAll(' ', '_')
+                      ] ? (
+                      <UserConfigurationSummary
+                        userConfigurations={{
+                          [record.description.toLowerCase().replaceAll(' ', '_')]:
+                            userConfigurations[
+                            record.description
+                              .toLowerCase()
+                              .replaceAll(' ', '_')
+                            ],
+                        }}
+                        onEdit={onEditConfiguration ?? (() => { })}
+                      />
+                    ) : (
+                      <div className="flex flex-col gap-10">
+                        {customerFields.map((field: any) => {
+                          const hasError =
+                            field.valueFormat?.required &&
+                            (() => {
+                              const key = field.valueFormat.fieldName;
+                              const val = configurationValues[key];
+
+                              if (field.valueFormat.type === 'array') {
+                                if (!val || typeof val !== 'object') return true;
+                                return field.valueFormat.defaultValue.some(
+                                  (k: string) => isEmptyValue(val[k])
+                                );
+                              }
+
+                              if (field.valueFormat.type === 'arrayOfImages') {
+                                if (!val) return true;
+                                if (Array.isArray(val)) return val.length === 0;
+                                return true;
+                              }
+
+                              return isEmptyValue(val);
+                            })();
+
+                          return (
+                            <div
+                              key={field.valueFormat.fieldName}
+                              className="flex flex-col gap-5"
+                            >
+                              <label className="text-12 weight-500">
+                                {field.keyFormat?.defaultValue}
+                                {field.valueFormat?.required && (
+                                  <span style={{ color: 'red' }}> {hasError ? '(required)' : '*'}</span>
+                                )}
+                              </label>
+
+                              {renderCustomerField(
+                                field,
+                                configurationValues,
+                                handleConfigChange
+                              )}
+
+                              {/* {hasError && (
+                              <span className="text-11 color-#D4380D">
+                                This field is required
+                              </span>
+                            )} */}
+                            </div>
+                          );
+                        })}
+                      </div>
+                    )}
+                  </>
+                )}
+              </div>
+            );
+          })}
+        </div>
+        {fullViewUrl &&
+          createPortal(
+            <div
+              className="fixed inset-0 flex items-center justify-center bg-black/85 p-16"
+              style={{ zIndex: 100_000 }}
+              role="dialog"
+              aria-modal="true"
+              aria-label="Image preview"
+              onClick={() => setFullViewUrl(null)}
+            >
+              <button
+                type="button"
+                className="absolute flex a-items-center j-content-center radius-99 bg-white pointer"
+                style={{
+                  top: 'max(12px, env(safe-area-inset-top, 0px))',
+                  right: 'max(12px, env(safe-area-inset-right, 0px))',
+                  minWidth: 48,
+                  minHeight: 48,
+                  padding: 10,
+                  zIndex: 1,
+                  boxShadow: '0 2px 12px rgba(0,0,0,0.25)',
+                }}
+                aria-label="Close preview"
+                onClick={(e) => {
+                  e.stopPropagation();
+                  setFullViewUrl(null);
+                }}
+              >
+                <IoMdClose className="w-28 h-28 color-black" aria-hidden />
+              </button>
+              <img
+                src={fullViewUrl}
+                alt=""
+                className="max-h-[90vh] max-w-full object-contain"
+                onClick={(e) => e.stopPropagation()}
+              />
+            </div>,
+            document.body
+          )}
+      </>
+    );
+  };
+
+const renderConfigurationValueForSummary = (value: any): ReactNode => {
+  if (Array.isArray(value)) {
+    const allHttpUrls = value.every(
+      (x) => typeof x === 'string' && /^https?:\/\//i.test(x)
+    );
+    if (allHttpUrls) {
+      return (
+        <span className="flex flex-wrap gap-1 justify-end">
+          {(value as string[]).map((url, i) => (
+            <img
+              key={i}
+              src={url}
+              alt=""
+              className="h-12 w-12 rounded border object-cover"
+            />
+          ))}
+        </span>
+      );
+    }
+    return <span>{value.join(', ')}</span>;
+  }
+  if (value && typeof value === 'object' && !Array.isArray(value)) {
+    return (
+      <span className="text-11">
+        {Object.entries(value)
+          .map(([k, v]) => `${k}: ${v}`)
+          .join(', ')}
+      </span>
+    );
+  }
+  return <span>{String(value)}</span>;
+};
+
+const summarizeConfigurationEntry = (_key: string, value: any): ReactNode => {
+  if (
+    value &&
+    typeof value === 'object' &&
+    !Array.isArray(value) &&
+    ('vendor' in value || 'customer' in value)
+  ) {
+    return (
+      <span className="flex flex-col gap-2 items-end text-right max-w-[min(280px,85vw)]">
+        {value.vendor != null && !isEmptyValue(value.vendor) && (
+          <span className="flex flex-col gap-1 items-end">
+            <span className="text-10 color-#00000099">Seller reference</span>
+            {renderConfigurationValueForSummary(value.vendor)}
+          </span>
+        )}
+        {value.customer != null && !isEmptyValue(value.customer) && (
+          <span className="flex flex-col gap-1 items-end">
+            <span className="text-10 color-#00000099">Your details</span>
+            {renderConfigurationValueForSummary(value.customer)}
+          </span>
+        )}
+      </span>
+    );
+  }
+  return (
+    <span className="weight-500 color-#000000">
+      {renderConfigurationValueForSummary(value)}
+    </span>
   );
 };
 
@@ -335,24 +619,15 @@ const UserConfigurationSummary = ({
         >
           <div className="flex flex-col gap-4">
             {Object.entries(fields as Record<string, any>).map(
-              ([key, value]) => {
-                const display =
-                  typeof value === 'object'
-                    ? Object.entries(value)
-                        .map(([k, v]) => `${k}: ${v}`)
-                        .join(', ')
-                    : String(value);
+              ([key, value]) => (
+                <div key={key} className="flex justify-between gap-3 text-12">
+                  <span className="color-#00000099 weight-400 capitalize shrink-0">
+                    {key.replaceAll('_', ' ')}:
+                  </span>
 
-                return (
-                  <div key={key} className="flex justify-between gap-3 text-12">
-                    <span className="color-#00000099 weight-400 capitalize">
-                      {key.replaceAll('_', ' ')}:
-                    </span>
-
-                    <span className="weight-500 color-#000000">{display}</span>
-                  </div>
-                );
-              }
+                  {summarizeConfigurationEntry(key, value)}
+                </div>
+              )
             )}
           </div>
         </div>
@@ -369,6 +644,77 @@ const UserConfigurationSummary = ({
   );
 };
 
+const isHttpUrlArray = (v: unknown): v is string[] =>
+  Array.isArray(v) &&
+  v.length > 0 &&
+  v.every((x) => typeof x === 'string' && /^https?:\/\//i.test(x));
+
+const renderConfigLeaf = (v: any): ReactNode => {
+  if (v === undefined || v === null || v === '') return null;
+  if (Array.isArray(v)) {
+    if (v.length === 0) return null;
+    if (isHttpUrlArray(v)) {
+      return (
+        <span className="inline-flex flex-wrap gap-1 justify-end">
+          {v.map((url, i) => (
+            <img
+              key={i}
+              src={url}
+              alt=""
+              className="h-10 w-10 rounded border border-#00000014 object-cover"
+            />
+          ))}
+        </span>
+      );
+    }
+    return (
+      <span className="weight-500 color-#000000E0">{v.join(', ')}</span>
+    );
+  }
+  if (v && typeof v === 'object') {
+    const vo = v as Record<string, unknown>;
+    const hasVendor = 'vendor' in vo && vo.vendor != null && !isEmptyValue(vo.vendor);
+    const hasCustomer =
+      'customer' in vo && vo.customer != null && !isEmptyValue(vo.customer);
+    if (hasVendor || hasCustomer) {
+      return (
+        <span className="flex flex-col gap-2 items-end text-right">
+          {hasVendor && (
+            <span className="flex flex-col gap-1 items-end">
+              <span className="text-10 color-#00000099">Seller reference</span>
+              {renderConfigLeaf(vo.vendor)}
+            </span>
+          )}
+          {hasCustomer && (
+            <span className="flex flex-col gap-1 items-end">
+              <span className="text-10 color-#00000099">Customer</span>
+              {renderConfigLeaf(vo.customer)}
+            </span>
+          )}
+        </span>
+      );
+    }
+    return (
+      <span className="flex flex-col gap-1 ml-6">
+        {Object.entries(v).map(([nk, nv]) => (
+          <span
+            key={nk}
+            className="flex space-between gap-12 text-12 color-#00000099"
+          >
+            <span className="capitalize">{nk.replaceAll('_', ' ')}</span>
+            <span className="weight-500 color-#000000E0">
+              {renderConfigLeaf(nv) ?? String(nv)}
+            </span>
+          </span>
+        ))}
+      </span>
+    );
+  }
+  return (
+    <span className="weight-500 color-#000000E0">{String(v)}</span>
+  );
+};
+
 const renderConfigDetails = (value: any) => {
   if (
     value === undefined ||
@@ -382,41 +728,48 @@ const renderConfigDetails = (value: any) => {
   if (typeof value !== 'object' || Array.isArray(value)) {
     return (
       <span className="inline-block text-12 color-#00000099">
-        {Array.isArray(value) ? value.join(', ') : String(value)}
+        {renderConfigLeaf(value)}
       </span>
     );
   }
 
   return Object.entries(value).map(([k, v]) => {
-    if (v && typeof v === 'object' && !Array.isArray(v)) {
+    if (!v || typeof v !== 'object' || Array.isArray(v)) {
       return (
-        <span key={k} className="flex flex-col gap-2">
-          <span className="text-12 color-#00000099 capitalize">
+        <div key={k} className="flex gap-12 space-between text-12">
+          <span className="capitalize color-#00000099 shrink-0">
             {k.replaceAll('_', ' ')}
           </span>
-
-          <span className="flex flex-col gap-1 ml-6">
-            {Object.entries(v).map(([nk, nv]) => (
-              <span
-                key={nk}
-                className="flex space-between gap-12 text-12 color-#00000099"
-              >
-                <span className="capitalize">{nk.replaceAll('_', ' ')}</span>
-                <span className="weight-500 color-#000000E0">{String(nv)}</span>
-              </span>
-            ))}
+          <span className="flex flex-col items-end min-w-0">
+            {renderConfigLeaf(v)}
           </span>
-        </span>
+        </div>
+      );
+    }
+
+    const vo = v as Record<string, unknown>;
+    const mergedBoth =
+      ('vendor' in vo || 'customer' in vo) &&
+      Object.keys(vo).every((key) => key === 'vendor' || key === 'customer');
+
+    if (mergedBoth) {
+      return (
+        <div key={k} className="flex gap-12 space-between text-12">
+          <span className="capitalize color-#00000099 shrink-0">
+            {k.replaceAll('_', ' ')}
+          </span>
+          <span className="flex flex-col items-end min-w-0">{renderConfigLeaf(v)}</span>
+        </div>
       );
     }
 
     return (
-      <div key={k} className="flex gap-12 space-between text-12">
-        <span className="capitalize color-#00000099">
+      <span key={k} className="flex flex-col gap-2">
+        <span className="text-12 color-#00000099 capitalize">
           {k.replaceAll('_', ' ')}
         </span>
-        <span className="weight-500 color-#000000E0">{String(v)}</span>
-      </div>
+        {renderConfigLeaf(v)}
+      </span>
     );
   });
 };

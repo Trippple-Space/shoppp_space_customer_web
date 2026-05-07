@@ -50,8 +50,12 @@ import ReviewModal from './modals/ReviewModal';
 import {
   buildUserConfigurations,
   DisplayProductConfigurations,
+  isCustomerInputForField,
   isEmptyValue,
+  resolveConfigurationImageFilesForCart,
 } from '@/modules/lib/components/product-detail-modal/productConfigurationsHelper';
+import { uploadPublicConfigurationImage } from '@/modules/lib/utility/services/configuration-image-upload.service';
+import { toast } from 'sonner';
 import { CatalogueMediaItem } from '@/modules/lib/components/product-tile/ProductCatalogueDropdown';
 import { guestSession } from '@/modules/lib/utility/guest-session';
 import { CartItem } from '@/modules/lib/utility/types/cart.interface';
@@ -637,9 +641,7 @@ const ProductDetails = ({ product }: { product: Product }) => {
 
     return (selectedVariant.configurationRecords ?? []).flatMap((record: any) =>
       (record.customerDataForm ?? []).filter(
-        (f: any) =>
-          f.valueFormat?.targetUserType === 'customer' &&
-          f.valueFormat?.required
+        (f: any) => isCustomerInputForField(f) && f.valueFormat?.required
       )
     );
   }, [selectedVariant]);
@@ -656,14 +658,15 @@ const ProductDetails = ({ product }: { product: Product }) => {
         );
       }
 
+      if (field.valueFormat.type === 'arrayOfImages') {
+        if (!value) return false;
+        if (Array.isArray(value)) return value.length > 0;
+        return false;
+      }
+
       return !isEmptyValue(value);
     });
   }, [getRequiredCustomerFields, configurationValues]);
-
-  const userConfigurations = buildUserConfigurations(
-    configurationValues,
-    configurationRecords
-  );
 
   const addToCartBtn = () => {
     return (
@@ -717,7 +720,7 @@ const ProductDetails = ({ product }: { product: Product }) => {
             className={classNames(
               `text-white border-none l:px-24 l:py-12 py-15 w-100p radius-6 ${!selectedVariant || isOutOfStock || !areRequiredCustomerFieldsFilled ? 'bg-gray-300 cursor-not-allowed' : 'bg-#0B9378 hover:bg-darkgreen pointer'}`
             )}
-            onClick={() => {
+            onClick={async () => {
               if (orders.length == 0 && cart.cartItems.length == 0) {
                 handleFlyToCart(imgRef);
               }
@@ -726,17 +729,50 @@ const ProductDetails = ({ product }: { product: Product }) => {
                 selectedVariant.status !== 'OUT_OF_STOCK' &&
                 areRequiredCustomerFieldsFilled
               ) {
-                addToCart(
-                  selectedVariant?.id ?? 0,
-                  selectedVariant?.minPurchaseQuantity || 1,
-                  userConfigurations,
-                  selectedVariant
-                    ? {
-                        ...selectedVariant,
-                        product: selectedVariant.product ?? product,
-                      }
-                    : undefined
-                );
+                try {
+                  let valuesForCart = configurationValues;
+                  if (
+                    configurationRecords.length > 0 &&
+                    process.env.NEXT_PUBLIC_PUBLIC_UPLOAD_API_KEY
+                  ) {
+                    valuesForCart =
+                      await resolveConfigurationImageFilesForCart(
+                        configurationValues,
+                        configurationRecords,
+                        uploadPublicConfigurationImage
+                      );
+                  } else if (
+                    configurationRecords.length > 0 &&
+                    Object.values(configurationValues).some(
+                      (v) =>
+                        Array.isArray(v) && v.some((x) => x instanceof File)
+                    )
+                  ) {
+                    toast.error(
+                      'Image upload is not configured. Set NEXT_PUBLIC_PUBLIC_UPLOAD_API_KEY.'
+                    );
+                    return;
+                  }
+                  const configs = buildUserConfigurations(
+                    valuesForCart,
+                    configurationRecords
+                  );
+                  addToCart(
+                    selectedVariant?.id ?? 0,
+                    selectedVariant?.minPurchaseQuantity || 1,
+                    configs,
+                    selectedVariant
+                      ? {
+                          ...selectedVariant,
+                          product: selectedVariant.product ?? product,
+                        }
+                      : undefined
+                  );
+                } catch (e: unknown) {
+                  const msg =
+                    e instanceof Error ? e.message : 'Could not upload images';
+                  toast.error(msg);
+                }
               }
             }}
           >

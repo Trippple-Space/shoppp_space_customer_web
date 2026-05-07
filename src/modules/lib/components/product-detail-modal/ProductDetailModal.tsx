@@ -19,13 +19,15 @@ import {
   buildUserConfigurations,
   DisplayProductConfigurations,
   isEmptyValue,
+  isCustomerInputForField,
+  resolveConfigurationImageFilesForCart,
 } from './productConfigurationsHelper';
+import { uploadPublicConfigurationImage } from '../../utility/services/configuration-image-upload.service';
 import { createPortal } from 'react-dom';
 import { guestSession } from '../../utility/guest-session';
 import { CartItem } from '../../utility/types/cart.interface';
-import {
-  buildVariantMediaPreviewItems,
-} from '../../utility/product-media';
+import { toast } from 'sonner';
+import { buildVariantMediaPreviewItems } from '../../utility/product-media';
 
 interface ProductDetailModalProp {
   openSingleProductModal: boolean;
@@ -501,9 +503,7 @@ const ProductDetailModal = ({
 
     return (selectedVariant.configurationRecords ?? []).flatMap((record: any) =>
       (record.customerDataForm ?? []).filter(
-        (f: any) =>
-          f.valueFormat?.targetUserType === 'customer' &&
-          f.valueFormat?.required
+        (f: any) => isCustomerInputForField(f) && f.valueFormat?.required
       )
     );
   }, [selectedVariant]);
@@ -518,6 +518,12 @@ const ProductDetailModal = ({
         return field.valueFormat.defaultValue.every(
           (k: string) => !isEmptyValue(value[k])
         );
+      }
+
+      if (field.valueFormat.type === 'arrayOfImages') {
+        if (!value) return false;
+        if (Array.isArray(value)) return value.length > 0;
+        return false;
       }
 
       return !isEmptyValue(value);
@@ -869,7 +875,7 @@ const ProductDetailModal = ({
                                 selectedVariant.status === 'OUT_OF_STOCK' ||
                                 !areRequiredCustomerFieldsFilled
                               }
-                              onClick={() => {
+                              onClick={async () => {
                                 if (!localStorage.getItem('seenMiniCart')) {
                                   window.dispatchEvent(
                                     new Event('showMiniCartOnboarding')
@@ -883,18 +889,57 @@ const ProductDetailModal = ({
                                   selectedVariant &&
                                   selectedVariant.status !== 'OUT_OF_STOCK'
                                 ) {
-                                  addToCart(
-                                    selectedVariant?.id ?? '0',
-                                    selectedVariant?.minPurchaseQuantity || 1,
-                                    userConfigurations,
-                                    selectedVariant
-                                      ? {
-                                          ...selectedVariant,
-                                          product:
-                                            selectedVariant.product ?? product,
-                                        }
-                                      : undefined
-                                  );
+                                  try {
+                                    let valuesForCart = configurationValues;
+                                    if (
+                                      configurationRecords.length > 0 &&
+                                      process.env
+                                        .NEXT_PUBLIC_PUBLIC_UPLOAD_API_KEY
+                                    ) {
+                                      valuesForCart =
+                                        await resolveConfigurationImageFilesForCart(
+                                          configurationValues,
+                                          configurationRecords,
+                                          uploadPublicConfigurationImage
+                                        );
+                                    } else if (
+                                      configurationRecords.length > 0 &&
+                                      Object.values(configurationValues).some(
+                                        (v) =>
+                                          Array.isArray(v) &&
+                                          v.some((x) => x instanceof File)
+                                      )
+                                    ) {
+                                      toast.error(
+                                        'Image upload is not configured. Set NEXT_PUBLIC_PUBLIC_UPLOAD_API_KEY.'
+                                      );
+                                      return;
+                                    }
+                                    const configs = buildUserConfigurations(
+                                      valuesForCart,
+                                      configurationRecords
+                                    );
+                                    addToCart(
+                                      selectedVariant?.id ?? '0',
+                                      selectedVariant?.minPurchaseQuantity ||
+                                        1,
+                                      configs,
+                                      selectedVariant
+                                        ? {
+                                            ...selectedVariant,
+                                            product:
+                                              selectedVariant.product ??
+                                              product,
+                                          }
+                                        : undefined
+                                    );
+                                  } catch (e: unknown) {
+                                    const msg =
+                                      e instanceof Error
+                                        ? e.message
+                                        : 'Could not upload images';
+                                    toast.error(msg);
+                                  }
                                 }
                               }}
                             >
