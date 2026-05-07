@@ -23,6 +23,10 @@ import {
 import { createPortal } from 'react-dom';
 import { guestSession } from '../../utility/guest-session';
 import { CartItem } from '../../utility/types/cart.interface';
+import {
+  buildVariantMediaPreviewItems,
+  getMediaDedupeKey,
+} from '../../utility/product-media';
 
 interface ProductDetailModalProp {
   openSingleProductModal: boolean;
@@ -354,6 +358,11 @@ const ProductDetailModal = ({
     return Array.from(map.values()).concat(rest);
   }, [variantSelectedImage, variant, product?.variants, allPropertiesWithSize]);
 
+  const variantPreviewItems = useMemo(
+    () => buildVariantMediaPreviewItems(uniqueVariantsFromProductImages),
+    [uniqueVariantsFromProductImages]
+  );
+
   const displayPrice = selectedVariant?.finalPrice || product?.finalPrice;
   const descriptionLength = product?.longDescription?.split(' ')?.length || 0;
   const maxDisplayDescLength = 20;
@@ -413,60 +422,58 @@ const ProductDetailModal = ({
   };
 
   const handlePreviousImage = () => {
-    if (!uniqueVariantsFromProductImages?.length) return;
+    if (!variantPreviewItems?.length) return;
 
-    let currentIndex = uniqueVariantsFromProductImages.findIndex((v) =>
-      v?.media?.some((m) => m.url === selectedImage)
+    let currentIndex = variantPreviewItems.findIndex(
+      (item) => item.media?.url === selectedImage
     );
     if (currentIndex === -1 && selectedVariant) {
-      currentIndex = uniqueVariantsFromProductImages.findIndex(
-        (v) => v?.id === selectedVariant?.id
+      currentIndex = variantPreviewItems.findIndex(
+        (item) => item.variant?.id === selectedVariant?.id
       );
     }
 
     const prevIndex =
       currentIndex >= 0 && currentIndex > 0
         ? currentIndex - 1
-        : uniqueVariantsFromProductImages.length - 1;
+        : variantPreviewItems.length - 1;
 
-    const prevVariant = uniqueVariantsFromProductImages[prevIndex];
+    const prevPreviewItem = variantPreviewItems[prevIndex];
 
-    if (!prevVariant) return;
+    if (!prevPreviewItem) return;
 
-    const firstMedia = prevVariant.media?.[0];
-    setForcedVariantId(prevVariant.id);
-    setActiveFilters(buildFiltersFromVariant(prevVariant));
-    setSelectedImage(firstMedia?.url);
-    setSelectedMediaType(firstMedia?.type);
+    setForcedVariantId(prevPreviewItem.variant.id);
+    setActiveFilters(buildFiltersFromVariant(prevPreviewItem.variant));
+    setSelectedImage(prevPreviewItem.media?.url);
+    setSelectedMediaType(prevPreviewItem.media?.type);
     setImageSource('variant');
   };
 
   const handleNextImage = () => {
-    if (!uniqueVariantsFromProductImages?.length) return;
+    if (!variantPreviewItems?.length) return;
 
-    let currentIndex = uniqueVariantsFromProductImages.findIndex((v) =>
-      v?.media?.some((m) => m.url === selectedImage)
+    let currentIndex = variantPreviewItems.findIndex(
+      (item) => item.media?.url === selectedImage
     );
     if (currentIndex === -1 && selectedVariant) {
-      currentIndex = uniqueVariantsFromProductImages.findIndex(
-        (v) => v?.id === selectedVariant?.id
+      currentIndex = variantPreviewItems.findIndex(
+        (item) => item.variant?.id === selectedVariant?.id
       );
     }
 
     const nextIndex =
       currentIndex >= 0
-        ? (currentIndex + 1) % uniqueVariantsFromProductImages.length
+        ? (currentIndex + 1) % variantPreviewItems.length
         : 0;
 
-    const nextVariant = uniqueVariantsFromProductImages[nextIndex];
+    const nextPreviewItem = variantPreviewItems[nextIndex];
 
-    if (!nextVariant) return;
+    if (!nextPreviewItem) return;
 
-    const firstMedia = nextVariant.media?.[0];
-    setForcedVariantId(nextVariant.id);
-    setActiveFilters(buildFiltersFromVariant(nextVariant));
-    setSelectedImage(firstMedia?.url);
-    setSelectedMediaType(firstMedia?.type);
+    setForcedVariantId(nextPreviewItem.variant.id);
+    setActiveFilters(buildFiltersFromVariant(nextPreviewItem.variant));
+    setSelectedImage(nextPreviewItem.media?.url);
+    setSelectedMediaType(nextPreviewItem.media?.type);
     setImageSource('variant');
   };
 
@@ -607,15 +614,23 @@ const ProductDetailModal = ({
                             (uniqueVariantsFromProductImages?.length ?? 0) >
                             0 && (
                               <div className="flex gap-10 py-5 overflow-x-auto a-items-center no-scrollbar w-full">
-                                {uniqueVariantsFromProductImages.map((vari) =>
-                                  vari?.media?.map((mediaItem: any) => (
+                                {variantPreviewItems.map(({ variant: vari, media: mediaItem }) => (
                                     <div
                                       key={`${vari.id}-${mediaItem.url}`}
                                       onClick={() => {
                                         const isSameVariant =
                                           selectedVariant?.id === vari.id;
+                                        const selectedVariantHasSameMedia = Boolean(
+                                          getMediaDedupeKey(mediaItem) &&
+                                          selectedVariant?.media?.some(
+                                            (img) =>
+                                              getMediaDedupeKey(img) ===
+                                              getMediaDedupeKey(mediaItem)
+                                          )
+                                        );
                                         const isSameImage =
-                                          selectedImage === mediaItem.url;
+                                          selectedImage === mediaItem.url ||
+                                          selectedVariantHasSameMedia;
 
                                         if (isSameVariant && isSameImage) {
                                           resetToDefault();
@@ -643,9 +658,15 @@ const ProductDetailModal = ({
                                             }`,
                                             {
                                               'border border-green border-2':
-                                                selectedVariant?.media.find(
-                                                  (img) =>
-                                                    img.url === mediaItem.url
+                                                Boolean(
+                                                  getMediaDedupeKey(mediaItem) &&
+                                                    selectedVariant?.media?.some(
+                                                      (img) =>
+                                                        getMediaDedupeKey(img) ===
+                                                        getMediaDedupeKey(
+                                                          mediaItem
+                                                        )
+                                                    )
                                                 ),
                                             }
                                           )}
@@ -662,9 +683,15 @@ const ProductDetailModal = ({
                                             }`,
                                             {
                                               'border border-green border-2':
-                                                selectedVariant?.media.find(
-                                                  (img) =>
-                                                    img.url === mediaItem.url
+                                                Boolean(
+                                                  getMediaDedupeKey(mediaItem) &&
+                                                    selectedVariant?.media?.some(
+                                                      (img) =>
+                                                        getMediaDedupeKey(img) ===
+                                                        getMediaDedupeKey(
+                                                          mediaItem
+                                                        )
+                                                    )
                                                 ),
                                             }
                                           )}
@@ -672,8 +699,7 @@ const ProductDetailModal = ({
                                         />
                                       )}
                                     </div>
-                                  ))
-                                )}
+                                  ))}
                               </div>
                             )}
                         </div>
