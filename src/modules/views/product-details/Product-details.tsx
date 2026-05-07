@@ -59,6 +59,10 @@ import {
   getStrikethroughAmounts,
   getVariantDisplayPrices,
 } from '@/modules/lib/utility/visible-discount';
+import {
+  buildVariantMediaPreviewItems,
+  getMediaDedupeKey,
+} from '@/modules/lib/utility/product-media';
 
 const ProductDetails = ({ product }: { product: Product }) => {
   const [recentlyViewedVariants, setRecentlyViewedVariants] = useState<
@@ -252,10 +256,12 @@ const ProductDetails = ({ product }: { product: Product }) => {
     return Array.from(map.values()).concat(rest);
   }, [product?.variants, allPropertiesWithSize]);
 
-  const allImages =
-    uniqueVariantsFromProductImages?.flatMap((variant) =>
-      variant.media.map((media) => media.url)
-    ) ?? [];
+  const variantPreviewItems = useMemo(
+    () => buildVariantMediaPreviewItems(uniqueVariantsFromProductImages),
+    [uniqueVariantsFromProductImages]
+  );
+
+  const allImages = variantPreviewItems.map((item) => item.media.url);
   const uniqueImages = Array.from(new Set(allImages.filter(Boolean)));
 
   const catalogueImages =
@@ -886,13 +892,22 @@ const ProductDetails = ({ product }: { product: Product }) => {
           >
             {(uniqueVariantsFromProductImages?.length ?? 0) > 0 && (
               <>
-                {uniqueVariantsFromProductImages.slice(0, 4).map((vari) =>
-                  vari?.media?.map((mediaItem: any, idx) => (
+                {variantPreviewItems.slice(0, 4).map(({ variant: vari, media: mediaItem }, idx) => (
                     <div
                       key={`${vari.id}-${mediaItem.url}`}
                       onClick={() => {
                         const isSameVariant = selectedVariant?.id === vari.id;
-                        const isSameImage = selectedImage === mediaItem.url;
+                        const selectedVariantHasSameMedia = Boolean(
+                          getMediaDedupeKey(mediaItem) &&
+                          selectedVariant?.media?.some(
+                            (img) =>
+                              getMediaDedupeKey(img) ===
+                              getMediaDedupeKey(mediaItem)
+                          )
+                        );
+                        const isSameImage =
+                          selectedImage === mediaItem.url ||
+                          selectedVariantHasSameMedia;
 
                         if (isSameVariant && isSameImage) {
                           resetToDefault();
@@ -914,8 +929,13 @@ const ProductDetails = ({ product }: { product: Product }) => {
                             'object-fit w-50 h-50 radius-4 l:w-full l:h-full pointer l:radius-t-l-0 l:radius-b-l-0  l:radius-t-r-0 l:radius-b-r-0',
                             {
                               'border border-green border-2':
-                                selectedVariant?.media.find(
-                                  (img) => img.url === mediaItem.url
+                                Boolean(
+                                  getMediaDedupeKey(mediaItem) &&
+                                    selectedVariant?.media?.some(
+                                      (img) =>
+                                        getMediaDedupeKey(img) ===
+                                        getMediaDedupeKey(mediaItem)
+                                    )
                                 ),
                               'l:radius-t-r-16': idx === 1,
                               'l:radius-b-r-16': idx === 3,
@@ -930,8 +950,13 @@ const ProductDetails = ({ product }: { product: Product }) => {
                             'object-fit w-50 h-50 radius-4 l:w-full l:h-full pointer l:radius-t-l-0 l:radius-b-l-0  l:radius-t-r-0 l:radius-b-r-0',
                             {
                               'border border-green border-2':
-                                selectedVariant?.media.find(
-                                  (img) => img.url === mediaItem.url
+                                Boolean(
+                                  getMediaDedupeKey(mediaItem) &&
+                                    selectedVariant?.media?.some(
+                                      (img) =>
+                                        getMediaDedupeKey(img) ===
+                                        getMediaDedupeKey(mediaItem)
+                                    )
                                 ),
                               'l:radius-t-r-16': idx === 1,
                               'l:radius-b-r-16': idx === 3,
@@ -942,8 +967,7 @@ const ProductDetails = ({ product }: { product: Product }) => {
                         />
                       )}
                     </div>
-                  ))
-                )}
+                  ))}
               </>
             )}
           </div>

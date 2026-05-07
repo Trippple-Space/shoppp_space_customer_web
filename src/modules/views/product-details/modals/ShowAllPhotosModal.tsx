@@ -1,7 +1,11 @@
 import Modal from '@/modules/lib/components/modal/modal';
 import Image from '@/modules/lib/components/image/Image';
-import { ProductVariant } from '@/modules/lib/utility/types/product.interface';
+import {
+  ProductMedia,
+  ProductVariant,
+} from '@/modules/lib/utility/types/product.interface';
 import { cx } from '@/modules/lib/utility/utility';
+import { getMediaDedupeKey } from '@/modules/lib/utility/product-media';
 
 const ShowAllPhotosModal = ({
   isOpen,
@@ -20,6 +24,11 @@ const ShowAllPhotosModal = ({
     <Modal isOpen={isOpen} onClose={onClose}>
       <div className="l:w-500 h-70vh flex l:grid grid-2-cols-1fr l:grid-2-row-auto gap-6 p-20 overflow-auto no-scrollbar">
         {uniqueImages.map((image: string, idx: number) => {
+          const selectedMediaKey = getMediaDedupeKey(
+            productVariants
+              .flatMap((item: ProductVariant) => item.media ?? [])
+              .find((media: ProductMedia) => media.url === selectedImage)
+          );
           const variant: ProductVariant = productVariants.find(
             (variant: ProductVariant) =>
               variant.media.some((media) => media.url === image)
@@ -45,13 +54,24 @@ const ShowAllPhotosModal = ({
                   'object-fit w-50 h-50 radius-4 l:radius-0 l:w-full pointer l:h-full',
                   {
                     'border border-green border-2':
-                      selectedImage == mediaItem?.url,
+                      selectedImage == mediaItem?.url ||
+                      (!!selectedMediaKey &&
+                        selectedMediaKey === getMediaDedupeKey(mediaItem)),
                   }
                 )}
                 width={10000}
                 onClick={() => {
                   const isSameVariant = selectedVariant?.id === variant.id;
-                  const isSameImage = selectedImage === mediaItem?.url;
+                  const selectedVariantHasSameMedia = Boolean(
+                    mediaItem &&
+                      getMediaDedupeKey(mediaItem) &&
+                      selectedVariant?.media?.some(
+                        (media: ProductMedia) =>
+                          getMediaDedupeKey(media) === getMediaDedupeKey(mediaItem)
+                      )
+                  );
+                  const isSameImage =
+                    selectedImage === mediaItem?.url || selectedVariantHasSameMedia;
 
                   if (isSameVariant && isSameImage) {
                     resetToDefault();
