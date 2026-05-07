@@ -25,7 +25,6 @@ import { guestSession } from '../../utility/guest-session';
 import { CartItem } from '../../utility/types/cart.interface';
 import {
   buildVariantMediaPreviewItems,
-  getMediaDedupeKey,
 } from '../../utility/product-media';
 
 interface ProductDetailModalProp {
@@ -234,12 +233,10 @@ const ProductDetailModal = ({
 
   useEffect(() => {
     if (!selectedVariant?.media?.[0]?.url) return;
-    if (imageSource === 'preview') {
-      const isCurrentMediaInVariant = selectedVariant.media?.some(
-        (m: { url?: string }) => m.url === selectedImage
-      );
-      if (isCurrentMediaInVariant) return;
-    }
+    const isCurrentMediaInVariant = selectedVariant.media?.some(
+      (m: { url?: string }) => m.url === selectedImage
+    );
+    if (isCurrentMediaInVariant) return;
     setSelectedImage(selectedVariant.media[0].url);
     setImageSource('variant');
     setSelectedMediaType(selectedVariant.media[0]?.type);
@@ -362,6 +359,19 @@ const ProductDetailModal = ({
     () => buildVariantMediaPreviewItems(uniqueVariantsFromProductImages),
     [uniqueVariantsFromProductImages]
   );
+  const carouselPreviewItems = useMemo(() => {
+    const seen = new Set<string>();
+    return uniqueVariantsFromProductImages.flatMap((variant) =>
+      (variant?.media ?? [])
+        .filter((media) => {
+          const key = String(media?.url ?? '').trim();
+          if (!key || seen.has(key)) return false;
+          seen.add(key);
+          return true;
+        })
+        .map((media) => ({ variant, media }))
+    );
+  }, [uniqueVariantsFromProductImages]);
 
   const displayPrice = selectedVariant?.finalPrice || product?.finalPrice;
   const descriptionLength = product?.longDescription?.split(' ')?.length || 0;
@@ -422,13 +432,13 @@ const ProductDetailModal = ({
   };
 
   const handlePreviousImage = () => {
-    if (!variantPreviewItems?.length) return;
+    if (!carouselPreviewItems?.length) return;
 
-    let currentIndex = variantPreviewItems.findIndex(
+    let currentIndex = carouselPreviewItems.findIndex(
       (item) => item.media?.url === selectedImage
     );
     if (currentIndex === -1 && selectedVariant) {
-      currentIndex = variantPreviewItems.findIndex(
+      currentIndex = carouselPreviewItems.findIndex(
         (item) => item.variant?.id === selectedVariant?.id
       );
     }
@@ -436,9 +446,9 @@ const ProductDetailModal = ({
     const prevIndex =
       currentIndex >= 0 && currentIndex > 0
         ? currentIndex - 1
-        : variantPreviewItems.length - 1;
+        : carouselPreviewItems.length - 1;
 
-    const prevPreviewItem = variantPreviewItems[prevIndex];
+    const prevPreviewItem = carouselPreviewItems[prevIndex];
 
     if (!prevPreviewItem) return;
 
@@ -450,23 +460,23 @@ const ProductDetailModal = ({
   };
 
   const handleNextImage = () => {
-    if (!variantPreviewItems?.length) return;
+    if (!carouselPreviewItems?.length) return;
 
-    let currentIndex = variantPreviewItems.findIndex(
+    let currentIndex = carouselPreviewItems.findIndex(
       (item) => item.media?.url === selectedImage
     );
     if (currentIndex === -1 && selectedVariant) {
-      currentIndex = variantPreviewItems.findIndex(
+      currentIndex = carouselPreviewItems.findIndex(
         (item) => item.variant?.id === selectedVariant?.id
       );
     }
 
     const nextIndex =
       currentIndex >= 0
-        ? (currentIndex + 1) % variantPreviewItems.length
+        ? (currentIndex + 1) % carouselPreviewItems.length
         : 0;
 
-    const nextPreviewItem = variantPreviewItems[nextIndex];
+    const nextPreviewItem = carouselPreviewItems[nextIndex];
 
     if (!nextPreviewItem) return;
 
@@ -570,7 +580,7 @@ const ProductDetailModal = ({
                               position === 'homepage' &&
                               !variantSelectedImage && (
                                 <div
-                                  className={`absolute z-10 b-45p ${(product?.variants?.length || 0) > 1 ? 'bg-white color-black pointer' : 'color-#A9A9A9 bg-#D3D3D3 cursor-not-allowed'} l-20  p-15 radius-99 flex a-items-center j-content-center icon-box-shadow`}
+                                  className={`absolute z-10 b-45p ${carouselPreviewItems.length > 1 ? 'bg-white color-black pointer' : 'color-#A9A9A9 bg-#D3D3D3 cursor-not-allowed'} l-20  p-15 radius-99 flex a-items-center j-content-center icon-box-shadow`}
                                   onClick={handlePreviousImage}
                                 >
                                   <MdArrowBackIos className="w-full relative l-3" />
@@ -603,7 +613,7 @@ const ProductDetailModal = ({
                               position === 'homepage' &&
                               !variantSelectedImage && (
                                 <div
-                                  className={`absolute z-10 b-45p ${(product?.variants?.length || 0) > 1 ? 'bg-white color-black pointer' : 'color-#A9A9A9 bg-#D3D3D3 cursor-not-allowed'} r-20 p-15 radius-99 flex a-items-center j-content-center icon-box-shadow `}
+                                  className={`absolute z-10 b-45p ${carouselPreviewItems.length > 1 ? 'bg-white color-black pointer' : 'color-#A9A9A9 bg-#D3D3D3 cursor-not-allowed'} r-20 p-15 radius-99 flex a-items-center j-content-center icon-box-shadow `}
                                   onClick={handleNextImage}
                                 >
                                   <MdArrowForwardIos className="w-fit" />
@@ -620,20 +630,10 @@ const ProductDetailModal = ({
                                       onClick={() => {
                                         const isSameVariant =
                                           selectedVariant?.id === vari.id;
-                                        const selectedVariantHasSameMedia = Boolean(
-                                          getMediaDedupeKey(mediaItem) &&
-                                          selectedVariant?.media?.some(
-                                            (img) =>
-                                              getMediaDedupeKey(img) ===
-                                              getMediaDedupeKey(mediaItem)
-                                          )
-                                        );
                                         const isSameImage =
-                                          selectedImage === mediaItem.url ||
-                                          selectedVariantHasSameMedia;
+                                          selectedImage === mediaItem.url;
 
                                         if (isSameVariant && isSameImage) {
-                                          resetToDefault();
                                           return;
                                         }
 
@@ -658,16 +658,7 @@ const ProductDetailModal = ({
                                             }`,
                                             {
                                               'border border-green border-2':
-                                                Boolean(
-                                                  getMediaDedupeKey(mediaItem) &&
-                                                    selectedVariant?.media?.some(
-                                                      (img) =>
-                                                        getMediaDedupeKey(img) ===
-                                                        getMediaDedupeKey(
-                                                          mediaItem
-                                                        )
-                                                    )
-                                                ),
+                                                selectedImage === mediaItem.url,
                                             }
                                           )}
                                           width={10000}
@@ -683,16 +674,7 @@ const ProductDetailModal = ({
                                             }`,
                                             {
                                               'border border-green border-2':
-                                                Boolean(
-                                                  getMediaDedupeKey(mediaItem) &&
-                                                    selectedVariant?.media?.some(
-                                                      (img) =>
-                                                        getMediaDedupeKey(img) ===
-                                                        getMediaDedupeKey(
-                                                          mediaItem
-                                                        )
-                                                    )
-                                                ),
+                                                selectedImage === mediaItem.url,
                                             }
                                           )}
                                           hasLoader={true}
