@@ -625,6 +625,7 @@
 .bg-\#111 { background-color: #111; } 
 .border-\#111 { border-color: #111; } 
 .ml-8 { margin-left: 8px; } 
+.px-8 { padding-left: 8px; padding-right: 8px; } 
 .text-11 { font-size: 11px; } 
 .w-46 { width: 46px; } 
 .bg-\#fafafa { background-color: #fafafa; } 
@@ -669,7 +670,6 @@
 .bg-\#FFF7E6 { background-color: #FFF7E6; } 
 .border-\#FFD699 { border-color: #FFD699; } 
 .color-\#8A5A00 { color: #8A5A00; } 
-.px-8 { padding-left: 8px; padding-right: 8px; } 
 .bg-\#FFD699 { background-color: #FFD699; } 
 .color-\#A66A00 { color: #A66A00; } 
 .w-94p { width: 94%; } 

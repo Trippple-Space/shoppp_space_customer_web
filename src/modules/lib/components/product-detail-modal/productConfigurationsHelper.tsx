@@ -71,6 +71,21 @@ export const renderCustomerField = (
   };
 
   if (vf.type === 'string' || vf.type === 'number') {
+    const isNotesField = /note/i.test(
+      `${field?.keyFormat?.fieldName ?? ''} ${field?.keyFormat?.defaultValue ?? ''}`
+    );
+    if (isNotesField && vf.type === 'string') {
+      return (
+        <textarea
+          placeholder={vf.placeholder || ''}
+          required={vf.required}
+          value={configurationValues[fieldKey] ?? ''}
+          className="mt-2 min-h-90 w-full radius-6 border border-#00000014 bg-#FAFAFA px-8 py-8 text-12 text-#000000 resize-none"
+          onChange={(e) => handleConfigChange(fieldKey, e.target.value)}
+          style={{ minHeight: '90px' }}
+        />
+      );
+    }
     return (
       <input
         type={vf.type === 'number' ? 'number' : 'text'}
