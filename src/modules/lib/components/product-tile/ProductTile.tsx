@@ -28,7 +28,10 @@ import {
 } from '../../utility/hooks/use-recently-viewed';
 import { useProductTileOrders } from '../../utility/hooks/use-product-tile-orders';
 import { LuChevronRight } from 'react-icons/lu';
-import { buildUserConfigurations } from '../product-detail-modal/productConfigurationsHelper';
+import {
+  buildUserConfigurations,
+  isCustomerInputForField,
+} from '../product-detail-modal/productConfigurationsHelper';
 import ProductCatalogueDropdown from './ProductCatalogueDropdown';
 import { guestSession } from '../../utility/guest-session';
 import { CartItem } from '../../utility/types/cart.interface';
@@ -437,9 +440,7 @@ const ProductTile: FC<IProductTile> = ({
   const hasCustomerConfiguration = useMemo(() => {
     return (
       selectedVariant?.configurationRecords?.some((record: any) =>
-        record.customerDataForm?.some(
-          (f: any) => f.valueFormat?.targetUserType === 'customer'
-        )
+        record.customerDataForm?.some((f: any) => isCustomerInputForField(f))
       ) ?? false
     );
   }, [selectedVariant?.id]);

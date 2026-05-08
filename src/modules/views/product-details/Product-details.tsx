@@ -50,6 +50,8 @@ import ReviewModal from './modals/ReviewModal';
 import {
   buildUserConfigurations,
   DisplayProductConfigurations,
+  hasPendingConfigurationImageUploads,
+  isCustomerInputForField,
   isEmptyValue,
 } from '@/modules/lib/components/product-detail-modal/productConfigurationsHelper';
 import { CatalogueMediaItem } from '@/modules/lib/components/product-tile/ProductCatalogueDropdown';
@@ -637,9 +639,7 @@ const ProductDetails = ({ product }: { product: Product }) => {
 
     return (selectedVariant.configurationRecords ?? []).flatMap((record: any) =>
       (record.customerDataForm ?? []).filter(
-        (f: any) =>
-          f.valueFormat?.targetUserType === 'customer' &&
-          f.valueFormat?.required
+        (f: any) => isCustomerInputForField(f) && f.valueFormat?.required
       )
     );
   }, [selectedVariant]);
@@ -656,13 +656,19 @@ const ProductDetails = ({ product }: { product: Product }) => {
         );
       }
 
+      if (field.valueFormat.type === 'arrayOfImages') {
+        if (!value) return false;
+        if (Array.isArray(value)) return value.length > 0;
+        return false;
+      }
+
       return !isEmptyValue(value);
     });
   }, [getRequiredCustomerFields, configurationValues]);
 
-  const userConfigurations = buildUserConfigurations(
-    configurationValues,
-    configurationRecords
+  
+  const hasPendingImageUploads = hasPendingConfigurationImageUploads(
+    configurationValues
   );
 
   const addToCartBtn = () => {
@@ -712,11 +718,24 @@ const ProductDetails = ({ product }: { product: Product }) => {
             </div>
           )}
 
+        {hasPendingImageUploads && (
+          <p className="text-12 weight-500 color-#A66A00">
+            Tap “Upload” under each attached image to upload it before adding
+            to cart.
+          </p>
+        )}
+
         {!selectedVariantItemInCart ? (
           <button
             className={classNames(
-              `text-white border-none l:px-24 l:py-12 py-15 w-100p radius-6 ${!selectedVariant || isOutOfStock || !areRequiredCustomerFieldsFilled ? 'bg-gray-300 cursor-not-allowed' : 'bg-#0B9378 hover:bg-darkgreen pointer'}`
+              `text-white border-none l:px-24 l:py-12 py-15 w-100p radius-6 ${!selectedVariant || isOutOfStock || !areRequiredCustomerFieldsFilled || hasPendingImageUploads ? 'bg-gray-300 cursor-not-allowed' : 'bg-#0B9378 hover:bg-darkgreen pointer'}`
             )}
+            disabled={
+              !selectedVariant ||
+              isOutOfStock ||
+              !areRequiredCustomerFieldsFilled ||
+              hasPendingImageUploads
+            }
             onClick={() => {
               if (orders.length == 0 && cart.cartItems.length == 0) {
                 handleFlyToCart(imgRef);
@@ -726,10 +745,14 @@ const ProductDetails = ({ product }: { product: Product }) => {
                 selectedVariant.status !== 'OUT_OF_STOCK' &&
                 areRequiredCustomerFieldsFilled
               ) {
+                const configs = buildUserConfigurations(
+                  configurationValues,
+                  configurationRecords
+                );
                 addToCart(
                   selectedVariant?.id ?? 0,
                   selectedVariant?.minPurchaseQuantity || 1,
-                  userConfigurations,
+                  configs,
                   selectedVariant
                     ? {
                         ...selectedVariant,
@@ -761,8 +784,15 @@ const ProductDetails = ({ product }: { product: Product }) => {
           </button>
         ) : (
           <QuantitySelector
-            decrement={() => decrement(selectedVariantItemInCart)}
-            increment={() => increment(selectedVariantItemInCart)}
+            disabled={hasPendingImageUploads}
+            decrement={() => {
+              if (hasPendingImageUploads) return;
+              decrement(selectedVariantItemInCart);
+            }}
+            increment={() => {
+              if (hasPendingImageUploads) return;
+              increment(selectedVariantItemInCart);
+            }}
             cartItem={selectedVariantItemInCart}
           />
         )}

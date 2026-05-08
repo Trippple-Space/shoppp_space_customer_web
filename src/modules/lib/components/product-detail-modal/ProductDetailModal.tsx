@@ -19,13 +19,13 @@ import {
   buildUserConfigurations,
   DisplayProductConfigurations,
   isEmptyValue,
+  isCustomerInputForField,
+  hasPendingConfigurationImageUploads,
 } from './productConfigurationsHelper';
 import { createPortal } from 'react-dom';
 import { guestSession } from '../../utility/guest-session';
 import { CartItem } from '../../utility/types/cart.interface';
-import {
-  buildVariantMediaPreviewItems,
-} from '../../utility/product-media';
+import { buildVariantMediaPreviewItems } from '../../utility/product-media';
 
 interface ProductDetailModalProp {
   openSingleProductModal: boolean;
@@ -501,9 +501,7 @@ const ProductDetailModal = ({
 
     return (selectedVariant.configurationRecords ?? []).flatMap((record: any) =>
       (record.customerDataForm ?? []).filter(
-        (f: any) =>
-          f.valueFormat?.targetUserType === 'customer' &&
-          f.valueFormat?.required
+        (f: any) => isCustomerInputForField(f) && f.valueFormat?.required
       )
     );
   }, [selectedVariant]);
@@ -520,6 +518,12 @@ const ProductDetailModal = ({
         );
       }
 
+      if (field.valueFormat.type === 'arrayOfImages') {
+        if (!value) return false;
+        if (Array.isArray(value)) return value.length > 0;
+        return false;
+      }
+
       return !isEmptyValue(value);
     });
   }, [getRequiredCustomerFields, configurationValues]);
@@ -527,6 +531,10 @@ const ProductDetailModal = ({
   const userConfigurations = buildUserConfigurations(
     configurationValues,
     configurationRecords
+  );
+
+  const hasPendingImageUploads = hasPendingConfigurationImageUploads(
+    configurationValues
   );
 
   if (!openSingleProductModal) return null;
@@ -850,6 +858,13 @@ const ProductDetailModal = ({
                           </div>
                         )}
 
+                        {hasPendingImageUploads && (
+                          <p className="text-11 weight-500 color-#A66A00 mt-10">
+                            Tap “Upload” under each attached image to upload it
+                            before adding to cart.
+                          </p>
+                        )}
+
                         <div className="grid mt-20 mb-10 gap-10">
                           {!selectedVariantItemInCart ? (
                             <button
@@ -867,7 +882,8 @@ const ProductDetailModal = ({
                               disabled={
                                 !selectedVariant ||
                                 selectedVariant.status === 'OUT_OF_STOCK' ||
-                                !areRequiredCustomerFieldsFilled
+                                !areRequiredCustomerFieldsFilled ||
+                                hasPendingImageUploads
                               }
                               onClick={() => {
                                 if (!localStorage.getItem('seenMiniCart')) {
@@ -883,15 +899,20 @@ const ProductDetailModal = ({
                                   selectedVariant &&
                                   selectedVariant.status !== 'OUT_OF_STOCK'
                                 ) {
+                                  const configs = buildUserConfigurations(
+                                    configurationValues,
+                                    configurationRecords
+                                  );
                                   addToCart(
                                     selectedVariant?.id ?? '0',
                                     selectedVariant?.minPurchaseQuantity || 1,
-                                    userConfigurations,
+                                    configs,
                                     selectedVariant
                                       ? {
                                           ...selectedVariant,
                                           product:
-                                            selectedVariant.product ?? product,
+                                            selectedVariant.product ??
+                                            product,
                                         }
                                       : undefined
                                   );
@@ -913,18 +934,21 @@ const ProductDetailModal = ({
                           ) : (
                             <div className="mb-10">
                               <QuantitySelector
-                                decrement={() =>
+                                disabled={hasPendingImageUploads}
+                                decrement={() => {
+                                  if (hasPendingImageUploads) return;
                                   decrement(
                                     selectedVariantItemInCart,
                                     userConfigurations
-                                  )
-                                }
-                                increment={() =>
+                                  );
+                                }}
+                                increment={() => {
+                                  if (hasPendingImageUploads) return;
                                   increment(
                                     selectedVariantItemInCart,
                                     userConfigurations
-                                  )
-                                }
+                                  );
+                                }}
                                 cartItem={selectedVariantItemInCart}
                               />
                             </div>

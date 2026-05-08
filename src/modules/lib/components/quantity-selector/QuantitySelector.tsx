@@ -9,12 +9,14 @@ export interface QuantitySelectorProps {
   cartItem: CartItem
   increment: () => void
   decrement: () => void
+  disabled?: boolean
 }
 
 const QuantitySelector: FC<QuantitySelectorProps> = ({
   cartItem,
   increment,
-  decrement
+  decrement,
+  disabled = false,
 }) => {
   return (
     <div className='relative mb-10'>
@@ -23,8 +25,9 @@ const QuantitySelector: FC<QuantitySelectorProps> = ({
       </div>
       <div className='text-black bg-rgba(245,245,245,0.9) flex a-items-center relative w-fit s:p-4 p-3 gap-10 radius-999'>
         <button
-          onClick={() => decrement()}
-          className='bg-#FACE33 active:bg-#e8b915! border-none shadow-0-4-8-0-#00000033 hover:shadow-0-5-8-0-#00000033 hover:scale-1.03 g|transition:0.5s g|will-change:transform focus:outline-none pointer s:p-8 p-6 flex a-items-center j-items-center gap-10 round'
+          onClick={() => { if (!disabled) decrement() }}
+          disabled={disabled}
+          className='bg-#FACE33 active:bg-#e8b915! border-none shadow-0-4-8-0-#00000033 hover:shadow-0-5-8-0-#00000033 hover:scale-1.03 g|transition:0.5s g|will-change:transform focus:outline-none pointer s:p-8 p-6 flex a-items-center j-items-center gap-10 round disabled:opacity-60 disabled:cursor-not-allowed'
           data-action='minus'
           type='button'
         >
@@ -38,8 +41,9 @@ const QuantitySelector: FC<QuantitySelectorProps> = ({
         <p className='w-fit inline-block text-center weight-500 bg-transparent s:text-18 text-16 @lo:border-none inline-block h-full focus:outline-none no-arrows'>{cartItem.quantity}</p>
 
         <button
-          onClick={() => increment()}
-          className='bg-#FACE33 active:bg-#e8b915! border-none shadow-0-4-8-0-#00000033 hover:shadow-0-5-8-0-#00000033 hover:scale-1.03 g|transition:0.5s g|will-change:transform focus:outline-none pointer s:p-8 p-6 flex a-items-center j-items-center gap-10 round'
+          onClick={() => { if (!disabled) increment() }}
+          disabled={disabled}
+          className='bg-#FACE33 active:bg-#e8b915! border-none shadow-0-4-8-0-#00000033 hover:shadow-0-5-8-0-#00000033 hover:scale-1.03 g|transition:0.5s g|will-change:transform focus:outline-none pointer s:p-8 p-6 flex a-items-center j-items-center gap-10 round disabled:opacity-60 disabled:cursor-not-allowed'
           data-action='add'
           type='button'
         >
