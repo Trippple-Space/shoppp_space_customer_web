@@ -19,10 +19,13 @@ import {
   buildUserConfigurations,
   DisplayProductConfigurations,
   isEmptyValue,
+  isCustomerInputForField,
+  hasPendingConfigurationImageUploads,
 } from './productConfigurationsHelper';
 import { createPortal } from 'react-dom';
 import { guestSession } from '../../utility/guest-session';
 import { CartItem } from '../../utility/types/cart.interface';
+import { buildVariantMediaPreviewItems } from '../../utility/product-media';
 
 interface ProductDetailModalProp {
   openSingleProductModal: boolean;
@@ -230,12 +233,10 @@ const ProductDetailModal = ({
 
   useEffect(() => {
     if (!selectedVariant?.media?.[0]?.url) return;
-    if (imageSource === 'preview') {
-      const isCurrentMediaInVariant = selectedVariant.media?.some(
-        (m: { url?: string }) => m.url === selectedImage
-      );
-      if (isCurrentMediaInVariant) return;
-    }
+    const isCurrentMediaInVariant = selectedVariant.media?.some(
+      (m: { url?: string }) => m.url === selectedImage
+    );
+    if (isCurrentMediaInVariant) return;
     setSelectedImage(selectedVariant.media[0].url);
     setImageSource('variant');
     setSelectedMediaType(selectedVariant.media[0]?.type);
@@ -354,6 +355,24 @@ const ProductDetailModal = ({
     return Array.from(map.values()).concat(rest);
   }, [variantSelectedImage, variant, product?.variants, allPropertiesWithSize]);
 
+  const variantPreviewItems = useMemo(
+    () => buildVariantMediaPreviewItems(uniqueVariantsFromProductImages),
+    [uniqueVariantsFromProductImages]
+  );
+  const carouselPreviewItems = useMemo(() => {
+    const seen = new Set<string>();
+    return uniqueVariantsFromProductImages.flatMap((variant) =>
+      (variant?.media ?? [])
+        .filter((media) => {
+          const key = String(media?.url ?? '').trim();
+          if (!key || seen.has(key)) return false;
+          seen.add(key);
+          return true;
+        })
+        .map((media) => ({ variant, media }))
+    );
+  }, [uniqueVariantsFromProductImages]);
+
   const displayPrice = selectedVariant?.finalPrice || product?.finalPrice;
   const descriptionLength = product?.longDescription?.split(' ')?.length || 0;
   const maxDisplayDescLength = 20;
@@ -413,60 +432,58 @@ const ProductDetailModal = ({
   };
 
   const handlePreviousImage = () => {
-    if (!uniqueVariantsFromProductImages?.length) return;
+    if (!carouselPreviewItems?.length) return;
 
-    let currentIndex = uniqueVariantsFromProductImages.findIndex((v) =>
-      v?.media?.some((m) => m.url === selectedImage)
+    let currentIndex = carouselPreviewItems.findIndex(
+      (item) => item.media?.url === selectedImage
     );
     if (currentIndex === -1 && selectedVariant) {
-      currentIndex = uniqueVariantsFromProductImages.findIndex(
-        (v) => v?.id === selectedVariant?.id
+      currentIndex = carouselPreviewItems.findIndex(
+        (item) => item.variant?.id === selectedVariant?.id
       );
     }
 
     const prevIndex =
       currentIndex >= 0 && currentIndex > 0
         ? currentIndex - 1
-        : uniqueVariantsFromProductImages.length - 1;
+        : carouselPreviewItems.length - 1;
 
-    const prevVariant = uniqueVariantsFromProductImages[prevIndex];
+    const prevPreviewItem = carouselPreviewItems[prevIndex];
 
-    if (!prevVariant) return;
+    if (!prevPreviewItem) return;
 
-    const firstMedia = prevVariant.media?.[0];
-    setForcedVariantId(prevVariant.id);
-    setActiveFilters(buildFiltersFromVariant(prevVariant));
-    setSelectedImage(firstMedia?.url);
-    setSelectedMediaType(firstMedia?.type);
+    setForcedVariantId(prevPreviewItem.variant.id);
+    setActiveFilters(buildFiltersFromVariant(prevPreviewItem.variant));
+    setSelectedImage(prevPreviewItem.media?.url);
+    setSelectedMediaType(prevPreviewItem.media?.type);
     setImageSource('variant');
   };
 
   const handleNextImage = () => {
-    if (!uniqueVariantsFromProductImages?.length) return;
+    if (!carouselPreviewItems?.length) return;
 
-    let currentIndex = uniqueVariantsFromProductImages.findIndex((v) =>
-      v?.media?.some((m) => m.url === selectedImage)
+    let currentIndex = carouselPreviewItems.findIndex(
+      (item) => item.media?.url === selectedImage
     );
     if (currentIndex === -1 && selectedVariant) {
-      currentIndex = uniqueVariantsFromProductImages.findIndex(
-        (v) => v?.id === selectedVariant?.id
+      currentIndex = carouselPreviewItems.findIndex(
+        (item) => item.variant?.id === selectedVariant?.id
       );
     }
 
     const nextIndex =
       currentIndex >= 0
-        ? (currentIndex + 1) % uniqueVariantsFromProductImages.length
+        ? (currentIndex + 1) % carouselPreviewItems.length
         : 0;
 
-    const nextVariant = uniqueVariantsFromProductImages[nextIndex];
+    const nextPreviewItem = carouselPreviewItems[nextIndex];
 
-    if (!nextVariant) return;
+    if (!nextPreviewItem) return;
 
-    const firstMedia = nextVariant.media?.[0];
-    setForcedVariantId(nextVariant.id);
-    setActiveFilters(buildFiltersFromVariant(nextVariant));
-    setSelectedImage(firstMedia?.url);
-    setSelectedMediaType(firstMedia?.type);
+    setForcedVariantId(nextPreviewItem.variant.id);
+    setActiveFilters(buildFiltersFromVariant(nextPreviewItem.variant));
+    setSelectedImage(nextPreviewItem.media?.url);
+    setSelectedMediaType(nextPreviewItem.media?.type);
     setImageSource('variant');
   };
 
@@ -484,9 +501,7 @@ const ProductDetailModal = ({
 
     return (selectedVariant.configurationRecords ?? []).flatMap((record: any) =>
       (record.customerDataForm ?? []).filter(
-        (f: any) =>
-          f.valueFormat?.targetUserType === 'customer' &&
-          f.valueFormat?.required
+        (f: any) => isCustomerInputForField(f) && f.valueFormat?.required
       )
     );
   }, [selectedVariant]);
@@ -503,6 +518,12 @@ const ProductDetailModal = ({
         );
       }
 
+      if (field.valueFormat.type === 'arrayOfImages') {
+        if (!value) return false;
+        if (Array.isArray(value)) return value.length > 0;
+        return false;
+      }
+
       return !isEmptyValue(value);
     });
   }, [getRequiredCustomerFields, configurationValues]);
@@ -510,6 +531,10 @@ const ProductDetailModal = ({
   const userConfigurations = buildUserConfigurations(
     configurationValues,
     configurationRecords
+  );
+
+  const hasPendingImageUploads = hasPendingConfigurationImageUploads(
+    configurationValues
   );
 
   if (!openSingleProductModal) return null;
@@ -563,7 +588,7 @@ const ProductDetailModal = ({
                               position === 'homepage' &&
                               !variantSelectedImage && (
                                 <div
-                                  className={`absolute z-10 b-45p ${(product?.variants?.length || 0) > 1 ? 'bg-white color-black pointer' : 'color-#A9A9A9 bg-#D3D3D3 cursor-not-allowed'} l-20  p-15 radius-99 flex a-items-center j-content-center icon-box-shadow`}
+                                  className={`absolute z-10 b-45p ${carouselPreviewItems.length > 1 ? 'bg-white color-black pointer' : 'color-#A9A9A9 bg-#D3D3D3 cursor-not-allowed'} l-20  p-15 radius-99 flex a-items-center j-content-center icon-box-shadow`}
                                   onClick={handlePreviousImage}
                                 >
                                   <MdArrowBackIos className="w-full relative l-3" />
@@ -596,7 +621,7 @@ const ProductDetailModal = ({
                               position === 'homepage' &&
                               !variantSelectedImage && (
                                 <div
-                                  className={`absolute z-10 b-45p ${(product?.variants?.length || 0) > 1 ? 'bg-white color-black pointer' : 'color-#A9A9A9 bg-#D3D3D3 cursor-not-allowed'} r-20 p-15 radius-99 flex a-items-center j-content-center icon-box-shadow `}
+                                  className={`absolute z-10 b-45p ${carouselPreviewItems.length > 1 ? 'bg-white color-black pointer' : 'color-#A9A9A9 bg-#D3D3D3 cursor-not-allowed'} r-20 p-15 radius-99 flex a-items-center j-content-center icon-box-shadow `}
                                   onClick={handleNextImage}
                                 >
                                   <MdArrowForwardIos className="w-fit" />
@@ -607,8 +632,7 @@ const ProductDetailModal = ({
                             (uniqueVariantsFromProductImages?.length ?? 0) >
                             0 && (
                               <div className="flex gap-10 py-5 overflow-x-auto a-items-center no-scrollbar w-full">
-                                {uniqueVariantsFromProductImages.map((vari) =>
-                                  vari?.media?.map((mediaItem: any) => (
+                                {variantPreviewItems.map(({ variant: vari, media: mediaItem }) => (
                                     <div
                                       key={`${vari.id}-${mediaItem.url}`}
                                       onClick={() => {
@@ -618,7 +642,6 @@ const ProductDetailModal = ({
                                           selectedImage === mediaItem.url;
 
                                         if (isSameVariant && isSameImage) {
-                                          resetToDefault();
                                           return;
                                         }
 
@@ -643,10 +666,7 @@ const ProductDetailModal = ({
                                             }`,
                                             {
                                               'border border-green border-2':
-                                                selectedVariant?.media.find(
-                                                  (img) =>
-                                                    img.url === mediaItem.url
-                                                ),
+                                                selectedImage === mediaItem.url,
                                             }
                                           )}
                                           width={10000}
@@ -662,18 +682,14 @@ const ProductDetailModal = ({
                                             }`,
                                             {
                                               'border border-green border-2':
-                                                selectedVariant?.media.find(
-                                                  (img) =>
-                                                    img.url === mediaItem.url
-                                                ),
+                                                selectedImage === mediaItem.url,
                                             }
                                           )}
                                           hasLoader={true}
                                         />
                                       )}
                                     </div>
-                                  ))
-                                )}
+                                  ))}
                               </div>
                             )}
                         </div>
@@ -842,6 +858,13 @@ const ProductDetailModal = ({
                           </div>
                         )}
 
+                        {hasPendingImageUploads && (
+                          <p className="text-11 weight-500 color-#A66A00 mt-10">
+                            Tap “Upload” under each attached image to upload it
+                            before adding to cart.
+                          </p>
+                        )}
+
                         <div className="grid mt-20 mb-10 gap-10">
                           {!selectedVariantItemInCart ? (
                             <button
@@ -859,7 +882,8 @@ const ProductDetailModal = ({
                               disabled={
                                 !selectedVariant ||
                                 selectedVariant.status === 'OUT_OF_STOCK' ||
-                                !areRequiredCustomerFieldsFilled
+                                !areRequiredCustomerFieldsFilled ||
+                                hasPendingImageUploads
                               }
                               onClick={() => {
                                 if (!localStorage.getItem('seenMiniCart')) {
@@ -875,15 +899,20 @@ const ProductDetailModal = ({
                                   selectedVariant &&
                                   selectedVariant.status !== 'OUT_OF_STOCK'
                                 ) {
+                                  const configs = buildUserConfigurations(
+                                    configurationValues,
+                                    configurationRecords
+                                  );
                                   addToCart(
                                     selectedVariant?.id ?? '0',
                                     selectedVariant?.minPurchaseQuantity || 1,
-                                    userConfigurations,
+                                    configs,
                                     selectedVariant
                                       ? {
                                           ...selectedVariant,
                                           product:
-                                            selectedVariant.product ?? product,
+                                            selectedVariant.product ??
+                                            product,
                                         }
                                       : undefined
                                   );
@@ -905,18 +934,21 @@ const ProductDetailModal = ({
                           ) : (
                             <div className="mb-10">
                               <QuantitySelector
-                                decrement={() =>
+                                disabled={hasPendingImageUploads}
+                                decrement={() => {
+                                  if (hasPendingImageUploads) return;
                                   decrement(
                                     selectedVariantItemInCart,
                                     userConfigurations
-                                  )
-                                }
-                                increment={() =>
+                                  );
+                                }}
+                                increment={() => {
+                                  if (hasPendingImageUploads) return;
                                   increment(
                                     selectedVariantItemInCart,
                                     userConfigurations
-                                  )
-                                }
+                                  );
+                                }}
                                 cartItem={selectedVariantItemInCart}
                               />
                             </div>

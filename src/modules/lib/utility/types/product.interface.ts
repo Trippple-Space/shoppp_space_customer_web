@@ -112,6 +112,12 @@ export interface ProductMedia {
   type: "image" | "video";
   description?: string;
   caption?: string;
+  uploadUrl?: string;
+  uploadURL?: string;
+  upload_url?: string;
+  sharedUploadUrl?: string;
+  sourceUrl?: string;
+  originalUrl?: string;
 }
 
 export interface ProductVariant {

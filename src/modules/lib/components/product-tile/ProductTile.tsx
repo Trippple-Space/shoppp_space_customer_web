@@ -28,7 +28,10 @@ import {
 } from '../../utility/hooks/use-recently-viewed';
 import { useProductTileOrders } from '../../utility/hooks/use-product-tile-orders';
 import { LuChevronRight } from 'react-icons/lu';
-import { buildUserConfigurations } from '../product-detail-modal/productConfigurationsHelper';
+import {
+  buildUserConfigurations,
+  isCustomerInputForField,
+} from '../product-detail-modal/productConfigurationsHelper';
 import ProductCatalogueDropdown from './ProductCatalogueDropdown';
 import { guestSession } from '../../utility/guest-session';
 import { CartItem } from '../../utility/types/cart.interface';
@@ -37,6 +40,7 @@ import {
   getStrikethroughAmounts,
   getVariantDisplayPrices,
 } from '../../utility/visible-discount';
+import { buildVariantMediaPreviewItems } from '../../utility/product-media';
 
 interface IProductTile {
   product: Product;
@@ -156,6 +160,11 @@ const ProductTile: FC<IProductTile> = ({
 
     return Array.from(map.values()).concat(rest);
   }, [product?.variants, allPropertiesWithSize]);
+
+  const variantPreviewItems = useMemo(
+    () => buildVariantMediaPreviewItems(uniqueVariantsFromProductImages),
+    [uniqueVariantsFromProductImages]
+  );
 
   const { orders, fetching: orderFetching } = useProductTileOrders({
     filters: { status: { In: `${onGoingOrderStatusQuery},DELIVERED` } },
@@ -431,9 +440,7 @@ const ProductTile: FC<IProductTile> = ({
   const hasCustomerConfiguration = useMemo(() => {
     return (
       selectedVariant?.configurationRecords?.some((record: any) =>
-        record.customerDataForm?.some(
-          (f: any) => f.valueFormat?.targetUserType === 'customer'
-        )
+        record.customerDataForm?.some((f: any) => isCustomerInputForField(f))
       ) ?? false
     );
   }, [selectedVariant?.id]);
@@ -860,10 +867,9 @@ const ProductTile: FC<IProductTile> = ({
           className="l:mt-16 mt-14 l:h-51.2 h-45 flex a-items-center md:gap-6 gap-4 w-full overflow-auto whitespace-nowrap no-scrollbar"
         >
           <ProductCatalogueDropdown productCatalogues={product?.productCatalogues} />
-          {uniqueVariantsFromProductImages.map((variant: any) =>
-            variant?.media?.map((mediaItem: any, i: number) => (
+          {variantPreviewItems.map(({ variant, media: mediaItem }, i: number) => (
               <div
-                key={mediaItem + i}
+                key={`${variant.id}-${mediaItem?.url}-${i}`}
                 className="l:w-35.2 l:min-w-35.2 l:h-35.2 w-31 min-w-31 h-31 pointer md:radius-4 radius-3 a-self-center relative"
               >
                 {mediaItem?.type === 'image' ? (
@@ -910,7 +916,7 @@ const ProductTile: FC<IProductTile> = ({
                 )}
               </div>
             ))
-          )}
+          }
         </div>
       </div>
       <div

@@ -50,6 +50,8 @@ import ReviewModal from './modals/ReviewModal';
 import {
   buildUserConfigurations,
   DisplayProductConfigurations,
+  hasPendingConfigurationImageUploads,
+  isCustomerInputForField,
   isEmptyValue,
 } from '@/modules/lib/components/product-detail-modal/productConfigurationsHelper';
 import { CatalogueMediaItem } from '@/modules/lib/components/product-tile/ProductCatalogueDropdown';
@@ -59,6 +61,10 @@ import {
   getStrikethroughAmounts,
   getVariantDisplayPrices,
 } from '@/modules/lib/utility/visible-discount';
+import {
+  buildVariantMediaPreviewItems,
+  getMediaDedupeKey,
+} from '@/modules/lib/utility/product-media';
 
 const ProductDetails = ({ product }: { product: Product }) => {
   const [recentlyViewedVariants, setRecentlyViewedVariants] = useState<
@@ -252,10 +258,12 @@ const ProductDetails = ({ product }: { product: Product }) => {
     return Array.from(map.values()).concat(rest);
   }, [product?.variants, allPropertiesWithSize]);
 
-  const allImages =
-    uniqueVariantsFromProductImages?.flatMap((variant) =>
-      variant.media.map((media) => media.url)
-    ) ?? [];
+  const variantPreviewItems = useMemo(
+    () => buildVariantMediaPreviewItems(uniqueVariantsFromProductImages),
+    [uniqueVariantsFromProductImages]
+  );
+
+  const allImages = variantPreviewItems.map((item) => item.media.url);
   const uniqueImages = Array.from(new Set(allImages.filter(Boolean)));
 
   const catalogueImages =
@@ -631,9 +639,7 @@ const ProductDetails = ({ product }: { product: Product }) => {
 
     return (selectedVariant.configurationRecords ?? []).flatMap((record: any) =>
       (record.customerDataForm ?? []).filter(
-        (f: any) =>
-          f.valueFormat?.targetUserType === 'customer' &&
-          f.valueFormat?.required
+        (f: any) => isCustomerInputForField(f) && f.valueFormat?.required
       )
     );
   }, [selectedVariant]);
@@ -650,13 +656,19 @@ const ProductDetails = ({ product }: { product: Product }) => {
         );
       }
 
+      if (field.valueFormat.type === 'arrayOfImages') {
+        if (!value) return false;
+        if (Array.isArray(value)) return value.length > 0;
+        return false;
+      }
+
       return !isEmptyValue(value);
     });
   }, [getRequiredCustomerFields, configurationValues]);
 
-  const userConfigurations = buildUserConfigurations(
-    configurationValues,
-    configurationRecords
+  
+  const hasPendingImageUploads = hasPendingConfigurationImageUploads(
+    configurationValues
   );
 
   const addToCartBtn = () => {
@@ -706,11 +718,24 @@ const ProductDetails = ({ product }: { product: Product }) => {
             </div>
           )}
 
+        {hasPendingImageUploads && (
+          <p className="text-12 weight-500 color-#A66A00">
+            Tap “Upload” under each attached image to upload it before adding
+            to cart.
+          </p>
+        )}
+
         {!selectedVariantItemInCart ? (
           <button
             className={classNames(
-              `text-white border-none l:px-24 l:py-12 py-15 w-100p radius-6 ${!selectedVariant || isOutOfStock || !areRequiredCustomerFieldsFilled ? 'bg-gray-300 cursor-not-allowed' : 'bg-#0B9378 hover:bg-darkgreen pointer'}`
+              `text-white border-none l:px-24 l:py-12 py-15 w-100p radius-6 ${!selectedVariant || isOutOfStock || !areRequiredCustomerFieldsFilled || hasPendingImageUploads ? 'bg-gray-300 cursor-not-allowed' : 'bg-#0B9378 hover:bg-darkgreen pointer'}`
             )}
+            disabled={
+              !selectedVariant ||
+              isOutOfStock ||
+              !areRequiredCustomerFieldsFilled ||
+              hasPendingImageUploads
+            }
             onClick={() => {
               if (orders.length == 0 && cart.cartItems.length == 0) {
                 handleFlyToCart(imgRef);
@@ -720,10 +745,14 @@ const ProductDetails = ({ product }: { product: Product }) => {
                 selectedVariant.status !== 'OUT_OF_STOCK' &&
                 areRequiredCustomerFieldsFilled
               ) {
+                const configs = buildUserConfigurations(
+                  configurationValues,
+                  configurationRecords
+                );
                 addToCart(
                   selectedVariant?.id ?? 0,
                   selectedVariant?.minPurchaseQuantity || 1,
-                  userConfigurations,
+                  configs,
                   selectedVariant
                     ? {
                         ...selectedVariant,
@@ -755,8 +784,15 @@ const ProductDetails = ({ product }: { product: Product }) => {
           </button>
         ) : (
           <QuantitySelector
-            decrement={() => decrement(selectedVariantItemInCart)}
-            increment={() => increment(selectedVariantItemInCart)}
+            disabled={hasPendingImageUploads}
+            decrement={() => {
+              if (hasPendingImageUploads) return;
+              decrement(selectedVariantItemInCart);
+            }}
+            increment={() => {
+              if (hasPendingImageUploads) return;
+              increment(selectedVariantItemInCart);
+            }}
             cartItem={selectedVariantItemInCart}
           />
         )}
@@ -886,13 +922,22 @@ const ProductDetails = ({ product }: { product: Product }) => {
           >
             {(uniqueVariantsFromProductImages?.length ?? 0) > 0 && (
               <>
-                {uniqueVariantsFromProductImages.slice(0, 4).map((vari) =>
-                  vari?.media?.map((mediaItem: any, idx) => (
+                {variantPreviewItems.slice(0, 4).map(({ variant: vari, media: mediaItem }, idx) => (
                     <div
                       key={`${vari.id}-${mediaItem.url}`}
                       onClick={() => {
                         const isSameVariant = selectedVariant?.id === vari.id;
-                        const isSameImage = selectedImage === mediaItem.url;
+                        const selectedVariantHasSameMedia = Boolean(
+                          getMediaDedupeKey(mediaItem) &&
+                          selectedVariant?.media?.some(
+                            (img) =>
+                              getMediaDedupeKey(img) ===
+                              getMediaDedupeKey(mediaItem)
+                          )
+                        );
+                        const isSameImage =
+                          selectedImage === mediaItem.url ||
+                          selectedVariantHasSameMedia;
 
                         if (isSameVariant && isSameImage) {
                           resetToDefault();
@@ -914,8 +959,13 @@ const ProductDetails = ({ product }: { product: Product }) => {
                             'object-fit w-50 h-50 radius-4 l:w-full l:h-full pointer l:radius-t-l-0 l:radius-b-l-0  l:radius-t-r-0 l:radius-b-r-0',
                             {
                               'border border-green border-2':
-                                selectedVariant?.media.find(
-                                  (img) => img.url === mediaItem.url
+                                Boolean(
+                                  getMediaDedupeKey(mediaItem) &&
+                                    selectedVariant?.media?.some(
+                                      (img) =>
+                                        getMediaDedupeKey(img) ===
+                                        getMediaDedupeKey(mediaItem)
+                                    )
                                 ),
                               'l:radius-t-r-16': idx === 1,
                               'l:radius-b-r-16': idx === 3,
@@ -930,8 +980,13 @@ const ProductDetails = ({ product }: { product: Product }) => {
                             'object-fit w-50 h-50 radius-4 l:w-full l:h-full pointer l:radius-t-l-0 l:radius-b-l-0  l:radius-t-r-0 l:radius-b-r-0',
                             {
                               'border border-green border-2':
-                                selectedVariant?.media.find(
-                                  (img) => img.url === mediaItem.url
+                                Boolean(
+                                  getMediaDedupeKey(mediaItem) &&
+                                    selectedVariant?.media?.some(
+                                      (img) =>
+                                        getMediaDedupeKey(img) ===
+                                        getMediaDedupeKey(mediaItem)
+                                    )
                                 ),
                               'l:radius-t-r-16': idx === 1,
                               'l:radius-b-r-16': idx === 3,
@@ -942,8 +997,7 @@ const ProductDetails = ({ product }: { product: Product }) => {
                         />
                       )}
                     </div>
-                  ))
-                )}
+                  ))}
               </>
             )}
           </div>

@@ -29,6 +29,9 @@ const Modal: React.FC<ModalProps> = ({ isOpen, onClose, children, extraModalClas
       if (target?.closest('[data-cookie-consent="true"]')) {
         return;
       }
+      if (target?.closest('[data-modal-ignore-outside-click="true"]')) {
+        return;
+      }
       if (modalRef.current && !modalRef.current.contains(event.target as Node)) {
         onClose();
       }
