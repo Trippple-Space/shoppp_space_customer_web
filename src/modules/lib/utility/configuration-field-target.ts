@@ -9,3 +9,9 @@ export function isVendorConfigurationDefault(
 ): boolean {
   return targetUserType === 'vendor' || targetUserType === 'both';
 }
+
+export function isVendorOnlyConfigurationField(
+  targetUserType?: string | null
+): boolean {
+  return targetUserType === 'vendor';
+}

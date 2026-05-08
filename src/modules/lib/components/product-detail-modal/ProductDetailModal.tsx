@@ -20,13 +20,11 @@ import {
   DisplayProductConfigurations,
   isEmptyValue,
   isCustomerInputForField,
-  resolveConfigurationImageFilesForCart,
+  hasPendingConfigurationImageUploads,
 } from './productConfigurationsHelper';
-import { uploadPublicConfigurationImage } from '../../utility/services/configuration-image-upload.service';
 import { createPortal } from 'react-dom';
 import { guestSession } from '../../utility/guest-session';
 import { CartItem } from '../../utility/types/cart.interface';
-import { toast } from 'sonner';
 import { buildVariantMediaPreviewItems } from '../../utility/product-media';
 
 interface ProductDetailModalProp {
@@ -535,6 +533,10 @@ const ProductDetailModal = ({
     configurationRecords
   );
 
+  const hasPendingImageUploads = hasPendingConfigurationImageUploads(
+    configurationValues
+  );
+
   if (!openSingleProductModal) return null;
 
   return createPortal(
@@ -856,6 +858,13 @@ const ProductDetailModal = ({
                           </div>
                         )}
 
+                        {hasPendingImageUploads && (
+                          <p className="text-11 weight-500 color-#A66A00 mt-10">
+                            Tap “Upload” under each attached image to upload it
+                            before adding to cart.
+                          </p>
+                        )}
+
                         <div className="grid mt-20 mb-10 gap-10">
                           {!selectedVariantItemInCart ? (
                             <button
@@ -873,9 +882,10 @@ const ProductDetailModal = ({
                               disabled={
                                 !selectedVariant ||
                                 selectedVariant.status === 'OUT_OF_STOCK' ||
-                                !areRequiredCustomerFieldsFilled
+                                !areRequiredCustomerFieldsFilled ||
+                                hasPendingImageUploads
                               }
-                              onClick={async () => {
+                              onClick={() => {
                                 if (!localStorage.getItem('seenMiniCart')) {
                                   window.dispatchEvent(
                                     new Event('showMiniCartOnboarding')
@@ -889,57 +899,23 @@ const ProductDetailModal = ({
                                   selectedVariant &&
                                   selectedVariant.status !== 'OUT_OF_STOCK'
                                 ) {
-                                  try {
-                                    let valuesForCart = configurationValues;
-                                    if (
-                                      configurationRecords.length > 0 &&
-                                      process.env
-                                        .NEXT_PUBLIC_PUBLIC_UPLOAD_API_KEY
-                                    ) {
-                                      valuesForCart =
-                                        await resolveConfigurationImageFilesForCart(
-                                          configurationValues,
-                                          configurationRecords,
-                                          uploadPublicConfigurationImage
-                                        );
-                                    } else if (
-                                      configurationRecords.length > 0 &&
-                                      Object.values(configurationValues).some(
-                                        (v) =>
-                                          Array.isArray(v) &&
-                                          v.some((x) => x instanceof File)
-                                      )
-                                    ) {
-                                      toast.error(
-                                        'Image upload is not configured. Set NEXT_PUBLIC_PUBLIC_UPLOAD_API_KEY.'
-                                      );
-                                      return;
-                                    }
-                                    const configs = buildUserConfigurations(
-                                      valuesForCart,
-                                      configurationRecords
-                                    );
-                                    addToCart(
-                                      selectedVariant?.id ?? '0',
-                                      selectedVariant?.minPurchaseQuantity ||
-                                        1,
-                                      configs,
-                                      selectedVariant
-                                        ? {
-                                            ...selectedVariant,
-                                            product:
-                                              selectedVariant.product ??
-                                              product,
-                                          }
-                                        : undefined
-                                    );
-                                  } catch (e: unknown) {
-                                    const msg =
-                                      e instanceof Error
-                                        ? e.message
-                                        : 'Could not upload images';
-                                    toast.error(msg);
-                                  }
+                                  const configs = buildUserConfigurations(
+                                    configurationValues,
+                                    configurationRecords
+                                  );
+                                  addToCart(
+                                    selectedVariant?.id ?? '0',
+                                    selectedVariant?.minPurchaseQuantity || 1,
+                                    configs,
+                                    selectedVariant
+                                      ? {
+                                          ...selectedVariant,
+                                          product:
+                                            selectedVariant.product ??
+                                            product,
+                                        }
+                                      : undefined
+                                  );
                                 }
                               }}
                             >
@@ -958,18 +934,21 @@ const ProductDetailModal = ({
                           ) : (
                             <div className="mb-10">
                               <QuantitySelector
-                                decrement={() =>
+                                disabled={hasPendingImageUploads}
+                                decrement={() => {
+                                  if (hasPendingImageUploads) return;
                                   decrement(
                                     selectedVariantItemInCart,
                                     userConfigurations
-                                  )
-                                }
-                                increment={() =>
+                                  );
+                                }}
+                                increment={() => {
+                                  if (hasPendingImageUploads) return;
                                   increment(
                                     selectedVariantItemInCart,
                                     userConfigurations
-                                  )
-                                }
+                                  );
+                                }}
                                 cartItem={selectedVariantItemInCart}
                               />
                             </div>

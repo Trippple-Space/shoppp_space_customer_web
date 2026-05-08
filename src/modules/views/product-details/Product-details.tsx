@@ -50,12 +50,10 @@ import ReviewModal from './modals/ReviewModal';
 import {
   buildUserConfigurations,
   DisplayProductConfigurations,
+  hasPendingConfigurationImageUploads,
   isCustomerInputForField,
   isEmptyValue,
-  resolveConfigurationImageFilesForCart,
 } from '@/modules/lib/components/product-detail-modal/productConfigurationsHelper';
-import { uploadPublicConfigurationImage } from '@/modules/lib/utility/services/configuration-image-upload.service';
-import { toast } from 'sonner';
 import { CatalogueMediaItem } from '@/modules/lib/components/product-tile/ProductCatalogueDropdown';
 import { guestSession } from '@/modules/lib/utility/guest-session';
 import { CartItem } from '@/modules/lib/utility/types/cart.interface';
@@ -668,6 +666,11 @@ const ProductDetails = ({ product }: { product: Product }) => {
     });
   }, [getRequiredCustomerFields, configurationValues]);
 
+  
+  const hasPendingImageUploads = hasPendingConfigurationImageUploads(
+    configurationValues
+  );
+
   const addToCartBtn = () => {
     return (
       <div className="flex flex-col gap-16">
@@ -715,12 +718,25 @@ const ProductDetails = ({ product }: { product: Product }) => {
             </div>
           )}
 
+        {hasPendingImageUploads && (
+          <p className="text-12 weight-500 color-#A66A00">
+            Tap “Upload” under each attached image to upload it before adding
+            to cart.
+          </p>
+        )}
+
         {!selectedVariantItemInCart ? (
           <button
             className={classNames(
-              `text-white border-none l:px-24 l:py-12 py-15 w-100p radius-6 ${!selectedVariant || isOutOfStock || !areRequiredCustomerFieldsFilled ? 'bg-gray-300 cursor-not-allowed' : 'bg-#0B9378 hover:bg-darkgreen pointer'}`
+              `text-white border-none l:px-24 l:py-12 py-15 w-100p radius-6 ${!selectedVariant || isOutOfStock || !areRequiredCustomerFieldsFilled || hasPendingImageUploads ? 'bg-gray-300 cursor-not-allowed' : 'bg-#0B9378 hover:bg-darkgreen pointer'}`
             )}
-            onClick={async () => {
+            disabled={
+              !selectedVariant ||
+              isOutOfStock ||
+              !areRequiredCustomerFieldsFilled ||
+              hasPendingImageUploads
+            }
+            onClick={() => {
               if (orders.length == 0 && cart.cartItems.length == 0) {
                 handleFlyToCart(imgRef);
               }
@@ -729,50 +745,21 @@ const ProductDetails = ({ product }: { product: Product }) => {
                 selectedVariant.status !== 'OUT_OF_STOCK' &&
                 areRequiredCustomerFieldsFilled
               ) {
-                try {
-                  let valuesForCart = configurationValues;
-                  if (
-                    configurationRecords.length > 0 &&
-                    process.env.NEXT_PUBLIC_PUBLIC_UPLOAD_API_KEY
-                  ) {
-                    valuesForCart =
-                      await resolveConfigurationImageFilesForCart(
-                        configurationValues,
-                        configurationRecords,
-                        uploadPublicConfigurationImage
-                      );
-                  } else if (
-                    configurationRecords.length > 0 &&
-                    Object.values(configurationValues).some(
-                      (v) =>
-                        Array.isArray(v) && v.some((x) => x instanceof File)
-                    )
-                  ) {
-                    toast.error(
-                      'Image upload is not configured. Set NEXT_PUBLIC_PUBLIC_UPLOAD_API_KEY.'
-                    );
-                    return;
-                  }
-                  const configs = buildUserConfigurations(
-                    valuesForCart,
-                    configurationRecords
-                  );
-                  addToCart(
-                    selectedVariant?.id ?? 0,
-                    selectedVariant?.minPurchaseQuantity || 1,
-                    configs,
-                    selectedVariant
-                      ? {
-                          ...selectedVariant,
-                          product: selectedVariant.product ?? product,
-                        }
-                      : undefined
-                  );
-                } catch (e: unknown) {
-                  const msg =
-                    e instanceof Error ? e.message : 'Could not upload images';
-                  toast.error(msg);
-                }
+                const configs = buildUserConfigurations(
+                  configurationValues,
+                  configurationRecords
+                );
+                addToCart(
+                  selectedVariant?.id ?? 0,
+                  selectedVariant?.minPurchaseQuantity || 1,
+                  configs,
+                  selectedVariant
+                    ? {
+                        ...selectedVariant,
+                        product: selectedVariant.product ?? product,
+                      }
+                    : undefined
+                );
               }
             }}
           >
@@ -797,8 +784,15 @@ const ProductDetails = ({ product }: { product: Product }) => {
           </button>
         ) : (
           <QuantitySelector
-            decrement={() => decrement(selectedVariantItemInCart)}
-            increment={() => increment(selectedVariantItemInCart)}
+            disabled={hasPendingImageUploads}
+            decrement={() => {
+              if (hasPendingImageUploads) return;
+              decrement(selectedVariantItemInCart);
+            }}
+            increment={() => {
+              if (hasPendingImageUploads) return;
+              increment(selectedVariantItemInCart);
+            }}
             cartItem={selectedVariantItemInCart}
           />
         )}

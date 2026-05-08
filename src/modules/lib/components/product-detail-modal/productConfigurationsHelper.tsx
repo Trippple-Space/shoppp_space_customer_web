@@ -1,12 +1,22 @@
-import { FC, useEffect, useState, type ReactNode } from 'react';
+import {
+  FC,
+  useEffect,
+  useRef,
+  useState,
+  type CSSProperties,
+  type ReactNode,
+} from 'react';
 import { createPortal } from 'react-dom';
+import { toast } from 'sonner';
 import { IoMdClose } from 'react-icons/io';
 import { HiPlus } from 'react-icons/hi2';
 import { ConfigurationRecord } from '../../utility/types/product.interface';
 import {
   isCustomerConfigurationInput,
-  isVendorConfigurationDefault,
+  isVendorOnlyConfigurationField,
 } from '../../utility/configuration-field-target';
+import { uploadPublicConfigurationImage } from '../../utility/services/configuration-image-upload.service';
+import SpinLoader from '../spin-loader/SpinLoader';
 import {
   useFloating,
   offset,
@@ -28,11 +38,7 @@ export const isEmptyValue = (v: any) => {
 };
 
 export const isCustomerInputForField = (field: any): boolean => {
-  const vf = field?.valueFormat;
-  if (!vf) return false;
-  if (isCustomerConfigurationInput(vf.targetUserType)) return true;
-  if (vf.type === 'arrayOfImages') return true;
-  return false;
+  return isCustomerConfigurationInput(field?.valueFormat?.targetUserType);
 };
 
 const CustomerBlobThumb = ({ file }: { file: File }) => {
@@ -44,14 +50,15 @@ const CustomerBlobThumb = ({ file }: { file: File }) => {
   }, [file]);
   if (!src) return null;
   return (
-    <img src={src} alt="" className="h-full w-full object-cover" />
+    <img src={src} alt="" className="h-full w-full object-cover" style={{ objectFit: 'cover', objectPosition: 'top' }} />
   );
 };
 
 export const renderCustomerField = (
   field: any,
   configurationValues: Record<string, any>,
-  handleConfigChange: (key: string, value: any) => void
+  handleConfigChange: (key: string, value: any) => void,
+  onPreviewImage?: (url: string) => void
 ) => {
   const vf = field.valueFormat;
   const fieldKey = vf.fieldName;
@@ -114,80 +121,190 @@ export const renderCustomerField = (
   }
 
   if (vf.type === 'arrayOfImages') {
-    const raw = configurationValues[fieldKey];
-    const list: unknown[] = Array.isArray(raw)
-      ? raw
-      : raw === undefined || raw === null
-        ? []
-        : [raw];
-
-    const uploadInputId = `cfg-array-images-${fieldKey}`;
-
     return (
-      <div className="flex flex-wrap gap-6 a-items-center">
-        {list.map((item, idx) => (
-          <div
-            key={`${fieldKey}-img-${idx}`}
-            className="relative h-46 w-46 shrink-0 overflow-hidden radius-8 border border-#ddd bg-#fafafa"
-          >
-            {typeof item === 'string' ? (
-              <img
-                src={item}
-                alt=""
-                className="h-full w-full object-cover"
-              />
-            ) : item instanceof File ? (
-              <CustomerBlobThumb file={item} />
-            ) : null}
-            <button
-              type="button"
-              className="absolute r-0 t-0 radius-bl-8 bg-black opacity-50 px-1 text-10 text-white"
-              aria-label="Remove"
-              onClick={() =>
-                handleConfigChange(
-                  fieldKey,
-                  list.filter((_, i) => i !== idx)
-                )
-              }
-            >
-              <IoMdClose className="h-10 w-10" aria-hidden />
-            </button>
-          </div>
-        ))}
-        <label
-          htmlFor={uploadInputId}
-          aria-label="Add images"
-          style={{ position: 'relative' }}
-          className="flex h-44 w-44 shrink-0 cursor-pointer a-items-center j-content-center radius-8 border border-dashed border-#0B9378 bg-#fafafa color-#0B9378 hover:bg-#EDFCF7"
-        >
-          <HiPlus className="h-24 w-24" aria-hidden />
-          <input
-            id={uploadInputId}
-            type="file"
-            multiple
-            accept="image/*"
-            tabIndex={-1}
-            style={{
-              position: 'absolute',
-              inset: 0,
-              width: '100%',
-              height: '100%',
-              opacity: 0,
-              cursor: 'pointer',
-            }}
-            onChange={(e) => {
-              const files = e.target.files;
-              if (!files?.length) return;
-              handleConfigChange(fieldKey, [...list, ...Array.from(files)]);
-              e.target.value = '';
-            }}
-          />
-        </label>
-      </div>
+      <CustomerImagesUploader
+        fieldKey={fieldKey}
+        value={configurationValues[fieldKey]}
+        onChange={handleConfigChange}
+        onPreviewImage={onPreviewImage}
+      />
     );
   }
 
   return null;
+};
+
+const CustomerImagesUploader: FC<{
+  fieldKey: string;
+  value: unknown;
+  onChange: (key: string, value: any) => void;
+  onPreviewImage?: (url: string) => void;
+}> = ({ fieldKey, value, onChange, onPreviewImage }) => {
+  const list: unknown[] = Array.isArray(value)
+    ? value
+    : value === undefined || value === null
+      ? []
+      : [value];
+
+  const listRef = useRef<unknown[]>(list);
+  useEffect(() => {
+    listRef.current = list;
+  }, [list]);
+
+  const [uploadingFiles, setUploadingFiles] = useState<Set<File>>(new Set());
+
+  const readFileAsDataUrl = (file: File) =>
+    new Promise<string>((resolve, reject) => {
+      const reader = new FileReader();
+      reader.onload = () => resolve(String(reader.result ?? ''));
+      reader.onerror = () => reject(new Error('Could not preview image'));
+      reader.readAsDataURL(file);
+    });
+
+  const startUpload = async (file: File) => {
+    setUploadingFiles((prev) => {
+      const next = new Set(prev);
+      next.add(file);
+      return next;
+    });
+    try {
+      const url = await uploadPublicConfigurationImage(file);
+      const current = listRef.current;
+      if (current.includes(file)) {
+        onChange(
+          fieldKey,
+          current.map((it) => (it === file ? url : it))
+        );
+      }
+    } catch (e) {
+      const msg = e instanceof Error ? e.message : 'Could not upload image';
+      toast.error(msg);
+    } finally {
+      setUploadingFiles((prev) => {
+        const next = new Set(prev);
+        next.delete(file);
+        return next;
+      });
+    }
+  };
+
+  const removeAt = (idx: number) => {
+    const item = list[idx];
+    if (item instanceof File && uploadingFiles.has(item)) return;
+    onChange(
+      fieldKey,
+      list.filter((_, i) => i !== idx)
+    );
+  };
+
+  const uploadInputId = `cfg-array-images-${fieldKey}`;
+
+  return (
+    <div className="flex flex-wrap gap-10 a-items-start">
+      {list.map((item, idx) => {
+        const isFile = item instanceof File;
+        const isUploadingThis = isFile && uploadingFiles.has(item);
+
+        return (
+          <div
+            key={`${fieldKey}-img-${idx}`}
+            className="flex flex-col a-items-center gap-4"
+          >
+            <div className="relative h-46 w-46 shrink-0 overflow-hidden radius-8 border border-#ddd bg-#fafafa">
+              <button
+                type="button"
+                className="h-full w-full border-none bg-transparent p-0 cursor-zoom-in"
+                aria-label="View image full size"
+                onClick={async () => {
+                  if (!onPreviewImage) return;
+                  if (typeof item === 'string') {
+                    onPreviewImage(item);
+                    return;
+                  }
+                  if (item instanceof File) {
+                    try {
+                      const dataUrl = await readFileAsDataUrl(item);
+                      onPreviewImage(dataUrl);
+                    } catch (e) {
+                      const msg =
+                        e instanceof Error ? e.message : 'Could not preview image';
+                      toast.error(msg);
+                    }
+                  }
+                }}
+              >
+                {typeof item === 'string' ? (
+                  <img
+                    src={item}
+                    alt=""
+                    className="h-full w-full object-cover"
+                    style={{ objectFit: 'cover', objectPosition: 'top' }}
+                  />
+                ) : isFile ? (
+                  <CustomerBlobThumb file={item} />
+                ) : null}
+              </button>
+              <button
+                type="button"
+                className="absolute r-2 t-2 radius-999 bg-red flex flex-col a-items-center j-content-center p-2 text-10 text-white border-none disabled:opacity-30 disabled:cursor-not-allowed"
+                aria-label="Remove"
+                disabled={isUploadingThis}
+                onClick={() => removeAt(idx)}
+              >
+                <IoMdClose className="h-10 w-10 color-#FFFFFF" aria-hidden />
+              </button>
+            </div>
+            {isFile && (
+              <button
+                type="button"
+                disabled={isUploadingThis}
+                onClick={() => startUpload(item)}
+                className="bg-transparent border-none p-0 text-10 weight-500 color-#0B9378 underline cursor-pointer disabled:opacity-60 disabled:cursor-not-allowed flex a-items-center gap-3"
+              >
+                {isUploadingThis ? (
+                  <>
+                    <SpinLoader size={10} color="#0B9378" loading />
+                    <span>Uploading…</span>
+                  </>
+                ) : (
+                  <span>Upload</span>
+                )}
+              </button>
+            )}
+          </div>
+        );
+      })}
+      <label
+        htmlFor={uploadInputId}
+        aria-label="Add images"
+        style={{ position: 'relative' }}
+        className="flex h-44 w-44 shrink-0 cursor-pointer a-items-center j-content-center radius-8 border border-dashed border-#0B9378 bg-#fafafa color-#0B9378 hover:bg-#EDFCF7"
+      >
+        <HiPlus className="h-24 w-24" aria-hidden />
+        <input
+          id={uploadInputId}
+          type="file"
+          multiple
+          accept="image/*"
+          tabIndex={-1}
+          style={{
+            position: 'absolute',
+            inset: 0,
+            width: '100%',
+            height: '100%',
+            opacity: 0,
+            cursor: 'pointer',
+          }}
+          onChange={(e) => {
+            const files = e.target.files;
+            if (!files?.length) return;
+            onChange(fieldKey, [...list, ...Array.from(files)]);
+            e.target.value = '';
+          }}
+        />
+      </label>
+    </div>
+  );
 };
 
 export const buildUserConfigurations = (
@@ -223,20 +340,10 @@ export const buildUserConfigurations = (
       }
 
       if (target === 'both') {
-        const hasVendor = !isEmptyValue(vendorDefault);
-        const hasCustomer = !isEmptyValue(customerInput);
-
-        if (!hasVendor && !hasCustomer) continue;
-
-        if (hasVendor && hasCustomer) {
-          valuesForSchema[fieldName] = {
-            vendor: vendorDefault,
-            customer: customerInput,
-          };
-        } else if (hasVendor) {
-          valuesForSchema[fieldName] = vendorDefault;
-        } else {
+        if (!isEmptyValue(customerInput)) {
           valuesForSchema[fieldName] = customerInput;
+        } else if (!isEmptyValue(vendorDefault)) {
+          valuesForSchema[fieldName] = vendorDefault;
         }
       }
     }
@@ -249,7 +356,16 @@ export const buildUserConfigurations = (
   return result;
 };
 
-/** Upload File entries for customer/both arrayOfImages fields before JSON cart payload */
+export function hasPendingConfigurationImageUploads(
+  configurationValues: Record<string, any>
+): boolean {
+  for (const value of Object.values(configurationValues ?? {})) {
+    if (!Array.isArray(value)) continue;
+    if (value.some((x) => x instanceof File)) return true;
+  }
+  return false;
+}
+
 export async function resolveConfigurationImageFilesForCart(
   configurationValues: Record<string, any>,
   configurationRecords: ConfigurationRecord[],
@@ -328,7 +444,7 @@ export const DisplayProductConfigurations: FC<
 
             const vendorFields =
               record.customerDataForm?.filter((f: any) =>
-                isVendorConfigurationDefault(f.valueFormat?.targetUserType)
+                isVendorOnlyConfigurationField(f.valueFormat?.targetUserType)
               ) || [];
 
             const visibleVendorFields = vendorFields.filter((f: any) => {
@@ -384,6 +500,7 @@ export const DisplayProductConfigurations: FC<
                                       src={url}
                                       alt=""
                                       className="h-full w-full object-cover"
+                                      style={{ objectFit: 'cover', objectPosition: 'top' }}
                                     />
                                   </button>
                                 ))}
@@ -435,6 +552,10 @@ export const DisplayProductConfigurations: FC<
                               .replaceAll(' ', '_')
                             ],
                         }}
+                        configurationFormFields={
+                          record.customerDataForm ?? []
+                        }
+                        onPreviewImage={setFullViewUrl}
                         onEdit={onEditConfiguration ?? (() => { })}
                       />
                     ) : (
@@ -477,7 +598,8 @@ export const DisplayProductConfigurations: FC<
                               {renderCustomerField(
                                 field,
                                 configurationValues,
-                                handleConfigChange
+                                handleConfigChange,
+                                setFullViewUrl
                               )}
 
                               {/* {hasError && (
@@ -499,8 +621,8 @@ export const DisplayProductConfigurations: FC<
         {fullViewUrl &&
           createPortal(
             <div
-              className="fixed inset-0 flex items-center justify-center bg-black/85 p-16"
-              style={{ zIndex: 100_000 }}
+              className="fixed inset-0 flex items-center justify-center overflow-auto p-16"
+              style={{ zIndex: 100_000, backgroundColor: 'rgba(0, 0, 0, 0.65)' }}
               role="dialog"
               aria-modal="true"
               aria-label="Image preview"
@@ -529,7 +651,12 @@ export const DisplayProductConfigurations: FC<
               <img
                 src={fullViewUrl}
                 alt=""
-                className="max-h-[90vh] max-w-full object-contain"
+                className="block h-auto w-auto object-contain"
+                style={{
+                  maxWidth: 'calc(100vw - 32px)',
+                  maxHeight: 'calc(100vh - 32px)',
+                  objectFit: 'contain',
+                }}
                 onClick={(e) => e.stopPropagation()}
               />
             </div>,
@@ -539,63 +666,65 @@ export const DisplayProductConfigurations: FC<
     );
   };
 
-const renderConfigurationValueForSummary = (value: any): ReactNode => {
-  if (Array.isArray(value)) {
-    const allHttpUrls = value.every(
-      (x) => typeof x === 'string' && /^https?:\/\//i.test(x)
-    );
-    if (allHttpUrls) {
-      return (
-        <span className="flex flex-wrap gap-1 justify-end">
-          {(value as string[]).map((url, i) => (
-            <img
-              key={i}
-              src={url}
-              alt=""
-              className="h-12 w-12 rounded border object-cover"
-            />
-          ))}
-        </span>
-      );
-    }
-    return <span>{value.join(', ')}</span>;
-  }
-  if (value && typeof value === 'object' && !Array.isArray(value)) {
-    return (
-      <span className="text-11">
-        {Object.entries(value)
-          .map(([k, v]) => `${k}: ${v}`)
-          .join(', ')}
-      </span>
-    );
-  }
-  return <span>{String(value)}</span>;
-};
-
-const summarizeConfigurationEntry = (_key: string, value: any): ReactNode => {
+const unwrapMergedConfigurationValue = (value: any): any => {
   if (
     value &&
     typeof value === 'object' &&
     !Array.isArray(value) &&
     ('vendor' in value || 'customer' in value)
   ) {
-    return (
-      <span className="flex flex-col gap-2 items-end text-right max-w-[min(280px,85vw)]">
-        {value.vendor != null && !isEmptyValue(value.vendor) && (
-          <span className="flex flex-col gap-1 items-end">
-            <span className="text-10 color-#00000099">Seller reference</span>
-            {renderConfigurationValueForSummary(value.vendor)}
-          </span>
-        )}
-        {value.customer != null && !isEmptyValue(value.customer) && (
-          <span className="flex flex-col gap-1 items-end">
-            <span className="text-10 color-#00000099">Your details</span>
-            {renderConfigurationValueForSummary(value.customer)}
-          </span>
-        )}
-      </span>
-    );
+    return !isEmptyValue(value.customer) ? value.customer : value.vendor;
   }
+  return value;
+};
+
+const stringifyForSummary = (v: any): string => {
+  if (v === null || v === undefined) return '';
+  if (typeof v === 'string') return v;
+  if (typeof v === 'number' || typeof v === 'boolean') return String(v);
+  if (Array.isArray(v)) {
+    return v
+      .map((item, i) => `${i}: ${stringifyForSummary(item)}`)
+      .join(', ');
+  }
+  if (typeof v === 'object') {
+    return Object.entries(v)
+      .map(([k, val]) => `${k}: ${stringifyForSummary(val)}`)
+      .join(', ');
+  }
+  return String(v);
+};
+
+const renderConfigurationValueForSummary = (value: any): ReactNode => {
+  const v = unwrapMergedConfigurationValue(value);
+  if (Array.isArray(v)) {
+    const allHttpUrls =
+      v.length > 0 &&
+      v.every((x) => typeof x === 'string' && /^https?:\/\//i.test(x));
+    if (allHttpUrls) {
+      return (
+        <span className="flex flex-wrap gap-1 justify-end">
+          {(v as string[]).map((url, i) => (
+            <img
+              key={i}
+              src={url}
+              alt=""
+              className="h-12 w-12 rounded border object-cover"
+              style={{ objectFit: 'cover', objectPosition: 'top' }}
+            />
+          ))}
+        </span>
+      );
+    }
+    return <span>{stringifyForSummary(v)}</span>;
+  }
+  if (v && typeof v === 'object') {
+    return <span className="text-11">{stringifyForSummary(v)}</span>;
+  }
+  return <span>{String(v ?? '')}</span>;
+};
+
+const summarizeConfigurationEntry = (_key: string, value: any): ReactNode => {
   return (
     <span className="weight-500 color-#000000">
       {renderConfigurationValueForSummary(value)}
@@ -603,13 +732,96 @@ const summarizeConfigurationEntry = (_key: string, value: any): ReactNode => {
   );
 };
 
+const looksLikeImageUrl = (v: unknown): v is string => {
+  if (typeof v !== 'string') return false;
+  const trimmed = v.trim();
+  if (!trimmed) return false;
+  if (/^https?:\/\//i.test(trimmed)) return true;
+  return /\.(png|jpe?g|gif|webp|avif|svg|bmp)(\?.*)?$/i.test(trimmed);
+};
+
+const renderSummaryValue = (
+  value: any,
+  onPreviewImage?: (url: string) => void
+): ReactNode => {
+  if (looksLikeImageUrl(value)) {
+    return (
+      <button
+        type="button"
+        className="inline-block border-none bg-transparent p-0 cursor-zoom-in"
+        aria-label="View image full size"
+        onClick={() => onPreviewImage?.(value)}
+      >
+        <img
+          src={value}
+          alt=""
+          className="h-32 w-32 radius-6 border border-#00000014 object-cover inline-block"
+          style={{ objectFit: 'cover', objectPosition: 'top' }}
+        />
+      </button>
+    );
+  }
+
+  if (
+    Array.isArray(value) &&
+    value.length > 0 &&
+    value.every((x) => looksLikeImageUrl(x))
+  ) {
+    return (
+      <span className="inline-flex flex-wrap gap-4 j-content-end">
+        {(value as string[]).map((url, i) => (
+          <button
+            key={i}
+            type="button"
+            className="border-none bg-transparent p-0 cursor-zoom-in"
+            aria-label="View image full size"
+            onClick={() => onPreviewImage?.(url)}
+          >
+            <img
+              src={url}
+              alt=""
+              className="h-32 w-32 radius-6 border border-#00000014 object-cover"
+              style={{ objectFit: 'cover', objectPosition: 'top' }}
+            />
+          </button>
+        ))}
+      </span>
+    );
+  }
+
+  if (value && typeof value === 'object') {
+    return (
+      <span>
+        {Object.entries(value as Record<string, unknown>)
+          .map(([k, v]) => `${k}: ${v}`)
+          .join('; ')}
+      </span>
+    );
+  }
+
+  return <span>{String(value)}</span>;
+};
+
 const UserConfigurationSummary = ({
   userConfigurations,
   onEdit,
+  configurationFormFields,
+  onPreviewImage,
 }: {
   userConfigurations: Record<string, any>;
   onEdit: () => void;
+  configurationFormFields?: any[];
+  onPreviewImage?: (url: string) => void;
 }) => {
+  const customerOrBothFieldNames = new Set(
+    (configurationFormFields ?? [])
+      .filter((f: any) =>
+        isCustomerConfigurationInput(f.valueFormat?.targetUserType)
+      )
+      .map((f: any) => f.valueFormat?.fieldName)
+      .filter(Boolean)
+  );
+
   return (
     <div className="flex flex-col gap-10">
       {Object.entries(userConfigurations).map(([schemaName, fields]) => (
@@ -618,17 +830,29 @@ const UserConfigurationSummary = ({
           className="p-10 radius-6 border border-#0B9378 bg-#EDFCF7 flex flex-col gap-6"
         >
           <div className="flex flex-col gap-4">
-            {Object.entries(fields as Record<string, any>).map(
-              ([key, value]) => (
-                <div key={key} className="flex justify-between gap-3 text-12">
-                  <span className="color-#00000099 weight-400 capitalize shrink-0">
+            {Object.entries(fields as Record<string, any>)
+              .filter(([key]) =>
+                customerOrBothFieldNames.size === 0
+                  ? true
+                  : customerOrBothFieldNames.has(key)
+              )
+              .map(([key, value]) => (
+                <div
+                  key={key}
+                  className="flex flex-col gap-4 text-12"
+                >
+                  <span
+                    className="color-#000000 weight-400 capitalize"
+                    style={{ textWrap: 'nowrap' }}
+                  >
                     {key.replaceAll('_', ' ')}:
                   </span>
 
-                  {summarizeConfigurationEntry(key, value)}
+                  <span className="weight-500 color-#00000099">
+                    {renderSummaryValue(value, onPreviewImage)}
+                  </span>
                 </div>
-              )
-            )}
+              ))}
           </div>
         </div>
       ))}
@@ -649,26 +873,37 @@ const isHttpUrlArray = (v: unknown): v is string[] =>
   v.length > 0 &&
   v.every((x) => typeof x === 'string' && /^https?:\/\//i.test(x));
 
+const configDetailBreakStyle: CSSProperties = {
+  overflowWrap: 'anywhere',
+  wordBreak: 'break-word',
+};
+
 const renderConfigLeaf = (v: any): ReactNode => {
   if (v === undefined || v === null || v === '') return null;
   if (Array.isArray(v)) {
     if (v.length === 0) return null;
     if (isHttpUrlArray(v)) {
       return (
-        <span className="inline-flex flex-wrap gap-1 justify-end">
+        <span className="inline-flex flex-wrap gap-3 justify-end">
           {v.map((url, i) => (
             <img
               key={i}
               src={url}
               alt=""
-              className="h-10 w-10 rounded border border-#00000014 object-cover"
+              className="h-30 w-30 radius-6 border border-#00000014 object-cover"
+              style={{ objectFit: 'cover', objectPosition: 'top' }}
             />
           ))}
         </span>
       );
     }
     return (
-      <span className="weight-500 color-#000000E0">{v.join(', ')}</span>
+      <span
+        className="weight-500 color-#000000E0 min-w-0 max-w-100p text-right"
+        style={configDetailBreakStyle}
+      >
+        {v.join(', ')}
+      </span>
     );
   }
   if (v && typeof v === 'object') {
@@ -678,15 +913,18 @@ const renderConfigLeaf = (v: any): ReactNode => {
       'customer' in vo && vo.customer != null && !isEmptyValue(vo.customer);
     if (hasVendor || hasCustomer) {
       return (
-        <span className="flex flex-col gap-2 items-end text-right">
+        <span
+          className="flex max-w-100p min-w-0 flex-col gap-2 items-end text-right"
+          style={configDetailBreakStyle}
+        >
           {hasVendor && (
-            <span className="flex flex-col gap-1 items-end">
+            <span className="flex max-w-100p min-w-0 flex-col gap-1 items-end">
               <span className="text-10 color-#00000099">Seller reference</span>
               {renderConfigLeaf(vo.vendor)}
             </span>
           )}
           {hasCustomer && (
-            <span className="flex flex-col gap-1 items-end">
+            <span className="flex max-w-100p min-w-0 flex-col gap-1 items-end">
               <span className="text-10 color-#00000099">Customer</span>
               {renderConfigLeaf(vo.customer)}
             </span>
@@ -695,14 +933,19 @@ const renderConfigLeaf = (v: any): ReactNode => {
       );
     }
     return (
-      <span className="flex flex-col gap-1 ml-6">
+      <span className="ml-6 flex max-w-100p min-w-0 flex-col gap-1">
         {Object.entries(v).map(([nk, nv]) => (
           <span
             key={nk}
-            className="flex space-between gap-12 text-12 color-#00000099"
+            className="flex w-100p min-w-0 space-between gap-12 text-12 color-#00000099"
           >
-            <span className="capitalize">{nk.replaceAll('_', ' ')}</span>
-            <span className="weight-500 color-#000000E0">
+            <span className="flex-shrink-0 capitalize">
+              {nk.replaceAll('_', ' ')}
+            </span>
+            <span
+              className="weight-500 color-#000000E0 min-w-0 max-w-100p flex-grow-1 text-right"
+              style={configDetailBreakStyle}
+            >
               {renderConfigLeaf(nv) ?? String(nv)}
             </span>
           </span>
@@ -711,7 +954,12 @@ const renderConfigLeaf = (v: any): ReactNode => {
     );
   }
   return (
-    <span className="weight-500 color-#000000E0">{String(v)}</span>
+    <span
+      className="weight-500 color-#000000E0 min-w-0 max-w-100p"
+      style={configDetailBreakStyle}
+    >
+      {String(v)}
+    </span>
   );
 };
 
@@ -727,20 +975,40 @@ const renderConfigDetails = (value: any) => {
 
   if (typeof value !== 'object' || Array.isArray(value)) {
     return (
-      <span className="inline-block text-12 color-#00000099">
+      <span
+        className="block max-w-100p min-w-0 text-12 color-#00000099"
+        style={configDetailBreakStyle}
+      >
         {renderConfigLeaf(value)}
       </span>
     );
   }
 
   return Object.entries(value).map(([k, v]) => {
-    if (!v || typeof v !== 'object' || Array.isArray(v)) {
+    if (Array.isArray(v) && isHttpUrlArray(v)) {
       return (
-        <div key={k} className="flex gap-12 space-between text-12">
-          <span className="capitalize color-#00000099 shrink-0">
+        <div key={k} className="flex w-100p min-w-0 flex-col gap-2 text-12">
+          <span className="flex-shrink-0 capitalize color-#00000099">
             {k.replaceAll('_', ' ')}
           </span>
-          <span className="flex flex-col items-end min-w-0">
+          <span className="min-w-0">{renderConfigLeaf(v)}</span>
+        </div>
+      );
+    }
+
+    if (!v || typeof v !== 'object' || Array.isArray(v)) {
+      return (
+        <div
+          key={k}
+          className="flex w-100p min-w-0 gap-12 space-between text-12"
+        >
+          <span className="flex-shrink-0 capitalize color-#00000099">
+            {k.replaceAll('_', ' ')}
+          </span>
+          <span
+            className="flex min-w-0 flex-grow-1 flex-col items-end text-right"
+            style={configDetailBreakStyle}
+          >
             {renderConfigLeaf(v)}
           </span>
         </div>
@@ -754,21 +1022,31 @@ const renderConfigDetails = (value: any) => {
 
     if (mergedBoth) {
       return (
-        <div key={k} className="flex gap-12 space-between text-12">
-          <span className="capitalize color-#00000099 shrink-0">
+        <div
+          key={k}
+          className="flex w-100p min-w-0 gap-12 space-between text-12"
+        >
+          <span className="flex-shrink-0 capitalize color-#00000099">
             {k.replaceAll('_', ' ')}
           </span>
-          <span className="flex flex-col items-end min-w-0">{renderConfigLeaf(v)}</span>
+          <span
+            className="flex min-w-0 flex-grow-1 flex-col items-end text-right"
+            style={configDetailBreakStyle}
+          >
+            {renderConfigLeaf(v)}
+          </span>
         </div>
       );
     }
 
     return (
-      <span key={k} className="flex flex-col gap-2">
-        <span className="text-12 color-#00000099 capitalize">
+      <span key={k} className="flex max-w-100p min-w-0 flex-col gap-2">
+        <span className="text-12 capitalize color-#00000099">
           {k.replaceAll('_', ' ')}
         </span>
-        {renderConfigLeaf(v)}
+        <span className="min-w-0" style={configDetailBreakStyle}>
+          {renderConfigLeaf(v)}
+        </span>
       </span>
     );
   });
@@ -818,15 +1096,19 @@ export const ConfigPill = ({ title, value }: { title: string; value: any }) => {
         <FloatingPortal>
           <p
             ref={refs.setFloating}
-            style={floatingStyles}
+            style={{
+              ...floatingStyles,
+              maxWidth: 'min(380px, calc(100vw - 24px))',
+              overflowWrap: 'anywhere',
+            }}
             {...getFloatingProps()}
-            className="z-50 radius-6 border border-#00000014 bg-white p-10 flex flex-col gap-6 min-w-250"
+            className="z-50 radius-6 border border-#00000014 bg-white p-10 flex flex-col gap-6 min-w-250 max-w-400"
           >
             <span className="inline-block text-12 weight-600 capitalize color-#000000E0">
               {title}
             </span>
 
-            <span className="flex flex-col gap-4">
+            <span className="flex max-w-100p min-w-0 flex-col gap-4">
               {renderConfigDetails(value)}
             </span>
           </p>
