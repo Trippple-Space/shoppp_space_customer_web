@@ -1094,6 +1094,7 @@ export const ConfigPill = ({ title, value }: { title: string; value: any }) => {
       <span
         ref={refs.setReference}
         {...getReferenceProps()}
+        data-modal-ignore-outside-click="true"
         className="text-12 weight-500 hover:pointer inline-block"
         style={{
           padding: '6px 10px',
@@ -1117,6 +1118,7 @@ export const ConfigPill = ({ title, value }: { title: string; value: any }) => {
               overflowWrap: 'anywhere',
             }}
             {...getFloatingProps()}
+            data-modal-ignore-outside-click="true"
             className="z-50 radius-6 border border-#00000014 bg-white p-10 flex flex-col gap-6 min-w-250 max-w-400"
           >
             <span className="inline-block text-12 weight-600 capitalize color-#000000E0">
