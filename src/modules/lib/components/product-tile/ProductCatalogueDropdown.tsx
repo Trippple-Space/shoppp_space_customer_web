@@ -164,42 +164,44 @@ export function ProductCatalogueDropdown({ productCatalogues }: ProductCatalogue
       >
         <HiSquares2X2 className="l:w-18 w-16 l:h-18 h-16 color-#0B9378" />
       </button>
-      {open && (
-        <FloatingPortal>
-          <div
-            ref={refs.setFloating}
-            className='sm:p-10 p-5 sm:pt-14'
-            style={{
-              ...floatingStyles,
-              minWidth: 'min(90vw, 560px)',
-              maxWidth: 'min(92vw, 640px)',
-              maxHeight: 'min(80vh, 560px)',
-              overflow: 'auto',
-              zIndex: 9999,
-              borderRadius: 16,
-              boxShadow: '0 14px 28px rgba(0,0,0,0.12), 0 8px 16px rgba(0,0,0,0.08)',
-              background: 'linear-gradient(180deg, #fefefe 0%, #f8f9fa 100%)',
-              border: '1px solid rgba(0,0,0,0.06)',
-            }}
-            {...getFloatingProps()}
-          >
-            <div className="p-12 sm:pt-0 pt-5">
-              <h3 className="text-14 weight-600 color-#0B9378 uppercase tracking-wider">Catalogue</h3>
-            </div>
-            <div
-              className="p-10 grid grid-3-cols-1fr sm:grid-4-cols-1fr xl:grid-5-cols-1fr gap-3"
-            >
-              {cataloguesSorted.map((item) => (
-                <div key={item.id} style={{
-                  minWidth: 0
-                }}>
-                  <CatalogueMediaItem item={item} />
-                </div>
-              ))}
-            </div>
+      <FloatingPortal>
+        <div
+          ref={refs.setFloating}
+          className='sm:p-10 p-5 sm:pt-14'
+          style={{
+            ...floatingStyles,
+            minWidth: 'min(90vw, 560px)',
+            maxWidth: 'min(92vw, 640px)',
+            maxHeight: 'min(80vh, 560px)',
+            overflow: 'auto',
+            zIndex: 9999,
+            borderRadius: 16,
+            boxShadow: '0 14px 28px rgba(0,0,0,0.12), 0 8px 16px rgba(0,0,0,0.08)',
+            background: 'linear-gradient(180deg, #fefefe 0%, #f8f9fa 100%)',
+            border: '1px solid rgba(0,0,0,0.06)',
+            visibility: open ? 'visible' : 'hidden',
+            opacity: open ? 1 : 0,
+            pointerEvents: open ? 'auto' : 'none',
+          }}
+          aria-hidden={!open}
+          {...getFloatingProps()}
+        >
+          <div className="p-12 sm:pt-0 pt-5">
+            <h3 className="text-14 weight-600 color-#0B9378 uppercase tracking-wider">Catalogue</h3>
           </div>
-        </FloatingPortal>
-      )}
+          <div
+            className="p-10 grid grid-3-cols-1fr sm:grid-4-cols-1fr xl:grid-5-cols-1fr gap-3"
+          >
+            {cataloguesSorted.map((item) => (
+              <div key={item.id} style={{
+                minWidth: 0
+              }}>
+                <CatalogueMediaItem item={item} />
+              </div>
+            ))}
+          </div>
+        </div>
+      </FloatingPortal>
     </>
   );
 }
