@@ -50,6 +50,8 @@ const endpoints = {
   GET_ALL_REVIEWS: "/product-review",
   GET_PRODUCT_REVIEWS: "/product-review/product/:productVariantId",
   CREATE_PRODUCT_REVIEW: "/product-review/create",
+  VENDOR_REVIEW_INVITE: "vendor-review/invite/:token",
+  VENDOR_REVIEW_SUBMIT: "vendor-review/invite/:token",
   GET_REVIEW_STATS: "/product-review/stats/product/:productVariantId",
   GET_REVIEW_STATS_DIST: "/product-review/stats/product/:productVariantId/distribution",
 
