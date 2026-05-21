@@ -868,54 +868,54 @@ const ProductTile: FC<IProductTile> = ({
         >
           <ProductCatalogueDropdown productCatalogues={product?.productCatalogues} />
           {variantPreviewItems.map(({ variant, media: mediaItem }, i: number) => (
-              <div
-                key={`${variant.id}-${mediaItem?.url}-${i}`}
-                className="l:w-35.2 l:min-w-35.2 l:h-35.2 w-31 min-w-31 h-31 pointer md:radius-4 radius-3 a-self-center relative"
-              >
-                {mediaItem?.type === 'image' ? (
-                  <Image
-                    key={`${variant.id}-${mediaItem.url}-${i}`}
-                    className={classNames(
-                      `l:w-35.2 l:min-w-35.2 l:h-35.2 w-31 min-w-31 h-31 pointer md:radius-4 radius-3 a-self-center g|object-fit:cover ${variant?.status === 'OUT_OF_STOCK' && 'out-of-stock'}`,
-                      {
-                        'border border-2 border-black':
-                          selectedImage == mediaItem?.url,
-                        [`border-${/*variant?.properties?.color?.toLocaleLowerCase() ||*/ '#0B9378'}`]:
-                          selectedImage == mediaItem?.url,
-                      }
-                    )}
-                    src={mediaItem?.url}
-                    onClick={() => {
-                      setSelectedVariant(variant);
-                      setRecentlyViewsId(variant.id);
-                      setSelectedImage(mediaItem?.url);
-                    }}
-                    alt="product-image"
-                    hasLoader={true}
-                    pulseClassName="md:radius-4 radius-3"
-                  />
-                ) : (
-                  <VideoSrc
-                    key={`${variant.id}-${mediaItem.url}-${i}`}
-                    className={classNames(
-                      `l:w-35.2 l:min-w-35.2 l:h-35.2 w-31 min-w-31 h-31 pointer md:radius-4 radius-3 a-self-center g|object-fit:cover ${variant?.status === 'OUT_OF_STOCK' && 'out-of-stock'}`,
-                      {
-                        'border border-2': selectedImage == mediaItem?.url,
-                        [`border-${/*variant?.properties?.color?.toLocaleLowerCase() ||*/ '#0B9378'}`]:
-                          selectedImage == mediaItem?.url,
-                      }
-                    )}
-                    onClick={() => {
-                      setSelectedVariant(variant);
-                      setRecentlyViewsId(variant.id);
-                      setSelectedImage(mediaItem?.url);
-                    }}
-                    src={mediaItem?.url}
-                    hasLoader={true}
-                  />
-                )}
-              </div>
-            ))
+            <div
+              key={`${variant.id}-${mediaItem?.url}-${i}`}
+              className="l:w-35.2 l:min-w-35.2 l:h-35.2 w-31 min-w-31 h-31 pointer md:radius-4 radius-3 a-self-center relative"
+            >
+              {mediaItem?.type === 'image' ? (
+                <Image
+                  key={`${variant.id}-${mediaItem.url}-${i}`}
+                  className={classNames(
+                    `l:w-35.2 l:min-w-35.2 l:h-35.2 w-31 min-w-31 h-31 pointer md:radius-4 radius-3 a-self-center g|object-fit:cover ${variant?.status === 'OUT_OF_STOCK' && 'out-of-stock'}`,
+                    {
+                      'border border-2 border-black':
+                        selectedImage == mediaItem?.url,
+                      [`border-${/*variant?.properties?.color?.toLocaleLowerCase() ||*/ '#0B9378'}`]:
+                        selectedImage == mediaItem?.url,
+                    }
+                  )}
+                  src={mediaItem?.url}
+                  onClick={() => {
+                    setSelectedVariant(variant);
+                    setRecentlyViewsId(variant.id);
+                    setSelectedImage(mediaItem?.url);
+                  }}
+                  alt="product-image"
+                  hasLoader={true}
+                  pulseClassName="md:radius-4 radius-3"
+                />
+              ) : (
+                <VideoSrc
+                  key={`${variant.id}-${mediaItem.url}-${i}`}
+                  className={classNames(
+                    `l:w-35.2 l:min-w-35.2 l:h-35.2 w-31 min-w-31 h-31 pointer md:radius-4 radius-3 a-self-center g|object-fit:cover ${variant?.status === 'OUT_OF_STOCK' && 'out-of-stock'}`,
+                    {
+                      'border border-2': selectedImage == mediaItem?.url,
+                      [`border-${/*variant?.properties?.color?.toLocaleLowerCase() ||*/ '#0B9378'}`]:
+                        selectedImage == mediaItem?.url,
+                    }
+                  )}
+                  onClick={() => {
+                    setSelectedVariant(variant);
+                    setRecentlyViewsId(variant.id);
+                    setSelectedImage(mediaItem?.url);
+                  }}
+                  src={mediaItem?.url}
+                  hasLoader={true}
+                />
+              )}
+            </div>
+          ))
           }
         </div>
       </div>
@@ -970,7 +970,7 @@ const ProductTile: FC<IProductTile> = ({
               </div>
             )
             : null}
-        <div ref={rowRef} className="flex j-content-between gap-15">
+        <div ref={rowRef} className="flex j-content-between sm:gap-15 gap-6">
           <div
             ref={priceRef}
             className="flex md:gap-8 md:a-items-center md:flex-row flex-col"
@@ -992,6 +992,13 @@ const ProductTile: FC<IProductTile> = ({
                 )}
               </div>
             )}
+            {
+              variantDisplayPrices.hasSlash ? (
+                null
+              ) : (
+                <span className='sm:text-10 text-8 weight-400 md:line-height-20 line-height-12.1' style={{ alignSelf: 'flex-end' }}>{selectedVariant?.stockUnit ? `/ ${selectedVariant?.stockUnit}` : ' / piece'}</span>
+              )
+            }
           </div>
 
           <div className="text-9 sm:text-10 text-grey flex gap-6 a-items-center relative">

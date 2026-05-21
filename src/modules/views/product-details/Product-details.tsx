@@ -666,7 +666,7 @@ const ProductDetails = ({ product }: { product: Product }) => {
     });
   }, [getRequiredCustomerFields, configurationValues]);
 
-  
+
   const hasPendingImageUploads = hasPendingConfigurationImageUploads(
     configurationValues
   );
@@ -674,12 +674,12 @@ const ProductDetails = ({ product }: { product: Product }) => {
   const addToCartBtn = () => {
     return (
       <div className="flex flex-col gap-16">
-        <div className="flex flex-col gap-8">
+        <div className="flex flex-row flex-wrap a-items-end gap-8">
           <p className="text-24 weight-600">
             {formatNumberAsPrice(variantDisplayPrices.displayPrice)}
           </p>
           {variantDisplayPrices.hasSlash && (
-            <div className="flex flex-wrap gap-8 a-items-center">
+            <div className="flex flex-wrap gap-8 a-items-center mb-2">
               {getStrikethroughAmounts(variantDisplayPrices).map(
                 (amount, idx) => (
                   <p
@@ -692,6 +692,7 @@ const ProductDetails = ({ product }: { product: Product }) => {
               )}
             </div>
           )}
+          <p className='text-10 weight-400 md:line-height-20 line-height-12.1 md:mb-0 mb-2'>{selectedVariant?.stockUnit ? `/ ${selectedVariant?.stockUnit}` : '/ piece'}</p >
         </div>
 
         {!selectedVariant &&
@@ -755,9 +756,9 @@ const ProductDetails = ({ product }: { product: Product }) => {
                   configs,
                   selectedVariant
                     ? {
-                        ...selectedVariant,
-                        product: selectedVariant.product ?? product,
-                      }
+                      ...selectedVariant,
+                      product: selectedVariant.product ?? product,
+                    }
                     : undefined
                 );
               }
@@ -923,81 +924,81 @@ const ProductDetails = ({ product }: { product: Product }) => {
             {(uniqueVariantsFromProductImages?.length ?? 0) > 0 && (
               <>
                 {variantPreviewItems.slice(0, 4).map(({ variant: vari, media: mediaItem }, idx) => (
-                    <div
-                      key={`${vari.id}-${mediaItem.url}`}
-                      onClick={() => {
-                        const isSameVariant = selectedVariant?.id === vari.id;
-                        const selectedVariantHasSameMedia = Boolean(
-                          getMediaDedupeKey(mediaItem) &&
-                          selectedVariant?.media?.some(
-                            (img) =>
-                              getMediaDedupeKey(img) ===
-                              getMediaDedupeKey(mediaItem)
-                          )
-                        );
-                        const isSameImage =
-                          selectedImage === mediaItem.url ||
-                          selectedVariantHasSameMedia;
+                  <div
+                    key={`${vari.id}-${mediaItem.url}`}
+                    onClick={() => {
+                      const isSameVariant = selectedVariant?.id === vari.id;
+                      const selectedVariantHasSameMedia = Boolean(
+                        getMediaDedupeKey(mediaItem) &&
+                        selectedVariant?.media?.some(
+                          (img) =>
+                            getMediaDedupeKey(img) ===
+                            getMediaDedupeKey(mediaItem)
+                        )
+                      );
+                      const isSameImage =
+                        selectedImage === mediaItem.url ||
+                        selectedVariantHasSameMedia;
 
-                        if (isSameVariant && isSameImage) {
-                          resetToDefault();
-                          return;
-                        }
+                      if (isSameVariant && isSameImage) {
+                        resetToDefault();
+                        return;
+                      }
 
-                        setForcedVariantId(vari.id);
-                        setActiveFilters(buildFiltersFromVariant(vari));
-                        setSelectedImage(mediaItem.url);
-                        setImageSource('preview');
-                      }}
-                      className={`l:h-207 ${vari?.status === 'OUT_OF_STOCK' && 'out-of-stock'} relative ${idx <= 3 ? 'block' : 'l:hidden block'}`}
-                    >
-                      {mediaItem?.type === 'image' ? (
-                        <Image
-                          src={mediaItem?.url ?? ''}
-                          alt="product-image"
-                          className={cx(
-                            'object-fit w-50 h-50 radius-4 l:w-full l:h-full pointer l:radius-t-l-0 l:radius-b-l-0  l:radius-t-r-0 l:radius-b-r-0',
-                            {
-                              'border border-green border-2':
-                                Boolean(
-                                  getMediaDedupeKey(mediaItem) &&
-                                    selectedVariant?.media?.some(
-                                      (img) =>
-                                        getMediaDedupeKey(img) ===
-                                        getMediaDedupeKey(mediaItem)
-                                    )
-                                ),
-                              'l:radius-t-r-16': idx === 1,
-                              'l:radius-b-r-16': idx === 3,
-                            }
-                          )}
-                          width={10000}
-                          hasLoader
-                        />
-                      ) : (
-                        <VideoSrc
-                          className={cx(
-                            'object-fit w-50 h-50 radius-4 l:w-full l:h-full pointer l:radius-t-l-0 l:radius-b-l-0  l:radius-t-r-0 l:radius-b-r-0',
-                            {
-                              'border border-green border-2':
-                                Boolean(
-                                  getMediaDedupeKey(mediaItem) &&
-                                    selectedVariant?.media?.some(
-                                      (img) =>
-                                        getMediaDedupeKey(img) ===
-                                        getMediaDedupeKey(mediaItem)
-                                    )
-                                ),
-                              'l:radius-t-r-16': idx === 1,
-                              'l:radius-b-r-16': idx === 3,
-                            }
-                          )}
-                          src={mediaItem?.url ?? ''}
-                          hasLoader={true}
-                        />
-                      )}
-                    </div>
-                  ))}
+                      setForcedVariantId(vari.id);
+                      setActiveFilters(buildFiltersFromVariant(vari));
+                      setSelectedImage(mediaItem.url);
+                      setImageSource('preview');
+                    }}
+                    className={`l:h-207 ${vari?.status === 'OUT_OF_STOCK' && 'out-of-stock'} relative ${idx <= 3 ? 'block' : 'l:hidden block'}`}
+                  >
+                    {mediaItem?.type === 'image' ? (
+                      <Image
+                        src={mediaItem?.url ?? ''}
+                        alt="product-image"
+                        className={cx(
+                          'object-fit w-50 h-50 radius-4 l:w-full l:h-full pointer l:radius-t-l-0 l:radius-b-l-0  l:radius-t-r-0 l:radius-b-r-0',
+                          {
+                            'border border-green border-2':
+                              Boolean(
+                                getMediaDedupeKey(mediaItem) &&
+                                selectedVariant?.media?.some(
+                                  (img) =>
+                                    getMediaDedupeKey(img) ===
+                                    getMediaDedupeKey(mediaItem)
+                                )
+                              ),
+                            'l:radius-t-r-16': idx === 1,
+                            'l:radius-b-r-16': idx === 3,
+                          }
+                        )}
+                        width={10000}
+                        hasLoader
+                      />
+                    ) : (
+                      <VideoSrc
+                        className={cx(
+                          'object-fit w-50 h-50 radius-4 l:w-full l:h-full pointer l:radius-t-l-0 l:radius-b-l-0  l:radius-t-r-0 l:radius-b-r-0',
+                          {
+                            'border border-green border-2':
+                              Boolean(
+                                getMediaDedupeKey(mediaItem) &&
+                                selectedVariant?.media?.some(
+                                  (img) =>
+                                    getMediaDedupeKey(img) ===
+                                    getMediaDedupeKey(mediaItem)
+                                )
+                              ),
+                            'l:radius-t-r-16': idx === 1,
+                            'l:radius-b-r-16': idx === 3,
+                          }
+                        )}
+                        src={mediaItem?.url ?? ''}
+                        hasLoader={true}
+                      />
+                    )}
+                  </div>
+                ))}
               </>
             )}
           </div>
@@ -1034,24 +1035,26 @@ const ProductDetails = ({ product }: { product: Product }) => {
             <div className="flex flex-col gap-12 border-b  border-#00000014 pb-15">
               <p className="weight-500 text-20">{product.name}</p>
             </div>
-            <div className="flex flex-col gap-12 border-b  border-#00000014 pb-15">
-              <p className="weight-400 text-28">
-                {formatNumberAsPrice(variantDisplayPrices.displayPrice)}
-              </p>
-              {variantDisplayPrices.hasSlash && (
-                <div className="flex flex-wrap gap-8 a-items-center">
-                  {getStrikethroughAmounts(variantDisplayPrices).map(
-                    (amount, idx) => (
-                      <p
-                        key={idx}
-                        className="weight-400 text-16 color-#00000099 line-through"
-                      >
-                        {formatNumberAsPrice(amount)}
-                      </p>
-                    )
-                  )}
-                </div>
-              )}
+            <div className="flex flex-col sm:gap-16 gap-12 border-b  border-#00000014 pb-15">
+              <div className="flex flex-row flex-wrap a-items-end gap-8">
+                <p className="weight-400 text-28">
+                  {formatNumberAsPrice(variantDisplayPrices.displayPrice)}
+                </p>
+                {variantDisplayPrices.hasSlash && (
+                  <div className="flex flex-wrap gap-8 a-items-center mb-2">
+                    {getStrikethroughAmounts(variantDisplayPrices).map(
+                      (amount, idx) => (
+                        <p
+                          key={idx}
+                          className="weight-400 text-16 color-#00000099 line-through"
+                        >
+                          {formatNumberAsPrice(amount)}
+                        </p>
+                      )
+                    )}
+                  </div>
+                )}
+              </div>
               <div className="flex flex-col l:flex-row l:a-items-center l:j-content-between gap-12 w-100p">
                 <div className="flex a-items-center gap-12">
                   <div className="flex gap-8 a-items-center">
