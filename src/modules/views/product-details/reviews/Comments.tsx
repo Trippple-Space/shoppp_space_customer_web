@@ -14,8 +14,7 @@ export const Comments = ({ reviews, limit, productId, slug, isModal, color, open
                 <div className=''>{!reviews?.length ?
                     <div className='flex a-items-center flex-col'>
                         <Image type='image' src='empty-tray.png' alt='no comments' className='w-150 h-150' />
-                        <p className='color-#00000073'>Customers who have bought this product</p>
-                        <p className='color-#00000073'>have not yet posted comments</p>
+                        <p className='color-#00000073 text-center max-w-400 mt-10'>Customers who have bought this product have not yet posted comments</p>
                     </div>
 
                     :

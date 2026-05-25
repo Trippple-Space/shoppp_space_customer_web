@@ -2,7 +2,7 @@
 
 import {
   formatNumberAsPrice,
-  getCartItems,
+  getActiveOrderCartLines,
   getLastFiveIdChars,
   getStoreNames
 } from '@/modules/lib/utility/utility'
@@ -103,11 +103,15 @@ const OrderDetails = ({ orderId }: OrderDetailsProps) => {
   const isOngoing = singleOrder?.status !== 'CANCELLED' && singleOrder?.status !== 'DELIVERED' && singleOrder?.status !== 'RETURNED'
 
   const orderCartItems = useMemo(
-    () =>
-      singleOrder
-        ? getCartItems(singleOrder.cart?.storeGroups || [])
-        : [],
+    () => (singleOrder ? getActiveOrderCartLines(singleOrder) : []),
     [singleOrder]
+  )
+
+  const hasRemovedLines = useMemo(
+    () =>
+      singleOrder?.orderItems?.some((line) => line.status === 'REMOVED') ??
+      false,
+    [singleOrder?.orderItems]
   )
 
   const hasOrderDiscount = useMemo(
@@ -169,6 +173,13 @@ const OrderDetails = ({ orderId }: OrderDetailsProps) => {
                         <p className='text-14 weight-400 color-#00000099'>
                           {orderReturnMessage(singleOrder.status)}
                         </p>
+                        {hasRemovedLines && singleOrder.status !== 'CANCELLED' && (
+                          <p className='text-13 weight-400 color-#00000099 mt-4'>
+                            Some items were removed because a seller did not
+                            acknowledge them in time. Remaining items may still
+                            be processed.
+                          </p>
+                        )}
                       </div>
                       <div className='bg-whitesmoke p-12 radius-12 w-60 h-60 flex flex-col j-content-center a-items-center'>
                         <Image
@@ -246,7 +257,7 @@ const OrderDetails = ({ orderId }: OrderDetailsProps) => {
                           <button
                             className='flex gap-10 a-items-center px-10 py-7 radius-5 border border-#00000026 bg-none cursor-pointer'
                             onClick={() =>
-                              buyOrdersAgain(getCartItems(singleOrder?.cart?.storeGroups))
+                              buyOrdersAgain(getActiveOrderCartLines(singleOrder))
                             }
                           >
                             <PiArrowClockwise className='w-fit' />
