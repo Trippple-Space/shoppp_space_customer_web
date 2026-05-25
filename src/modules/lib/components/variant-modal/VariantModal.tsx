@@ -9,9 +9,11 @@ import { useCart } from '../../utility/hooks/use-cart';
 import { PiShoppingCartFill, PiStorefront } from 'react-icons/pi';
 import classNames from 'classnames';
 import { AiFillHeart, AiFillStar, AiOutlineHeart } from 'react-icons/ai';
+import { formatNumberAsPrice } from '../../utility/utility';
 import {
-  formatNumberAsPrice,
-} from '../../utility/utility';
+  getStrikethroughAmounts,
+  getVariantDisplayPrices,
+} from '../../utility/visible-discount';
 import ProductDetailModal from '../product-detail-modal/ProductDetailModal';
 import { SavedVariant } from '../../utility/types/SavedVariant.interface';
 import { guestSession } from '../../utility/guest-session';
@@ -94,6 +96,11 @@ const VariantModal = ({
   const isSaved = savedVariants?.find(
     (item: SavedVariant) => item.variantId === variant?.productVariantId
   );
+
+  const variantDisplayPrices = getVariantDisplayPrices({
+    variant: variant.productVariant,
+    product: variant.productVariant?.product,
+  });
   const handleSave = () => {
     if (!variant?.productVariantId) return;
     if (isSaved) {
@@ -293,13 +300,31 @@ const VariantModal = ({
             </div>
           )} */}
           </div>
-          <div className="md:text-16 text-12 weight-600 md:line-height-24 line-height-20">
-            {formatNumberAsPrice(
-              variant?.productVariant.finalPrice ??
-                variant.productVariant?.product?.finalPrice ??
-                0
+          <div className="flex md:gap-8 md:a-items-center gap-6">
+            <p className="md:text-16 text-12 weight-600 md:line-height-24 line-height-20">
+              {formatNumberAsPrice(variantDisplayPrices.displayPrice)}
+            </p>
+            {variantDisplayPrices.hasSlash && (
+              <div className="flex flex-wrap gap-6 md:gap-8 a-items-center">
+                {getStrikethroughAmounts(variantDisplayPrices).map(
+                  (amount, idx) => (
+                    <p
+                      key={idx}
+                      className="md:text-12 text-10 weight-400 md:line-height-20 color-#00000099 line-through"
+                    >
+                      {formatNumberAsPrice(amount)}
+                    </p>
+                  )
+                )}
+              </div>
             )}
-            {/* <span className="weight-300 l:text-15 text-10">{!!selectedVariant?.stockUnit && 'per'} {selectedVariant?.stockUnit}</span> */}
+            {!variantDisplayPrices.hasSlash && (
+              <span className="sm:text-10 text-8 weight-400 md:line-height-20 line-height-12.1 md:mb-0 mb-2" style={{ alignSelf: 'flex-end' }}>
+                {variant.productVariant?.stockUnit
+                  ? `/ ${variant.productVariant.stockUnit}`
+                  : ' / piece'}
+              </span>
+            )}
           </div>
           {/* <div className="flex flex-wrap gap-4">
           {product?.tags?.map((tag: any, i: number) => (

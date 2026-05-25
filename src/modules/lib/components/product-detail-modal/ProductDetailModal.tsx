@@ -26,6 +26,10 @@ import { createPortal } from 'react-dom';
 import { guestSession } from '../../utility/guest-session';
 import { CartItem } from '../../utility/types/cart.interface';
 import { buildVariantMediaPreviewItems } from '../../utility/product-media';
+import {
+  getStrikethroughAmounts,
+  getVariantDisplayPrices,
+} from '../../utility/visible-discount';
 
 interface ProductDetailModalProp {
   openSingleProductModal: boolean;
@@ -373,7 +377,10 @@ const ProductDetailModal = ({
     );
   }, [uniqueVariantsFromProductImages]);
 
-  const displayPrice = selectedVariant?.finalPrice || product?.finalPrice;
+  const variantDisplayPrices = getVariantDisplayPrices({
+    variant: selectedVariant,
+    product,
+  });
   const descriptionLength = product?.longDescription?.split(' ')?.length || 0;
   const maxDisplayDescLength = 20;
 
@@ -633,63 +640,63 @@ const ProductDetailModal = ({
                             0 && (
                               <div className="flex gap-10 py-5 overflow-x-auto a-items-center no-scrollbar w-full">
                                 {variantPreviewItems.map(({ variant: vari, media: mediaItem }) => (
-                                    <div
-                                      key={`${vari.id}-${mediaItem.url}`}
-                                      onClick={() => {
-                                        const isSameVariant =
-                                          selectedVariant?.id === vari.id;
-                                        const isSameImage =
-                                          selectedImage === mediaItem.url;
+                                  <div
+                                    key={`${vari.id}-${mediaItem.url}`}
+                                    onClick={() => {
+                                      const isSameVariant =
+                                        selectedVariant?.id === vari.id;
+                                      const isSameImage =
+                                        selectedImage === mediaItem.url;
 
-                                        if (isSameVariant && isSameImage) {
-                                          return;
-                                        }
+                                      if (isSameVariant && isSameImage) {
+                                        return;
+                                      }
 
-                                        setForcedVariantId(vari.id);
-                                        setActiveFilters(
-                                          buildFiltersFromVariant(vari)
-                                        );
-                                        setSelectedImage(mediaItem.url);
-                                        setImageSource('preview');
-                                        setSelectedMediaType(mediaItem?.type);
-                                      }}
-                                      className="w-90 min-w-90 h-90 pointer relative"
-                                    >
-                                      {mediaItem?.type === 'image' ? (
-                                        <Image
-                                          src={mediaItem.url}
-                                          alt="product-image"
-                                          className={cx(
-                                            `object-fit w-full h-full overflow-hidden ${vari.status === 'OUT_OF_STOCK'
-                                              ? 'greyscale'
-                                              : ''
-                                            }`,
-                                            {
-                                              'border border-green border-2':
-                                                selectedImage === mediaItem.url,
-                                            }
-                                          )}
-                                          width={10000}
-                                          hasLoader={true}
-                                        />
-                                      ) : (
-                                        <VideoSrc
-                                          src={mediaItem.url}
-                                          className={cx(
-                                            `object-fit w-full h-full overflow-hidden ${vari.status === 'OUT_OF_STOCK'
-                                              ? 'greyscale'
-                                              : ''
-                                            }`,
-                                            {
-                                              'border border-green border-2':
-                                                selectedImage === mediaItem.url,
-                                            }
-                                          )}
-                                          hasLoader={true}
-                                        />
-                                      )}
-                                    </div>
-                                  ))}
+                                      setForcedVariantId(vari.id);
+                                      setActiveFilters(
+                                        buildFiltersFromVariant(vari)
+                                      );
+                                      setSelectedImage(mediaItem.url);
+                                      setImageSource('preview');
+                                      setSelectedMediaType(mediaItem?.type);
+                                    }}
+                                    className="w-90 min-w-90 h-90 pointer relative"
+                                  >
+                                    {mediaItem?.type === 'image' ? (
+                                      <Image
+                                        src={mediaItem.url}
+                                        alt="product-image"
+                                        className={cx(
+                                          `object-fit w-full h-full overflow-hidden ${vari.status === 'OUT_OF_STOCK'
+                                            ? 'greyscale'
+                                            : ''
+                                          }`,
+                                          {
+                                            'border border-green border-2':
+                                              selectedImage === mediaItem.url,
+                                          }
+                                        )}
+                                        width={10000}
+                                        hasLoader={true}
+                                      />
+                                    ) : (
+                                      <VideoSrc
+                                        src={mediaItem.url}
+                                        className={cx(
+                                          `object-fit w-full h-full overflow-hidden ${vari.status === 'OUT_OF_STOCK'
+                                            ? 'greyscale'
+                                            : ''
+                                          }`,
+                                          {
+                                            'border border-green border-2':
+                                              selectedImage === mediaItem.url,
+                                          }
+                                        )}
+                                        hasLoader={true}
+                                      />
+                                    )}
+                                  </div>
+                                ))}
                               </div>
                             )}
                         </div>
@@ -721,10 +728,27 @@ const ProductDetailModal = ({
                           </p>
                         </div>
                         <p className="weight-400"> in {product?.type} </p>
-                        <p className="weight-600 text-30 text-black">
-                          {' '}
-                          {formatNumberAsPrice(displayPrice || 0)}{' '}
-                        </p>
+                        <div className="flex a-items-end gap-6">
+                          <p className="weight-600 text-30 text-black">
+                            {' '}
+                            {formatNumberAsPrice(variantDisplayPrices.displayPrice)}
+                          </p>
+                          {variantDisplayPrices.hasSlash && (
+                            <div className="flex flex-wrap gap-6 md:gap-8 a-items-end mb-2">
+                              {getStrikethroughAmounts(variantDisplayPrices).map(
+                                (amount, idx) => (
+                                  <p
+                                    key={idx}
+                                    className="md:text-12 text-10 weight-400 md:line-height-20 color-#00000099 line-through"
+                                  >
+                                    {formatNumberAsPrice(amount)}
+                                  </p>
+                                )
+                              )}
+                            </div>
+                          )}
+                          <p className='sm:text-10 text-8 weight-400 md:line-height-20 line-height-12.1'>{selectedVariant?.stockUnit ? `/ ${selectedVariant?.stockUnit}` : '/ piece'}</p >
+                        </div>
                       </div>
 
                       <div className="mt-10 flex flex-col">
@@ -909,11 +933,11 @@ const ProductDetailModal = ({
                                     configs,
                                     selectedVariant
                                       ? {
-                                          ...selectedVariant,
-                                          product:
-                                            selectedVariant.product ??
-                                            product,
-                                        }
+                                        ...selectedVariant,
+                                        product:
+                                          selectedVariant.product ??
+                                          product,
+                                      }
                                       : undefined
                                   );
                                 }

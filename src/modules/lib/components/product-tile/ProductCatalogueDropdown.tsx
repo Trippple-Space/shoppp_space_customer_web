@@ -5,9 +5,12 @@ import { HiSquares2X2 } from 'react-icons/hi2';
 import { ProductCatalogue } from '../../utility/types/product.interface';
 import {
   useFloating,
+  autoUpdate,
   offset,
   flip,
   shift,
+  size,
+  limitShift,
   useHover,
   useDismiss,
   useInteractions,
@@ -141,7 +144,25 @@ export function ProductCatalogueDropdown({ productCatalogues }: ProductCatalogue
     open,
     onOpenChange: setOpen,
     placement: 'top-start',
-    middleware: [offset(8), flip({ fallbackPlacements: ['bottom-start'] }), shift({ padding: 12 })],
+    strategy: 'fixed',
+    whileElementsMounted: autoUpdate,
+    middleware: [
+      offset(8),
+      flip({
+        fallbackPlacements: ['top-end', 'bottom-end', 'bottom-start'],
+      }),
+      shift({ padding: 8, limiter: limitShift() }),
+      size({
+        padding: 8,
+        apply({ availableWidth, elements }) {
+          const width = Math.min(Math.max(availableWidth, 180), 480);
+          Object.assign(elements.floating.style, {
+            width: `${width}px`,
+            maxWidth: `${width}px`,
+          });
+        },
+      }),
+    ],
   });
   const hover = useHover(context, {
     handleClose: safePolygon(),
@@ -170,8 +191,6 @@ export function ProductCatalogueDropdown({ productCatalogues }: ProductCatalogue
           className='sm:p-10 p-5 sm:pt-14'
           style={{
             ...floatingStyles,
-            minWidth: 'min(90vw, 560px)',
-            maxWidth: 'min(92vw, 640px)',
             maxHeight: 'min(80vh, 560px)',
             overflow: 'auto',
             zIndex: 9999,

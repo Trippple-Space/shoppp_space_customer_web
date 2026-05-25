@@ -3,10 +3,13 @@ import React, { FC, useEffect, useMemo, useRef, useState } from 'react';
 import Image from '../image/Image';
 import { AiFillStar, AiFillHeart } from 'react-icons/ai';
 import classNames from 'classnames';
-import { Product, ProductVariant } from '../../utility/types/product.interface';
+import {
+  ConfigurationRecord,
+  Product,
+  ProductVariant,
+} from '../../utility/types/product.interface';
 import {
   checkMediaType,
-  displayProductPill,
   formatNumberAsPrice,
   handleFlyToCart,
   onGoingOrderStatusQuery,
@@ -37,10 +40,47 @@ import { guestSession } from '../../utility/guest-session';
 import { CartItem } from '../../utility/types/cart.interface';
 import { useSavedVariant } from '../../utility/hooks/use-saved-variants';
 import {
+  extractVisibleDiscountMeta,
   getStrikethroughAmounts,
   getVariantDisplayPrices,
 } from '../../utility/visible-discount';
 import { buildVariantMediaPreviewItems } from '../../utility/product-media';
+
+const PRODUCT_TILE_PILL_STYLES = {
+  preorder: {
+    pillBackground: '#E6EDF4',
+    pillColor: '#4018DE',
+  },
+  'custom-made': {
+    pillBackground: '#F4EDE6',
+    pillColor: '#DE7818',
+  },
+  'ready-to-wear': {
+    pillBackground: 'rgba(11, 147, 120, 0.1)',
+    pillColor: '#0B9378',
+  },
+  discount: {
+    pillBackground: '#FFF1F0',
+    pillColor: '#CF1322',
+  },
+} as const;
+
+const resolveConfigPillKind = (
+  record: Pick<ConfigurationRecord, 'slug' | 'name' | 'description'>
+): keyof Pick<
+  typeof PRODUCT_TILE_PILL_STYLES,
+  'preorder' | 'custom-made'
+> => {
+  const haystack = `${record.slug ?? ''} ${record.name ?? ''} ${record.description ?? ''}`
+    .toLowerCase()
+    .replace(/_/g, '-');
+
+  if (haystack.includes('preorder') || haystack.includes('pre-order')) {
+    return 'preorder';
+  }
+
+  return 'custom-made';
+};
 
 interface IProductTile {
   product: Product;
@@ -296,43 +336,40 @@ const ProductTile: FC<IProductTile> = ({
     setSelectedVariant(product?.variants?.[0]);
   }, [product?.id]);
 
-  const [topTwoPills, setTopTwoPills] = useState<any[]>([]);
   useEffect(() => {
-    const pills = displayProductPill(product?.tags);
-    setTopTwoPills(pills);
-
     if (!seenAddToCartIconOnBoarding) {
       localStorage.setItem('seenAddToCartIcon', 'true');
     }
-  }, []);
+  }, [seenAddToCartIconOnBoarding]);
 
   const configPills = useMemo(() => {
     const records = selectedVariant?.configurationRecords ?? [];
 
     return records
       .filter((r: any) => !!r?.description)
-      .map((r: any) => ({
-        text: r.description,
-        pillBackground: '#FFF7E6',
-        pillColor: '#AD6800',
-        source: 'config',
-      }));
+      .map((r: ConfigurationRecord) => {
+        const kind = resolveConfigPillKind(r);
+        return {
+          text: r.description,
+          ...PRODUCT_TILE_PILL_STYLES[kind],
+          source: kind,
+        };
+      });
   }, [selectedVariant?.id]);
 
-  const finalTopPills = useMemo(() => {
-    const configs = configPills.slice(0, 2);
-    const normal = topTwoPills ?? [];
-
-    if (configs.length >= 2) {
-      return configs;
+  const visibleConfigPills = useMemo(() => {
+    if (configPills.length > 0) {
+      return configPills.slice(0, 2);
     }
 
-    if (configs.length === 1) {
-      return [...configs, normal[0]].filter(Boolean);
-    }
-
-    return normal.slice(0, 2);
-  }, [configPills, topTwoPills]);
+    return [
+      {
+        text: 'Ready to wear',
+        ...PRODUCT_TILE_PILL_STYLES['ready-to-wear'],
+        source: 'ready-to-wear',
+      },
+    ];
+  }, [configPills]);
 
   const activeVariantId = selectedVariant?.id ?? product?.variants?.[0]?.id;
   const resolvedSavedVariants = savedVariants ?? fallbackSavedVariants;
@@ -403,6 +440,42 @@ const ProductTile: FC<IProductTile> = ({
     variant: selectedVariant,
     product,
   });
+
+  const discountPill = useMemo(() => {
+    if (!variantDisplayPrices.hasSlash) return null;
+
+    const payable = variantDisplayPrices.displayPrice;
+    const strike = getStrikethroughAmounts(variantDisplayPrices)[0];
+    if (!strike || strike <= payable) return null;
+
+    const discount = product?.discount;
+    const visibleMeta = extractVisibleDiscountMeta(selectedVariant);
+
+    let text: string;
+    if (variantDisplayPrices.hasVisualSlash && visibleMeta?.value) {
+      if (visibleMeta.discountCalculationType === 'PERCENTAGE') {
+        text = `${Math.round(Number(visibleMeta.value))}% off`;
+      } else {
+        text = `${formatNumberAsPrice(visibleMeta.value)} off`;
+      }
+    } else if (variantDisplayPrices.hasVendorSlash && discount?.value) {
+      if (discount.discountCalculationType === 'PERCENTAGE') {
+        text = `${Math.round(Number(discount.value))}% off`;
+      } else {
+        text = `${formatNumberAsPrice(discount.value)} off`;
+      }
+    } else {
+      const pct = Math.round(((strike - payable) / strike) * 100);
+      if (pct <= 0) return null;
+      text = `${pct}% off`;
+    }
+
+    return {
+      text,
+      ...PRODUCT_TILE_PILL_STYLES.discount,
+      source: 'discount',
+    };
+  }, [variantDisplayPrices, selectedVariant, product?.discount]);
 
   const hasProperties = useMemo(() => {
     if (!selectedVariant) return false;
@@ -844,12 +917,29 @@ const ProductTile: FC<IProductTile> = ({
           />
         </div>
 
-        {/* PILLS */}
-        <div className="absolute w-fit h-fit t-0 l-0 z-1">
-          {finalTopPills.map((pill, index) => (
+        {/* DISCOUNT PILL */}
+        {discountPill && (
+          <div className="absolute w-fit h-fit t-0 l-0 z-1">
             <div
-              key={index + pill.text + pill.pillColor}
               className="mt-10 l:ml-15 l:mt-15 whitespace-nowrap w-fit h-20 radius-20 flex a-items-center j-content-center px-10 py-15 ml-5"
+              style={{
+                backgroundColor: discountPill.pillBackground,
+                color: discountPill.pillColor,
+              }}
+            >
+              <p className="text-10 l:text-12">{discountPill.text}</p>
+            </div>
+          </div>
+        )}
+      </div>
+
+      {/* CONFIG PILLS */}
+      {visibleConfigPills.length > 0 && (
+        <div className="flex flex-wrap gap-6 w-fit h-fit">
+          {visibleConfigPills.map((pill, index) => (
+            <div
+              key={`${pill.source}-${index}-${pill.text}`}
+              className="mt-16 whitespace-nowrap w-fit h-20 radius-20 flex a-items-center j-content-center px-10 py-15"
               style={{
                 backgroundColor: pill.pillBackground,
                 color: pill.pillColor,
@@ -859,64 +949,65 @@ const ProductTile: FC<IProductTile> = ({
             </div>
           ))}
         </div>
-      </div>
+      )}
 
-      <div className="scroll-x no-scrollbar">
-        <div
-          id="product varients"
-          className="l:mt-16 mt-14 l:h-51.2 h-45 flex a-items-center md:gap-6 gap-4 w-full overflow-auto whitespace-nowrap no-scrollbar"
-        >
+      <div
+        id="product varients"
+        className="l:mt-16 mt-14 l:h-51.2 h-45 flex flex-nowrap a-items-center j-content-start md:gap-6 gap-4 w-full min-w-0"
+      >
+        <div className="shrink-0 a-self-center">
           <ProductCatalogueDropdown productCatalogues={product?.productCatalogues} />
+        </div>
+        <div className="flex-1 min-w-0 overflow-x-auto flex flex-nowrap a-items-center md:gap-6 gap-4 whitespace-nowrap no-scrollbar">
           {variantPreviewItems.map(({ variant, media: mediaItem }, i: number) => (
-              <div
-                key={`${variant.id}-${mediaItem?.url}-${i}`}
-                className="l:w-35.2 l:min-w-35.2 l:h-35.2 w-31 min-w-31 h-31 pointer md:radius-4 radius-3 a-self-center relative"
-              >
-                {mediaItem?.type === 'image' ? (
-                  <Image
-                    key={`${variant.id}-${mediaItem.url}-${i}`}
-                    className={classNames(
-                      `l:w-35.2 l:min-w-35.2 l:h-35.2 w-31 min-w-31 h-31 pointer md:radius-4 radius-3 a-self-center g|object-fit:cover ${variant?.status === 'OUT_OF_STOCK' && 'out-of-stock'}`,
-                      {
-                        'border border-2 border-black':
-                          selectedImage == mediaItem?.url,
-                        [`border-${/*variant?.properties?.color?.toLocaleLowerCase() ||*/ '#0B9378'}`]:
-                          selectedImage == mediaItem?.url,
-                      }
-                    )}
-                    src={mediaItem?.url}
-                    onClick={() => {
-                      setSelectedVariant(variant);
-                      setRecentlyViewsId(variant.id);
-                      setSelectedImage(mediaItem?.url);
-                    }}
-                    alt="product-image"
-                    hasLoader={true}
-                    pulseClassName="md:radius-4 radius-3"
-                  />
-                ) : (
-                  <VideoSrc
-                    key={`${variant.id}-${mediaItem.url}-${i}`}
-                    className={classNames(
-                      `l:w-35.2 l:min-w-35.2 l:h-35.2 w-31 min-w-31 h-31 pointer md:radius-4 radius-3 a-self-center g|object-fit:cover ${variant?.status === 'OUT_OF_STOCK' && 'out-of-stock'}`,
-                      {
-                        'border border-2': selectedImage == mediaItem?.url,
-                        [`border-${/*variant?.properties?.color?.toLocaleLowerCase() ||*/ '#0B9378'}`]:
-                          selectedImage == mediaItem?.url,
-                      }
-                    )}
-                    onClick={() => {
-                      setSelectedVariant(variant);
-                      setRecentlyViewsId(variant.id);
-                      setSelectedImage(mediaItem?.url);
-                    }}
-                    src={mediaItem?.url}
-                    hasLoader={true}
-                  />
-                )}
-              </div>
-            ))
-          }
+            <div
+              key={`${variant.id}-${mediaItem?.url}-${i}`}
+              className="l:w-35.2 l:min-w-35.2 l:h-35.2 w-31 min-w-31 h-31 pointer md:radius-4 radius-3 a-self-center relative"
+            >
+              {mediaItem?.type === 'image' ? (
+                <Image
+                  key={`${variant.id}-${mediaItem.url}-${i}`}
+                  className={classNames(
+                    `l:w-35.2 l:min-w-35.2 l:h-35.2 w-31 min-w-31 h-31 pointer md:radius-4 radius-3 a-self-center g|object-fit:cover ${variant?.status === 'OUT_OF_STOCK' && 'out-of-stock'}`,
+                    {
+                      'border border-2 border-black':
+                        selectedImage == mediaItem?.url,
+                      [`border-${/*variant?.properties?.color?.toLocaleLowerCase() ||*/ '#0B9378'}`]:
+                        selectedImage == mediaItem?.url,
+                    }
+                  )}
+                  src={mediaItem?.url}
+                  onClick={() => {
+                    setSelectedVariant(variant);
+                    setRecentlyViewsId(variant.id);
+                    setSelectedImage(mediaItem?.url);
+                  }}
+                  alt="product-image"
+                  hasLoader={true}
+                  pulseClassName="md:radius-4 radius-3"
+                />
+              ) : (
+                <VideoSrc
+                  key={`${variant.id}-${mediaItem.url}-${i}`}
+                  className={classNames(
+                    `l:w-35.2 l:min-w-35.2 l:h-35.2 w-31 min-w-31 h-31 pointer md:radius-4 radius-3 a-self-center g|object-fit:cover ${variant?.status === 'OUT_OF_STOCK' && 'out-of-stock'}`,
+                    {
+                      'border border-2': selectedImage == mediaItem?.url,
+                      [`border-${/*variant?.properties?.color?.toLocaleLowerCase() ||*/ '#0B9378'}`]:
+                        selectedImage == mediaItem?.url,
+                    }
+                  )}
+                  onClick={() => {
+                    setSelectedVariant(variant);
+                    setRecentlyViewsId(variant.id);
+                    setSelectedImage(mediaItem?.url);
+                  }}
+                  src={mediaItem?.url}
+                  hasLoader={true}
+                />
+              )}
+            </div>
+          ))}
         </div>
       </div>
       <div
@@ -970,28 +1061,37 @@ const ProductTile: FC<IProductTile> = ({
               </div>
             )
             : null}
-        <div ref={rowRef} className="flex j-content-between gap-15">
+        <div ref={rowRef} className="flex j-content-between sm:gap-15 gap-6">
           <div
             ref={priceRef}
-            className="flex md:gap-8 md:a-items-center md:flex-row flex-col"
+            className="flex md:gap-8 md:a-items-center gap-3"
           >
-            <p className="md:text-16 text-12 weight-600 md:line-height-24 line-height-20">
-              {formatNumberAsPrice(variantDisplayPrices.displayPrice)}
-            </p>
-            {variantDisplayPrices.hasSlash && (
-              <div className="flex flex-wrap gap-6 md:gap-8 a-items-center">
-                {getStrikethroughAmounts(variantDisplayPrices).map(
-                  (amount, idx) => (
-                    <p
-                      key={idx}
-                      className="md:text-12 text-10 weight-400 md:line-height-20 color-#00000099 line-through"
-                    >
-                      {formatNumberAsPrice(amount)}
-                    </p>
-                  )
-                )}
-              </div>
-            )}
+            <div className="flex md:gap-8 md:a-items-center md:flex-row flex-col">
+              <p className="md:text-16 text-12 weight-600 md:line-height-24 line-height-20">
+                {formatNumberAsPrice(variantDisplayPrices.displayPrice)}
+              </p>
+              {variantDisplayPrices.hasSlash && (
+                <div className="flex flex-wrap gap-6 md:gap-8 a-items-center">
+                  {getStrikethroughAmounts(variantDisplayPrices).map(
+                    (amount, idx) => (
+                      <p
+                        key={idx}
+                        className="md:text-12 text-10 weight-400 md:line-height-20 color-#00000099 line-through"
+                      >
+                        {formatNumberAsPrice(amount)}
+                      </p>
+                    )
+                  )}
+                </div>
+              )}
+            </div>
+            {
+              variantDisplayPrices.hasSlash ? (
+                null
+              ) : (
+                <span className='sm:text-10 text-8 weight-400 md:line-height-20 line-height-12.1 md:mb-0 mb-2' style={{ alignSelf: 'flex-end' }}>{selectedVariant?.stockUnit ? `/ ${selectedVariant?.stockUnit}` : ' / piece'}</span>
+              )
+            }
           </div>
 
           <div className="text-9 sm:text-10 text-grey flex gap-6 a-items-center relative">

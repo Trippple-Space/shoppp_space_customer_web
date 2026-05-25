@@ -2,9 +2,10 @@ import {
   checkMediaType,
   ellipseText,
   formatNumberAsPrice,
-  getCartItems,
+  getActiveOrderCartLines,
   getClosestColorName,
   getLastFiveIdChars,
+  getOrderCartLinesWithStatus,
 } from '@/modules/lib/utility/utility';
 import { IoMdClose } from 'react-icons/io';
 import Image from '../image/Image';
@@ -41,11 +42,12 @@ const OrderedProductModal = ({
     setExpandedId((prevId) => (prevId === id ? null : id));
   };
 
-  const cartItems = getCartItems(order?.cart?.storeGroups || []);
+  const cartItems = getOrderCartLinesWithStatus(order);
+  const activeCartItems = getActiveOrderCartLines(order);
   const hasOrderDiscount = hasOrderLevelDiscountInCart(order?.cart);
   const orderDisplaySubtotal = hasOrderDiscount
-    ? sumOrderCartReferenceSubtotal(cartItems)
-    : sumOrderCartPayableTotal(cartItems);
+    ? sumOrderCartReferenceSubtotal(activeCartItems)
+    : sumOrderCartPayableTotal(activeCartItems);
   const orderDisplayDiscount = hasOrderDiscount
     ? getOrderLevelDiscountTotalFromCart(order?.cart)
     : 0;
@@ -103,7 +105,7 @@ const OrderedProductModal = ({
                 </p>
                 <button
                   className="flex gap-10 a-items-center px-10 py-7 radius-5 border border-#00000026 bg-none cursor-pointer weight-500"
-                  onClick={() => buyOrdersAgain(cartItems)}
+                  onClick={() => buyOrdersAgain(activeCartItems)}
                 >
                   <PiArrowClockwise className="w-fit" />
                   Buy again
@@ -124,7 +126,8 @@ const OrderedProductModal = ({
                     'flex flex-col gap-10 overflow-auto j-content-center no-scrollbar'
                   )}
                 >
-                  {cartItems.map((item: CartItem, i) => {
+                  {cartItems.map((item: CartItem & { lineStatus?: string }, i) => {
+                    const isRemoved = item.lineStatus === 'REMOVED';
                     const mediaType =
                       checkMediaType(item?.variant.media[0].url) ?? 'image';
                     const linePrices = getLineDisplayPrices({
@@ -135,7 +138,9 @@ const OrderedProductModal = ({
                     });
 
                     return (
-                      <div className="flex flex-col gap-4 bg-whitesmoke radius-8 p-10">
+                      <div
+                        className={`flex flex-col gap-4 bg-whitesmoke radius-8 p-10 ${isRemoved ? 'opacity-70' : ''}`}
+                      >
                         <div
                           className={classNames(
                             'gap-5 flex flex-col l:flex-row space-between a-items-start'
@@ -161,13 +166,20 @@ const OrderedProductModal = ({
                             <div className="flex flex-col gap-6">
                               <div className="flex flex-col gap-3">
                                 <div
-                                  className="weight-600 text-12 xl:w-10 xl:white-space-nowrap text-overflow-ellipsis"
+                                  className="weight-600 text-12 flex flex-wrap items-center gap-2"
                                   onClick={() => handleTextClick(item.id)}
                                 >
-                                  {ellipseText(
-                                    item.variant.product?.name ?? '',
-                                    expandedId === item.id,
-                                    30
+                                  <span className="xl:white-space-nowrap text-overflow-ellipsis">
+                                    {ellipseText(
+                                      item.variant.product?.name ?? '',
+                                      expandedId === item.id,
+                                      30
+                                    )}
+                                  </span>
+                                  {isRemoved && (
+                                    <span className="text-[10px] uppercase font-semibold px-2 py-0.5 rounded bg-[#6C757D] text-white shrink-0">
+                                      Removed
+                                    </span>
                                   )}
                                 </div>
                                 <p className="color-#0000008C text-10 w-fit">
