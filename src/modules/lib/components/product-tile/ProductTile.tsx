@@ -11,6 +11,7 @@ import {
 import {
   checkMediaType,
   formatNumberAsPrice,
+  formatStockUnitSuffix,
   handleFlyToCart,
   onGoingOrderStatusQuery,
 } from '../../utility/utility';
@@ -1085,13 +1086,20 @@ const ProductTile: FC<IProductTile> = ({
                 </div>
               )}
             </div>
-            {
-              variantDisplayPrices.hasSlash ? (
-                null
-              ) : (
-                <span className='sm:text-10 text-8 weight-400 md:line-height-20 line-height-12.1 md:mb-0 mb-2' style={{ alignSelf: 'flex-end' }}>{selectedVariant?.stockUnit ? `/ ${selectedVariant?.stockUnit}` : ' / piece'}</span>
-              )
-            }
+            {!variantDisplayPrices.hasSlash &&
+              (() => {
+                const stockUnitSuffix = formatStockUnitSuffix(
+                  selectedVariant?.stockUnit
+                );
+                return stockUnitSuffix ? (
+                  <span
+                    className="sm:text-10 text-8 weight-400 md:line-height-20 line-height-12.1 md:mb-0 mb-2"
+                    style={{ alignSelf: 'flex-end' }}
+                  >
+                    {stockUnitSuffix}
+                  </span>
+                ) : null;
+              })()}
           </div>
 
           <div className="text-9 sm:text-10 text-grey flex gap-6 a-items-center relative">

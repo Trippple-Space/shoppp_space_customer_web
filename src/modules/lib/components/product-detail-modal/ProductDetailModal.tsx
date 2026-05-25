@@ -4,7 +4,7 @@ import { IoMdClose } from 'react-icons/io';
 import Link from 'next/link';
 import { Product, ProductVariant } from '../../utility/types/product.interface';
 import { useCart } from '../../utility/hooks/use-cart';
-import { cx, formatNumberAsPrice } from '../../utility/utility';
+import { cx, formatNumberAsPrice, formatStockUnitSuffix } from '../../utility/utility';
 import QuantitySelector from '../quantity-selector/QuantitySelector';
 import Image from '../image/Image';
 import { MdArrowBackIos, MdArrowForwardIos } from 'react-icons/md';
@@ -747,7 +747,16 @@ const ProductDetailModal = ({
                               )}
                             </div>
                           )}
-                          <p className='sm:text-10 text-8 weight-400 md:line-height-20 line-height-12.1'>{selectedVariant?.stockUnit ? `/ ${selectedVariant?.stockUnit}` : '/ piece'}</p >
+                          {(() => {
+                            const stockUnitSuffix = formatStockUnitSuffix(
+                              selectedVariant?.stockUnit
+                            );
+                            return stockUnitSuffix ? (
+                              <p className="sm:text-10 text-8 weight-400 md:line-height-20 line-height-12.1">
+                                {stockUnitSuffix}
+                              </p>
+                            ) : null;
+                          })()}
                         </div>
                       </div>
 

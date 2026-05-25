@@ -25,6 +25,7 @@ import {
   checkMediaType,
   cx,
   formatNumberAsPrice,
+  formatStockUnitSuffix,
   handleFlyToCart,
   onGoingOrderStatusQuery,
 } from '@/modules/lib/utility/utility';
@@ -692,7 +693,16 @@ const ProductDetails = ({ product }: { product: Product }) => {
               )}
             </div>
           )}
-          <p className='text-10 weight-400 md:line-height-20 line-height-12.1 md:mb-0 mb-2'>{selectedVariant?.stockUnit ? `/ ${selectedVariant?.stockUnit}` : '/ piece'}</p >
+          {(() => {
+            const stockUnitSuffix = formatStockUnitSuffix(
+              selectedVariant?.stockUnit
+            );
+            return stockUnitSuffix ? (
+              <p className="text-10 weight-400 md:line-height-20 line-height-12.1 md:mb-0 mb-2">
+                {stockUnitSuffix}
+              </p>
+            ) : null;
+          })()}
         </div>
 
         {!selectedVariant &&
