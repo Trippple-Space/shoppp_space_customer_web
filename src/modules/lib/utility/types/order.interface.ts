@@ -22,9 +22,22 @@ export interface Delivery {
      lastUpdated: string;
 }
 
+/** Per-line status from the API (ONGOING, REMOVED, ACKNOWLEDGED, etc.). */
+export interface OrderLineItem {
+     id: string;
+     status: string;
+     item: Record<string, unknown>;
+     store?: {
+          id: string;
+          name?: string;
+          slug?: string;
+     };
+}
+
 export interface Order {
      id: string;
      cart: Cart;
+     orderItems?: OrderLineItem[];
      status: string;
      user: User;
      delivery: Delivery;

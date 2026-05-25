@@ -674,7 +674,7 @@ const ProductDetails = ({ product }: { product: Product }) => {
   const addToCartBtn = () => {
     return (
       <div className="flex flex-col gap-16">
-        <div className="flex flex-row flex-wrap a-items-end gap-8">
+        <div className="l:flex flex-row flex-wrap a-items-end gap-8 hidden">
           <p className="text-24 weight-600">
             {formatNumberAsPrice(variantDisplayPrices.displayPrice)}
           </p>
@@ -1035,13 +1035,13 @@ const ProductDetails = ({ product }: { product: Product }) => {
             <div className="flex flex-col gap-12 border-b  border-#00000014 pb-15">
               <p className="weight-500 text-20">{product.name}</p>
             </div>
-            <div className="flex flex-col sm:gap-16 gap-12 border-b  border-#00000014 pb-15">
-              <div className="flex flex-row flex-wrap a-items-end gap-8">
-                <p className="weight-400 text-28">
+            <div className="flex flex-col gap-16 border-b border-#00000014 pb-15">
+              <div className='flex flex-col gap-8'>
+                <p className="weight-400 md:text-32 text-28">
                   {formatNumberAsPrice(variantDisplayPrices.displayPrice)}
                 </p>
                 {variantDisplayPrices.hasSlash && (
-                  <div className="flex flex-wrap gap-8 a-items-center mb-2">
+                  <div className="flex flex-wrap gap-8 a-items-center">
                     {getStrikethroughAmounts(variantDisplayPrices).map(
                       (amount, idx) => (
                         <p
@@ -1108,19 +1108,20 @@ const ProductDetails = ({ product }: { product: Product }) => {
                 </div>
               </div>
             </div>
-            <div className="flex flex-col gap-12 border-b  border-#00000014 pb-15">
-              <div className="flex a-items-center py-15 gap-12">
+
+            <div className="l:flex flex-col gap-12 border-b border-#00000014 mt--12 hidden">
+              <div className="flex a-items-center py-16 gap-12">
                 <div className="bg-black flex a-items-center j-content-center radius-999 color-white py-10 px-14 h-43 w-43">
                   {product.store.name[0]}
                 </div>
-                <div className="">
-                  <p className="text-16 weight-500">
-                    Seller by {product.store.name}
+                <div className="flex flex-col gap-2">
+                  <p className="text-16 weight-500 line-height-24">
+                    Sold by {product.store.name}
                   </p>
                   <Link
                     href={storeUrl}
                     target="_blank"
-                    className="color-#00000099 text-14 border-b"
+                    className="color-#00000099 text-14 border-b line-height-22"
                   >
                     Visit store home
                   </Link>
@@ -1220,6 +1221,26 @@ const ProductDetails = ({ product }: { product: Product }) => {
               />
 
               {addToCartBtn()}
+            </div>
+
+            <div className="flex flex-col gap-12 border-b border-#00000014 mt--12 l:hidden">
+              <div className="flex a-items-center py-16 gap-12">
+                <div className="bg-black flex a-items-center j-content-center radius-999 color-white py-10 px-14 h-43 w-43">
+                  {product.store.name[0]}
+                </div>
+                <div className="flex flex-col gap-2">
+                  <p className="text-16 weight-500 line-height-24">
+                    Sold by {product.store.name}
+                  </p>
+                  <Link
+                    href={storeUrl}
+                    target="_blank"
+                    className="color-#00000099 text-14 border-b line-height-22"
+                  >
+                    Visit store home
+                  </Link>
+                </div>
+              </div>
             </div>
 
             <div className="flex flex-col gap-12 border-b  border-#00000014 pb-15 pt-15">

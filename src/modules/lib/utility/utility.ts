@@ -3,7 +3,7 @@ import { StoreGroupResponse } from "./types/cart.interface";
 import { NewUser, User } from "./types/user.interface";
 import { IFilters } from "./types/product.interface";
 import { ContactFormData } from "./types/contact-us.interface";
-import type { Delivery, Order } from "./types/order.interface";
+import type { Delivery, Order, OrderLineItem } from "./types/order.interface";
 import colors from '@/modules/lib/utility/json-data/colors.json';
 
 export type ImageSrcFolder = "icons" | "logos" | "images";
@@ -382,6 +382,50 @@ export const getCartItems = (storeGroups: StoreGroupResponse[]) => {
 
   return cartItems
 }
+
+export const isInactiveOrderLineStatus = (status?: string) =>
+  status === 'REMOVED' || status === 'CANCELLED'
+
+/** Map cart lines to API order-item status (variant + store). */
+export const attachLineStatusToCartItems = <T extends { variant?: { id?: string; product?: { store?: { id?: string } } } }>(
+  cartItems: T[],
+  orderItems?: OrderLineItem[],
+): (T & { lineStatus?: string })[] => {
+  if (!orderItems?.length) {
+    return cartItems.map((item) => ({ ...item, lineStatus: undefined }))
+  }
+
+  const statusByKey = new Map<string, string>()
+  for (const oi of orderItems) {
+    const variantId = (oi.item as { variant?: { id?: string } })?.variant?.id
+    const storeId = oi.store?.id
+    if (variantId && storeId) {
+      statusByKey.set(`${storeId}:${variantId}`, oi.status)
+    }
+  }
+
+  return cartItems.map((cartItem) => {
+    const variantId = cartItem.variant?.id
+    const storeId = cartItem.variant?.product?.store?.id
+    const lineStatus =
+      variantId && storeId
+        ? statusByKey.get(`${storeId}:${variantId}`)
+        : undefined
+    return { ...cartItem, lineStatus }
+  })
+}
+
+export const getOrderCartLinesWithStatus = (order?: Pick<Order, 'cart' | 'orderItems'>) =>
+  attachLineStatusToCartItems(
+    getCartItems(order?.cart?.storeGroups || []),
+    order?.orderItems,
+  )
+
+/** Cart lines that still count toward totals / buy-again (excludes REMOVED & CANCELLED). */
+export const getActiveOrderCartLines = (order?: Pick<Order, 'cart' | 'orderItems'>) =>
+  getOrderCartLinesWithStatus(order).filter(
+    (line) => !isInactiveOrderLineStatus(line.lineStatus),
+  )
 
 export const preventCopyPaste = (e: ClipboardEvent) => {
   e.preventDefault();

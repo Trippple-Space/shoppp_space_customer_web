@@ -1,8 +1,8 @@
 import {
   checkMediaType,
   formatNumberAsPrice,
-  getCartItems,
   getClosestColorName,
+  getOrderCartLinesWithStatus,
 } from '@/modules/lib/utility/utility';
 import React from 'react';
 import Image from '../image/Image';
@@ -14,11 +14,12 @@ import {
 } from '@/modules/lib/utility/visible-discount';
 
 function orderedProductCard({ orderedProducts }: any) {
-  const cartItems = getCartItems(orderedProducts?.cart?.storeGroups);
+  const cartItems = getOrderCartLinesWithStatus(orderedProducts);
   return (
     <>
       <div className="flex flex-col gap-10">
         {cartItems.map((item: any) => {
+          const isRemoved = item?.lineStatus === 'REMOVED';
           const mediaType =
             checkMediaType(item?.variant.media[0].url) ?? 'image';
           const linePrices = getLineDisplayPrices({
@@ -29,7 +30,9 @@ function orderedProductCard({ orderedProducts }: any) {
           });
 
           return (
-            <div className="flex flex-col gap-4 bg-whitesmoke radius-5 p-10">
+            <div
+              className={`flex flex-col gap-4 bg-whitesmoke radius-5 p-10 ${isRemoved ? 'opacity-70' : ''}`}
+            >
               <div className="l:flex space-between a-items-start">
                 <div className="flex gap-10 l:w-60p w-90p relative">
                   <div className="w-60 h-60 radius-8 relative overflow-hidden">
@@ -49,8 +52,13 @@ function orderedProductCard({ orderedProducts }: any) {
                   </div>
                   <div className="flex flex-col gap-10 pb-10 l:pb-0">
                     <div className="flex flex-col gap-3">
-                      <p className="weight-600 text-14 w-fit">
-                        {item.variant.product?.name}
+                      <p className="weight-600 text-14 w-fit flex flex-wrap items-center gap-2">
+                        <span>{item.variant.product?.name}</span>
+                        {isRemoved && (
+                          <span className="text-[10px] uppercase font-semibold px-2 py-0.5 rounded bg-[#6C757D] text-white">
+                            Removed
+                          </span>
+                        )}
                       </p>
                       <p className="color-#0000008C text-12">
                         {item.variant.product?.store.name}
