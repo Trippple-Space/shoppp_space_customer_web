@@ -9,7 +9,7 @@ import { useCart } from '../../utility/hooks/use-cart';
 import { PiShoppingCartFill, PiStorefront } from 'react-icons/pi';
 import classNames from 'classnames';
 import { AiFillHeart, AiFillStar, AiOutlineHeart } from 'react-icons/ai';
-import { formatNumberAsPrice } from '../../utility/utility';
+import { formatNumberAsPrice, formatStockUnitSuffix } from '../../utility/utility';
 import {
   getStrikethroughAmounts,
   getVariantDisplayPrices,
@@ -318,13 +318,20 @@ const VariantModal = ({
                 )}
               </div>
             )}
-            {!variantDisplayPrices.hasSlash && (
-              <span className="sm:text-10 text-8 weight-400 md:line-height-20 line-height-12.1 md:mb-0 mb-2" style={{ alignSelf: 'flex-end' }}>
-                {variant.productVariant?.stockUnit
-                  ? `/ ${variant.productVariant.stockUnit}`
-                  : ' / piece'}
-              </span>
-            )}
+            {!variantDisplayPrices.hasSlash &&
+              (() => {
+                const stockUnitSuffix = formatStockUnitSuffix(
+                  variant.productVariant?.stockUnit
+                );
+                return stockUnitSuffix ? (
+                  <span
+                    className="sm:text-10 text-8 weight-400 md:line-height-20 line-height-12.1 md:mb-0 mb-2"
+                    style={{ alignSelf: 'flex-end' }}
+                  >
+                    {stockUnitSuffix}
+                  </span>
+                ) : null;
+              })()}
           </div>
           {/* <div className="flex flex-wrap gap-4">
           {product?.tags?.map((tag: any, i: number) => (

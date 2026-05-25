@@ -181,6 +181,16 @@ export const scrollToTop = () => {
   });
 };
 
+const DEFAULT_STOCK_UNITS = new Set(["piece", "pieces", "unit", "units"]);
+
+export function formatStockUnitSuffix(stockUnit?: string | null): string {
+  const normalized = (stockUnit ?? "piece").trim().toLowerCase();
+  if (!normalized || DEFAULT_STOCK_UNITS.has(normalized)) {
+    return "";
+  }
+  return `/ ${stockUnit!.trim()}`;
+}
+
 export function displayStockUnit(stockUnit: string): string {
   if (stockUnit == "yard" || stockUnit === "yards") return `yard`;
   else if (stockUnit == "unit" || stockUnit === "units") return stockUnit;
