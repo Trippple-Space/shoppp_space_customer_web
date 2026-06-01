@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { productService } from "../services/product.service";
 import { useProductStore } from "../store/products.store";
 import { IFilters } from "../types/product.interface";
@@ -51,7 +51,7 @@ export const useProducts = (
   const [fetchingError, setFetchingError] = useState<Error | null>(null);
   const [loadMoreError, setLoadMoreError] = useState<Error | null>(null);
   const [refetchToken, setRefetchToken] = useState(0);
-  const [loadMoreRetryToken, setLoadMoreRetryToken] = useState(0);
+  const loadMoreInFlightRef = useRef(false);
 
   const {
     productsCache,
@@ -146,11 +146,11 @@ export const useProducts = (
     : collectionSlug;
 
   const refetch = () => {
+    loadMoreInFlightRef.current = false;
     setFetchingError(null);
     setLoadMoreError(null);
     clearProductsCacheByKey(cacheKey);
     setRefetchToken((t) => t + 1);
-    setLoadMoreRetryToken(0);
     setQuery((prev) => ({
       ...prev,
       pagination: {
@@ -160,9 +160,67 @@ export const useProducts = (
     }));
   };
 
+  const fetchNextPage = useCallback(() => {
+    if (paginationType !== "infinite") return;
+    if (!query.pagination) return;
+    if (collectionSlug) return;
+    if (loadMoreInFlightRef.current) return;
+
+    const { productsCache: latestCache } = useProductStore.getState();
+    const cached = latestCache[cacheKey];
+    const fetchedPage = cached?.meta?.currentPage ?? 0;
+    const totalPages = cached?.meta?.totalPages ?? 1;
+    const limit = query.pagination.limit ?? 20;
+    const nextPage = fetchedPage + 1;
+
+    if (nextPage > totalPages) return;
+
+    loadMoreInFlightRef.current = true;
+    setLoading(true);
+    setLoadMoreError(null);
+
+    const fetchQuery = {
+      ...query,
+      pagination: { page: nextPage, limit },
+    };
+
+    productService
+      .fetchProducts(fetchQuery, query.allFilters, effectiveCollectionSlug)
+      .then((fetchedProducts) => {
+        const { productsCache: cacheAfterFetch, productCacheIdempotencyTracker: tracker } =
+          useProductStore.getState();
+        const previous = cacheAfterFetch[cacheKey];
+        const seenIds = tracker[cacheKey] ?? {};
+
+        setLoadMoreError(null);
+        setProductsCache(cacheKey, {
+          data: [
+            ...(previous?.data ?? []),
+            ...fetchedProducts.data.filter((product) => !seenIds[product.id]),
+          ],
+          meta: fetchedProducts.meta,
+        });
+
+        setProductsCacheIdempotencyTracker(
+          cacheKey,
+          fetchedProducts.data.reduce(
+            (cumm, curr) => ({ ...cumm, [curr.id]: true }),
+            {}
+          )
+        );
+      })
+      .catch((error) => {
+        setLoadMoreError(normalizeFetchError(error));
+      })
+      .finally(() => {
+        loadMoreInFlightRef.current = false;
+        setLoading(false);
+      });
+  }, [cacheKey, collectionSlug, effectiveCollectionSlug, paginationType, query]);
+
   const retryLoadMore = () => {
     setLoadMoreError(null);
-    setLoadMoreRetryToken((t) => t + 1);
+    fetchNextPage();
   };
 
   useEffect(() => {
@@ -236,57 +294,12 @@ export const useProducts = (
     query.collection
   ]);
 
-  useEffect(() => {
-    if (paginationType !== "infinite") return;
-    if (!query.pagination) return;
-    if (collectionSlug) return;
-
-    if (
-      (productsCache[cacheKey]?.data?.length ?? 0) <
-      (query.pagination?.limit ?? 0) * (query.pagination?.page ?? 1)
-    ) {
-      setLoading(true);
-      setFetchingError(null);
-      setLoadMoreError(null);
-      productService
-        .fetchProducts(query, query.allFilters, effectiveCollectionSlug)
-        .then((fetchedProducts) => {
-          const { productsCache: latestCache, productCacheIdempotencyTracker: latestTracker } =
-            useProductStore.getState();
-          const previous = latestCache[cacheKey];
-          const seenIds = latestTracker[cacheKey] ?? {};
-
-          setLoadMoreError(null);
-          setProductsCache(cacheKey, {
-            data: [
-              ...(previous?.data ?? []),
-              ...fetchedProducts.data.filter((product) => !seenIds[product.id]),
-            ],
-            meta: fetchedProducts.meta
-          });
-
-          setProductsCacheIdempotencyTracker(
-            cacheKey,
-            fetchedProducts.data.reduce(
-              (cumm, curr) => ({ ...cumm, [curr.id]: true }),
-              {}
-            )
-          );
-        }).catch((error) => {
-          setLoadMoreError(normalizeFetchError(error));
-          setLoading(false);
-        }).finally(() => {
-          setLoading(false);
-        })
-    }
-  }, [
-    JSON.stringify(query.pagination ?? {}),
-    JSON.stringify(query.allFilters),
-    JSON.stringify(query.search ?? ''),
-    JSON.stringify(query.collection ?? ''),
-    refetchToken,
-    loadMoreRetryToken
-  ]);
+  const meta = productsCache[cacheKey]?.meta;
+  const currentPage = meta?.currentPage ?? query.pagination?.page ?? 1;
+  const totalPages = meta?.totalPages ?? 1;
+  const hasMore = currentPage < totalPages;
+  const loadingMore =
+    loading && (productsCache[cacheKey]?.data?.length ?? 0) > 0;
 
   return {
     products: productsCache[cacheKey]?.data ?? [],
@@ -299,11 +312,15 @@ export const useProducts = (
     setCollection,
     query,
     loading,
+    loadingMore,
     fetchingError,
     loadMoreError,
     refetch,
     retryLoadMore,
-    meta: productsCache[cacheKey]?.meta
-    // paginationLoading
+    fetchNextPage,
+    meta,
+    hasMore,
+    currentPage,
+    totalPages,
   };
 };

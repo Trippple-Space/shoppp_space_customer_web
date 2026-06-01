@@ -1,0 +1,188 @@
+.pill {
+  position: fixed;
+  left: 18px;
+  bottom: 18px;
+  z-index: 1000;
+
+  display: flex;
+  align-items: center;
+  gap: 10px;
+
+  padding: 10px 14px;
+  border-radius: 999px;
+
+  background: #fff;
+  border: 1px solid rgba(0, 0, 0, 0.06);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.12);
+  text-decoration: none;
+  overflow: hidden;
+
+  color: inherit;
+  font: inherit;
+  cursor: pointer;
+}
+
+.pill {
+  animation: float 3s ease-in-out infinite;
+}
+
+.orchestrated {
+  transition:
+    opacity 1.2s ease,
+    padding 2s ease,
+    gap 2s ease,
+    box-shadow 0.25s ease;
+}
+
+.orchestrated.pillOpen {
+  padding-right: 14px;
+  gap: 10px;
+}
+
+.orchestrated.pillClosed {
+  padding-right: 10px;
+  gap: 0;
+}
+
+.orchestrated.faded {
+  opacity: 0;
+  pointer-events: none;
+  z-index: 999;
+}
+
+.orchestrated:not(.faded) {
+  z-index: 1001;
+}
+
+.orchestrated:hover {
+  transform: translateY(-6px) scale(1.02);
+  box-shadow: 0 18px 40px rgba(0, 0, 0, 0.18);
+}
+
+@keyframes float {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+
+  50% {
+    transform: translateY(-4px);
+  }
+}
+
+.iconWrap {
+  flex-shrink: 0;
+  width: 38px;
+  height: 38px;
+  border: none;
+  padding: 0;
+  border-radius: 999px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  cursor: pointer;
+  font: inherit;
+}
+
+.iconWrapInstagram {
+  background: linear-gradient(135deg, #f58529, #dd2a7b, #8134af);
+}
+
+.iconWrapSuggestion {
+  background: linear-gradient(135deg, #6366f1, #8b5cf6, #a855f7);
+}
+
+.iconWrap::before {
+  content: '';
+  position: absolute;
+  inset: -3px;
+  border-radius: inherit;
+  background: inherit;
+  filter: blur(8px);
+  opacity: 0.6;
+  z-index: -1;
+  animation: glow 2.5s infinite ease-in-out;
+}
+
+@keyframes glow {
+  0%,
+  100% {
+    opacity: 0.5;
+  }
+
+  50% {
+    opacity: 0.9;
+  }
+}
+
+.iconWrap svg {
+  width: 20px;
+  height: 20px;
+  color: #fff;
+}
+
+.text,
+.arrow {
+  transition:
+    opacity 2s ease,
+    max-width 2s ease,
+    transform 2s ease;
+}
+
+.text {
+  font-size: 14px;
+  font-weight: 600;
+  color: #111827;
+  white-space: nowrap;
+  overflow: hidden;
+}
+
+.labelVisible {
+  opacity: 1;
+  transform: translateX(0);
+}
+
+.text.labelVisible {
+  max-width: 170px;
+}
+
+.arrow {
+  width: 18px;
+  height: 18px;
+  color: #111827;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.arrow.labelVisible {
+  max-width: 18px;
+  opacity: 1;
+}
+
+.labelHidden {
+  opacity: 0;
+  max-width: 0;
+  transform: translateX(-10px);
+}
+
+.labelAction {
+  cursor: pointer;
+}
+
+.orchestrated:hover .arrow.labelVisible {
+  transform: translateX(4px);
+}
+
+@media (max-width: 480px) {
+  .pill {
+    padding: 10px 12px;
+    left: 10px;
+  }
+
+  .text {
+    font-size: 12px;
+  }
+}

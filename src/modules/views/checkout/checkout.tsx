@@ -130,7 +130,7 @@ const CheckoutPage = () => {
   const [devOptions, setDevOptions] = useState<string>();
   const [showSummary, setshowSummary] = useState(false);
   const [devAddressError, setDevAddressError] = useState(false);
-  const [enableOrderWhatsApp, setEnableOrderWhatsApp] = useState(false);
+  const [enableOrderWhatsApp, setEnableOrderWhatsApp] = useState(true);
   const [orderWhatsAppNumber, setOrderWhatsAppNumber] = useState('');
   const [orderWhatsAppError, setOrderWhatsAppError] = useState('');
   const [cachedShareLinkResponse, setCachedShareLinkResponse] =
@@ -318,12 +318,10 @@ const CheckoutPage = () => {
   }, [selectedAddress, shouldUpdateFee]);
 
   useEffect(() => {
-    if (!selectedAddress) return;
-    if (!enableOrderWhatsApp) {
-      setOrderWhatsAppNumber(selectedAddress.contactNo || '');
-      setOrderWhatsAppError('');
-    }
-  }, [selectedAddress, enableOrderWhatsApp]);
+    if (!selectedAddress || !enableOrderWhatsApp) return;
+    setOrderWhatsAppNumber(selectedAddress.contactNo || '');
+    setOrderWhatsAppError('');
+  }, [selectedAddress?.id, selectedAddress?.contactNo, enableOrderWhatsApp]);
 
   useEffect(() => {
     setCachedShareLinkResponse(null);
