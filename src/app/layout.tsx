@@ -16,7 +16,7 @@ import {
 import GlobalArena from '@/modules/lib/components/global-arena/GlobalArena';
 import GlobalLaunchBanner from '@/modules/lib/components/global-launch-banner/GlobalLaunchBanner';
 import CookieConsentBanner from '@/modules/lib/components/cookie-consent-banner/CookieConsentBanner';
-import InstagramFollowFloating from '@/modules/lib/components/instagram-follow-floating/InstagramFollowFloating';
+import FloatingWidgets from '@/modules/lib/components/floating-widgets/FloatingWidgets';
 import { PHProvider } from './providers';
 import dynamic from 'next/dynamic';
 import '@smastrom/react-rating/style.css';
@@ -128,7 +128,7 @@ fbq('track', 'PageView');`}
           <GlobalArena />
           <GlobalLaunchBanner />
           <CookieConsentBanner />
-          <InstagramFollowFloating />
+          <FloatingWidgets />
           {/* <div className="fixed w-full b-60 z-3">
             <div className="max-w-1000 mx-auto flex text-14 l:text-16 bg-yellow-50 text-green p-10 max-w-1100 mx-auto ">
               <BsInfoCircle className="inline-block w-fit text-26 mr-10 mt--2" />

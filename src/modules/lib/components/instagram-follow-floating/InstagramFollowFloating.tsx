@@ -1,31 +1,36 @@
-import { AiOutlineInstagram } from 'react-icons/ai';
-import { GoArrowRight } from 'react-icons/go';
+'use client';
 
-import styles from './InstagramFollowFloating.module.scss';
+import { AiOutlineInstagram } from 'react-icons/ai';
+
+import FloatingPromoPill from '@/modules/lib/components/floating-promo-pill/FloatingPromoPill';
 
 const INSTAGRAM_URL = 'https://www.instagram.com/theasoebiafrica/';
 
-export default function InstagramFollowFloating() {
+type InstagramFollowFloatingProps = {
+  orchestrated?: boolean;
+  pillExpanded?: boolean;
+  faded?: boolean;
+};
+
+export default function InstagramFollowFloating({
+  orchestrated = false,
+  pillExpanded = false,
+  faded = false,
+}: InstagramFollowFloatingProps) {
+  if (!orchestrated) {
+    return null;
+  }
+
   return (
-    <a
-      className={styles.wrapper}
+    <FloatingPromoPill
+      variant="instagram"
+      label="See our latest looks"
+      icon={<AiOutlineInstagram />}
       href={INSTAGRAM_URL}
-      target="_blank"
-      rel="noopener noreferrer"
-      aria-label="Follow us on Instagram"
-      title="Follow us on Instagram"
-    >
-      <span className={styles.iconWrap} aria-hidden="true">
-        <AiOutlineInstagram className={styles.icon} />
-      </span>
-
-      {/* <span className={styles.text}>Follow us on Instagram</span> */}
-      <span className={styles.text}>See our latest looks</span>
-
-      <span className={styles.arrow} aria-hidden="true">
-        <GoArrowRight />
-      </span>
-    </a>
+      orchestrated
+      pillExpanded={pillExpanded}
+      faded={faded}
+      ariaLabel="Follow us on Instagram"
+    />
   );
 }
-

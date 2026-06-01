@@ -3,6 +3,7 @@ import { StoreGroupResponse } from "./types/cart.interface";
 import { NewUser, User } from "./types/user.interface";
 import { IFilters } from "./types/product.interface";
 import { ContactFormData } from "./types/contact-us.interface";
+import { SuggestionFormData } from "./types/suggestion.interface";
 import type { Delivery, Order, OrderLineItem } from "./types/order.interface";
 import colors from '@/modules/lib/utility/json-data/colors.json';
 
@@ -678,6 +679,49 @@ export const buildContactSlackMessage = (data: ContactFormData) => ({
         type: 'mrkdwn',
         text: `<mailto:${data.email}|Reply to sender>`,
       },
+    },
+  ],
+});
+
+export const buildSuggestionSlackMessage = (data: SuggestionFormData) => ({
+  blocks: [
+    {
+      type: 'header',
+      text: {
+        type: 'plain_text',
+        text: '💡 New Suggestion',
+        emoji: true,
+      },
+    },
+    {
+      type: 'section',
+      text: {
+        type: 'mrkdwn',
+        text: `*Suggestion:*\n${data.message}`,
+      },
+    },
+    ...(data.pageUrl
+      ? [
+        {
+          type: 'section',
+          text: {
+            type: 'mrkdwn',
+            text: `*Page:*\n${data.pageUrl}`,
+          },
+        },
+      ]
+      : []),
+    {
+      type: 'divider',
+    },
+    {
+      type: 'context',
+      elements: [
+        {
+          type: 'mrkdwn',
+          text: '_Submitted via floating suggestion widget (not contact form)_',
+        },
+      ],
     },
   ],
 });

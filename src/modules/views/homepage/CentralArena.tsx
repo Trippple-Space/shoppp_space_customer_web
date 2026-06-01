@@ -5,6 +5,7 @@ import ProductTile from '@/modules/lib/components/product-tile/ProductTile';
 import { useProductListView } from '@/modules/lib/utility/hooks/views/use-product-list-view';
 import { DotsLoader } from '@/modules/lib/components/dots-loader/DotsLoader';
 import PuffLoader from '@/modules/lib/components/puff-loader/PuffLoader';
+import Button from '@/modules/lib/components/button/Button';
 import { useSavedVariant } from '@/modules/lib/utility/hooks/use-saved-variants';
 import { toast } from 'sonner';
 import { useSearchParams } from 'next/navigation';
@@ -15,7 +16,12 @@ import {
   getProductFetchErrorCopy,
 } from '@/modules/lib/utility/fetch-error';
 
-const CentralArena = ({ selectedCategory, setSelectedCategory, hasCollections, collectionsLoaded }: any) => {
+const CentralArena = ({
+  selectedCategory,
+  setSelectedCategory,
+  hasCollections,
+  collectionsLoaded,
+}: any) => {
   const searchParams = useSearchParams();
 
   const {
@@ -23,10 +29,13 @@ const CentralArena = ({ selectedCategory, setSelectedCategory, hasCollections, c
     type,
     ref,
     loading,
+    loadingMore,
     fetchingError,
     loadMoreError,
+    isInitialFetchError,
+    hasMore,
     refetch,
-    retryLoadMore,
+    loadMore,
     setSearch,
     search,
     setCollection,
@@ -39,6 +48,14 @@ const CentralArena = ({ selectedCategory, setSelectedCategory, hasCollections, c
   const listErrorCopy = getProductFetchErrorCopy(listErrorKind);
   const loadMoreKind = loadMoreError ? classifyFetchError(loadMoreError) : 'unknown';
   const loadMoreCopy = getProductFetchErrorCopy(loadMoreKind);
+
+  const showLoadMoreButton =
+    collectionsLoaded &&
+    products.length > 0 &&
+    !loading &&
+    !loadingMore &&
+    !isInitialFetchError &&
+    (hasMore || Boolean(loadMoreError));
 
   useEffect(() => {
     const searchFromUrl = searchParams.get('search');
@@ -103,7 +120,7 @@ const CentralArena = ({ selectedCategory, setSelectedCategory, hasCollections, c
               );
             })}
           </div>
-        ) : fetchingError ? (
+        ) : isInitialFetchError ? (
           <div className="mt-32 w-full max-w-520 mx-auto">
             <DataFetchErrorPanel
               title={listErrorCopy.title}
@@ -133,23 +150,28 @@ Your convenience is our priority.`}
           </div>
         )}
 
-        {products.length > 0 && collectionsLoaded && !fetchingError && !loading && (
-          <div ref={ref} className="h-20"></div>
+        {products.length > 0 && collectionsLoaded && !isInitialFetchError && hasMore && (
+          <div ref={ref} className="h-1 w-full" aria-hidden />
         )}
-        <div>
-          <p className="w-100p flex j-content-center mt-10">
-            {collectionsLoaded && products.length >= 20 && loading ? <PuffLoader /> : ''}
-          </p>
-          {collectionsLoaded && products.length >= 20 && !loading && loadMoreError && (
-            <div className="mt-24 w-full max-w-560 mx-auto">
-              <DataFetchErrorPanel
-                compact
-                title="Couldn’t load more products"
-                description={loadMoreCopy.description}
-                onRetry={retryLoadMore}
-                retryLabel="Try again"
-              />
-            </div>
+
+        <div className="w-100p flex flex-col items-center mt-24 gap-12">
+          {collectionsLoaded && loadingMore && <PuffLoader />}
+
+          {collectionsLoaded && products.length > 0 && loadMoreError && (
+            <p className="text-14 weight-400 color-#00000099 text-center max-w-480 px-16">
+              {loadMoreCopy.description}
+            </p>
+          )}
+
+          {showLoadMoreButton && (
+            <Button
+              type="button"
+              onClick={loadMore}
+              disabled={loading || loadingMore}
+              className="min-w-140"
+            >
+              Load more
+            </Button>
           )}
         </div>
       </section>
