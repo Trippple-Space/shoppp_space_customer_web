@@ -869,7 +869,8 @@
 .max-w-520 { max-width: 520px; } 
 .mt-60 { margin-top: 60px; } 
 .grid-col-span-5 { grid-column: span 5; } 
-.max-w-560 { max-width: 560px; } 
+.max-w-480 { max-width: 480px; } 
+.min-w-140 { min-width: 140px; } 
 .w-36 { width: 36px; } 
 .py-40 { padding-top: 40px; padding-bottom: 40px; } 
 .border-\#E8E8E8 { border-color: #E8E8E8; } 
@@ -939,7 +940,6 @@
 .bg-light-green { background-color: #E2FFFACC; } 
 .m-2 { margin: 2px; } 
 .bg-\#FFFFFF { background-color: #FFFFFF; } 
-.max-w-480 { max-width: 480px; } 
 .h-130 { height: 130px; } 
 .border-red-500 { border-color: #DE3838; } 
 .focus\:border-\#0B9378:focus { border-color: #0B9378; } 
