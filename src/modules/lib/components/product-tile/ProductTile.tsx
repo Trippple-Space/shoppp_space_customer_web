@@ -954,12 +954,51 @@ const ProductTile: FC<IProductTile> = ({
 
       <div
         id="product varients"
-        className="l:mt-16 mt-14 l:h-51.2 h-45 flex flex-nowrap a-items-center j-content-start md:gap-6 gap-4 w-full min-w-0"
+        className="l:mt-16 mt-14 l:h-51.2 h-45 flex flex-nowrap a-items-center j-content-start md:gap-6 gap-4 w-full min-w-0 overflow-hidden"
       >
-        <div className="shrink-0 a-self-center">
-          <ProductCatalogueDropdown productCatalogues={product?.productCatalogues} />
-        </div>
-        <div className="flex-1 min-w-0 overflow-x-auto flex flex-nowrap a-items-center md:gap-6 gap-4 whitespace-nowrap no-scrollbar">
+        {(product?.productCatalogues?.length ?? 0) > 0 && (
+          <div className="shrink-0 a-self-center">
+            <ProductCatalogueDropdown
+              productCatalogues={product?.productCatalogues}
+              variantPreviewItems={variantPreviewItems}
+              isOutOfStock={isOutOfStock}
+              isSaved={!!isSaved}
+              onSave={handleSave}
+              isAuthenticated={isAuthenticated}
+              onAuthRequired={isLoginModal}
+              showAddToCart={selectedVariant?.status !== 'OUT_OF_STOCK'}
+              addToCartDisabled={!selectedImage}
+              onAddToCart={() => {
+                if (
+                  (hasProperties && !shouldAddDirectlyToCart) ||
+                  hasCustomerConfiguration
+                ) {
+                  setShowOnBoardingModal(false);
+                  setIsToAddProperties(true);
+                  handleCloseProductModal();
+                } else {
+                  setShowOnBoardingModal(false);
+                  if (!localStorage.getItem('seenMiniCart')) {
+                    window.dispatchEvent(
+                      new Event('showMiniCartOnboarding')
+                    );
+                    localStorage.setItem('seenMiniCart', 'true');
+                  }
+                  addToCart(
+                    selectedVariant.id,
+                    selectedVariant.minPurchaseQuantity || 1,
+                    userConfigurations,
+                    {
+                      ...selectedVariant,
+                      product: selectedVariant.product ?? product,
+                    }
+                  );
+                }
+              }}
+            />
+          </div>
+        )}
+        <div className="flex-1 min-w-0 min-h-0 h-full overflow-x-auto g|overflow-y:hidden flex flex-nowrap a-items-center md:gap-6 gap-4 whitespace-nowrap no-scrollbar">
           {variantPreviewItems.map(({ variant, media: mediaItem }, i: number) => (
             <div
               key={`${variant.id}-${mediaItem?.url}-${i}`}

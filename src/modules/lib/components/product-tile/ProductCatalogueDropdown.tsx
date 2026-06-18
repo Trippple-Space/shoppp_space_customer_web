@@ -18,6 +18,13 @@ import {
   FloatingPortal,
 } from '@floating-ui/react';
 import Image from '../image/Image';
+import ProductMediaGallery from './ProductMediaGallery';
+import ShareProductModal from '@/modules/views/product-details/share-modal/shareProductModal';
+import {
+  buildProductGalleryMediaUrls,
+  VariantMediaPreviewItem,
+} from '../../utility/product-media';
+import catalogueStyles from './product-catalogue-dropdown.module.css';
 
 export function CatalogueMediaItem({
   item,
@@ -48,21 +55,14 @@ export function CatalogueMediaItem({
     return () => observer.disconnect();
   }, [item.mediaType, item.id]);
 
-  const wrapperStyle: React.CSSProperties = {
-    overflow: 'hidden',
-    background: 'rgba(0,0,0,0.04)',
-    cursor: onClick ? 'pointer' : undefined,
-    /* paddingBottom: 5 */
-  };
-
-  const tags: string[] = [];
-  if (item.occasionType) tags.push(item.occasionType);
-  if (item.locationType) tags.push(item.locationType);
-
   if (item.mediaType === 'video') {
     return (
-      <div style={wrapperStyle}>
-        <div style={{ aspectRatio: '1', overflow: 'hidden' }}>
+      <div
+        className={catalogueStyles.catalogueMediaItem}
+        onClick={onClick}
+        role={onClick ? 'button' : undefined}
+      >
+        <div className={catalogueStyles.catalogueMediaItemMedia}>
           <video
             ref={videoRef}
             src={item.mediaUrl}
@@ -71,32 +71,20 @@ export function CatalogueMediaItem({
             playsInline
             className="w-100p h-100p block g|object-fit:cover"
             style={{ width: '100%', height: '100%', display: 'block', objectFit: 'cover' }}
-            onClick={onClick}
           />
+          <span className={catalogueStyles.catalogueMediaItemOverlay} aria-hidden />
         </div>
-        {/* (item.caption || tags.length > 0) && (
-          <div className="px-8 py-6">
-            {tags.length > 0 && (
-              <div className="flex flex-wrap gap-4">
-                {tags.map((t) => (
-                  <span key={t} className="text-11 color-#0B9378 lowercase">
-                    #{t.replace(/\s+/g, '_')}
-                  </span>
-                ))}
-              </div>
-            )}
-            {item.caption && (
-              <p className="text-11 color-#00000099">{item.caption}</p>
-            )}
-          </div>
-        ) */}
       </div>
     );
   }
 
   return (
-    <div style={wrapperStyle}>
-      <div style={{ aspectRatio: '1', overflow: 'hidden', position: 'relative' }}>
+    <div
+      className={catalogueStyles.catalogueMediaItem}
+      onClick={onClick}
+      role={onClick ? 'button' : undefined}
+    >
+      <div className={catalogueStyles.catalogueMediaItemMedia}>
         <Image
           ref={imgRef}
           className={`absolute w-full h-full a-self-center g|object-fit:cover`}
@@ -104,41 +92,60 @@ export function CatalogueMediaItem({
           alt={item.caption ?? 'Catalogue'}
           hasLoader={true}
           width={10000}
-          onClick={onClick}
         />
+        <span className={catalogueStyles.catalogueMediaItemOverlay} aria-hidden />
       </div>
-      {/* (item.caption || tags.length > 0) && (
-        <div className="px-8 py-6">
-          {tags.length > 0 && (
-            <div className="flex flex-wrap gap-4">
-              {tags.map((t) => (
-                <span key={t} className="text-11 color-#0B9378 lowercase">
-                  #{t.replace(/\s+/g, '_')}
-                </span>
-              ))}
-            </div>
-          )}
-          {item.caption && (
-            <p className="text-11 color-#00000099">{item.caption}</p>
-          )}
-        </div>
-      ) */}
     </div>
   );
 }
 
 export interface ProductCatalogueDropdownProps {
   productCatalogues?: ProductCatalogue[] | null;
+  variantPreviewItems?: VariantMediaPreviewItem[];
+  isOutOfStock?: boolean;
+  isSaved?: boolean;
+  onSave?: () => void;
+  isAuthenticated?: boolean;
+  onAuthRequired?: () => void;
+  onAddToCart?: () => void;
+  showAddToCart?: boolean;
+  addToCartDisabled?: boolean;
 }
 
-export function ProductCatalogueDropdown({ productCatalogues }: ProductCatalogueDropdownProps) {
+export function ProductCatalogueDropdown({
+  productCatalogues,
+  variantPreviewItems = [],
+  isOutOfStock = false,
+  isSaved = false,
+  onSave,
+  isAuthenticated = false,
+  onAuthRequired,
+  onAddToCart,
+  showAddToCart = false,
+  addToCartDisabled = false,
+}: ProductCatalogueDropdownProps) {
   const [open, setOpen] = useState(false);
+  const [galleryOpen, setGalleryOpen] = useState(false);
+  const [galleryIndex, setGalleryIndex] = useState(0);
+  const [showShareModal, setShowShareModal] = useState(false);
 
   const cataloguesSorted = useMemo(() => {
     const list = productCatalogues ?? [];
     if (!list.length) return [];
     return [...list].sort((a, b) => (a.displayOrder ?? 0) - (b.displayOrder ?? 0));
   }, [productCatalogues]);
+
+  const galleryMediaUrls = useMemo(
+    () => buildProductGalleryMediaUrls(variantPreviewItems, productCatalogues),
+    [variantPreviewItems, productCatalogues]
+  );
+
+  const openGalleryAt = (mediaUrl: string) => {
+    const idx = galleryMediaUrls.findIndex((url) => url === mediaUrl);
+    setGalleryIndex(idx >= 0 ? idx : 0);
+    setGalleryOpen(true);
+    setOpen(false);
+  };
 
   const { refs, floatingStyles, context } = useFloating({
     open,
@@ -183,7 +190,7 @@ export function ProductCatalogueDropdown({ productCatalogues }: ProductCatalogue
         className="l:w-35.2 l:min-w-35.2 l:h-35.2 w-31 min-w-31 h-31 flex a-items-center j-content-center radius-3 md:radius-4 border border-#00000014 outline-none bg-#00000006 hover:bg-#0000000D transition-colors shrink-0"
         aria-label="View Catalogue"
       >
-        <HiSquares2X2 className="l:w-18 w-16 l:h-18 h-16 color-#0B9378" />
+        <HiSquares2X2 className="l:w-18 w-16 l:h-18 h-16 color-#0B9378 ml-1" />
       </button>
       <FloatingPortal>
         <div
@@ -212,15 +219,44 @@ export function ProductCatalogueDropdown({ productCatalogues }: ProductCatalogue
             className="p-10 grid grid-3-cols-1fr sm:grid-4-cols-1fr xl:grid-5-cols-1fr gap-3"
           >
             {cataloguesSorted.map((item) => (
-              <div key={item.id} style={{
-                minWidth: 0
-              }}>
-                <CatalogueMediaItem item={item} />
+              <div
+                key={item.id}
+                style={{ minWidth: 0 }}
+              >
+                <CatalogueMediaItem
+                  item={item}
+                  onClick={() => openGalleryAt(item.mediaUrl)}
+                />
               </div>
             ))}
           </div>
         </div>
       </FloatingPortal>
+
+      <ProductMediaGallery
+        isOpen={galleryOpen}
+        onClose={() => setGalleryOpen(false)}
+        mediaUrls={galleryMediaUrls}
+        initialIndex={galleryIndex}
+        isOutOfStock={isOutOfStock}
+        isSaved={isSaved}
+        onSave={onSave}
+        requireAuthForSave={!isAuthenticated}
+        onAuthRequired={onAuthRequired}
+        onShare={() => setShowShareModal(true)}
+        onAddToCart={() => {
+          setGalleryOpen(false);
+          onAddToCart?.();
+        }}
+        showAddToCart={showAddToCart}
+        addToCartDisabled={addToCartDisabled}
+      />
+
+      <ShareProductModal
+        modalOpen={showShareModal}
+        handleCloseModal={() => setShowShareModal(false)}
+        modalZIndex={10001}
+      />
     </>
   );
 }

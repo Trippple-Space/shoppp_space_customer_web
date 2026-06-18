@@ -1,4 +1,8 @@
-import { ProductMedia, ProductVariant } from './types/product.interface';
+import {
+  ProductCatalogue,
+  ProductMedia,
+  ProductVariant,
+} from './types/product.interface';
 
 export interface VariantMediaPreviewItem {
   variant: ProductVariant;
@@ -50,4 +54,20 @@ export const buildVariantMediaPreviewItems = (
   }
 
   return previewItems;
+};
+
+export const buildProductGalleryMediaUrls = (
+  variantPreviewItems: VariantMediaPreviewItem[],
+  productCatalogues?: ProductCatalogue[] | null
+): string[] => {
+  const productImages = variantPreviewItems
+    .map((item) => item.media.url)
+    .filter(Boolean);
+  const catalogueImages =
+    (productCatalogues ?? [])
+      .map((catalogue) => catalogue.mediaUrl)
+      .filter(Boolean) ?? [];
+
+  const combined = [...productImages, ...catalogueImages];
+  return combined.length ? Array.from(new Set(combined)) : [];
 };
