@@ -271,7 +271,11 @@ class ProductService {
 
      fetchSavedVariants(): Promise<SavedVariant[]> {
           return new Promise((resolve, reject) => {
-               http.get(endpoints.SAVED_VARIANT).then((response: AxiosResponse) => {
+               http.get(endpoints.SAVED_VARIANT, {
+                    params: {
+                         order: { savedAt: "DESC" },
+                    },
+               }).then((response: AxiosResponse) => {
                     resolve(response.data.data);
                }).catch((err) => {
                     if (err.response && err.response.data.message === "No saved variants found for this user") {
@@ -318,8 +322,10 @@ class ProductService {
 
 
      getRecentlyViewedVariants(type?: string): Promise<RecentlyViewed[]> {
-          const params: any = {};
-          params["filters[type]"] = type;
+          const params: Record<string, unknown> = {
+               "filters[type]": type,
+               order: { createdAt: "DESC" },
+          };
 
           return new Promise((resolve, reject) => {
                http.get(endpoints.GET_RECENTLY_VIEWED, {
@@ -329,8 +335,10 @@ class ProductService {
      }
 
      getAllRecentlyViewedVariants(): Promise<RecentlyViewed[]> {
-          const params: any = {};
-          params["filters[type]"] = "view";
+          const params: Record<string, unknown> = {
+               "filters[type]": "view",
+               order: { createdAt: "DESC" },
+          };
 
           return new Promise((resolve, reject) => {
                http.get(endpoints.ALL_RECENTLY_VIEWED, {

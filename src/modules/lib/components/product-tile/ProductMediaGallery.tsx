@@ -10,43 +10,51 @@ import { RxShare2 } from 'react-icons/rx';
 import { HiOutlineShoppingBag } from 'react-icons/hi2';
 import Image from '../image/Image';
 import VideoSrc from '../video-src/VideoSrc';
+import QuantitySelector from '../quantity-selector/QuantitySelector';
 import { checkMediaType } from '../../utility/utility';
+import { ProductGallerySlide } from '../../utility/product-media';
+import { ProductVariant } from '../../utility/types/product.interface';
+import { CartItem } from '../../utility/types/cart.interface';
 import styles from './product-media-gallery.module.css';
 
 export interface ProductMediaGalleryProps {
   isOpen: boolean;
   onClose: () => void;
-  mediaUrls: string[];
+  slides: ProductGallerySlide[];
   initialIndex?: number;
-  isOutOfStock?: boolean;
-  isSaved?: boolean;
-  onSave?: () => void;
+  isSavedForVariant?: (variantId: string) => boolean;
+  onToggleSaveVariant?: (variantId: string) => void;
   requireAuthForSave?: boolean;
   onAuthRequired?: () => void;
   onShare?: () => void;
-  onAddToCart?: () => void;
-  showAddToCart?: boolean;
-  addToCartDisabled?: boolean;
+  getCartItemForVariant?: (variant: ProductVariant) => CartItem | undefined;
+  variantNeedsQuickLook?: (variant: ProductVariant) => boolean;
+  onAddToCart?: (variant: ProductVariant) => void;
+  onOpenQuickLook?: (variant: ProductVariant, mediaUrl: string) => void;
+  onIncrementCartItem?: (cartItem: CartItem) => void;
+  onDecrementCartItem?: (cartItem: CartItem) => void;
 }
 
 export function ProductMediaGallery({
   isOpen,
   onClose,
-  mediaUrls,
+  slides,
   initialIndex = 0,
-  isOutOfStock = false,
-  isSaved = false,
-  onSave,
+  isSavedForVariant,
+  onToggleSaveVariant,
   requireAuthForSave = false,
   onAuthRequired,
   onShare,
+  getCartItemForVariant,
+  variantNeedsQuickLook,
   onAddToCart,
-  showAddToCart = false,
-  addToCartDisabled = false,
+  onOpenQuickLook,
+  onIncrementCartItem,
+  onDecrementCartItem,
 }: ProductMediaGalleryProps) {
   const [index, setIndex] = useState(initialIndex);
   const touchStartX = useRef(0);
-  const total = mediaUrls.length;
+  const total = slides.length;
 
   useEffect(() => {
     if (isOpen) {
@@ -88,13 +96,42 @@ export function ProductMediaGallery({
     };
   }, [isOpen]);
 
+  const currentSlide = slides[index];
+  const currentVariant = currentSlide?.variant;
+  const currentUrl = currentSlide?.url ?? '';
+  const currentMediaType = checkMediaType(currentUrl);
+  const isCatalogueSlide = currentSlide?.isCatalogue ?? false;
+  const isOutOfStock = currentVariant?.status === 'OUT_OF_STOCK';
+  const cartItem = currentVariant
+    ? getCartItemForVariant?.(currentVariant)
+    : undefined;
+  const isSaved = currentVariant
+    ? (isSavedForVariant?.(currentVariant.id) ?? false)
+    : false;
+  const showAddToCart =
+    !isCatalogueSlide &&
+    !!currentVariant &&
+    currentVariant.status !== 'OUT_OF_STOCK';
+  const showSave = !isCatalogueSlide && !!currentVariant;
+
   const handleSaveClick = () => {
-    if (!onSave) return;
+    if (!onToggleSaveVariant || !currentVariant) return;
     if (requireAuthForSave && !isSaved) {
       onAuthRequired?.();
       return;
     }
-    onSave();
+    onToggleSaveVariant(currentVariant.id);
+  };
+
+  const handleAddToCartClick = () => {
+    if (!currentVariant) return;
+
+    if (variantNeedsQuickLook?.(currentVariant)) {
+      onOpenQuickLook?.(currentVariant, currentUrl);
+      return;
+    }
+
+    onAddToCart?.(currentVariant);
   };
 
   const handleTouchStart = (event: React.TouchEvent) => {
@@ -112,9 +149,6 @@ export function ProductMediaGallery({
   if (typeof document === 'undefined' || !total) {
     return null;
   }
-
-  const currentUrl = mediaUrls[index] ?? '';
-  const currentMediaType = checkMediaType(currentUrl);
 
   return createPortal(
     <AnimatePresence>
@@ -200,7 +234,7 @@ export function ProductMediaGallery({
                 </button>
               )}
 
-              {onSave && (
+              {showSave && onToggleSaveVariant && (
                 <button
                   type="button"
                   className={`${styles.actionBtn} ${styles.iconAction} ${
@@ -217,17 +251,24 @@ export function ProductMediaGallery({
                 </button>
               )}
 
-              {showAddToCart && onAddToCart && (
+              {showAddToCart && cartItem && onIncrementCartItem && onDecrementCartItem ? (
+                <div className={styles.cartControls}>
+                  <QuantitySelector
+                    cartItem={cartItem}
+                    increment={() => onIncrementCartItem(cartItem)}
+                    decrement={() => onDecrementCartItem(cartItem)}
+                  />
+                </div>
+              ) : showAddToCart && onAddToCart ? (
                 <button
                   type="button"
                   className={`${styles.actionBtn} ${styles.addToCartBtn}`}
-                  onClick={onAddToCart}
-                  disabled={addToCartDisabled}
+                  onClick={handleAddToCartClick}
                 >
                   <HiOutlineShoppingBag size={18} />
                   Add to cart
                 </button>
-              )}
+              ) : null}
             </div>
           </div>
         </motion.div>

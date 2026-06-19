@@ -205,3 +205,11 @@
 .savedHeart {
   color: #ff6b8a;
 }
+
+.cartControls {
+  pointer-events: auto;
+}
+
+.cartControls :global(.relative) {
+  margin-bottom: 0;
+}

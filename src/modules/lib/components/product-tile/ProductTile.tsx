@@ -235,6 +235,11 @@ const ProductTile: FC<IProductTile> = ({
   const [recentlyViewedId, setRecentlyViewsId] = useState<any>();
   const [activeIndex, setActiveIndex] = useState(0);
   const [guestCartVersion, setGuestCartVersion] = useState(0);
+  const [catalogueGalleryOpen, setCatalogueGalleryOpen] = useState(false);
+  const [galleryQuickLookVariant, setGalleryQuickLookVariant] = useState<
+    ProductVariant | undefined
+  >();
+  const [galleryQuickLookImage, setGalleryQuickLookImage] = useState<string>();
 
   const activePreviewItem = variantPreviewItems[activeIndex];
   const selectedVariant =
@@ -448,8 +453,92 @@ const ProductTile: FC<IProductTile> = ({
     setOpenSingleProductModal((prev) => !prev);
     if (openSingleProductModal) {
       setIsToAddProperties(false);
+      setGalleryQuickLookVariant(undefined);
+      setGalleryQuickLookImage(undefined);
     }
   };
+
+  const getCartItemForVariant = useCallback(
+    (variant: ProductVariant) => {
+      const existing = cart.cartItems.find(
+        (item) => item.variant.id === variant.id
+      );
+      if (existing) return existing;
+      if (isAuthenticated) return undefined;
+
+      const guestQty = guestSession.getCartQuantityForVariant(variant.id);
+      if (guestQty <= 0) return undefined;
+
+      return {
+        id: `guest-${variant.id}`,
+        productId: variant.product?.id ?? '',
+        quantity: guestQty,
+        variant,
+        totalPrice: variant.finalPrice * guestQty,
+        discountedPrice: variant.discountedPrice * guestQty,
+        userConfigurations:
+          guestSession.getLatestUserConfigurations(variant.id) ?? {},
+        createdAt: '',
+        discountValue: 0,
+        lastUpdated: '',
+        meta: null,
+      } as CartItem;
+    },
+    [cart.cartItems, isAuthenticated, guestCartVersion]
+  );
+
+  const isSavedForVariant = useCallback(
+    (variantId: string) =>
+      !!resolvedSavedVariants?.find(
+        (item: SavedVariant) => item.variantId === variantId
+      ),
+    [resolvedSavedVariants]
+  );
+
+  const handleToggleSaveVariant = useCallback(
+    (variantId: string) => {
+      if (isSavedForVariant(variantId)) {
+        resolvedRemoveSavedVariant?.(variantId);
+      } else {
+        resolvedSaveVariant?.(variantId);
+      }
+    },
+    [
+      isSavedForVariant,
+      resolvedRemoveSavedVariant,
+      resolvedSaveVariant,
+    ]
+  );
+
+  const handleGalleryOpenQuickLook = useCallback(
+    (variant: ProductVariant, mediaUrl: string) => {
+      setGalleryQuickLookVariant(variant);
+      setGalleryQuickLookImage(mediaUrl);
+      setIsToAddProperties(true);
+      setOpenSingleProductModal(true);
+    },
+    []
+  );
+
+  const handleGalleryAddToCart = useCallback(
+    (variant: ProductVariant) => {
+      setShowOnBoardingModal(false);
+      if (!localStorage.getItem('seenMiniCart')) {
+        window.dispatchEvent(new Event('showMiniCartOnboarding'));
+        localStorage.setItem('seenMiniCart', 'true');
+      }
+      addToCart(
+        variant.id,
+        variant.minPurchaseQuantity || 1,
+        {},
+        {
+          ...variant,
+          product: variant.product ?? product,
+        }
+      );
+    },
+    [addToCart, product]
+  );
 
   const handleLongPressOpenProductModal = () => {
     handleCloseProductModal();
@@ -570,6 +659,28 @@ const ProductTile: FC<IProductTile> = ({
       ) ?? false
     );
   }, [selectedVariant?.id]);
+
+  const variantNeedsQuickLook = useCallback(
+    (variant: ProductVariant) => {
+      const hasSize = variant.size && variant.size.trim() !== '';
+      const hasOtherProperties =
+        variant?.properties &&
+        Object.entries(variant.properties).some(([, value]) => {
+          const trimmed = String(value ?? '').trim();
+          return trimmed !== '';
+        });
+      const hasProperties = hasSize || hasOtherProperties;
+      const hasCustomerConfiguration =
+        variant?.configurationRecords?.some((record: any) =>
+          record.customerDataForm?.some((f: any) => isCustomerInputForField(f))
+        ) ?? false;
+
+      return (
+        (hasProperties && !shouldAddDirectlyToCart) || hasCustomerConfiguration
+      );
+    },
+    [shouldAddDirectlyToCart]
+  );
 
   const visibleTags = useMemo(() => {
     return (product?.tags ?? [])
@@ -1004,40 +1115,18 @@ const ProductTile: FC<IProductTile> = ({
             <ProductCatalogueDropdown
               productCatalogues={product?.productCatalogues}
               variantPreviewItems={variantPreviewItems}
-              isOutOfStock={isOutOfStock}
-              isSaved={!!isSaved}
-              onSave={handleSave}
+              product={product}
               isAuthenticated={isAuthenticated}
               onAuthRequired={isLoginModal}
-              showAddToCart={selectedVariant?.status !== 'OUT_OF_STOCK'}
-              addToCartDisabled={!selectedImage}
-              onAddToCart={() => {
-                if (
-                  (hasProperties && !shouldAddDirectlyToCart) ||
-                  hasCustomerConfiguration
-                ) {
-                  setShowOnBoardingModal(false);
-                  setIsToAddProperties(true);
-                  handleCloseProductModal();
-                } else {
-                  setShowOnBoardingModal(false);
-                  if (!localStorage.getItem('seenMiniCart')) {
-                    window.dispatchEvent(
-                      new Event('showMiniCartOnboarding')
-                    );
-                    localStorage.setItem('seenMiniCart', 'true');
-                  }
-                  addToCart(
-                    selectedVariant.id,
-                    selectedVariant.minPurchaseQuantity || 1,
-                    userConfigurations,
-                    {
-                      ...selectedVariant,
-                      product: selectedVariant.product ?? product,
-                    }
-                  );
-                }
-              }}
+              onGalleryOpenChange={setCatalogueGalleryOpen}
+              isSavedForVariant={isSavedForVariant}
+              onToggleSaveVariant={handleToggleSaveVariant}
+              getCartItemForVariant={getCartItemForVariant}
+              variantNeedsQuickLook={variantNeedsQuickLook}
+              onGalleryAddToCart={handleGalleryAddToCart}
+              onGalleryOpenQuickLook={handleGalleryOpenQuickLook}
+              onIncrementCartItem={increment}
+              onDecrementCartItem={decrement}
             />
           </div>
         )}
@@ -1303,15 +1392,28 @@ const ProductTile: FC<IProductTile> = ({
           openSingleProductModal={openSingleProductModal}
           handleCloseProductModal={handleCloseProductModal}
           position="homepage"
-          variantSelectedImage={isToAddProperties ? selectedImage : ''}
-          product={selectedVariant.product ?? product}
+          modalZIndex={catalogueGalleryOpen ? 10050 : undefined}
+          variantSelectedImage={
+            galleryQuickLookImage ??
+            (isToAddProperties ? selectedImage : '')
+          }
+          product={
+            galleryQuickLookVariant?.product ??
+            selectedVariant.product ??
+            product
+          }
           variant={
-            isToAddProperties
+            galleryQuickLookVariant
               ? {
-                ...selectedVariant,
-                product,
-              }
-              : undefined
+                  ...galleryQuickLookVariant,
+                  product: galleryQuickLookVariant.product ?? product,
+                }
+              : isToAddProperties
+                ? {
+                    ...selectedVariant,
+                    product,
+                  }
+                : undefined
           }
         />
       )}

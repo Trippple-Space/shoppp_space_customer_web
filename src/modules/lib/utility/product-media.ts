@@ -61,16 +61,56 @@ export const buildProductGalleryMediaUrls = (
   variantPreviewItems: VariantMediaPreviewItem[],
   productCatalogues?: ProductCatalogue[] | null
 ): string[] => {
-  const productImages = variantPreviewItems
-    .map((item) => item.media.url)
-    .filter(Boolean);
-  const catalogueImages =
-    (productCatalogues ?? [])
-      .map((catalogue) => catalogue.mediaUrl)
-      .filter(Boolean) ?? [];
+  return buildProductGallerySlides(variantPreviewItems, productCatalogues).map(
+    (slide) => slide.url
+  );
+};
 
-  const combined = [...productImages, ...catalogueImages];
-  return combined.length ? Array.from(new Set(combined)) : [];
+export interface ProductGallerySlide {
+  url: string;
+  isCatalogue: boolean;
+  variant: ProductVariant;
+}
+
+export const buildProductGallerySlides = (
+  variantPreviewItems: VariantMediaPreviewItem[],
+  productCatalogues?: ProductCatalogue[] | null,
+  fallbackVariant?: ProductVariant
+): ProductGallerySlide[] => {
+  const firstVariant =
+    variantPreviewItems[0]?.variant ?? fallbackVariant ?? null;
+  if (!firstVariant) return [];
+
+  const slides: ProductGallerySlide[] = [];
+  const seen = new Set<string>();
+
+  const catalogues = [...(productCatalogues ?? [])].sort(
+    (a, b) => (a.displayOrder ?? 0) - (b.displayOrder ?? 0)
+  );
+
+  for (const catalogue of catalogues) {
+    const url = catalogue.mediaUrl;
+    if (!url || seen.has(url)) continue;
+    seen.add(url);
+    slides.push({
+      url,
+      isCatalogue: true,
+      variant: firstVariant,
+    });
+  }
+
+  for (const item of variantPreviewItems) {
+    const url = item.media?.url;
+    if (!url || seen.has(url)) continue;
+    seen.add(url);
+    slides.push({
+      url,
+      isCatalogue: false,
+      variant: item.variant,
+    });
+  }
+
+  return slides;
 };
 
 export const preloadProductMediaUrl = (

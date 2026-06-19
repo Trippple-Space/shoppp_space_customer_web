@@ -2,7 +2,7 @@
 
 import React, { useEffect, useMemo, useRef, useState } from 'react';
 import { FaCirclePlay } from 'react-icons/fa6';
-import { ProductCatalogue } from '../../utility/types/product.interface';
+import { Product, ProductCatalogue, ProductVariant } from '../../utility/types/product.interface';
 import {
   useFloating,
   autoUpdate,
@@ -21,9 +21,10 @@ import Image from '../image/Image';
 import ProductMediaGallery from './ProductMediaGallery';
 import ShareProductModal from '@/modules/views/product-details/share-modal/shareProductModal';
 import {
-  buildProductGalleryMediaUrls,
+  buildProductGallerySlides,
   VariantMediaPreviewItem,
 } from '../../utility/product-media';
+import { CartItem } from '../../utility/types/cart.interface';
 import catalogueStyles from './product-catalogue-dropdown.module.css';
 
 export function CatalogueMediaItem({
@@ -102,27 +103,35 @@ export function CatalogueMediaItem({
 export interface ProductCatalogueDropdownProps {
   productCatalogues?: ProductCatalogue[] | null;
   variantPreviewItems?: VariantMediaPreviewItem[];
-  isOutOfStock?: boolean;
-  isSaved?: boolean;
-  onSave?: () => void;
+  product?: Product;
   isAuthenticated?: boolean;
   onAuthRequired?: () => void;
-  onAddToCart?: () => void;
-  showAddToCart?: boolean;
-  addToCartDisabled?: boolean;
+  onGalleryOpenChange?: (open: boolean) => void;
+  isSavedForVariant?: (variantId: string) => boolean;
+  onToggleSaveVariant?: (variantId: string) => void;
+  getCartItemForVariant?: (variant: ProductVariant) => CartItem | undefined;
+  variantNeedsQuickLook?: (variant: ProductVariant) => boolean;
+  onGalleryAddToCart?: (variant: ProductVariant) => void;
+  onGalleryOpenQuickLook?: (variant: ProductVariant, mediaUrl: string) => void;
+  onIncrementCartItem?: (cartItem: CartItem) => void;
+  onDecrementCartItem?: (cartItem: CartItem) => void;
 }
 
 export function ProductCatalogueDropdown({
   productCatalogues,
   variantPreviewItems = [],
-  isOutOfStock = false,
-  isSaved = false,
-  onSave,
+  product,
   isAuthenticated = false,
   onAuthRequired,
-  onAddToCart,
-  showAddToCart = false,
-  addToCartDisabled = false,
+  onGalleryOpenChange,
+  isSavedForVariant,
+  onToggleSaveVariant,
+  getCartItemForVariant,
+  variantNeedsQuickLook,
+  onGalleryAddToCart,
+  onGalleryOpenQuickLook,
+  onIncrementCartItem,
+  onDecrementCartItem,
 }: ProductCatalogueDropdownProps) {
   const [open, setOpen] = useState(false);
   const [galleryOpen, setGalleryOpen] = useState(false);
@@ -135,13 +144,22 @@ export function ProductCatalogueDropdown({
     return [...list].sort((a, b) => (a.displayOrder ?? 0) - (b.displayOrder ?? 0));
   }, [productCatalogues]);
 
-  const galleryMediaUrls = useMemo(
-    () => buildProductGalleryMediaUrls(variantPreviewItems, productCatalogues),
-    [variantPreviewItems, productCatalogues]
+  const gallerySlides = useMemo(
+    () =>
+      buildProductGallerySlides(
+        variantPreviewItems,
+        productCatalogues,
+        product?.variants?.[0]
+      ),
+    [variantPreviewItems, productCatalogues, product?.variants]
   );
 
+  useEffect(() => {
+    onGalleryOpenChange?.(galleryOpen);
+  }, [galleryOpen, onGalleryOpenChange]);
+
   const openGalleryAt = (mediaUrl: string) => {
-    const idx = galleryMediaUrls.findIndex((url) => url === mediaUrl);
+    const idx = gallerySlides.findIndex((slide) => slide.url === mediaUrl);
     setGalleryIndex(idx >= 0 ? idx : 0);
     setGalleryOpen(true);
     setOpen(false);
@@ -247,20 +265,19 @@ export function ProductCatalogueDropdown({
       <ProductMediaGallery
         isOpen={galleryOpen}
         onClose={() => setGalleryOpen(false)}
-        mediaUrls={galleryMediaUrls}
+        slides={gallerySlides}
         initialIndex={galleryIndex}
-        isOutOfStock={isOutOfStock}
-        isSaved={isSaved}
-        onSave={onSave}
+        isSavedForVariant={isSavedForVariant}
+        onToggleSaveVariant={onToggleSaveVariant}
         requireAuthForSave={!isAuthenticated}
         onAuthRequired={onAuthRequired}
         onShare={() => setShowShareModal(true)}
-        onAddToCart={() => {
-          setGalleryOpen(false);
-          onAddToCart?.();
-        }}
-        showAddToCart={showAddToCart}
-        addToCartDisabled={addToCartDisabled}
+        getCartItemForVariant={getCartItemForVariant}
+        variantNeedsQuickLook={variantNeedsQuickLook}
+        onAddToCart={onGalleryAddToCart}
+        onOpenQuickLook={onGalleryOpenQuickLook}
+        onIncrementCartItem={onIncrementCartItem}
+        onDecrementCartItem={onDecrementCartItem}
       />
 
       <ShareProductModal
