@@ -315,6 +315,12 @@ export function ProductMediaGallery({
                 width={10000}
               />
             )}
+
+            {isOutOfStock && (
+              <div className={styles.outOfStockLabel} aria-hidden>
+                Out of stock
+              </div>
+            )}
           </div>
 
           <div className={styles.uiLayer}>

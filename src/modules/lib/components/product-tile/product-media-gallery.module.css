@@ -24,6 +24,27 @@
   object-fit: contain;
 }
 
+.outOfStockLabel {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #fff;
+  font-size: 22px;
+  font-weight: 600;
+  line-height: 1.2;
+  pointer-events: none;
+  text-shadow: 0 2px 12px rgba(0, 0, 0, 0.45);
+}
+
+@media (min-width: 768px) {
+  .outOfStockLabel {
+    font-size: 28px;
+  }
+}
+
 .uiLayer {
   position: relative;
   z-index: 2;
