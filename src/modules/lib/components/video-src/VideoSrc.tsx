@@ -17,6 +17,7 @@ interface VideoSrcProps {
   style?: React.CSSProperties;
   autoPlay?: boolean;
   loop?: boolean;
+  onLoaded?: () => void;
 }
 
 const VideoSrc: React.FC<VideoSrcProps> = ({
@@ -30,6 +31,7 @@ const VideoSrc: React.FC<VideoSrcProps> = ({
   style,
   autoPlay = false,
   loop = false,
+  onLoaded,
 }) => {
   const videoRef = useRef<HTMLVideoElement>(null);
   const [loaded, setLoaded] = useState(false);
@@ -86,7 +88,10 @@ const VideoSrc: React.FC<VideoSrcProps> = ({
             )}
             onMouseEnter={handleMouseEnter}
             onMouseLeave={handleMouseLeave}
-            onLoadedData={() => setLoaded(true)}
+            onLoadedData={() => {
+              setLoaded(true);
+              onLoaded?.();
+            }}
             preload={shouldPreload ? 'auto' : 'metadata'}
             muted
             autoPlay={autoPlay}

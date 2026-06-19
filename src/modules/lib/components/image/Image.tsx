@@ -20,6 +20,7 @@ export interface IImageProps {
   priority?: boolean;
   fetchPriority?: 'high' | 'low' | 'auto';
   style?: React.CSSProperties;
+  onLoadComplete?: () => void;
 }
 
 const extractSize = (
@@ -47,10 +48,16 @@ const Image = React.forwardRef<HTMLImageElement, IImageProps>(
       priority,
       fetchPriority,
       style,
+      onLoadComplete,
     },
     ref
   ) => {
     const [loaded, setLoaded] = useState(false);
+
+    const handleLoad = () => {
+      setLoaded(true);
+      onLoadComplete?.();
+    };
 
     const autoWidth = width ?? extractSize(className, 'w') ?? 0;
     const autoHeight = height ?? extractSize(className, 'h') ?? 0;
@@ -82,7 +89,7 @@ const Image = React.forwardRef<HTMLImageElement, IImageProps>(
             src={imageSrc}
             alt={alt}
             onClick={onClick}
-            onLoad={() => setLoaded(true)}
+            onLoad={handleLoad}
             loading={priority || fetchPriority ? 'eager' : 'lazy'}
             width={autoWidth}
             height={autoHeight}
@@ -109,7 +116,7 @@ const Image = React.forwardRef<HTMLImageElement, IImageProps>(
             loading="lazy"
             width={autoWidth}
             height={autoHeight}
-            onLoad={() => setLoaded(true)}
+            onLoad={handleLoad}
             style={style}
           />
         )}

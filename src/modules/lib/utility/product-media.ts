@@ -3,6 +3,7 @@ import {
   ProductMedia,
   ProductVariant,
 } from './types/product.interface';
+import { checkMediaType, getImageDir } from './utility';
 
 export interface VariantMediaPreviewItem {
   variant: ProductVariant;
@@ -70,4 +71,48 @@ export const buildProductGalleryMediaUrls = (
 
   const combined = [...productImages, ...catalogueImages];
   return combined.length ? Array.from(new Set(combined)) : [];
+};
+
+export const preloadProductMediaUrl = (
+  url: string,
+  onComplete: () => void
+): (() => void) => {
+  if (!url) return () => {};
+
+  let cancelled = false;
+  const scheduleComplete = () => {
+    requestAnimationFrame(() => {
+      if (!cancelled) onComplete();
+    });
+  };
+
+  const mediaType = checkMediaType(url);
+
+  if (mediaType === 'video') {
+    const video = document.createElement('video');
+    video.preload = 'auto';
+    video.muted = true;
+    video.playsInline = true;
+    const onLoadedData = () => scheduleComplete();
+    video.addEventListener('loadeddata', onLoadedData);
+    video.src = url;
+
+    return () => {
+      cancelled = true;
+      video.removeEventListener('loadeddata', onLoadedData);
+      video.src = '';
+    };
+  }
+
+  const img = new window.Image();
+  img.onload = scheduleComplete;
+  img.onerror = scheduleComplete;
+  img.src = getImageDir('images', url);
+
+  return () => {
+    cancelled = true;
+    img.onload = null;
+    img.onerror = null;
+    img.src = '';
+  };
 };
