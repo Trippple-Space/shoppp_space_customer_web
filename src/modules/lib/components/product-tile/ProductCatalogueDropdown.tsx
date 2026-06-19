@@ -26,6 +26,7 @@ import {
 } from '../../utility/product-media';
 import { CartItem } from '../../utility/types/cart.interface';
 import catalogueStyles from './product-catalogue-dropdown.module.css';
+import { useProductTileGallery } from './ProductTileGalleryContext';
 
 export function CatalogueMediaItem({
   item,
@@ -133,10 +134,12 @@ export function ProductCatalogueDropdown({
   onIncrementCartItem,
   onDecrementCartItem,
 }: ProductCatalogueDropdownProps) {
+  const pageGallery = useProductTileGallery();
   const [open, setOpen] = useState(false);
   const [galleryOpen, setGalleryOpen] = useState(false);
   const [galleryIndex, setGalleryIndex] = useState(0);
   const [showShareModal, setShowShareModal] = useState(false);
+  const usePageGallery = !!pageGallery;
 
   const cataloguesSorted = useMemo(() => {
     const list = productCatalogues ?? [];
@@ -155,10 +158,21 @@ export function ProductCatalogueDropdown({
   );
 
   useEffect(() => {
-    onGalleryOpenChange?.(galleryOpen);
-  }, [galleryOpen, onGalleryOpenChange]);
+    onGalleryOpenChange?.(usePageGallery ? pageGallery.isGalleryOpen : galleryOpen);
+  }, [
+    galleryOpen,
+    onGalleryOpenChange,
+    pageGallery?.isGalleryOpen,
+    usePageGallery,
+  ]);
 
   const openGalleryAt = (mediaUrl: string) => {
+    if (usePageGallery && product?.id) {
+      pageGallery.openGallery(product.id, mediaUrl);
+      setOpen(false);
+      return;
+    }
+
     const idx = gallerySlides.findIndex((slide) => slide.url === mediaUrl);
     setGalleryIndex(idx >= 0 ? idx : 0);
     setGalleryOpen(true);
@@ -166,6 +180,12 @@ export function ProductCatalogueDropdown({
   };
 
   const openFullGallery = () => {
+    if (usePageGallery && product?.id) {
+      pageGallery.openGallery(product.id);
+      setOpen(false);
+      return;
+    }
+
     setGalleryIndex(0);
     setGalleryOpen(true);
     setOpen(false);
@@ -262,29 +282,34 @@ export function ProductCatalogueDropdown({
         </div>
       </FloatingPortal>
 
-      <ProductMediaGallery
-        isOpen={galleryOpen}
-        onClose={() => setGalleryOpen(false)}
-        slides={gallerySlides}
-        initialIndex={galleryIndex}
-        isSavedForVariant={isSavedForVariant}
-        onToggleSaveVariant={onToggleSaveVariant}
-        requireAuthForSave={!isAuthenticated}
-        onAuthRequired={onAuthRequired}
-        onShare={() => setShowShareModal(true)}
-        getCartItemForVariant={getCartItemForVariant}
-        variantNeedsQuickLook={variantNeedsQuickLook}
-        onAddToCart={onGalleryAddToCart}
-        onOpenQuickLook={onGalleryOpenQuickLook}
-        onIncrementCartItem={onIncrementCartItem}
-        onDecrementCartItem={onDecrementCartItem}
-      />
+      {!usePageGallery && (
+        <ProductMediaGallery
+          isOpen={galleryOpen}
+          onClose={() => setGalleryOpen(false)}
+          slides={gallerySlides}
+          initialIndex={galleryIndex}
+          productLabel={product?.name ? String(product.name) : undefined}
+          isSavedForVariant={isSavedForVariant}
+          onToggleSaveVariant={onToggleSaveVariant}
+          requireAuthForSave={!isAuthenticated}
+          onAuthRequired={onAuthRequired}
+          onShare={() => setShowShareModal(true)}
+          getCartItemForVariant={getCartItemForVariant}
+          variantNeedsQuickLook={variantNeedsQuickLook}
+          onAddToCart={onGalleryAddToCart}
+          onOpenQuickLook={onGalleryOpenQuickLook}
+          onIncrementCartItem={onIncrementCartItem}
+          onDecrementCartItem={onDecrementCartItem}
+        />
+      )}
 
-      <ShareProductModal
-        modalOpen={showShareModal}
-        handleCloseModal={() => setShowShareModal(false)}
-        modalZIndex={10001}
-      />
+      {!usePageGallery && (
+        <ShareProductModal
+          modalOpen={showShareModal}
+          handleCloseModal={() => setShowShareModal(false)}
+          modalZIndex={10001}
+        />
+      )}
     </>
   );
 }

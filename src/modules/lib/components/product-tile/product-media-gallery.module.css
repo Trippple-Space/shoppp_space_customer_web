@@ -213,3 +213,126 @@
 .cartControls :global(.relative) {
   margin-bottom: 0;
 }
+
+.productHeader {
+  position: absolute;
+  top: max(14px, env(safe-area-inset-top));
+  left: 16px;
+  z-index: 5;
+  max-width: min(72vw, 420px);
+  padding: 10px 14px;
+  border-radius: 12px;
+  background: rgba(0, 0, 0, 0.5);
+  backdrop-filter: blur(8px);
+  pointer-events: none;
+}
+
+@media (min-width: 768px) {
+  .productHeader {
+    top: max(20px, env(safe-area-inset-top));
+    left: 28px;
+    padding: 12px 16px;
+    max-width: min(50vw, 480px);
+  }
+}
+
+.productName {
+  margin: 0;
+  font-size: 14px;
+  font-weight: 600;
+  line-height: 1.35;
+  color: rgba(255, 255, 255, 0.96);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+@media (min-width: 768px) {
+  .productName {
+    font-size: 16px;
+  }
+}
+
+.productPosition {
+  margin: 4px 0 0;
+  font-size: 12px;
+  font-weight: 400;
+  line-height: 1.2;
+  color: rgba(255, 255, 255, 0.72);
+}
+
+.boundaryPrompt {
+  position: absolute;
+  left: 50%;
+  bottom: calc(88px + env(safe-area-inset-bottom));
+  z-index: 6;
+  width: min(92vw, 380px);
+  padding: 18px 20px;
+  border-radius: 16px;
+  background: rgba(18, 18, 18, 0.92);
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  box-shadow: 0 16px 40px rgba(0, 0, 0, 0.45);
+  transform: translateX(-50%);
+  pointer-events: auto;
+  backdrop-filter: blur(10px);
+}
+
+@media (min-width: 768px) {
+  .boundaryPrompt {
+    bottom: calc(104px + env(safe-area-inset-bottom));
+    padding: 20px 22px;
+  }
+}
+
+.boundaryTitle {
+  margin: 0;
+  font-size: 15px;
+  font-weight: 600;
+  line-height: 1.35;
+  color: #fff;
+}
+
+.boundaryMessage {
+  margin: 8px 0 0;
+  font-size: 13px;
+  line-height: 1.45;
+  color: rgba(255, 255, 255, 0.78);
+}
+
+.boundaryActions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+  margin-top: 16px;
+}
+
+.boundaryBtnSecondary,
+.boundaryBtnPrimary {
+  min-height: 40px;
+  padding: 0 16px;
+  border-radius: 999px;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  border: none;
+  transition: background 0.15s ease, transform 0.15s ease;
+}
+
+.boundaryBtnSecondary {
+  background: rgba(255, 255, 255, 0.12);
+  color: #fff;
+}
+
+.boundaryBtnSecondary:hover {
+  background: rgba(255, 255, 255, 0.2);
+}
+
+.boundaryBtnPrimary {
+  background: #face33;
+  color: #000;
+}
+
+.boundaryBtnPrimary:hover {
+  background: #f5d24d;
+  transform: translateY(-1px);
+}

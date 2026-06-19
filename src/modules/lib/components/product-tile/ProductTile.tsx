@@ -24,9 +24,7 @@ import ProductDetailModal from '../product-detail-modal/ProductDetailModal';
 import { PiShoppingCartFill, PiStorefront } from 'react-icons/pi';
 import { SavedVariant } from '../../utility/types/SavedVariant.interface';
 import { IFetchedReview } from '../../utility/types/review.interface';
-import useTransformProduct, {
-  getVariantValue,
-} from '../../utility/hooks/use-transform-product';
+import useTransformProduct from '../../utility/hooks/use-transform-product';
 import {
   useRecentlyViewedActions,
 } from '../../utility/hooks/use-recently-viewed';
@@ -45,9 +43,17 @@ import {
   getStrikethroughAmounts,
   getVariantDisplayPrices,
 } from '../../utility/visible-discount';
-import { buildVariantMediaPreviewItems } from '../../utility/product-media';
+import {
+  buildVariantMediaPreviewItems,
+  getUniqueGalleryVariants,
+} from '../../utility/product-media';
 import { ProductTileMediaCarousel } from './ProductTileMediaCarousel';
 import { TILE_AUTO_ROTATE_MS } from './product-tile-auto-rotate';
+import {
+  useRegisterProductTileGalleryApi,
+  ProductTileGalleryApi,
+  useProductTileGallery,
+} from './ProductTileGalleryContext';
 
 const TILE_PRICE_FADE = {
   duration: 1.1,
@@ -148,66 +154,10 @@ const ProductTile: FC<IProductTile> = ({
     return `/${slug}`;
   }, [product.store?.slug]);
 
-  const allPropertiesWithSize = useMemo(() => {
-    const props: Record<string, string[]> = { ...allProperties };
-
-    const sizes = Array.from(
-      new Set(product?.variants?.map((v) => v.size).filter(Boolean))
-    ) as string[];
-
-    if (sizes.length) {
-      props.size = sizes;
-    }
-
-    return props;
-  }, [allProperties, product?.variants]);
-
-  const uniqueVariantsFromProductImages = useMemo(() => {
-    if (!product?.variants?.length) return [];
-
-    const candidateKeys = [
-      ...(allPropertiesWithSize.color?.length ? ['color'] : []),
-      ...Object.keys(allPropertiesWithSize).filter(
-        (k) => k !== 'color' && k !== 'size'
-      ),
-      ...(allPropertiesWithSize.size?.length ? ['size'] : []),
-    ];
-
-    const uniqueKey = candidateKeys.find((key) => {
-      const values = new Set(
-        product.variants
-          .map((v) => String(getVariantValue(v, key) ?? '').trim())
-          .filter(Boolean)
-      );
-
-      return values.size > 1;
-    });
-
-    if (!uniqueKey) {
-      return product.variants;
-    }
-
-    const map = new Map<string, ProductVariant>();
-    const rest: ProductVariant[] = [];
-
-    for (const v of product.variants) {
-      const raw = getVariantValue(v, uniqueKey);
-      const value = String(raw ?? '')
-        .trim()
-        .toLowerCase();
-
-      if (!value) {
-        rest.push(v);
-        continue;
-      }
-
-      if (!map.has(value)) {
-        map.set(value, v);
-      }
-    }
-
-    return Array.from(map.values()).concat(rest);
-  }, [product?.variants, allPropertiesWithSize]);
+  const uniqueVariantsFromProductImages = useMemo(
+    () => (product ? getUniqueGalleryVariants(product) : []),
+    [product]
+  );
 
   const variantPreviewItems = useMemo(
     () => buildVariantMediaPreviewItems(uniqueVariantsFromProductImages),
@@ -681,6 +631,41 @@ const ProductTile: FC<IProductTile> = ({
     },
     [shouldAddDirectlyToCart]
   );
+
+  const productTileGalleryApi = useMemo((): ProductTileGalleryApi => {
+    return {
+      isSavedForVariant,
+      onToggleSaveVariant: handleToggleSaveVariant,
+      getCartItemForVariant,
+      variantNeedsQuickLook,
+      onGalleryAddToCart: handleGalleryAddToCart,
+      onGalleryOpenQuickLook: handleGalleryOpenQuickLook,
+      onIncrementCartItem: increment,
+      onDecrementCartItem: decrement,
+      isAuthenticated,
+      onAuthRequired: isLoginModal,
+    };
+  }, [
+    isSavedForVariant,
+    handleToggleSaveVariant,
+    getCartItemForVariant,
+    variantNeedsQuickLook,
+    handleGalleryAddToCart,
+    handleGalleryOpenQuickLook,
+    increment,
+    decrement,
+    isAuthenticated,
+    isLoginModal,
+  ]);
+
+  useRegisterProductTileGalleryApi(product?.id, productTileGalleryApi);
+
+  const pageGallery = useProductTileGallery();
+
+  useEffect(() => {
+    if (!pageGallery?.isGalleryOpen) return;
+    pageGallery.bumpGalleryRevision();
+  }, [guestCartVersion, cart.cartItems, pageGallery]);
 
   const visibleTags = useMemo(() => {
     return (product?.tags ?? [])
