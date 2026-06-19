@@ -38,6 +38,7 @@ interface ProductDetailModalProp {
   product?: Product;
   position: string;
   variantSelectedImage?: string;
+  modalZIndex?: number;
 }
 
 const ProductDetailModal = ({
@@ -47,6 +48,7 @@ const ProductDetailModal = ({
   openSingleProductModal,
   position,
   variantSelectedImage,
+  modalZIndex = 10,
 }: ProductDetailModalProp) => {
   const {
     addToCart,
@@ -549,16 +551,18 @@ const ProductDetailModal = ({
   return createPortal(
     <>
       <div
-        className="fixed inset-0 bg-#00000073 w-100p h-100p z-10 block"
+        className="fixed inset-0 bg-#00000073 w-100p h-100p block"
+        style={{ zIndex: modalZIndex }}
         onClick={handleCloseProductModal}
       >
         <>
           <div className="relative no-scrollbar w-full h-full flex flex-col j-content-center a-items-center">
             <div
-              className={`fixed bg-white z-20 w-94p sm:w-80p l:w-65p xl:w-50p max-w-900 radius-8 no-scrollbar`}
+              className={`fixed bg-white w-94p sm:w-80p l:w-65p xl:w-50p max-w-900 radius-8 no-scrollbar`}
               style={{
                 height: 'fit-content',
                 maxHeight: 'calc(100vh - 80px)',
+                zIndex: modalZIndex + 10,
               }}
               onClick={(e) => e.stopPropagation()}
             >

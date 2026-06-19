@@ -3,6 +3,7 @@ import {
 } from '@/modules/lib/utility/hooks/use-products';
 import ProductTile from '@/modules/lib/components/product-tile/ProductTile';
 import ProductTileShimmer from '@/modules/lib/components/product-tile/ProductTileShimmer';
+import { ProductTileGalleryProvider } from '@/modules/lib/components/product-tile/ProductTileGalleryContext';
 import ScrollButtons from '@/modules/lib/components/scroll-buttons/scrollButtons';
 import { useEffect, useMemo, useRef } from 'react';
 import { ICollection } from '@/modules/lib/utility/types/collection.interface';
@@ -249,7 +250,8 @@ const CollectionSection = ({
           </Button>
         </div>
       ) : (
-        <div className="flex flex-col gap-38 s:gap-40 md:gap-44">
+        <ProductTileGalleryProvider products={displayedProducts}>
+          <div className="flex flex-col gap-38 s:gap-40 md:gap-44">
           {(showShimmers ? Array.from({ length: effectiveLayoutRows }, (_, idx) => idx) : productRows.map((_, idx) => idx)).map((rowIndex) => {
             const rowProducts = showShimmers
               ? []
@@ -304,7 +306,8 @@ const CollectionSection = ({
               </div>
             );
           })}
-        </div>
+          </div>
+        </ProductTileGalleryProvider>
       )}
     </section>
   );

@@ -1,6 +1,8 @@
 import Image from '../image/Image'
 import Icon from '../icon/Icon'
+import VideoSrc from '../video-src/VideoSrc'
 import {
+  checkMediaType,
   formatDate,
   formatNumberAsPrice,
   parseApiInstant
@@ -29,21 +31,36 @@ const SavedVariantsCard: React.FC<any> = ({ savedVariant, removeSavedVariant, re
 
   const isOutOfStock = savedVariant?.variant.status === 'OUT_OF_STOCK'
 
+  const media =
+    savedVariant?.variant.media?.[0] ?? recentVariant?.productVariant.media?.[0]
+  const mediaUrl = media?.url ?? ''
+  const mediaType = media?.type ?? checkMediaType(mediaUrl) ?? 'image'
+  const mediaClassName = `w-full h-full a-self-center radius-6 g|object-fit:cover pointer ${isOutOfStock ? 'out-of-stock' : ''}`
+
   return (
     <div className='l:flex space-between items-center'>
       <div className='flex w-100p l:w-50p gap-10 l:gap-30 items-center mb-10'>
-        <div className='l:w-115 l:min-w-115 l:h-115 w-70 min-w-70 relative'>
+        <div className='l:w-115 l:min-w-115 l:h-115 w-70 min-w-70 relative g|overflow:hidden radius-6'>
           {isOutOfStock
             && <div className="absolute w-100p h-100p text-white flex j-content-center a-items-center z-1 radius-6">
               Out of stock
             </div>}
-          <Image
-            className={` w-full h-full a-self-center radius-6 g|object-fit:cover pointer ${isOutOfStock && 'out-of-stock'}`}
-            src={savedVariant?.variant.media[0].url || recentVariant?.productVariant.media[0].url}
-            alt='product'
-            type='image'
-            width={1000}
-          />
+          {mediaType === 'video' ? (
+            <VideoSrc
+              className={mediaClassName}
+              src={mediaUrl}
+              hasLoader={true}
+              pulseClassName="radius-6"
+            />
+          ) : (
+            <Image
+              className={mediaClassName}
+              src={mediaUrl}
+              alt='product'
+              type='image'
+              width={1000}
+            />
+          )}
 
         </div>
         <div className='line-height-28'>
