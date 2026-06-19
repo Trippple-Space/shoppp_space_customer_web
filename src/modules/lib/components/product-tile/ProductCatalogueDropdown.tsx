@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useEffect, useMemo, useRef, useState } from 'react';
-import { HiSquares2X2 } from 'react-icons/hi2';
+import { FaCirclePlay } from 'react-icons/fa6';
 import { ProductCatalogue } from '../../utility/types/product.interface';
 import {
   useFloating,
@@ -147,6 +147,12 @@ export function ProductCatalogueDropdown({
     setOpen(false);
   };
 
+  const openFullGallery = () => {
+    setGalleryIndex(0);
+    setGalleryOpen(true);
+    setOpen(false);
+  };
+
   const { refs, floatingStyles, context } = useFloating({
     open,
     onOpenChange: setOpen,
@@ -186,11 +192,16 @@ export function ProductCatalogueDropdown({
       <button
         type="button"
         ref={refs.setReference}
-        {...getReferenceProps()}
+        {...getReferenceProps({
+          onClick(event) {
+            event.preventDefault();
+            openFullGallery();
+          },
+        })}
         className="l:w-35.2 l:min-w-35.2 l:h-35.2 w-31 min-w-31 h-31 flex a-items-center j-content-center radius-3 md:radius-4 border border-#00000014 outline-none bg-#00000006 hover:bg-#0000000D transition-colors shrink-0"
-        aria-label="View Catalogue"
+        aria-label="Open product media gallery"
       >
-        <HiSquares2X2 className="l:w-18 w-16 l:h-18 h-16 color-#0B9378 ml-1" />
+        <FaCirclePlay className="l:w-18 w-16 l:h-18 h-16 color-#0B9378 ml-1" />
       </button>
       <FloatingPortal>
         <div
