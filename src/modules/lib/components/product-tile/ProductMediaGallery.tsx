@@ -71,6 +71,7 @@ export function ProductMediaGallery({
   const boundaryPromptRef = useRef(boundaryPrompt);
   boundaryPromptRef.current = boundaryPrompt;
   const touchStartX = useRef(0);
+  const touchStartY = useRef(0);
   const total = slides.length;
 
   const ranges = React.useMemo(
@@ -265,13 +266,19 @@ export function ProductMediaGallery({
 
   const handleTouchStart = (event: React.TouchEvent) => {
     touchStartX.current = event.touches[0]?.clientX ?? 0;
+    touchStartY.current = event.touches[0]?.clientY ?? 0;
   };
 
   const handleTouchEnd = (event: React.TouchEvent) => {
     const endX = event.changedTouches[0]?.clientX ?? 0;
-    const delta = endX - touchStartX.current;
-    if (Math.abs(delta) < 48) return;
-    if (delta > 0) goPrev();
+    const endY = event.changedTouches[0]?.clientY ?? 0;
+    const deltaX = endX - touchStartX.current;
+    const deltaY = endY - touchStartY.current;
+
+    if (Math.abs(deltaX) < 48) return;
+    if (Math.abs(deltaX) < Math.abs(deltaY)) return;
+
+    if (deltaX > 0) goPrev();
     else goNext();
   };
 
@@ -292,11 +299,7 @@ export function ProductMediaGallery({
           aria-modal="true"
           aria-label="Product gallery"
         >
-          <div
-            className={styles.mediaStage}
-            onTouchStart={handleTouchStart}
-            onTouchEnd={handleTouchEnd}
-          >
+          <div className={styles.mediaStage}>
             {currentMediaType === 'video' ? (
               <VideoSrc
                 key={currentUrl}
@@ -372,7 +375,11 @@ export function ProductMediaGallery({
               </div>
             )}
 
-            <div className={styles.viewer}>
+            <div
+              className={styles.viewer}
+              onTouchStart={handleTouchStart}
+              onTouchEnd={handleTouchEnd}
+            >
               {total > 1 && (
                 <div className={styles.mediaWrapper}>
                   <button

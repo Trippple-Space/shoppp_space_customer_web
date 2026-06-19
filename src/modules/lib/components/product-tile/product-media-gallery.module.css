@@ -92,7 +92,8 @@
   flex: 1;
   position: relative;
   min-height: 0;
-  pointer-events: none;
+  pointer-events: auto;
+  touch-action: pan-y pinch-zoom;
 }
 
 .mediaWrapper {
@@ -101,7 +102,7 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  pointer-events: auto;
+  pointer-events: none;
 }
 
 .navBtn {
@@ -349,11 +350,11 @@
 }
 
 .boundaryBtnPrimary {
-  background: #face33;
-  color: #000;
+  background: #0b9378;
+  color: #fff;
 }
 
 .boundaryBtnPrimary:hover {
-  background: #f5d24d;
+  background: #087a63;
   transform: translateY(-1px);
 }
