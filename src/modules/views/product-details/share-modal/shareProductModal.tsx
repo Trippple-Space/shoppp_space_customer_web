@@ -9,11 +9,13 @@ import { IoMailOutline } from 'react-icons/io5';
 interface ModalProps {
   modalOpen: boolean;
   handleCloseModal: () => void;
+  modalZIndex?: number;
 }
 
 const ShareProductModal: React.FC<ModalProps> = ({
   modalOpen,
   handleCloseModal,
+  modalZIndex = 10,
 }) => {
   const shareOptions = [
     { mediaLogo: <BsTwitterX />, mediaName: 'Twitter' },
@@ -38,7 +40,7 @@ const ShareProductModal: React.FC<ModalProps> = ({
         <Modal
           isOpen={modalOpen}
           onClose={handleCloseModal}
-          extraModalClass={{ zIndex: 10, overflowY: 'auto' }}
+          extraModalClass={{ zIndex: modalZIndex, overflowY: 'auto' }}
           extraClass={{
             transform: 'translate(50%)',
             overflowY: 'hidden',

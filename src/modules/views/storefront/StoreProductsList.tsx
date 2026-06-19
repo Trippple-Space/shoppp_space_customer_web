@@ -1,6 +1,7 @@
 import React, { FC } from 'react';
 import { DotsLoader } from '@/modules/lib/components/dots-loader/DotsLoader';
 import ProductTile from '@/modules/lib/components/product-tile/ProductTile';
+import { ProductTileGalleryProvider } from '@/modules/lib/components/product-tile/ProductTileGalleryContext';
 import {
   ICategory,
   Product,
@@ -60,24 +61,26 @@ const StoreProductsList: FC<{
           />
         </div>
       ) : products.length ? (
-        <div className="grid xxlgrid-5-cols xl:grid-4-cols-1fr s:grid-3-cols-1fr grid-2-cols-1fr gap-18 s:gap-20 md:gap-24 w-full">
-          {products.map((product, i) => (
-            <div key={i} className="l:mt--20 mt--30 w-full overflow-hidden">
-              <ProductTile
-                product={product}
-                key={i}
-                id={product.id}
-                addToCartVariant="icon"
-                savedVariants={savedVariants}
-                saveVariant={saveVariant}
-                removeSavedVariant={removeSavedVariant}
-                isStoreBased={true}
-                selectedCategory={selectedCategory}
-                setSelectedCategory={setSelectedCategory}
-              />
-            </div>
-          ))}
-        </div>
+        <ProductTileGalleryProvider products={products}>
+          <div className="grid xxlgrid-5-cols xl:grid-4-cols-1fr s:grid-3-cols-1fr grid-2-cols-1fr gap-18 s:gap-20 md:gap-24 w-full">
+            {products.map((product, i) => (
+              <div key={i} className="l:mt--20 mt--30 w-full overflow-hidden">
+                <ProductTile
+                  product={product}
+                  key={i}
+                  id={product.id}
+                  addToCartVariant="icon"
+                  savedVariants={savedVariants}
+                  saveVariant={saveVariant}
+                  removeSavedVariant={removeSavedVariant}
+                  isStoreBased={true}
+                  selectedCategory={selectedCategory}
+                  setSelectedCategory={setSelectedCategory}
+                />
+              </div>
+            ))}
+          </div>
+        </ProductTileGalleryProvider>
       ) : (
         <div className="mt-60 grid-col-span-5 text-center bg-white">
           <NoResultMessage

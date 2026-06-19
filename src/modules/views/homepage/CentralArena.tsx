@@ -2,6 +2,7 @@
 
 import React, { useEffect, useState } from 'react';
 import ProductTile from '@/modules/lib/components/product-tile/ProductTile';
+import { ProductTileGalleryProvider } from '@/modules/lib/components/product-tile/ProductTileGalleryContext';
 import { useProductListView } from '@/modules/lib/utility/hooks/views/use-product-list-view';
 import { DotsLoader } from '@/modules/lib/components/dots-loader/DotsLoader';
 import PuffLoader from '@/modules/lib/components/puff-loader/PuffLoader';
@@ -99,27 +100,29 @@ const CentralArena = ({
             <DotsLoader />
           </div>
         ) : products.length ? (
-          <div className="grid xxlgrid-5-cols xl:grid-4-cols-1fr s:grid-3-cols-1fr grid-2-cols-1fr flex-wrap gap-18 s:gap-20 md:gap-24 w-full relative">
-            {products.map((product, index) => {
-              if (renderedIds.has(product.id)) return null;
-              renderedIds.add(product.id);
-              return (
-                <ProductTile
-                  product={product}
-                  key={product.id}
-                  savedVariants={savedVariants}
-                  saveVariant={saveVariant}
-                  removeSavedVariant={removeSavedVariant}
-                  id={product.id}
-                  isOpen={openReviewId}
-                  setIsOpen={setOpenReviewId}
-                  index={index}
-                  selectedCategory={selectedCategory}
-                  setSelectedCategory={setSelectedCategory}
-                />
-              );
-            })}
-          </div>
+          <ProductTileGalleryProvider products={products}>
+            <div className="grid xxlgrid-5-cols xl:grid-4-cols-1fr s:grid-3-cols-1fr grid-2-cols-1fr flex-wrap gap-18 s:gap-20 md:gap-24 w-full relative">
+              {products.map((product, index) => {
+                if (renderedIds.has(product.id)) return null;
+                renderedIds.add(product.id);
+                return (
+                  <ProductTile
+                    product={product}
+                    key={product.id}
+                    savedVariants={savedVariants}
+                    saveVariant={saveVariant}
+                    removeSavedVariant={removeSavedVariant}
+                    id={product.id}
+                    isOpen={openReviewId}
+                    setIsOpen={setOpenReviewId}
+                    index={index}
+                    selectedCategory={selectedCategory}
+                    setSelectedCategory={setSelectedCategory}
+                  />
+                );
+              })}
+            </div>
+          </ProductTileGalleryProvider>
         ) : isInitialFetchError ? (
           <div className="mt-32 w-full max-w-520 mx-auto">
             <DataFetchErrorPanel

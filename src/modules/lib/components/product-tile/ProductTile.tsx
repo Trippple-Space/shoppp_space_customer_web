@@ -1,5 +1,6 @@
 'use client';
-import React, { FC, useEffect, useMemo, useRef, useState } from 'react';
+import React, { FC, useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import { AnimatePresence, motion } from 'framer-motion';
 import Image from '../image/Image';
 import { AiFillStar, AiFillHeart } from 'react-icons/ai';
 import classNames from 'classnames';
@@ -9,7 +10,6 @@ import {
   ProductVariant,
 } from '../../utility/types/product.interface';
 import {
-  checkMediaType,
   formatNumberAsPrice,
   formatStockUnitSuffix,
   handleFlyToCart,
@@ -24,9 +24,7 @@ import ProductDetailModal from '../product-detail-modal/ProductDetailModal';
 import { PiShoppingCartFill, PiStorefront } from 'react-icons/pi';
 import { SavedVariant } from '../../utility/types/SavedVariant.interface';
 import { IFetchedReview } from '../../utility/types/review.interface';
-import useTransformProduct, {
-  getVariantValue,
-} from '../../utility/hooks/use-transform-product';
+import useTransformProduct from '../../utility/hooks/use-transform-product';
 import {
   useRecentlyViewedActions,
 } from '../../utility/hooks/use-recently-viewed';
@@ -45,7 +43,22 @@ import {
   getStrikethroughAmounts,
   getVariantDisplayPrices,
 } from '../../utility/visible-discount';
-import { buildVariantMediaPreviewItems } from '../../utility/product-media';
+import {
+  buildVariantMediaPreviewItems,
+  getUniqueGalleryVariants,
+} from '../../utility/product-media';
+import { ProductTileMediaCarousel } from './ProductTileMediaCarousel';
+import { TILE_AUTO_ROTATE_MS } from './product-tile-auto-rotate';
+import {
+  useRegisterProductTileGalleryApi,
+  ProductTileGalleryApi,
+  useProductTileGallery,
+} from './ProductTileGalleryContext';
+
+const TILE_PRICE_FADE = {
+  duration: 1.1,
+  ease: [0.42, 0, 0.58, 1] as const,
+};
 
 const PRODUCT_TILE_PILL_STYLES = {
   preorder: {
@@ -141,66 +154,10 @@ const ProductTile: FC<IProductTile> = ({
     return `/${slug}`;
   }, [product.store?.slug]);
 
-  const allPropertiesWithSize = useMemo(() => {
-    const props: Record<string, string[]> = { ...allProperties };
-
-    const sizes = Array.from(
-      new Set(product?.variants?.map((v) => v.size).filter(Boolean))
-    ) as string[];
-
-    if (sizes.length) {
-      props.size = sizes;
-    }
-
-    return props;
-  }, [allProperties, product?.variants]);
-
-  const uniqueVariantsFromProductImages = useMemo(() => {
-    if (!product?.variants?.length) return [];
-
-    const candidateKeys = [
-      ...(allPropertiesWithSize.color?.length ? ['color'] : []),
-      ...Object.keys(allPropertiesWithSize).filter(
-        (k) => k !== 'color' && k !== 'size'
-      ),
-      ...(allPropertiesWithSize.size?.length ? ['size'] : []),
-    ];
-
-    const uniqueKey = candidateKeys.find((key) => {
-      const values = new Set(
-        product.variants
-          .map((v) => String(getVariantValue(v, key) ?? '').trim())
-          .filter(Boolean)
-      );
-
-      return values.size > 1;
-    });
-
-    if (!uniqueKey) {
-      return product.variants;
-    }
-
-    const map = new Map<string, ProductVariant>();
-    const rest: ProductVariant[] = [];
-
-    for (const v of product.variants) {
-      const raw = getVariantValue(v, uniqueKey);
-      const value = String(raw ?? '')
-        .trim()
-        .toLowerCase();
-
-      if (!value) {
-        rest.push(v);
-        continue;
-      }
-
-      if (!map.has(value)) {
-        map.set(value, v);
-      }
-    }
-
-    return Array.from(map.values()).concat(rest);
-  }, [product?.variants, allPropertiesWithSize]);
+  const uniqueVariantsFromProductImages = useMemo(
+    () => (product ? getUniqueGalleryVariants(product) : []),
+    [product]
+  );
 
   const variantPreviewItems = useMemo(
     () => buildVariantMediaPreviewItems(uniqueVariantsFromProductImages),
@@ -226,13 +183,54 @@ const ProductTile: FC<IProductTile> = ({
   const [openSingleProductModal, setOpenSingleProductModal] = useState(false);
   const [isToAddProperties, setIsToAddProperties] = useState<boolean>(false);
   const [recentlyViewedId, setRecentlyViewsId] = useState<any>();
-  const [selectedImage, setSelectedImage] = useState(
-    product?.variants?.[0]?.media?.[0]?.url
-  );
-  const [selectedVariant, setSelectedVariant] = useState<ProductVariant>(
-    uniqueVariantsFromProductImages[0] ?? product?.variants?.[0]
-  );
+  const [activeIndex, setActiveIndex] = useState(0);
   const [guestCartVersion, setGuestCartVersion] = useState(0);
+  const [catalogueGalleryOpen, setCatalogueGalleryOpen] = useState(false);
+  const [galleryQuickLookVariant, setGalleryQuickLookVariant] = useState<
+    ProductVariant | undefined
+  >();
+  const [galleryQuickLookImage, setGalleryQuickLookImage] = useState<string>();
+
+  const activePreviewItem = variantPreviewItems[activeIndex];
+  const selectedVariant =
+    activePreviewItem?.variant ??
+    uniqueVariantsFromProductImages[0] ??
+    product?.variants?.[0];
+  const selectedImage = activePreviewItem?.media?.url;
+
+  const handleAutoAdvance = useCallback(() => {
+    if (variantPreviewItems.length <= 1) return;
+    setActiveIndex((index) => (index + 1) % variantPreviewItems.length);
+  }, [variantPreviewItems.length]);
+
+  const rotateTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const autoRotatePaused = onProductTileHover || openSingleProductModal;
+
+  const clearRotateTimeout = useCallback(() => {
+    if (rotateTimeoutRef.current) {
+      clearTimeout(rotateTimeoutRef.current);
+      rotateTimeoutRef.current = null;
+    }
+  }, []);
+
+  const scheduleRotate = useCallback(() => {
+    clearRotateTimeout();
+    if (autoRotatePaused || variantPreviewItems.length <= 1) return;
+
+    rotateTimeoutRef.current = setTimeout(() => {
+      handleAutoAdvance();
+    }, TILE_AUTO_ROTATE_MS);
+  }, [
+    autoRotatePaused,
+    variantPreviewItems.length,
+    handleAutoAdvance,
+    clearRotateTimeout,
+  ]);
+
+  useEffect(() => {
+    scheduleRotate();
+    return clearRotateTimeout;
+  }, [activeIndex, scheduleRotate, clearRotateTimeout]);
 
   const rowRef = useRef<HTMLDivElement>(null);
   const priceRef = useRef<HTMLDivElement>(null);
@@ -333,9 +331,19 @@ const ProductTile: FC<IProductTile> = ({
   }, [cart.cartItems, selectedVariant, isAuthenticated, guestCartVersion]);
 
   useEffect(() => {
-    setSelectedImage(product?.variants?.[0]?.media?.[0]?.url);
-    setSelectedVariant(product?.variants?.[0]);
+    setActiveIndex(0);
   }, [product?.id]);
+
+  const handlePreviewMediaSelect = useCallback(
+    (index: number) => {
+      const item = variantPreviewItems[index];
+      if (!item?.media?.url) return;
+
+      setActiveIndex(index);
+      setRecentlyViewsId(item.variant.id);
+    },
+    [variantPreviewItems]
+  );
 
   useEffect(() => {
     if (!seenAddToCartIconOnBoarding) {
@@ -381,7 +389,6 @@ const ProductTile: FC<IProductTile> = ({
   const isSaved = resolvedSavedVariants?.find(
     (item: SavedVariant) => item.variantId === activeVariantId
   );
-  const mediaType = checkMediaType(selectedImage) ?? 'image';
 
   const handleSave = () => {
     if (!activeVariantId) return;
@@ -396,8 +403,92 @@ const ProductTile: FC<IProductTile> = ({
     setOpenSingleProductModal((prev) => !prev);
     if (openSingleProductModal) {
       setIsToAddProperties(false);
+      setGalleryQuickLookVariant(undefined);
+      setGalleryQuickLookImage(undefined);
     }
   };
+
+  const getCartItemForVariant = useCallback(
+    (variant: ProductVariant) => {
+      const existing = cart.cartItems.find(
+        (item) => item.variant.id === variant.id
+      );
+      if (existing) return existing;
+      if (isAuthenticated) return undefined;
+
+      const guestQty = guestSession.getCartQuantityForVariant(variant.id);
+      if (guestQty <= 0) return undefined;
+
+      return {
+        id: `guest-${variant.id}`,
+        productId: variant.product?.id ?? '',
+        quantity: guestQty,
+        variant,
+        totalPrice: variant.finalPrice * guestQty,
+        discountedPrice: variant.discountedPrice * guestQty,
+        userConfigurations:
+          guestSession.getLatestUserConfigurations(variant.id) ?? {},
+        createdAt: '',
+        discountValue: 0,
+        lastUpdated: '',
+        meta: null,
+      } as CartItem;
+    },
+    [cart.cartItems, isAuthenticated, guestCartVersion]
+  );
+
+  const isSavedForVariant = useCallback(
+    (variantId: string) =>
+      !!resolvedSavedVariants?.find(
+        (item: SavedVariant) => item.variantId === variantId
+      ),
+    [resolvedSavedVariants]
+  );
+
+  const handleToggleSaveVariant = useCallback(
+    (variantId: string) => {
+      if (isSavedForVariant(variantId)) {
+        resolvedRemoveSavedVariant?.(variantId);
+      } else {
+        resolvedSaveVariant?.(variantId);
+      }
+    },
+    [
+      isSavedForVariant,
+      resolvedRemoveSavedVariant,
+      resolvedSaveVariant,
+    ]
+  );
+
+  const handleGalleryOpenQuickLook = useCallback(
+    (variant: ProductVariant, mediaUrl: string) => {
+      setGalleryQuickLookVariant(variant);
+      setGalleryQuickLookImage(mediaUrl);
+      setIsToAddProperties(true);
+      setOpenSingleProductModal(true);
+    },
+    []
+  );
+
+  const handleGalleryAddToCart = useCallback(
+    (variant: ProductVariant) => {
+      setShowOnBoardingModal(false);
+      if (!localStorage.getItem('seenMiniCart')) {
+        window.dispatchEvent(new Event('showMiniCartOnboarding'));
+        localStorage.setItem('seenMiniCart', 'true');
+      }
+      addToCart(
+        variant.id,
+        variant.minPurchaseQuantity || 1,
+        {},
+        {
+          ...variant,
+          product: variant.product ?? product,
+        }
+      );
+    },
+    [addToCart, product]
+  );
 
   const handleLongPressOpenProductModal = () => {
     handleCloseProductModal();
@@ -518,6 +609,63 @@ const ProductTile: FC<IProductTile> = ({
       ) ?? false
     );
   }, [selectedVariant?.id]);
+
+  const variantNeedsQuickLook = useCallback(
+    (variant: ProductVariant) => {
+      const hasSize = variant.size && variant.size.trim() !== '';
+      const hasOtherProperties =
+        variant?.properties &&
+        Object.entries(variant.properties).some(([, value]) => {
+          const trimmed = String(value ?? '').trim();
+          return trimmed !== '';
+        });
+      const hasProperties = hasSize || hasOtherProperties;
+      const hasCustomerConfiguration =
+        variant?.configurationRecords?.some((record: any) =>
+          record.customerDataForm?.some((f: any) => isCustomerInputForField(f))
+        ) ?? false;
+
+      return (
+        (hasProperties && !shouldAddDirectlyToCart) || hasCustomerConfiguration
+      );
+    },
+    [shouldAddDirectlyToCart]
+  );
+
+  const productTileGalleryApi = useMemo((): ProductTileGalleryApi => {
+    return {
+      isSavedForVariant,
+      onToggleSaveVariant: handleToggleSaveVariant,
+      getCartItemForVariant,
+      variantNeedsQuickLook,
+      onGalleryAddToCart: handleGalleryAddToCart,
+      onGalleryOpenQuickLook: handleGalleryOpenQuickLook,
+      onIncrementCartItem: increment,
+      onDecrementCartItem: decrement,
+      isAuthenticated,
+      onAuthRequired: isLoginModal,
+    };
+  }, [
+    isSavedForVariant,
+    handleToggleSaveVariant,
+    getCartItemForVariant,
+    variantNeedsQuickLook,
+    handleGalleryAddToCart,
+    handleGalleryOpenQuickLook,
+    increment,
+    decrement,
+    isAuthenticated,
+    isLoginModal,
+  ]);
+
+  useRegisterProductTileGalleryApi(product?.id, productTileGalleryApi);
+
+  const pageGallery = useProductTileGallery();
+
+  useEffect(() => {
+    if (!pageGallery?.isGalleryOpen) return;
+    pageGallery.bumpGalleryRevision();
+  }, [guestCartVersion, cart.cartItems, pageGallery]);
 
   const visibleTags = useMemo(() => {
     return (product?.tags ?? [])
@@ -733,40 +881,29 @@ const ProductTile: FC<IProductTile> = ({
             }
           }}
         >
-          {mediaType === 'image' ? (
-            <div className="relative w-full h-full">
+            <div className="relative w-full h-full g|overflow:hidden">
+              {variantPreviewItems.length > 0 && (
+                <ProductTileMediaCarousel
+                  key={product.id}
+                  items={variantPreviewItems}
+                  activeIndex={activeIndex}
+                  imgRef={imgRef}
+                />
+              )}
+
               {isOutOfStock && (
-                <div className="absolute w-100p h-100p text-white flex j-content-center a-items-center z-1 l:text-22 radius-6">
+                <div className="absolute w-100p h-100p text-white flex j-content-center a-items-center z-3 l:text-22 radius-6 pointer-events-none">
                   Out of stock
                 </div>
               )}
-              <Image
-                ref={imgRef}
-                className={`absolute w-full h-full a-self-center g|object-fit:cover pointer ${isOutOfStock && 'out-of-stock'
-                  }`}
-                src={selectedImage}
-                alt="product-image"
-                width={10000}
-                hasLoader={true}
-              />
             </div>
-          ) : (
-            <div className="relative w-full h-full">
-              <VideoSrc
-                className={`absolute w-full h-full a-self-center g|object-fit:cover pointer ${isOutOfStock && 'out-of-stock'
-                  }`}
-                src={selectedImage}
-                hasLoader={true}
-              />
-            </div>
-          )}
         </Link>
 
         {/* QUICK LOOK BUTTON */}
         {onProductTileHover && product && (
           <div
             id="add to cart button"
-            className="hidden l:block absolute z-1 b-0 l-0 ml-10 mt-20 l:mr-15 l:mb-15"
+            className="hidden l:block absolute z-2 b-0 l-0 ml-10 mt-20 l:mr-15 l:mb-15"
             onClick={() => {
               handleCloseProductModal();
               if (selectedVariant) {
@@ -784,7 +921,7 @@ const ProductTile: FC<IProductTile> = ({
         {/* ADD TO CART / ONBOARDING */}
         <div
           id="add to cart button"
-          className="absolute b-0 r-0 mr-10 mb-10 l:mr-15 l:mb-15"
+          className="absolute z-2 b-0 r-0 mr-10 mb-10 l:mr-15 l:mb-15"
         >
           {selectedVariantItemInCart ? (
             <QuantitySelector
@@ -837,7 +974,9 @@ const ProductTile: FC<IProductTile> = ({
               )}
 
               <div
-                style={{ zIndex: showOnBoardingModal && indexCount ? 1000 : 0 }}
+                style={
+                  showOnBoardingModal && indexCount ? { zIndex: 1000 } : undefined
+                }
                 className="round relative"
               >
                 {selectedVariant?.status !== 'OUT_OF_STOCK' && (
@@ -896,7 +1035,7 @@ const ProductTile: FC<IProductTile> = ({
         {/* FAVORITE ICON */}
         <div
           id="favorite icon"
-          className="absolute z-1 t-0 r-0 mr-10 mt-10 l:mr-15 l:mt-15 text-24 l:text-34"
+          className="absolute z-2 t-0 r-0 mr-10 mt-10 l:mr-15 l:mt-15 text-24 l:text-34"
           onClick={(e) => {
             e.preventDefault();
             e.stopPropagation();
@@ -920,7 +1059,7 @@ const ProductTile: FC<IProductTile> = ({
 
         {/* DISCOUNT PILL */}
         {discountPill && (
-          <div className="absolute w-fit h-fit t-0 l-0 z-1">
+          <div className="absolute w-fit h-fit t-0 l-0 z-2">
             <div
               className="mt-10 l:ml-15 l:mt-15 whitespace-nowrap w-fit h-20 radius-20 flex a-items-center j-content-center px-10 py-15 ml-5"
               style={{
@@ -954,12 +1093,29 @@ const ProductTile: FC<IProductTile> = ({
 
       <div
         id="product varients"
-        className="l:mt-16 mt-14 l:h-51.2 h-45 flex flex-nowrap a-items-center j-content-start md:gap-6 gap-4 w-full min-w-0"
+        className="l:mt-16 mt-14 l:h-51.2 h-45 flex flex-nowrap a-items-center j-content-start md:gap-6 gap-4 w-full min-w-0 overflow-hidden"
       >
-        <div className="shrink-0 a-self-center">
-          <ProductCatalogueDropdown productCatalogues={product?.productCatalogues} />
-        </div>
-        <div className="flex-1 min-w-0 overflow-x-auto flex flex-nowrap a-items-center md:gap-6 gap-4 whitespace-nowrap no-scrollbar">
+        {(product?.productCatalogues?.length ?? 0) > 0 && (
+          <div className="shrink-0 a-self-center">
+            <ProductCatalogueDropdown
+              productCatalogues={product?.productCatalogues}
+              variantPreviewItems={variantPreviewItems}
+              product={product}
+              isAuthenticated={isAuthenticated}
+              onAuthRequired={isLoginModal}
+              onGalleryOpenChange={setCatalogueGalleryOpen}
+              isSavedForVariant={isSavedForVariant}
+              onToggleSaveVariant={handleToggleSaveVariant}
+              getCartItemForVariant={getCartItemForVariant}
+              variantNeedsQuickLook={variantNeedsQuickLook}
+              onGalleryAddToCart={handleGalleryAddToCart}
+              onGalleryOpenQuickLook={handleGalleryOpenQuickLook}
+              onIncrementCartItem={increment}
+              onDecrementCartItem={decrement}
+            />
+          </div>
+        )}
+        <div className="flex-1 min-w-0 min-h-0 h-full overflow-x-auto g|overflow-y:hidden flex flex-nowrap a-items-center md:gap-6 gap-4 whitespace-nowrap no-scrollbar">
           {variantPreviewItems.map(({ variant, media: mediaItem }, i: number) => (
             <div
               key={`${variant.id}-${mediaItem?.url}-${i}`}
@@ -978,11 +1134,7 @@ const ProductTile: FC<IProductTile> = ({
                     }
                   )}
                   src={mediaItem?.url}
-                  onClick={() => {
-                    setSelectedVariant(variant);
-                    setRecentlyViewsId(variant.id);
-                    setSelectedImage(mediaItem?.url);
-                  }}
+                  onClick={() => handlePreviewMediaSelect(i)}
                   alt="product-image"
                   hasLoader={true}
                   pulseClassName="md:radius-4 radius-3"
@@ -998,11 +1150,7 @@ const ProductTile: FC<IProductTile> = ({
                         selectedImage == mediaItem?.url,
                     }
                   )}
-                  onClick={() => {
-                    setSelectedVariant(variant);
-                    setRecentlyViewsId(variant.id);
-                    setSelectedImage(mediaItem?.url);
-                  }}
+                  onClick={() => handlePreviewMediaSelect(i)}
                   src={mediaItem?.url}
                   hasLoader={true}
                 />
@@ -1065,41 +1213,63 @@ const ProductTile: FC<IProductTile> = ({
         <div ref={rowRef} className="flex j-content-between sm:gap-15 gap-6">
           <div
             ref={priceRef}
-            className="flex md:gap-8 md:a-items-center gap-3"
+            className="min-w-0"
+            style={{
+              display: 'grid',
+              gridTemplateColumns: 'minmax(0, max-content)',
+              alignItems: 'center',
+            }}
           >
-            <div className="flex md:gap-8 md:a-items-center md:flex-row flex-col">
-              <p className="md:text-16 text-12 weight-600 md:line-height-24 line-height-20">
-                {formatNumberAsPrice(variantDisplayPrices.displayPrice)}
-              </p>
-              {variantDisplayPrices.hasSlash && (
-                <div className="flex flex-wrap gap-6 md:gap-8 a-items-center">
-                  {getStrikethroughAmounts(variantDisplayPrices).map(
-                    (amount, idx) => (
-                      <p
-                        key={idx}
-                        className="md:text-12 text-10 weight-400 md:line-height-20 color-#00000099 line-through"
-                      >
-                        {formatNumberAsPrice(amount)}
-                      </p>
-                    )
+            <AnimatePresence mode="sync" initial={false}>
+              <motion.div
+                key={selectedVariant?.id ?? 'price'}
+                initial={{ opacity: 0 }}
+                animate={{
+                  opacity: 1,
+                  transition: TILE_PRICE_FADE,
+                }}
+                exit={{
+                  opacity: 0,
+                  transition: TILE_PRICE_FADE,
+                }}
+                className="flex md:gap-8 md:a-items-center gap-3 min-w-0"
+                style={{ gridRow: 1, gridColumn: 1 }}
+              >
+                <div className="flex md:gap-8 md:a-items-center md:flex-row flex-col">
+                  <p className="md:text-16 text-12 weight-600 md:line-height-24 line-height-20">
+                    {formatNumberAsPrice(variantDisplayPrices.displayPrice)}
+                  </p>
+                  {variantDisplayPrices.hasSlash && (
+                    <div className="flex flex-wrap gap-6 md:gap-8 a-items-center">
+                      {getStrikethroughAmounts(variantDisplayPrices).map(
+                        (amount, idx) => (
+                          <p
+                            key={idx}
+                            className="md:text-12 text-10 weight-400 md:line-height-20 color-#00000099 line-through"
+                          >
+                            {formatNumberAsPrice(amount)}
+                          </p>
+                        )
+                      )}
+                    </div>
                   )}
                 </div>
-              )}
-            </div>
-            {!variantDisplayPrices.hasSlash &&
-              (() => {
-                const stockUnitSuffix = formatStockUnitSuffix(
-                  selectedVariant?.stockUnit
-                );
-                return stockUnitSuffix ? (
-                  <span
-                    className="sm:text-10 text-8 weight-400 md:line-height-20 line-height-12.1 md:mb-0 mb-2"
-                    style={{ alignSelf: 'flex-end' }}
-                  >
-                    {stockUnitSuffix}
-                  </span>
-                ) : null;
-              })()}
+                {!variantDisplayPrices.hasSlash &&
+                  (() => {
+                    const stockUnitSuffix = formatStockUnitSuffix(
+                      selectedVariant?.stockUnit
+                    );
+                    return stockUnitSuffix ? (
+                      <span
+                        className="sm:text-10 text-8 weight-400 md:line-height-20 line-height-12.1 md:mb-0 mb-2"
+                        style={{ alignSelf: 'flex-end' }}
+                      >
+                        {stockUnitSuffix}
+                      </span>
+                    ) : null;
+                  })()}
+              </motion.div>
+            </AnimatePresence>
           </div>
 
           <div className="text-9 sm:text-10 text-grey flex gap-6 a-items-center relative">
@@ -1207,15 +1377,28 @@ const ProductTile: FC<IProductTile> = ({
           openSingleProductModal={openSingleProductModal}
           handleCloseProductModal={handleCloseProductModal}
           position="homepage"
-          variantSelectedImage={isToAddProperties ? selectedImage : ''}
-          product={selectedVariant.product ?? product}
+          modalZIndex={catalogueGalleryOpen ? 10050 : undefined}
+          variantSelectedImage={
+            galleryQuickLookImage ??
+            (isToAddProperties ? selectedImage : '')
+          }
+          product={
+            galleryQuickLookVariant?.product ??
+            selectedVariant.product ??
+            product
+          }
           variant={
-            isToAddProperties
+            galleryQuickLookVariant
               ? {
-                ...selectedVariant,
-                product,
-              }
-              : undefined
+                  ...galleryQuickLookVariant,
+                  product: galleryQuickLookVariant.product ?? product,
+                }
+              : isToAddProperties
+                ? {
+                    ...selectedVariant,
+                    product,
+                  }
+                : undefined
           }
         />
       )}

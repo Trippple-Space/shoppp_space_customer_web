@@ -1,0 +1,25 @@
+.catalogueMediaItem {
+  position: relative;
+  overflow: hidden;
+  background: rgba(0, 0, 0, 0.04);
+  cursor: pointer;
+}
+
+.catalogueMediaItemMedia {
+  aspect-ratio: 1;
+  overflow: hidden;
+  position: relative;
+}
+
+.catalogueMediaItemOverlay {
+  position: absolute;
+  inset: 0;
+  background: rgba(0, 0, 0, 0);
+  transition: background 0.2s ease;
+  pointer-events: none;
+  z-index: 1;
+}
+
+.catalogueMediaItem:hover .catalogueMediaItemOverlay {
+  background: rgba(0, 0, 0, 0.32);
+}
