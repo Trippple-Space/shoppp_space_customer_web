@@ -10,9 +10,10 @@ interface ModalProps {
   extraClass?: React.CSSProperties
   className?: any
   modalClassName?: string
+  closeOnOutsideClick?: boolean
 }
 
-const Modal: React.FC<ModalProps> = ({ isOpen, onClose, children, extraModalClass, extraClass, className, modalClassName }) => {
+const Modal: React.FC<ModalProps> = ({ isOpen, onClose, children, extraModalClass, extraClass, className, modalClassName, closeOnOutsideClick = true }) => {
  const [isOnCheckoutPage, setIsOnCheckoutPage] = useState(false);
 
   useEffect(() => {
@@ -25,6 +26,9 @@ const Modal: React.FC<ModalProps> = ({ isOpen, onClose, children, extraModalClas
 
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
+      if (!closeOnOutsideClick) {
+        return;
+      }
       const target = event.target as HTMLElement | null;
       if (target?.closest('[data-cookie-consent="true"]')) {
         return;
@@ -46,7 +50,7 @@ const Modal: React.FC<ModalProps> = ({ isOpen, onClose, children, extraModalClas
       document.body.style.overflow = 'auto'
       document.removeEventListener('mousedown', handleClickOutside);
     };
-  }, [isOpen, onClose]);
+  }, [isOpen, onClose, closeOnOutsideClick]);
 
   if (!isOpen) return null;
   if (!isOpen) return null;

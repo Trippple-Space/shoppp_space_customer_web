@@ -1131,7 +1131,7 @@ const ProductDetails = ({ product }: { product: Product }) => {
                   <Link
                     href={storeUrl}
                     target="_blank"
-                    className="color-#00000099 text-14 border-b line-height-22"
+                    className="color-#00000099 text-14 underline line-height-22"
                   >
                     Visit store home
                   </Link>

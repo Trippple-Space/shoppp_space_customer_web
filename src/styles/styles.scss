@@ -465,6 +465,28 @@ input[type="number"].no-arrows {
   margin-top: 2;
 }
 
+.personalization-measurements-scroll-inner {
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+
+.personalization-measurements-scroll-inner::-webkit-scrollbar {
+  display: none !important;
+  width: 0 !important;
+  height: 0 !important;
+}
+
+.personalization-measurements-scroll-inner {
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+
+.personalization-measurements-scroll-inner::-webkit-scrollbar {
+  display: none !important;
+  width: 0 !important;
+  height: 0 !important;
+}
+
 
 /**
 TODO:
