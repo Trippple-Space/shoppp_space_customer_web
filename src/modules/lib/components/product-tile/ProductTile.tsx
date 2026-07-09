@@ -1035,7 +1035,7 @@ const ProductTile: FC<IProductTile> = ({
         {/* FAVORITE ICON */}
         <div
           id="favorite icon"
-          className="absolute z-2 t-0 r-0 mr-10 mt-10 l:mr-15 l:mt-15 text-24 l:text-34"
+          className="absolute z-1 t-0 r-0 mr-10 mt-10 l:mr-15 l:mt-15 text-24 l:text-34"
           onClick={(e) => {
             e.preventDefault();
             e.stopPropagation();
