@@ -8,6 +8,7 @@ interface PersonalizationStepFooterProps {
   showBack?: boolean;
   showProTip?: boolean;
   continueLabel?: string;
+  onViewMeasurementGuide?: () => void;
 }
 
 const primaryButtonClass =
@@ -19,6 +20,7 @@ const PersonalizationStepFooter = ({
   showBack = false,
   showProTip = false,
   continueLabel = 'Continue',
+  onViewMeasurementGuide,
 }: PersonalizationStepFooterProps) => {
   return (
     <div className="flex flex-col gap-8 sm:gap-12">
@@ -30,8 +32,21 @@ const PersonalizationStepFooter = ({
               Pro tip for chest measurement
             </span>
             <br />
-            <span className='weight-500 color-#757575 text-8 sm:text-8.5'>Wrap the measuring tape around the fullest part of your chest,
+            <span className="weight-500 color-#757575 text-8 sm:text-8.5">
+              Wrap the measuring tape around the fullest part of your chest,
               keeping it parallel to the floor. Don&apos;t hold your breath.
+              {onViewMeasurementGuide && (
+                <>
+                  {' '}
+                  <button
+                    type="button"
+                    onClick={onViewMeasurementGuide}
+                    className="border-none bg-transparent p-0 cursor-pointer color-#0B9378 weight-500 underline sm:hidden mt-3 text-9"
+                  >
+                    View measurement guide
+                  </button>
+                </>
+              )}
             </span>
           </p>
         </div>

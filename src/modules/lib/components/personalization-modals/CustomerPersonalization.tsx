@@ -8,7 +8,11 @@ import PersonalizationBodyStep from './steps/PersonalizationBodyStep';
 import PersonalizationDimensionsStep from './steps/PersonalizationDimensionsStep';
 import PersonalizationDoneStep from './steps/PersonalizationDoneStep';
 import { PersonalizationFlowStep } from './types';
-import { usePersonalizationStore } from '@/modules/lib/utility/store/personalization.store';
+import {
+  getMeasurementIllustration,
+  usePersonalizationStore,
+} from '@/modules/lib/utility/store/personalization.store';
+import PersonalizationMeasurementGuideLightbox from './components/PersonalizationMeasurementGuideLightbox';
 import {
   scrollToPersonalizationField,
   validateBodyStep,
@@ -25,6 +29,7 @@ const CustomerPersonalization = ({
   onClose,
 }: CustomerPersonalizationProps) => {
   const [step, setStep] = useState<PersonalizationFlowStep>('intro');
+  const [isMeasurementGuideOpen, setIsMeasurementGuideOpen] = useState(false);
   const {
     shopPreference,
     bodyBuild,
@@ -39,14 +44,24 @@ const CustomerPersonalization = ({
   useEffect(() => {
     if (!isOpen) {
       setStep('intro');
+      setIsMeasurementGuideOpen(false);
     }
   }, [isOpen]);
 
+  useEffect(() => {
+    if (step !== 'dimensions') {
+      setIsMeasurementGuideOpen(false);
+    }
+  }, [step]);
+
   const handleClose = () => {
     setStep('intro');
+    setIsMeasurementGuideOpen(false);
     reset();
     onClose();
   };
+
+  const measurementIllustration = getMeasurementIllustration(shopPreference);
 
   const handleBodyContinue = () => {
     const result = validateBodyStep(shopPreference, bodyBuild);
@@ -113,6 +128,7 @@ const CustomerPersonalization = ({
             onClose={handleClose}
             onContinue={handleDimensionsContinue}
             showFooterBack
+            onViewMeasurementGuide={() => setIsMeasurementGuideOpen(true)}
           >
             <PersonalizationDimensionsStep />
           </PersonalizationStepLayout>
@@ -161,6 +177,11 @@ const CustomerPersonalization = ({
       }`}
     >
       {renderStep()}
+      <PersonalizationMeasurementGuideLightbox
+        isOpen={isMeasurementGuideOpen}
+        illustration={measurementIllustration}
+        onClose={() => setIsMeasurementGuideOpen(false)}
+      />
     </Modal>
   );
 };

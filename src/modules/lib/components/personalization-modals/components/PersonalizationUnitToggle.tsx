@@ -19,7 +19,7 @@ const PersonalizationUnitToggle = ({
             key={option}
             type="button"
             onClick={() => onChange(option)}
-            className={`w-100p text-center px-8 py-6.86 radius-2.96 sm:text-7.89 weight-400 line-height-10.84 border-none cursor-pointer g|transition:background-color|_|0.3s g|transition-timing-function:ease ${
+            className={`w-100p text-center px-8 py-6.86 radius-2.96 text-7.89 weight-400 line-height-10.84 border-none cursor-pointer g|transition:background-color|_|0.3s g|transition-timing-function:ease ${
               isActive
                 ? 'bg-white color-#333333 weight-600'
                 : 'bg-transparent color-#6A6A6A'

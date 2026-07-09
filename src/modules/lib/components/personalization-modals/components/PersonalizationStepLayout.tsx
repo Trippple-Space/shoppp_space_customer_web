@@ -22,6 +22,7 @@ interface PersonalizationStepLayoutProps {
   layoutMode?: PersonalizationStepLayoutMode;
   fitContent?: boolean;
   continueLabel?: string;
+  onViewMeasurementGuide?: () => void;
   children: ReactNode;
 }
 
@@ -35,6 +36,7 @@ const PersonalizationStepLayout = ({
   layoutMode = 'default',
   fitContent = false,
   continueLabel,
+  onViewMeasurementGuide,
   children,
 }: PersonalizationStepLayoutProps) => {
   const footer = (
@@ -44,11 +46,12 @@ const PersonalizationStepLayout = ({
       showBack={showFooterBack}
       showProTip={activeStep === 2}
       continueLabel={continueLabel}
+      onViewMeasurementGuide={onViewMeasurementGuide}
     />
   );
 
   const stepIndicator = (
-    <div className="pt-4 sm:pt-6 pb-16 sm:pb-30">
+    <div className="pt-6 pb-16 sm:pb-30">
       <PersonalizationStepIndicator
         activeStep={activeStep}
         completedSteps={completedSteps}

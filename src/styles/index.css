@@ -641,6 +641,7 @@
 .text-10\.67 { font-size: 10.67px; } 
 .line-height-14\.67 { line-height: 14.67px; } 
 .placeholder\:lowercase::placeholder {    text-transform: lowercase;  } 
+@layer base {.radius-12 { border-radius: 12px; } } 
 .overflow-y-auto { overflow-y: auto; } 
 [class~='g|object-fit:contain']{object-fit:contain} 
 @layer base {.radius-9 { border-radius: 9px; } } 
@@ -648,11 +649,11 @@
 .bg-\#0B937817 { background-color: #0B937817; } 
 .border-\#F5F5F5 { border-color: #F5F5F5; } 
 .px-6 { padding-left: 6px; padding-right: 6px; } 
-@layer base {.radius-12 { border-radius: 12px; } } 
 .w-19 { width: 19px; } 
 .line-height-11 { line-height: 11px; } 
 .color-\#757575 { color: #757575; } 
 .text-8 { font-size: 8px; } 
+.text-9 { font-size: 9px; } 
 .bg-\#F5F5F5\! { background-color: #F5F5F5 !important; } 
 .color-\#000000\! { color: #000000 !important; } 
 .hover\:bg-\#F5F5F5\!:hover { background-color: #F5F5F5 !important; } 
@@ -664,7 +665,7 @@
 .text-11 { font-size: 11px; } 
 [class~='g|transition:background-color|_|0.3s']{transition:background-color 0.3s} 
 [class~='g|transition-timing-function:ease']{transition-timing-function:ease} 
-.pt-4 { padding-top: 4px; } 
+.pt-6 { padding-top: 6px; } 
 .pb-16 { padding-bottom: 16px; } 
 .p-8 { padding: 8px; } 
 .pt-17 { padding-top: 17px; } 
@@ -673,6 +674,7 @@
 .p-2 { padding: 2px; } 
 .mb-13 { margin-bottom: 13px; } 
 .py-6\.86 { padding-top: 6.86px; padding-bottom: 6.86px; } 
+.text-7\.89 { font-size: 7.89px; } 
 .line-height-10\.84 { line-height: 10.84px; } 
 .color-\#333333 { color: #333333; } 
 .max-w-916 { max-width: 916px; } 
@@ -764,7 +766,6 @@
 .j-content-start { justify-content: flex-start; } 
 .white-space-nowrap { white-space: nowrap; } 
 @layer base {    .border-y {       border-bottom: 1px solid;       border-top: 1px solid;    }  } 
-.text-9 { font-size: 9px; } 
 .z-index-0, .z-0 { z-index: 0; } 
 .mx-2 { margin-left: 2px; margin-right: 2px; } 
 .min-w-14 { min-width: 14px; } 
@@ -1207,8 +1208,10 @@
 @media only screen and (min-width: 576px) { .sm\:text-20 { font-size: 20px; } } 
 @media only screen and (min-width: 576px) { .sm\:line-height-28 { line-height: 28px; } } 
 @media only screen and (min-width: 576px) { .sm\:text-11 { font-size: 11px; } } 
-@media only screen and (min-width: 576px) { .sm\:h-64 { height: 64px; } } 
 @media only screen and (min-width: 576px) { .sm\:text-14 { font-size: 14px; } } 
+@media only screen and (min-width: 576px) { .sm\:p-24 { padding: 24px; } } 
+@media only screen and (min-width: 576px) { .sm\:p-20 { padding: 20px; } } 
+@media only screen and (min-width: 576px) { .sm\:h-64 { height: 64px; } } 
 @media only screen and (min-width: 576px) { .sm\:gap-12 { gap: 12px; } } 
 @media only screen and (min-width: 576px) { .sm\:p-16 { padding: 16px; } } 
 @media only screen and (min-width: 576px) { .sm\:py-20 { padding-top: 20px; padding-bottom: 20px; } } 
@@ -1218,7 +1221,6 @@
 @media only screen and (min-width: 576px) { .sm\:px-20 { padding-left: 20px; padding-right: 20px; } } 
 @media only screen and (min-width: 576px) { .sm\:py-10 { padding-top: 10px; padding-bottom: 10px; } } 
 @media only screen and (min-width: 576px) { .sm\:text-12\.95 { font-size: 12.95px; } } 
-@media only screen and (min-width: 576px) { .sm\:pt-6 { padding-top: 6px; } } 
 @media only screen and (min-width: 576px) { .sm\:pb-30 { padding-bottom: 30px; } } 
 @media only screen and (min-width: 576px) { .sm\:gap-8 { gap: 8px; } } 
 @media only screen and (min-width: 576px) { .sm\:px-16 { padding-left: 16px; padding-right: 16px; } } 
@@ -1226,7 +1228,6 @@
 @media only screen and (min-width: 576px) { .sm\:h-20 { height: 20px; } } 
 @media only screen and (min-width: 576px) { .sm\:pb-24 { padding-bottom: 24px; } } 
 @media only screen and (min-width: 576px) { .sm\:pb-32 { padding-bottom: 32px; } } 
-@media only screen and (min-width: 576px) { .sm\:text-7\.89 { font-size: 7.89px; } } 
 @media only screen and (min-width: 576px) { .sm\:gap-36 { gap: 36px; } } 
 @media only screen and (min-width: 576px) { .sm\:mb-26 { margin-bottom: 26px; } } 
 @media only screen and (min-width: 576px) { .sm\:gap-16 { gap: 16px; } } 
@@ -1281,7 +1282,6 @@
 @media only screen and (min-width: 576px) { .sm\:border-b-\#F5F5F5 { border-bottom-color: #F5F5F5; } } 
 @media only screen and (min-width: 576px) { .sm\:pb-0 { padding-bottom: 0px; } } 
 @media only screen and (min-width: 576px) { .sm\:mt-0 { margin-top: 0px; } } 
-@media only screen and (min-width: 576px) { .sm\:p-24 { padding: 24px; } } 
 @media only screen and (min-width: 576px) { .sm\:gap-20 { gap: 20px; } } 
 @media only screen and (min-width: 576px) { .sm\:gap-100 { gap: 100px; } } 
 @media only screen and (min-width: 576px) { .sm\:j-content-between { justify-content: space-between; } } 
