@@ -9,6 +9,11 @@ import PersonalizationDimensionsStep from './steps/PersonalizationDimensionsStep
 import PersonalizationDoneStep from './steps/PersonalizationDoneStep';
 import { PersonalizationFlowStep } from './types';
 import { usePersonalizationStore } from '@/modules/lib/utility/store/personalization.store';
+import {
+  scrollToPersonalizationField,
+  validateBodyStep,
+  validateDimensionsStep,
+} from './utils/personalization-validation';
 
 interface CustomerPersonalizationProps {
   isOpen: boolean;
@@ -20,7 +25,16 @@ const CustomerPersonalization = ({
   onClose,
 }: CustomerPersonalizationProps) => {
   const [step, setStep] = useState<PersonalizationFlowStep>('intro');
-  const resetPersonalization = usePersonalizationStore((state) => state.reset);
+  const {
+    shopPreference,
+    bodyBuild,
+    dimensions,
+    completedWizardSteps,
+    reset,
+    markWizardStepComplete,
+    setFieldErrors,
+    clearFieldErrors,
+  } = usePersonalizationStore();
 
   useEffect(() => {
     if (!isOpen) {
@@ -30,8 +44,40 @@ const CustomerPersonalization = ({
 
   const handleClose = () => {
     setStep('intro');
-    resetPersonalization();
+    reset();
     onClose();
+  };
+
+  const handleBodyContinue = () => {
+    const result = validateBodyStep(shopPreference, bodyBuild);
+
+    if (!result.valid) {
+      setFieldErrors(result.errors);
+      if (result.firstErrorKey) {
+        scrollToPersonalizationField(result.firstErrorKey);
+      }
+      return;
+    }
+
+    clearFieldErrors();
+    markWizardStepComplete(1);
+    setStep('dimensions');
+  };
+
+  const handleDimensionsContinue = () => {
+    const result = validateDimensionsStep(dimensions, shopPreference);
+
+    if (!result.valid) {
+      setFieldErrors(result.errors);
+      if (result.firstErrorKey) {
+        scrollToPersonalizationField(result.firstErrorKey);
+      }
+      return;
+    }
+
+    clearFieldErrors();
+    markWizardStepComplete(2);
+    setStep('done');
   };
 
   const renderStep = () => {
@@ -47,10 +93,12 @@ const CustomerPersonalization = ({
         return (
           <PersonalizationStepLayout
             activeStep={1}
+            completedSteps={completedWizardSteps}
             layoutMode="footer-in-scroll"
+            fitContent
             onBack={() => setStep('intro')}
             onClose={handleClose}
-            onContinue={() => setStep('dimensions')}
+            onContinue={handleBodyContinue}
           >
             <PersonalizationBodyStep />
           </PersonalizationStepLayout>
@@ -59,10 +107,11 @@ const CustomerPersonalization = ({
         return (
           <PersonalizationStepLayout
             activeStep={2}
+            completedSteps={completedWizardSteps}
             layoutMode="fixed-body"
             onBack={() => setStep('body')}
             onClose={handleClose}
-            onContinue={() => setStep('done')}
+            onContinue={handleDimensionsContinue}
             showFooterBack
           >
             <PersonalizationDimensionsStep />
@@ -72,6 +121,7 @@ const CustomerPersonalization = ({
         return (
           <PersonalizationStepLayout
             activeStep={3}
+            completedSteps={completedWizardSteps}
             layoutMode="fixed-body"
             onBack={() => setStep('dimensions')}
             onClose={handleClose}
@@ -87,7 +137,7 @@ const CustomerPersonalization = ({
     }
   };
 
-  const isIntroStep = step === 'intro';
+  const useFitContentHeight = step === 'intro' || step === 'body';
 
   return (
     <Modal
@@ -98,7 +148,7 @@ const CustomerPersonalization = ({
         overflow: 'hidden',
         overflowY: 'hidden',
         maxHeight: 'calc(100dvh - 44px)',
-        ...(isIntroStep
+        ...(useFitContentHeight
           ? { height: 'auto' }
           : {
               height: 'calc(100dvh - 44px)',
@@ -107,7 +157,7 @@ const CustomerPersonalization = ({
             }),
       }}
       className={`w-95p sm:w-90p max-w-916 g|max-height:90vh no-scrollbar radius-12 ${
-        isIntroStep ? 'h-fit' : 'h-full'
+        useFitContentHeight ? 'h-fit' : 'h-full'
       }`}
     >
       {renderStep()}

@@ -2,6 +2,21 @@ export type PersonalizationFlowStep = 'intro' | 'body' | 'dimensions' | 'done';
 
 export type PersonalizationWizardStep = 1 | 2 | 3;
 
+export type PersonalizationFieldErrorKey =
+  | 'shopPreference'
+  | 'bodyBuild'
+  | 'height'
+  | 'bust'
+  | 'waist'
+  | 'shoulder'
+  | 'armsLength'
+  | 'neck'
+  | 'wrist'
+  | 'hip'
+  | 'inseam'
+  | 'thigh'
+  | 'shoeSize';
+
 export const PERSONALIZATION_WIZARD_STEPS: {
   id: PersonalizationWizardStep;
   label: string;

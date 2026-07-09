@@ -5,30 +5,26 @@ import PersonalizationMeasurementsScroll from '../components/PersonalizationMeas
 import PersonalizationMeasurementField from '../components/PersonalizationMeasurementField';
 import PersonalizationUnitToggle from '../components/PersonalizationUnitToggle';
 import {
+  getMeasurementFieldLabel,
+  getMeasurementPlaceholder,
+  PERSONALIZATION_MEASUREMENT_CATEGORIES,
+} from '../constants/personalization-measurements';
+import {
   getMeasurementIllustration,
   usePersonalizationStore,
 } from '@/modules/lib/utility/store/personalization.store';
-
-const MEASUREMENT_FIELDS = [
-  { key: 'bust' as const, label: 'Bust / Chest' },
-  { key: 'waist' as const, label: 'Waist' },
-  { key: 'hip' as const, label: 'Hip' },
-  { key: 'armsLength' as const, label: 'Arms Length' },
-  { key: 'inseam' as const, label: 'Inseam' },
-  { key: 'shoeSize' as const, label: 'Shoe Size', showInfo: true },
-];
 
 const PersonalizationDimensionsStep = () => {
   const {
     shopPreference,
     unit,
     dimensions,
+    fieldErrors,
     setUnit,
     setDimension,
   } = usePersonalizationStore();
 
   const illustration = getMeasurementIllustration(shopPreference);
-  const unitLabel = unit === 'cm' ? 'CM' : 'INCHES';
 
   return (
     <div
@@ -55,16 +51,30 @@ const PersonalizationDimensionsStep = () => {
         </div>
 
         <PersonalizationMeasurementsScroll>
-          <div className="flex flex-col gap-12 sm:gap-16 pb-8">
-            {MEASUREMENT_FIELDS.map((field) => (
-              <PersonalizationMeasurementField
-                key={field.key}
-                label={field.label}
-                placeholder={`EG.32${unitLabel}`}
-                value={dimensions[field.key]}
-                onChange={(value) => setDimension(field.key, value)}
-                showInfo={field.showInfo}
-              />
+          <div className="flex flex-col gap-20 sm:gap-24 pb-8">
+            {PERSONALIZATION_MEASUREMENT_CATEGORIES.map((category) => (
+              <section key={category.id}>
+                <h3 className="text-13 sm:text-14 weight-600 color-#000000 mb-12 sm:mb-14">
+                  {category.title}
+                </h3>
+
+                <div className="flex flex-col gap-12 sm:gap-16">
+                  {category.fields.map((field) => (
+                    <PersonalizationMeasurementField
+                      key={field.key}
+                      fieldKey={field.key}
+                      label={getMeasurementFieldLabel(field, shopPreference)}
+                      placeholder={getMeasurementPlaceholder(field.key, unit)}
+                      value={dimensions[field.key]}
+                      onChange={(value) => setDimension(field.key, value)}
+                      showInfo={field.showInfo}
+                      step={field.step}
+                      required={field.required}
+                      error={fieldErrors[field.key]}
+                    />
+                  ))}
+                </div>
+              </section>
             ))}
           </div>
         </PersonalizationMeasurementsScroll>

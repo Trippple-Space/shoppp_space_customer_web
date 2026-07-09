@@ -1,24 +1,35 @@
 import { create } from 'zustand';
+import { PersonalizationFieldErrorKey, PersonalizationWizardStep } from '@/modules/lib/components/personalization-modals/types';
 
 export type ShopPreference = 'women' | 'men' | 'unisex';
 export type BodyBuild = 'slim' | 'regular' | 'plus';
 export type MeasurementUnit = 'cm' | 'inches';
 
 export interface PersonalizationDimensions {
+  height: string;
   bust: string;
   waist: string;
-  hip: string;
+  shoulder: string;
   armsLength: string;
+  neck: string;
+  wrist: string;
+  hip: string;
   inseam: string;
+  thigh: string;
   shoeSize: string;
 }
 
 const emptyDimensions: PersonalizationDimensions = {
+  height: '',
   bust: '',
   waist: '',
-  hip: '',
+  shoulder: '',
   armsLength: '',
+  neck: '',
+  wrist: '',
+  hip: '',
   inseam: '',
+  thigh: '',
   shoeSize: '',
 };
 
@@ -27,10 +38,18 @@ interface PersonalizationStore {
   bodyBuild: BodyBuild | null;
   unit: MeasurementUnit;
   dimensions: PersonalizationDimensions;
-  setShopPreference: (value: ShopPreference) => void;
-  setBodyBuild: (value: BodyBuild) => void;
+  completedWizardSteps: PersonalizationWizardStep[];
+  fieldErrors: Partial<Record<PersonalizationFieldErrorKey, string>>;
+  setShopPreference: (value: ShopPreference | null) => void;
+  setBodyBuild: (value: BodyBuild | null) => void;
   setUnit: (value: MeasurementUnit) => void;
   setDimension: (field: keyof PersonalizationDimensions, value: string) => void;
+  markWizardStepComplete: (step: PersonalizationWizardStep) => void;
+  setFieldErrors: (
+    errors: Partial<Record<PersonalizationFieldErrorKey, string>>,
+  ) => void;
+  clearFieldError: (key: PersonalizationFieldErrorKey) => void;
+  clearFieldErrors: () => void;
   reset: () => void;
 }
 
@@ -39,17 +58,56 @@ export const usePersonalizationStore = create<PersonalizationStore>((set) => ({
   bodyBuild: null,
   unit: 'cm',
   dimensions: { ...emptyDimensions },
+  completedWizardSteps: [],
+  fieldErrors: {},
 
-  setShopPreference: (value) => set({ shopPreference: value }),
+  setShopPreference: (value) =>
+    set((state) => ({
+      shopPreference: value,
+      ...(value && {
+        fieldErrors: Object.fromEntries(
+          Object.entries(state.fieldErrors).filter(([key]) => key !== 'shopPreference'),
+        ),
+      }),
+    })),
 
-  setBodyBuild: (value) => set({ bodyBuild: value }),
+  setBodyBuild: (value) =>
+    set((state) => ({
+      bodyBuild: value,
+      ...(value && {
+        fieldErrors: Object.fromEntries(
+          Object.entries(state.fieldErrors).filter(([key]) => key !== 'bodyBuild'),
+        ),
+      }),
+    })),
 
   setUnit: (unit) => set({ unit }),
 
   setDimension: (field, value) =>
     set((state) => ({
       dimensions: { ...state.dimensions, [field]: value },
+      fieldErrors: Object.fromEntries(
+        Object.entries(state.fieldErrors).filter(([key]) => key !== field),
+      ),
     })),
+
+  markWizardStepComplete: (step) =>
+    set((state) => ({
+      completedWizardSteps: state.completedWizardSteps.includes(step)
+        ? state.completedWizardSteps
+        : [...state.completedWizardSteps, step],
+    })),
+
+  setFieldErrors: (errors) => set({ fieldErrors: errors }),
+
+  clearFieldError: (key) =>
+    set((state) => ({
+      fieldErrors: Object.fromEntries(
+        Object.entries(state.fieldErrors).filter(([errorKey]) => errorKey !== key),
+      ),
+    })),
+
+  clearFieldErrors: () => set({ fieldErrors: {} }),
 
   reset: () =>
     set({
@@ -57,11 +115,13 @@ export const usePersonalizationStore = create<PersonalizationStore>((set) => ({
       bodyBuild: null,
       unit: 'cm',
       dimensions: { ...emptyDimensions },
+      completedWizardSteps: [],
+      fieldErrors: {},
     }),
 }));
 
 export const getMeasurementIllustration = (
-  shopPreference: ShopPreference | null
+  shopPreference: ShopPreference | null,
 ) => {
   if (shopPreference === 'men') {
     return 'personalization-measurement-male.svg';

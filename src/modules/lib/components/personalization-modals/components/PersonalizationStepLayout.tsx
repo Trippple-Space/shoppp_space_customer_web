@@ -14,22 +14,26 @@ export type PersonalizationStepLayoutMode =
 
 interface PersonalizationStepLayoutProps {
   activeStep: PersonalizationWizardStep;
+  completedSteps?: PersonalizationWizardStep[];
   onBack: () => void;
   onClose: () => void;
   onContinue: () => void;
   showFooterBack?: boolean;
   layoutMode?: PersonalizationStepLayoutMode;
+  fitContent?: boolean;
   continueLabel?: string;
   children: ReactNode;
 }
 
 const PersonalizationStepLayout = ({
   activeStep,
+  completedSteps = [],
   onBack,
   onClose,
   onContinue,
   showFooterBack = false,
   layoutMode = 'default',
+  fitContent = false,
   continueLabel,
   children,
 }: PersonalizationStepLayoutProps) => {
@@ -45,14 +49,23 @@ const PersonalizationStepLayout = ({
 
   const stepIndicator = (
     <div className="pt-4 sm:pt-6 pb-16 sm:pb-30">
-      <PersonalizationStepIndicator activeStep={activeStep} />
+      <PersonalizationStepIndicator
+        activeStep={activeStep}
+        completedSteps={completedSteps}
+      />
     </div>
   );
 
   return (
     <div
-      className="w-full bg-white radius-12 overflow-hidden flex flex-col h-full"
-      style={{ maxHeight: MODAL_BODY_MAX_HEIGHT, minHeight: 0 }}
+      className={`w-full bg-white radius-12 overflow-hidden flex flex-col ${
+        fitContent ? 'h-fit' : 'h-full'
+      }`}
+      style={
+        fitContent
+          ? { maxHeight: MODAL_BODY_MAX_HEIGHT }
+          : { maxHeight: MODAL_BODY_MAX_HEIGHT, minHeight: 0 }
+      }
     >
       <div className="flex-shrink-0 p-8 sm:p-16 md:p-24">
         <div className="flex a-items-start j-content-between gap-6 sm:gap-8 px-8 sm:px-16 md:px-24 py-12 border-b border-b-1 border-b-#00000014">
@@ -90,8 +103,10 @@ const PersonalizationStepLayout = ({
 
       {layoutMode === 'footer-in-scroll' && (
         <div
-          className="flex-grow-1 overflow-auto scroll-y px-8 sm:px-16 md:px-24"
-          style={{ minHeight: 0 }}
+          className={`overflow-auto scroll-y px-8 sm:px-16 md:px-24 ${
+            fitContent ? 'flex-1 min-h-0' : 'flex-grow-1'
+          }`}
+          style={fitContent ? undefined : { minHeight: 0 }}
         >
           <div className={`pt-5 pb-24 sm:pb-32 md:pb-36 max-w-510 mx-auto`}>
             {children}
