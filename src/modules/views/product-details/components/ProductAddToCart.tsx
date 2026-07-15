@@ -16,7 +16,7 @@ import {
 } from '@/modules/lib/utility/visible-discount';
 import classNames from 'classnames';
 import { HiOutlineShoppingBag } from 'react-icons/hi2';
-import { RefObject } from 'react';
+import { RefObject, ReactNode } from 'react';
 
 type AddToCart = ReturnType<typeof useCartStore.getState>['addToCart'];
 
@@ -38,6 +38,7 @@ interface ProductAddToCartProps {
   addToCart: AddToCart;
   increment: (item: CartItem) => void;
   decrement: (item: CartItem) => void;
+  fitRecommendationSection?: ReactNode;
 }
 
 const ProductAddToCart = ({
@@ -58,6 +59,7 @@ const ProductAddToCart = ({
   addToCart,
   increment,
   decrement,
+  fitRecommendationSection,
 }: ProductAddToCartProps) => {
   return (
     <div className="flex flex-col gap-16">
@@ -121,6 +123,8 @@ const ProductAddToCart = ({
           to cart.
         </p>
       )}
+
+      {fitRecommendationSection}
 
       {!selectedVariantItemInCart ? (
         <button

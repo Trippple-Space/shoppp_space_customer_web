@@ -35,8 +35,8 @@ const CustomerPersonalization = ({
     bodyBuild,
     dimensions,
     completedWizardSteps,
-    reset,
     markWizardStepComplete,
+    markPersonalizationSetupComplete,
     setFieldErrors,
     clearFieldErrors,
   } = usePersonalizationStore();
@@ -54,10 +54,16 @@ const CustomerPersonalization = ({
     }
   }, [step]);
 
-  const handleClose = () => {
+  const handleDismiss = () => {
     setStep('intro');
     setIsMeasurementGuideOpen(false);
-    reset();
+    onClose();
+  };
+
+  const handleSaveComplete = () => {
+    markPersonalizationSetupComplete();
+    setStep('intro');
+    setIsMeasurementGuideOpen(false);
     onClose();
   };
 
@@ -100,7 +106,7 @@ const CustomerPersonalization = ({
       case 'intro':
         return (
           <PersonalizationIntroStep
-            onClose={handleClose}
+            onClose={handleDismiss}
             onContinue={() => setStep('body')}
           />
         );
@@ -112,7 +118,7 @@ const CustomerPersonalization = ({
             layoutMode="footer-in-scroll"
             fitContent
             onBack={() => setStep('intro')}
-            onClose={handleClose}
+            onClose={handleDismiss}
             onContinue={handleBodyContinue}
           >
             <PersonalizationBodyStep />
@@ -125,7 +131,7 @@ const CustomerPersonalization = ({
             completedSteps={completedWizardSteps}
             layoutMode="fixed-body"
             onBack={() => setStep('body')}
-            onClose={handleClose}
+            onClose={handleDismiss}
             onContinue={handleDimensionsContinue}
             showFooterBack
             onViewMeasurementGuide={() => setIsMeasurementGuideOpen(true)}
@@ -140,8 +146,8 @@ const CustomerPersonalization = ({
             completedSteps={completedWizardSteps}
             layoutMode="fixed-body"
             onBack={() => setStep('dimensions')}
-            onClose={handleClose}
-            onContinue={handleClose}
+            onClose={handleDismiss}
+            onContinue={handleSaveComplete}
             showFooterBack
             continueLabel="Save my fits"
           >
@@ -158,7 +164,7 @@ const CustomerPersonalization = ({
   return (
     <Modal
       isOpen={isOpen}
-      onClose={handleClose}
+      onClose={handleDismiss}
       closeOnOutsideClick={false}
       extraClass={{
         overflow: 'hidden',

@@ -14,6 +14,7 @@ import ProductCatalogueSection from './components/ProductCatalogueSection';
 import ProductAddToCart from './components/ProductAddToCart';
 import ProductInfoLeftColumn from './components/ProductInfoLeftColumn';
 import ProductVariationsPicker from './components/ProductVariationsPicker';
+import ProductFitRecommendationSection from './components/ProductFitRecommendationSection';
 import RecentlyViewedSection from './components/RecentlyViewedSection';
 import CustomerReviewsSection from './components/CustomerReviewsSection';
 
@@ -110,6 +111,9 @@ const ProductDetails = ({ product }: { product: Product }) => {
       addToCart={addToCart}
       increment={increment}
       decrement={decrement}
+      fitRecommendationSection={
+        <ProductFitRecommendationSection selectedVariant={selectedVariant} />
+      }
     />
   );
 

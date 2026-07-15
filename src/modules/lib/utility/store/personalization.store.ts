@@ -40,11 +40,13 @@ interface PersonalizationStore {
   dimensions: PersonalizationDimensions;
   completedWizardSteps: PersonalizationWizardStep[];
   fieldErrors: Partial<Record<PersonalizationFieldErrorKey, string>>;
+  isPersonalizationSetup: boolean;
   setShopPreference: (value: ShopPreference | null) => void;
   setBodyBuild: (value: BodyBuild | null) => void;
   setUnit: (value: MeasurementUnit) => void;
   setDimension: (field: keyof PersonalizationDimensions, value: string) => void;
   markWizardStepComplete: (step: PersonalizationWizardStep) => void;
+  markPersonalizationSetupComplete: () => void;
   setFieldErrors: (
     errors: Partial<Record<PersonalizationFieldErrorKey, string>>,
   ) => void;
@@ -53,6 +55,14 @@ interface PersonalizationStore {
   reset: () => void;
 }
 
+const readStoredSetupFlag = () => {
+  if (typeof window === 'undefined') {
+    return false;
+  }
+
+  return window.localStorage.getItem('personalization-setup-complete') === 'true';
+};
+
 export const usePersonalizationStore = create<PersonalizationStore>((set) => ({
   shopPreference: null,
   bodyBuild: null,
@@ -60,6 +70,7 @@ export const usePersonalizationStore = create<PersonalizationStore>((set) => ({
   dimensions: { ...emptyDimensions },
   completedWizardSteps: [],
   fieldErrors: {},
+  isPersonalizationSetup: readStoredSetupFlag(),
 
   setShopPreference: (value) =>
     set((state) => ({
@@ -98,6 +109,14 @@ export const usePersonalizationStore = create<PersonalizationStore>((set) => ({
         : [...state.completedWizardSteps, step],
     })),
 
+  markPersonalizationSetupComplete: () => {
+    if (typeof window !== 'undefined') {
+      window.localStorage.setItem('personalization-setup-complete', 'true');
+    }
+
+    set({ isPersonalizationSetup: true });
+  },
+
   setFieldErrors: (errors) => set({ fieldErrors: errors }),
 
   clearFieldError: (key) =>
@@ -109,7 +128,11 @@ export const usePersonalizationStore = create<PersonalizationStore>((set) => ({
 
   clearFieldErrors: () => set({ fieldErrors: {} }),
 
-  reset: () =>
+  reset: () => {
+    if (typeof window !== 'undefined') {
+      window.localStorage.removeItem('personalization-setup-complete');
+    }
+
     set({
       shopPreference: null,
       bodyBuild: null,
@@ -117,7 +140,9 @@ export const usePersonalizationStore = create<PersonalizationStore>((set) => ({
       dimensions: { ...emptyDimensions },
       completedWizardSteps: [],
       fieldErrors: {},
-    }),
+      isPersonalizationSetup: false,
+    });
+  },
 }));
 
 export const getMeasurementIllustration = (
