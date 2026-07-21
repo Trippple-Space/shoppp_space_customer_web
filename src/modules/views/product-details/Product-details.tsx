@@ -112,7 +112,13 @@ const ProductDetails = ({ product }: { product: Product }) => {
       increment={increment}
       decrement={decrement}
       fitRecommendationSection={
-        <ProductFitRecommendationSection selectedVariant={selectedVariant} />
+        <ProductFitRecommendationSection
+          productId={product.id}
+          productType={product.type}
+          selectedVariant={selectedVariant}
+          activeFilters={activeFilters}
+          fitSizeChart={product?.fitSizeChart}
+        />
       }
     />
   );
@@ -212,6 +218,9 @@ const ProductDetails = ({ product }: { product: Product }) => {
             onEditConfiguration={() => setIsEditingConfiguration(true)}
             selectedVariant={selectedVariant}
             addToCartSection={addToCartSection}
+            productId={product?.id}
+            productName={product?.name}
+            fitSizeChart={product?.fitSizeChart}
           />
         </div>
 

@@ -30,6 +30,13 @@ import {
   getStrikethroughAmounts,
   getVariantDisplayPrices,
 } from '../../utility/visible-discount';
+import ProductSizeChartModal from '@/modules/views/product-details/modals/ProductSizeChartModal';
+import {
+  isFullProductSizeChart,
+  shouldShowProductSizeChart,
+} from '@/modules/views/product-details/utils/fit-size-chart';
+import { fitOracleService } from '@/modules/lib/utility/services/fit-oracle.service';
+import type { ProductSizeChartResponse } from '@/modules/views/product-details/types/product-size-chart';
 
 interface ProductDetailModalProp {
   openSingleProductModal: boolean;
@@ -90,6 +97,44 @@ const ProductDetailModal = ({
   const [isHover, setIsHover] = useState(false);
   const [isEditingConfiguration, setIsEditingConfiguration] = useState(false);
   const [guestCartVersion, setGuestCartVersion] = useState(0);
+  const [sizeChartOpen, setSizeChartOpen] = useState(false);
+  const [fetchedSizeChart, setFetchedSizeChart] =
+    useState<ProductSizeChartResponse | null>(null);
+
+  const embeddedSizeChart = isFullProductSizeChart(product?.fitSizeChart)
+    ? product.fitSizeChart
+    : null;
+  const resolvedSizeChart = embeddedSizeChart ?? fetchedSizeChart;
+  const showSizeChartLink = shouldShowProductSizeChart(
+    resolvedSizeChart ?? product?.fitSizeChart,
+  );
+
+  useEffect(() => {
+    if (!openSingleProductModal || !product?.id || embeddedSizeChart) {
+      return;
+    }
+
+    let cancelled = false;
+    fitOracleService
+      .getSizeChart(product.id)
+      .then((chart) => {
+        if (!cancelled) setFetchedSizeChart(chart);
+      })
+      .catch(() => {
+        if (!cancelled) setFetchedSizeChart(null);
+      });
+
+    return () => {
+      cancelled = true;
+    };
+  }, [openSingleProductModal, product?.id, embeddedSizeChart]);
+
+  useEffect(() => {
+    if (!openSingleProductModal) {
+      setFetchedSizeChart(null);
+      setSizeChartOpen(false);
+    }
+  }, [openSingleProductModal]);
 
   const imgRef = useRef<HTMLImageElement>(null);
   const didInitFromVariantRef = useRef(false);
@@ -854,6 +899,16 @@ const ProductDetailModal = ({
                           }
                         )}
 
+                        {product?.id && showSizeChartLink && (
+                          <button
+                            type="button"
+                            onClick={() => setSizeChartOpen(true)}
+                            className="text-12 weight-500 color-#0B9378 underline underline-offset-2 bg-transparent border-none pointer p-0 mt-12 self-start w-fit"
+                          >
+                            View size chart
+                          </button>
+                        )}
+
                         {!selectedVariant &&
                           (missingRequiredOptions.length > 0 ||
                             initialMissingOptions.length > 0) && (
@@ -1010,6 +1065,15 @@ const ProductDetailModal = ({
           </div>
         </>
       </div>
+      {product?.id && showSizeChartLink && (
+        <ProductSizeChartModal
+          isOpen={sizeChartOpen}
+          onClose={() => setSizeChartOpen(false)}
+          productId={product.id}
+          productName={product.name}
+          fitSizeChart={resolvedSizeChart}
+        />
+      )}
     </>,
     document.body
   );

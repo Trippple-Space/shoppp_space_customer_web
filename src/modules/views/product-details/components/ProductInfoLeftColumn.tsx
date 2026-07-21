@@ -170,6 +170,9 @@ const ProductInfoLeftColumn = ({
         onEditConfiguration={() => setIsEditingConfiguration(true)}
         selectedVariant={selectedVariant}
         addToCartSection={addToCartSection}
+        productId={product?.id}
+        productName={product?.name}
+        fitSizeChart={product?.fitSizeChart}
       />
 
       <SoldByStore product={product} storeUrl={storeUrl} variant="mobile" />

@@ -22,6 +22,7 @@ interface PersonalizationStepLayoutProps {
   layoutMode?: PersonalizationStepLayoutMode;
   fitContent?: boolean;
   continueLabel?: string;
+  continueDisabled?: boolean;
   onViewMeasurementGuide?: () => void;
   children: ReactNode;
 }
@@ -36,6 +37,7 @@ const PersonalizationStepLayout = ({
   layoutMode = 'default',
   fitContent = false,
   continueLabel,
+  continueDisabled,
   onViewMeasurementGuide,
   children,
 }: PersonalizationStepLayoutProps) => {
@@ -46,6 +48,7 @@ const PersonalizationStepLayout = ({
       showBack={showFooterBack}
       showProTip={activeStep === 2}
       continueLabel={continueLabel}
+      continueDisabled={continueDisabled}
       onViewMeasurementGuide={onViewMeasurementGuide}
     />
   );

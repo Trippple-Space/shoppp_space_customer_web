@@ -22,6 +22,7 @@ import { ICategory } from '@/modules/lib/utility/types/product.interface';
 import { PiRuler } from 'react-icons/pi';
 import { BiRightArrowAlt } from 'react-icons/bi';
 import CustomerPersonalization from '@/modules/lib/components/personalization-modals/CustomerPersonalization';
+import { usePersonalizationStore } from '@/modules/lib/utility/store/personalization.store';
 
 const Homepage = ({
   initialCollections = [],
@@ -38,6 +39,9 @@ const Homepage = ({
     useStoreCategoryNavView();
   const { setRate, setPrice, setSort, setLocation, allFilters, resetFilters } =
     useFilterStore();
+  const isPersonalizationSetup = usePersonalizationStore(
+    (state) => state.isPersonalizationSetup,
+  );
 
   const [hasCollections, setHasCollections] = useState(false);
   const [personalizationOpen, setPersonalizationOpen] = useState(false);
@@ -291,22 +295,24 @@ const Homepage = ({
         )}
       </div>
       <div className="app-width">
-        <div className='w-full flex flex-col sm:flex-row sm:a-items-center sm:j-content-between gap-12 sm:gap-16 text-12 md:text-14 weight-600 color-#0B9378 mt-11 p-12 sm:p-17 bg-#0B937817 radius-4'>
-          <div className='flex a-items-start sm:a-items-center gap-12 lg:gap-33 sm:gap-18 gap-10 min-w-0'>
-            <PiRuler className='w-19 h-19 flex-shrink-0' />
-            <p className='line-height-12.67 sm:line-height-20'>
-              Set up your measurements to see personalized fit predictions on every product.
-            </p>
+        {!isPersonalizationSetup && (
+          <div className='w-full flex flex-col sm:flex-row sm:a-items-center sm:j-content-between gap-12 sm:gap-16 text-12 md:text-14 weight-600 color-#0B9378 mt-11 p-12 sm:p-17 bg-#0B937817 radius-4'>
+            <div className='flex a-items-start sm:a-items-center gap-12 lg:gap-33 sm:gap-18 gap-10 min-w-0'>
+              <PiRuler className='w-19 h-19 flex-shrink-0' />
+              <p className='line-height-12.67 sm:line-height-20'>
+                Set up your measurements to see personalized fit predictions on every product.
+              </p>
+            </div>
+            <button
+              type='button'
+              className='flex a-items-center j-content-end gap-4 line-height-12.67 weight-600 pointer whitespace-nowrap border-none bg-transparent color-#0B9378 self-end sm:self-auto flex-shrink-0 p-0'
+              onClick={() => setPersonalizationOpen(true)}
+            >
+              <span>Set up</span>
+              <BiRightArrowAlt className='w-16 h-16' />
+            </button>
           </div>
-          <button
-            type='button'
-            className='flex a-items-center j-content-end gap-4 line-height-12.67 weight-600 pointer whitespace-nowrap border-none bg-transparent color-#0B9378 self-end sm:self-auto flex-shrink-0 p-0'
-            onClick={() => setPersonalizationOpen(true)}
-          >
-            <span>Set up</span>
-            <BiRightArrowAlt className='w-16 h-16' />
-          </button>
-        </div>
+        )}
 
         <CustomerPersonalization
           isOpen={personalizationOpen}

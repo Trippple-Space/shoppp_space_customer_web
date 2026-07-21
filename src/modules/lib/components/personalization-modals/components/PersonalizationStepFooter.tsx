@@ -8,6 +8,7 @@ interface PersonalizationStepFooterProps {
   showBack?: boolean;
   showProTip?: boolean;
   continueLabel?: string;
+  continueDisabled?: boolean;
   onViewMeasurementGuide?: () => void;
 }
 
@@ -20,6 +21,7 @@ const PersonalizationStepFooter = ({
   showBack = false,
   showProTip = false,
   continueLabel = 'Continue',
+  continueDisabled = false,
   onViewMeasurementGuide,
 }: PersonalizationStepFooterProps) => {
   return (
@@ -56,6 +58,7 @@ const PersonalizationStepFooter = ({
         <Button
           type="button"
           onClick={onContinue}
+          disabled={continueDisabled}
           className={`w-full! max-w-725 ${primaryButtonClass}`}
         >
           {continueLabel}
@@ -65,6 +68,7 @@ const PersonalizationStepFooter = ({
           <Button
             type="button"
             onClick={onBack}
+            disabled={continueDisabled}
             className="bg-#F5F5F5! color-#000000! hover:bg-#F5F5F5! radius-6 py-12 px-16 sm:px-20 text-14 sm:text-16 weight-500 flex a-items-center j-content-center gap-6 whitespace-nowrap"
           >
             <IoChevronBack className="w-16 h-16" />
@@ -73,6 +77,7 @@ const PersonalizationStepFooter = ({
           <Button
             type="button"
             onClick={onContinue}
+            disabled={continueDisabled}
             className={`flex-grow-1 w-full! ${primaryButtonClass}`}
           >
             {continueLabel}

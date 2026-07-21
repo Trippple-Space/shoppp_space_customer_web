@@ -1,8 +1,14 @@
 import { DisplayProductConfigurations } from '@/modules/lib/components/product-detail-modal/productConfigurationsHelper';
+import { Product } from '@/modules/lib/utility/types/product.interface';
 import { ProductVariant } from '@/modules/lib/utility/types/product.interface';
 import { cx } from '@/modules/lib/utility/utility';
 import classNames from 'classnames';
-import { ReactNode } from 'react';
+import { ReactNode, useState } from 'react';
+import ProductSizeChartModal from '../modals/ProductSizeChartModal';
+import {
+  isFullProductSizeChart,
+  shouldShowProductSizeChart,
+} from '../utils/fit-size-chart';
 
 interface ProductVariationsPickerProps {
   layout: 'mobile' | 'desktop';
@@ -19,6 +25,9 @@ interface ProductVariationsPickerProps {
   onEditConfiguration: () => void;
   selectedVariant: ProductVariant | undefined;
   addToCartSection: ReactNode;
+  productId?: string;
+  productName?: string;
+  fitSizeChart?: Product['fitSizeChart'];
 }
 
 const ProductVariationsPicker = ({
@@ -36,8 +45,14 @@ const ProductVariationsPicker = ({
   onEditConfiguration,
   selectedVariant,
   addToCartSection,
+  productId,
+  productName,
+  fitSizeChart,
 }: ProductVariationsPickerProps) => {
   const isMobile = layout === 'mobile';
+  const [sizeChartOpen, setSizeChartOpen] = useState(false);
+  const showSizeChartLink = shouldShowProductSizeChart(fitSizeChart);
+  const embeddedChart = isFullProductSizeChart(fitSizeChart) ? fitSizeChart : null;
 
   const colorSwatchClass = isMobile
     ? 'w-32 h-32 round border border-lightgray transition'
@@ -50,6 +65,17 @@ const ProductVariationsPicker = ({
   const optionButtonClass = isMobile
     ? 'px-10 py-7 radius-6 border transition whitespace-nowrap text-12'
     : 'px-15 py-8 radius-6 border transition text-12 whitespace-nowrap weight-400';
+
+  const sizeChartLink =
+    productId && showSizeChartLink ? (
+      <button
+        type="button"
+        onClick={() => setSizeChartOpen(true)}
+        className="text-12 weight-500 color-#0B9378 underline underline-offset-2 bg-transparent border-none pointer p-0"
+      >
+        View size chart
+      </button>
+    ) : null;
 
   const variationsContent = (
     <>
@@ -140,15 +166,26 @@ const ProductVariationsPicker = ({
       )}
 
       {addToCartSection}
+
+      {productId && showSizeChartLink && (
+        <ProductSizeChartModal
+          isOpen={sizeChartOpen}
+          onClose={() => setSizeChartOpen(false)}
+          productId={productId}
+          productName={productName}
+          fitSizeChart={embeddedChart}
+        />
+      )}
     </>
   );
 
   if (isMobile) {
     return (
       <div className="l:hidden flex flex-col gap-12 border-b  border-#00000014 pb-15">
-        <p className="weight-600 border-b border-#00000014 pb-15 pt-15">
-          VARIATIONS
-        </p>
+        <div className="flex a-items-center space-between gap-10 border-b border-#00000014 pb-15 pt-15">
+          <p className="weight-600">VARIATIONS</p>
+          {sizeChartLink}
+        </div>
         {variationsContent}
       </div>
     );
@@ -161,9 +198,10 @@ const ProductVariationsPicker = ({
             "
         style={{ boxShadow: '-4px -4px 8px 2px #EDFCF766' }}
       >
-        <p className="weight-600 border-b border-#00000014 pb-10">
-          VARIATIONS
-        </p>
+        <div className="flex a-items-center space-between gap-10 border-b border-#00000014 pb-10">
+          <p className="weight-600">VARIATIONS</p>
+          {sizeChartLink}
+        </div>
         <div className="flex flex-col gap-28">
           {variationsContent}
         </div>

@@ -1,4 +1,10 @@
-export type FitRecommendationStatus = 'perfect' | 'warning';
+export type FitRecommendationStatus =
+  | 'perfect'
+  | 'warning'
+  | 'no_fit'
+  | 'unavailable';
+
+export type FitRecommendationConfidence = 'high' | 'medium' | 'low' | 'none';
 
 export interface FitMeasurementComparison {
   label: string;
@@ -25,4 +31,10 @@ export interface ProductFitRecommendationData {
   spectrum: FitSpectrumSegment[];
   profileSummary: string;
   userName: string;
+  eligible?: boolean;
+  confidence?: FitRecommendationConfidence;
+  recommendedSizeLabel?: string | null;
+  archetypeSlug?: string | null;
+  fitMode?: string | null;
+  message?: string | null;
 }

@@ -82,7 +82,7 @@ export const getMeasurementPlaceholder = (
   const unitLabel = unit === 'cm' ? 'CM' : 'INCHES';
 
   if (fieldKey === 'shoeSize') {
-    return `Size in ${unitLabel}`;
+    return 'e.g. 42';
   }
 
   return `${fieldKey} in ${unitLabel}`;

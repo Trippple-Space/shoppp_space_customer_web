@@ -12,24 +12,30 @@ import {
   getMeasurementIllustration,
   usePersonalizationStore,
 } from '@/modules/lib/utility/store/personalization.store';
+import useUserStore from '@/modules/lib/utility/store/user.store';
 import PersonalizationMeasurementGuideLightbox from './components/PersonalizationMeasurementGuideLightbox';
 import {
   scrollToPersonalizationField,
   validateBodyStep,
   validateDimensionsStep,
 } from './utils/personalization-validation';
+import { toast } from 'sonner';
 
 interface CustomerPersonalizationProps {
   isOpen: boolean;
   onClose: () => void;
+  initialStep?: PersonalizationFlowStep;
 }
 
 const CustomerPersonalization = ({
   isOpen,
   onClose,
+  initialStep = 'intro',
 }: CustomerPersonalizationProps) => {
-  const [step, setStep] = useState<PersonalizationFlowStep>('intro');
+  const [step, setStep] = useState<PersonalizationFlowStep>(initialStep);
   const [isMeasurementGuideOpen, setIsMeasurementGuideOpen] = useState(false);
+  const [isSaving, setIsSaving] = useState(false);
+  const isAuthenticated = useUserStore((state) => state.isAuthenticated);
   const {
     shopPreference,
     bodyBuild,
@@ -37,16 +43,21 @@ const CustomerPersonalization = ({
     completedWizardSteps,
     markWizardStepComplete,
     markPersonalizationSetupComplete,
+    syncToApi,
     setFieldErrors,
     clearFieldErrors,
   } = usePersonalizationStore();
 
   useEffect(() => {
     if (!isOpen) {
-      setStep('intro');
+      setStep(initialStep);
       setIsMeasurementGuideOpen(false);
+      setIsSaving(false);
+      return;
     }
-  }, [isOpen]);
+
+    setStep(initialStep);
+  }, [isOpen, initialStep]);
 
   useEffect(() => {
     if (step !== 'dimensions') {
@@ -55,16 +66,40 @@ const CustomerPersonalization = ({
   }, [step]);
 
   const handleDismiss = () => {
-    setStep('intro');
+    if (isSaving) {
+      return;
+    }
+
+    setStep(initialStep);
     setIsMeasurementGuideOpen(false);
     onClose();
   };
 
-  const handleSaveComplete = () => {
-    markPersonalizationSetupComplete();
-    setStep('intro');
-    setIsMeasurementGuideOpen(false);
-    onClose();
+  const handleSaveComplete = async () => {
+    if (isSaving) {
+      return;
+    }
+
+    setIsSaving(true);
+
+    try {
+      if (isAuthenticated) {
+        await syncToApi(true);
+      }
+
+      markPersonalizationSetupComplete();
+      setStep('intro');
+      setIsMeasurementGuideOpen(false);
+      onClose();
+    } catch (error: any) {
+      const message =
+        error?.response?.data?.message ||
+        error?.message ||
+        'Could not save your fit profile. Please try again.';
+      toast.error(message);
+    } finally {
+      setIsSaving(false);
+    }
   };
 
   const measurementIllustration = getMeasurementIllustration(shopPreference);
@@ -149,7 +184,8 @@ const CustomerPersonalization = ({
             onClose={handleDismiss}
             onContinue={handleSaveComplete}
             showFooterBack
-            continueLabel="Save my fits"
+            continueLabel={isSaving ? 'Saving...' : 'Save my fits'}
+            continueDisabled={isSaving}
           >
             <PersonalizationDoneStep />
           </PersonalizationStepLayout>

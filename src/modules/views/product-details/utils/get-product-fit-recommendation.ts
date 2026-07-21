@@ -39,12 +39,7 @@ export const getProductFitRecommendation = (
   const hips = formatMeasurement(dimensions.hip || '', unit);
   const profileSummary = buildProfileSummary(dimensions, unit);
 
-  // Placeholder logic until fit API is wired — even variant ids demo perfect fit.
-  const numericVariantId = variantId ? Number.parseInt(variantId, 10) : 0;
-  /* const isPerfectFit = Number.isNaN(numericVariantId)
-    ? true
-    : numericVariantId % 2 === 0; */
-
+  // Local mock fallback only — prefer fit-oracle.service getRecommendation.
   const isPerfectFit = true;
 
   if (isPerfectFit) {
