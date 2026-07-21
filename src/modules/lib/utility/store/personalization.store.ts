@@ -353,10 +353,13 @@ export const usePersonalizationStore = create<PersonalizationStore>((set, get) =
       shopPreference: payload.shopPreference ?? null,
       bodyBuild: payload.bodyBuild ?? null,
       unit: payload.unit ?? 'cm',
-      shoeScale:
-        payload.shoeScale === 'UK' || payload.shoeScale === 'US'
-          ? payload.shoeScale
-          : 'EU',
+      shoeScale: (
+        payload.shoeScale === 'UK'
+          ? 'UK'
+          : payload.shoeScale === 'US'
+            ? 'US'
+            : 'EU'
+      ) as ShoeSizeScale,
       dimensions: nextDimensions,
       ...(isComplete !== undefined ? { isPersonalizationSetup: isComplete } : {}),
     };

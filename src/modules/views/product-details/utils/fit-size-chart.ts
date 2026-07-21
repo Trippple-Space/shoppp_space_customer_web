@@ -7,7 +7,8 @@ export const shouldShowProductSizeChart = (
   fitSizeChart?: ProductFitSizeChart | null,
 ): boolean => {
   if (!fitSizeChart) return false;
-  if ('showSizeChart' in fitSizeChart) return fitSizeChart.showSizeChart;
+  if ('showSizeChart' in fitSizeChart)
+    return fitSizeChart.showSizeChart ?? false;
   return fitSizeChart.available;
 };
 
