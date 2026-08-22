@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { LiaAngleDownSolid, LiaLayerGroupSolid, LiaStar, LiaTagSolid } from 'react-icons/lia'
 import FilterModal from './FilterModal'
 import { useFilterStore } from '@/modules/lib/utility/store/filter.store'
@@ -15,7 +15,6 @@ const Filters = () => {
     { name: 'Location', downIcon: true, extraIcon: HiOutlineLocationMarker }
   ]
 
-  const modalRef = useRef<any>()
   const [isFilterOpen, setIsFilterOpen] = useState<boolean>(false)
   const [selectedFilter, setSelectedFilter] = useState<string>()
   const [activeFilters, setActiveFilters] = useState<any>([])
@@ -39,15 +38,10 @@ const Filters = () => {
   const openFilterOptions = (option: string) => {
     setIsFilterOpen(true);
     setSelectedFilter(option)
-    if (modalRef.current && window.innerWidth >= 768) {
-      const offset = 100
-      const scrollToElem = modalRef.current.getBoundingClientRect().top + window.scrollY
-      window.scrollTo({ top: scrollToElem - offset, behavior: 'smooth' })
-    }
   }
 
   return (
-    <div className='relative' ref={modalRef}>
+    <div className='relative'>
       <div className='overflow-x-auto no-scrollbar pb-24'>
         <div className='flex flex-row flex-nowrap j-content-start s:j-content-center s:gap-12 gap-8 w-max min-w-full px-4'>
         {

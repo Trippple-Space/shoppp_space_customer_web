@@ -116,6 +116,7 @@ const BaseNavBar: FC<IBaseNavBar> = ({ links, parent }) => {
 
   return (
     <div
+      data-asoebi-main-nav="true"
       className={`fixed w-full t-0 l-0 bg-white z-5 ${
         (parent === 'checkout' || parent === 'orders') &&
         'border-b border-b-#00000014 md:py-3 py-5.8625'
