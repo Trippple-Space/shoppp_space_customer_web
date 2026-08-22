@@ -186,6 +186,7 @@ export const useProductTile = ({
   const tagRefs = useRef<HTMLSpanElement[]>([]);
   const longPressTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   const longPressTriggeredRef = useRef(false);
+  const cartActionLockRef = useRef(false);
 
   const [isOverflowing, setIsOverflowing] = useState(false);
   const [showAllTags, setShowAllTags] = useState(false);
@@ -223,10 +224,11 @@ export const useProductTile = ({
   };
 
   const {
-    addToCart,
+    addToCart: cartAddToCart,
     cart,
-    increment,
-    decrement,
+    increment: cartIncrement,
+    decrement: cartDecrement,
+    removeFromCart,
     isAuthenticated,
     isLoginModal,
     fetching: cartFetching,
@@ -237,6 +239,8 @@ export const useProductTile = ({
     savedVariants: fallbackSavedVariants,
   } = useSavedVariant();
   const imgRef = useRef<HTMLImageElement>(null);
+  const [isAddingToCart, setIsAddingToCart] = useState(false);
+  const [isRemovingFromCart, setIsRemovingFromCart] = useState(false);
 
   /* const variantIds = useMemo(
     () => product.variants.map((v: any) => v.id),
@@ -276,6 +280,44 @@ export const useProductTile = ({
       meta: null,
     } as CartItem;
   }, [cart.cartItems, selectedVariant, isAuthenticated, guestCartVersion]);
+
+  const addToCart = async (
+    variantId: string,
+    quantity: number,
+    userConfigurations: any,
+    variant: ProductVariant
+  ) => {
+    if (cartActionLockRef.current) return;
+    cartActionLockRef.current = true;
+    setIsAddingToCart(true);
+    try {
+      await cartAddToCart(variantId, quantity, userConfigurations, variant);
+    } finally {
+      cartActionLockRef.current = false;
+      setIsAddingToCart(false);
+    }
+  };
+
+  const increment = (cartItem: CartItem, userConfigurations?: any) => {
+    if (cartActionLockRef.current || isAddingToCart || isRemovingFromCart) return;
+    cartIncrement(cartItem, userConfigurations);
+  };
+
+  const decrement = async (cartItem: CartItem, userConfigurations?: any) => {
+    if (cartActionLockRef.current || isAddingToCart || isRemovingFromCart) return;
+    if (cartItem.quantity <= cartItem.variant.minPurchaseQuantity) {
+      cartActionLockRef.current = true;
+      setIsRemovingFromCart(true);
+      try {
+        await removeFromCart(cartItem.id);
+      } finally {
+        cartActionLockRef.current = false;
+        setIsRemovingFromCart(false);
+      }
+      return;
+    }
+    cartDecrement(cartItem, userConfigurations);
+  };
 
   useEffect(() => {
     setActiveIndex(0);
@@ -823,6 +865,8 @@ export const useProductTile = ({
     addToCart,
     increment,
     decrement,
+    isAddingToCart,
+    isRemovingFromCart,
     isAuthenticated,
     isLoginModal,
     imgRef,

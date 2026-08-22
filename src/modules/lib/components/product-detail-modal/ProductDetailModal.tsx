@@ -58,6 +58,8 @@ const ProductDetailModal = ({
     handleAddToCart,
     increment,
     decrement,
+    isAddingToCart,
+    isRemovingFromCart,
     activeFilters,
   } = useProductDetailModal({
     product,
@@ -156,6 +158,8 @@ const ProductDetailModal = ({
               handleAddToCart={handleAddToCart}
               increment={increment}
               decrement={decrement}
+              isAddingToCart={isAddingToCart}
+              isRemovingFromCart={isRemovingFromCart}
               onClose={handleCloseProductModal}
             />
           </div>

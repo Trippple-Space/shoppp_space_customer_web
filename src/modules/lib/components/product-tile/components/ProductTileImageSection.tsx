@@ -5,6 +5,7 @@ import { FaEye } from 'react-icons/fa6';
 import { PiShoppingCartFill } from 'react-icons/pi';
 import Link from 'next/link';
 import QuantitySelector from '../../quantity-selector/QuantitySelector';
+import SpinLoader from '../../spin-loader/SpinLoader';
 import { ProductTileMediaCarousel } from '../ProductTileMediaCarousel';
 import { Product, ProductVariant } from '../../../utility/types/product.interface';
 import { CartItem } from '../../../utility/types/cart.interface';
@@ -47,6 +48,8 @@ const ProductTileImageSection = ({
   selectedImage,
   setShowOnBoardingModal,
   addToCart,
+  isAddingToCart,
+  isRemovingFromCart,
   userConfigurations,
   handleSave,
   isSaved,
@@ -85,6 +88,8 @@ const ProductTileImageSection = ({
     userConfigurations: any,
     variant: ProductVariant
   ) => void;
+  isAddingToCart: boolean;
+  isRemovingFromCart: boolean;
   userConfigurations: any;
   handleSave: () => void;
   isSaved: SavedVariant | undefined;
@@ -155,9 +160,10 @@ const ProductTileImageSection = ({
         id="add to cart button"
         className="absolute z-2 b-0 r-0 mr-10 mb-10 l:mr-15 l:mb-15"
       >
-        {selectedVariantItemInCart ? (
+        {selectedVariantItemInCart && !isAddingToCart ? (
           <QuantitySelector
             decrement={() => {
+              if (isRemovingFromCart) return;
               if (
                 (hasProperties && !shouldAddDirectlyToCart) ||
                 hasCustomerConfiguration
@@ -169,6 +175,7 @@ const ProductTileImageSection = ({
               }
             }}
             increment={() => {
+              if (isRemovingFromCart) return;
               if (
                 (hasProperties && !shouldAddDirectlyToCart) ||
                 hasCustomerConfiguration
@@ -180,6 +187,7 @@ const ProductTileImageSection = ({
               }
             }}
             cartItem={selectedVariantItemInCart}
+            busy={isRemovingFromCart}
           />
         ) : (
           <>
@@ -214,6 +222,7 @@ const ProductTileImageSection = ({
               {selectedVariant?.status !== 'OUT_OF_STOCK' && (
                 <button
                   onClick={() => {
+                    if (isAddingToCart) return;
                     if (
                       (hasProperties && !shouldAddDirectlyToCart) ||
                       hasCustomerConfiguration
@@ -243,16 +252,25 @@ const ProductTileImageSection = ({
                   disabled={!selectedImage}
                   className={classNames(
                     `bg-#FACE33 shadow-0-4-8-0-#00000033 hover:shadow-0-8-8-0-#00000033 text-black! 
-                    disabled:bg-gray-200 disabled:cursor-not-allowed hover:scale-1.06 
-                    g|transition:0.5s g|will-change:transform pointer font-roboto 
+                    disabled:bg-gray-200 disabled:cursor-not-allowed  
+                    g|transition:0.5s g|will-change:transform font-roboto 
                     border-hidden outline-none flex a-items-center j-items-center gap-10`,
                     {
                       'round s:p-14 p-12': addToCartVariant === 'icon',
                       'radius-10 px-10 py-5 s:py-10 s:px-16': addToCartVariant === 'text',
+                      'g|pointer-events:none': isAddingToCart,
+                      'pointer hover:scale-1.06': !isAddingToCart,
                     }
                   )}
                 >
-                  {addToCartVariant === 'icon' ? (
+                  {isAddingToCart ? (
+                    <SpinLoader
+                      size={addToCartVariant === 'icon' ? 18 : 16}
+                      color="#111111"
+                      trackColor="rgba(0,0,0,0.2)"
+                      thickness={3}
+                    />
+                  ) : addToCartVariant === 'icon' ? (
                     <PiShoppingCartFill className="s:w-22 w-20 s:h-22 h-20" />
                   ) : (
                     <span className="text-black font-roboto text-12 s:text-14 weight-500">Add to cart</span>

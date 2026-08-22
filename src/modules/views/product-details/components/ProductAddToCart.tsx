@@ -17,6 +17,7 @@ import {
 import classNames from 'classnames';
 import { HiOutlineShoppingBag } from 'react-icons/hi2';
 import { RefObject, ReactNode } from 'react';
+import SpinLoader from '@/modules/lib/components/spin-loader/SpinLoader';
 
 type AddToCart = ReturnType<typeof useCartStore.getState>['addToCart'];
 
@@ -38,6 +39,8 @@ interface ProductAddToCartProps {
   addToCart: AddToCart;
   increment: (item: CartItem) => void;
   decrement: (item: CartItem) => void;
+  isAddingToCart: boolean;
+  isRemovingFromCart: boolean;
   fitRecommendationSection?: ReactNode;
 }
 
@@ -59,6 +62,8 @@ const ProductAddToCart = ({
   addToCart,
   increment,
   decrement,
+  isAddingToCart,
+  isRemovingFromCart,
   fitRecommendationSection,
 }: ProductAddToCartProps) => {
   return (
@@ -126,18 +131,41 @@ const ProductAddToCart = ({
 
       {fitRecommendationSection}
 
-      {!selectedVariantItemInCart ? (
+      {(!selectedVariantItemInCart || isAddingToCart) ? (
         <button
           className={classNames(
-            `text-white border-none l:px-24 l:py-12 py-15 w-100p radius-6 ${!selectedVariant || isOutOfStock || !areRequiredCustomerFieldsFilled || hasPendingImageUploads ? 'bg-gray-300 cursor-not-allowed' : 'bg-#0B9378 hover:bg-darkgreen pointer'}`
+            `text-white border-none l:px-24 l:py-12 py-15 w-100p radius-6 flex a-items-center j-content-center`,
+            {
+              'bg-gray-300 cursor-not-allowed':
+                !isAddingToCart &&
+                (!selectedVariant ||
+                  isOutOfStock ||
+                  !areRequiredCustomerFieldsFilled ||
+                  hasPendingImageUploads),
+              'bg-#0B9378':
+                isAddingToCart ||
+                (selectedVariant &&
+                  !isOutOfStock &&
+                  areRequiredCustomerFieldsFilled &&
+                  !hasPendingImageUploads),
+              'hover:bg-darkgreen pointer':
+                !isAddingToCart &&
+                selectedVariant &&
+                !isOutOfStock &&
+                areRequiredCustomerFieldsFilled &&
+                !hasPendingImageUploads,
+              'g|pointer-events:none': isAddingToCart,
+            }
           )}
           disabled={
-            !selectedVariant ||
-            isOutOfStock ||
-            !areRequiredCustomerFieldsFilled ||
-            hasPendingImageUploads
+            !isAddingToCart &&
+            (!selectedVariant ||
+              isOutOfStock ||
+              !areRequiredCustomerFieldsFilled ||
+              hasPendingImageUploads)
           }
           onClick={() => {
+            if (isAddingToCart) return;
             if (orders.length == 0 && cart.cartItems.length == 0) {
               handleFlyToCart(imgRef);
             }
@@ -164,35 +192,45 @@ const ProductAddToCart = ({
             }
           }}
         >
-          <div className="l:flex grid grid-2-cols-auto gap-10 items-center w-fit mx-auto ">
-            {selectedVariant &&
-              areRequiredCustomerFieldsFilled && 
-              selectedVariant?.status !== 'OUT_OF_STOCK' && 
-              !hasPendingImageUploads && (
-                <HiOutlineShoppingBag className="h-21" />
-              )}
-            <div
-              className={classNames(
-                `whitespace-nowrap text-16 ${selectedVariant && areRequiredCustomerFieldsFilled && !hasPendingImageUploads ? (isOutOfStock ? 'text-black' : 'text-white') : 'color-gray'}`
-              )}
-            >
-              {!selectedVariant
-                ? 'Add to cart'
-                : isOutOfStock
-                  ? 'Out of stock'
-                  : 'Add to cart'}
+          {isAddingToCart ? (
+            <SpinLoader
+              size={20}
+              color="#ffffff"
+              trackColor="rgba(255,255,255,0.35)"
+              thickness={3}
+            />
+          ) : (
+            <div className="l:flex grid grid-2-cols-auto gap-10 items-center w-fit mx-auto ">
+              {selectedVariant &&
+                areRequiredCustomerFieldsFilled && 
+                selectedVariant?.status !== 'OUT_OF_STOCK' && 
+                !hasPendingImageUploads && (
+                  <HiOutlineShoppingBag className="h-21" />
+                )}
+              <div
+                className={classNames(
+                  `whitespace-nowrap text-16 ${selectedVariant && areRequiredCustomerFieldsFilled && !hasPendingImageUploads ? (isOutOfStock ? 'text-black' : 'text-white') : 'color-gray'}`
+                )}
+              >
+                {!selectedVariant
+                  ? 'Add to cart'
+                  : isOutOfStock
+                    ? 'Out of stock'
+                    : 'Add to cart'}
+              </div>
             </div>
-          </div>
+          )}
         </button>
       ) : (
         <QuantitySelector
           disabled={hasPendingImageUploads}
+          busy={isRemovingFromCart}
           decrement={() => {
-            if (hasPendingImageUploads) return;
+            if (hasPendingImageUploads || isRemovingFromCart) return;
             decrement(selectedVariantItemInCart);
           }}
           increment={() => {
-            if (hasPendingImageUploads) return;
+            if (hasPendingImageUploads || isRemovingFromCart) return;
             increment(selectedVariantItemInCart);
           }}
           cartItem={selectedVariantItemInCart}

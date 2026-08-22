@@ -176,7 +176,7 @@ const SearchInput: FC<ISearchInput> = ({
     <div
       className={`flex gap-30 l:gap-50 weight-200 text-14 l:text-16 ${
         component === 'home' ? 'l:w-400 md:w-340' : 'l:w-400'
-      } ${openSearchModal ? 'md:relative md:z-2' : 'md-relative z-0'}`}
+      } ${openSearchModal ? 'md:relative md:z-8' : 'md-relative z-0'}`}
     >
       <div
         className={`flex w-100p relative a-items-center ${openSearchModal ? 'md:z-2' : ''}`}
@@ -219,13 +219,13 @@ const SearchInput: FC<ISearchInput> = ({
         {openSearchModal && (
           <>
             <div
-              className="fixed inset-0 bg-black opacity-70 z-7"
+              className="fixed inset-0 bg-black opacity-70 z-1"
               onClick={handleOpenSearchModal}
             />
 
             <div
               className={classNames(
-                `z-8 bg-white radius-30 md:radius-20 flex flex-col fixed l-50p md:l-auto t-70 md:t--12 md:pt-70 g|transform:translate(-50%); w-90p h-70p md:h-400 md:w-520 md:absolute md:transform-none md:g|box-shadow:0px|_|2px|_|5px|_|rgba(0,0,0,0.05);`
+                `z-1 bg-white radius-30 md:radius-20 flex flex-col fixed l-50p md:l-auto t-70 md:t--12 md:pt-70 g|transform:translate(-50%); w-90p h-70p md:h-400 md:w-520 md:absolute md:transform-none md:g|box-shadow:0px|_|2px|_|5px|_|rgba(0,0,0,0.05);`
               )}
             >
               <div className="w-100p flex j-content-center md:hidden pb-20">

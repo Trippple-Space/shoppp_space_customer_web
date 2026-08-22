@@ -40,6 +40,8 @@ const ProductTile: FC<IProductTile> = (props) => {
     addToCart,
     increment,
     decrement,
+    isAddingToCart,
+    isRemovingFromCart,
     isAuthenticated,
     isLoginModal,
     imgRef,
@@ -115,6 +117,8 @@ const ProductTile: FC<IProductTile> = (props) => {
         selectedImage={selectedImage}
         setShowOnBoardingModal={setShowOnBoardingModal}
         addToCart={addToCart}
+        isAddingToCart={isAddingToCart}
+        isRemovingFromCart={isRemovingFromCart}
         userConfigurations={userConfigurations}
         handleSave={handleSave}
         isSaved={isSaved}

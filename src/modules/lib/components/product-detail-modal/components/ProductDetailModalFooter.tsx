@@ -2,6 +2,7 @@ import classNames from 'classnames';
 import Link from 'next/link';
 import { GoArrowRight } from 'react-icons/go';
 import QuantitySelector from '../../quantity-selector/QuantitySelector';
+import SpinLoader from '../../spin-loader/SpinLoader';
 import { ProductVariant } from '../../../utility/types/product.interface';
 import { CartItem } from '../../../utility/types/cart.interface';
 import { paths } from '../../../utility/paths';
@@ -15,6 +16,8 @@ const ProductDetailModalFooter = ({
   handleAddToCart,
   increment,
   decrement,
+  isAddingToCart,
+  isRemovingFromCart,
   onClose,
 }: {
   selectedVariant?: ProductVariant;
@@ -25,6 +28,8 @@ const ProductDetailModalFooter = ({
   handleAddToCart: () => void;
   increment: (item: CartItem, userConfigurations?: any) => void;
   decrement: (item: CartItem, userConfigurations?: any) => void;
+  isAddingToCart: boolean;
+  isRemovingFromCart: boolean;
   onClose: () => void;
 }) => {
   const isOutOfStock = selectedVariant?.status === 'OUT_OF_STOCK';
@@ -33,42 +38,57 @@ const ProductDetailModalFooter = ({
     !isOutOfStock &&
     areRequiredCustomerFieldsFilled &&
     !hasPendingImageUploads;
+  const showQuantity =
+    !!selectedVariantItemInCart && !isAddingToCart;
 
   return (
     <div
-      className={`flex-shrink-0 bg-white border-t border-#00000014 px-16 ${selectedVariantItemInCart ? 'pt-14 pb-24' : 'py-14'}`}
+      className={`flex-shrink-0 bg-white border-t border-#00000014 px-16 ${showQuantity ? 'pt-14 pb-24' : 'py-14'}`}
     >
-      {!selectedVariantItemInCart ? (
+      {isAddingToCart || !selectedVariantItemInCart ? (
         <button
           className={classNames(
-            'w-full pointer font-roboto border-hidden py-16 px-20 radius-8 text-16 weight-500',
+            'w-full font-roboto border-hidden py-16 px-20 radius-8 text-16 weight-500 flex a-items-center j-content-center',
             {
-              'bg-#F3F3F3 color-gray cursor-not-allowed': !canAdd,
-              'bg-#0B9378 color-white hover:bg-darkgreen': canAdd,
+              'bg-#F3F3F3 color-gray cursor-not-allowed':
+                !canAdd && !isAddingToCart,
+              'bg-#0B9378 color-white': canAdd || isAddingToCart,
+              'hover:bg-darkgreen pointer': canAdd && !isAddingToCart,
+              'g|pointer-events:none': isAddingToCart,
             }
           )}
-          disabled={!canAdd}
+          disabled={!canAdd && !isAddingToCart}
           onClick={handleAddToCart}
         >
-          {!selectedVariant
-            ? 'Add to cart'
-            : isOutOfStock
-              ? 'Out of stock'
-              : 'Add to cart'}
+          {isAddingToCart ? (
+            <SpinLoader
+              size={20}
+              color="#ffffff"
+              trackColor="rgba(255,255,255,0.35)"
+              thickness={3}
+            />
+          ) : !selectedVariant ? (
+            'Add to cart'
+          ) : isOutOfStock ? (
+            'Out of stock'
+          ) : (
+            'Add to cart'
+          )}
         </button>
       ) : (
         <div className="flex a-items-end space-between gap-12">
           <QuantitySelector
             disabled={hasPendingImageUploads}
+            busy={isRemovingFromCart}
             decrement={() => {
-              if (hasPendingImageUploads) return;
+              if (hasPendingImageUploads || isRemovingFromCart) return;
               decrement(
                 selectedVariantItemInCart,
                 userConfigurations
               );
             }}
             increment={() => {
-              if (hasPendingImageUploads) return;
+              if (hasPendingImageUploads || isRemovingFromCart) return;
               increment(
                 selectedVariantItemInCart,
                 userConfigurations

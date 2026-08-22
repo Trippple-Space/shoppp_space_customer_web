@@ -48,6 +48,7 @@ export const useProductDetailModal = ({
     cart,
     increment,
     decrement,
+    removeFromCart,
     isAuthenticated,
     isLoginModal,
   } = useCart();
@@ -82,6 +83,8 @@ export const useProductDetailModal = ({
 
   const [isHover, setIsHover] = useState(false);
   const [isEditingConfiguration, setIsEditingConfiguration] = useState(false);
+  const [isAddingToCart, setIsAddingToCart] = useState(false);
+  const [isRemovingFromCart, setIsRemovingFromCart] = useState(false);
   const [guestCartVersion, setGuestCartVersion] = useState(0);
   const [sizeChartOpen, setSizeChartOpen] = useState(false);
   const [fetchedSizeChart, setFetchedSizeChart] =
@@ -124,6 +127,7 @@ export const useProductDetailModal = ({
 
   const imgRef = useRef<HTMLImageElement>(null);
   const didInitFromVariantRef = useRef(false);
+  const cartActionLockRef = useRef(false);
 
   const filteredVariants = useMemo(() => {
     if (!product?.variants) return [];
@@ -313,6 +317,13 @@ export const useProductDetailModal = ({
       body.style.overflow = previous.overflow;
       window.scrollTo(0, scrollY);
     };
+  }, [openSingleProductModal]);
+
+  useEffect(() => {
+    if (openSingleProductModal) return;
+    cartActionLockRef.current = false;
+    setIsAddingToCart(false);
+    setIsRemovingFromCart(false);
   }, [openSingleProductModal]);
 
   useEffect(() => {
@@ -621,28 +632,60 @@ export const useProductDetailModal = ({
     setSelectedMediaType(mediaItem?.type);
   };
 
-  const handleAddToCart = () => {
+  const handleAddToCart = async () => {
+    if (cartActionLockRef.current || isAddingToCart || isRemovingFromCart) return;
+    if (!selectedVariant || selectedVariant.status === 'OUT_OF_STOCK') return;
     if (!localStorage.getItem('seenMiniCart')) {
       window.dispatchEvent(new Event('showMiniCartOnboarding'));
       localStorage.setItem('seenMiniCart', 'true');
     }
-    if (selectedVariant && selectedVariant.status !== 'OUT_OF_STOCK') {
-      const configs = buildUserConfigurations(
-        configurationValues,
-        configurationRecords
-      );
-      addToCart(
-        selectedVariant?.id ?? '0',
-        selectedVariant?.minPurchaseQuantity || 1,
+    const configs = buildUserConfigurations(
+      configurationValues,
+      configurationRecords
+    );
+    cartActionLockRef.current = true;
+    setIsAddingToCart(true);
+    try {
+      await addToCart(
+        selectedVariant.id ?? '0',
+        selectedVariant.minPurchaseQuantity || 1,
         configs,
-        selectedVariant
-          ? {
-            ...selectedVariant,
-            product: selectedVariant.product ?? product,
-          }
-          : undefined
+        {
+          ...selectedVariant,
+          product: selectedVariant.product ?? product,
+        }
       );
+    } finally {
+      cartActionLockRef.current = false;
+      setIsAddingToCart(false);
     }
+  };
+
+  const handleDecrement = async (
+    cartItem: CartItem,
+    userConfigurations?: any
+  ) => {
+    if (cartActionLockRef.current || isAddingToCart || isRemovingFromCart) return;
+    if (cartItem.quantity <= cartItem.variant.minPurchaseQuantity) {
+      cartActionLockRef.current = true;
+      setIsRemovingFromCart(true);
+      try {
+        await removeFromCart(cartItem.id);
+      } finally {
+        cartActionLockRef.current = false;
+        setIsRemovingFromCart(false);
+      }
+      return;
+    }
+    decrement(cartItem, userConfigurations);
+  };
+
+  const handleIncrement = (
+    cartItem: CartItem,
+    userConfigurations?: any
+  ) => {
+    if (cartActionLockRef.current || isAddingToCart || isRemovingFromCart) return;
+    increment(cartItem, userConfigurations);
   };
 
   return {
@@ -659,8 +702,10 @@ export const useProductDetailModal = ({
     variantSelectedImage,
     modalZIndex,
     addToCart,
-    increment,
-    decrement,
+    increment: handleIncrement,
+    decrement: handleDecrement,
+    isAddingToCart,
+    isRemovingFromCart,
     activeFilters,
     selectedImage,
     selectedMediaType,

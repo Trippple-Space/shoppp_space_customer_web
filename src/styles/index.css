@@ -706,6 +706,7 @@
 .pt-14 { padding-top: 14px; } 
 .border-hidden { border-style: hidden; } 
 .color-gray { color: gray; } 
+[class~='g|pointer-events:none']{pointer-events:none} 
 .l-3 { left: 3px; } 
 .min-w-50 { min-width: 50px; } 
 .b-45p { bottom: 45%; } 
@@ -775,9 +776,9 @@
 .shadow-0-4-8-0-\#00000033 { box-shadow: 0px 4px 8px 0px #00000033; } 
 .hover\:shadow-0-8-8-0-\#00000033:hover { box-shadow: 0px 8px 8px 0px #00000033; } 
 .text-black\! { color: #000000 !important; } 
-.hover\:scale-1\.06:hover { scale: 1.06; } 
 [class~='g|will-change:transform']{will-change:transform} 
 .j-items-center { justify-items: center; } 
+.hover\:scale-1\.06:hover { scale: 1.06; } 
 .mt-14 { margin-top: 14px; } 
 .h-45 { height: 45px; } 
 .w-31 { width: 31px; } 
@@ -812,7 +813,6 @@
 .t-40p { top: 40%; } 
 .bg-\#FFFFFFCC { background-color: #FFFFFFCC; } 
 .r--10 { right: -10px; } 
-.z-index-7, .z-7 { z-index: 7; } 
 .gap-42 { gap: 42px; } 
 .w-93p { width: 93%; } 
 .gap-18 { gap: 18px; } 
@@ -823,15 +823,16 @@
 .bg-\#E5E7EB { background-color: #E5E7EB; } 
 .weight-200 { font-weight: 200; } 
 .mb--5 { margin-bottom: -5px; } 
-.z-index-8, .z-8 { z-index: 8; } 
 [class~='g|transform:translate(-50%);']{transform:translate(-50%);} 
 .h-70p { height: 70%; } 
 .border-\#D9D9D9 { border-color: #D9D9D9; } 
 .m-5 { margin: 5px; } 
 .color-\#fff { color: #fff; } 
 .px-3 { padding-left: 3px; padding-right: 3px; } 
+.z-index-8, .z-8 { z-index: 8; } 
 .min-w-200 { min-width: 200px; } 
 .t-65 { top: 65px; } 
+.z-index-7, .z-7 { z-index: 7; } 
 .h-70 { height: 70px; } 
 .h-60p { height: 60%; } 
 .bg-grey-300 { background-color: #E4E1DF; } 
@@ -1521,6 +1522,7 @@
 @media only screen and (min-width: 768px) { .md\:w-250 { width: 250px; } } 
 @media only screen and (min-width: 768px) { .md\:w-340 { width: 340px; } } 
 @media only screen and (min-width: 768px) { .md\:relative {    position: relative;  } } 
+@media only screen and (min-width: 768px) { .z-index-8, .md\:z-8 { z-index: 8; } } 
 @media only screen and (min-width: 768px) { @layer base {    .md\:border {       border: 1px solid;     }  } } 
 @media only screen and (min-width: 768px) { .md\:bg-\#F3F3F3 { background-color: #F3F3F3; } } 
 @media only screen and (min-width: 768px) { .md\:border-none { border-style: none; } } 

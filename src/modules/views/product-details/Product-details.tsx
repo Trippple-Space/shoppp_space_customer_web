@@ -61,6 +61,8 @@ const ProductDetails = ({ product }: { product: Product }) => {
     cart,
     increment,
     decrement,
+    isAddingToCart,
+    isRemovingFromCart,
     isLoginModal,
     isAuthenticated,
     reviews,
@@ -111,6 +113,8 @@ const ProductDetails = ({ product }: { product: Product }) => {
       addToCart={addToCart}
       increment={increment}
       decrement={decrement}
+      isAddingToCart={isAddingToCart}
+      isRemovingFromCart={isRemovingFromCart}
       fitRecommendationSection={
         <ProductFitRecommendationSection
           productId={product.id}

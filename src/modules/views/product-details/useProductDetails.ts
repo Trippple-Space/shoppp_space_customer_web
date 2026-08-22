@@ -69,9 +69,12 @@ export const useProductDetails = (product: Product) => {
   >({});
 
   const [isEditingConfiguration, setIsEditingConfiguration] = useState(false);
+  const [isAddingToCart, setIsAddingToCart] = useState(false);
+  const [isRemovingFromCart, setIsRemovingFromCart] = useState(false);
 
   const imgRef = useRef<HTMLImageElement>(null) as RefObject<HTMLImageElement>;
   const rateProductDeepLinkHandled = useRef(false);
+  const cartActionLockRef = useRef(false);
 
   const variantIds = useMemo(
     () => product?.variants.map((v) => v.id),
@@ -249,10 +252,11 @@ export const useProductDetails = (product: Product) => {
   const { saveVariant, savedVariants, removeSavedVariant } = useSavedVariant();
 
   const {
-    addToCart,
+    addToCart: cartAddToCart,
     cart,
-    increment,
-    decrement,
+    increment: cartIncrement,
+    decrement: cartDecrement,
+    removeFromCart,
     isLoginModal,
     isAuthenticated,
   } = useCart();
@@ -656,6 +660,44 @@ export const useProductDetails = (product: Product) => {
     return `/${slug}`;
   }, [product.store?.slug]);
 
+  const addToCart = async (
+    variantId: string,
+    quantity?: number,
+    userConfigurations?: Record<string, any>,
+    variantSnapshot?: ProductVariant
+  ) => {
+    if (cartActionLockRef.current) return;
+    cartActionLockRef.current = true;
+    setIsAddingToCart(true);
+    try {
+      await cartAddToCart(variantId, quantity, userConfigurations, variantSnapshot);
+    } finally {
+      cartActionLockRef.current = false;
+      setIsAddingToCart(false);
+    }
+  };
+
+  const increment = (cartItem: CartItem, userConfigurations?: any) => {
+    if (cartActionLockRef.current || isAddingToCart || isRemovingFromCart) return;
+    cartIncrement(cartItem, userConfigurations);
+  };
+
+  const decrement = async (cartItem: CartItem, userConfigurations?: any) => {
+    if (cartActionLockRef.current || isAddingToCart || isRemovingFromCart) return;
+    if (cartItem.quantity <= cartItem.variant.minPurchaseQuantity) {
+      cartActionLockRef.current = true;
+      setIsRemovingFromCart(true);
+      try {
+        await removeFromCart(cartItem.id);
+      } finally {
+        cartActionLockRef.current = false;
+        setIsRemovingFromCart(false);
+      }
+      return;
+    }
+    cartDecrement(cartItem, userConfigurations);
+  };
+
   return {
     product,
     recentlyViewedVariants,
@@ -701,6 +743,8 @@ export const useProductDetails = (product: Product) => {
     cart,
     increment,
     decrement,
+    isAddingToCart,
+    isRemovingFromCart,
     isLoginModal,
     isAuthenticated,
     reviews,
