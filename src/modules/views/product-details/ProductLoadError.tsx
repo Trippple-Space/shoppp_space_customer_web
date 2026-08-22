@@ -24,10 +24,13 @@ const ProductLoadError: FC<{ message?: string }> = ({ message }) => {
   }, [router]);
 
   return (
-    <main className="flex min-h-screen flex-col bg-#FFFFFF">
+    <main className="min-h-100vh bg-#FFFFFF">
       <BaseNavBar links={undefined} parent={undefined} />
-      <div className="flex flex-1 items-center justify-center px-24 py-48">
-        <div className="w-full max-w-480 flex flex-col gap-24">
+      <div
+        className="w-full flex flex-col a-items-center j-content-center px-24 pt-40 pb-40"
+        style={{ minHeight: 'calc(100vh - 88px)', marginTop: 88 }}
+      >
+        <div className="w-full max-w-480">
           <DataFetchErrorPanel
             title={copy.title}
             description={copy.description}

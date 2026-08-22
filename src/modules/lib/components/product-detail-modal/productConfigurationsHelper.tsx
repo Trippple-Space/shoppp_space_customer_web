@@ -28,6 +28,11 @@ import {
   safePolygon,
   FloatingPortal,
 } from '@floating-ui/react';
+import { usePersonalizationStore } from '../../utility/store/personalization.store';
+import {
+  buildPersonalizationPrefill,
+  countPersonalizationPrefillMatches,
+} from '../../utility/personalization-prefill';
 
 export const isEmptyValue = (v: any) => {
   if (v === null || v === undefined) return true;
@@ -63,12 +68,8 @@ export const renderCustomerField = (
   const vf = field.valueFormat;
   const fieldKey = vf.fieldName;
 
-  const commonStyle: React.CSSProperties = {
-    width: '100%',
-    padding: '8px',
-    borderRadius: 6,
-    border: '1px solid #ddd',
-  };
+  const commonClass =
+    'w-full radius-6 border border-#00000014 bg-#FAFAFA px-10 py-8 text-12 color-#000000 outline-none';
 
   if (vf.type === 'string' || vf.type === 'number') {
     const isNotesField = /note/i.test(
@@ -80,7 +81,7 @@ export const renderCustomerField = (
           placeholder={vf.placeholder || ''}
           required={vf.required}
           value={configurationValues[fieldKey] ?? ''}
-          className="mt-2 min-h-90 w-full radius-6 border border-#00000014 bg-#FAFAFA px-8 py-8 text-12 text-#000000 resize-none"
+          className={`${commonClass} mt-2 min-h-90 resize-none`}
           onChange={(e) => handleConfigChange(fieldKey, e.target.value)}
           style={{ minHeight: '90px' }}
         />
@@ -92,7 +93,7 @@ export const renderCustomerField = (
         placeholder={vf.placeholder || ''}
         required={vf.required}
         value={configurationValues[fieldKey] ?? ''}
-        style={commonStyle}
+        className={commonClass}
         onChange={(e) =>
           handleConfigChange(
             fieldKey,
@@ -121,7 +122,7 @@ export const renderCustomerField = (
               type="text"
               placeholder={k}
               value={valueObj[k] ?? ''}
-              style={commonStyle}
+              className={commonClass}
               onChange={(e) => {
                 handleConfigChange(fieldKey, {
                   ...valueObj,
@@ -436,6 +437,47 @@ export const DisplayProductConfigurations: FC<
   onEditConfiguration,
 }) => {
     const [fullViewUrl, setFullViewUrl] = useState<string | null>(null);
+    const [measurementsApplied, setMeasurementsApplied] = useState(false);
+    const isPersonalizationSetup = usePersonalizationStore(
+      (state) => state.isPersonalizationSetup
+    );
+    const dimensions = usePersonalizationStore((state) => state.dimensions);
+    const unit = usePersonalizationStore((state) => state.unit);
+    const shoeScale = usePersonalizationStore((state) => state.shoeScale);
+
+    const canPrefill =
+      isPersonalizationSetup &&
+      (!userConfigurations || isEditingConfiguration) &&
+      countPersonalizationPrefillMatches(
+        configurationRecords,
+        dimensions,
+        unit,
+        shoeScale
+      ) > 0;
+
+    const applyMeasurements = () => {
+      const patch = buildPersonalizationPrefill(
+        configurationRecords,
+        dimensions,
+        unit,
+        shoeScale
+      );
+      Object.entries(patch).forEach(([key, value]) => {
+        if (value && typeof value === 'object' && !Array.isArray(value)) {
+          handleConfigChange(key, {
+            ...(configurationValues[key] ?? {}),
+            ...value,
+          });
+          return;
+        }
+        handleConfigChange(key, value);
+      });
+      setMeasurementsApplied(true);
+    };
+
+    useEffect(() => {
+      setMeasurementsApplied(false);
+    }, [configurationRecords]);
 
     useEffect(() => {
       if (!fullViewUrl) return;
@@ -451,6 +493,29 @@ export const DisplayProductConfigurations: FC<
     return (
       <>
         <div className="flex flex-col gap-16">
+          {canPrefill && (
+            <button
+              type="button"
+              onClick={applyMeasurements}
+              className="flex a-items-center j-content-between gap-10 w-full px-12 py-10 radius-8 border border-#0B937833 bg-#DEFFF9 pointer"
+            >
+              <span className="flex flex-col a-items-start gap-2 text-left">
+                <span className="text-12 weight-600 color-#0B9378">
+                  {measurementsApplied
+                    ? 'Measurements applied'
+                    : 'Use my measurements'}
+                </span>
+                <span className="text-11 weight-400 color-#0B9378">
+                  {measurementsApplied
+                    ? 'Matching fields were filled from your saved profile. You can still edit them.'
+                    : `Prefill matching fields from your saved profile${unit ? ` (${unit})` : ''}.`}
+                </span>
+              </span>
+              <span className="text-11 weight-600 color-#0B9378 underline flex-shrink-0">
+                {measurementsApplied ? 'Apply again' : 'Prefill'}
+              </span>
+            </button>
+          )}
           {configurationRecords.map((record) => {
             const customerFields =
               record.customerDataForm?.filter((f: any) =>

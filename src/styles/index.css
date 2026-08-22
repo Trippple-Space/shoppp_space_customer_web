@@ -333,10 +333,12 @@
 .w-18 { width: 18px; } 
 .h-18 { height: 18px; } 
 .py-48 { padding-top: 48px; padding-bottom: 48px; } 
+@layer base {.radius-16 { border-radius: 16px; } } 
 .bg-\#FAFAFA { background-color: #FAFAFA; } 
 .bg-\#FFF3F1 { background-color: #FFF3F1; } 
 .w-40 { width: 40px; } 
 .h-40 { height: 40px; } 
+.min-w-40 { min-width: 40px; } 
 .w-56 { width: 56px; } 
 .h-56 { height: 56px; } 
 .w-22 { width: 22px; } 
@@ -741,6 +743,8 @@
 .h-44 { height: 44px; } 
 .w-44 { width: 44px; } 
 .border-dashed { border-style: dashed; } 
+.border-\#0B937833 { border-color: #0B937833; } 
+.bg-\#DEFFF9 { background-color: #DEFFF9; } 
 .bg-\#F0F9FF { background-color: #F0F9FF; } 
 .border-\#91D5FF { border-color: #91D5FF; } 
 .color-\#003A8C { color: #003A8C; } 
@@ -929,7 +933,6 @@
 .w-48 { width: 48px; } 
 .h-48 { height: 48px; } 
 .gap-38 { gap: 38px; } 
-@layer base {.radius-16 { border-radius: 16px; } } 
 .mt--30 { margin-top: -30px; } 
 .min-w-121 { min-width: 121px; } 
 .mt-11 { margin-top: 11px; } 
