@@ -16,6 +16,10 @@ import {
 import { ProductFitRecommendationData } from '../types/product-fit-recommendation';
 import { shouldShowProductSizeChart } from '../utils/fit-size-chart';
 import { resolveSelectedFitLabel, getFitSelectionSignature } from '../utils/resolve-selected-fit-label';
+import {
+  alignRecommendationToVendorOptions,
+  collectFitOptionValues,
+} from '../utils/product-fit-options';
 import ProductFitRecommendation from '@/modules/views/product-details/components/ProductFitRecommendation';
 import ProductFitRecommendationResult from '@/modules/views/product-details/components/ProductFitRecommendationResult';
 import ProductFitRecommendationLoading from '@/modules/views/product-details/components/ProductFitRecommendationLoading';
@@ -27,6 +31,7 @@ interface ProductFitRecommendationSectionProps {
   selectedVariant?: ProductVariant;
   activeFilters?: Record<string, string>;
   fitSizeChart?: Product['fitSizeChart'];
+  variants?: ProductVariant[];
 }
 
 const ProductFitRecommendationSection = ({
@@ -34,6 +39,7 @@ const ProductFitRecommendationSection = ({
   selectedVariant,
   activeFilters = {},
   fitSizeChart,
+  variants = [],
 }: ProductFitRecommendationSectionProps) => {
   const [personalizationOpen, setPersonalizationOpen] = useState(false);
   const [personalizationStep, setPersonalizationStep] =
@@ -58,6 +64,12 @@ const ProductFitRecommendationSection = ({
   );
 
   const hasSizeChart = shouldShowProductSizeChart(fitSizeChart);
+  const fitOptionValues = useMemo(
+    () => collectFitOptionValues(variants),
+    [variants]
+  );
+  const canShowFitRecommendation =
+    hasSizeChart && fitOptionValues.length > 0;
 
   const fitSelectionSignature = useMemo(
     () => getFitSelectionSignature(activeFilters, selectedVariant),
@@ -115,7 +127,7 @@ const ProductFitRecommendationSection = ({
       !isSetupResolved ||
       !isPersonalizationSetup ||
       !productId ||
-      !hasSizeChart
+      !canShowFitRecommendation
     ) {
       setRecommendation(null);
       setFetchError(false);
@@ -147,7 +159,7 @@ const ProductFitRecommendationSection = ({
     }
   }, [
     getProfilePayload,
-    hasSizeChart,
+    canShowFitRecommendation,
     isPersonalizationSetup,
     isSetupResolved,
     productId,
@@ -194,7 +206,7 @@ const ProductFitRecommendationSection = ({
     />
   );
 
-  if (!hasSizeChart) {
+  if (!canShowFitRecommendation) {
     return null;
   }
 
@@ -233,14 +245,18 @@ const ProductFitRecommendationSection = ({
     );
   }
 
-  if (!recommendation) {
+  const alignedRecommendation = recommendation
+    ? alignRecommendationToVendorOptions(recommendation, fitOptionValues)
+    : null;
+
+  if (!alignedRecommendation) {
     return personalizationModal;
   }
 
   return (
     <>
       <ProductFitRecommendationResult
-        recommendation={recommendation}
+        recommendation={alignedRecommendation}
         onUpdateMeasurements={() => openPersonalization('dimensions')}
       />
       {personalizationModal}

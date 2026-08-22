@@ -12,7 +12,7 @@ export const FIT_SELECTION_OPTION_KEYS = [
 const normalizeKey = (value: string) =>
   value.trim().toLowerCase().replace(/[_-]+/g, ' ');
 
-const isFitSelectionKey = (key: string) =>
+export const isFitSelectionKey = (key: string) =>
   (FIT_SELECTION_OPTION_KEYS as readonly string[]).includes(normalizeKey(key));
 
 /**

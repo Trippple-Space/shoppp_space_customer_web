@@ -122,6 +122,7 @@ const ProductDetails = ({ product }: { product: Product }) => {
           selectedVariant={selectedVariant}
           activeFilters={activeFilters}
           fitSizeChart={product?.fitSizeChart}
+          variants={product.variants}
         />
       }
     />
