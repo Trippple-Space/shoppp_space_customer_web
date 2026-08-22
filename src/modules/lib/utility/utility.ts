@@ -61,7 +61,7 @@ export const buildEndpoint = (
 
 export const buildFilterParams = (filters: any) => {
   if (!filters) return {};
-  const { price, sort, rating, showOffers, location, tags } = filters;
+  const { price, sort, rating, showOffers, location, tags, availability } = filters;
   let params: any = {};
 
   if (price?.min && price?.max) {
@@ -100,6 +100,10 @@ export const buildFilterParams = (filters: any) => {
   if (rating?.rateBy) {
     params["filters[variants][averageRating][MoreThanOrEqual]"] = rating.rateBy;
   }
+
+  if (availability?.orderType) {
+    params["filters[variants][availabilityType]"] = availability.orderType;
+  }
   /*if (sort?.sortBy) {
     params["sort"] = sort.sortBy;
   }
@@ -134,6 +138,10 @@ export const filtersToSearchParams = (filters: IFilters, selectedCategory?: { na
     params.set("location", filters.location.selectedState);
   else params.delete("location");
 
+  if (filters.availability.orderType)
+    params.set("availability", filters.availability.orderType);
+  else params.delete("availability");
+
   if (filters.showOffers) params.set("offers", "true");
   else params.delete("offers");
 
@@ -158,6 +166,9 @@ export const searchParamsToFilters = (
     sort: { sortBy: searchParams.get("sort") || "" },
     location: {
       selectedState: searchParams.get("location") || "",
+    },
+    availability: {
+      orderType: searchParams.get("availability") || "",
     },
     showOffers: searchParams.get("offers") === "true",
   };

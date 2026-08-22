@@ -7,6 +7,7 @@ interface FilterStore {
   setPrice: (price: { min: string; max: string }) => void;
   setRate: (rateBy: string) => void;
   setLocation: (state: string) => void;
+  setAvailability: (orderType: string) => void;
   setShowOffers: () => void;
   resetFilters: (field: keyof IFilters) => void;
 }
@@ -18,6 +19,7 @@ export const useFilterStore = create<FilterStore>((set) => ({
     rating: { rateBy: "" },
     showOffers: false,
     location: { selectedState: "" },
+    availability: { orderType: "" },
   },
 
   setSort: (sortBy) => {
@@ -60,6 +62,15 @@ export const useFilterStore = create<FilterStore>((set) => ({
     }));
   },
 
+  setAvailability: (orderType) => {
+    return set((state) => ({
+      allFilters: {
+        ...state.allFilters,
+        availability: { ...state.allFilters.availability, orderType }
+      }
+    }));
+  },
+
   setShowOffers: () => {
     return set((state) => ({
       allFilters: {
@@ -82,7 +93,9 @@ export const useFilterStore = create<FilterStore>((set) => ({
                 ? { rateBy: "" }
                 : field === "location"
                   ? { selectedState: "" }
-                  : field === "showOffers"
+                  : field === "availability"
+                    ? { orderType: "" }
+                    : field === "showOffers"
                     ? false
                     : state.allFilters[field]
       }

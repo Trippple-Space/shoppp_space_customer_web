@@ -520,17 +520,21 @@
 @layer base {.radius-20 { border-radius: 20px; } } 
 .hover\:bg-green-50:hover { background-color: rgba(11, 147, 120, 0.1); } 
 .bg-\#EDFCF7\! { background-color: #EDFCF7 !important; } 
+.color-\#6A6A6A { color: #6A6A6A; } 
+.hover\:color-\#000000E0:hover { color: #000000E0; } 
 .w-90p { width: 90%; } 
 .max-w-450 { max-width: 450px; } 
+.overflow-x-auto { overflow-x: auto; } 
 .pb-24 { padding-bottom: 24px; } 
+.flex-nowrap { flex-wrap: nowrap; } 
+.j-content-start { justify-content: flex-start; } 
 .mt-2 { margin-top: 2px; } 
+.flex-shrink-0 { flex-shrink: 0; } 
 .py-6 { padding-top: 6px; padding-bottom: 6px; } 
 [class~='g|transition:0.4s;']{transition:0.4s;} 
 @layer base {.radius-999 { border-radius: 999px; } } 
 .hover\:bg-\#00000014:hover { background-color: #00000014; } 
 .hover\:bg-\#FACE33:hover { background-color: #FACE33; } 
-.color-\#6A6A6A { color: #6A6A6A; } 
-.hover\:color-\#000000E0:hover { color: #000000E0; } 
 .w-10p { width: 10%; } 
 .w-20p { width: 20%; } 
 .w-70p { width: 70%; } 
@@ -632,7 +636,6 @@
 .line-height-12\.67 { line-height: 12.67px; } 
 .color-\#000000 { color: #000000; } 
 .mr-19 { margin-right: 19px; } 
-.flex-shrink-0 { flex-shrink: 0; } 
 .h-34\.67 { height: 34.67px; } 
 @layer base {.radius-3 { border-radius: 3px; } } 
 .min-w-0 { min-width: 0px; } 
@@ -723,7 +726,6 @@
 .z-index-50, .z-50 { z-index: 50; } 
 .min-w-250 { min-width: 250px; } 
 .l-3 { left: 3px; } 
-.overflow-x-auto { overflow-x: auto; } 
 .min-w-90 { min-width: 90px; } 
 .text-grey-500 { color: #A39F9C; } 
 .mb-2 { margin-bottom: 2px; } 
@@ -763,8 +765,6 @@
 .mt-16 { margin-top: 16px; } 
 .mt-14 { margin-top: 14px; } 
 .h-45 { height: 45px; } 
-.flex-nowrap { flex-wrap: nowrap; } 
-.j-content-start { justify-content: flex-start; } 
 .white-space-nowrap { white-space: nowrap; } 
 @layer base {    .border-y {       border-bottom: 1px solid;       border-top: 1px solid;    }  } 
 .z-index-0, .z-0 { z-index: 0; } 
@@ -1422,6 +1422,7 @@
 @media only screen and (min-width: 576px) { .s\:min-w-90 { min-width: 90px; } } 
 @media only screen and (min-width: 576px) { .s\:min-w-116 { min-width: 116px; } } 
 @media only screen and (min-width: 576px) { .s\:w-100 { width: 100px; } } 
+@media only screen and (min-width: 576px) { .s\:j-content-center { justify-content: center; } } 
 @media only screen and (min-width: 576px) { .s\:w-16 { width: 16px; } } 
 @media only screen and (min-width: 576px) { .s\:h-16 { height: 16px; } } 
 @media only screen and (min-width: 576px) { .s\:w-12 { width: 12px; } } 

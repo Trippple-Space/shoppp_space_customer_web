@@ -7,6 +7,7 @@ import HomepageNavBar from '@/modules/lib/components/nav-bar/HomepageNavBar';
 import CentralArena from './CentralArena';
 import { useStoreCategoryNavView } from '@/modules/lib/utility/hooks/views/use-category-nav-view';
 import Filters from '@/modules/lib/components/nav-bar/FiltersNav/FiltersComponent';
+import { getAvailabilityLabel } from '@/modules/lib/components/nav-bar/FiltersNav/AvailabilityFilter';
 import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 import { useFilterStore } from '@/modules/lib/utility/store/filter.store';
 import {
@@ -37,7 +38,7 @@ const Homepage = ({
 
   const { categories, setSelectedCategory, selectedCategory } =
     useStoreCategoryNavView();
-  const { setRate, setPrice, setSort, setLocation, allFilters, resetFilters } =
+  const { setRate, setPrice, setSort, setLocation, setAvailability, allFilters, resetFilters } =
     useFilterStore();
   const isPersonalizationSetup = usePersonalizationStore(
     (state) => state.isPersonalizationSetup,
@@ -60,6 +61,8 @@ const Homepage = ({
     if (parsed.sort?.sortBy) setSort(parsed.sort.sortBy);
     if (parsed.location?.selectedState)
       setLocation(parsed.location.selectedState);
+    if (parsed.availability?.orderType)
+      setAvailability(parsed.availability.orderType);
   }, [searchParams]);
 
   const emptyCategory = {
@@ -88,6 +91,7 @@ const Homepage = ({
   const hasPrice = !!allFilters.price.min || !!allFilters.price.max;
   const hasRating = !!allFilters.rating.rateBy;
   const hasLocation = !!allFilters.location.selectedState;
+  const hasAvailability = !!allFilters.availability.orderType;
   const hasOffers = allFilters.showOffers;
   const selectedCategoryLabels = (() => {
     const name = selectedCategory?.name ?? '';
@@ -176,6 +180,7 @@ const Homepage = ({
     resetFilters('price');
     resetFilters('rating');
     resetFilters('location');
+    resetFilters('availability');
     resetFilters('sort');
     resetFilters('showOffers');
     setSelectedCategory({
@@ -212,7 +217,7 @@ const Homepage = ({
           key={categories}
         />
         <Filters />
-        {(hasPrice || hasRating || hasLocation || hasOffers || hasCategory) && (
+        {(hasPrice || hasRating || hasLocation || hasAvailability || hasOffers || hasCategory) && (
           <div className="bg-#F3F3F3 min-h-92 h-fit py-30 flex flex-col j-content-center">
             <div className="app-width flex j-content-between sm:gap-100 gap-30">
               <div className="flex gap-12">
@@ -278,6 +283,18 @@ const Homepage = ({
                       <TbX
                         className="w-15 h-15 cursor-pointer"
                         onClick={() => handleReset('rating')}
+                      />
+                    </p>
+                  )}
+
+                  {hasAvailability && (
+                    <p className="bg-white h-33 min-w-121 flex gap-8 a-items-center j-content-between radius-999 p-10">
+                      <span className="text-14 weight-500">
+                        {getAvailabilityLabel(allFilters.availability.orderType)}
+                      </span>
+                      <TbX
+                        className="w-15 h-15 cursor-pointer"
+                        onClick={() => handleReset('availability')}
                       />
                     </p>
                   )}

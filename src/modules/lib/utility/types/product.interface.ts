@@ -162,6 +162,7 @@ export interface IFilters {
   price: { min: string; max: string };
   rating: { rateBy: string };
   location: { selectedState: string };
+  availability: { orderType: string };
   showOffers: boolean;
   tags?: string | string[]
 }
