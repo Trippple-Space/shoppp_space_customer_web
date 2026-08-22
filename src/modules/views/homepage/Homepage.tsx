@@ -7,6 +7,7 @@ import HomepageNavBar from '@/modules/lib/components/nav-bar/HomepageNavBar';
 import CentralArena from './CentralArena';
 import { useStoreCategoryNavView } from '@/modules/lib/utility/hooks/views/use-category-nav-view';
 import Filters from '@/modules/lib/components/nav-bar/FiltersNav/FiltersComponent';
+import { getAvailabilityLabel } from '@/modules/lib/components/nav-bar/FiltersNav/AvailabilityFilter';
 import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 import { useFilterStore } from '@/modules/lib/utility/store/filter.store';
 import {
@@ -19,6 +20,10 @@ import { IFilters } from '@/modules/lib/utility/types/product.interface';
 import Collections from './Collections';
 import { ICollection } from '@/modules/lib/utility/types/collection.interface';
 import { ICategory } from '@/modules/lib/utility/types/product.interface';
+import { PiRuler } from 'react-icons/pi';
+import { BiRightArrowAlt } from 'react-icons/bi';
+import CustomerPersonalization from '@/modules/lib/components/personalization-modals/CustomerPersonalization';
+import { usePersonalizationStore } from '@/modules/lib/utility/store/personalization.store';
 
 const Homepage = ({
   initialCollections = [],
@@ -33,10 +38,14 @@ const Homepage = ({
 
   const { categories, setSelectedCategory, selectedCategory } =
     useStoreCategoryNavView();
-  const { setRate, setPrice, setSort, setLocation, allFilters, resetFilters } =
+  const { setRate, setPrice, setSort, setLocation, setAvailability, allFilters, resetFilters } =
     useFilterStore();
+  const isPersonalizationSetup = usePersonalizationStore(
+    (state) => state.isPersonalizationSetup,
+  );
 
   const [hasCollections, setHasCollections] = useState(false);
+  const [personalizationOpen, setPersonalizationOpen] = useState(false);
   const showCollectionsSection = !searchParams.get('search') && !searchParams.get('collection');
   const [collectionsLoaded, setCollectionsLoaded] = useState(!showCollectionsSection);
 
@@ -52,6 +61,8 @@ const Homepage = ({
     if (parsed.sort?.sortBy) setSort(parsed.sort.sortBy);
     if (parsed.location?.selectedState)
       setLocation(parsed.location.selectedState);
+    if (parsed.availability?.orderType)
+      setAvailability(parsed.availability.orderType);
   }, [searchParams]);
 
   const emptyCategory = {
@@ -80,6 +91,7 @@ const Homepage = ({
   const hasPrice = !!allFilters.price.min || !!allFilters.price.max;
   const hasRating = !!allFilters.rating.rateBy;
   const hasLocation = !!allFilters.location.selectedState;
+  const hasAvailability = !!allFilters.availability.orderType;
   const hasOffers = allFilters.showOffers;
   const selectedCategoryLabels = (() => {
     const name = selectedCategory?.name ?? '';
@@ -168,6 +180,7 @@ const Homepage = ({
     resetFilters('price');
     resetFilters('rating');
     resetFilters('location');
+    resetFilters('availability');
     resetFilters('sort');
     resetFilters('showOffers');
     setSelectedCategory({
@@ -204,7 +217,7 @@ const Homepage = ({
           key={categories}
         />
         <Filters />
-        {(hasPrice || hasRating || hasLocation || hasOffers || hasCategory) && (
+        {(hasPrice || hasRating || hasLocation || hasAvailability || hasOffers || hasCategory) && (
           <div className="bg-#F3F3F3 min-h-92 h-fit py-30 flex flex-col j-content-center">
             <div className="app-width flex j-content-between sm:gap-100 gap-30">
               <div className="flex gap-12">
@@ -273,6 +286,18 @@ const Homepage = ({
                       />
                     </p>
                   )}
+
+                  {hasAvailability && (
+                    <p className="bg-white h-33 min-w-121 flex gap-8 a-items-center j-content-between radius-999 p-10">
+                      <span className="text-14 weight-500">
+                        {getAvailabilityLabel(allFilters.availability.orderType)}
+                      </span>
+                      <TbX
+                        className="w-15 h-15 cursor-pointer"
+                        onClick={() => handleReset('availability')}
+                      />
+                    </p>
+                  )}
                 </div>
               </div>
               <p
@@ -287,6 +312,30 @@ const Homepage = ({
         )}
       </div>
       <div className="app-width">
+        {!isPersonalizationSetup && (
+          <div className='w-full flex flex-col sm:flex-row sm:a-items-center sm:j-content-between gap-12 sm:gap-16 text-12 md:text-14 weight-600 color-#0B9378 mt-11 p-12 sm:p-17 bg-#0B937817 radius-4'>
+            <div className='flex a-items-start sm:a-items-center gap-12 lg:gap-33 sm:gap-18 gap-10 min-w-0'>
+              <PiRuler className='w-19 h-19 flex-shrink-0' />
+              <p className='line-height-12.67 sm:line-height-20'>
+                Set up your measurements to see personalized fit predictions on every product.
+              </p>
+            </div>
+            <button
+              type='button'
+              className='flex a-items-center j-content-end gap-4 line-height-12.67 weight-600 pointer whitespace-nowrap border-none bg-transparent color-#0B9378 self-end sm:self-auto flex-shrink-0 p-0'
+              onClick={() => setPersonalizationOpen(true)}
+            >
+              <span>Set up</span>
+              <BiRightArrowAlt className='w-16 h-16' />
+            </button>
+          </div>
+        )}
+
+        <CustomerPersonalization
+          isOpen={personalizationOpen}
+          onClose={() => setPersonalizationOpen(false)}
+        />
+
         {showCollectionsSection && (
           <Collections
             storeId="global"

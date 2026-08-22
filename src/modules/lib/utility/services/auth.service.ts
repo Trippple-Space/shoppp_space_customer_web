@@ -42,8 +42,6 @@ class AuthService {
       .then((response: AxiosResponse) => {
         this.storeAuthCredentials({ token: response.data.token })
 
-
-        console.log('Validated user:', response.data.user);
         return convertUserResponse(response.data.user)
       })
       .catch((error) => {

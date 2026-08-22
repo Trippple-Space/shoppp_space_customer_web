@@ -1,4 +1,5 @@
 import { Store } from "./store.interface";
+import type { ProductFitSizeChart } from "@/modules/views/product-details/types/product-size-chart";
 
 export interface ICategory {
   name: string;
@@ -94,6 +95,7 @@ export interface Product {
   discount: Discount
   meta: any;
   productCatalogues?: ProductCatalogue[];
+  fitSizeChart?: ProductFitSizeChart;
 }
 
 export interface ProductsResponse {
@@ -160,6 +162,7 @@ export interface IFilters {
   price: { min: string; max: string };
   rating: { rateBy: string };
   location: { selectedState: string };
+  availability: { orderType: string };
   showOffers: boolean;
   tags?: string | string[]
 }
