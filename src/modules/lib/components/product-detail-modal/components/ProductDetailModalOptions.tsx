@@ -3,6 +3,7 @@ import { cx } from '../../../utility/utility';
 import { DisplayProductConfigurations } from '../productConfigurationsHelper';
 import { ProductVariant } from '../../../utility/types/product.interface';
 import { CartItem } from '../../../utility/types/cart.interface';
+import ColorSwatch from '../../color-swatch/ColorSwatch';
 
 const ProductDetailModalOptions = ({
   allPropertiesWithSize,
@@ -55,7 +56,6 @@ const ProductDetailModalOptions = ({
 
             <div className="flex gap-6 a-items-center overflow-auto no-scrollbar">
               {allPropertiesWithSize?.color.map((color) => {
-                const hex = colorMap[color.replaceAll(' ', '')];
                 const active = activeFilters.color === color;
                 const compatible = isOptionCompatible(
                   'color',
@@ -63,11 +63,13 @@ const ProductDetailModalOptions = ({
                 );
 
                 return (
-                  <div
+                  <ColorSwatch
                     key={color}
+                    color={color}
+                    colorMap={colorMap}
                     onClick={() => toggleFilter('color', color)}
                     className={classNames(
-                      'w-32 min-w-32 h-32 round border transition',
+                      'w-32 min-w-32 h-32 round overflow-hidden border transition',
                       {
                         'border-3 border-#0B9378 border-solid':
                           active,
@@ -75,7 +77,6 @@ const ProductDetailModalOptions = ({
                           !compatible,
                       }
                     )}
-                    style={{ background: hex || color }}
                   />
                 );
               })}

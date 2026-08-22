@@ -5,6 +5,7 @@ import { cx } from '@/modules/lib/utility/utility';
 import classNames from 'classnames';
 import { ReactNode, useState } from 'react';
 import ProductSizeChartModal from '../modals/ProductSizeChartModal';
+import ColorSwatch from '@/modules/lib/components/color-swatch/ColorSwatch';
 import {
   isFullProductSizeChart,
   shouldShowProductSizeChart,
@@ -90,19 +91,19 @@ const ProductVariationsPicker = ({
               style={{ width: '100%', overflow: 'auto' }}
             >
               {allPropertiesWithSize.color?.map((color) => {
-                const hex = colorMap[color.replaceAll(' ', '')];
                 const active = activeFilters.color === color;
                 const compatible = isOptionCompatible('color', color);
 
                 return (
-                  <div
+                  <ColorSwatch
                     key={color}
+                    color={color}
+                    colorMap={colorMap}
                     onClick={() => toggleFilter('color', color)}
-                    className={classNames(colorSwatchClass, {
+                    className={classNames(colorSwatchClass, 'overflow-hidden', {
                       [colorActiveClass]: active,
                       'opacity-40 cursor-not-allowed': !compatible,
                     })}
-                    style={{ background: hex || color }}
                   />
                 );
               })}
