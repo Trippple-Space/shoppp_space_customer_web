@@ -1,1377 +1,168 @@
 'use client';
-import React, { FC, useCallback, useEffect, useMemo, useRef, useState } from 'react';
-import { AnimatePresence, motion } from 'framer-motion';
-import Image from '../image/Image';
-import { AiFillStar, AiFillHeart } from 'react-icons/ai';
-import classNames from 'classnames';
-import {
-  ConfigurationRecord,
-  Product,
-  ProductVariant,
-} from '../../utility/types/product.interface';
-import {
-  formatNumberAsPrice,
-  formatStockUnitSuffix,
-  handleFlyToCart,
-  onGoingOrderStatusQuery,
-} from '../../utility/utility';
-import { useCart } from '../../utility/hooks/use-cart';
-import QuantitySelector from '../quantity-selector/QuantitySelector';
-import Link from 'next/link';
-import VideoSrc from '../video-src/VideoSrc';
-import { FaEye } from 'react-icons/fa6';
+import React, { FC } from 'react';
 import ProductDetailModal from '../product-detail-modal/ProductDetailModal';
-import { PiShoppingCartFill, PiStorefront } from 'react-icons/pi';
-import { SavedVariant } from '../../utility/types/SavedVariant.interface';
-import { IFetchedReview } from '../../utility/types/review.interface';
-import useTransformProduct from '../../utility/hooks/use-transform-product';
-import {
-  useRecentlyViewedActions,
-} from '../../utility/hooks/use-recently-viewed';
-import { useProductTileOrders } from '../../utility/hooks/use-product-tile-orders';
-import { LuChevronRight } from 'react-icons/lu';
-import {
-  buildUserConfigurations,
-  isCustomerInputForField,
-} from '../product-detail-modal/productConfigurationsHelper';
-import ProductCatalogueDropdown from './ProductCatalogueDropdown';
-import { guestSession } from '../../utility/guest-session';
-import { CartItem } from '../../utility/types/cart.interface';
-import { useSavedVariant } from '../../utility/hooks/use-saved-variants';
-import {
-  extractVisibleDiscountMeta,
-  getStrikethroughAmounts,
-  getVariantDisplayPrices,
-} from '../../utility/visible-discount';
-import {
-  buildVariantMediaPreviewItems,
-  getUniqueGalleryVariants,
-} from '../../utility/product-media';
-import { ProductTileMediaCarousel } from './ProductTileMediaCarousel';
-import { TILE_AUTO_ROTATE_MS } from './product-tile-auto-rotate';
-import {
-  useRegisterProductTileGalleryApi,
-  ProductTileGalleryApi,
-  useProductTileGallery,
-} from './ProductTileGalleryContext';
+import { IProductTile, useProductTile } from './useProductTile';
+import ProductTileOnboardingOverlay from './components/ProductTileOnboardingOverlay';
+import ProductTileImageSection from './components/ProductTileImageSection';
+import ProductTileConfigPills from './components/ProductTileConfigPills';
+import ProductTileVariantStrip from './components/ProductTileVariantStrip';
+import ProductTileDetails from './components/ProductTileDetails';
 
-const TILE_PRICE_FADE = {
-  duration: 1.1,
-  ease: [0.42, 0, 0.58, 1] as const,
-};
-
-const PRODUCT_TILE_PILL_STYLES = {
-  preorder: {
-    pillBackground: '#E6EDF4',
-    pillColor: '#4018DE',
-  },
-  'custom-made': {
-    pillBackground: '#F4EDE6',
-    pillColor: '#DE7818',
-  },
-  'ready-to-wear': {
-    pillBackground: 'rgba(11, 147, 120, 0.1)',
-    pillColor: '#0B9378',
-  },
-  discount: {
-    pillBackground: '#FFF1F0',
-    pillColor: '#CF1322',
-  },
-} as const;
-
-const resolveConfigPillKind = (
-  record: Pick<ConfigurationRecord, 'slug' | 'name' | 'description'>
-): keyof Pick<
-  typeof PRODUCT_TILE_PILL_STYLES,
-  'preorder' | 'custom-made'
-> => {
-  const haystack = `${record.slug ?? ''} ${record.name ?? ''} ${record.description ?? ''}`
-    .toLowerCase()
-    .replace(/_/g, '-');
-
-  if (haystack.includes('preorder') || haystack.includes('pre-order')) {
-    return 'preorder';
-  }
-
-  return 'custom-made';
-};
-
-interface IProductTile {
-  product: Product;
-  saveVariant?: (variantId: string) => void;
-  removeSavedVariant?: (variantId: string) => void;
-  savedVariants?: SavedVariant[];
-  allReviews?: IFetchedReview[];
-  id: string;
-  isOpen?: string | null;
-  setIsOpen?: React.Dispatch<React.SetStateAction<string | null>>;
-  index?: number;
-  selectedCategory?: any;
-  setSelectedCategory?: any;
-  addToCartVariant?: 'icon' | 'text';
-  isStoreBased?: boolean;
-}
-
-const ProductTile: FC<IProductTile> = ({
-  product,
-  savedVariants,
-  saveVariant,
-  removeSavedVariant,
-  allReviews,
-  isOpen,
-  setIsOpen,
-  index,
-  selectedCategory,
-  setSelectedCategory,
-  addToCartVariant = 'text',
-  isStoreBased = false,
-}) => {
-  const pathname =
-    typeof window !== 'undefined' ? window.location.pathname : '';
-  const { groupedData, availableColors, productImages, allProperties } = product
-    ? useTransformProduct(product)
-    : {
-      groupedData: {},
-      availableColors: [],
-      productImages: [],
-      allProperties: {},
-    };
-
-  const storeUrl = useMemo(() => {
-    if (typeof window === "undefined") return `/${product.store?.slug}`;
-
-    const host = window.location.hostname;
-    const slug = product.store?.slug;
-
-    if (host === "asoebi.africa") {
-      return `https://${slug}.asoebi.africa`;
-    }
-
-    if (host === "staging.asoebi.africa") {
-      return `https://staging.asoebi.africa/${slug}`;
-    }
-
-    return `/${slug}`;
-  }, [product.store?.slug]);
-
-  const uniqueVariantsFromProductImages = useMemo(
-    () => (product ? getUniqueGalleryVariants(product) : []),
-    [product]
-  );
-
-  const variantPreviewItems = useMemo(
-    () => buildVariantMediaPreviewItems(uniqueVariantsFromProductImages),
-    [uniqueVariantsFromProductImages]
-  );
-
-  const { orders, fetching: orderFetching } = useProductTileOrders({
-    filters: { status: { In: `${onGoingOrderStatusQuery},DELIVERED` } },
-  });
-
-  const isCheckoutOrOrdersPage =
-    pathname.includes('/checkout') || pathname.includes('/orders');
-
-  const [seenAddToCartIconOnBoarding] = useState<boolean>(() => {
-    if (typeof window !== 'undefined') {
-      const stored = localStorage.getItem('seenAddToCartIcon');
-      return stored ? JSON.parse(stored) : false;
-    }
-    return false;
-  });
-
-  const [onProductTileHover, setOnProductTileHover] = useState(false);
-  const [openSingleProductModal, setOpenSingleProductModal] = useState(false);
-  const [isToAddProperties, setIsToAddProperties] = useState<boolean>(false);
-  const [recentlyViewedId, setRecentlyViewsId] = useState<any>();
-  const [activeIndex, setActiveIndex] = useState(0);
-  const [guestCartVersion, setGuestCartVersion] = useState(0);
-  const [catalogueGalleryOpen, setCatalogueGalleryOpen] = useState(false);
-  const [galleryQuickLookVariant, setGalleryQuickLookVariant] = useState<
-    ProductVariant | undefined
-  >();
-  const [galleryQuickLookImage, setGalleryQuickLookImage] = useState<string>();
-
-  const activePreviewItem = variantPreviewItems[activeIndex];
-  const selectedVariant =
-    activePreviewItem?.variant ??
-    uniqueVariantsFromProductImages[0] ??
-    product?.variants?.[0];
-  const selectedImage = activePreviewItem?.media?.url;
-
-  const handleAutoAdvance = useCallback(() => {
-    if (variantPreviewItems.length <= 1) return;
-    setActiveIndex((index) => (index + 1) % variantPreviewItems.length);
-  }, [variantPreviewItems.length]);
-
-  const rotateTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
-  const autoRotatePaused = onProductTileHover || openSingleProductModal;
-
-  const clearRotateTimeout = useCallback(() => {
-    if (rotateTimeoutRef.current) {
-      clearTimeout(rotateTimeoutRef.current);
-      rotateTimeoutRef.current = null;
-    }
-  }, []);
-
-  const scheduleRotate = useCallback(() => {
-    clearRotateTimeout();
-    if (autoRotatePaused || variantPreviewItems.length <= 1) return;
-
-    rotateTimeoutRef.current = setTimeout(() => {
-      handleAutoAdvance();
-    }, TILE_AUTO_ROTATE_MS);
-  }, [
-    autoRotatePaused,
-    variantPreviewItems.length,
-    handleAutoAdvance,
-    clearRotateTimeout,
-  ]);
-
-  useEffect(() => {
-    scheduleRotate();
-    return clearRotateTimeout;
-  }, [activeIndex, scheduleRotate, clearRotateTimeout]);
-
-  const rowRef = useRef<HTMLDivElement>(null);
-  const priceRef = useRef<HTMLDivElement>(null);
-  const chevronRef = useRef<HTMLDivElement>(null);
-  const tagsContainerRef = useRef<HTMLDivElement>(null);
-  const tagRefs = useRef<HTMLSpanElement[]>([]);
-  const longPressTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
-  const longPressTriggeredRef = useRef(false);
-
-  const [isOverflowing, setIsOverflowing] = useState(false);
-  const [showAllTags, setShowAllTags] = useState(false);
-
-  const handleTagSelection = (tagLabel: string) => {
-    if (!setSelectedCategory) return;
-
-    const clicked = String(tagLabel ?? '').trim();
-    if (!clicked) return;
-
-    const currentRaw = String(selectedCategory?.name ?? '').trim();
-    const current =
-      !currentRaw || currentRaw.toLowerCase() === 'all'
-        ? []
-        : currentRaw
-          .split(',')
-          .map((t: string) => t.trim())
-          .filter(Boolean);
-
-    const clickedIndex = current.findIndex(
-      (t: string) => t.toLowerCase() === clicked.toLowerCase()
-    );
-
-    const next =
-      clickedIndex >= 0
-        ? current.filter((_, i) => i !== clickedIndex)
-        : [...current, clicked];
-
-    const nextName = next.length ? next.join(',') : 'All';
-
-    setSelectedCategory({
-      ...(selectedCategory ?? {}),
-      name: nextName,
-    });
-  };
-
+const ProductTile: FC<IProductTile> = (props) => {
   const {
+    product,
+    storeUrl,
+    variantPreviewItems,
+    isCheckoutOrOrdersPage,
+    onProductTileHover,
+    setOnProductTileHover,
+    openSingleProductModal,
+    isToAddProperties,
+    setIsToAddProperties,
+    setRecentlyViewsId,
+    activeIndex,
+    catalogueGalleryOpen,
+    setCatalogueGalleryOpen,
+    galleryQuickLookVariant,
+    galleryQuickLookImage,
+    selectedVariant,
+    selectedImage,
+    rowRef,
+    priceRef,
+    chevronRef,
+    tagsContainerRef,
+    tagRefs,
+    longPressTriggeredRef,
+    isOverflowing,
+    showAllTags,
+    setShowAllTags,
+    handleTagSelection,
     addToCart,
-    cart,
     increment,
     decrement,
     isAuthenticated,
     isLoginModal,
-    fetching: cartFetching,
-  } = useCart();
-  const {
-    saveVariant: fallbackSaveVariant,
-    removeSavedVariant: fallbackRemoveSavedVariant,
-    savedVariants: fallbackSavedVariants,
-  } = useSavedVariant();
-  const imgRef = useRef<HTMLImageElement>(null);
-
-  /* const variantIds = useMemo(
-    () => product.variants.map((v: any) => v.id),
-    [product.variants]
-  );
-  const { reviewStat, loading: statsLoading } = useGetRatingStats(variantIds); */
-  const { addVariant } = useRecentlyViewedActions();
-
-  const selectedVariantItemInCart = useMemo(() => {
-    const existing = cart.cartItems.find(
-      (item) => item.variant.id === selectedVariant?.id
-    );
-    if (existing || !selectedVariant) {
-      return existing;
-    }
-    if (isAuthenticated) {
-      return undefined;
-    }
-
-    const guestQty = guestSession.getCartQuantityForVariant(selectedVariant.id);
-    if (guestQty <= 0) {
-      return undefined;
-    }
-
-    return {
-      id: `guest-${selectedVariant.id}`,
-      productId: selectedVariant.product?.id ?? '',
-      quantity: guestQty,
-      variant: selectedVariant,
-      totalPrice: selectedVariant.finalPrice * guestQty,
-      discountedPrice: selectedVariant.discountedPrice * guestQty,
-      userConfigurations:
-        guestSession.getLatestUserConfigurations(selectedVariant.id) ?? {},
-      createdAt: '',
-      discountValue: 0,
-      lastUpdated: '',
-      meta: null,
-    } as CartItem;
-  }, [cart.cartItems, selectedVariant, isAuthenticated, guestCartVersion]);
-
-  useEffect(() => {
-    setActiveIndex(0);
-  }, [product?.id]);
-
-  const handlePreviewMediaSelect = useCallback(
-    (index: number) => {
-      const item = variantPreviewItems[index];
-      if (!item?.media?.url) return;
-
-      setActiveIndex(index);
-      setRecentlyViewsId(item.variant.id);
-    },
-    [variantPreviewItems]
-  );
-
-  useEffect(() => {
-    if (!seenAddToCartIconOnBoarding) {
-      localStorage.setItem('seenAddToCartIcon', 'true');
-    }
-  }, [seenAddToCartIconOnBoarding]);
-
-  const configPills = useMemo(() => {
-    const records = selectedVariant?.configurationRecords ?? [];
-
-    return records
-      .filter((r: any) => !!r?.description)
-      .map((r: ConfigurationRecord) => {
-        const kind = resolveConfigPillKind(r);
-        return {
-          text: r.description,
-          ...PRODUCT_TILE_PILL_STYLES[kind],
-          source: kind,
-        };
-      });
-  }, [selectedVariant?.id]);
-
-  const visibleConfigPills = useMemo(() => {
-    if (configPills.length > 0) {
-      return configPills.slice(0, 2);
-    }
-
-    return [
-      {
-        text: 'Ready to wear',
-        ...PRODUCT_TILE_PILL_STYLES['ready-to-wear'],
-        source: 'ready-to-wear',
-      },
-    ];
-  }, [configPills]);
-
-  const activeVariantId = selectedVariant?.id ?? product?.variants?.[0]?.id;
-  const resolvedSavedVariants = savedVariants ?? fallbackSavedVariants;
-  const resolvedSaveVariant = saveVariant ?? fallbackSaveVariant;
-  const resolvedRemoveSavedVariant =
-    removeSavedVariant ?? fallbackRemoveSavedVariant;
-
-  const isSaved = resolvedSavedVariants?.find(
-    (item: SavedVariant) => item.variantId === activeVariantId
-  );
-
-  const handleSave = () => {
-    if (!activeVariantId) return;
-    if (isSaved) {
-      resolvedRemoveSavedVariant && resolvedRemoveSavedVariant(activeVariantId);
-    } else {
-      resolvedSaveVariant && resolvedSaveVariant(activeVariantId);
-    }
-  };
-
-  const handleCloseProductModal = () => {
-    setOpenSingleProductModal((prev) => !prev);
-    if (openSingleProductModal) {
-      setIsToAddProperties(false);
-      setGalleryQuickLookVariant(undefined);
-      setGalleryQuickLookImage(undefined);
-    }
-  };
-
-  const getCartItemForVariant = useCallback(
-    (variant: ProductVariant) => {
-      const existing = cart.cartItems.find(
-        (item) => item.variant.id === variant.id
-      );
-      if (existing) return existing;
-      if (isAuthenticated) return undefined;
-
-      const guestQty = guestSession.getCartQuantityForVariant(variant.id);
-      if (guestQty <= 0) return undefined;
-
-      return {
-        id: `guest-${variant.id}`,
-        productId: variant.product?.id ?? '',
-        quantity: guestQty,
-        variant,
-        totalPrice: variant.finalPrice * guestQty,
-        discountedPrice: variant.discountedPrice * guestQty,
-        userConfigurations:
-          guestSession.getLatestUserConfigurations(variant.id) ?? {},
-        createdAt: '',
-        discountValue: 0,
-        lastUpdated: '',
-        meta: null,
-      } as CartItem;
-    },
-    [cart.cartItems, isAuthenticated, guestCartVersion]
-  );
-
-  const isSavedForVariant = useCallback(
-    (variantId: string) =>
-      !!resolvedSavedVariants?.find(
-        (item: SavedVariant) => item.variantId === variantId
-      ),
-    [resolvedSavedVariants]
-  );
-
-  const handleToggleSaveVariant = useCallback(
-    (variantId: string) => {
-      if (isSavedForVariant(variantId)) {
-        resolvedRemoveSavedVariant?.(variantId);
-      } else {
-        resolvedSaveVariant?.(variantId);
-      }
-    },
-    [
-      isSavedForVariant,
-      resolvedRemoveSavedVariant,
-      resolvedSaveVariant,
-    ]
-  );
-
-  const handleGalleryOpenQuickLook = useCallback(
-    (variant: ProductVariant, mediaUrl: string) => {
-      setGalleryQuickLookVariant(variant);
-      setGalleryQuickLookImage(mediaUrl);
-      setIsToAddProperties(true);
-      setOpenSingleProductModal(true);
-    },
-    []
-  );
-
-  const handleGalleryAddToCart = useCallback(
-    (variant: ProductVariant) => {
-      setShowOnBoardingModal(false);
-      if (!localStorage.getItem('seenMiniCart')) {
-        window.dispatchEvent(new Event('showMiniCartOnboarding'));
-        localStorage.setItem('seenMiniCart', 'true');
-      }
-      addToCart(
-        variant.id,
-        variant.minPurchaseQuantity || 1,
-        {},
-        {
-          ...variant,
-          product: variant.product ?? product,
-        }
-      );
-    },
-    [addToCart, product]
-  );
-
-  const handleLongPressOpenProductModal = () => {
-    handleCloseProductModal();
-    if (selectedVariant) {
-      setRecentlyViewsId(selectedVariant.id);
-    }
-  };
-
-  const clearLongPressTimeout = () => {
-    if (longPressTimeoutRef.current) {
-      clearTimeout(longPressTimeoutRef.current);
-      longPressTimeoutRef.current = null;
-    }
-  };
-
-  const startLongPress = () => {
-    longPressTriggeredRef.current = false;
-    clearLongPressTimeout();
-    longPressTimeoutRef.current = setTimeout(() => {
-      longPressTriggeredRef.current = true;
-      handleLongPressOpenProductModal();
-    }, 450);
-  };
-
-  const endLongPress = () => {
-    clearLongPressTimeout();
-  };
-
-  useEffect(() => {
-    return () => clearLongPressTimeout();
-  }, []);
-
-  useEffect(() => {
-    if (recentlyViewedId && isAuthenticated) {
-      addVariant(recentlyViewedId, 'view');
-    }
-  }, [recentlyViewedId, isAuthenticated]);
-
-  const isOutOfStock = selectedVariant?.status === 'OUT_OF_STOCK';
-  const variantDisplayPrices = getVariantDisplayPrices({
-    variant: selectedVariant,
-    product,
-  });
-
-  const discountPill = useMemo(() => {
-    if (!variantDisplayPrices.hasSlash) return null;
-
-    const payable = variantDisplayPrices.displayPrice;
-    const strike = getStrikethroughAmounts(variantDisplayPrices)[0];
-    if (!strike || strike <= payable) return null;
-
-    const discount = product?.discount;
-    const visibleMeta = extractVisibleDiscountMeta(selectedVariant);
-
-    let text: string;
-    if (variantDisplayPrices.hasVisualSlash && visibleMeta?.value) {
-      if (visibleMeta.discountCalculationType === 'PERCENTAGE') {
-        text = `${Math.round(Number(visibleMeta.value))}% off`;
-      } else {
-        text = `${formatNumberAsPrice(visibleMeta.value)} off`;
-      }
-    } else if (variantDisplayPrices.hasVendorSlash && discount?.value) {
-      if (discount.discountCalculationType === 'PERCENTAGE') {
-        text = `${Math.round(Number(discount.value))}% off`;
-      } else {
-        text = `${formatNumberAsPrice(discount.value)} off`;
-      }
-    } else {
-      const pct = Math.round(((strike - payable) / strike) * 100);
-      if (pct <= 0) return null;
-      text = `${pct}% off`;
-    }
-
-    return {
-      text,
-      ...PRODUCT_TILE_PILL_STYLES.discount,
-      source: 'discount',
-    };
-  }, [variantDisplayPrices, selectedVariant, product?.discount]);
-
-  const hasProperties = useMemo(() => {
-    if (!selectedVariant) return false;
-
-    const hasSize = selectedVariant.size && selectedVariant.size.trim() !== '';
-    const hasOtherProperties =
-      selectedVariant?.properties &&
-      Object.entries(selectedVariant.properties).some(([, value]) => {
-        const trimmed = String(value ?? '').trim();
-        return trimmed !== '';
-      });
-
-    return hasSize || hasOtherProperties;
-  }, [selectedVariant]);
-
-  const shouldAddDirectlyToCart = useMemo(() => {
-
-    if (!allProperties) return false;
-
-    const propertyKeys = Object.keys(allProperties);
-    if (propertyKeys.length !== 1) return false;
-
-    const firstKey = propertyKeys[0];
-    const values = allProperties[firstKey];
-
-    if (!Array.isArray(values) || values.length !== 1) return false;
-
-    const singleValue = values[0];
-    const hasNonEmptyValue =
-      typeof singleValue === 'string' && singleValue.trim() !== '';
-
-    return hasNonEmptyValue;
-  }, [allProperties]);
-
-  const hasCustomerConfiguration = useMemo(() => {
-    return (
-      selectedVariant?.configurationRecords?.some((record: any) =>
-        record.customerDataForm?.some((f: any) => isCustomerInputForField(f))
-      ) ?? false
-    );
-  }, [selectedVariant?.id]);
-
-  const variantNeedsQuickLook = useCallback(
-    (variant: ProductVariant) => {
-      const hasSize = variant.size && variant.size.trim() !== '';
-      const hasOtherProperties =
-        variant?.properties &&
-        Object.entries(variant.properties).some(([, value]) => {
-          const trimmed = String(value ?? '').trim();
-          return trimmed !== '';
-        });
-      const hasProperties = hasSize || hasOtherProperties;
-      const hasCustomerConfiguration =
-        variant?.configurationRecords?.some((record: any) =>
-          record.customerDataForm?.some((f: any) => isCustomerInputForField(f))
-        ) ?? false;
-
-      return (
-        (hasProperties && !shouldAddDirectlyToCart) || hasCustomerConfiguration
-      );
-    },
-    [shouldAddDirectlyToCart]
-  );
-
-  const productTileGalleryApi = useMemo((): ProductTileGalleryApi => {
-    return {
-      isSavedForVariant,
-      onToggleSaveVariant: handleToggleSaveVariant,
-      getCartItemForVariant,
-      variantNeedsQuickLook,
-      onGalleryAddToCart: handleGalleryAddToCart,
-      onGalleryOpenQuickLook: handleGalleryOpenQuickLook,
-      onIncrementCartItem: increment,
-      onDecrementCartItem: decrement,
-      isAuthenticated,
-      onAuthRequired: isLoginModal,
-    };
-  }, [
+    imgRef,
+    selectedVariantItemInCart,
+    handlePreviewMediaSelect,
+    visibleConfigPills,
+    isSaved,
+    handleSave,
+    handleCloseProductModal,
+    getCartItemForVariant,
     isSavedForVariant,
     handleToggleSaveVariant,
-    getCartItemForVariant,
-    variantNeedsQuickLook,
-    handleGalleryAddToCart,
     handleGalleryOpenQuickLook,
-    increment,
-    decrement,
-    isAuthenticated,
-    isLoginModal,
-  ]);
-
-  useRegisterProductTileGalleryApi(product?.id, productTileGalleryApi);
-
-  const pageGallery = useProductTileGallery();
-
-  useEffect(() => {
-    if (!pageGallery?.isGalleryOpen) return;
-    pageGallery.bumpGalleryRevision();
-  }, [guestCartVersion, cart.cartItems, pageGallery]);
-
-  const visibleTags = useMemo(() => {
-    return (product?.tags ?? [])
-      .filter((tag: any) => !tag.label?.includes('pill:'))
-      .filter((tag: any) => !tag.label?.includes('collection:'));
-  }, [product?.tags]);
-
-  const activeTagSet = useMemo(() => {
-    const raw = String(selectedCategory?.name ?? '').trim();
-    if (!raw || raw.toLowerCase() === 'all') return new Set<string>();
-
-    return new Set(
-      raw
-        .split(',')
-        .map((t) => t.trim().toLowerCase())
-        .filter(Boolean)
-    );
-  }, [selectedCategory?.name]);
-
-  const isTagActive = (tagLabel: string) => {
-    const key = String(tagLabel ?? '').trim().toLowerCase();
-    return activeTagSet.has(key);
-  };
-
-  const [visibleTagCount, setVisibleTagCount] = useState(visibleTags.length);
-
-  const [showOnBoardingModal, setShowOnBoardingModal] = useState(false);
-  const indexCount = index === 0;
-
-  useEffect(() => {
-    const handleGuestCartUpdate = () => setGuestCartVersion((value) => value + 1);
-    window.addEventListener('guest-cart-updated', handleGuestCartUpdate);
-    return () =>
-      window.removeEventListener('guest-cart-updated', handleGuestCartUpdate);
-  }, []);
-
-  useEffect(() => {
-    const isDataLoading = orderFetching || cartFetching;
-    if (isDataLoading) return;
-
-    if (!seenAddToCartIconOnBoarding && !isCheckoutOrOrdersPage) {
-      const noOrders = (orders?.length ?? 0) === 0;
-      const emptyCart = (cart?.cartItems?.length ?? 0) === 0;
-
-      if (noOrders && emptyCart) {
-        setShowOnBoardingModal(true);
-      } else {
-        setShowOnBoardingModal(false);
-      }
-    } else {
-      setShowOnBoardingModal(false);
-    }
-  }, [
-    orderFetching,
-    cartFetching,
-    orders,
-    cart,
-    seenAddToCartIconOnBoarding,
-    isCheckoutOrOrdersPage,
-  ]);
-
-  useEffect(() => {
-    document.body.style.overflow = showOnBoardingModal ? 'hidden' : 'auto';
-    return () => {
-      document.body.style.overflow = 'auto';
-    };
-  }, [showOnBoardingModal]);
-
-  const recalculateVisibleTags = React.useCallback(() => {
-    if (
-      !rowRef.current ||
-      !priceRef.current ||
-      !tagsContainerRef.current ||
-      visibleTags.length === 0
-    )
-      return;
-
-    const rowWidth = rowRef.current.clientWidth;
-    const priceWidth = priceRef.current.offsetWidth;
-
-    const gapBetween = 21;
-    const chevronWidth = chevronRef.current?.offsetWidth ?? 14;
-
-    const availableWidth = rowWidth - priceWidth - gapBetween - chevronWidth;
-
-    let usedWidth = 0;
-    let count = 0;
-
-    for (let i = 0; i < tagRefs.current.length; i++) {
-      const tagEl = tagRefs.current[i];
-      if (!tagEl) continue;
-
-      const style = window.getComputedStyle(tagEl);
-      const margin =
-        parseFloat(style.marginLeft) + parseFloat(style.marginRight);
-
-      const tagWidth = tagEl.offsetWidth + margin + 6;
-
-      if (usedWidth + tagWidth > availableWidth) break;
-
-      usedWidth += tagWidth;
-      count++;
-    }
-
-    setVisibleTagCount(count);
-    setIsOverflowing(count < visibleTags.length);
-  }, [visibleTags, selectedVariant?.id, selectedCategory?.name]);
-
-  useEffect(() => {
-    recalculateVisibleTags();
-  }, [recalculateVisibleTags]);
-
-  useEffect(() => {
-    if (!rowRef.current) return;
-
-    const observer = new ResizeObserver(() => {
-      recalculateVisibleTags();
-    });
-
-    observer.observe(rowRef.current);
-
-    return () => {
-      observer.disconnect();
-    };
-  }, [recalculateVisibleTags]);
-
-  useEffect(() => {
-    recalculateVisibleTags();
-  }, [visibleTags, selectedVariant?.id]);
-
-  useEffect(() => {
-    const close = () => setShowAllTags(false);
-    if (showAllTags) document.addEventListener('click', close);
-    return () => document.removeEventListener('click', close);
-  }, [showAllTags]);
-
-  const handleOnboardingClose = () => {
-    setShowOnBoardingModal(false);
-    localStorage.setItem('seenAddToCartIcon', 'true');
-    if (!localStorage.getItem('seenMiniCart') && !isCheckoutOrOrdersPage) {
-      window.dispatchEvent(new Event('showMiniCartOnboarding'));
-      localStorage.setItem('seenMiniCart', 'true');
-    }
-  };
-
-  const configurationRecords = selectedVariant?.configurationRecords ?? [];
-  const [configurationValues, setConfigurationValues] = useState<
-    Record<string, any>
-  >({});
-
-  useEffect(() => {
-    if (!selectedVariantItemInCart?.userConfigurations) return;
-
-    const nextValues: Record<string, any> = {};
-
-    Object.values(selectedVariantItemInCart.userConfigurations).forEach(
-      (schema: any) => {
-        if (!schema || typeof schema !== 'object') return;
-
-        Object.entries(schema).forEach(([fieldName, value]) => {
-          nextValues[fieldName] = value;
-        });
-      }
-    );
-
-    setConfigurationValues(nextValues);
-  }, [selectedVariantItemInCart]);
-
-  const userConfigurations = buildUserConfigurations(
-    configurationValues,
-    configurationRecords
-  );
+    handleGalleryAddToCart,
+    startLongPress,
+    endLongPress,
+    isOutOfStock,
+    variantDisplayPrices,
+    discountPill,
+    hasProperties,
+    shouldAddDirectlyToCart,
+    hasCustomerConfiguration,
+    variantNeedsQuickLook,
+    visibleTags,
+    isTagActive,
+    visibleTagCount,
+    showOnBoardingModal,
+    setShowOnBoardingModal,
+    indexCount,
+    handleOnboardingClose,
+    userConfigurations,
+    addToCartVariant,
+    isStoreBased,
+    allReviews,
+    isOpen,
+    setIsOpen,
+  } = useProductTile(props);
 
   return (
     <div className="mt-30 l:mt-20 w-full min-w-0 overflow-hidden">
-      {showOnBoardingModal && indexCount && (
-        <div
-          onClick={(e) => e.stopPropagation()}
-          style={{
-            position: 'fixed',
-            inset: 0,
-            width: '100vw',
-            height: '100vh',
-            backgroundColor: 'rgba(0, 0, 0, 0.4)',
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center',
-            zIndex: 100,
-          }}
-        ></div>
-      )}
+      <ProductTileOnboardingOverlay
+        showOnBoardingModal={showOnBoardingModal}
+        indexCount={indexCount}
+      />
 
       {/* IMAGE SECTION */}
-      <div
-        id="image"
-        className="relative ratio-1 radius-10 g|overflow:hidden l:radius-15 w-full"
-        onMouseOver={() => setOnProductTileHover(true)}
-        onMouseOut={() => setOnProductTileHover(false)}
-        onMouseDown={startLongPress}
-        onMouseUp={endLongPress}
-        onMouseLeave={endLongPress}
-        onTouchStart={startLongPress}
-        onTouchEnd={endLongPress}
-        onTouchMove={endLongPress}
-        onTouchCancel={endLongPress}
-      >
-        <Link
-          href={`/products/${product?.slug}`}
-          onClick={(e) => {
-            if (longPressTriggeredRef.current) {
-              e.preventDefault();
-              longPressTriggeredRef.current = false;
-            }
-          }}
-        >
-            <div className="relative w-full h-full g|overflow:hidden">
-              {variantPreviewItems.length > 0 && (
-                <ProductTileMediaCarousel
-                  key={product.id}
-                  items={variantPreviewItems}
-                  activeIndex={activeIndex}
-                  imgRef={imgRef}
-                />
-              )}
-
-              {isOutOfStock && (
-                <div className="absolute w-100p h-100p text-white flex j-content-center a-items-center z-3 l:text-22 radius-6 pointer-events-none">
-                  Out of stock
-                </div>
-              )}
-            </div>
-        </Link>
-
-        {/* QUICK LOOK BUTTON */}
-        {onProductTileHover && product && (
-          <div
-            id="add to cart button"
-            className="hidden l:block absolute z-2 b-0 l-0 ml-10 mt-20 l:mr-15 l:mb-15"
-            onClick={() => {
-              handleCloseProductModal();
-              if (selectedVariant) {
-                setRecentlyViewsId(selectedVariant.id);
-              }
-            }}
-          >
-            <p className="bg-white radius-20 p-5 cursor-pointer text-12 flex a-items-center gap-5">
-              <FaEye className="w-fit" />
-              Quick look
-            </p>
-          </div>
-        )}
-
-        {/* ADD TO CART / ONBOARDING */}
-        <div
-          id="add to cart button"
-          className="absolute z-2 b-0 r-0 mr-10 mb-10 l:mr-15 l:mb-15"
-        >
-          {selectedVariantItemInCart ? (
-            <QuantitySelector
-              decrement={() => {
-                if (
-                  (hasProperties && !shouldAddDirectlyToCart) ||
-                  hasCustomerConfiguration
-                ) {
-                  setIsToAddProperties(true);
-                  handleCloseProductModal();
-                } else {
-                  decrement(selectedVariantItemInCart);
-                }
-              }}
-              increment={() => {
-                if (
-                  (hasProperties && !shouldAddDirectlyToCart) ||
-                  hasCustomerConfiguration
-                ) {
-                  setIsToAddProperties(true);
-                  handleCloseProductModal();
-                } else {
-                  increment(selectedVariantItemInCart);
-                }
-              }}
-              cartItem={selectedVariantItemInCart}
-            />
-          ) : (
-            <>
-              {showOnBoardingModal && indexCount && !isCheckoutOrOrdersPage && (
-                <div
-                  onClick={(e) => e.stopPropagation()}
-                  className="l:w-200 w-100 l:p-10 p-5 l:mb-10 b-70p r-20"
-                  style={{
-                    position: 'absolute',
-                    background: 'white',
-                    borderRadius: '10px',
-                    zIndex: 1000,
-                  }}
-                >
-                  <p className="weight-400">
-                    Tap this button to add an item to your cart
-                  </p>
-                  <div onClick={handleOnboardingClose}>
-                    <button className="bg-green text-white mt-2 l:mt-10 l:py-10 l:px-20 w-full py-5 radius-5 border-none hover:pointer text-13 l:text-14 font-inter hover:bg-darkgreen transition-0.5s text-center">
-                      Close
-                    </button>
-                  </div>
-                </div>
-              )}
-
-              <div
-                style={
-                  showOnBoardingModal && indexCount ? { zIndex: 1000 } : undefined
-                }
-                className="round relative"
-              >
-                {selectedVariant?.status !== 'OUT_OF_STOCK' && (
-                  <button
-                    onClick={() => {
-                      if (
-                        (hasProperties && !shouldAddDirectlyToCart) ||
-                        hasCustomerConfiguration
-                      ) {
-                        setShowOnBoardingModal(false);
-                        setIsToAddProperties(true);
-                        handleCloseProductModal();
-                      } else {
-                        setShowOnBoardingModal(false);
-                        if (!localStorage.getItem('seenMiniCart')) {
-                          window.dispatchEvent(
-                            new Event('showMiniCartOnboarding')
-                          );
-                          localStorage.setItem('seenMiniCart', 'true');
-                        }
-                        addToCart(
-                          selectedVariant.id,
-                          selectedVariant.minPurchaseQuantity || 1,
-                          userConfigurations,
-                          {
-                            ...selectedVariant,
-                            product: selectedVariant.product ?? product,
-                          }
-                        );
-                      }
-                    }}
-                    disabled={!selectedImage}
-                    className={classNames(
-                      `bg-#FACE33 shadow-0-4-8-0-#00000033 hover:shadow-0-8-8-0-#00000033 text-black! 
-                      disabled:bg-gray-200 disabled:cursor-not-allowed hover:scale-1.06 
-                      g|transition:0.5s g|will-change:transform pointer font-roboto 
-                      border-hidden outline-none flex a-items-center j-items-center gap-10`,
-                      {
-                        'round s:p-14 p-12': addToCartVariant === 'icon',
-                        'radius-10 px-10 py-5 s:py-10 s:px-16': addToCartVariant === 'text',
-                      }
-                    )}
-                  >
-                    {addToCartVariant === 'icon' ? (
-                      <PiShoppingCartFill className="s:w-22 w-20 s:h-22 h-20" />
-                    ) : (
-                      <span className="text-black font-roboto text-12 s:text-14 weight-500">Add to cart</span>
-                    )}
-                  </button>
-                )}
-              </div>
-            </>
-          )}
-        </div>
-
-        {/* FAVORITE ICON */}
-        <div
-          id="favorite icon"
-          className="absolute z-1 t-0 r-0 mr-10 mt-10 l:mr-15 l:mt-15 text-24 l:text-34"
-          onClick={(e) => {
-            e.preventDefault();
-            e.stopPropagation();
-            handleSave();
-          }}
-          style={{
-            background: isSaved ? 'rgba(0,0,0,0.25)' : 'rgba(255,255,255,0.7)',
-            borderRadius: '50%',
-            padding: '4px',
-            boxShadow: '0 2px 8px rgba(0,0,0,0.11)',
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center',
-          }}
-        >
-          <AiFillHeart
-            color={isSaved ? '#ffffffee' : '#000000aa'}
-            className="shadow"
-          />
-        </div>
-
-        {/* DISCOUNT PILL */}
-        {discountPill && (
-          <div className="absolute w-fit h-fit t-0 l-0 z-2">
-            <div
-              className="mt-10 l:ml-15 l:mt-15 whitespace-nowrap w-fit h-20 radius-20 flex a-items-center j-content-center px-10 py-15 ml-5"
-              style={{
-                backgroundColor: discountPill.pillBackground,
-                color: discountPill.pillColor,
-              }}
-            >
-              <p className="text-10 l:text-12">{discountPill.text}</p>
-            </div>
-          </div>
-        )}
-      </div>
+      <ProductTileImageSection
+        product={product}
+        variantPreviewItems={variantPreviewItems}
+        activeIndex={activeIndex}
+        imgRef={imgRef}
+        isOutOfStock={isOutOfStock}
+        longPressTriggeredRef={longPressTriggeredRef}
+        setOnProductTileHover={setOnProductTileHover}
+        startLongPress={startLongPress}
+        endLongPress={endLongPress}
+        onProductTileHover={onProductTileHover}
+        handleCloseProductModal={handleCloseProductModal}
+        selectedVariant={selectedVariant}
+        setRecentlyViewsId={setRecentlyViewsId}
+        selectedVariantItemInCart={selectedVariantItemInCart}
+        hasProperties={hasProperties}
+        shouldAddDirectlyToCart={shouldAddDirectlyToCart}
+        hasCustomerConfiguration={hasCustomerConfiguration}
+        setIsToAddProperties={setIsToAddProperties}
+        decrement={decrement}
+        increment={increment}
+        showOnBoardingModal={showOnBoardingModal}
+        indexCount={indexCount}
+        isCheckoutOrOrdersPage={isCheckoutOrOrdersPage}
+        handleOnboardingClose={handleOnboardingClose}
+        addToCartVariant={addToCartVariant}
+        selectedImage={selectedImage}
+        setShowOnBoardingModal={setShowOnBoardingModal}
+        addToCart={addToCart}
+        userConfigurations={userConfigurations}
+        handleSave={handleSave}
+        isSaved={isSaved}
+        discountPill={discountPill}
+      />
 
       {/* CONFIG PILLS */}
-      {visibleConfigPills.length > 0 && (
-        <div className="flex flex-wrap gap-6 w-fit h-fit">
-          {visibleConfigPills.map((pill, index) => (
-            <div
-              key={`${pill.source}-${index}-${pill.text}`}
-              className="mt-16 whitespace-nowrap w-fit h-20 radius-20 flex a-items-center j-content-center px-10 py-15"
-              style={{
-                backgroundColor: pill.pillBackground,
-                color: pill.pillColor,
-              }}
-            >
-              <p className="text-10 l:text-12">{pill.text}</p>
-            </div>
-          ))}
-        </div>
-      )}
+      <ProductTileConfigPills visibleConfigPills={visibleConfigPills} />
 
-      <div
-        id="product varients"
-        className="l:mt-16 mt-14 l:h-51.2 h-45 flex flex-nowrap a-items-center j-content-start md:gap-6 gap-4 w-full min-w-0 overflow-hidden"
-      >
-        {(product?.productCatalogues?.length ?? 0) > 0 && (
-          <div className="shrink-0 a-self-center">
-            <ProductCatalogueDropdown
-              productCatalogues={product?.productCatalogues}
-              variantPreviewItems={variantPreviewItems}
-              product={product}
-              isAuthenticated={isAuthenticated}
-              onAuthRequired={isLoginModal}
-              onGalleryOpenChange={setCatalogueGalleryOpen}
-              isSavedForVariant={isSavedForVariant}
-              onToggleSaveVariant={handleToggleSaveVariant}
-              getCartItemForVariant={getCartItemForVariant}
-              variantNeedsQuickLook={variantNeedsQuickLook}
-              onGalleryAddToCart={handleGalleryAddToCart}
-              onGalleryOpenQuickLook={handleGalleryOpenQuickLook}
-              onIncrementCartItem={increment}
-              onDecrementCartItem={decrement}
-            />
-          </div>
-        )}
-        <div className="flex-1 min-w-0 min-h-0 h-full overflow-x-auto g|overflow-y:hidden flex flex-nowrap a-items-center md:gap-6 gap-4 whitespace-nowrap no-scrollbar">
-          {variantPreviewItems.map(({ variant, media: mediaItem }, i: number) => (
-            <div
-              key={`${variant.id}-${mediaItem?.url}-${i}`}
-              className="l:w-35.2 l:min-w-35.2 l:h-35.2 w-31 min-w-31 h-31 pointer md:radius-4 radius-3 a-self-center relative"
-            >
-              {mediaItem?.type === 'image' ? (
-                <Image
-                  key={`${variant.id}-${mediaItem.url}-${i}`}
-                  className={classNames(
-                    `l:w-35.2 l:min-w-35.2 l:h-35.2 w-31 min-w-31 h-31 pointer md:radius-4 radius-3 a-self-center g|object-fit:cover ${variant?.status === 'OUT_OF_STOCK' && 'out-of-stock'}`,
-                    {
-                      'border border-2 border-black':
-                        selectedImage == mediaItem?.url,
-                      [`border-${/*variant?.properties?.color?.toLocaleLowerCase() ||*/ '#0B9378'}`]:
-                        selectedImage == mediaItem?.url,
-                    }
-                  )}
-                  src={mediaItem?.url}
-                  onClick={() => handlePreviewMediaSelect(i)}
-                  alt="product-image"
-                  hasLoader={true}
-                  pulseClassName="md:radius-4 radius-3"
-                />
-              ) : (
-                <VideoSrc
-                  key={`${variant.id}-${mediaItem.url}-${i}`}
-                  className={classNames(
-                    `l:w-35.2 l:min-w-35.2 l:h-35.2 w-31 min-w-31 h-31 pointer md:radius-4 radius-3 a-self-center g|object-fit:cover ${variant?.status === 'OUT_OF_STOCK' && 'out-of-stock'}`,
-                    {
-                      'border border-2': selectedImage == mediaItem?.url,
-                      [`border-${/*variant?.properties?.color?.toLocaleLowerCase() ||*/ '#0B9378'}`]:
-                        selectedImage == mediaItem?.url,
-                    }
-                  )}
-                  onClick={() => handlePreviewMediaSelect(i)}
-                  src={mediaItem?.url}
-                  hasLoader={true}
-                />
-              )}
-            </div>
-          ))}
-        </div>
-      </div>
-      <div
-        id="product details"
-        className="md:mt-16 mt-20 white-space-nowrap text-overflow-ellipsis flex flex-col gap-8"
-      >
-        <div
-          title={product.name}
-          className="md:text-16 text-15 weight-500 text-#000000E0 md:line-height-24 line-height-22 l:w-100p w-100 l:white-space-nowrap text-overflow-ellipsis flex flex-wrap a-items-center j-content-between"
-          style={{
-            whiteSpace: 'nowrap',
-            overflow: 'hidden',
-            textOverflow: 'ellipsis',
-            display: 'block',
-            maxWidth: '100%',
-          }}
-        >
-          <Link
-            href={`/products/${product?.slug}`}
-            style={{
-              whiteSpace: 'nowrap',
-              overflow: 'hidden',
-              textOverflow: 'ellipsis',
-              display: 'block',
-              maxWidth: '100%',
-            }}
-          >
-            {product.name}
-          </Link>
-        </div>
-        {
-          !isStoreBased ?
-            (
-              <div className="flex a-items-center gap-10 l:gap-18 text-dimgrey py-6 border-y border-#00000014">
-                <Link
-                  href={storeUrl}
-                  target="_blank"
-                  className="flex gap-6 a-items-center color-#00000099 capitalize"
-                >
-                  <PiStorefront className="md:w-16 w-14 md:h-16 h-14" />
-                  <p className="md:text-12 text-10 weight-400 md:line-height-20 line-height-12.1">
-                    {product?.store?.name}
-                  </p>
-                </Link>
-                {!!product.reviewRating && (
-                  <div className="flex gap-3 items-center">
-                    <AiFillStar className="w-12" />
-                    <span className="l:text-16 text-12">{product.reviewRating}</span>
-                  </div>
-                )}
-              </div>
-            )
-            : null}
-        <div ref={rowRef} className="flex j-content-between sm:gap-15 gap-6">
-          <div
-            ref={priceRef}
-            className="min-w-0"
-            style={{
-              display: 'grid',
-              gridTemplateColumns: 'minmax(0, max-content)',
-              alignItems: 'center',
-            }}
-          >
-            <AnimatePresence mode="sync" initial={false}>
-              <motion.div
-                key={selectedVariant?.id ?? 'price'}
-                initial={{ opacity: 0 }}
-                animate={{
-                  opacity: 1,
-                  transition: TILE_PRICE_FADE,
-                }}
-                exit={{
-                  opacity: 0,
-                  transition: TILE_PRICE_FADE,
-                }}
-                className="flex md:gap-8 md:a-items-center gap-3 min-w-0"
-                style={{ gridRow: 1, gridColumn: 1 }}
-              >
-                <div className="flex md:gap-8 md:a-items-center md:flex-row flex-col">
-                  <p className="md:text-16 text-12 weight-600 md:line-height-24 line-height-20">
-                    {formatNumberAsPrice(variantDisplayPrices.displayPrice)}
-                  </p>
-                  {variantDisplayPrices.hasSlash && (
-                    <div className="flex flex-wrap gap-6 md:gap-8 a-items-center">
-                      {getStrikethroughAmounts(variantDisplayPrices).map(
-                        (amount, idx) => (
-                          <p
-                            key={idx}
-                            className="md:text-12 text-10 weight-400 md:line-height-20 color-#00000099 line-through"
-                          >
-                            {formatNumberAsPrice(amount)}
-                          </p>
-                        )
-                      )}
-                    </div>
-                  )}
-                </div>
-                {!variantDisplayPrices.hasSlash &&
-                  (() => {
-                    const stockUnitSuffix = formatStockUnitSuffix(
-                      selectedVariant?.stockUnit
-                    );
-                    return stockUnitSuffix ? (
-                      <span
-                        className="sm:text-10 text-8 weight-400 md:line-height-20 line-height-12.1 md:mb-0 mb-2"
-                        style={{ alignSelf: 'flex-end' }}
-                      >
-                        {stockUnitSuffix}
-                      </span>
-                    ) : null;
-                  })()}
-              </motion.div>
-            </AnimatePresence>
-          </div>
-
-          <div className="text-9 sm:text-10 text-grey flex gap-6 a-items-center relative">
-            {/* <MiniReview
-              id={selectedVariant?.id}
-              slug={product?.slug}
-              isOpen={isOpen}
-              setIsOpen={setIsOpen}
-              reviews={allReviews.filter(
-                (review: any) => review.productVariantId === selectedVariant?.id
-              )}
-              reviewStat={
-                reviewStat.find((stat: any) => stat.id === selectedVariant?.id)
-                  ?.reviewStat
-              }
-              loading={statsLoading}
-              color={selectedColor}
-            /> */}
-            <div className="absolute opacity-0 pointer-events-none z-0">
-              {visibleTags.map((tag: any, i: number) => (
-                <span
-                  key={i}
-                  ref={(el) => {
-                    if (el) tagRefs.current[i] = el;
-                  }}
-                  className="text-green md:text-12 text-10 inline-block mx-2"
-                >
-                  #{tag.label}
-                </span>
-              ))}
-            </div>
-
-            <div
-              ref={tagsContainerRef}
-              className="flex gap-6 overflow-hidden whitespace-nowrap max-w-full relative z-1"
-            >
-              {visibleTags
-                .slice(0, visibleTagCount)
-                .map((tag: any, i: number) => {
-                  const active = isTagActive(tag.label);
-
-                  return (
-                    <span
-                      key={i}
-                      ref={(el) => {
-                        if (el) tagRefs.current[i] = el;
-                      }}
-                      className={classNames(
-                        'md:text-12 text-10 inline-block radius-5 mx-2 my-1 pointer hover:underline lowercase',
-                        {
-                          'text-green': !active,
-                          'color-#000000E0 bg-green-50 weight-600': active,
-                        }
-                      )}
-                      onClick={() => handleTagSelection(tag.label)}
-                    >
-                      #{tag.label}
-                    </span>
-                  );
-                })}
-            </div>
-
-            {isOverflowing && (
-              <div ref={chevronRef}>
-                <LuChevronRight
-                  className="w-14 h-14 min-w-14 color-#0B9378 mt-6 cursor-pointer relative z-1"
-                  onClick={() => setShowAllTags(true)}
-                />
-              </div>
-            )}
-
-            {showAllTags && (
-              <div
-                className="absolute b-3 r-5 sm:r-1 mt-6 bg-white g|box-shadow:0px|_|1px|_|3px|_|0px|_|rgba(0,0,0,0.1); radius-5 p-10 z-3"
-                onClick={(e) => e.stopPropagation()}
-              >
-                <div className="flex flex-wrap gap-6 max-w-220">
-                  {visibleTags.map((tag: any, i: number) => (
-                    <span
-                      key={i}
-                      className={classNames('text-12 lowercase pointer hover:underline', {
-                        'text-green': !isTagActive(tag.label),
-                        'color-#000000E0 bg-green-50 weight-600': isTagActive(tag.label),
-                      })}
-                      onClick={() => handleTagSelection(tag.label)}
-                    >
-                      #{tag.label}
-                    </span>
-                  ))}
-                </div>
-
-                {/* <p
-                  className="text-10 text-grey mt-8 pointer"
-                  onClick={() => setShowAllTags(false)}
-                >
-                  Close
-                </p> */}
-              </div>
-            )}
-          </div>
-        </div>
-      </div>
+      <ProductTileVariantStrip
+        product={product}
+        variantPreviewItems={variantPreviewItems}
+        isAuthenticated={isAuthenticated}
+        onAuthRequired={isLoginModal}
+        onGalleryOpenChange={setCatalogueGalleryOpen}
+        isSavedForVariant={isSavedForVariant}
+        onToggleSaveVariant={handleToggleSaveVariant}
+        getCartItemForVariant={getCartItemForVariant}
+        variantNeedsQuickLook={variantNeedsQuickLook}
+        onGalleryAddToCart={handleGalleryAddToCart}
+        onGalleryOpenQuickLook={handleGalleryOpenQuickLook}
+        onIncrementCartItem={increment}
+        onDecrementCartItem={decrement}
+        selectedImage={selectedImage}
+        handlePreviewMediaSelect={handlePreviewMediaSelect}
+      />
+      <ProductTileDetails
+        product={product}
+        isStoreBased={isStoreBased}
+        storeUrl={storeUrl}
+        rowRef={rowRef}
+        priceRef={priceRef}
+        variantDisplayPrices={variantDisplayPrices}
+        selectedVariant={selectedVariant}
+        visibleTags={visibleTags}
+        tagRefs={tagRefs}
+        visibleTagCount={visibleTagCount}
+        tagsContainerRef={tagsContainerRef}
+        isTagActive={isTagActive}
+        handleTagSelection={handleTagSelection}
+        isOverflowing={isOverflowing}
+        chevronRef={chevronRef}
+        showAllTags={showAllTags}
+        setShowAllTags={setShowAllTags}
+        allReviews={allReviews}
+        isOpen={isOpen}
+        setIsOpen={setIsOpen}
+      />
       {openSingleProductModal && (
         <ProductDetailModal
           openSingleProductModal={openSingleProductModal}
