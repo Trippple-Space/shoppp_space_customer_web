@@ -9,6 +9,7 @@ import { RatingFilter } from './RatingFilter';
 import { SortFilter } from './SortFilter';
 import { useFilterStore } from '@/modules/lib/utility/store/filter.store';
 import { LocationFilter } from './LocationFilter';
+import { AvailabilityFilter } from './AvailabilityFilter';
 import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 import { filtersToSearchParams } from '@/modules/lib/utility/utility';
 import { useStoreCategoryNavView } from '@/modules/lib/utility/hooks/views/use-category-nav-view';
@@ -35,6 +36,7 @@ const FilterModal: React.FC<ModalProps> = ({
   const [rating, setRating] = useState<string>('');
   const [priceRange, setPriceRange] = useState<any>({ min: '', max: '' });
   const [selectedState, setSelectedState] = useState<string>('');
+  const [orderType, setOrderType] = useState<string>('');
 
   const applyFilter = (e: any) => {
     e.preventDefault();
@@ -47,6 +49,7 @@ const FilterModal: React.FC<ModalProps> = ({
         ...(filterBy === 'Rating' && { rating: { rateBy: rating } }),
         ...(filterBy === 'Price' && { price: priceRange }),
         ...(filterBy === 'Location' && { location: { selectedState } }),
+        ...(filterBy === 'Availability' && { availability: { orderType } }),
         ...(filterBy === 'Sort' && { sort: { sortBy } }),
       },
       selectedCategory,
@@ -85,7 +88,7 @@ const FilterModal: React.FC<ModalProps> = ({
         onClose={handleCloseModal}
         modalClassName="filter"
         extraClass={{ boxShadow: '0 8px 16px 0 #494F5E1F' }}
-        className={`border border-#00000014 m:t-20 w-90p ${filterBy === 'Price' ? 'm:mr-245 max-w-450' : filterBy === 'Rating' ? 'm:mr-360 max-w-400' : 'm:mr-35 max-w-400'}`}
+        className={`border border-#00000014 m:t-20 w-90p ${filterBy === 'Price' ? 'm:mr-245 max-w-450' : filterBy === 'Rating' || filterBy === 'Availability' ? 'm:mr-360 max-w-400' : 'm:mr-35 max-w-400'}`}
       >
         <form onSubmit={applyFilter}>
           <div className="flex space-between items-center border-b border-#00000014 py-12 px-24">
@@ -122,6 +125,8 @@ const FilterModal: React.FC<ModalProps> = ({
                     <RatingFilter setRatingFilter={setRating} />
                   ) : filterBy === 'Sort' ? (
                     <SortFilter setSortFilter={setSortBy} />
+                  ) : filterBy === 'Availability' ? (
+                    <AvailabilityFilter setAvailabilityFilter={setOrderType} />
                   ) : (
                     <LocationFilter setLocationFilter={setSelectedState} />
                   )}

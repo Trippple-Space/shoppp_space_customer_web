@@ -56,6 +56,10 @@ const endpoints = {
   GET_REVIEW_STATS_DIST: "/product-review/stats/product/:productVariantId/distribution",
 
   CONTACT_FORM: '/slack',
+
+  FIT_ORACLE_PROFILE: '/fit-oracle/profile',
+  FIT_ORACLE_RECOMMENDATION: '/fit-oracle/products/:productId/recommendation',
+  FIT_ORACLE_SIZE_CHART: '/fit-oracle/products/:productId/size-chart',
 };
 
 export default endpoints;

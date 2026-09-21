@@ -1,5 +1,42 @@
 /* You can add global styles to this file, and also import other style files */
 @import url("./index.css");
+
+.personalization-measurements-scroll {
+  overflow-y: scroll !important;
+  scrollbar-gutter: stable;
+  scrollbar-width: auto;
+  scrollbar-color: #9a9a9a #e8e8e8;
+}
+
+.personalization-measurements-scroll::-webkit-scrollbar {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 10px !important;
+  display: block !important;
+}
+
+.personalization-measurements-scroll::-webkit-scrollbar-button {
+  display: none;
+  height: 0;
+  width: 0;
+}
+
+.personalization-measurements-scroll::-webkit-scrollbar-track {
+  background: #e8e8e8;
+  border-radius: 999px;
+}
+
+.personalization-measurements-scroll::-webkit-scrollbar-thumb {
+  background: #9a9a9a;
+  border-radius: 999px;
+  border: 2px solid #e8e8e8;
+  min-height: 48px;
+}
+
+.personalization-measurements-scroll::-webkit-scrollbar-corner {
+  background: transparent;
+}
+
 .tile .tile-add-to-cart .tile-add-to-cart-btn {
   display: none;
 }
