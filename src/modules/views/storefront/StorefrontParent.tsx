@@ -41,7 +41,7 @@ export const StorefrontParent: FC<{
 
   const { categories, selectedCategory, setSelectedCategory } =
     useStoreCategoryNavView({ storeId: store.id });
-  const { setRate, setPrice, setSort, setLocation, resetFilters, setShowOffers } =
+  const { setRate, setPrice, setSort, setLocation, setAvailability, resetFilters, setShowOffers } =
     useFilterStore();
 
   const emptyCategory = {
@@ -67,6 +67,10 @@ export const StorefrontParent: FC<{
     if (parsed.location?.selectedState)
       setLocation(parsed.location.selectedState);
     else resetFilters('location');
+
+    if (parsed.availability?.orderType)
+      setAvailability(parsed.availability.orderType);
+    else resetFilters('availability');
 
     if (searchParams.get('offers') === 'true') {
       const { allFilters } = useFilterStore.getState();

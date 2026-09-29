@@ -130,9 +130,9 @@ const FabricsCategoryNav = ({
           onClearSearch={() => {
             const params = filtersToSearchParams(allFilters, selectedCategory);
             params.delete('search');
-            params.delete('collection')
-            setSearchTerm('')
-            setSelectedCollection('')
+            params.delete('collection');
+            setSearchTerm('');
+            setSelectedCollection('');
             router.replace(`${path}?${params.toString()}`);
           }}
         />

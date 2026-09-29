@@ -1,11 +1,9 @@
-// 'use client';
-
-
-import { useLayoutEffect, useState } from 'react';
+import { useEffect, useLayoutEffect, useState } from 'react';
 import { protectedPaths } from '../paths';
 import { authService } from '../services/auth.service';
 import useUserStore from '../store/user.store';
 import { usePathname } from 'next/navigation';
+import { hydratePersonalizationFromApi } from '../store/personalization.store';
 
 
 /**
@@ -40,6 +38,16 @@ export const useAuthGuard = () => {
         };
         checkAuth();
     }, [user, isAuthenticated, pathname]);
+
+    useEffect(() => {
+      if (!isAuthenticated) {
+        return;
+      }
+
+      hydratePersonalizationFromApi().catch(() => {
+        // Offline fallback: keep local personalization flag / draft.
+      });
+    }, [isAuthenticated]);
   
   return { user, checking }
 };
