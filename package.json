@@ -2,6 +2,9 @@
   "name": "asoebi-client",
   "version": "0.1.0",
   "private": true,
+  "engines": {
+    "node": "24.x"
+  },
   "scripts": {
     "dev": "cross-env CMD_ENV=development npm run dev:start",
     "dev:start": "cxcss & next dev --turbo",
