@@ -29,9 +29,9 @@ const LoginModal = () => {
     <>
       <AnimatePresence>
         {shouldRender && showLoginModal ? (
-          <div className="radius-8 w-100p">
+          <div className="rounded-[8px] w-full">
             <div
-              className="fixed l-0 t-0 h-full w-full z-20"
+              className="fixed left-0 top-0 h-full w-full z-[20px]"
               style={{
                 height: '100dvh',
                 background: '#00000012',
@@ -40,7 +40,7 @@ const LoginModal = () => {
               }}
             ></div>
             <div
-              className="fixed z-20 w-full h-full t-0 b-0 overflow-hidden"
+              className="fixed z-[20px] w-full h-full top-0 bottom-0 overflow-hidden"
               style={{
                 maxHeight: '90vh',
                 margin: 'auto 0',
@@ -50,7 +50,7 @@ const LoginModal = () => {
               }}
             >
               <div
-                className="my-auto flex flex-col j-content-center a-items-center h-full py-20"
+                className="my-auto flex flex-col justify-center items-center h-full py-[20px]"
                 style={{ minHeight: 449 }}
               >
                 <motion.div
@@ -58,7 +58,7 @@ const LoginModal = () => {
                   animate={{ scale: 1 }}
                   exit={{ scale: 0 }}
                   transition={{ duration: 0.3 }}
-                  className="bg-white radius-8 w-95p l:w-100p max-w-500 md:max-w-981 py-30 md:py-10 md:pl-35 mx-auto flex shadow-30-30-4-0-\#00000040 h-fit"
+                  className="bg-white rounded-[8px] w-[95%] lg:w-full max-w-[500px] md:max-w-[981px] py-[30px] md:py-[10px] md:pl-[35px] mx-auto flex shadow-30-30-4-0-\#00000040 h-fit"
                   style={{ overflowY: 'scroll', overflow: 'auto' }}
                   onClick={(e) => e.stopPropagation()}
                 >

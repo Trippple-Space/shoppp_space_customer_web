@@ -15,7 +15,7 @@ const ShareButton: React.FC<ShareProps> = ({ mediaName, mediaLogo }) => {
     const urls = {
       Twitter: `https://twitter.com/intent/tweet?url=${shareUrl}`,
       Facebook: `https://www.facebook.com/sharer/sharer.php?u=${shareUrl}`,
-      Linkedin: `http://www.linkedin.com/shareArticle?mini=true&url=${shareUrl}&title=Check%20this%20product%20out%20&summary=asoebi%20africa&source=staging.asoebi.africa`,
+      Linkedin: `http://www.linkedin.com/shareArticle?mini=true&url=${shareUrl}&title=Check%20this%20product%20out%20&summary=shoppp%20space&source=staging.shoppp.space`,
       Email: `mailto:?subject=Check this out Product&body=${shareUrl}`,
     };
 
@@ -46,10 +46,10 @@ const ShareButton: React.FC<ShareProps> = ({ mediaName, mediaLogo }) => {
   return (
     <button
       type="button"
-      className="border border-#eeeeee radius-8 outline-none bg-transparent s:py-25 py-12 s:px-15 px-8 flex flex-row a-items-center s:gap-15 gap-8 s:text-18 text-medium cursor-pointer hover:shadow-0-1-3-0-rgba(0,0,0,0.1) g|transition-property:all g|transition-duration:0.4s g|transition-timing-function:ease"
+      className="border border-[#eeeeee] rounded-[8px] outline-none bg-transparent sm:py-[25px] py-[12px] sm:px-[15px] px-[8px] flex flex-row items-center sm:gap-[15px] gap-[8px] sm:text-[18px] text-medium cursor-pointer hover:shadow-0-1-3-0-rgba(0,0,0,0.1) transition-all [transition-duration:0.4s] [transition-timing-function:ease]"
       onClick={getShareUrl}
     >
-      <span className="s:text-24 text-20">{mediaLogo}</span>
+      <span className="sm:text-[24px] text-[20px]">{mediaLogo}</span>
       <span className="capitalize">{mediaName}</span>
     </button>
   );

@@ -170,13 +170,13 @@ export default function RateVendorPage({ token }: RateVendorPageProps) {
   };
 
   return (
-    <div className="flex flex-col bg-#f9f9f9" style={{ minHeight: '100dvh' }}>
+    <div className="flex flex-col bg-[#f9f9f9]" style={{ minHeight: '100dvh' }}>
       <HomepageNavBar />
-      <main className="flex-grow-1 max-w-720 mt-80 w-full mx-auto px-16 pt-32 pb-90 flex flex-col">
+      <main className="grow max-w-[720px] mt-[80px] w-full mx-auto px-[16px] pt-[32px] pb-[90px] flex flex-col">
         {loading ? (
           <RateVendorCenteredState>
             <PuffLoader />
-            <p className="text-14 weight-400 color-#00000099 mt-20">
+            <p className="text-[14px] font-normal text-[#00000099] mt-[20px]">
               Loading your review link…
             </p>
           </RateVendorCenteredState>
@@ -187,27 +187,27 @@ export default function RateVendorPage({ token }: RateVendorPageProps) {
         ) : invite ? (
           <form
             onSubmit={handleSubmit}
-            className="bg-white rounded-12 p-24 border border-#00000014 radius-12"
+            className="bg-white rounded-12 p-[24px] border border-[#00000014] rounded-[12px]"
           >
-            <div className="flex gap-16 a-items-center mb-24">
+            <div className="flex gap-[16px] items-center mb-[24px]">
               {invite.store.thumbnail ? (
                 <Image
                   src={invite.store.thumbnail}
                   alt={invite.store.name}
                   width={64}
                   height={64}
-                  className="rounded-8 object-cover w-64 h-64"
+                  className="rounded-8 object-cover w-[64px] h-[64px]"
                   style={{ objectFit: 'cover' }}
                 />
               ) : (
-                <div className="w-64 h-64 rounded-8 bg-#f0f0f0" />
+                <div className="w-[64px] h-[64px] rounded-8 bg-[#f0f0f0]" />
               )}
               <div>
-                <p className="text-12 text-#888 mb-4">
+                <p className="text-[12px] text-[#888] mb-[4px]">
                   Order #{invite.order.reference}
                 </p>
-                <h1 className="text-22 weight-600">{invite.store.name}</h1>
-                <p className="text-14 text-#666 mt-4">
+                <h1 className="text-[22px] font-semibold">{invite.store.name}</h1>
+                <p className="text-[14px] text-[#666] mt-[4px]">
                   How did your order go? Share your honest feedback below.
                 </p>
               </div>
@@ -220,30 +220,30 @@ export default function RateVendorPage({ token }: RateVendorPageProps) {
               onChange={setRating}
             />
 
-            <div className="mb-20">
-              <p className="mb-8 weight-500">
-                Your feedback <span className="text-red">*</span>
+            <div className="mb-[20px]">
+              <p className="mb-[8px] font-medium">
+                Your feedback <span className="text-[#DE3838]">*</span>
               </p>
               <textarea
                 value={comment}
                 onChange={(e) => setComment(e.target.value)}
-                className="w-full border border-2 border-#00000014 radius-6 outline-none px-12 py-10 resize-none h-130"
+                className="w-full border border-[2px] border-[#00000014] rounded-[6px] outline-none px-[12px] py-[10px] resize-none h-[130px]"
                 placeholder="What went well? What could be better?"
               />
             </div>
 
-            <div className="mb-24">
-              <p className="mb-8 weight-500">Photos & videos (optional)</p>
+            <div className="mb-[24px]">
+              <p className="mb-[8px] font-medium">Photos & videos (optional)</p>
               <input
                 type="file"
                 accept="image/*,video/*"
                 multiple
                 onChange={onFilesSelected}
                 disabled={isSubmitting}
-                className="text-14"
+                className="text-[14px]"
               />
               {pendingMedia.length > 0 && (
-                <div className="flex flex-wrap gap-8 mt-12">
+                <div className="flex flex-wrap gap-[8px] mt-[12px]">
                   {pendingMedia.map((item) => (
                     <RateVendorMediaPreview
                       key={item.id}
@@ -259,7 +259,7 @@ export default function RateVendorPage({ token }: RateVendorPageProps) {
             <button
               type="submit"
               disabled={isSubmitting}
-              className="w-full bg-#0B9378 text-white border-none rounded-6 py-12 weight-600 cursor-pointer disabled:opacity-60"
+              className="w-full bg-[#0357EE] text-white border-none rounded-6 py-[12px] font-semibold cursor-pointer disabled:opacity-60"
             >
               {getSubmitButtonLabel(submitPhase, uploadProgress)}
             </button>
@@ -297,12 +297,12 @@ function RateVendorMediaPreview({
 
   return (
     <div
-      className={`relative flex-shrink-0 ${isVideo ? 'w-120' : 'w-72'} h-72`}
+      className={`relative shrink-0 ${isVideo ? 'w-[120px]' : 'w-[72px]'} h-[72px]`}
     >
       {isVideo ? (
         <video
           src={item.previewUrl}
-          className="w-full h-full object-cover radius-6 border border-#eee"
+          className="w-full h-full object-cover rounded-[6px] border border-[#eee]"
           muted
           playsInline
         />
@@ -310,7 +310,7 @@ function RateVendorMediaPreview({
         <img
           src={item.previewUrl}
           alt={item.file.name}
-          className="w-full h-full object-cover radius-6 border border-#eee"
+          className="w-full h-full object-cover rounded-[6px] border border-[#eee]"
           style={{ objectFit: 'cover' }}
         />
       )}
@@ -319,10 +319,10 @@ function RateVendorMediaPreview({
         onClick={onRemove}
         disabled={disabled}
         aria-label={`Remove ${item.file.name}`}
-        className="absolute flex a-items-center j-content-center w-24 h-24 radius-999 bg-#00000099 color-white border-none pointer disabled:opacity-50"
+        className="absolute flex items-center justify-center w-[24px] h-[24px] rounded-[999px] bg-[#00000099] text-white border-none cursor-pointer disabled:opacity-50"
         style={{ top: 4, right: 4 }}
       >
-        <TbX className="w-14 h-14" aria-hidden />
+        <TbX className="w-[14px] h-[14px]" aria-hidden />
       </button>
     </div>
   );
@@ -330,7 +330,7 @@ function RateVendorMediaPreview({
 
 function RateVendorCenteredState({ children }: { children: React.ReactNode }) {
   return (
-    <div className="flex-grow-1 flex flex-col a-items-center j-content-center w-full py-48 px-8">
+    <div className="grow flex flex-col items-center justify-center w-full py-[48px] px-[8px]">
       {children}
     </div>
   );
@@ -346,15 +346,15 @@ function RateVendorReviewSubmitted({
 
   return (
     <RateVendorCenteredState>
-      <div className="w-full max-w-480 bg-white radius-12 p-32 border border-#00000014 flex flex-col a-items-center text-center gap-16">
-        <span className="flex a-items-center j-content-center w-80 h-80 radius-999 bg-#EDFCF7 color-#0B9378">
-          <TbCircleCheck className="w-40 h-40" aria-hidden />
+      <div className="w-full max-w-[480px] bg-white rounded-[12px] p-[32px] border border-[#00000014] flex flex-col items-center text-center gap-[16px]">
+        <span className="flex items-center justify-center w-[80px] h-[80px] rounded-[999px] bg-[#EDFCF7] text-[#0357EE]">
+          <TbCircleCheck className="w-[40px] h-[40px]" aria-hidden />
         </span>
 
-        <div className="flex flex-col gap-8 max-w-400">
-          <h1 className="text-24 weight-600 color-#0B9378">Thank you!</h1>
+        <div className="flex flex-col gap-[8px] max-w-[400px]">
+          <h1 className="text-[24px] font-semibold text-[#0357EE]">Thank you!</h1>
           <p
-            className="text-14 l:text-16 weight-400 line-height-22 color-#00000099"
+            className="text-[14px] lg:text-[16px] font-normal leading-[22px] text-[#00000099]"
             style={{ textWrap: 'balance' }}
           >
             Your review has been submitted and helps other shoppers. This link
@@ -362,13 +362,13 @@ function RateVendorReviewSubmitted({
           </p>
         </div>
 
-        <div className="flex flex-col gap-12 w-full max-w-320 mt-4">
+        <div className="flex flex-col gap-[12px] w-full max-w-[320px] mt-[4px]">
           <Link
             href={storeHref ? storeHref : paths.homepage}
-            className="w-full bg-green radius-10 text-white text-16 weight-500 py-12 px-24 pointer"
+            className="w-full bg-brand rounded-[10px] text-white text-[16px] font-medium py-[12px] px-[24px] cursor-pointer"
             style={{ textDecoration: 'none' }}
           >
-            {storeHref ? `See more from ${storeName}` : 'Explore more on Asoebi'}
+            {storeHref ? `See more from ${storeName}` : 'Explore more on Shoppp'}
           </Link>
         </div>
       </div>
@@ -380,22 +380,22 @@ function RateVendorLinkUnavailable({ message }: { message: string }) {
   return (
     <RateVendorCenteredState>
       <div
-        className="w-full max-w-480 bg-white radius-12 p-32 border border-#00000014 flex flex-col a-items-center text-center gap-16"
+        className="w-full max-w-[480px] bg-white rounded-[12px] p-[32px] border border-[#00000014] flex flex-col items-center text-center gap-[16px]"
         role="alert"
       >
-        <span className="flex a-items-center j-content-center w-56 h-56 radius-999 bg-#FFF3F1 color-#D4280C">
-          <TbLinkOff className="w-28 h-28" aria-hidden />
+        <span className="flex items-center justify-center w-[56px] h-[56px] rounded-[999px] bg-[#FFF3F1] text-[#D4280C]">
+          <TbLinkOff className="w-[28px] h-[28px]" aria-hidden />
         </span>
 
-        <div className="flex flex-col gap-8 max-w-400">
-          <h1 className="text-22 weight-600 color-#000000E0">
+        <div className="flex flex-col gap-[8px] max-w-[400px]">
+          <h1 className="text-[22px] font-semibold text-[#000000E0]">
             This link isn&apos;t available
           </h1>
-          <p className="text-14 weight-500 line-height-22 color-#00000099">
+          <p className="text-[14px] font-medium leading-[22px] text-[#00000099]">
             {message}
           </p>
           <p
-            className="text-14 weight-400 line-height-22 color-#00000066"
+            className="text-[14px] font-normal leading-[22px] text-[#00000066]"
             style={{ textWrap: 'balance' }}
           >
             Review links can expire, may have already been used, or might be
@@ -406,7 +406,7 @@ function RateVendorLinkUnavailable({ message }: { message: string }) {
 
         <Link
           href={paths.homepage}
-          className="bg-green radius-10 text-white text-16 weight-500 mt-4 py-12 px-24 pointer"
+          className="bg-brand rounded-[10px] text-white text-[16px] font-medium mt-[4px] py-[12px] px-[24px] cursor-pointer"
           style={{ textDecoration: 'none' }}
         >
           Go to homepage
@@ -429,12 +429,12 @@ function RatingField({
 }) {
   const [hovered, setHovered] = useState(0);
   return (
-    <div className="mb-20">
-      <p className="mb-8 weight-500">
+    <div className="mb-[20px]">
+      <p className="mb-[8px] font-medium">
         {label}
-        {required ? <span className="text-red"> *</span> : null}
+        {required ? <span className="text-[#DE3838]"> *</span> : null}
         {value || hovered ? (
-          <span className="text-14 text-#666 ml-8">
+          <span className="text-[14px] text-[#666] ml-[8px]">
             {ratingLabel(hovered || value)}
           </span>
         ) : null}

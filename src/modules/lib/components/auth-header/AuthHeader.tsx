@@ -18,12 +18,12 @@ const AuthHeader = ({ activeTab }: { activeTab: string }) => {
 
   return (
       <>
-          <div className='mb-30'>
-               <div className='w-full h-full flex a-items-center flex-col  l:gap-30 '>
-                     <div className='w-100p flex flex-col gap-50'>
-                       <div className='flex a-items-center l:gap-10 bg-#F5F5F5 p-5 radius-6 '>
+          <div className='mb-[30px]'>
+               <div className='w-full h-full flex items-center flex-col  lg:gap-[30px] '>
+                     <div className='w-full flex flex-col gap-[50px]'>
+                       <div className='flex items-center lg:gap-[10px] bg-[#F5F5F5] p-[5px] rounded-[6px] '>
                          <div
-                           className={classNames('w-100p radius-6 cursor-pointer p-10 weight-400', {
+                           className={classNames('w-full rounded-[6px] cursor-pointer p-[10px] font-normal', {
                              'bg-white': active === 'signup'
                            })}
                            onClick={() => {
@@ -32,8 +32,8 @@ const AuthHeader = ({ activeTab }: { activeTab: string }) => {
                               }}
                          >
                            <p
-                             className={classNames('text-center font-inter text-bold text-16', {
-                               'weight-600': activeTab === 'signup'
+                             className={classNames('text-center font-inter text-bold text-[16px]', {
+                               'font-semibold': activeTab === 'signup'
                              })}
                            >
                              Sign up
@@ -42,7 +42,7 @@ const AuthHeader = ({ activeTab }: { activeTab: string }) => {
              
                          <div
                            className={classNames(
-                             'w-100p cursor-pointer cursor-pointer p-10 radius-6 weight-400',
+                             'w-full cursor-pointer cursor-pointer p-[10px] rounded-[6px] font-normal',
                              {
                                'bg-white': active === 'login'
                              }
@@ -53,8 +53,8 @@ const AuthHeader = ({ activeTab }: { activeTab: string }) => {
                               }}
                          >
                            <p
-                             className={classNames('text-center font-inter text-16', {
-                               'weight-600': activeTab === 'login'
+                             className={classNames('text-center font-inter text-[16px]', {
+                               'font-semibold': activeTab === 'login'
                              })}
                            >
                              Login

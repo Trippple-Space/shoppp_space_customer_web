@@ -1,2 +1,0 @@
-npx cxcss --build
-git add src/styles/index.css

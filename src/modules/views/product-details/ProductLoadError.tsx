@@ -24,13 +24,13 @@ const ProductLoadError: FC<{ message?: string }> = ({ message }) => {
   }, [router]);
 
   return (
-    <main className="min-h-100vh bg-#FFFFFF">
+    <main className="min-h-screen bg-[#FFFFFF]">
       <BaseNavBar links={undefined} parent={undefined} />
       <div
-        className="w-full flex flex-col a-items-center j-content-center px-24 pt-40 pb-40"
+        className="w-full flex flex-col items-center justify-center px-[24px] pt-[40px] pb-[40px]"
         style={{ minHeight: 'calc(100vh - 88px)', marginTop: 88 }}
       >
-        <div className="w-full max-w-480">
+        <div className="w-full max-w-[480px]">
           <DataFetchErrorPanel
             title={copy.title}
             description={copy.description}
@@ -39,7 +39,7 @@ const ProductLoadError: FC<{ message?: string }> = ({ message }) => {
             extra={
               <Link
                 href={paths.homepage}
-                className="text-14 weight-500 color-#1677FF hover:underline"
+                className="text-[14px] font-medium text-[#1677FF] hover:underline"
               >
                 Back to home
               </Link>

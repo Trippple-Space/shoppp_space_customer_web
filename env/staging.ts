@@ -6,11 +6,11 @@
 
 const stagingConfig = {
     //   API_HOST: 'http://localhost:80',
-    API_HOST: 'https://api-ephemeral.asoebi.africa/api/v1',
-    // API_HOST: 'https://api-staging.asoebi.africa/api/v1',
-    VENDOR_CENTER_HOST: 'https://vendor-staging.asoebi.africa',
-    VENDOR_CENTER_SIGNUP: 'https://vendor-staging.asoebi.africa/auth/signup',
-    LANDING_PAGE_HOST: 'https://vendor-staging.asoebi.africa/landing-page'
+    API_HOST: 'https://api-ephemeral.shoppp.space/api/v1',
+    // API_HOST: 'https://api-staging.shoppp.space/api/v1',
+    VENDOR_CENTER_HOST: 'https://vendor-staging.shoppp.space',
+    VENDOR_CENTER_SIGNUP: 'https://vendor-staging.shoppp.space/auth/signup',
+    LANDING_PAGE_HOST: 'https://vendor-staging.shoppp.space/landing-page'
 }
 
 export default stagingConfig;

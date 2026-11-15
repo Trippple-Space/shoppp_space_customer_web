@@ -38,7 +38,7 @@ jobs:
 
       - name: Clone RepoB
         run: |
-          git clone git@github.com:CodenNerd/asoebi-client-deploy.git repoB
+          git clone git@github.com:Trippple-Space/shoppp_space_customer_web-deploy.git repoB
           cd repoB
           git fetch
           git pull origin ${{ github.ref_name }} --no-rebase --no-edit || true
@@ -46,7 +46,7 @@ jobs:
       - name: Push to RepoB - Add Remote
         run: |
           cd repoB
-          git remote add repoA git@github.com:Asoebi-Africa/asoebi-client.git
+          git remote add repoA git@github.com:Trippple-Space/shoppp_space_customer_web.git
           git remote -v
 
       - name: Push to RepoB - Pull from RepoA

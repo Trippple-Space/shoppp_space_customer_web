@@ -20,18 +20,18 @@ interface IBreadcrumb {
 
 const Breadcrumb: FC<IBreadcrumb> = ({ crumbs }) => {
     return (
-        crumbs.length ? <div className="breadcrumb l:block hidden">
-            <div className="flex a-content-center j-content-center w-fit bg-green-50 px-12 py-8 gap-14 radius-8 whitespace-nowrap">
+        crumbs.length ? <div className="breadcrumb lg:block hidden">
+            <div className="flex a-content-center justify-center w-fit bg-brand-tint px-[12px] py-[8px] gap-[14px] rounded-[8px] whitespace-nowrap">
                 {crumbs.map((crumb, i) => (
-                    <span className='flex a-content-center j-content-center gap-14 first-letter:uppercase!' key={i}>
-                        <Link href={crumb.route.toLowerCase()} className={cx('text-14 @lo:text-green-300 first-letter:uppercase!', {
-                            'bold @hi:text-green': i === crumbs.length - 1
+                    <span className='flex a-content-center justify-center gap-[14px] first-letter:!uppercase' key={i}>
+                        <Link href={crumb.route.toLowerCase()} className={cx('text-[14px] text-brand first-letter:!uppercase', {
+                            'font-bold text-brand': i === crumbs.length - 1
                         })}>
                             {crumb.label}
                         </Link>
                         {
                             i < crumbs.length - 1 &&
-                            <TfiAngleRight className='h-10 a-self-center text-green-300' />
+                            <TfiAngleRight className='h-[10px] self-center text-brand' />
                         }
                     </span>
                 ))}

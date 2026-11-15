@@ -93,7 +93,7 @@ export const useSignUpView = (options?: {
         fetchCart();
         options?.onVerified?.();
         if (redirectOnVerified) {
-          router.push(paths.asoebi_wears);
+          router.push('/');
         }
         return;
       }
@@ -125,7 +125,7 @@ export const useSignUpView = (options?: {
               options?.onVerified?.();
               toast.success("OTP verified successfully.");
               if (redirectOnVerified) {
-                router.push(paths.asoebi_wears);
+                router.push('/');
               }
               return;
             }
@@ -175,7 +175,7 @@ export const useSignUpView = (options?: {
               authenticateUser(response.user);
               syncGuestStateAfterAuth(response.user.id).finally(() => {
                 fetchCart();
-                router.push(paths.asoebi_wears);
+                router.push('/');
               });
             });
           } else {
@@ -214,7 +214,7 @@ export const useSignUpView = (options?: {
 //     onSubmit: (values: RegistrationDetails) => {
 //         authService.signUp(values)
 //             .then((user) => {
-//                 toast.success(`Hey ${user.username}. Welcome to Asoebi Africa! Login here.`)
+//                 toast.success(`Hey ${user.username}. Welcome to Shoppp Space! Login here.`)
 //                 router.push(paths.login)
 //             })
 //     },

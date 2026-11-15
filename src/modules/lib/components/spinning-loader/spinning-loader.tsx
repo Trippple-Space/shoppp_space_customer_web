@@ -30,7 +30,7 @@ const SpinningLoader: React.FC<SpinningLoaderProps> = ({ spinningLoaderText, siz
   return (
     <div style={{ display: "flex", flexDirection: "column", alignItems: "center" }}>
       <motion.img
-        src="/images/logos/asoebi-icon.svg"
+        src="/images/logos/shoppp-icon.svg"
         alt="spinningLoader"
         style={{ width: size, height: size }}
         animate={controls}

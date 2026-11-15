@@ -7,7 +7,7 @@ interface PuffLoaderProps {
   className?: string
 }
 
-function PuffLoader({ loading = true, color = "#000000", size = 60, className = '' }: PuffLoaderProps): JSX.Element | null {
+function PuffLoader({ loading = true, color = "#000000", size = 60, className = '' }: PuffLoaderProps): React.JSX.Element | null {
   const wrapperStyle: React.CSSProperties = {
     display: "inline-block",
     position: "relative",

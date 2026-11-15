@@ -63,7 +63,7 @@ const OrderDetails = ({ orderId }: OrderDetailsProps) => {
     const statusMessageMap: Record<string, string> = {
       ONGOING: 'Your order is being processed. Please wait for confirmation.',
       PENDING_CONFIRMATION: 'Your order is awaiting confirmation. We will notify you soon.',
-      CONFIRMED: 'Your order has been confirmed. Thank you for shopping with Asoebi!',
+      CONFIRMED: 'Your order has been confirmed. Thank you for shopping with Shoppp!',
       ACKNOWLEDGED: 'We have acknowledged your order. It is being prepared.',
       WAITING_TO_BE_SHIPPED: 'Your order is ready and waiting to be shipped.',
       OUT_FOR_DELIVERY: 'Your order is on its way. It will reach you soon!',
@@ -140,83 +140,83 @@ const OrderDetails = ({ orderId }: OrderDetailsProps) => {
       <div>
         <HomepageNavBar parent={'orders'} />
       </div>
-      <div className='mt-120 w-full h-full flex a-items-center flex-col gap-30'>
-        <div className='flex  a-items-center gap-5 l:w-50p w-90p'>
-          <GoHome className='w-fit color-#00000066 w-15 h-15' />
-          <Link href='/home' className='text-14 weight-400 color-#00000066'>
+      <div className='mt-[120px] w-full h-full flex items-center flex-col gap-[30px]'>
+        <div className='flex  items-center gap-[5px] lg:w-1/2 w-[90%]'>
+          <GoHome className='w-fit text-[#00000066] w-[15px] h-[15px]' />
+          <Link href='/home' className='text-[14px] font-normal text-[#00000066]'>
             Home /
           </Link>
-          <span className='text-14 weight-400'>Orders</span>
+          <span className='text-[14px] font-normal'>Orders</span>
         </div>
         <OrderHeader orderStatus={isOngoing ? "ONGOING" : singleOrder?.status} />
-        <div className='l:w-50p w-90p flex flex-col gap-50 pb-32'>
+        <div className='lg:w-1/2 w-[90%] flex flex-col gap-[50px] pb-[32px]'>
           {/* Default "Order Details" View */}
           {showDetails ? (
             <>
               {singleOrder ? (
-                <div className='flex a-items-center gap-10 bg-#F5F5F5 p-5 radius-6 j-content-center'>
-                  <div className='flex flex-col gap-10 w-100p p-10'>
+                <div className='flex items-center gap-[10px] bg-[#F5F5F5] p-[5px] rounded-[6px] justify-center'>
+                  <div className='flex flex-col gap-[10px] w-full p-[10px]'>
                     <div
                       onClick={() => router.back()}
-                      className='flex a-items-center gap-10 mb-10 cursor-pointer w-fit weight-400 text-16'
+                      className='flex items-center gap-[10px] mb-[10px] cursor-pointer w-fit font-normal text-[16px]'
                     >
                       <GoArrowLeft className='w-fit' />
-                      <p className='weight-400 text-16'>
+                      <p className='font-normal text-[16px]'>
                         Order #{getLastFiveIdChars(singleOrder.id)}
                       </p>
                     </div>
-                    <div className='bg-white p-25 flex a-items-center space-between'>
-                      <div className='grid gap-5'>
-                        <p className='text-18 weight-600'>
+                    <div className='bg-white p-[25px] flex items-center justify-between'>
+                      <div className='grid gap-[5px]'>
+                        <p className='text-[18px] font-semibold'>
                           Hi, {singleOrder.user.profile.firstName}
                         </p>
-                        <p className='text-14 weight-400 color-#00000099'>
+                        <p className='text-[14px] font-normal text-[#00000099]'>
                           {orderReturnMessage(singleOrder.status)}
                         </p>
                         {hasRemovedLines && singleOrder.status !== 'CANCELLED' && (
-                          <p className='text-13 weight-400 color-#00000099 mt-4'>
+                          <p className='text-[13px] font-normal text-[#00000099] mt-[4px]'>
                             Some items were removed because a seller did not
                             acknowledge them in time. Remaining items may still
                             be processed.
                           </p>
                         )}
                       </div>
-                      <div className='bg-whitesmoke p-12 radius-12 w-60 h-60 flex flex-col j-content-center a-items-center'>
+                      <div className='bg-[#F5F5F5] p-[12px] rounded-[12px] w-[60px] h-[60px] flex flex-col justify-center items-center'>
                         <Image
                           type='icon'
                           src={getOrderImage(singleOrder?.status) || ''}
                           alt='placed order icon'
-                          className='w-fit!'
+                          className='!w-fit'
                           width={50}
                           height={50}
                         />
                       </div>
                     </div>
                     <div
-                      className='bg-white p-25 flex flex-col gap-25 cursor-pointer'
+                      className='bg-white p-[25px] flex flex-col gap-[25px] cursor-pointer'
                       onClick={handleOrderedProducts}
                     >
-                      <div className='flex a-items-center space-between'>
-                        <div className='whitespace-nowrap w-90p l:w-fit'>
-                          <p className='color-#00000099 text-12 weight-400 overflow-hidden text-ellipsis l:overflow'>
+                      <div className='flex items-center justify-between'>
+                        <div className='whitespace-nowrap w-[90%] lg:w-fit'>
+                          <p className='text-[#00000099] text-[12px] font-normal overflow-hidden text-ellipsis lg:overflow'>
                             Order from:{' '}
-                            <span className='weight-500 color-#000000E0 text-14 font-inter'>
+                            <span className='font-medium text-[#000000E0] text-[14px] font-inter'>
                               {getStoreNames(singleOrder.cart.storeGroups)}
                             </span>
                           </p>
                         </div>
                         <div>
-                          <div className='flex a-items-center j-content-center'>
+                          <div className='flex items-center justify-center'>
                             <div
                               className={classNames(
-                                'text-12 hidden l:block relative',
+                                'text-[12px] hidden lg:block relative',
                                 {}
                               )}
                             >
                               <OverlappingImages orderItem={singleOrder} />
                             </div>
 
-                            <MdKeyboardArrowDown className='w-25 h-25 ml-5' />
+                            <MdKeyboardArrowDown className='w-[25px] h-[25px] ml-[5px]' />
                           </div>
                         </div>
                       </div>
@@ -224,24 +224,24 @@ const OrderDetails = ({ orderId }: OrderDetailsProps) => {
                         <OrderedProductCard orderedProducts={singleOrder} />
                       )}
                     </div>
-                    <div className='p-20 flex flex-col l:flex-row gap-15 l:gap-0 l:a-items-center space-between bg-white'>
+                    <div className='p-[20px] flex flex-col lg:flex-row gap-[15px] lg:gap-0 lg:items-center justify-between bg-white'>
                       {isOngoing ? (
                         <>
-                          <div className='flex flex-col gap-5'>
-                            <p className='color-#00000099 text-14'>
+                          <div className='flex flex-col gap-[5px]'>
+                            <p className='text-[#00000099] text-[14px]'>
                               Delivery confirmation code
                             </p>
-                            <p className='text-14 weight-600'>
+                            <p className='text-[14px] font-semibold'>
                               Share this code with your rider
                             </p>
                           </div>
-                          <div className='flex gap-10'>
+                          <div className='flex gap-[10px]'>
                             {singleOrder.delivery.code
                               .split('')
                               .map((str: string, i) => (
                                 <p
                                   key={i}
-                                  className='w-40 h-40 p-10 radius-5 weight-600 bg-whitesmoke text-center'
+                                  className='w-[40px] h-[40px] p-[10px] rounded-[5px] font-semibold bg-[#F5F5F5] text-center'
                                 >
                                   {str.toLocaleUpperCase()}
                                 </p>
@@ -249,13 +249,13 @@ const OrderDetails = ({ orderId }: OrderDetailsProps) => {
                           </div>
                         </>
                       ) : (
-                        <div className='flex w-100p a-items-center space-between'>
-                          <p className='text-14 weight-500'>
+                        <div className='flex w-full items-center justify-between'>
+                          <p className='text-[14px] font-medium'>
                             #{singleOrder.id.slice(-5)}
                           </p>
 
                           <button
-                            className='flex gap-10 a-items-center px-10 py-7 radius-5 border border-#00000026 bg-none cursor-pointer'
+                            className='flex gap-[10px] items-center px-[10px] py-[7px] rounded-[5px] border border-[#00000026] bg-transparent cursor-pointer'
                             onClick={() =>
                               buyOrdersAgain(getActiveOrderCartLines(singleOrder))
                             }
@@ -270,65 +270,65 @@ const OrderDetails = ({ orderId }: OrderDetailsProps) => {
                       <OrderProgress singleOrder={singleOrder} />
                     </div>
                     <div>
-                      <div className='bg-white p-20'>
+                      <div className='bg-white p-[20px]'>
                         <div
-                          className='flex a-items-center space-between cursor-pointer '
+                          className='flex items-center justify-between cursor-pointer '
                           onClick={handleOpenTotal}
                         >
-                          <p className='text-16 font-inter weight-600'>
+                          <p className='text-[16px] font-inter font-semibold'>
                             Order info
                           </p>
                           <MdKeyboardArrowDown className='w-fit' />
                         </div>
                         {openTotal && (
-                          <div className='grid gap-10 pt-20'>
-                            <div className='grid gap-15'>
-                              <div className='flex space-between'>
-                                <p className='color-#000000E0 weight-400'>
+                          <div className='grid gap-[10px] pt-[20px]'>
+                            <div className='grid gap-[15px]'>
+                              <div className='flex justify-between'>
+                                <p className='text-[#000000E0] font-normal'>
                                   Subtotal
                                 </p>
-                                <p className='text-16'>
+                                <p className='text-[16px]'>
                                   {formatNumberAsPrice(orderDisplaySubtotal)}
                                 </p>
                               </div>
                               {orderDisplayDiscount > 0 ? (
-                                <div className='flex space-between'>
-                                  <p className='color-#000000E0 weight-400'>
+                                <div className='flex justify-between'>
+                                  <p className='text-[#000000E0] font-normal'>
                                     Discount
                                   </p>
-                                  <p className='text-16'>
+                                  <p className='text-[16px]'>
                                     −{' '}
                                     {formatNumberAsPrice(orderDisplayDiscount)}
                                   </p>
                                 </div>
                               ) : null}
-                              <div className='flex space-between border-b border-b-#00000014 pb-10'>
-                                <p className='color-#000000E0 weight-400'>
+                              <div className='flex justify-between border-b border-b-[#00000014] pb-[10px]'>
+                                <p className='text-[#000000E0] font-normal'>
                                   Delivery
                                 </p>
-                                <p className='text-16 weight-400'>
+                                <p className='text-[16px] font-normal'>
                                   {formatNumberAsPrice(
                                     singleOrder.deliveryFee
                                   )}
                                 </p>
                               </div>
                             </div>
-                            <div className='grid gap-15'>
-                              <div className='flex space-between'>
-                                <p className='color-#000000E0 weight-400'>
+                            <div className='grid gap-[15px]'>
+                              <div className='flex justify-between'>
+                                <p className='text-[#000000E0] font-normal'>
                                   Total
                                 </p>
-                                <p className='text-16 weight-400'>
+                                <p className='text-[16px] font-normal'>
                                   {formatNumberAsPrice(
                                     singleOrder.totalAmount
                                   )}
                                 </p>
                               </div>
-                              <div className='flex space-between'>
-                                <p className='color-#000000E0 weight-400'>
+                              <div className='flex justify-between'>
+                                <p className='text-[#000000E0] font-normal'>
                                   Payment Method
                                 </p>
-                                <p className='text-16 weight-400'>Paid online</p>
+                                <p className='text-[16px] font-normal'>Paid online</p>
                               </div>
                             </div>
                           </div>
@@ -338,8 +338,8 @@ const OrderDetails = ({ orderId }: OrderDetailsProps) => {
                   </div>
                 </div>
               ) : (
-                <div className='relative w-100p h-250'>
-                  <div className='h-100p absolute flex a-items-center  l-50p g|transform:translate(-50%) b-0'>
+                <div className='relative w-full h-[250px]'>
+                  <div className='h-full absolute flex items-center  left-[50%] [transform:translate(-50%)] bottom-0'>
                     <PuffLoader />
                   </div>
                 </div>

@@ -137,13 +137,13 @@ export const ProductSearch: React.FC<ProductSearchProps> = ({
             <input
               type="text"
               placeholder="Search product..."
-              className="h-42 w-full px-3 outline-none"
+              className="h-[42px] w-full px-[3px] outline-none"
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
               onClick={() => setOpenSearchModal(true)}
             />
             <TbSearch
-              className="w-24 h-24 min-w-24 mr-10 cursor-pointer"
+              className="w-[24px] h-[24px] min-w-[24px] mr-[10px] cursor-pointer"
               onClick={handleOpenSearchModal}
             />
           </div>
@@ -154,7 +154,7 @@ export const ProductSearch: React.FC<ProductSearchProps> = ({
           <div className="modernLuxe__search-box relative">
             <label htmlFor="search" className="flex">
               <FaSearch
-                className="w-16 h-16 cursor-pointer"
+                className="w-[16px] h-[16px] cursor-pointer"
                 onClick={handleOpenSearchModal}
               />
             </label>
@@ -202,9 +202,9 @@ export const ProductSearch: React.FC<ProductSearchProps> = ({
         if (loadingProducts) return <ProductLoadingSkeleton />;
 
         return (
-          <div className="flex flex-col gap-22">
-            <h6 className="font-inter weight-700 text-14">Products</h6>
-            <p className="text-13 color-#00000099 text-center">
+          <div className="flex flex-col gap-[22px]">
+            <h6 className="font-inter font-bold text-[14px]">Products</h6>
+            <p className="text-[13px] text-[#00000099] text-center">
               No products found
             </p>
           </div>
@@ -236,22 +236,22 @@ export const ProductSearch: React.FC<ProductSearchProps> = ({
     <>
       {renderTrigger()}
       {openSearchModal && variant === 'modernEarth' && (
-        <div className="absolute hidden md:block min-w-250 max-w-400 h-300 bg-white border border-#00000014 radius-4 t-50 mt--3 z-8 overflow-auto no-scrollbar">
-          <div className="flex flex-col gap-42 w-95p mx-auto py-12">
+        <div className="absolute hidden md:block min-w-[250px] max-w-[400px] h-[300px] bg-white border border-[#00000014] rounded-[4px] top-[50px] -mt-[3px] z-[8px] overflow-auto no-scrollbar">
+          <div className="flex flex-col gap-[42px] w-[95%] mx-auto py-[12px]">
             {renderResultContent()}
           </div>
         </div>
       )}
       {openSearchModal && variant === 'modernLuxe' && (
-        <div className="modernLuxe__searchContent md:absolute hidden md:block md:w-100p min-w-200 md:h-200 md:bg-white md:h-400 overflow-auto no-scrollbar radius-4 t-65 z-8">
-          <div className="flex flex-col gap-42 w-95p mx-auto py-12">
+        <div className="modernLuxe__searchContent md:absolute hidden md:block md:w-[100%] min-w-[200px] md:h-[200px] md:bg-white md:h-[400px] overflow-auto no-scrollbar rounded-[4px] top-[65px] z-[8px]">
+          <div className="flex flex-col gap-[42px] w-[95%] mx-auto py-[12px]">
             {renderResultContent()}
           </div>
         </div>
       )}
       {openSearchModal && variant === 'furniture' && (
-        <div className="search-box-input hidden md:block md:absolute min-w-200 md:h-200 overflow-auto no-scrollbar md:bg-white md:border md:border-#00000014 radius-4 t-65 mt-3 z-8">
-          <div className="flex flex-col gap-42 w-95p mx-auto py-12">
+        <div className="search-box-input hidden md:block md:absolute min-w-[200px] md:h-[200px] overflow-auto no-scrollbar md:bg-white md:border md:border-[#00000014] rounded-[4px] top-[65px] mt-[3px] z-[8px]">
+          <div className="flex flex-col gap-[42px] w-[95%] mx-auto py-[12px]">
             {renderResultContent()}
           </div>
         </div>
@@ -259,35 +259,35 @@ export const ProductSearch: React.FC<ProductSearchProps> = ({
       {openSearchModal && (
         <>
           <div
-            className={`fixed inset-0 bg-black opacity-70 z-7 ${hasDesktopContainer ? 'md:opacity-0' : ''}`}
+            className={`fixed inset-0 bg-black opacity-70 z-[7px] ${hasDesktopContainer ? 'md:opacity-0' : ''}`}
             onClick={handleOpenSearchModal}
           />
 
           <div
-            className={`fixed l-50p g|transform:translate(-50%); w-90p h-70 md:w-50p h-60p t-70 mt-30 bg-white z-8 flex flex-col radius-30 pb-20 relative ${hasDesktopContainer ? 'md:hidden md:radius-20' : ''}`}
+            className={`fixed left-[50%] -translate-x-1/2 w-[90%] h-[70px] md:w-[50%] h-[60%] top-[70px] mt-[30px] bg-white z-[8px] flex flex-col rounded-[30px] pb-[20px] relative ${hasDesktopContainer ? 'md:hidden md:rounded-[20px]' : ''}`}
           >
             <div
-              className={` w-100p flex j-content-center pb-20 ${hasDesktopContainer ? 'md:hidden' : ''}`}
+              className={` w-full flex justify-center pb-[20px] ${hasDesktopContainer ? 'md:hidden' : ''}`}
             >
-              <div className="flex j-content-center relative a-items-center mt-20 w-80p">
+              <div className="flex justify-center relative items-center mt-[20px] w-[80%]">
                 <input
                   type="text"
                   value={searchTerm}
                   onChange={(e) => setSearchTerm(e.target.value)}
-                  className="block radius-99 border bg-#F3F3F3 border-none py-12 px-14 outline-none w-100p"
+                  className="block rounded-[99px] border bg-[#F3F3F3] border-none py-[12px] px-[14px] outline-none w-full"
                   placeholder="Search"
                 />
 
-                <div className="flex j-content-center a-items-center absolute r-0 radius-50 m-5">
+                <div className="flex justify-center items-center absolute right-0 rounded-[50px] m-[5px]">
                   <IoIosSearch
-                    className="w-25 h-20"
+                    className="w-[25px] h-[20px]"
                     onClick={handleOpenSearchModal}
                   />
                 </div>
               </div>
             </div>
 
-            <div className="flex flex-col gap-42 sm:w-90p w-93p mx-auto flex-1 min-h-0 overflow-auto no-scrollbar sm:py-20 py-12">
+            <div className="flex flex-col gap-[42px] sm:w-[90%] w-[93%] mx-auto flex-1 min-h-0 overflow-auto no-scrollbar sm:py-[20px] py-[12px]">
               {renderResultContent()}
             </div>
           </div>

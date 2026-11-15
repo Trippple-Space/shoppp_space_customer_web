@@ -58,7 +58,7 @@ export default function GlobalLaunchBanner() {
 
   return (
     <div
-      className="fixed lg:t-69.7 md:t-66.5 t-64 l-0 r-0 flex flex-col items-center justify-center gap-6 px-16 py-10 text-center animate-in slide-in-from-bottom-2 duration-200"
+      className="fixed lg:top-[69.7px] md:top-[66.5px] top-[64px] left-0 right-0 flex flex-col items-center justify-center gap-[6px] px-[16px] py-[10px] text-center animate-in slide-in-from-bottom-2 duration-200"
       style={{
         background: '#fedf94',
         color: 'black',
@@ -68,12 +68,12 @@ export default function GlobalLaunchBanner() {
       }}
       role="banner"
     >
-      <span className="text-13 md:text-14 font-medium">
-        Asoebi Africa marketplace opens officially by {MARKETPLACE_OPENS_DATE}.
+      <span className="text-[13px] md:text-[14px] font-medium">
+        Shoppp Space marketplace opens officially by {MARKETPLACE_OPENS_DATE}.
         You might not be able to make purchases yet. Feel free to join our beta testers and explore the site.
       </span>
 
-      <div className="text-20 md:text-26 font-bold tracking-wider">
+      <div className="text-[20px] md:text-[26px] font-bold tracking-wider">
         {timeLeft}
       </div>
     </div>

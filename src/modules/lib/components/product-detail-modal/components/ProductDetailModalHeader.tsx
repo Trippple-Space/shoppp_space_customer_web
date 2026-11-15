@@ -11,22 +11,22 @@ const ProductDetailModalHeader = ({
   onClose: () => void;
 }) => {
   return (
-    <div className="flex a-items-center space-between gap-12 px-16 py-12 border-b border-#00000014 flex-shrink-0 bg-white">
+    <div className="flex items-center justify-between gap-[12px] px-[16px] py-[12px] border-b border-[#00000014] shrink-0 bg-white">
       <Link
         href={`/products/${product?.slug}`}
-        className="cursor-pointer flex a-items-center gap-4 text-12 weight-500 color-#0B9378 min-w-0"
+        className="cursor-pointer flex items-center gap-[4px] text-[12px] font-medium text-[#0357EE] min-w-0"
         onClick={onClose}
       >
         <span>All details</span>
-        <MdArrowForwardIos className="w-10 h-10 mt-1 flex-shrink-0" />
+        <MdArrowForwardIos className="w-[10px] h-[10px] mt-[1px] shrink-0" />
       </Link>
       <button
         type="button"
-        className="bg-transparent border-none pointer flex a-items-center p-0 flex-shrink-0"
+        className="bg-transparent border-none cursor-pointer flex items-center p-0 shrink-0"
         onClick={onClose}
         aria-label="Close"
       >
-        <IoMdClose className="sm:w-25 w-20 sm:h-25 h-20" />
+        <IoMdClose className="sm:w-[25px] w-[20px] sm:h-[25px] h-[20px]" />
       </button>
     </div>
   );

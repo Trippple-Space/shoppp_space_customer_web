@@ -49,11 +49,11 @@ const StoreProductsList: FC<{
   return (
     <>
       {showInitialLoader ? (
-        <div className="w-100p flex j-content-center mt-10">
+        <div className="w-full flex justify-center mt-[10px]">
           <DotsLoader />
         </div>
       ) : showFatalError ? (
-        <div className="mt-24 w-full">
+        <div className="mt-[24px] w-full">
           <DataFetchErrorPanel
             title={errorCopy.title}
             description={errorCopy.description}
@@ -62,9 +62,9 @@ const StoreProductsList: FC<{
         </div>
       ) : products.length ? (
         <ProductTileGalleryProvider products={products}>
-          <div className="grid xxlgrid-5-cols xl:grid-4-cols-1fr s:grid-3-cols-1fr grid-2-cols-1fr gap-18 s:gap-20 md:gap-24 w-full">
+          <div className="grid xxlgrid-5-cols xl:grid-cols-4 sm:grid-cols-3 grid-cols-2 gap-[18px] sm:gap-[20px] md:gap-[24px] w-full">
             {products.map((product, i) => (
-              <div key={i} className="l:mt--20 mt--30 w-full overflow-hidden">
+              <div key={i} className="lg:-mt-[20px] -mt-[30px] w-full overflow-hidden">
                 <ProductTile
                   product={product}
                   key={i}
@@ -82,7 +82,7 @@ const StoreProductsList: FC<{
           </div>
         </ProductTileGalleryProvider>
       ) : (
-        <div className="mt-60 grid-col-span-5 text-center bg-white">
+        <div className="mt-[60px] col-span-5 text-center bg-white">
           <NoResultMessage
             textContent={`It seems we can’t find any results based on your filters.`}
             contentTitle="No results found"

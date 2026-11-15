@@ -20,12 +20,12 @@ const ProductDetailModalInfo = ({
   maxDisplayDescLength: number;
 }) => {
   return (
-    <div className="flex flex-col gap-10">
-      <p className="weight-500 text-16 line-height-22">
+    <div className="flex flex-col gap-[10px]">
+      <p className="font-medium text-[16px] leading-[22px]">
         {product?.name}
       </p>
       {product?.longDescription && (
-        <p className="weight-400 text-13 color-#00000099 line-height-20">
+        <p className="font-normal text-[13px] text-[#00000099] leading-[20px]">
           {product?.longDescription
             ?.split(' ')
             ?.slice(0, maxDisplayDescLength)
@@ -33,30 +33,30 @@ const ProductDetailModalInfo = ({
           {descriptionLength > maxDisplayDescLength ? '...' : ''}
         </p>
       )}
-      <p className="weight-400 text-grey-500 text-13">
+      <p className="font-normal text-[#A39F9C] text-[13px]">
         sold by{' '}
         <Link
           href={`/${product?.store?.slug}`}
           target="_blank"
-          className="text-grey-500 underline"
+          className="text-[#A39F9C] underline"
         >
           {product?.store?.name}
         </Link>
       </p>
-      <p className="weight-400 text-13 color-#00000099 capitalize">
+      <p className="font-normal text-[13px] text-[#00000099] capitalize">
         in {product?.type}
       </p>
-      <div className="flex a-items-end gap-6">
-        <p className="weight-600 text-24 text-black">
+      <div className="flex items-end gap-[6px]">
+        <p className="font-semibold text-[24px] text-black">
           {formatNumberAsPrice(variantDisplayPrices.displayPrice)}
         </p>
         {variantDisplayPrices.hasSlash && (
-          <div className="flex flex-wrap gap-6 md:gap-8 a-items-end mb-2">
+          <div className="flex flex-wrap gap-[6px] md:gap-[8px] items-end mb-[2px]">
             {getStrikethroughAmounts(variantDisplayPrices).map(
               (amount, idx) => (
                 <p
                   key={idx}
-                  className="md:text-12 text-10 weight-400 md:line-height-20 color-#00000099 line-through"
+                  className="md:text-[12px] text-[10px] font-normal md:leading-[20px] text-[#00000099] line-through"
                 >
                   {formatNumberAsPrice(amount)}
                 </p>
@@ -69,7 +69,7 @@ const ProductDetailModalInfo = ({
             selectedVariant?.stockUnit
           );
           return stockUnitSuffix ? (
-            <p className="sm:text-10 text-8 weight-400 md:line-height-20 line-height-12.1">
+            <p className="sm:text-[10px] text-[8px] font-normal md:leading-[20px] leading-[12.1px]">
               {stockUnitSuffix}
             </p>
           ) : null;

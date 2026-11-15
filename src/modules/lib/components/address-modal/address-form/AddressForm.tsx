@@ -122,35 +122,35 @@ const AddressForm: FC<AddressFormProps> = ({ closeAddressForm, type }) => {
   return (
     (<div className="flex-col w-full">
       <form className='flex flex-col' onSubmit={formhandler.handleSubmit}>
-        <div className='flex flex-col p-24 mt--24 mx--24 gap-16'>
-          <div className={`radius-8 overflow-hidden relative h-100`}>
+        <div className='flex flex-col p-[24px] -mt-[24px] -mx-[24px] gap-[16px]'>
+          <div className={`rounded-[8px] overflow-hidden relative h-[100px]`}>
             <AddressMap location={{ lat: userLocation.latitude || 6.5480282, lng: userLocation.longitude || 3.1191456 }} />
-            <div className='absolute bg-#00000073 t-0 b-0 w-full flex flex-col j-content-center'>
+            <div className='absolute bg-[#00000073] top-0 bottom-0 w-full flex flex-col justify-center'>
               <UseCurrentLocationButton formhandler={formhandler} setUserLocation={setUserLocation} setSuggestionInputValue={setSuggestionInputValue} />
             </div>
           </div>
-          <div className='grid sm:grid-4-rows-1fr grid-2-cols-1fr gap-16'>
-            <div className='sm:grid-col-span-1 grid-col-span-2'>
+          <div className='grid sm:grid-4-rows-1fr grid-cols-2 gap-[16px]'>
+            <div className='sm:col-span-1 col-span-2'>
               <AddressField
                 field='firstName'
-                label={<span>First name <span className='color-#B3261E'>*</span></span>}
+                label={<span>First name <span className='text-[#B3261E]'>*</span></span>}
                 placeholder='Enter your first name'
                 handler={formhandler}
                 disabled={false}
               />
             </div>
-            <div className='sm:grid-col-span-1 grid-col-span-2'>
+            <div className='sm:col-span-1 col-span-2'>
               <AddressField
                 field='lastName'
-                label={<span>Last name <span className='color-#B3261E'>*</span></span>}
+                label={<span>Last name <span className='text-[#B3261E]'>*</span></span>}
                 placeholder='Enter your last name'
                 handler={formhandler}
                 disabled={false}
               />
             </div>
-            <div className='grid-col-span-2' ref={selectRef}>
+            <div className='col-span-2' ref={selectRef}>
             <Input
-  label={<span className={`text-14 weight-400 line-height-19`}>Search Address</span>}
+  label={<span className={`text-[14px] font-normal leading-[19px]`}>Search Address</span>}
   id={'searchAddress'}
   name={'searchAddress'}
   type={"text"}
@@ -161,21 +161,21 @@ const AddressForm: FC<AddressFormProps> = ({ closeAddressForm, type }) => {
   }}
   handleFocus={() => { }}
   className={'w-full'}
-  inputClass="radius-6! p-12 w-full border-#6A6A6A4D text-16"
+  inputClass="rounded-[6px] p-[12px] w-full border-[#6A6A6A4D] text-[16px]"
 />
 
               <div className='relative'>
                 {
                   showSuggestions &&
-                  <div className='absolute w-full bg-white border border-black z-10 top-0 mt-3 radius-6! border-#6A6A6A4D text-16 overflow-hidden h-fit g|max-height:182px overflow-auto'>
+                  <div className='absolute w-full bg-white border border-black z-[10px] top-0 mt-[3px] rounded-[6px] border-[#6A6A6A4D] text-[16px] overflow-hidden h-fit max-h-[182px] overflow-auto'>
                     {
                       addressSuggestions.length === 0 ?
-                        <div className='py-8 px-12 flex a-items-center j-content-center w-full text-center'>no address found</div>
+                        <div className='py-[8px] px-[12px] flex items-center justify-center w-full text-center'>no address found</div>
                         :
                         <div className='flex flex-col'>
                           {
                             addressSuggestions.map((suggestion) => (
-                              <div onClick={() => { handleSelectAddress(suggestion) }} className='py-8 px-12 cursor-pointer hover:bg-green hover:text-white g|transition:0.15s'>
+                              <div onClick={() => { handleSelectAddress(suggestion) }} className='py-[8px] px-[12px] cursor-pointer hover:bg-brand hover:text-white transition-all duration-150'>
                                 <p>{suggestion.display_name}</p>
                               </div>
                             ))
@@ -186,39 +186,39 @@ const AddressForm: FC<AddressFormProps> = ({ closeAddressForm, type }) => {
                 }
               </div>
             </div>
-            <div className='sm:grid-col-span-1 grid-col-span-2'>
+            <div className='sm:col-span-1 col-span-2'>
               <AddressField
                 field='state'
-                label={<span>State <span className='color-#B3261E'>*</span></span>}
+                label={<span>State <span className='text-[#B3261E]'>*</span></span>}
                 handler={formhandler}
               />
             </div>
-            <div className='sm:grid-col-span-1 grid-col-span-2'>
+            <div className='sm:col-span-1 col-span-2'>
               <AddressField
                 field='city'
-                label={<span>City <span className='color-#B3261E'>*</span></span>}
+                label={<span>City <span className='text-[#B3261E]'>*</span></span>}
                 placeholder='Enter city'
                 handler={formhandler}
               />
             </div>
-            <div className='grid-col-span-2'>
+            <div className='col-span-2'>
               <AddressField
                 field='address'
-                label={<span>Street address <span className='color-#B3261E'>*</span></span>}
+                label={<span>Street address <span className='text-[#B3261E]'>*</span></span>}
                 placeholder='Enter street address'
                 handler={formhandler}
               />
             </div>
-            <div className='sm:grid-col-span-1 grid-col-span-2'>
+            <div className='sm:col-span-1 col-span-2'>
               <AddressField
                 field='contactNo'
-                label={<span>Contact number 1 <span className='color-#B3261E'>*</span></span>}
+                label={<span>Contact number 1 <span className='text-[#B3261E]'>*</span></span>}
                 placeholder='01245'
                 handler={formhandler}
                 disabled={false}
               />
             </div>
-            <div className='sm:grid-col-span-1 grid-col-span-2'>
+            <div className='sm:col-span-1 col-span-2'>
               <AddressField
                 field="secondaryContactNo"
                 label='Contact number 2'
@@ -235,31 +235,31 @@ const AddressForm: FC<AddressFormProps> = ({ closeAddressForm, type }) => {
               label='Delivery note'
               handler={formhandler}
               disabled={false}
-              inputClassName='h-200'
+              inputClassName='h-[200px]'
             />
           </div>
 
-          <div className="flex space-between w-full @lo:text-grey-700 text-16 weight-400 line-height-22">
-            <label className="pointer content-center flex gap-8">
+          <div className="flex justify-between w-full text-[#6B6662] text-[16px] font-normal leading-[22px]">
+            <label className="cursor-pointer content-center flex gap-[8px]">
               <Input
                 type="checkbox"
                 name="isDefault"
                 id="isDefault"
-                className="accent-#0B9378 w-20 h-20"
-                inputClass="accent-#0B9378 w-20 h-20"
+                className="accent-[#0357EE] w-[20px] h-[20px]"
+                inputClass="accent-[#0357EE] w-[20px] h-[20px]"
                 checked={formhandler.values.isDefault}
                 handleChange={(e: any) => {
                   formhandler.setFieldValue("isDefault", e.target.checked)
                 }
                 }
               />
-              <span className="l:text-16 text-12">Set as default delivery address</span>
+              <span className="lg:text-[16px] text-[12px]">Set as default delivery address</span>
             </label>
           </div>
         </div>
-        <div className='flex j-content-end a-items-center border-t border-#00000014 py-12 gap-12'>
-          <button type='reset' className='w-fit border-2 border-black text-#000000E0 bg-white hover:bg-red-100 hover:border-red hover:text-red text-14 py-12 px-20 radius-6 weight-500 pointer line-height-19 g|transition:0.5s' onClick={() => closeAddressForm('cancel')} >{type === 'edit' ? 'Discard' : 'Cancel'}</button>
-          <button type='submit' className={`w-fit border-none bg-#0B9378 text-white text-14 py-15 px-20 radius-6 weight-500 hover:bg-darkgreen disabled:bg-green-300 g|transition:0.5s ${disableButton ? 'cursor-not-allowed' : 'cursor-pointer'}`}
+        <div className='flex justify-end items-center border-t border-[#00000014] py-[12px] gap-[12px]'>
+          <button type='reset' className='w-fit border-[2px] border-black text-[#000000E0] bg-white hover:bg-red-100 hover:border-[#DE3838] hover:text-[#DE3838] text-[14px] py-[12px] px-[20px] rounded-[6px] font-medium cursor-pointer leading-[19px] transition-all duration-500' onClick={() => closeAddressForm('cancel')} >{type === 'edit' ? 'Discard' : 'Cancel'}</button>
+          <button type='submit' className={`w-fit border-none bg-[#0357EE] text-white text-[14px] py-[15px] px-[20px] rounded-[6px] font-medium hover:bg-brand-hover disabled:bg-brand transition-all duration-500 ${disableButton ? 'cursor-not-allowed' : 'cursor-pointer'}`}
             disabled={disableButton}
             onClick={() => {
               if (!disableButton) {

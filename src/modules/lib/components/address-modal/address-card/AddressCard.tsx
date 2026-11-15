@@ -35,9 +35,9 @@ const AddressCard: FC<AddressCardProps> = ({
   return (
     <div
       className={cx(
-        'flex flex-row space-between gap-12 a-items-center w-full p-16 radius-6 border border-#00000014 pointer',
+        'flex flex-row justify-between gap-[12px] items-center w-full p-[16px] rounded-[6px] border border-[#00000014] cursor-pointer',
         {
-          'border-green-400': isAddressSelected
+          'border-brand': isAddressSelected
         }
       )}
       onClick={() => {
@@ -70,8 +70,8 @@ const AddressCard: FC<AddressCardProps> = ({
           />
         </>
       ) : (
-        <div className='flex space-between a-items-center w-full'>
-          <div className='flex flex-col gap-4 weight-400 text-16 line-height-24 color-#00000099'>
+        <div className='flex justify-between items-center w-full'>
+          <div className='flex flex-col gap-[4px] font-normal text-[16px] leading-[24px] text-[#00000099]'>
             <p>
               {address.contactNo}
               {address?.secondaryContactNo && ', '}
@@ -86,21 +86,21 @@ const AddressCard: FC<AddressCardProps> = ({
             </p>
             {address.notes && <p>Delivery note: {address.notes}</p>}
             {address.isDefault && (
-              <span className='bg-#D4280C1F py-2 px-10 radius-4 color-#D4280C weight-400 text-12 line-height-20 w-fit'>
+              <span className='bg-[#D4280C1F] py-[2px] px-[10px] rounded-[4px] text-[#D4280C] font-normal text-[12px] leading-[20px] w-fit'>
                 Default
               </span>
             )}
           </div>
           <div className=''>
             <button
-              className='border-none pointer bg-white'
+              className='border-none cursor-pointer bg-white'
               onClick={e => {
                 e.stopPropagation()
                 setAddressToUpdateId(address.id)
                 setShowAddressForm(true)
               }}
             >
-              <span className='color-#1677FF text-16 weight-500 line-height-24 underline'>
+              <span className='text-[#1677FF] text-[16px] font-medium leading-[24px] underline'>
                 Edit
               </span>
             </button>

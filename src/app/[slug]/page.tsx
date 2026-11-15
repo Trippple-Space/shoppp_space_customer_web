@@ -12,6 +12,8 @@ import { buildEndpoint } from "@/modules/lib/utility/utility";
 import { getCollections } from "@/modules/lib/utility/server/collections.server";
 import { getCategories } from "@/modules/lib/utility/server/categories.server";
 import type { Store } from "@/modules/lib/utility/types/store.interface";
+import { resolvePublishedPage } from "@/modules/website/api";
+import { SaneeSite, siteMetadata } from "@/modules/website/SaneeSite";
 
 type GetStoreResult =
   | { status: "ok"; store: Store }
@@ -51,14 +53,32 @@ async function getStore(slug: string): Promise<GetStoreResult> {
   }
 }
 
-export async function generateMetadata({ params }: { params: { slug: string } }): Promise<Metadata> {
+type StorefrontPageProps = {
+  params: Promise<{ slug: string }>;
+  searchParams: Promise<{ collection?: string }>;
+};
+
+export async function generateMetadata({
+  params,
+  searchParams,
+}: StorefrontPageProps): Promise<Metadata> {
+  const { slug } = await params;
+  const { collection } = await searchParams;
   try {
-    const result = await getStore(params.slug);
+    // A published Sanee home page wins over the legacy storefront for this store.
+    const published = await resolvePublishedPage({
+      slug,
+      path: "/",
+      collection,
+    });
+    if (published.status === "ok") return siteMetadata(published.site);
+
+    const result = await getStore(slug);
     const store = result.status === "ok" ? result.store : null;
 
     if (!store?.id) {
       return {
-        title: `Unknown Vendor - Asoebi Africa`,
+        title: `Unknown Vendor - Shoppp Space`,
         description: `This store could not be found`
       };
     }
@@ -75,12 +95,12 @@ export async function generateMetadata({ params }: { params: { slug: string } })
           `${store?.description}` ||
           `${store.heading}` ||
           `${store?.name} - Check out my store`,
-        url: `https://${params.slug}.asoebi.africa`,
-        siteName: store.name || 'Asoebi Africa',
+        url: `https://${slug}.shoppp.space`,
+        siteName: store.name || 'Shoppp Space',
         images: [
           {
             url:
-              store?.thumbnail || store?.meta?.heroImage1 || 'new-asoebi-logo.svg',
+              store?.thumbnail || store?.meta?.heroImage1 || 'new-shoppp-logo.svg',
             alt: store?.name,
             height: 630,
             width: 1200
@@ -95,13 +115,13 @@ export async function generateMetadata({ params }: { params: { slug: string } })
           `${store.heading}` ||
           `${store?.name} - Check out my store`,
         images: [
-          store?.thumbnail || store?.meta?.heroImage1 || 'new-asoebi-logo.svg'
+          store?.thumbnail || store?.meta?.heroImage1 || 'new-shoppp-logo.svg'
         ]
       }
     };
   } catch (error) {
     return {
-      title: `Unknown Vendor - Asoebi Africa`,
+      title: `Unknown Vendor - Shoppp Space`,
       description: `This store could not be found`
     };
   }
@@ -110,10 +130,21 @@ export async function generateMetadata({ params }: { params: { slug: string } })
 
 export default async function storeFront({
   params,
-}: {
-  params: { slug: string };
-}) {
-  const result = await getStore(params.slug);
+  searchParams,
+}: StorefrontPageProps) {
+  const { slug } = await params;
+  const { collection } = await searchParams;
+  // Published Sanee site (Tranche 3). Falls back to the legacy storefront when the store has none.
+  const published = await resolvePublishedPage({
+    slug,
+    path: "/",
+    collection,
+  });
+  if (published.status === "ok") {
+    return <SaneeSite resolved={published.site} />;
+  }
+
+  const result = await getStore(slug);
 
   if (result.status === "fetch_failed") {
     return <StorefrontFetchError reason="network" />;

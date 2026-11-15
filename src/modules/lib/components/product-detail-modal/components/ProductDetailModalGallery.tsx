@@ -44,23 +44,23 @@ const ProductDetailModalGallery = ({
     !variantSelectedImage;
 
   return (
-    <div className="l:w-50p w-full overflow-hidden">
-      <div className="flex flex-col gap-6 s:gap-12">
+    <div className="lg:w-1/2 w-full overflow-hidden">
+      <div className="flex flex-col gap-[6px] sm:gap-[12px]">
         <div
-          className="relative bg-#F5F5F5 radius-4 l:radius-8 overflow-hidden"
+          className="relative bg-[#F5F5F5] rounded-[4px] lg:rounded-[8px] overflow-hidden"
           onMouseOver={() => setIsHover(true)}
           onMouseOut={() => setIsHover(false)}
         >
           {showArrows && (
             <div
-              className={`absolute z-10 b-45p ${carouselPreviewItems.length > 1 ? 'bg-white color-black pointer' : 'color-#A9A9A9 bg-#D3D3D3 cursor-not-allowed'} l-20  p-15 radius-99 flex a-items-center j-content-center icon-box-shadow`}
+              className={`absolute z-[10px] bottom-[45%] ${carouselPreviewItems.length > 1 ? 'bg-white text-black cursor-pointer' : 'text-[#A9A9A9] bg-[#D3D3D3] cursor-not-allowed'} left-[20px]  p-[15px] rounded-[99px] flex items-center justify-center icon-box-shadow`}
               onClick={handlePreviousImage}
             >
-              <MdArrowBackIos className="w-full relative l-3" />
+              <MdArrowBackIos className="w-full relative left-[3px]" />
             </div>
           )}
           <div
-            className={`w-full ${variantSelectedImage ? 'l:h-400 h-250' : 'h-300 sm:h-350'} relative`}
+            className={`w-full ${variantSelectedImage ? 'lg:h-[400px] h-[250px]' : 'h-[300px] sm:h-[350px]'} relative`}
           >
             {selectedMediaType === 'image' || !selectedMediaType ? (
               <Image
@@ -84,7 +84,7 @@ const ProductDetailModalGallery = ({
 
           {showArrows && (
             <div
-              className={`absolute z-10 b-45p ${carouselPreviewItems.length > 1 ? 'bg-white color-black pointer' : 'color-#A9A9A9 bg-#D3D3D3 cursor-not-allowed'} r-20 p-15 radius-99 flex a-items-center j-content-center icon-box-shadow `}
+              className={`absolute z-[10px] bottom-[45%] ${carouselPreviewItems.length > 1 ? 'bg-white text-black cursor-pointer' : 'text-[#A9A9A9] bg-[#D3D3D3] cursor-not-allowed'} right-[20px] p-[15px] rounded-[99px] flex items-center justify-center icon-box-shadow `}
               onClick={handleNextImage}
             >
               <MdArrowForwardIos className="w-fit" />
@@ -94,24 +94,24 @@ const ProductDetailModalGallery = ({
         {!variantSelectedImage &&
           (uniqueVariantsFromProductImages?.length ?? 0) >
           0 && (
-            <div className="flex gap-4 sm:gap-8 py-5 overflow-x-auto a-items-center no-scrollbar w-full">
+            <div className="flex gap-[4px] sm:gap-[8px] py-[5px] overflow-x-auto items-center no-scrollbar w-full">
               {variantPreviewItems.map(({ variant: vari, media: mediaItem }) => (
                 <div
                   key={`${vari.id}-${mediaItem.url}`}
                   onClick={() => handleSelectPreview(vari, mediaItem)}
-                  className="w-50 min-w-50 h-50 l:w-90 l:h-90 pointer relative radius-4 l:radius-8 overflow-hidden"
+                  className="w-[50px] min-w-[50px] h-[50px] lg:w-[90px] lg:h-[90px] cursor-pointer relative rounded-[4px] lg:rounded-[8px] overflow-hidden"
                 >
                   {mediaItem?.type === 'image' ? (
                     <Image
                       src={mediaItem.url}
                       alt="product-image"
                       className={cx(
-                        `object-fit w-full h-full radius-4 l:radius-8 overflow-hidden ${vari.status === 'OUT_OF_STOCK'
+                        `object-fit w-full h-full rounded-[4px] lg:rounded-[8px] overflow-hidden ${vari.status === 'OUT_OF_STOCK'
                           ? 'greyscale'
                           : ''
                         }`,
                         {
-                          'border border-green border-2':
+                          'border border-brand border-[2px]':
                             selectedImage === mediaItem.url,
                         }
                       )}
@@ -122,12 +122,12 @@ const ProductDetailModalGallery = ({
                     <VideoSrc
                       src={mediaItem.url}
                       className={cx(
-                        `object-fit w-full h-full radius-4 l:radius-8 overflow-hidden ${vari.status === 'OUT_OF_STOCK'
+                        `object-fit w-full h-full rounded-[4px] lg:rounded-[8px] overflow-hidden ${vari.status === 'OUT_OF_STOCK'
                           ? 'greyscale'
                           : ''
                         }`,
                         {
-                          'border border-green border-2':
+                          'border border-brand border-[2px]':
                             selectedImage === mediaItem.url,
                         }
                       )}

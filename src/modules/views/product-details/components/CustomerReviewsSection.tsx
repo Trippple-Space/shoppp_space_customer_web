@@ -10,9 +10,9 @@ const CustomerReviewsSection = ({
   slug,
 }: CustomerReviewsSectionProps) => {
   return (
-    <div className="flex flex-col gap-12 pt-15 mt-10 pb-100">
+    <div className="flex flex-col gap-[12px] pt-[15px] mt-[10px] pb-[100px]">
       <div className="">
-        <p className="text-20 weight-600">
+        <p className="text-[20px] font-semibold">
           Customer Reviews (
           {reviews.flatMap((review) => review.reviews).length ?? 0})
         </p>

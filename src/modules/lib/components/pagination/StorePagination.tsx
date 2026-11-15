@@ -43,13 +43,13 @@ const StorePagination: React.FC<Props> = ({
   const pages = getPages(page, totalPages);
 
   return (
-    <div className="flex j-content-center mt-40">
+    <div className="flex justify-center mt-[40px]">
       <div
-        className="flex j-content-center a-items-center gap-8 px-14 py-10 bg-#fff radius-999"
+        className="flex justify-center items-center gap-[8px] px-[14px] py-[10px] bg-[#fff] rounded-[999px]"
         style={{ boxShadow: '0 6px 20px rgba(0,0,0,0.06)' }}
       >
         <button
-          className={`flex a-items-center gap-6 min-w-36 h-36 px-12 mr-8 border-none bg-white pointer text-14 g|transition-property:all g|transition-duration:0.2s hover:bg-#f5f5f5 ${page === 1 || loading ? 'opacity-50 cursor-not-allowed' : ''}`}
+          className={`flex items-center gap-[6px] min-w-[36px] h-[36px] px-[12px] mr-[8px] border-none bg-white cursor-pointer text-[14px] transition-all duration-200 hover:bg-[#f5f5f5] ${page === 1 || loading ? 'opacity-50 cursor-not-allowed' : ''}`}
           disabled={page === 1 || loading}
           onClick={() => onPageChange(page - 1)}
         >
@@ -58,14 +58,14 @@ const StorePagination: React.FC<Props> = ({
 
         {pages.map((p, i) =>
           p === '...' ? (
-            <span key={i} className="py-6 text-#999">
+            <span key={i} className="py-[6px] text-[#999]">
               …
             </span>
           ) : (
             <button
               key={i}
               disabled={loading}
-              className={`min-w-36 h-36 px-12 border border-solid border-#eee bg-white pointer text-14 g|transition-property:all g|transition-duration:0.2s ${p === page ? 'bg-#111 text-white border-#111' : 'hover:bg-#f5f5f5'} ${loading ? 'opacity-50 cursor-not-allowed' : ''}`}
+              className={`min-w-[36px] h-[36px] px-[12px] border border-solid border-[#eee] bg-white cursor-pointer text-[14px] transition-all duration-200 ${p === page ? 'bg-[#111] text-white border-[#111]' : 'hover:bg-[#f5f5f5]'} ${loading ? 'opacity-50 cursor-not-allowed' : ''}`}
               onClick={() => onPageChange(p)}
             >
               {p}
@@ -74,7 +74,7 @@ const StorePagination: React.FC<Props> = ({
         )}
 
         <button
-          className={`flex a-items-center gap-6 min-w-36 h-36 px-12 ml-8 border-none bg-white pointer text-14 g|transition-property:all g|transition-duration:0.2s hover:bg-#f5f5f5 ${page === totalPages || loading ? 'opacity-50 cursor-not-allowed' : ''}`}
+          className={`flex items-center gap-[6px] min-w-[36px] h-[36px] px-[12px] ml-[8px] border-none bg-white cursor-pointer text-[14px] transition-all duration-200 hover:bg-[#f5f5f5] ${page === totalPages || loading ? 'opacity-50 cursor-not-allowed' : ''}`}
           disabled={page === totalPages || loading}
           onClick={() => onPageChange(page + 1)}
         >

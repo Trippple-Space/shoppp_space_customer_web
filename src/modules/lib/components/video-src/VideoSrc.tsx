@@ -64,11 +64,11 @@ const VideoSrc: React.FC<VideoSrcProps> = ({
   return (
     <>
       {hasLoader ? (
-        <div className={classNames('absolute t-0 w-full h-full')}>
+        <div className={classNames('absolute top-0 w-full h-full')}>
           {!loaded && (
             <div
               className={classNames(
-                'absolute g|inset:0px z-1 pulsing-multi-color-bg',
+                'absolute inset-0 z-[1px] pulsing-multi-color-bg',
                 pulseClassName
               )}
               aria-hidden

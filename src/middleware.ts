@@ -1,5 +1,6 @@
 import { NextResponse } from 'next/server';
 import type { NextRequest } from 'next/server';
+import { isReservedPath } from '@/modules/website/reserved-paths';
 
 function getSubstringBefore(input: string, target: string): string {
   const index = input.indexOf(target);
@@ -11,8 +12,13 @@ function getSubstringBefore(input: string, target: string): string {
 
 const extractMerchantSubdomainFromHost = (host: string) => {
   const hostParts = host.split(".");
-  const subdomain = hostParts.length >= 3 ? `${hostParts[0]}`.replace(/staging$/, '') : '';
-  return getSubstringBefore(subdomain, 'asoebi-client');
+  // `adaeze.localhost:3000` (local dev) is a store host too.
+  const isLocalSubdomain = hostParts.length === 2 && hostParts[1].startsWith('localhost');
+  const subdomain =
+    hostParts.length >= 3 || isLocalSubdomain
+      ? `${hostParts[0]}`.replace(/staging$/, '')
+      : '';
+  return getSubstringBefore(subdomain, 'shoppp-space-customer');
 }
 
 export function middleware(request: NextRequest) {
@@ -37,9 +43,16 @@ export function middleware(request: NextRequest) {
   });
   */
 
+  const proto = reconstructedHost.startsWith('localhost') ? 'http' : 'https';
+
   if (subdomain && subdomain !== "www" && subdomain !== "api") {
     // all other 
     if (pathname && pathname !== '/') {
+      // A published Sanee page (e.g. adaeze.shoppp.space/about) is served by /[slug]/[...sitePath].
+      // Paths the app owns (products, checkout, auth, ...) keep their existing routing.
+      if (!isReservedPath(pathname)) {
+        return NextResponse.rewrite(`${proto}://${reconstructedHost}/${subdomain}${pathname.replace(/\/$/, '')}`);
+      }
       /*
       console.log('Products path detected, not prepending subdomain', {
         subdomain,
@@ -47,7 +60,7 @@ export function middleware(request: NextRequest) {
         URL: `https://${reconstructedHost}${pathname}`
       });
       */
-      return NextResponse.rewrite(`https://${reconstructedHost}${pathname}`);
+      return NextResponse.rewrite(`${proto}://${reconstructedHost}${pathname}`);
     }
 
     const newPathname = `/${subdomain}${url.pathname?.replace?.(/\/$/, '')}`;
@@ -56,15 +69,7 @@ export function middleware(request: NextRequest) {
       pathname: newPathname,
       URL: `https://${reconstructedHost}${newPathname}`
     }); */
-    return NextResponse.rewrite(`https://${reconstructedHost}${newPathname}`); // aznzee.asoebi.africa ==> https://asoebi.africa/aznzee
-  }
-
-  if (pathname === '/' && !subdomain) {
-    /* console.log('Redirecting to /wears', {
-      pathname,
-      subdomain
-    }) */
-    return NextResponse.redirect(new URL('/wears', request.url))
+    return NextResponse.rewrite(`${proto}://${reconstructedHost}${newPathname}`); // store.shoppp.space => shoppp.space/store
   }
 
   return NextResponse.next();

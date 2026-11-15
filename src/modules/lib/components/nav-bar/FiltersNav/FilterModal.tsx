@@ -88,19 +88,19 @@ const FilterModal: React.FC<ModalProps> = ({
         onClose={handleCloseModal}
         modalClassName="filter"
         extraClass={{ boxShadow: '0 8px 16px 0 #494F5E1F' }}
-        className={`border border-#00000014 m:t-20 w-90p ${filterBy === 'Price' ? 'm:mr-245 max-w-450' : filterBy === 'Rating' || filterBy === 'Availability' ? 'm:mr-360 max-w-400' : 'm:mr-35 max-w-400'}`}
+        className={`border border-[#00000014] md:top-[20px] w-[90%] ${filterBy === 'Price' ? 'md:mr-[245px] max-w-[450px]' : filterBy === 'Rating' || filterBy === 'Availability' ? 'md:mr-[360px] max-w-[400px]' : 'md:mr-[35px] max-w-[400px]'}`}
       >
         <form onSubmit={applyFilter}>
-          <div className="flex space-between items-center border-b border-#00000014 py-12 px-24">
-            <h4 className="weight-600 text-16 line-height-24">
+          <div className="flex justify-between items-center border-b border-[#00000014] py-[12px] px-[24px]">
+            <h4 className="font-semibold text-[16px] leading-[24px]">
               {filterBy} {filterBy === 'Price' && `(₦)`}
             </h4>
             <AiOutlineClose
-              className="w-20 h-20 cursor-pointer"
+              className="w-[20px] h-[20px] cursor-pointer"
               onClick={() => handleCloseModal()}
             />
           </div>
-          <div className="flex gap-10 flex-col p-24">
+          <div className="flex gap-[10px] flex-col p-[24px]">
             <div
               className="overflow-hidden"
               style={{
@@ -133,18 +133,18 @@ const FilterModal: React.FC<ModalProps> = ({
                 </div>
               </div>
             </div>
-            <div className="flex gap-12 j-content-end pt-12 bg-white border-t border-#00000014 mx--24 px-24">
+            <div className="flex gap-[12px] justify-end pt-[12px] bg-white border-t border-[#00000014] -mx-[24px] px-[24px]">
               <button
                 type="button"
                 onClick={() => {
                   handleCloseModal();
                   handleReset();
                 }}
-                className={`bg-none border-2 color-#000000E0 py-10 l:py-12 px-20 w-fit radius-5 cursor-pointer text-13 l:text-14 font-inter g|transition:0.5s disabled:bg-grey`}
+                className={`bg-transparent border-[2px] text-[#000000E0] py-[10px] lg:py-[12px] px-[20px] w-fit rounded-[5px] cursor-pointer text-[13px] lg:text-[14px] font-inter transition-all duration-500 disabled:bg-[#676767]`}
               >
                 Reset
               </button>
-              <Button type="submit" children={'Apply'} className="l:py-12" />
+              <Button type="submit" children={'Apply'} className="lg:py-[12px]" />
             </div>
           </div>
         </form>

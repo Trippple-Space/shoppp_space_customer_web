@@ -11,9 +11,6 @@ const ProductDetailModalOptions = ({
   activeFilters,
   isOptionCompatible,
   toggleFilter,
-  productId,
-  showSizeChartLink,
-  onOpenSizeChart,
   selectedVariant,
   missingRequiredOptions,
   initialMissingOptions,
@@ -30,9 +27,6 @@ const ProductDetailModalOptions = ({
   activeFilters: Record<string, string>;
   isOptionCompatible: (prop: string, value: string) => boolean;
   toggleFilter: (key: string, value: string) => void;
-  productId?: string;
-  showSizeChartLink: boolean;
-  onOpenSizeChart: () => void;
   selectedVariant?: ProductVariant;
   missingRequiredOptions: string[];
   initialMissingOptions: string[];
@@ -45,16 +39,16 @@ const ProductDetailModalOptions = ({
   hasPendingImageUploads: boolean;
 }) => {
   return (
-    <div className="mt-16 flex flex-col">
+    <div className="mt-[16px] flex flex-col">
       {allPropertiesWithSize?.color?.filter(
         (v) => v.trim() !== ''
       )?.length > 0 && (
-          <div className="mt-4">
-            <p className="text-left text-12 weight-400 color-#000000B2 mb-10">
+          <div className="mt-[4px]">
+            <p className="text-left text-[12px] font-normal text-[#000000B2] mb-[10px]">
               Select color:
             </p>
 
-            <div className="flex gap-6 a-items-center overflow-auto no-scrollbar">
+            <div className="flex gap-[6px] items-center overflow-auto no-scrollbar">
               {allPropertiesWithSize?.color.map((color) => {
                 const active = activeFilters.color === color;
                 const compatible = isOptionCompatible(
@@ -69,9 +63,9 @@ const ProductDetailModalOptions = ({
                     colorMap={colorMap}
                     onClick={() => toggleFilter('color', color)}
                     className={classNames(
-                      'w-32 min-w-32 h-32 round overflow-hidden border transition',
+                      'w-[32px] min-w-[32px] h-[32px] rounded-full overflow-hidden border transition',
                       {
-                        'border-3 border-#0B9378 border-solid':
+                        'border-[3px] border-[#0357EE] border-solid':
                           active,
                         'opacity-40 cursor-not-allowed':
                           !compatible,
@@ -94,12 +88,12 @@ const ProductDetailModalOptions = ({
           if (cleanValues.length === 0) return null;
 
           return (
-            <div key={prop} className="mt-16">
-              <p className="text-left text-12 weight-400 color-#000000B2 mb-10">
+            <div key={prop} className="mt-[16px]">
+              <p className="text-left text-[12px] font-normal text-[#000000B2] mb-[10px]">
                 Select {prop}:
               </p>
 
-              <div className="flex gap-6 overflow-auto no-scrollbar">
+              <div className="flex gap-[6px] overflow-auto no-scrollbar">
                 {values.map((value) => {
                   const active =
                     activeFilters[prop] === value;
@@ -117,12 +111,12 @@ const ProductDetailModalOptions = ({
                         toggleFilter(prop, value)
                       }
                       className={cx(
-                        'px-12 py-8 radius-6 border transition whitespace-nowrap text-12',
+                        'px-[12px] py-[8px] rounded-[6px] border transition whitespace-nowrap text-[12px]',
                         active &&
-                        'bg-#DEFFF9! color-#0B9378! border-3 border-#0B9378 border-solid',
-                        !active && compatible && 'bg-#F3F3F3',
+                        '!bg-[#DEFFF9] !text-[#0357EE] border-[3px] border-[#0357EE] border-solid',
+                        !active && compatible && 'bg-[#F3F3F3]',
                         !compatible &&
-                        'bg-#F3F3F3 opacity-40 cursor-not-allowed'
+                        'bg-[#F3F3F3] opacity-40 cursor-not-allowed'
                       )}
                     >
                       {value}
@@ -135,32 +129,22 @@ const ProductDetailModalOptions = ({
         }
       )}
 
-      {productId && showSizeChartLink && (
-        <button
-          type="button"
-          onClick={onOpenSizeChart}
-          className="text-12 weight-500 color-#0B9378 underline underline-offset-2 bg-transparent border-none pointer p-0 mt-16 self-start w-fit"
-        >
-          View size chart
-        </button>
-      )}
-
       {!selectedVariant &&
         (missingRequiredOptions.length > 0 ||
           initialMissingOptions.length > 0) && (
-          <div className="flex flex-col gap-6 p-10 radius-6 bg-#FFF7E6 border border-#FFD699 mt-16">
-            <p className="text-12 weight-400 color-#8A5A00">
+          <div className="flex flex-col gap-[6px] p-[10px] rounded-[6px] bg-[#FFF7E6] border border-[#FFD699] mt-[16px]">
+            <p className="text-[12px] font-normal text-[#8A5A00]">
               Please select the following to continue:
             </p>
 
-            <div className="flex flex-wrap gap-6">
+            <div className="flex flex-wrap gap-[6px]">
               {(missingRequiredOptions.length > 0
                 ? missingRequiredOptions
                 : initialMissingOptions
               ).map((option) => (
                 <span
                   key={option}
-                  className="px-8 py-4 radius-99 bg-#FFD699 text-11 weight-500 capitalize"
+                  className="px-[8px] py-[4px] rounded-[99px] bg-[#FFD699] text-[11px] font-medium capitalize"
                 >
                   {option}
                 </span>
@@ -170,7 +154,7 @@ const ProductDetailModalOptions = ({
         )}
 
       {selectedVariant?.status !== 'OUT_OF_STOCK' && (
-        <div className="mt-16">
+        <div className="mt-[16px]">
           <DisplayProductConfigurations
             configurationRecords={configurationRecords}
             configurationValues={configurationValues}
@@ -185,7 +169,7 @@ const ProductDetailModalOptions = ({
       )}
 
       {hasPendingImageUploads && (
-        <p className="text-11 weight-500 color-#A66A00 mt-10">
+        <p className="text-[11px] font-medium text-[#A66A00] mt-[10px]">
           Tap “Upload” under each attached image to upload it
           before adding to cart.
         </p>

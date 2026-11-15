@@ -21,7 +21,7 @@ interface ISearchInput {
 }
 
 const Shimmer = ({ className }: { className: string }) => (
-  <div className={cx('animate-pulse bg-#E5E7EB radius-6', className)} />
+  <div className={cx('animate-pulse bg-[#E5E7EB] rounded-[6px]', className)} />
 );
 
 const SearchInput: FC<ISearchInput> = ({
@@ -174,12 +174,12 @@ const SearchInput: FC<ISearchInput> = ({
 
   return (
     <div
-      className={`flex gap-30 l:gap-50 weight-200 text-14 l:text-16 ${
-        component === 'home' ? 'l:w-400 md:w-340' : 'l:w-400'
-      } ${openSearchModal ? 'md:relative md:z-8' : 'md-relative z-0'}`}
+      className={`flex gap-[30px] lg:gap-[50px] font-extralight text-[14px] lg:text-[16px] ${
+        component === 'home' ? 'lg:w-[400px] md:w-[340px]' : 'lg:w-[400px]'
+      } ${openSearchModal ? 'md:relative md:z-[8px]' : 'md:relative z-0'}`}
     >
       <div
-        className={`flex w-100p relative a-items-center ${openSearchModal ? 'md:z-2' : ''}`}
+        className={`flex w-full relative items-center ${openSearchModal ? 'md:z-[2px]' : ''}`}
       >
         <div className="w-full hidden md:block">
           <input
@@ -187,9 +187,9 @@ const SearchInput: FC<ISearchInput> = ({
             className={
               component === 'home'
                 ? classNames(
-                    'flex l:block md:border md:bg-#F3F3F3 md:border-none md:py-12 md:px-14 md:outline-none md:w-100p md:relative md:z-2 md:radius-99'
+                    'flex lg:block md:border md:bg-[#F3F3F3] md:border-none md:py-[12px] md:px-[14px] md:outline-none md:w-[100%] md:relative md:z-[2px] md:rounded-[99px]'
                   )
-                : 'md:block hidden md:radius-99 md:border md:border-#D9D9D9 bg-none outline-none l:w-full md:w-320 text-16 md:py-11.2 md:pl-14 md:relative md:z-2 md:radius-99'
+                : 'md:block hidden md:rounded-[99px] md:border md:border-[#D9D9D9] bg-transparent outline-none lg:w-full md:w-[320px] text-[16px] md:py-[11.2px] md:pl-[14px] md:relative md:z-[2px] md:rounded-[99px]'
             }
             placeholder={placeholder}
             value={searchTerm}
@@ -199,19 +199,19 @@ const SearchInput: FC<ISearchInput> = ({
         </div>
 
         <div
-          className={`md:absolute r-0 md:cursor-pointer md:z-2 md:radius-50 ${
+          className={`md:absolute right-0 md:cursor-pointer md:z-[2px] md:rounded-[50px] ${
             component === 'home'
               ? classNames(
-                  'flex a-items-center j-content-center md:bg-#0B9378 md:w-30 md:h-30 w-100p md:m-5'
+                  'flex items-center justify-center md:bg-[#0357EE] md:w-[30px] md:h-[30px] w-full md:m-[5px]'
                 )
-              : 'md:z-2 md:radius-50'
+              : 'md:z-[2px] md:rounded-[50px]'
           }`}
         >
           <BiSearch
             className={
               component === 'home'
-                ? 'w-20 h-20 color-black md:color-white md:mr-0 mr-10'
-                : 'md:w-16 w-24 md:h-16 h-24 md:mb--2 mb--5 md:mr-14'
+                ? 'w-[20px] h-[20px] text-black md:color-white md:mr-0 mr-[10px]'
+                : 'md:w-[16px] w-[24px] md:h-[16px] h-[24px] md:-mb-[2px] -mb-[5px] md:mr-[14px]'
             }
             onClick={handleOpenSearchModal}
           />
@@ -219,34 +219,34 @@ const SearchInput: FC<ISearchInput> = ({
         {openSearchModal && (
           <>
             <div
-              className="fixed inset-0 bg-black opacity-70 z-1"
+              className="fixed inset-0 bg-black opacity-70 z-[1px]"
               onClick={handleOpenSearchModal}
             />
 
             <div
               className={classNames(
-                `z-1 bg-white radius-30 md:radius-20 flex flex-col fixed l-50p md:l-auto t-70 md:t--12 md:pt-70 g|transform:translate(-50%); w-90p h-70p md:h-400 md:w-520 md:absolute md:transform-none md:g|box-shadow:0px|_|2px|_|5px|_|rgba(0,0,0,0.05);`
+                `z-[1px] bg-white rounded-[30px] md:rounded-[20px] flex flex-col fixed left-[50%] md:l-auto top-[70px] md:-top-[12px] md:pt-[70px] -translate-x-1/2 w-[90%] h-[70%] md:h-[400px] md:w-[520px] md:absolute md:transform-none md:shadow-[0px_2px_5px_rgba(0,0,0,0.05)]`
               )}
             >
-              <div className="w-100p flex j-content-center md:hidden pb-20">
-                <div className="flex j-content-center relative a-items-center mt-20 w-80p">
+              <div className="w-full flex justify-center md:hidden pb-[20px]">
+                <div className="flex justify-center relative items-center mt-[20px] w-[80%]">
                   <input
                     type="text"
                     value={searchTerm}
                     onChange={(e) => setSearchTerm(e.target.value)}
-                    className={`block radius-99 py-12 px-14 outline-none w-100p ${component === 'home' ? 'bg-#F3F3F3 border-none' : 'border border-#D9D9D9'}`}
-                    placeholder={`${component === 'home' ? 'Search asoebi.africa' : 'Search'}`}
+                    className={`block rounded-[99px] py-[12px] px-[14px] outline-none w-full ${component === 'home' ? 'bg-[#F3F3F3] border-none' : 'border border-[#D9D9D9]'}`}
+                    placeholder={`${component === 'home' ? 'Search Shoppp Space' : 'Search'}`}
                   />
 
                   <div
-                    className={`flex j-content-center a-items-center absolute r-0 radius-50 m-5 w-30 h-30 ${component === 'home' ? 'bg-#0B9378 color-#fff' : ''}`}
+                    className={`flex justify-center items-center absolute right-0 rounded-[50px] m-[5px] w-[30px] h-[30px] ${component === 'home' ? 'bg-[#0357EE] text-[#fff]' : ''}`}
                   >
-                    <IoIosSearch className="w-25 h-20" />
+                    <IoIosSearch className="w-[25px] h-[20px]" />
                   </div>
                 </div>
               </div>
 
-              <div className="flex flex-col gap-42 sm:w-90p w-93p mx-auto flex-1 min-h-0 overflow-auto no-scrollbar py-20">
+              <div className="flex flex-col gap-[42px] sm:w-[90%] w-[93%] mx-auto flex-1 min-h-0 overflow-auto no-scrollbar py-[20px]">
                 {searchTerm.length === 0 ? (
                   <MiniRecentlySearched
                     recentSearched={recentSearched}
@@ -260,58 +260,58 @@ const SearchInput: FC<ISearchInput> = ({
                   component === 'home' &&
                   (storeResults.length === 0 ? (
                     loadingStores ? (
-                      <div className="flex flex-col gap-22">
-                        <h6 className="font-inter weight-700 text-14">
+                      <div className="flex flex-col gap-[22px]">
+                        <h6 className="font-inter font-bold text-[14px]">
                           Stores
                         </h6>
 
-                        <div className="flex gap-18">
+                        <div className="flex gap-[18px]">
                           {Array.from({ length: 4 }).map((_, i) => (
                             <div
                               key={i}
-                              className="bg-#F3F3F3 h-33 px-16 py-8 radius-999 flex gap-8 a-items-center"
+                              className="bg-[#F3F3F3] h-[33px] px-[16px] py-[8px] rounded-[999px] flex gap-[8px] items-center"
                             >
-                              <Shimmer className="w-20 h-20 radius-50" />
-                              <Shimmer className="w-70 h-12" />
+                              <Shimmer className="w-[20px] h-[20px] rounded-[50px]" />
+                              <Shimmer className="w-[70px] h-[12px]" />
                             </div>
                           ))}
                         </div>
                       </div>
                     ) : (
-                      <div className="flex flex-col gap-22">
-                        <h6 className="font-inter weight-700 text-14">
+                      <div className="flex flex-col gap-[22px]">
+                        <h6 className="font-inter font-bold text-[14px]">
                           Stores
                         </h6>
-                        <p className="text-13 color-#00000099 text-center">
+                        <p className="text-[13px] text-[#00000099] text-center">
                           No stores found
                         </p>
                       </div>
                     )
                   ) : (
-                    <div className="flex flex-col gap-22">
-                      <h6 className="font-inter weight-700 text-14">Stores</h6>
-                      <div className="flex gap-18 a-items-center overflow-auto no-scrollbar">
+                    <div className="flex flex-col gap-[22px]">
+                      <h6 className="font-inter font-bold text-[14px]">Stores</h6>
+                      <div className="flex gap-[18px] items-center overflow-auto no-scrollbar">
                         {storeResults?.slice(0, 5).map((store) => (
                           <Link
                             href={`/${store?.slug}`}
                             target="_blank"
                             key={store.id}
-                            className="bg-#F3F3F3 hover:bg-#eee h-33 px-16 py-8 radius-999 flex gap-8 a-items-center j-content-center pointer"
+                            className="bg-[#F3F3F3] hover:bg-[#eee] h-[33px] px-[16px] py-[8px] rounded-[999px] flex gap-[8px] items-center justify-center cursor-pointer"
                           >
-                            <span className="text-14 weight-500 flex a-items-center j-content-center">
+                            <span className="text-[14px] font-medium flex items-center justify-center">
                               {store.logo ? (
                                 <img
                                   src={store.logo}
                                   alt={store.name}
-                                  className="w-100p h-100p object-cover"
+                                  className="w-full h-full object-cover"
                                 />
                               ) : (
-                                <BiStoreAlt className="w-20 h-21 min-w-20" />
+                                <BiStoreAlt className="w-[20px] h-[21px] min-w-[20px]" />
                               )}
                             </span>
 
                             <span
-                              className="text-14 weight-500"
+                              className="text-[14px] font-medium"
                               style={{ textWrap: 'nowrap' }}
                             >
                               {store.name}
@@ -328,11 +328,11 @@ const SearchInput: FC<ISearchInput> = ({
                       loadingProducts ? (
                         <ProductLoadingSkeleton />
                       ) : (
-                        <div className="flex flex-col gap-22">
-                          <h6 className="font-inter weight-700 text-14">
+                        <div className="flex flex-col gap-[22px]">
+                          <h6 className="font-inter font-bold text-[14px]">
                             Products
                           </h6>
-                          <p className="text-13 color-#00000099 text-center">
+                          <p className="text-[13px] text-[#00000099] text-center">
                             No products found
                           </p>
                         </div>
@@ -377,9 +377,9 @@ export const MiniRecentlySearched = ({
   return (
     <>
       {recentSearched?.length !== 0 ? (
-        <div className="flex flex-col gap-22">
-          <h6 className="font-inter weight-700 text-14">Recent Searches</h6>
-          <div className="flex gap-18 a-items-center w-100p overflow-auto no-scrollbar">
+        <div className="flex flex-col gap-[22px]">
+          <h6 className="font-inter font-bold text-[14px]">Recent Searches</h6>
+          <div className="flex gap-[18px] items-center w-full overflow-auto no-scrollbar">
             {recentSearched?.toReversed().map((searched, idx) => (
               <p
                 key={searched.id + idx}
@@ -388,10 +388,10 @@ export const MiniRecentlySearched = ({
                     searched?.productVariant?.product?.slug || ''
                   );
                 }}
-                className="bg-#F3F3F3 hover:bg-#eee h-33 px-16 py-8 radius-999 flex flex-col gap-8 a-items-center j-content-center pointer"
+                className="bg-[#F3F3F3] hover:bg-[#eee] h-[33px] px-[16px] py-[8px] rounded-[999px] flex flex-col gap-[8px] items-center justify-center cursor-pointer"
               >
                 <span
-                  className="text-14 weight-500"
+                  className="text-[14px] font-medium"
                   style={{ textWrap: 'nowrap' }}
                 >
                   {searched?.productVariant?.product?.name}
@@ -404,14 +404,14 @@ export const MiniRecentlySearched = ({
         ''
       )}
 
-      {/* <div className="flex flex-col gap-22">
-                      <h6 className="font-inter weight-700 text-14">
+      {/* <div className="flex flex-col gap-[22px]">
+                      <h6 className="font-inter font-bold text-[14px]">
                         Trending Now
                       </h6>
-                      <div className="flex gap-18 a-items-center overflow-auto no-scrollbar">
-                        <p className="bg-#F3F3F3 hover:bg-#eee h-33 px-16 py-8 radius-999 flex gap-8 a-items-center j-content-center pointer">
+                      <div className="flex gap-[18px] items-center overflow-auto no-scrollbar">
+                        <p className="bg-[#F3F3F3] hover:bg-[#eee] h-[33px] px-[16px] py-[8px] rounded-[999px] flex gap-[8px] items-center justify-center cursor-pointer">
                           <span
-                            className="text-14 weight-500"
+                            className="text-[14px] font-medium"
                             style={{ textWrap: 'nowrap' }}
                           >
                             Flowery Lace
@@ -426,17 +426,17 @@ export const MiniRecentlySearched = ({
 
 export const ProductLoadingSkeleton = () => {
   return (
-    <div className="flex flex-col gap-15">
-      <h6 className="font-inter weight-700 text-14">Products</h6>
+    <div className="flex flex-col gap-[15px]">
+      <h6 className="font-inter font-bold text-[14px]">Products</h6>
 
-      <div className="flex flex-col gap-10">
+      <div className="flex flex-col gap-[10px]">
         {Array.from({ length: 4 }).map((_, i) => (
-          <div key={i} className="flex gap-8 p-10 radius-8">
-            <Shimmer className="w-50 h-50 radius-6" />
+          <div key={i} className="flex gap-[8px] p-[10px] rounded-[8px]">
+            <Shimmer className="w-[50px] h-[50px] rounded-[6px]" />
 
-            <div className="flex flex-col gap-6 flex-grow-1">
-              <Shimmer className="h-12 w-70p" />
-              <Shimmer className="h-10 w-40p" />
+            <div className="flex flex-col gap-[6px] grow">
+              <Shimmer className="h-[12px] w-[70%]" />
+              <Shimmer className="h-[10px] w-[40%]" />
             </div>
           </div>
         ))}

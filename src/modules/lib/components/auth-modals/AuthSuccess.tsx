@@ -48,41 +48,41 @@ export default function StepSuccess() {
   }, []);
 
   return (
-    <div className="w-full flex flex-col gap-22 sm:gap-33">
-      <div className="flex flex-col gap-11 a-items-center">
-        <div className="bg-#E7F8F6 w-134 sm:w-154 h-134 sm:h-154 radius-100p flex flex-col a-items-center j-content-center ">
-          <IoShieldCheckmarkSharp className="w-66 sm:w-77 h-66 sm:h-77 color-#0EA17F" />
+    <div className="w-full flex flex-col gap-[22px] sm:gap-[33px]">
+      <div className="flex flex-col gap-[11px] items-center">
+        <div className="bg-[#E7F8F6] w-[134px] sm:w-[154px] h-[134px] sm:h-[154px] rounded-[100ppx] flex flex-col items-center justify-center ">
+          <IoShieldCheckmarkSharp className="w-[66px] sm:w-[77px] h-[66px] sm:h-[77px] text-[#0EA17F]" />
         </div>
 
-        <div className="flex flex-col gap-23 a-items-center w-full max-w-540 mx-auto">
-          <h2 className="text-32 sm:text-38 text-black weight-600">You’re signed in!</h2>
+        <div className="flex flex-col gap-[23px] items-center w-full max-w-[540px] mx-auto">
+          <h2 className="text-[32px] sm:text-[38px] text-black font-semibold">You’re signed in!</h2>
 
-          <p className="text-17 sm:text-23 text-black weight-400 text-center">
+          <p className="text-[17px] sm:text-[23px] text-black font-normal text-center">
             Welcome back! We’re redirecting you to your shopping experience.
           </p>
 
-          <div className="w-full max-w-419 mx-auto h-14 radius-18 bg-#D9D9D9 overflow-hidden">
+          <div className="w-full max-w-[419px] mx-auto h-[14px] rounded-[18px] bg-[#D9D9D9] overflow-hidden">
             <div
-              className="h-full bg-#0EA17F radius-18 g|transition-property:all g|transition-duration:0.2s"
+              className="h-full bg-[#0EA17F] rounded-[18px] transition-all duration-200"
               style={{ width: `${progress}%` }}
             ></div>
           </div>
         </div>
       </div>
 
-      <div className="w-full max-w-500 mx-auto flex flex-col a-items-center gap-40">
+      <div className="w-full max-w-[500px] mx-auto flex flex-col items-center gap-[40px]">
         <button
           onClick={closeAndRedirect}
-          className="bg-green text-white p-12 l:py-15 radius-14 w-full border text-14 mt-10 hover:pointer font-inter hover:bg-darkgreen g|transition:0.5s disabled:bg-grey weight-400 flex a-items-center j-content-center gap-5"
+          className="bg-brand text-white p-[12px] lg:py-[15px] rounded-[14px] w-full border text-[14px] mt-[10px] hover:cursor-pointer font-inter hover:bg-brand-hover transition-all duration-500 disabled:bg-[#676767] font-normal flex items-center justify-center gap-[5px]"
         >
           Continue shopping
-          <HiOutlineArrowNarrowRight className="w-24 h-24 text-#374957" />
+          <HiOutlineArrowNarrowRight className="w-[24px] h-[24px] text-[#374957]" />
         </button>
 
-        <p className="text-14 text-black weight-400">
+        <p className="text-[14px] text-black font-normal">
           If you’re not redirected automatically{' '}
           <span
-            className="color-#0EA17F cursor-pointer weight-600 hover:underline"
+            className="text-[#0EA17F] cursor-pointer font-semibold hover:underline"
             onClick={closeAndRedirect}
           >
             Click Here.

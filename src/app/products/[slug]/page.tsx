@@ -67,10 +67,11 @@ async function fetchProductBySlugWithTag(slug: string): Promise<Product> {
 export async function generateMetadata({
   params,
 }: {
-  params: { slug: string };
+  params: Promise<{ slug: string }>;
 }): Promise<Metadata> {
+  const { slug } = await params;
   try {
-    const product = await fetchProductBySlugWithTag(params.slug);
+    const product = await fetchProductBySlugWithTag(slug);
 
     const extractProductProperties = () => {
       const hasValue = (value: unknown) => {
@@ -134,7 +135,7 @@ export async function generateMetadata({
 
     const { sizes, colors, customProperties } = extractProductProperties();
 
-    const storeName = product?.store?.name?.trim() || 'Asoebi Africa';
+    const storeName = product?.store?.name?.trim() || 'Shoppp Space';
 
     const customPropsString = Object.entries(customProperties)
       .filter(
@@ -173,7 +174,7 @@ export async function generateMetadata({
           if (mediaItem?.type === 'image') return mediaUrl;
         }
       }
-      return 'asoebi-stacked-logo.svg';
+      return 'shoppp-stacked-logo.svg';
     };
 
     const previewImageUrl = getFirstImagePreviewUrl();
@@ -184,7 +185,7 @@ export async function generateMetadata({
       openGraph: {
         title: `${product?.name} - ${storeName}`,
         description: descriptionWithPrice,
-        url: `https://asoebi.africa/products/${params.slug}`,
+        url: `https://shoppp.space/products/${slug}`,
         siteName: storeName,
         images: [
           {
@@ -211,7 +212,7 @@ export async function generateMetadata({
   } catch (error) {
     //console.error('Error generating metadata:', error)
     return {
-      title: 'Product Not Found - Asoebi Africa',
+      title: 'Product Not Found - Shoppp Space',
       description: 'This product could not be found',
     };
   }
@@ -220,10 +221,11 @@ export async function generateMetadata({
 export default async function product_details({
   params,
 }: {
-  params: { slug: string };
+  params: Promise<{ slug: string }>;
 }) {
+  const { slug } = await params;
   try {
-    const product = await fetchProductBySlugWithTag(params.slug);
+    const product = await fetchProductBySlugWithTag(slug);
 
     return (
       <div>

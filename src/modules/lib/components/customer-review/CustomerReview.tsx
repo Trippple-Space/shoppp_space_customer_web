@@ -14,37 +14,37 @@ const ReviewTile: FC<IReview> = ({product}) => {
   const [selectedImage, setSelectedImage] = useState(product.images[2])
   const [isFavourite, setIsFavorite] = useState(false)
   return (
-    <div className="mt-20">
+    <div className="mt-[20px]">
       <div
         id="image"
-        className="relative ratio-1 radius-8 g|overflow:hidden l:radius-15 w-full h-283"
+        className="relative aspect-square rounded-[8px] overflow-hidden lg:rounded-[15px] w-full h-[283px]"
       >
         <Image
-          className="absolute w-full h-full a-self-center g|object-fit:cover pointer"
+          className="absolute w-full h-full self-center object-cover cursor-pointer"
           src={selectedImage}
           alt="product-image"
         />
         <div
           id="review"
-          className="absolute b-0 w-full"
+          className="absolute bottom-0 w-full"
           style={{
             background: 'linear-gradient(to bottom, rgba(0, 0, 0, 0), rgba(0, 0, 0, 0.8))',
             paddingBottom: '1rem', 
             paddingTop: '9rem', 
           }}
         >
-          <div className="flex gap-8 text-yellow ml-10 l:ml-15">
+          <div className="flex gap-[8px] text-[#FACE33] ml-[10px] lg:ml-[15px]">
             {
               [0,1,2,3,4].map(() => (
                 <AiFillStar 
-                  className="w-20"
+                  className="w-[20px]"
                 />
               ))
             }
           </div>
-          <div className="text-white mt-8 l:mt-8 ml-10 mb-10 l:ml-15 l:mb-15">
-            <h3 className="text-14 l:text-18 weight-400">Abdulrasaq Ibrahim</h3>
-            <p className="text-10 l:text-12 weight-400">The quality of the product is outstanding....</p>
+          <div className="text-white mt-[8px] lg:mt-[8px] ml-[10px] mb-[10px] lg:ml-[15px] lg:mb-[15px]">
+            <h3 className="text-[14px] lg:text-[18px] font-normal">Abdulrasaq Ibrahim</h3>
+            <p className="text-[10px] lg:text-[12px] font-normal">The quality of the product is outstanding....</p>
           </div>
         </div>
       </div>

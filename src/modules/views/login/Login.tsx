@@ -45,9 +45,9 @@ const Login = () => {
       <div className='w-full'>
 
 
-            <div className="font-inter mb-30"> 
-        <h3 className="text-center text-20 weight-500 mb-10 text-grey-900">Welcome back!</h3>
-        <p className="text-center text-14 text-grey-700">Enter your details below to login.</p>
+            <div className="font-inter mb-[30px]"> 
+        <h3 className="text-center text-[20px] font-medium mb-[10px] text-[#1F1B17]">Welcome back!</h3>
+        <p className="text-center text-[14px] text-[#6B6662]">Enter your details below to login.</p>
       </div>
 
       <form onSubmit={loginFormHandler.handleSubmit} className="">
@@ -62,7 +62,7 @@ const Login = () => {
             value={loginFormHandler.values.email}
           
               inputClass={cx({
-                      "border-red": loginFormHandler.touched.email && loginFormHandler.errors.email,
+                      "border-[#DE3838]": loginFormHandler.touched.email && loginFormHandler.errors.email,
                     })}
                     after={
                       <InputAlert 
@@ -79,12 +79,12 @@ const Login = () => {
           name='password'
           type='password'
           placeholder='********'
-          className='l:mt-30 mt-18'
+          className='lg:mt-[30px] mt-[18px]'
           handleBlur={loginFormHandler.handleBlur}
           handleChange={loginFormHandler.handleChange}
             value={loginFormHandler.values.password}
             inputClass={cx({
-              "border-red": loginFormHandler.touched.password && loginFormHandler.errors.password,
+              "border-[#DE3838]": loginFormHandler.touched.password && loginFormHandler.errors.password,
             })}
             after={
               <InputAlert 
@@ -100,22 +100,22 @@ const Login = () => {
           />
           
 
-          <div className="flex flex-col l:flex-row w-full j-content-between l:a-items-center text-grey-700 l:text-14 text-12">
+          <div className="flex flex-col lg:flex-row w-full justify-between lg:items-center text-[#6B6662] lg:text-[14px] text-[12px]">
             <Link href={paths.forgotPassword}>
             
-          <div className="pointer color-link border-b my-10 w-fit">Forgotten password?</div>
+          <div className="cursor-pointer color-link border-b my-[10px] w-fit">Forgotten password?</div>
           </Link>
         {loginFormHandler.errors.password === "You have not completed sign up process." && (
-          <p className="color-red border-b pointer text-12 w-fit" onClick={handleResendOtp}>
+          <p className="text-[#DE3838] border-b cursor-pointer text-[12px] w-fit" onClick={handleResendOtp}>
             Click here to finish setting up your account
           </p>
         )}
         </div>
 
         <button 
-          className="bg-green text-white py-15 l:py-18 radius-8 w-full border 
-          text-14 l:text-16 mt-20 hover:pointer font-inter
-          hover:bg-darkgreen g|transition:0.5s disabled:bg-grey"
+          className="bg-brand text-white py-[15px] lg:py-[18px] rounded-[8px] w-full border 
+          text-[14px] lg:text-[16px] mt-[20px] hover:cursor-pointer font-inter
+          hover:bg-brand-hover transition-all duration-500 disabled:bg-[#676767]"
           type="submit"
             disabled={loginFormHandler.isSubmitting}
       

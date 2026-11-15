@@ -69,33 +69,33 @@ export const AddReview = ({ id, setOpenModal, refresh }: { id: string, setOpenMo
     };
 
     return (
-        <form onSubmit={handleSubmit} className="px-20 py-16">
-            <div className='mb-20'>
-                <p className="mb-3 weight-500 text-16">Rate<span className='text-red'>*</span> : {hoveredRating ? getRating(hoveredRating) : getRating(rating)}</p>
+        <form onSubmit={handleSubmit} className="px-[20px] py-[16px]">
+            <div className='mb-[20px]'>
+                <p className="mb-[3px] font-medium text-[16px]">Rate<span className='text-[#DE3838]'>*</span> : {hoveredRating ? getRating(hoveredRating) : getRating(rating)}</p>
                 <div style={{ maxWidth: 180, width: '100%' }}>
                     <Rating value={rating} onChange={setRating} onHoverChange={setHoveredRating} isRequired />
                 </div>
                 {
-                    touched.rate && !rating && <span className='text-12 weight-400 text-red'>Required</span>
+                    touched.rate && !rating && <span className='text-[12px] font-normal text-[#DE3838]'>Required</span>
                 }
             </div>
 
-            <div className='mb-24'>
-                <p className="mb-10 weight-500 text-16">Comment<span className='text-red'>*</span> :</p>
+            <div className='mb-[24px]'>
+                <p className="mb-[10px] font-medium text-[16px]">Comment<span className='text-[#DE3838]'>*</span> :</p>
                 <textarea
                     name="comment"
                     id="comment"
                     value={comment}
                     onChange={(e) => setComment(e.target.value)}
                     onBlur={() => setTouched(t => ({ ...t, comment: true }))}
-                    className={`w-full border border-2 border-#00000014 radius-6 outline-none px-12 py-10 resize-none h-130 text-16 weight-300 ${touched.comment && !comment.trim() ? 'border-red-500' : 'border-gray-300'} focus:border-#0B9378`}
+                    className={`w-full border border-[2px] border-[#00000014] rounded-[6px] outline-none px-[12px] py-[10px] resize-none h-[130px] text-[16px] font-light ${touched.comment && !comment.trim() ? 'border-red-500' : 'border-gray-300'} focus:border-[#0357EE]`}
                 />
             </div>
 
-            <div className='flex j-content-end'>
+            <div className='flex justify-end'>
                 <button
                     type="submit"
-                    className="bg-#0B9378 border-none text-white radius-6 px-12 py-10 cursor-pointer weight-600 outline-none"
+                    className="bg-[#0357EE] border-none text-white rounded-[6px] px-[12px] py-[10px] cursor-pointer font-semibold outline-none"
                 >
                     Publish Review
                 </button>

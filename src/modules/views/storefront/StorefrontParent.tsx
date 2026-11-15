@@ -1,7 +1,5 @@
 'use client';
 
-import Furniture from '@/modules/templates/furniture/Furniture';
-import TrendFashion from '@/modules/templates/trendFashion/TrendFashion';
 import React, { FC, useEffect, useRef, useState } from 'react';
 import StorefrontLayout from './StorefrontLayout';
 import StorefrontAbout from './StorefrontAbout';
@@ -11,13 +9,8 @@ import { ICategory, Product } from '@/modules/lib/utility/types/product.interfac
 import { useStoreProductsView } from '@/modules/lib/utility/hooks/views/use-store-products-view';
 import useReviews from '@/modules/lib/utility/hooks/use-reviews';
 import { useProductSold } from '@/modules/lib/utility/hooks/use-product-sold';
-import ModernEarth from '@/modules/templates/modernEarth/ModernEarth';
-import { formatNumberAsPrice } from '@/modules/lib/utility/utility';
 import { useSavedVariant } from '@/modules/lib/utility/hooks/use-saved-variants';
 import { useCart } from '@/modules/lib/utility/hooks/use-cart';
-import ModernLuxe from '@/modules/templates/lustre/Lustre';
-import UrbanEdge from '@/modules/templates/urbanEdge/UrbanEdge';
-import SimpleFlow from '@/modules/templates/simpleFlow/SimpleFlow';
 import useUserStore from '@/modules/lib/utility/store/user.store';
 import { useGetIPAddress } from '@/modules/lib/utility/hooks/use-get-ip-address';
 import { useLogVisit } from '@/modules/lib/utility/hooks/use-log-visit';
@@ -278,119 +271,24 @@ export const StorefrontParent: FC<{
 
   return (
     <>
-      {template ? (
-        template?.name === 'Bold' ? (
-          <TrendFashion {...commonTemplateProps} />
-        ) : template?.name === 'Minimal' ? (
-          <Furniture {...commonTemplateProps} productSold={productSold || 0} />
-        ) : template?.name === 'Modern-earth' ? (
-          <ModernEarth
-            {...commonTemplateProps}
-            title={store?.heading || ''}
-            description={store?.subHeading || ''}
-            primaryBtnText="Shop now"
-            heroImage={store?.meta?.heroImage1 || ''}
-            offers={[
-              { image: store?.meta?.heroImage2 },
-              {
-                text: `${discountText}`,
-                subText: `${discountText
-                  ? 'on selected products'
-                  : 'Check back soon for upcoming deals!'
-                  }`,
-              },
-              { image: store?.meta?.heroImage3 },
-              { image: store?.meta?.heroImage4 },
-            ]}
-            discountText={discountText}
-            savedVariant={savedVariants}
-          />
-        ) : template?.name === 'Lustre' ? (
-          <ModernLuxe
-            {...commonTemplateProps}
-            offers={[
-              {
-                price: formatNumberAsPrice(
-                  firstDiscount?.discountedPrice ||
-                  firstDiscount?.finalPrice ||
-                  products[0]?.variants[0]?.discountedPrice ||
-                  products[0]?.variants[0]?.finalPrice
-                ),
-                image:
-                  getFirstImageUrl(firstDiscount) || getNextImageFromProducts(0),
-              },
-              {
-                text: `${discountText}`,
-                subText: `${discountText ? 'on selected products' : 'Check back soon for upcoming deals!'}`,
-              },
-              {
-                price: formatNumberAsPrice(
-                  nextTwoDiscounts[0]?.discountedPrice ||
-                  nextTwoDiscounts[0]?.finalPrice ||
-                  products[1]?.variants[0]?.discountedPrice ||
-                  products[1]?.variants[0]?.finalPrice
-                ),
-                image:
-                  getFirstImageUrl(nextTwoDiscounts[0]) ||
-                  getNextImageFromProducts(1),
-              },
-              {
-                price: formatNumberAsPrice(
-                  nextTwoDiscounts[1]?.discountedPrice ||
-                  nextTwoDiscounts[1]?.finalPrice ||
-                  products[2]?.variants[0]?.discountedPrice ||
-                  products[2]?.variants[0]?.finalPrice
-                ),
-                image:
-                  getFirstImageUrl(nextTwoDiscounts[1]) ||
-                  getNextImageFromProducts(2),
-              },
-            ]}
-          />
-        ) : template?.name === 'Urban-edge' ? (
-          <UrbanEdge {...commonTemplateProps} />
-        ) : template?.name === 'Simple-flow' ? (
-          <SimpleFlow {...commonTemplateProps} />
-        ) : (
-          <StorefrontLayout
-            store={store}
-            products={products}
-            loading={loading}
-            page={page}
-            setPage={setPage}
-            totalPages={totalPages}
-            initialCollections={initialCollections}
-            initialCategories={initialCategories}
-            showCollectionsSection={showCollectionsSection}
-            categories={categories}
-            selectedCategory={selectedCategory}
-            setSelectedCategory={setSelectedCategory}
-            fetchingError={fetchingError}
-            onProductsRetry={handleProductsRetry}
-          >
-            <StorefrontAbout store={store} />
-          </StorefrontLayout>
-        )
-      ) : (
-        <StorefrontLayout
-          store={store}
-          products={products}
-          loading={loading}
-          page={page}
-          setPage={setPage}
-          totalPages={totalPages}
-          initialCollections={initialCollections}
-          initialCategories={initialCategories}
-          showCollectionsSection={showCollectionsSection}
-          categories={categories}
-          selectedCategory={selectedCategory}
-          setSelectedCategory={setSelectedCategory}
-          fetchingError={fetchingError}
-          onProductsRetry={handleProductsRetry}
-        >
-          <StorefrontAbout store={store} />
-        </StorefrontLayout>
-      )}
+      <StorefrontLayout
+        store={store}
+        products={products}
+        loading={loading}
+        page={page}
+        setPage={setPage}
+        totalPages={totalPages}
+        initialCollections={initialCollections}
+        initialCategories={initialCategories}
+        showCollectionsSection={showCollectionsSection}
+        categories={categories}
+        selectedCategory={selectedCategory}
+        setSelectedCategory={setSelectedCategory}
+        fetchingError={fetchingError}
+        onProductsRetry={handleProductsRetry}
+      >
+        <StorefrontAbout store={store} />
+      </StorefrontLayout>
 
       {profileModal && (
         <>

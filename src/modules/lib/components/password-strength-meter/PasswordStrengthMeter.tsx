@@ -27,14 +27,14 @@ const PasswordStrengthMeter = ({ password }: { password: string }) => {
     switch (score) {
       case 1:
         return (
-          <p className="text-12 color-#00000099">
-            <span className="weight-500 color-black">Password strength is too weak:</span> Enter at least 8 characters
+          <p className="text-[12px] text-[#00000099]">
+            <span className="font-medium text-black">Password strength is too weak:</span> Enter at least 8 characters
           </p>
         );
       case 2:
         return (
-          <p className="text-12 color-#00000099">
-            <span className="weight-500 color-black">Password strength is weak:</span>
+          <p className="text-[12px] text-[#00000099]">
+            <span className="font-medium text-black">Password strength is weak:</span>
             Try adding 1 uppercase, 1 number and 1 special character.
           </p>
         );
@@ -83,14 +83,14 @@ const PasswordStrengthMeter = ({ password }: { password: string }) => {
 
   return (
     <>
-      <div className="radius-6" style={{ height: '12px', background: '#F5F5F5' }}>
+      <div className="rounded-[6px]" style={{ height: '12px', background: '#F5F5F5' }}>
         <motion.div 
           animate={{ width: progressStyle.width, background: progressStyle.background }}
           transition={{ duration: 0.5, ease: 'easeOut' }}
           style={progressStyle}
         />
       </div>
-      <div className="text-12 mt-10">{createPassLabel()}</div>
+      <div className="text-[12px] mt-[10px]">{createPassLabel()}</div>
     </>
   );
 };

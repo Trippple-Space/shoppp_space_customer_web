@@ -17,12 +17,6 @@ import { guestSession } from '../../utility/guest-session';
 import { CartItem } from '../../utility/types/cart.interface';
 import { buildVariantMediaPreviewItems } from '../../utility/product-media';
 import { getVariantDisplayPrices } from '../../utility/visible-discount';
-import {
-  isFullProductSizeChart,
-  shouldShowProductSizeChart,
-} from '@/modules/views/product-details/utils/fit-size-chart';
-import { fitOracleService } from '@/modules/lib/utility/services/fit-oracle.service';
-import type { ProductSizeChartResponse } from '@/modules/views/product-details/types/product-size-chart';
 
 export interface ProductDetailModalProp {
   openSingleProductModal: boolean;
@@ -86,44 +80,6 @@ export const useProductDetailModal = ({
   const [isAddingToCart, setIsAddingToCart] = useState(false);
   const [isRemovingFromCart, setIsRemovingFromCart] = useState(false);
   const [guestCartVersion, setGuestCartVersion] = useState(0);
-  const [sizeChartOpen, setSizeChartOpen] = useState(false);
-  const [fetchedSizeChart, setFetchedSizeChart] =
-    useState<ProductSizeChartResponse | null>(null);
-
-  const embeddedSizeChart = isFullProductSizeChart(product?.fitSizeChart)
-    ? product.fitSizeChart
-    : null;
-  const resolvedSizeChart = embeddedSizeChart ?? fetchedSizeChart;
-  const showSizeChartLink = shouldShowProductSizeChart(
-    resolvedSizeChart ?? product?.fitSizeChart,
-  );
-
-  useEffect(() => {
-    if (!openSingleProductModal || !product?.id || embeddedSizeChart) {
-      return;
-    }
-
-    let cancelled = false;
-    fitOracleService
-      .getSizeChart(product.id)
-      .then((chart) => {
-        if (!cancelled) setFetchedSizeChart(chart);
-      })
-      .catch(() => {
-        if (!cancelled) setFetchedSizeChart(null);
-      });
-
-    return () => {
-      cancelled = true;
-    };
-  }, [openSingleProductModal, product?.id, embeddedSizeChart]);
-
-  useEffect(() => {
-    if (!openSingleProductModal) {
-      setFetchedSizeChart(null);
-      setSizeChartOpen(false);
-    }
-  }, [openSingleProductModal]);
 
   const imgRef = useRef<HTMLImageElement>(null);
   const didInitFromVariantRef = useRef(false);
@@ -714,10 +670,6 @@ export const useProductDetailModal = ({
     setIsHover,
     isEditingConfiguration,
     setIsEditingConfiguration,
-    sizeChartOpen,
-    setSizeChartOpen,
-    resolvedSizeChart,
-    showSizeChartLink,
     imgRef,
     allPropertiesWithSize,
     selectedVariant,

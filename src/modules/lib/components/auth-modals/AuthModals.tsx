@@ -47,9 +47,9 @@ export default function AuthModals() {
     <>
       <div className="md:block hidden">
         <Image
-          className="w-fit h-100p radius-5 l:radius-8"
-          src={'asoebi-graphics.svg'}
-          alt="asoebi-graphics"
+          className="w-fit h-full rounded-[5px] lg:rounded-[8px]"
+          src={'shoppp-graphics.svg'}
+          alt="Shoppp Space graphics"
           type="image"
           priority
           fetchPriority="high"
@@ -57,7 +57,7 @@ export default function AuthModals() {
       </div>
 
       <div
-        className={`px-16 sm:px-35 flex flex-col a-items-center j-content-center h-fit`}
+        className={`px-[16px] sm:px-[35px] flex flex-col items-center justify-center h-fit`}
         style={{
           flex: 1,
           overflowY: 'scroll',

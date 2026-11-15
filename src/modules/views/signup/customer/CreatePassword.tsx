@@ -36,14 +36,14 @@ const CreatePassword: FC = () => {
   return (
     <div className="w-full">
       <div className="font-inter">
-        <h3 className="text-center text-20 weight-500 mb-10 text-grey-900">
+        <h3 className="text-center text-[20px] font-medium mb-[10px] text-[#1F1B17]">
           Secure your account
         </h3>
-        <p className="text-center text-14 text-grey-700">
+        <p className="text-center text-[14px] text-[#6B6662]">
           Create a strong password for your account.
         </p>
         <form
-          className="form block mt-36 l:mt-50"
+          className="form block mt-[36px] lg:mt-[50px]"
           onSubmit={(e) => {
             e.preventDefault();
             formikComplete.handleSubmit();
@@ -55,7 +55,7 @@ const CreatePassword: FC = () => {
             name="password"
             type="password"
             placeholder="********"
-            className="l:mt-30 mt-18"
+            className="lg:mt-[30px] mt-[18px]"
             handleChange={(e: any) => {
               setPassword(e.target.value);
               formikComplete.handleChange(e);
@@ -64,9 +64,9 @@ const CreatePassword: FC = () => {
             after={
               password &&
               password.length < 5 && (
-                <div className="notice text-12 h-0 @one:flex gap-5 j-content-end w-full mt-12 text-danger">
-                  <Icon name="alert-circle" className="w-14 a-self-center" />
-                  <span className="a-self-center">
+                <div className="notice text-[12px] h-0 flex gap-[5px] justify-end w-full mt-[12px] text-danger">
+                  <Icon name="alert-circle" className="w-[14px] self-center" />
+                  <span className="self-center">
                     Minimum password length is 5 characters
                   </span>
                 </div>
@@ -79,18 +79,18 @@ const CreatePassword: FC = () => {
             name="confirmPassword"
             type="password"
             placeholder="********"
-            className="l:mt-20 mt-18"
+            className="lg:mt-[20px] mt-[18px]"
             handleChange={(e: any) => {
               setConfirmPassword(e.target.value);
               formikComplete.handleChange(e);
             }}
             handleBlur={formikComplete.handleBlur}
-            inputClass={cx({ 'border-red': password !== confirmPassword })}
+            inputClass={cx({ 'border-[#DE3838]': password !== confirmPassword })}
             after={
               password !== confirmPassword && (
-                <div className="notice text-12 h-0 @one:flex gap-5 j-content-end w-full mt-12 text-danger">
-                  <Icon name="alert-circle" className="w-14 a-self-center" />
-                  <span className="a-self-center">Passwords do not match</span>
+                <div className="notice text-[12px] h-0 flex gap-[5px] justify-end w-full mt-[12px] text-danger">
+                  <Icon name="alert-circle" className="w-[14px] self-center" />
+                  <span className="self-center">Passwords do not match</span>
                 </div>
               )
             }
@@ -98,7 +98,7 @@ const CreatePassword: FC = () => {
           {/* Submit button - use type="submit" for a proper form submission */}
           <button
             type="submit"
-            className="btn text-center bg-green weight-500 text-16 l:btn-lg btn-lg font-inter mt-30 text-14 cursor-pointer hover:bg-darkgreen g|transition:0.5s"
+            className="btn text-center bg-brand font-medium text-[16px] lg:btn-lg btn-lg font-inter mt-[30px] text-[14px] cursor-pointer hover:bg-brand-hover transition-all duration-500"
             disabled={formikComplete.isSubmitting}
           >
             {formikComplete.isSubmitting

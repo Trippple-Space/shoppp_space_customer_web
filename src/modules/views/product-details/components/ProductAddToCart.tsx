@@ -67,18 +67,18 @@ const ProductAddToCart = ({
   fitRecommendationSection,
 }: ProductAddToCartProps) => {
   return (
-    <div className="flex flex-col gap-16">
-      <div className="l:flex flex-row flex-wrap a-items-end gap-8 hidden">
-        <p className="text-24 weight-600">
+    <div className="flex flex-col gap-[16px]">
+      <div className="lg:flex flex-row flex-wrap items-end gap-[8px] hidden">
+        <p className="text-[24px] font-semibold">
           {formatNumberAsPrice(variantDisplayPrices.displayPrice)}
         </p>
         {variantDisplayPrices.hasSlash && (
-          <div className="flex flex-wrap gap-8 a-items-center mb-2">
+          <div className="flex flex-wrap gap-[8px] items-center mb-[2px]">
             {getStrikethroughAmounts(variantDisplayPrices).map(
               (amount, idx) => (
                 <p
                   key={idx}
-                  className="weight-400 text-16 color-#00000099 line-through"
+                  className="font-normal text-[16px] text-[#00000099] line-through"
                 >
                   {formatNumberAsPrice(amount)}
                 </p>
@@ -91,7 +91,7 @@ const ProductAddToCart = ({
             selectedVariant?.stockUnit
           );
           return stockUnitSuffix ? (
-            <p className="text-10 weight-400 md:line-height-20 line-height-12.1 md:mb-0 mb-2">
+            <p className="text-[10px] font-normal md:leading-[20px] leading-[12.1px] md:mb-0 mb-[2px]">
               {stockUnitSuffix}
             </p>
           ) : null;
@@ -101,19 +101,19 @@ const ProductAddToCart = ({
       {!selectedVariant &&
         (missingRequiredOptions.length > 0 ||
           initialMissingOptions.length > 0) && (
-          <div className="flex flex-col gap-6 p-10 radius-6 bg-#FFF7E6 border border-#FFD699">
-            <p className="text-12 weight-400 color-#8A5A00">
+          <div className="flex flex-col gap-[6px] p-[10px] rounded-[6px] bg-[#FFF7E6] border border-[#FFD699]">
+            <p className="text-[12px] font-normal text-[#8A5A00]">
               Please select the following to continue:
             </p>
 
-            <div className="flex flex-wrap gap-6">
+            <div className="flex flex-wrap gap-[6px]">
               {(missingRequiredOptions.length > 0
                 ? missingRequiredOptions
                 : initialMissingOptions
               ).map((option) => (
                 <span
                   key={option}
-                  className="px-8 py-4 radius-99 bg-#FFD699 text-11 weight-500 capitalize"
+                  className="px-[8px] py-[4px] rounded-[99px] bg-[#FFD699] text-[11px] font-medium capitalize"
                 >
                   {option}
                 </span>
@@ -123,7 +123,7 @@ const ProductAddToCart = ({
         )}
 
       {hasPendingImageUploads && (
-        <p className="text-12 weight-500 color-#A66A00">
+        <p className="text-[12px] font-medium text-[#A66A00]">
           Tap “Upload” under each attached image to upload it before adding
           to cart.
         </p>
@@ -134,7 +134,7 @@ const ProductAddToCart = ({
       {(!selectedVariantItemInCart || isAddingToCart) ? (
         <button
           className={classNames(
-            `text-white border-none l:px-24 l:py-12 py-15 w-100p radius-6 flex a-items-center j-content-center`,
+            `text-white border-none lg:px-[24px] lg:py-[12px] py-[15px] w-full rounded-[6px] flex items-center justify-center`,
             {
               'bg-gray-300 cursor-not-allowed':
                 !isAddingToCart &&
@@ -142,19 +142,19 @@ const ProductAddToCart = ({
                   isOutOfStock ||
                   !areRequiredCustomerFieldsFilled ||
                   hasPendingImageUploads),
-              'bg-#0B9378':
+              'bg-[#0357EE]':
                 isAddingToCart ||
                 (selectedVariant &&
                   !isOutOfStock &&
                   areRequiredCustomerFieldsFilled &&
                   !hasPendingImageUploads),
-              'hover:bg-darkgreen pointer':
+              'hover:bg-brand-hover cursor-pointer':
                 !isAddingToCart &&
                 selectedVariant &&
                 !isOutOfStock &&
                 areRequiredCustomerFieldsFilled &&
                 !hasPendingImageUploads,
-              'g|pointer-events:none': isAddingToCart,
+              'pointer-events-none': isAddingToCart,
             }
           )}
           disabled={
@@ -200,16 +200,16 @@ const ProductAddToCart = ({
               thickness={3}
             />
           ) : (
-            <div className="l:flex grid grid-2-cols-auto gap-10 items-center w-fit mx-auto ">
+            <div className="lg:flex grid grid-cols-2 gap-[10px] items-center w-fit mx-auto ">
               {selectedVariant &&
                 areRequiredCustomerFieldsFilled && 
                 selectedVariant?.status !== 'OUT_OF_STOCK' && 
                 !hasPendingImageUploads && (
-                  <HiOutlineShoppingBag className="h-21" />
+                  <HiOutlineShoppingBag className="h-[21px]" />
                 )}
               <div
                 className={classNames(
-                  `whitespace-nowrap text-16 ${selectedVariant && areRequiredCustomerFieldsFilled && !hasPendingImageUploads ? (isOutOfStock ? 'text-black' : 'text-white') : 'color-gray'}`
+                  `whitespace-nowrap text-[16px] ${selectedVariant && areRequiredCustomerFieldsFilled && !hasPendingImageUploads ? (isOutOfStock ? 'text-black' : 'text-white') : 'color-gray'}`
                 )}
               >
                 {!selectedVariant

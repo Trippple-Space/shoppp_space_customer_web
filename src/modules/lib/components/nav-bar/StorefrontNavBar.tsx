@@ -29,9 +29,9 @@ const StorefrontNavBar = ({ store }: { store?: Store }) => {
   };
 
   return (
-    <nav className="flex flex-row j-content-between gap-20 a-items-center border border-0 border-b-1 border-b-#00000014 sm:py-14 py-12 l:px-80 md:px-60 sm:px-40 px-24 fixed w-100p bg-white z-10">
+    <nav className="flex flex-row justify-between gap-[20px] items-center border border-0 border-b-1 border-b-[#00000014] sm:py-[14px] py-[12px] lg:px-[80px] md:px-[60px] sm:px-[40px] px-[24px] fixed w-full bg-white z-[10px]">
       <div
-        className="md:flex-grow-0 flex-grow-1 flex flex-row"
+        className="md:flex-grow-0 grow flex flex-row"
         style={{
           whiteSpace: 'nowrap',
           overflow: 'hidden',
@@ -41,7 +41,7 @@ const StorefrontNavBar = ({ store }: { store?: Store }) => {
         }}
       >
         <h1
-          className="font-robotoMono weight-500 md:text-28 sm:text-26 text-22 w-fit"
+          className="font-robotoMono font-medium md:text-[28px] sm:text-[26px] text-[22px] w-fit"
           style={{
             whiteSpace: 'nowrap',
             overflow: 'hidden',
@@ -60,18 +60,18 @@ const StorefrontNavBar = ({ store }: { store?: Store }) => {
         storeSlug={store?.slug}
       />
       <div className="">
-        <div className="flex flex-row md:gap-24 gap-10 a-items-center">
+        <div className="flex flex-row md:gap-[24px] gap-[10px] items-center">
           <MiniCart />
           <div
-            className="flex flex-row md:gap-24 gap-20 a-items-center"
+            className="flex flex-row md:gap-[24px] gap-[20px] items-center"
             onClick={handleUserProfileDropdown}
           >
-            <div className="sm:flex hidden flex-row a-items-center gap-8 p-4 pl-12 border border-#00000014 radius-999 pointer">
-              <HiMenuAlt3 className="w-24 h-24" />
+            <div className="sm:flex hidden flex-row items-center gap-[8px] p-[4px] pl-[12px] border border-[#00000014] rounded-[999px] cursor-pointer">
+              <HiMenuAlt3 className="w-[24px] h-[24px]" />
               <img
                 src={`https://api.dicebear.com/7.x/thumbs/png?seed=${user?.firstName}`}
                 alt="user"
-                className="w-42 h-42 object-fit round border border-#00000014"
+                className="w-[42px] h-[42px] object-fit rounded-full border border-[#00000014]"
               />
             </div>
           </div>
@@ -82,7 +82,7 @@ const StorefrontNavBar = ({ store }: { store?: Store }) => {
             />
           </div>
         </div>
-        <div className="l:px-80 md:px-60 sm:px-40 px-24 relative t--46 sm:block hidden">
+        <div className="lg:px-[80px] md:px-[60px] sm:px-[40px] px-[24px] relative -top-[46px] sm:block hidden">
           {userProfileDropdown && (
             <UserProfileDropdown
               handleCloseDropdown={handleCloseDropdown}

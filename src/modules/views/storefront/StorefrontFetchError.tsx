@@ -15,10 +15,10 @@ const StorefrontFetchError: FC<{ reason?: FetchErrorKind }> = ({ reason = 'unkno
   const copy = getStoreFetchErrorCopy(reason);
 
   return (
-    <main className="flex min-h-screen flex-col bg-#FFFFFF">
+    <main className="flex min-h-screen flex-col bg-[#FFFFFF]">
       <BaseNavBar links={undefined} parent={undefined} />
-      <div className="flex flex-1 items-center justify-center px-24 py-48">
-        <div className="w-full max-w-480">
+      <div className="flex flex-1 items-center justify-center px-[24px] py-[48px]">
+        <div className="w-full max-w-[480px]">
           <DataFetchErrorPanel
             title={copy.title}
             description={copy.description}

@@ -35,19 +35,19 @@ function LegalDocuments() {
   return (
     <>
     <HomepageNavBar  parent={"checkout"}/>
-    <div className="mt-70 mx-auto p-20 flex flex-col a-items-center j-content-center cursor-pointer">
-      <div className="flex j-content-center  mb-4 gap-15">
+    <div className="mt-[70px] mx-auto p-[20px] flex flex-col items-center justify-center cursor-pointer">
+      <div className="flex justify-center  mb-[4px] gap-[15px]">
         {tabs.map((tab) => (
           <p
             key={tab.id}
             onClick={() => setActiveTab(tab.id)}
-            className={` bg-none pb-5 text-13 l:text-20 weight-300 ${activeTab == tab.id ? "border-2 border-b text-12 weight-800 color-#1677FF": ""} `}
+            className={` bg-transparent pb-[5px] text-[13px] lg:text-[20px] font-light ${activeTab == tab.id ? "border-[2px] border-b text-[12px] font-extrabold text-[#1677FF]": ""} `}
           >
             {tab.label}
           </p>
         ))}
       </div>
-      <div className="bg-white p-4 rounded shadow">{renderTabContent()}</div>
+      <div className="bg-white p-[4px] rounded shadow">{renderTabContent()}</div>
       </div>
     </>
       

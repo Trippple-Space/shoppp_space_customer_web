@@ -27,9 +27,9 @@ const DataFetchErrorPanel: FC<Props> = ({
   return (
     <div
       className={cx(
-        'flex flex-col a-items-center j-content-center text-center',
-        compact ? 'gap-12 py-24 px-16' : 'gap-20 py-48 px-24 radius-16 bg-#FAFAFA',
-        !compact && 'border border-#00000014',
+        'flex flex-col items-center justify-center text-center',
+        compact ? 'gap-[12px] py-[24px] px-[16px]' : 'gap-[20px] py-[48px] px-[24px] rounded-[16px] bg-[#FAFAFA]',
+        !compact && 'border border-[#00000014]',
         className
       )}
       role="alert"
@@ -37,36 +37,36 @@ const DataFetchErrorPanel: FC<Props> = ({
     >
       <span
         className={cx(
-          'flex a-items-center j-content-center round bg-#FFF3F1 color-#D4280C',
-          compact ? 'w-40 h-40 min-w-40' : 'w-56 h-56'
+          'flex items-center justify-center rounded-full bg-[#FFF3F1] text-[#D4280C]',
+          compact ? 'w-[40px] h-[40px] min-w-[40px]' : 'w-[56px] h-[56px]'
         )}
       >
         <TbAlertCircle
-          className={compact ? 'w-22 h-22' : 'w-32 h-32'}
+          className={compact ? 'w-[22px] h-[22px]' : 'w-[32px] h-[32px]'}
           style={{ width: compact ? 22 : 32, height: compact ? 22 : 32, flexShrink: 0 }}
           aria-hidden
         />
       </span>
-      <div className={cx('flex flex-col gap-6', compact ? 'max-w-100p' : 'max-w-400')}>
+      <div className={cx('flex flex-col gap-[6px]', compact ? 'max-w-[100%]' : 'max-w-[400px]')}>
         <h3
           className={cx(
-            'weight-600 color-#000000E0',
-            compact ? 'text-15 md:text-16' : 'text-18'
+            'font-semibold text-[#000000E0]',
+            compact ? 'text-[15px] md:text-[16px]' : 'text-[18px]'
           )}
         >
           {title}
         </h3>
-        <p className="text-14 weight-400 color-#00000099">{description}</p>
+        <p className="text-[14px] font-normal text-[#00000099]">{description}</p>
       </div>
       {extra}
       {onRetry && (
         <Button
           type="button"
           onClick={onRetry}
-          className="px-24 py-8 min-w-120 flex a-items-center j-content-center gap-8"
+          className="px-[24px] py-[8px] min-w-[120px] flex items-center justify-center gap-[8px]"
         >
           <TbRefresh
-            className="w-18 h-18"
+            className="w-[18px] h-[18px]"
             style={{ width: 18, height: 18, flexShrink: 0 }}
             aria-hidden
           />

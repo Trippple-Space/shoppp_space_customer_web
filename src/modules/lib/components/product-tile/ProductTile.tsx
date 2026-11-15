@@ -81,7 +81,7 @@ const ProductTile: FC<IProductTile> = (props) => {
   } = useProductTile(props);
 
   return (
-    <div className="mt-30 l:mt-20 w-full min-w-0 overflow-hidden">
+    <div className="mt-[30px] lg:mt-[20px] w-full min-w-0 overflow-hidden">
       <ProductTileOnboardingOverlay
         showOnBoardingModal={showOnBoardingModal}
         indexCount={indexCount}

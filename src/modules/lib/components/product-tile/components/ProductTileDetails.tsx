@@ -60,11 +60,11 @@ const ProductTileDetails = ({
   return (
     <div
       id="product details"
-      className="md:mt-16 mt-20 white-space-nowrap text-overflow-ellipsis flex flex-col gap-8"
+      className="md:mt-[16px] mt-[20px] white-space-nowrap text-overflow-ellipsis flex flex-col gap-[8px]"
     >
       <div
         title={product.name}
-        className="md:text-16 text-15 weight-500 text-#000000E0 md:line-height-24 line-height-22 l:w-100p w-100 l:white-space-nowrap text-overflow-ellipsis flex flex-wrap a-items-center j-content-between"
+        className="md:text-[16px] text-[15px] font-medium text-[#000000E0] md:leading-[24px] leading-[22px] lg:w-full w-[100px] lg:white-space-nowrap text-overflow-ellipsis flex flex-wrap items-center justify-between"
         style={{
           whiteSpace: 'nowrap',
           overflow: 'hidden',
@@ -89,27 +89,27 @@ const ProductTileDetails = ({
       {
         !isStoreBased ?
           (
-            <div className="flex a-items-center gap-10 l:gap-18 text-dimgrey py-6 border-y border-#00000014">
+            <div className="flex items-center gap-[10px] lg:gap-[18px] text-[#333333] py-[6px] border-y border-[#00000014]">
               <Link
                 href={storeUrl}
                 target="_blank"
-                className="flex gap-6 a-items-center color-#00000099 capitalize"
+                className="flex gap-[6px] items-center text-[#00000099] capitalize"
               >
-                <PiStorefront className="md:w-16 w-14 md:h-16 h-14" />
-                <p className="md:text-12 text-10 weight-400 md:line-height-20 line-height-12.1">
+                <PiStorefront className="md:w-[16px] w-[14px] md:h-[16px] h-[14px]" />
+                <p className="md:text-[12px] text-[10px] font-normal md:leading-[20px] leading-[12.1px]">
                   {product?.store?.name}
                 </p>
               </Link>
               {!!product.reviewRating && (
-                <div className="flex gap-3 items-center">
-                  <AiFillStar className="w-12" />
-                  <span className="l:text-16 text-12">{product.reviewRating}</span>
+                <div className="flex gap-[3px] items-center">
+                  <AiFillStar className="w-[12px]" />
+                  <span className="lg:text-[16px] text-[12px]">{product.reviewRating}</span>
                 </div>
               )}
             </div>
           )
           : null}
-      <div ref={rowRef} className="flex j-content-between sm:gap-15 gap-6">
+      <div ref={rowRef} className="flex justify-between sm:gap-[15px] gap-[6px]">
         <div
           ref={priceRef}
           className="min-w-0"
@@ -131,20 +131,20 @@ const ProductTileDetails = ({
                 opacity: 0,
                 transition: TILE_PRICE_FADE,
               }}
-              className="flex md:gap-8 md:a-items-center gap-3 min-w-0"
+              className="flex md:gap-[8px] md:items-center gap-[3px] min-w-0"
               style={{ gridRow: 1, gridColumn: 1 }}
             >
-              <div className="flex md:gap-8 md:a-items-center md:flex-row flex-col">
-                <p className="md:text-16 text-12 weight-600 md:line-height-24 line-height-20">
+              <div className="flex md:gap-[8px] md:items-center md:flex-row flex-col">
+                <p className="md:text-[16px] text-[12px] font-semibold md:leading-[24px] leading-[20px]">
                   {formatNumberAsPrice(variantDisplayPrices.displayPrice)}
                 </p>
                 {variantDisplayPrices.hasSlash && (
-                  <div className="flex flex-wrap gap-6 md:gap-8 a-items-center">
+                  <div className="flex flex-wrap gap-[6px] md:gap-[8px] items-center">
                     {getStrikethroughAmounts(variantDisplayPrices).map(
                       (amount, idx) => (
                         <p
                           key={idx}
-                          className="md:text-12 text-10 weight-400 md:line-height-20 color-#00000099 line-through"
+                          className="md:text-[12px] text-[10px] font-normal md:leading-[20px] text-[#00000099] line-through"
                         >
                           {formatNumberAsPrice(amount)}
                         </p>
@@ -160,7 +160,7 @@ const ProductTileDetails = ({
                   );
                   return stockUnitSuffix ? (
                     <span
-                      className="sm:text-10 text-8 weight-400 md:line-height-20 line-height-12.1 md:mb-0 mb-2"
+                      className="sm:text-[10px] text-[8px] font-normal md:leading-[20px] leading-[12.1px] md:mb-0 mb-[2px]"
                       style={{ alignSelf: 'flex-end' }}
                     >
                       {stockUnitSuffix}
@@ -171,7 +171,7 @@ const ProductTileDetails = ({
           </AnimatePresence>
         </div>
 
-        <div className="text-9 sm:text-10 text-grey flex gap-6 a-items-center relative">
+        <div className="text-[9px] sm:text-[10px] text-[#676767] flex gap-[6px] items-center relative">
           {/* <MiniReview
             id={selectedVariant?.id}
             slug={product?.slug}
@@ -194,7 +194,7 @@ const ProductTileDetails = ({
                 ref={(el) => {
                   if (el) tagRefs.current[i] = el;
                 }}
-                className="text-green md:text-12 text-10 inline-block mx-2"
+                className="text-brand md:text-[12px] text-[10px] inline-block mx-[2px]"
               >
                 #{tag.label}
               </span>
@@ -203,7 +203,7 @@ const ProductTileDetails = ({
 
           <div
             ref={tagsContainerRef}
-            className="flex gap-6 overflow-hidden whitespace-nowrap max-w-full relative z-1"
+            className="flex gap-[6px] overflow-hidden whitespace-nowrap max-w-full relative z-[1px]"
           >
             {visibleTags
               .slice(0, visibleTagCount)
@@ -217,10 +217,10 @@ const ProductTileDetails = ({
                       if (el) tagRefs.current[i] = el;
                     }}
                     className={classNames(
-                      'md:text-12 text-10 inline-block radius-5 mx-2 my-1 pointer hover:underline lowercase',
+                      'md:text-[12px] text-[10px] inline-block rounded-[5px] mx-[2px] my-[1px] cursor-pointer hover:underline lowercase',
                       {
-                        'text-green': !active,
-                        'color-#000000E0 bg-green-50 weight-600': active,
+                        'text-brand': !active,
+                        'text-[#000000E0] bg-brand-tint font-semibold': active,
                       }
                     )}
                     onClick={() => handleTagSelection(tag.label)}
@@ -234,7 +234,7 @@ const ProductTileDetails = ({
           {isOverflowing && (
             <div ref={chevronRef}>
               <LuChevronRight
-                className="w-14 h-14 min-w-14 color-#0B9378 mt-6 cursor-pointer relative z-1"
+                className="w-[14px] h-[14px] min-w-[14px] text-[#0357EE] mt-[6px] cursor-pointer relative z-[1px]"
                 onClick={() => setShowAllTags(true)}
               />
             </div>
@@ -242,16 +242,16 @@ const ProductTileDetails = ({
 
           {showAllTags && (
             <div
-              className="absolute b-3 r-5 sm:r-1 mt-6 bg-white g|box-shadow:0px|_|1px|_|3px|_|0px|_|rgba(0,0,0,0.1); radius-5 p-10 z-3"
+              className="absolute bottom-[3px] right-[5px] sm:right-[1px] mt-[6px] bg-white shadow-[0px_1px_3px_0px_rgba(0,0,0,0.1)] rounded-[5px] p-[10px] z-[3px]"
               onClick={(e) => e.stopPropagation()}
             >
-              <div className="flex flex-wrap gap-6 max-w-220">
+              <div className="flex flex-wrap gap-[6px] max-w-[220px]">
                 {visibleTags.map((tag: any, i: number) => (
                   <span
                     key={i}
-                    className={classNames('text-12 lowercase pointer hover:underline', {
-                      'text-green': !isTagActive(tag.label),
-                      'color-#000000E0 bg-green-50 weight-600': isTagActive(tag.label),
+                    className={classNames('text-[12px] lowercase cursor-pointer hover:underline', {
+                      'text-brand': !isTagActive(tag.label),
+                      'text-[#000000E0] bg-brand-tint font-semibold': isTagActive(tag.label),
                     })}
                     onClick={() => handleTagSelection(tag.label)}
                   >
@@ -261,7 +261,7 @@ const ProductTileDetails = ({
               </div>
 
               {/* <p
-                className="text-10 text-grey mt-8 pointer"
+                className="text-[10px] text-[#676767] mt-[8px] cursor-pointer"
                 onClick={() => setShowAllTags(false)}
               >
                 Close

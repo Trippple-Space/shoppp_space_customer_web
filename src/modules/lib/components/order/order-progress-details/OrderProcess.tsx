@@ -37,14 +37,14 @@ const OrderProgressCircle = ({
 }: OrderProgressProps) => (
   <div
     className={classNames(
-      `w-20 h-20 radius-20 z-2 border border-3 border-white  ${
+      `w-[20px] h-[20px] rounded-[20px] z-[2px] border border-[3px] border-white  ${
         singleOrder?.status === 'CANCELLED' &&
         text === 'Cancelled-Payment Unsuccessful' &&
-        'bg-#D4280C'
+        'bg-[#D4280C]'
       }`,
       {
-        'bg-green': active,
-        'bg-#d9d9d9 z-2': !active
+        'bg-brand': active,
+        'bg-[#d9d9d9] z-[2px]': !active
       }
     )}
   ></div>
@@ -53,9 +53,9 @@ const OrderProgressCircle = ({
 // Reusable Progress Line Component
 const OrderProgressLine = ({ active, styles = '' }: OrderProgressProps) => (
   <div
-    className={classNames(`p-1 absolute ${styles}`, {
-      'bg-green z-1': active,
-      'bg-#F3F3F3': !active
+    className={classNames(`p-[1px] absolute ${styles}`, {
+      'bg-brand z-[1px]': active,
+      'bg-[#F3F3F3]': !active
     })}
   ></div>
 )
@@ -102,23 +102,23 @@ const OrderProcess = ({
   }
 
   return (
-    <div className='w-full h-fit flex gap-20 a-items-center'>
-      <div className='relative flex flex-col a-items-center j-content-center gap-5'>
+    <div className='w-full h-fit flex gap-[20px] items-center'>
+      <div className='relative flex flex-col items-center justify-center gap-[5px]'>
         {isTimelineView ? (
           <>
             <OrderProgressLine
-              styles='b-10 h-70 l-9'
+              styles='bottom-[10px] h-[70px] left-[9px]'
               active={active}
               singleOrder={singleOrder}
               text={text}
             />
-            <PiDotsThreeOutline className='w-20 h-20 radius-20 bg-white z-10' />
+            <PiDotsThreeOutline className='w-[20px] h-[20px] rounded-[20px] bg-white z-[10px]' />
             <OrderProgressLine styles={styles} active={active} text={text} />
           </>
         ) : singleOrder.status === 'CANCELLED' ? (
           <>
             <OrderProgressLine
-              styles='b-1 h-70'
+              styles='bottom-[1px] h-[70px]'
               active={active}
               singleOrder={singleOrder}
               text={text}
@@ -139,7 +139,7 @@ const OrderProcess = ({
         ) : (
           <>
             <OrderProgressLine
-              styles='h-150'
+              styles='h-[150px]'
               active={active}
               singleOrder={singleOrder}
               text={text}
@@ -163,12 +163,12 @@ const OrderProcess = ({
 
       <div
         className={`flex flex-col ${
-          singleOrder.status !== 'CONFIRMED' && 'gap-10'
-        }  j-content-center`}
+          singleOrder.status !== 'CONFIRMED' && 'gap-[10px]'
+        }  justify-center`}
       >
         {isTimelineView || text === 'Close timelines' ? (
           <button
-            className='px-10 py-7 bg-white weight-400 border border-2 border-#00000026 radius-5 cursor-pointer absolute'
+            className='px-[10px] py-[7px] bg-white font-normal border border-[2px] border-[#00000026] rounded-[5px] cursor-pointer absolute'
             onClick={handleViewTimeline}
           >
             {viewTimeline ? 'Close all timelines' : text}
@@ -178,22 +178,22 @@ const OrderProcess = ({
           <>
             <p
               className={classNames(
-                'weight-600 font-inter text-16 text-danger'
+                'font-semibold font-inter text-[16px] text-danger'
               )}
             >
               {text}
             </p>
             {isValidTimelineDate(date) && (
-              <p className={classNames(`text-12 text-danger`)}>
+              <p className={classNames(`text-[12px] text-danger`)}>
                 {formatDate(parseApiInstant(date))}
               </p>
             )}
           </>
         ) : (
           <p
-            className={classNames('weight-600 font-inter text-16', {
-              'color-#00000066': !active,
-              'color-black': active
+            className={classNames('font-semibold font-inter text-[16px]', {
+              'text-[#00000066]': !active,
+              'text-black': active
             })}
           >
             {text}
@@ -204,9 +204,9 @@ const OrderProcess = ({
           text !== 'Cancelled-Payment Unsuccessful' &&
           isValidTimelineDate(date) && (
             <p
-              className={classNames(`text-12`, {
-                'color-#00000066': !active,
-                'color-#00000099': active
+              className={classNames(`text-[12px]`, {
+                'text-[#00000066]': !active,
+                'text-[#00000099]': active
               })}
             >
               {formatDate(parseApiInstant(date))}
@@ -217,7 +217,7 @@ const OrderProcess = ({
           <>
             {
               <p
-                className='border-b text-danger weight-500 w-fit text-14 cursor-pointer'
+                className='border-b text-danger font-medium w-fit text-[14px] cursor-pointer'
                 onClick={handleOpenCancelOrderModal}
               >
                 Cancel this order
@@ -228,21 +228,21 @@ const OrderProcess = ({
                 onClose={handleOpenCancelOrderModal}
                 children={
                   <>
-                    <div className='l:w-400 p-20 flex flex-col gap-10'>
-                      <div className='flex a-items-center j-content-end'>
+                    <div className='lg:w-[400px] p-[20px] flex flex-col gap-[10px]'>
+                      <div className='flex items-center justify-end'>
                         <IoMdClose
                           className='w-fit cursor-pointer'
                           onClick={handleOpenCancelOrderModal}
                         />
                       </div>
-                      <div className='flex flex-col gap-20'>
-                        <p className='weight-600'>Cancel order</p>
-                        <div className='flex flex-col gap-10'>
-                          <p className='color-#6A6A6A text-14'>
+                      <div className='flex flex-col gap-[20px]'>
+                        <p className='font-semibold'>Cancel order</p>
+                        <div className='flex flex-col gap-[10px]'>
+                          <p className='text-[#6A6A6A] text-[14px]'>
                             Why do you want to cancel this order?
                           </p>
 
-                          <div className='bg-#F5F5F5 p-20 radius-5'>
+                          <div className='bg-[#F5F5F5] p-[20px] rounded-[5px]'>
                             <RadioGroup
                               options={options}
                               name='reason'
@@ -252,15 +252,15 @@ const OrderProcess = ({
                           </div>
                         </div>
                       </div>
-                      <div className='flex a-items-center j-content-end gap-10'>
+                      <div className='flex items-center justify-end gap-[10px]'>
                         <button
-                          className='bg-none border-1 border-black px-20 py-7 radius-5 cursor-pointer bg-green'
+                          className='bg-transparent border border-black px-[20px] py-[7px] rounded-[5px] cursor-pointer bg-brand'
                           onClick={handleOpenCancelOrderModal}
                         >
                           Keep order
                         </button>
                         <button
-                          className='border-none px-20 py-8  radius-5 bg-#D4280C color-white cursor-pointer'
+                          className='border-none px-[20px] py-[8px]  rounded-[5px] bg-[#D4280C] text-white cursor-pointer'
                           onClick={() =>
                             handleCancelOrder(singleOrder.id, selectedReason)
                           }

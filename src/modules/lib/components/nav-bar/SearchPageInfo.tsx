@@ -19,21 +19,21 @@ const SearchPageInfo = ({ onClearSearch, searchTerm, selectedCollection }: Searc
   if (!searchFromUrl && !collectionFromUrl) return null;
 
   return (
-    <div className="bg-#F3F3F3 py-12 px-24 flex flex-col a-items-center j-content-center gap-16 sm:radius-55 radius-30 font-inter relative">
+    <div className="bg-[#F3F3F3] py-[12px] px-[24px] flex flex-col items-center justify-center gap-[16px] sm:rounded-[55px] rounded-[30px] font-inter relative">
       <button
         onClick={onClearSearch}
-        className="absolute t-16 sm:r-36 r-16 sm:w-40 w-28 sm:h-40 h-28 cursor-pointer hover:bg-#eee border-#999 border-solid radius-50p flex flex-col a-items-center j-content-center"
+        className="absolute top-[16px] sm:right-[36px] right-[16px] sm:w-[40px] w-[28px] sm:h-[40px] h-[28px] cursor-pointer hover:bg-[#eee] border-[#999] border-solid rounded-full flex flex-col items-center justify-center"
         aria-label="Clear Search"
         title='Clear Search'
       >
-        <FiX className="sm:text-24 text-16 color-#999" />
+        <FiX className="sm:text-[24px] text-[16px] text-[#999]" />
       </button>
 
       {
         collectionFromUrl &&
-        <div className="flex flex-col gap-8 a-items-center j-content-center">
-          <h5 className="sm:text-32 text-20 weight-600 capitalize">{collectionFromUrl.replaceAll('-', ' ')}</h5>
-          <p className="sm:text-16 text-14 weight-400">
+        <div className="flex flex-col gap-[8px] items-center justify-center">
+          <h5 className="sm:text-[32px] text-[20px] font-semibold capitalize">{collectionFromUrl.replaceAll('-', ' ')}</h5>
+          <p className="sm:text-[16px] text-[14px] font-normal">
             Browse all {searchFromUrl ? `'${searchFromUrl}' in` : 'products in'}  {collectionFromUrl.replaceAll('-', ' ')} collection
           </p>
         </div>
@@ -41,19 +41,19 @@ const SearchPageInfo = ({ onClearSearch, searchTerm, selectedCollection }: Searc
 
       {
         searchFromUrl && !collectionFromUrl &&
-        <div className="flex flex-col gap-8 a-items-center j-content-center">
-          <h5 className="sm:text-32 text-20 weight-600 capitalize">{searchFromUrl}</h5>
-          <p className="sm:text-16 text-14 weight-400">
+        <div className="flex flex-col gap-[8px] items-center justify-center">
+          <h5 className="sm:text-[32px] text-[20px] font-semibold capitalize">{searchFromUrl}</h5>
+          <p className="sm:text-[16px] text-[14px] font-normal">
             Browse all {searchFromUrl} results
           </p>
         </div>
       }
 
-      {/* <div className='flex gap-16 a-items-center j-content-center'>
-            <p className='text-14 weight-400'>Related keywords:</p>
-            <p className='flex gap-16 a-items-center j-content-center'>
-                <span className='text-14 weight-500'>Lace</span>
-                <span className='text-14 weight-500'>Lace</span>
+      {/* <div className='flex gap-[16px] items-center justify-center'>
+            <p className='text-[14px] font-normal'>Related keywords:</p>
+            <p className='flex gap-[16px] items-center justify-center'>
+                <span className='text-[14px] font-medium'>Lace</span>
+                <span className='text-[14px] font-medium'>Lace</span>
             </p>
         </div> */}
     </div>

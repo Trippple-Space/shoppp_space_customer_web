@@ -48,11 +48,11 @@ const StorefrontLayout: FC<{
 }) => {
     return (
       <div className='h-full flex flex-col justify-end'>
-        <div className="flex flex-col md:gap-36 sm:gap-28 gap-32 pb-100 flex-grow-1">
+        <div className="flex flex-col md:gap-[36px] sm:gap-[28px] gap-[32px] pb-[100px] grow">
           <div className="">{children}</div>
 
           {!!categories?.length && (
-            <div className="sm:py-20 py-16 max-w-1440 w-100p mx-auto">
+            <div className="sm:py-[20px] py-[16px] max-w-[1440px] w-full mx-auto">
               <FabricsCategoryNav
                 categories={categories}
                 selectedCategory={selectedCategory}
@@ -71,18 +71,18 @@ const StorefrontLayout: FC<{
             />
           )}
 
-          <section className="flex flex-col sm:gap-24 gap-20 app-width max-w-1440 mx-auto">
-            <div className="flex flex-row j-content-between a-items-center">
-              <h3 className="sm:text-24 text-16 weight-600">Featured products</h3>
+          <section className="flex flex-col sm:gap-[24px] gap-[20px] app-width max-w-[1440px] mx-auto">
+            <div className="flex flex-row justify-between items-center">
+              <h3 className="sm:text-[24px] text-[16px] font-semibold">Featured products</h3>
               {products?.length > 4 && (
                 <Link
                   href={'/'}
-                  className="text-16 flex flex-row a-items-center gap-3"
+                  className="text-[16px] flex flex-row items-center gap-[3px]"
                 >
                   <span className="sm:inline-block hidden">
                     Browse all products
                   </span>
-                  <GoArrowRight className="w-16 h-16 sm:mb--2" />
+                  <GoArrowRight className="w-[16px] h-[16px] sm:-mb-[2px]" />
                 </Link>
               )}
             </div>

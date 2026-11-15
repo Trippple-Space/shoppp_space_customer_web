@@ -42,8 +42,8 @@ const Filters = () => {
 
   return (
     <div className='relative'>
-      <div className='overflow-x-auto no-scrollbar pb-24'>
-        <div className='flex flex-row flex-nowrap j-content-start s:j-content-center s:gap-12 gap-8 w-max min-w-full px-4'>
+      <div className='overflow-x-auto no-scrollbar pb-[24px]'>
+        <div className='flex flex-row flex-nowrap justify-start sm:justify-center sm:gap-[12px] gap-[8px] w-max min-w-full px-[4px]'>
         {
           filters?.map((filter) => (
             <div key={filter.name}
@@ -54,11 +54,11 @@ const Filters = () => {
                   openFilterOptions(filter.name)
                 }
               }}
-              className={`flex-shrink-0 s:py-8 py-6 s:px-12 px-10 flex flex-row gap-6 a-items-center bg-#F5F5F5 g|transition:0.4s; radius-999 w-fit weight-500 s:text-14 text-12 line-height-16.94 cursor-pointer ${(selectedFilter === filter.name && !activeFilters.includes(filter.name.toLocaleLowerCase())) ? 'bg-#00000014' : activeFilters.includes(filter.name.toLocaleLowerCase()) ? 'bg-#FACE33' : 'bg-#F5F5F5 hover:bg-#00000014'}  ${filter.name === 'Offers' && allFilters.showOffers && 'bg-#FACE33 hover:bg-#FACE33'}`}
+              className={`shrink-0 sm:py-[8px] py-[6px] sm:px-[12px] px-[10px] flex flex-row gap-[6px] items-center bg-[#F5F5F5] transition-all duration-400; rounded-[999px] w-fit font-medium sm:text-[14px] text-[12px] leading-[16.94px] cursor-pointer ${(selectedFilter === filter.name && !activeFilters.includes(filter.name.toLocaleLowerCase())) ? 'bg-[#00000014]' : activeFilters.includes(filter.name.toLocaleLowerCase()) ? 'bg-[#FACE33]' : 'bg-[#F5F5F5] hover:bg-[#00000014]'}  ${filter.name === 'Offers' && allFilters.showOffers && 'bg-[#FACE33] hover:bg-[#FACE33]'}`}
             >
-              {filter.extraIcon && <filter.extraIcon className='s:w-16 w-14 s:h-16 h-14' />}
+              {filter.extraIcon && <filter.extraIcon className='sm:w-[16px] w-[14px] sm:h-[16px] h-[14px]' />}
               <span>{filter.name}</span>
-              {filter.downIcon && <LiaAngleDownSolid className='s:w-12 w-10 s:h-12 h-10 mt-2' />}
+              {filter.downIcon && <LiaAngleDownSolid className='sm:w-[12px] w-[10px] sm:h-[12px] h-[10px] mt-[2px]' />}
             </div>
           ))
         }

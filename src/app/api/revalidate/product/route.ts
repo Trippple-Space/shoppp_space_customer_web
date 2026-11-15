@@ -30,8 +30,8 @@ export async function POST(req: NextRequest) {
     );
   }
 
-  revalidateTag(PRODUCT_CACHE_TAG_PREFIX);
-  revalidateTag(`${PRODUCT_CACHE_TAG_PREFIX}:${slug}`);
+  revalidateTag(PRODUCT_CACHE_TAG_PREFIX, 'max');
+  revalidateTag(`${PRODUCT_CACHE_TAG_PREFIX}:${slug}`, 'max');
   revalidatePath(`/products/${slug}`);
 
   return NextResponse.json({

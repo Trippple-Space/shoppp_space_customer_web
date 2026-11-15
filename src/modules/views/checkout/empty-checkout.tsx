@@ -13,18 +13,18 @@ const EmptyCheckout = () => {
 
   return (
     <>
-      <div className="w-100p h-100p mx-auto flex flex-col items-center j-content-center p-20 l:p-70 l:pb-126">
+      <div className="w-full h-full mx-auto flex flex-col items-center justify-center p-[20px] lg:p-[70px] lg:pb-[126px]">
         <Image
           src="empty-tray.png"
-          className="w-80p l:100p h-250 my-10 object-fit-scale-down"
+          className="w-[80%] lg:100p h-[250px] my-[10px] object-fit-scale-down"
           alt="empty"
         />
 
-        <h1 className="text-24 l:text-30 line-height-40 my-15 weight-700 text-center">
+        <h1 className="text-[24px] lg:text-[30px] leading-[40px] my-[15px] font-bold text-center">
           {user ? 'Your cart is empty' : 'You are not signed in'}
         </h1>
 
-        <p className="text-16 l:text-18 line-height-30 text-center color-#00000099">
+        <p className="text-[16px] lg:text-[18px] leading-[30px] text-center text-[#00000099]">
           {user
             ? 'Looks like you have not added any items yet.'
             : 'Sign in to continue your checkout and view your cart.'}
@@ -38,7 +38,7 @@ const EmptyCheckout = () => {
               }
               isLoginModal();
             }}
-            className="bg-green radius-10 text-white text-16 weight-500 mt-20 py-12 px-20 border-none pointer"
+            className="bg-brand rounded-[10px] text-white text-[16px] font-medium mt-[20px] py-[12px] px-[20px] border-none cursor-pointer"
           >
             Sign in / Create account
           </button>
@@ -46,7 +46,7 @@ const EmptyCheckout = () => {
 
         <Link
           href={paths.homepage}
-          className="bg-green radius-10 text-white text-16 weight-500 my-20 py-12 px-20"
+          className="bg-brand rounded-[10px] text-white text-[16px] font-medium my-[20px] py-[12px] px-[20px]"
           style={{ textDecoration: 'none' }}
         >
           Explore products

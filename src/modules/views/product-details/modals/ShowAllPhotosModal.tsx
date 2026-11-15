@@ -22,7 +22,7 @@ const ShowAllPhotosModal = ({
 }: any) => {
   return (
     <Modal isOpen={isOpen} onClose={onClose}>
-      <div className="l:w-500 h-70vh flex l:grid grid-2-cols-1fr l:grid-2-row-auto gap-6 p-20 overflow-auto no-scrollbar">
+      <div className="lg:w-[500px] h-[70vh] flex lg:grid grid-cols-2 lg:grid-2-row-auto gap-[6px] p-[20px] overflow-auto no-scrollbar">
         {uniqueImages.map((image: string, idx: number) => {
           const selectedMediaKey = getMediaDedupeKey(
             productVariants
@@ -51,9 +51,9 @@ const ShowAllPhotosModal = ({
                 src={mediaItem?.url || ''}
                 alt="product-image"
                 className={cx(
-                  'object-fit w-50 h-50 radius-4 l:radius-0 l:w-full pointer l:h-full',
+                  'object-fit w-[50px] h-[50px] rounded-[4px] lg:rounded-0 lg:w-full cursor-pointer lg:h-full',
                   {
-                    'border border-green border-2':
+                    'border border-brand border-[2px]':
                       selectedImage == mediaItem?.url ||
                       (!!selectedMediaKey &&
                         selectedMediaKey === getMediaDedupeKey(mediaItem)),

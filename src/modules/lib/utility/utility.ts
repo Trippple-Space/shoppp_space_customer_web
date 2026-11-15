@@ -390,7 +390,7 @@ export const getStoreNames = (storeGroups: StoreGroupResponse[]) => {
 
 export const checkMediaType = (url: string) => {
   const lowerUrl = url?.toLowerCase();
-  if (/\.(jpg|jpeg|png|gif|webp)$/.test(lowerUrl)) {
+  if (/\.(jp[g]|jpe[g]|pn[g]|gif|webp)$/.test(lowerUrl)) {
     return "image";
   } else if (/\.(mp4|webm|mov|avi|mkv)$/.test(lowerUrl)) {
     return "video";
@@ -501,7 +501,7 @@ export const states = [
   "Lagos"
 ];
 
-export const contactEmail = "support@asoebi.africa"
+export const contactEmail = "support@shoppp.space"
 
 export const emailRegex = /^([a-zA-Z0-9_.\-]+)([+][a-zA-Z0-9_.\-]+)*@(([a-zA-Z0-9-])+\.)+([a-zA-Z0-9]{2,4})+$/;
 

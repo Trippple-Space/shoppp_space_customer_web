@@ -10,19 +10,19 @@ const NoResultMessage = ({
   contentStyle?: React.CSSProperties;
 }) => {
   return (
-    <div className="flex flex-col a-items-center gap-8 py-16">
+    <div className="flex flex-col items-center gap-[8px] py-[16px]">
       <Image
         src="empty-tray.png"
-        className="w-184 h-152 object-fit-scale-down"
+        className="w-[184px] h-[152px] object-fit-scale-down"
         alt="empty"
       />
       {contentTitle && (
-        <h1 className="text-24 l:text-30 line-height-40 md:my-15 my-10 weight-700 text-center" style={{textWrap: 'balance', textAlign: 'center'}}>
+        <h1 className="text-[24px] lg:text-[30px] leading-[40px] md:my-[15px] my-[10px] font-bold text-center" style={{textWrap: 'balance', textAlign: 'center'}}>
           {contentTitle}
         </h1>
       )}
       {textContent && (
-        <p className={`text-14 weight-400 line-height-22 color-#00000073 px-12 py-5 max-w-400`} style={{textWrap: 'balance', textAlign: 'center', whiteSpace: 'pre-line', ...contentStyle}}>
+        <p className={`text-[14px] font-normal leading-[22px] text-[#00000073] px-[12px] py-[5px] max-w-[400px]`} style={{textWrap: 'balance', textAlign: 'center', whiteSpace: 'pre-line', ...contentStyle}}>
           {textContent}
         </p>
       )}

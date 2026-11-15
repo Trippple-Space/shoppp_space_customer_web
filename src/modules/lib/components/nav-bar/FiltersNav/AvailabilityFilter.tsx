@@ -29,8 +29,8 @@ export const AvailabilityFilter: React.FC<IAvailabilityFilter> = ({
   return (
     <ul className="flex flex-col">
       {AVAILABILITY_OPTIONS.map((option) => (
-        <li key={option.value} className="flex gap-12 py-10">
-          <div className="h-fit w-fit color-#6A6A6A hover:color-#000000E0">
+        <li key={option.value} className="flex gap-[12px] py-[10px]">
+          <div className="h-fit w-fit text-[#6A6A6A] hover:text-[#000000E0]">
             <BoxRadio
               label={option.label}
               className="filter"

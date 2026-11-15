@@ -21,7 +21,7 @@ const usePayment = () => {
     if (typeof navigator !== "undefined" && typeof navigator.share === "function") {
       try {
         await navigator.share({
-          title: "Asoebi checkout payment link",
+          title: "Shoppp checkout payment link",
           text: "Complete this order payment using the link below.",
           url: shareLink,
         });

@@ -23,9 +23,9 @@ const Button: FC<IButton> = ({
     <button
       disabled={disabled}
       type={type}
-      className={`bg-green text-white py-10 l:py-15 px-20 w-fit radius-5 border-none
-                    hover:pointer text-13 l:text-14 font-inter 
-                hover:bg-darkgreen g|transition:0.5s disabled:bg-#0b9378cb disabled:cursor-not-allowed ${className}`}
+      className={`bg-brand text-white py-[10px] lg:py-[15px] px-[20px] w-fit rounded-[5px] border-none
+                    hover:cursor-pointer text-[13px] lg:text-[14px] font-inter 
+                hover:bg-brand-hover transition-all duration-500 disabled:bg-[#0357EEcb] disabled:cursor-not-allowed ${className}`}
       onClick={onClick}
     >
       {children}

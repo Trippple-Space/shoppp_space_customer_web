@@ -71,7 +71,7 @@ export function CatalogueMediaItem({
             muted
             loop
             playsInline
-            className="w-100p h-100p block g|object-fit:cover"
+            className="w-full h-full block object-cover"
             style={{ width: '100%', height: '100%', display: 'block', objectFit: 'cover' }}
           />
           <span className={catalogueStyles.catalogueMediaItemOverlay} aria-hidden />
@@ -89,7 +89,7 @@ export function CatalogueMediaItem({
       <div className={catalogueStyles.catalogueMediaItemMedia}>
         <Image
           ref={imgRef}
-          className={`absolute w-full h-full a-self-center g|object-fit:cover`}
+          className={`absolute w-full h-full self-center object-cover`}
           src={item.mediaUrl}
           alt={item.caption ?? 'Catalogue'}
           hasLoader={true}
@@ -236,15 +236,15 @@ export function ProductCatalogueDropdown({
             openFullGallery();
           },
         })}
-        className="l:w-35.2 l:min-w-35.2 l:h-35.2 w-31 min-w-31 h-31 flex a-items-center j-content-center radius-3 md:radius-4 border border-#00000014 outline-none bg-#00000006 hover:bg-#0000000D transition-colors shrink-0"
+        className="lg:w-[35.2px] lg:min-w-[35.2px] lg:h-[35.2px] w-[31px] min-w-[31px] h-[31px] flex items-center justify-center rounded-[3px] md:rounded-[4px] border border-[#00000014] outline-none bg-[#00000006] hover:bg-[#0000000D] transition-colors shrink-0"
         aria-label="Open product media gallery"
       >
-        <FaCirclePlay className="l:w-18 w-16 l:h-18 h-16 color-#0B9378 ml-1" />
+        <FaCirclePlay className="lg:w-[18px] w-[16px] lg:h-[18px] h-[16px] text-[#0357EE] ml-[1px]" />
       </button>
       <FloatingPortal>
         <div
           ref={refs.setFloating}
-          className='sm:p-10 p-5 sm:pt-14'
+          className='sm:p-[10px] p-[5px] sm:pt-[14px]'
           style={{
             ...floatingStyles,
             maxHeight: 'min(80vh, 560px)',
@@ -261,11 +261,11 @@ export function ProductCatalogueDropdown({
           aria-hidden={!open}
           {...getFloatingProps()}
         >
-          <div className="p-12 sm:pt-0 pt-5">
-            <h3 className="text-14 weight-600 color-#0B9378 uppercase tracking-wider">Catalogue</h3>
+          <div className="p-[12px] sm:pt-0 pt-[5px]">
+            <h3 className="text-[14px] font-semibold text-[#0357EE] uppercase tracking-wider">Catalogue</h3>
           </div>
           <div
-            className="p-10 grid grid-3-cols-1fr sm:grid-4-cols-1fr xl:grid-5-cols-1fr gap-3"
+            className="p-[10px] grid grid-cols-3 sm:grid-cols-4 xl:grid-cols-5 gap-[3px]"
           >
             {cataloguesSorted.map((item) => (
               <div

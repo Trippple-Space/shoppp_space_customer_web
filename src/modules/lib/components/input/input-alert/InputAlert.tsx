@@ -37,10 +37,10 @@ const renderErrorMessage = (errorMessage: InputAlertProps['errorMessage']) => {
 const InputAlert: React.FC<InputAlertProps> = ({ hasError, errorMessage }) => {
   return (
     <div
-      className={`notice text-12 h-0 gap-5 j-content-end w-full pt-12 pb-12 text-danger ${hasError ? 'flex' : "hidden!"}`}
+      className={`notice text-[12px] h-0 gap-[5px] justify-end w-full pt-[12px] pb-[12px] text-danger ${hasError ? 'flex' : "!hidden"}`}
     >
-      <Icon name="alert-circle" className="w-14 a-self-center" />
-      <span className="a-self-center">{renderErrorMessage(errorMessage)}</span>
+      <Icon name="alert-circle" className="w-[14px] self-center" />
+      <span className="self-center">{renderErrorMessage(errorMessage)}</span>
     </div>
   );
 };

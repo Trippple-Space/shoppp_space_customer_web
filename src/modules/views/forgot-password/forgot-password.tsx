@@ -36,9 +36,9 @@ const ForgotPassword = () => {
     <>
       <div className='w-full'>
 
-            <div className="font-inter mb-30"> 
-        <h3 className="text-center text-20 weight-500 mb-10 text-grey-900">Forgot password</h3>
-        <p className="text-center text-14 text-grey-700">Enter your email to reset password</p>
+            <div className="font-inter mb-[30px]"> 
+        <h3 className="text-center text-[20px] font-medium mb-[10px] text-[#1F1B17]">Forgot password</h3>
+        <p className="text-center text-[14px] text-[#6B6662]">Enter your email to reset password</p>
       </div>
 
       <form onSubmit={forgotPasswordHandler.handleSubmit} className="">
@@ -53,7 +53,7 @@ const ForgotPassword = () => {
             value={forgotPasswordHandler.values.email}
           
               inputClass={cx({
-                      "border-red": forgotPasswordHandler.touched.email && forgotPasswordHandler.errors.email,
+                      "border-[#DE3838]": forgotPasswordHandler.touched.email && forgotPasswordHandler.errors.email,
                     })}
                     after={
                       <InputAlert 
@@ -66,9 +66,9 @@ const ForgotPassword = () => {
   
 
         <button 
-          className="bg-green text-white py-15 l:py-18 radius-8 w-full border 
-          text-14 l:text-16 mt-20 hover:pointer font-inter
-          hover:bg-darkgreen g|transition:0.5s disabled:bg-grey"
+          className="bg-brand text-white py-[15px] lg:py-[18px] rounded-[8px] w-full border 
+          text-[14px] lg:text-[16px] mt-[20px] hover:cursor-pointer font-inter
+          hover:bg-brand-hover transition-all duration-500 disabled:bg-[#676767]"
           type="submit"
             disabled={forgotPasswordHandler.isSubmitting}
       

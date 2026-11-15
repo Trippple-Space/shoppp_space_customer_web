@@ -1,6 +1,5 @@
 import React from 'react';
 import { createPortal } from 'react-dom';
-import ProductSizeChartModal from '@/modules/views/product-details/modals/ProductSizeChartModal';
 import {
   ProductDetailModalProp,
   useProductDetailModal,
@@ -28,10 +27,6 @@ const ProductDetailModal = ({
     setIsHover,
     isEditingConfiguration,
     setIsEditingConfiguration,
-    sizeChartOpen,
-    setSizeChartOpen,
-    resolvedSizeChart,
-    showSizeChartLink,
     imgRef,
     allPropertiesWithSize,
     selectedVariant,
@@ -76,13 +71,13 @@ const ProductDetailModal = ({
   return createPortal(
     <>
       <div
-        className="fixed inset-0 bg-#00000073 w-100p h-100p block"
+        className="fixed inset-0 bg-[#00000073] w-full h-full block"
         style={{ zIndex: modalZIndex }}
         onClick={handleCloseProductModal}
       >
-        <div className="relative no-scrollbar w-full h-full flex flex-col j-content-center a-items-center">
+        <div className="relative no-scrollbar w-full h-full flex flex-col justify-center items-center">
           <div
-            className="fixed bg-white w-94p sm:w-80p l:w-65p xl:w-50p max-w-900 radius-12 overflow-hidden flex flex-col"
+            className="fixed bg-white w-[94%] sm:w-[80%] lg:w-[65%] xl:w-1/2 max-w-[900px] rounded-[12px] overflow-hidden flex flex-col"
             style={{
               maxHeight: 'calc(100vh - 80px)',
               zIndex: modalZIndex + 10,
@@ -95,10 +90,10 @@ const ProductDetailModal = ({
             />
 
             <div
-              className="overflow-auto no-scrollbar flex-grow-1"
+              className="overflow-auto no-scrollbar grow"
               style={{ minHeight: 0 }}
             >
-              <div className="l:flex grid j-content-center gap-24 sm:px-24 px-16 pt-16 pb-24">
+              <div className="lg:flex grid justify-center gap-[24px] sm:px-[24px] px-[16px] pt-[16px] pb-[24px]">
                 <ProductDetailModalGallery
                   product={product}
                   selectedImage={selectedImage}
@@ -117,7 +112,7 @@ const ProductDetailModal = ({
                   handleSelectPreview={handleSelectPreview}
                 />
 
-                <div className="l:w-50p w-full">
+                <div className="lg:w-1/2 w-full">
                   <ProductDetailModalInfo
                     product={product}
                     selectedVariant={selectedVariant}
@@ -131,9 +126,6 @@ const ProductDetailModal = ({
                     activeFilters={activeFilters}
                     isOptionCompatible={isOptionCompatible}
                     toggleFilter={toggleFilter}
-                    productId={product?.id}
-                    showSizeChartLink={showSizeChartLink}
-                    onOpenSizeChart={() => setSizeChartOpen(true)}
                     selectedVariant={selectedVariant}
                     missingRequiredOptions={missingRequiredOptions}
                     initialMissingOptions={initialMissingOptions}
@@ -165,15 +157,6 @@ const ProductDetailModal = ({
           </div>
         </div>
       </div>
-      {product?.id && showSizeChartLink && (
-        <ProductSizeChartModal
-          isOpen={sizeChartOpen}
-          onClose={() => setSizeChartOpen(false)}
-          productId={product.id}
-          productName={product.name}
-          fitSizeChart={resolvedSizeChart}
-        />
-      )}
     </>,
     document.body
   );

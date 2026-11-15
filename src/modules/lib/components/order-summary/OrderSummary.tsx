@@ -57,16 +57,16 @@ const OrderSummary: FC<IOrderSummary> = ({
   }
 
   return (
-    <div className='w-full flex flex-col md:gap-15 gap-20 md:pb-0 pb-12 md:pt-0 sm:pt-12 pt-56'>
+    <div className='w-full flex flex-col md:gap-[15px] gap-[20px] md:pb-0 pb-[12px] md:pt-0 sm:pt-[12px] pt-[56px]'>
 
-      <div className='flex flex-col gap-16 text-16 line-height-24 weight-400 color-#000000E0'>
-        <div className='flex space-between sm:pt-0 pt-16'>
+      <div className='flex flex-col gap-[16px] text-[16px] leading-[24px] font-normal text-[#000000E0]'>
+        <div className='flex justify-between sm:pt-0 pt-[16px]'>
           <div className=''>Subtotal</div>
-          <div className="flex a-items-center gap-8">
+          <div className="flex items-center gap-[8px]">
 
             {
 
-              <p className={`weight-400`}>
+              <p className={`font-normal`}>
                 {formatNumberAsPrice(subTotal - totalProductDiscounts())}
               </p>
             }
@@ -74,9 +74,9 @@ const OrderSummary: FC<IOrderSummary> = ({
           </div>
         </div>
 
-        <div className='flex space-between'>
+        <div className='flex justify-between'>
           <div className=''>Promo Code</div>
-          <div className='color-#1677FF underline pointer' onClick={() =>
+          <div className='text-[#1677FF] underline cursor-pointer' onClick={() =>
             setShowDisCountInput(prev => !prev)
 
           }>
@@ -88,12 +88,12 @@ const OrderSummary: FC<IOrderSummary> = ({
           showDisCountInput && (
             <>
 
-              <div className="flex gap-8 a-items-center w-full">
+              <div className="flex gap-[8px] items-center w-full">
                 <input placeholder="Enter discount code"
-                  className="h-41 block font-inter px-10 w-full flex flex-col a-items-center pb-4
-            @lo:border-solid @lo:border-1 @lo:border-grey-300 @lo:weight-400 @lo:outline-none
-            @lo:placeholder:text-grey-400 @lo:radius-6
-            @lo:focus:border-green @lo:placeholder:text-12 flex-grow-1"
+                  className="h-[41px] block font-inter px-[10px] w-full flex flex-col items-center pb-[4px]
+            border-solid border border-[#E4E1DF] font-normal outline-none
+            placeholder:text-grey-400 rounded-[6px]
+            focus:border-brand placeholder:text-[12px] grow"
 
                   value={discountCode}
                   onChange={(e: React.ChangeEvent<HTMLInputElement>) => setDiscountCode(e.target.value)}
@@ -104,7 +104,7 @@ const OrderSummary: FC<IOrderSummary> = ({
                     handleApplyDiscount(discountCode)
                   }
                 >
-                  <Button disabled={applyingCode} className="flex flex-col j-content-center a-items-center h-40">{applyingCode ? "Processing..." : "Apply"}</Button>
+                  <Button disabled={applyingCode} className="flex flex-col justify-center items-center h-[40px]">{applyingCode ? "Processing..." : "Apply"}</Button>
                 </div>
               </div>
 
@@ -116,13 +116,13 @@ const OrderSummary: FC<IOrderSummary> = ({
           <div className=''>
             <div>
               <div className=''>Discounts</div>
-              <div className='flex flex-col gap-3'>
+              <div className='flex flex-col gap-[3px]'>
                 {
                   cart?.storeGroups?.map((store) => (
                     store.discountCode &&
-                    <div key={store.id} className='flex space-between a-items-center text-15'>
-                      <p className='py-3 flex gap-3 a-items-center color-#00000099'>
-                        <AiOutlineTag className='w-16 h-16' />
+                    <div key={store.id} className='flex justify-between items-center text-[15px]'>
+                      <p className='py-[3px] flex gap-[3px] items-center text-[#00000099]'>
+                        <AiOutlineTag className='w-[16px] h-[16px]' />
                         <span className=''>{store.discountCode}</span>
                       </p>
                       <p>- {formatNumberAsPrice(store.storeDiscountValue - getStoreProductsDiscounts(store))}</p>
@@ -131,9 +131,9 @@ const OrderSummary: FC<IOrderSummary> = ({
                 }
                 {
                   cart.systemDiscountCode &&
-                  <div className='flex space-between a-items-center text-15'>
-                    <p className='py-3 flex gap-3 a-items-center color-#00000099'>
-                      <AiOutlineTag className='w-16 h-16' />
+                  <div className='flex justify-between items-center text-[15px]'>
+                    <p className='py-[3px] flex gap-[3px] items-center text-[#00000099]'>
+                      <AiOutlineTag className='w-[16px] h-[16px]' />
                       <span className=''>{cart.systemDiscountCode}</span>
                     </p>
                     <p>- {formatNumberAsPrice(cart.systemDiscountValue)}</p>
@@ -145,11 +145,11 @@ const OrderSummary: FC<IOrderSummary> = ({
         )}
 
         {shippingFee !== undefined && (
-          <div className='flex space-between'>
+          <div className='flex justify-between'>
             <div className=''>Delivery fee</div>
             <div className=''>{shippingFee === 0 ? <span>Free</span> :
               loading ?
-                <div className="bg-#00000014 w-70 h-24 radius-6 animate-pulse"></div>
+                <div className="bg-[#00000014] w-[70px] h-[24px] rounded-[6px] animate-pulse"></div>
                 :
                 <span>{formatNumberAsPrice(shippingFee)}</span>
             }</div>
@@ -158,14 +158,14 @@ const OrderSummary: FC<IOrderSummary> = ({
       </div>
 
       {!!total && (
-        <div className='flex space-between border-t md:border-b-0 border-b border-grey-300 sm:text-20 text-18 sm:line-height-28 line-height-24 weight-600 md:pt-24 pt-20 md:pb-0 pb-20'>
+        <div className='flex justify-between border-t md:border-b-0 border-b border-[#E4E1DF] sm:text-[20px] text-[18px] sm:leading-[28px] leading-[24px] font-semibold md:pt-[24px] pt-[20px] md:pb-0 pb-[20px]'>
           <div className=''>Total</div>
-          <div className="flex a-items-center gap-8">
+          <div className="flex items-center gap-[8px]">
             {
               loading ?
-                <div className="bg-#00000014 w-100 h-30 radius-6 animate-pulse"></div>
+                <div className="bg-[#00000014] w-[100px] h-[30px] rounded-[6px] animate-pulse"></div>
                 :
-                <p className={`weight-600`}>
+                <p className={`font-semibold`}>
                   {formatNumberAsPrice(total)}
                 </p>
             }

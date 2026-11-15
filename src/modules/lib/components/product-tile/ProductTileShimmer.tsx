@@ -8,26 +8,26 @@ const ProductTileShimmer: FC<{ isStoreBased?: boolean; horizontalScroll?: boolea
 }) => {
   return (
     <div
-      className={`${horizontalScroll ? 'l:w-290 md:w-250 sm:w-220 w-150 flex-shrink-0' : 'w-full'} flex flex-col gap-12`}
+      className={`${horizontalScroll ? 'lg:w-[290px] md:w-[250px] sm:w-[220px] w-[150px] shrink-0' : 'w-full'} flex flex-col gap-[12px]`}
     >
       <div
-        className="ratio-1 radius-10 l:radius-15 overflow-hidden w-full pulsing-multi-color-bg"
+        className="aspect-square rounded-[10px] lg:rounded-[15px] overflow-hidden w-full pulsing-multi-color-bg"
         aria-hidden
       />
-      <div className="flex gap-4 l:mt-16 mt-14">
+      <div className="flex gap-[4px] lg:mt-[16px] mt-[14px]">
         {[1, 2, 3].map((i) => (
           <div
             key={i}
-            className="l:w-35.2 l:h-35.2 w-31 h-31 radius-4 pulsing-multi-color-bg flex-shrink-0"
+            className="lg:w-[35.2px] lg:h-[35.2px] w-[31px] h-[31px] rounded-[4px] pulsing-multi-color-bg shrink-0"
             aria-hidden
           />
         ))}
       </div>
-      <div className="md:mt-16 mt-20 h-20 w-full max-w-180 pulsing-multi-color-bg radius-4" aria-hidden />
+      <div className="md:mt-[16px] mt-[20px] h-[20px] w-full max-w-[180px] pulsing-multi-color-bg rounded-[4px]" aria-hidden />
       {
-        !isStoreBased ? (<div className="h-24 w-full max-w-120 pulsing-multi-color-bg radius-4" aria-hidden />) : null
+        !isStoreBased ? (<div className="h-[24px] w-full max-w-[120px] pulsing-multi-color-bg rounded-[4px]" aria-hidden />) : null
       }
-      <div className="h-24 w-80 pulsing-multi-color-bg radius-4" aria-hidden />
+      <div className="h-[24px] w-[80px] pulsing-multi-color-bg rounded-[4px]" aria-hidden />
     </div>
   );
 };

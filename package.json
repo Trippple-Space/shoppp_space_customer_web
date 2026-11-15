@@ -1,25 +1,34 @@
 {
-  "name": "asoebi-client",
+  "name": "shoppp-space-customer-web",
   "version": "0.1.0",
   "private": true,
   "engines": {
     "node": "24.x"
   },
   "scripts": {
-    "dev": "cross-env CMD_ENV=development npm run dev:start",
-    "dev:start": "cxcss & next dev --turbo",
-    "build": "cxcss --build && next build",
+    "dev": "cross-env CMD_ENV=development next dev --turbo",
+    "dev:start": "next dev",
+    "build": "next build",
     "start": "next start",
-    "lint": "next lint",
-    "prepare": "husky",
-    "prettier": "prettier --config .prettierrc --write ."
+    "lint": "eslint .",
+    "prettier": "prettier --config .prettierrc --write .",
+    "check:no-editor": "node scripts/assert-no-editor.mjs",
+    "check:no-editor:build": "node scripts/assert-no-editor.mjs --build",
+    "test:no-editor": "node --test scripts/assert-no-editor.test.mjs",
+    "prebuild": "npm run check:no-editor",
+    "postbuild": "npm run check:no-editor:build",
+    "sanee:vendor": "../scripts/sanee-vendor.sh"
   },
   "dependencies": {
     "@floating-ui/react": "^0.27.8",
+    "@sanee/blocks": "file:vendor/sanee/sanee-blocks-0.0.0.tgz",
+    "@sanee/core": "file:vendor/sanee/sanee-core-0.0.0.tgz",
+    "@sanee/react": "file:vendor/sanee/sanee-react-0.0.0.tgz",
     "@smastrom/react-rating": "^1.5.0",
+    "@tailwindcss/postcss": "^4.1.12",
     "@types/node": "20.2.5",
-    "@types/react": "^18.2.48",
-    "@types/react-dom": "^18.2.18",
+    "@types/react": "^19",
+    "@types/react-dom": "^19",
     "aws-sdk": "^2.1632.0",
     "axios": "^1.5.1",
     "chart.js": "^4.4.0",
@@ -29,33 +38,32 @@
     "framer-motion": "^11.2.4",
     "googleapis": "^171.1.0",
     "i": "^0.3.7",
-    "next": "^14.1.0",
+    "next": "16.4.5",
     "npm": "^10.9.2",
     "posthog-js": "^1.188.1",
-    "react": "^18.2.0",
-    "react-chartjs-2": "^5.2.0",
-    "react-dom": "^18.2.0",
+    "react": "^19.0.0",
+    "react-chartjs-2": "^5.3.1",
+    "react-dom": "^19.0.0",
     "react-grid-gallery": "^1.0.1-alpha.0",
     "react-icons": "^5.3.0",
     "react-intersection-observer": "^9.13.1",
     "react-masonry-css": "^1.0.16",
     "sass": "^1.66.0",
     "sonner": "^1.0.3",
+    "tailwindcss": "^4.1.12",
     "typescript": "^5.3.3",
     "yup": "^1.3.2",
     "zustand": "^4.4.6"
   },
   "devDependencies": {
+    "@eslint/eslintrc": "^3",
     "cross-env": "^7.0.3",
-    "cxcss": "^0.0.49",
-    "husky": "^9.1.7",
+    "eslint": "^9",
+    "eslint-config-next": "16.4.5",
     "lint-staged": "^15.2.10",
     "prettier": "3.5.0"
   },
-  "husky": {
-    "hooks": {
-      "pre-commit": "npx cxcss",
-      "pre-push": "npx cxcss"
-    }
+  "overrides": {
+    "@sanee/core": "file:vendor/sanee/sanee-core-0.0.0.tgz"
   }
 }

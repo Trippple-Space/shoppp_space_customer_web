@@ -5,12 +5,16 @@
  */
 
 const localConfig = {
-  // API_HOST: 'http://localhost:80/api/v1',
-   API_HOST: "https://api-ephemeral.asoebi.africa/api/v1",
-  // API_HOST: 'https://api-staging.asoebi.africa/api/v1',
-  VENDOR_CENTER_HOST: 'https://vendor-staging.asoebi.africa',
-  VENDOR_CENTER_SIGNUP: 'https://vendor-staging.asoebi.africa/auth/signup',
-  LANDING_PAGE_HOST: 'https://vendor-staging.asoebi.africa/landing-page'
+  API_HOST:
+    process.env.NEXT_PUBLIC_API_HOST ?? "http://localhost/api/v1",
+  VENDOR_CENTER_HOST:
+    process.env.NEXT_PUBLIC_VENDOR_CENTER_HOST ?? "http://localhost:3001",
+  VENDOR_CENTER_SIGNUP:
+    process.env.NEXT_PUBLIC_VENDOR_CENTER_SIGNUP ??
+    "http://localhost:3001/auth/signup",
+  LANDING_PAGE_HOST:
+    process.env.NEXT_PUBLIC_LANDING_PAGE_HOST ??
+    "http://localhost:3001/landing-page",
 };
 
 export default localConfig;

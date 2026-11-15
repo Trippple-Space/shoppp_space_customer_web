@@ -8,7 +8,7 @@ interface IBuyBox {
 const BuyBox: FC<IBuyBox> = ({product}) => {
   return (
     <div className=''>
-        <div className='text-20 weight-500'>{product.name}</div>
+        <div className='text-[20px] font-medium'>{product.name}</div>
     </div>
   )
 }

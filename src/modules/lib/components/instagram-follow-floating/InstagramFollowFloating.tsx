@@ -4,7 +4,7 @@ import { AiOutlineInstagram } from 'react-icons/ai';
 
 import FloatingPromoPill from '@/modules/lib/components/floating-promo-pill/FloatingPromoPill';
 
-const INSTAGRAM_URL = 'https://www.instagram.com/theasoebiafrica/';
+const INSTAGRAM_URL = 'https://www.instagram.com/shopppspace/';
 
 type InstagramFollowFloatingProps = {
   orchestrated?: boolean;

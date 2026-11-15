@@ -26,14 +26,14 @@ const OrderProgressDetails = ({
 
   return (
     <>
-      <div className='py-20 px-15 bg-white flex flex-col gap-25 a-items-center w-full overflow-hidden'>
+      <div className='py-[20px] px-[15px] bg-white flex flex-col gap-[25px] items-center w-full overflow-hidden'>
         {singleOrder.status.toUpperCase() === 'DELIVERED' ? (
           <>
             <OrderProcess
               text='Order placed'
               date={getOrderTimelineStepDate(singleOrder, 'ONGOING')}
               active={true}
-              styles='b-10 h-0 z-0'
+              styles='bottom-[10px] h-0 z-0'
               singleOrder={singleOrder}
             />
 
@@ -89,7 +89,7 @@ const OrderProgressDetails = ({
               text='Delivered'
               date={getOrderTimelineStepDate(singleOrder, 'DELIVERED')}
               active={true}
-              styles='t-0 h-50'
+              styles='top-0 h-[50px]'
               singleOrder={singleOrder}
             />
           </>
@@ -99,7 +99,7 @@ const OrderProgressDetails = ({
               text='Order placed'
               date={getOrderTimelineStepDate(singleOrder, 'ONGOING')}
               active={true}
-              styles='b-10 h-200 z-0'
+              styles='bottom-[10px] h-[200px] z-0'
               singleOrder={singleOrder}
             />
             <OrderProcess
@@ -110,11 +110,11 @@ const OrderProgressDetails = ({
                 getOrderTimelineStepDate(singleOrder, 'ONGOING')
               }
               active={true}
-              styles='t-0 h-60 bg-#D4280C weight-600 overflow'
+              styles='top-0 h-[60px] bg-[#D4280C] font-semibold overflow'
               singleOrder={singleOrder}
             />
-            <div className='bg-#FFE5E1 w-100p px-10 py-20 radius-5 border border-2 border-#D4280C font-inter z-1'>
-              <p className='text-danger text-14 weight-400 w-90p'>
+            <div className='bg-[#FFE5E1] w-full px-[10px] py-[20px] rounded-[5px] border border-[2px] border-[#D4280C] font-inter z-[1px]'>
+              <p className='text-danger text-[14px] font-normal w-[90%]'>
                 {singleOrder?.cancellationReason
                   ? `Reason for cancellation: ${singleOrder?.cancellationReason}`
                   : 'This order has been cancelled'}
@@ -134,7 +134,7 @@ const OrderProgressDetails = ({
                 }
                 active={index <= currentStatusIndex}
                 singleOrder={singleOrder}
-                styles={index === 0 ? 'b-1 z-0' : 't-0 h-80'}
+                styles={index === 0 ? 'bottom-[1px] z-0' : 'top-0 h-[80px]'}
               />
             ))}
           </>

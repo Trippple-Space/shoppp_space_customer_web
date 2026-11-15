@@ -17,7 +17,7 @@ function orderedProductCard({ orderedProducts }: any) {
   const cartItems = getOrderCartLinesWithStatus(orderedProducts);
   return (
     <>
-      <div className="flex flex-col gap-10">
+      <div className="flex flex-col gap-[10px]">
         {cartItems.map((item: any) => {
           const isRemoved = item?.lineStatus === 'REMOVED';
           const mediaType =
@@ -31,48 +31,48 @@ function orderedProductCard({ orderedProducts }: any) {
 
           return (
             <div
-              className={`flex flex-col gap-4 bg-whitesmoke radius-5 p-10 ${isRemoved ? 'opacity-70' : ''}`}
+              className={`flex flex-col gap-[4px] bg-[#F5F5F5] rounded-[5px] p-[10px] ${isRemoved ? 'opacity-70' : ''}`}
             >
-              <div className="l:flex space-between a-items-start">
-                <div className="flex gap-10 l:w-60p w-90p relative">
-                  <div className="w-60 h-60 radius-8 relative overflow-hidden">
+              <div className="lg:flex justify-between items-start">
+                <div className="flex gap-[10px] lg:w-[60%] w-[90%] relative">
+                  <div className="w-[60px] h-[60px] rounded-[8px] relative overflow-hidden">
                     {mediaType === 'image' ? (
                       <Image
                         src={item?.variant.media[0].url}
                         alt={item.variant?.product?.name || ''}
-                        className="w-60 h-60 radius-8 object-fit-cover"
+                        className="w-[60px] h-[60px] rounded-[8px] object-fit-cover"
                       />
                     ) : (
                       <VideoSrc
-                        className="w-60 h-60 radius-8 object-fit-cover"
+                        className="w-[60px] h-[60px] rounded-[8px] object-fit-cover"
                         src={item?.variant.media[0].url}
                         hasLoader={true}
                       />
                     )}
                   </div>
-                  <div className="flex flex-col gap-10 pb-10 l:pb-0">
-                    <div className="flex flex-col gap-3">
-                      <p className="weight-600 text-14 w-fit flex flex-wrap items-center gap-2">
+                  <div className="flex flex-col gap-[10px] pb-[10px] lg:pb-0">
+                    <div className="flex flex-col gap-[3px]">
+                      <p className="font-semibold text-[14px] w-fit flex flex-wrap items-center gap-[2px]">
                         <span>{item.variant.product?.name}</span>
                         {isRemoved && (
-                          <span className="text-[10px] uppercase font-semibold px-2 py-0.5 rounded bg-[#6C757D] text-white">
+                          <span className="text-[10px] uppercase font-semibold px-[2px] py-[0.5px] rounded bg-[#6C757D] text-white">
                             Removed
                           </span>
                         )}
                       </p>
-                      <p className="color-#0000008C text-12">
+                      <p className="text-[#0000008C] text-[12px]">
                         {item.variant.product?.store.name}
                       </p>
                     </div>
-                    <div className="flex flex-col gap-5">
+                    <div className="flex flex-col gap-[5px]">
                       {' '}
                       {item.variant?.size ? (
-                        <p className="color-#0000008C text-14 w-fit">
+                        <p className="text-[#0000008C] text-[14px] w-fit">
                           Size: {item.variant?.size}
                         </p>
                       ) : null}
                       {item.variant?.properties?.color && (
-                        <p className="color-#0000008C text-14">
+                        <p className="text-[#0000008C] text-[14px]">
                           Color: {item?.variant?.properties?.color[0] === '#' ? getClosestColorName(item?.variant?.properties?.color) : item?.variant?.properties?.color}
                         </p>
                       )}
@@ -98,7 +98,7 @@ function orderedProductCard({ orderedProducts }: any) {
                             return (
                               <p
                                 key={key}
-                                className="color-#0000008C text-14 w-fit"
+                                className="text-[#0000008C] text-[14px] w-fit"
                               >
                                 {`${key}: ${Array.isArray(value) ? value.join(', ') : value}`}
                               </p>
@@ -108,18 +108,18 @@ function orderedProductCard({ orderedProducts }: any) {
                     </div>
                   </div>
                 </div>
-                <div className="flex space-between flex-row-reverse l:grid gap-5 pt-5 border-t border-t-#00000014 l:border-none">
-                  <div className="flex flex-col a-items-end">
-                    <p className="text-14 weight-500">
+                <div className="flex justify-between flex-row-reverse lg:grid gap-[5px] pt-[5px] border-t border-t-[#00000014] lg:border-none">
+                  <div className="flex flex-col items-end">
+                    <p className="text-[14px] font-medium">
                       {formatNumberAsPrice(linePrices.displayPrice)}
                     </p>
                     {linePrices.hasSlash && (
-                      <div className="flex flex-col gap-2 a-items-end">
+                      <div className="flex flex-col gap-[2px] items-end">
                         {getStrikethroughAmounts(linePrices).map(
                           (amount, idx) => (
                             <p
                               key={idx}
-                              className="text-12 color-#00000099 line-through"
+                              className="text-[12px] text-[#00000099] line-through"
                             >
                               {formatNumberAsPrice(amount)}
                             </p>
@@ -128,15 +128,15 @@ function orderedProductCard({ orderedProducts }: any) {
                       </div>
                     )}
                   </div>
-                  <p className="text-12 text-right"> X {item.quantity}</p>
+                  <p className="text-[12px] text-right"> X {item.quantity}</p>
                 </div>
               </div>
 
               {item?.userConfigurations &&
                 Object.keys(item.userConfigurations).length > 0 && (
-                  <div className="py-12">
-                    <div className="pt-10 flex flex-col gap-6">
-                      <div className="flex gap-8 flex-wrap relative">
+                  <div className="py-[12px]">
+                    <div className="pt-[10px] flex flex-col gap-[6px]">
+                      <div className="flex gap-[8px] flex-wrap relative">
                         {Object.entries(item.userConfigurations).map(
                           ([recordName, recordValue]) => {
                             if (

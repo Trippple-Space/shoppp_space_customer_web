@@ -128,16 +128,16 @@ const ScrollButtons: FC<IScrollButtons> = ({
               aria-disabled={buttonsState.isLeftDisabled}
               className={`${
                 component === "categories"
-                  ? "t-10p l--10 px-6 py-6 l:bg-white bg-#F5F5F5 sm:flex hidden"
-                  : "t-40p l-0 p-12 bg-#FFFFFFCC md:flex hidden"
-              } absolute z-1 l:border border-#00000014 pointer round j-content-center items-center margin-left:12px; ${
+                  ? "top-[10%] -left-[10px] px-[6px] py-[6px] lg:bg-white bg-[#F5F5F5] sm:flex hidden"
+                  : "top-[40%] left-0 p-[12px] bg-[#FFFFFFCC] md:flex hidden"
+              } absolute z-[1px] lg:border border-[#00000014] cursor-pointer rounded-full justify-center items-center margin-left:12px; ${
                 buttonsState.isLeftDisabled ? "opacity-0 pointer-events-none" : ""
               } ${leftButtonClassName ?? ""}`}
             >
               <HiOutlineChevronLeft
                 className={
                   leftIconClassName ??
-                  (component === "categories" ? "w-16 h-16" : "w-24 h-24")
+                  (component === "categories" ? "w-[16px] h-[16px]" : "w-[24px] h-[24px]")
                 }
               />
             </div>
@@ -149,16 +149,16 @@ const ScrollButtons: FC<IScrollButtons> = ({
               aria-disabled={buttonsState.isRightDisabled}
               className={`${
                 component === "categories"
-                  ? "t-10p r--10 px-6 py-6 l:bg-white bg-#F5F5F5 sm:flex hidden"
-                  : "t-40p r-0 p-12 bg-#FFFFFFCC md:flex hidden"
-              } absolute z-1 l:border border-#00000014 pointer round j-content-center items-center margin-left:12px; ${
+                  ? "top-[10%] -right-[10px] px-[6px] py-[6px] lg:bg-white bg-[#F5F5F5] sm:flex hidden"
+                  : "top-[40%] right-0 p-[12px] bg-[#FFFFFFCC] md:flex hidden"
+              } absolute z-[1px] lg:border border-[#00000014] cursor-pointer rounded-full justify-center items-center margin-left:12px; ${
                 buttonsState.isRightDisabled ? "opacity-0 pointer-events-none" : ""
               } ${rightButtonClassName ?? ""}`}
             >
               <HiOutlineChevronRight
                 className={
                   rightIconClassName ??
-                  (component === "categories" ? "w-16 h-16" : "w-24 h-24")
+                  (component === "categories" ? "w-[16px] h-[16px]" : "w-[24px] h-[24px]")
                 }
               />
             </div>

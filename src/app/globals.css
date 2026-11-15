@@ -1,0 +1,106 @@
+@import 'tailwindcss';
+
+@theme {
+  --color-brand: #0357EE;
+  --color-brand-hover: #0246c4;
+  --color-brand-tint: #e8effe;
+  --color-ink: #02102D;
+  --color-ground: #FFFFFF;
+  --color-muted: #5d5d5d;
+  --color-border: #d1d1d1;
+  --color-success: #52c41a;
+  --color-warning: #ff8800;
+  --color-danger: #d4280c;
+  --font-inter: var(--font-inter), sans-serif;
+}
+
+@layer base {
+  * {
+    box-sizing: border-box;
+  }
+
+  html,
+  body {
+    max-width: 100vw;
+    overflow-x: clip;
+    background: var(--color-ground);
+    color: var(--color-ink);
+  }
+
+  body {
+    margin: 0;
+    font-family: var(--font-inter), sans-serif;
+  }
+
+  a {
+    color: currentColor;
+    text-decoration: none;
+  }
+
+  img,
+  svg {
+    max-width: 100%;
+  }
+
+  ul {
+    list-style: none;
+    padding-left: 0;
+  }
+}
+
+@layer components {
+  .btn {
+    @apply inline-block rounded-[8px] border-none text-[18px] text-white cursor-pointer transition-all duration-500 lg:text-[16px];
+  }
+  .btn-primary {
+    @apply bg-brand hover:bg-brand-hover;
+  }
+  .btn-lg {
+    @apply px-[24px] py-[14px];
+  }
+  .btn-sm {
+    @apply px-[16px] py-[8px] text-[14px];
+  }
+  .app-width {
+    @apply w-[90%] mx-auto;
+  }
+}
+
+.greyscale {
+  filter: grayscale(1);
+}
+
+.color-link {
+  color: var(--color-brand);
+}
+
+.out-of-stock {
+  filter: grayscale(80%) brightness(50%);
+}
+
+.take-to-center {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+}
+
+.custom-progress {
+  border-radius: 10px;
+  background: #eaeaea;
+}
+
+.custom-progress::-webkit-progress-value,
+.custom-progress::-moz-progress-bar,
+.custom-progress::-ms-fill {
+  border-radius: 10px;
+  background: var(--color-ink);
+}
+
+.personalization-measurements-scroll-inner {
+  scrollbar-width: none;
+}
+
+.personalization-measurements-scroll-inner::-webkit-scrollbar {
+  display: none;
+}

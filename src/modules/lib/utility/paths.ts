@@ -13,7 +13,7 @@ export const paths = {
    asoebi_fabrics: "/fabrics",
    asoebi_wears: "/wears",
    explore: "/explore",
-   vendor_link: "https://vendor.asoebi.africa/auth/signup",
+   vendor_link: "https://vendor.shoppp.space/auth/signup",
    orders: "/orders",
    legal_document: "/legal-document",
    contact_us: "/contact-us",

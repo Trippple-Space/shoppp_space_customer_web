@@ -388,7 +388,7 @@ export function ProductMediaGallery({
                     onClick={goPrev}
                     aria-label="Previous image"
                   >
-                    <MdOutlineNavigateBefore className="color-#fffafaec" />
+                    <MdOutlineNavigateBefore className="text-[#fffafaec]" />
                   </button>
 
                   <button
@@ -397,7 +397,7 @@ export function ProductMediaGallery({
                     onClick={goNext}
                     aria-label="Next image"
                   >
-                    <MdOutlineNavigateNext className="color-#fffafaec" />
+                    <MdOutlineNavigateNext className="text-[#fffafaec]" />
                   </button>
                 </div>
               )}

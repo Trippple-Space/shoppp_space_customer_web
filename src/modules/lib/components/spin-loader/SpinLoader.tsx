@@ -14,11 +14,11 @@ const KEYFRAMES_ID = 'spin-loader-keyframes';
 const SpinLoader = ({
   loading = true,
   size = 16,
-  color = '#0B9378',
+  color = '#0357EE',
   trackColor,
   thickness = 3,
   className = '',
-}: SpinLoaderProps): JSX.Element | null => {
+}: SpinLoaderProps): React.JSX.Element | null => {
   React.useEffect(() => {
     if (typeof document === 'undefined') return;
     if (document.getElementById(KEYFRAMES_ID)) return;

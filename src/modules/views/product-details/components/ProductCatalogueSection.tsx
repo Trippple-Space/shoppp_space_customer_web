@@ -15,10 +15,10 @@ const ProductCatalogueSection = ({
   return (
     <div>
       {(product?.productCatalogues?.length ?? 0) > 0 && (
-        <div className="mt-30">
-          <p className="text-16 weight-600 mb-10">Catalogue</p>
+        <div className="mt-[30px]">
+          <p className="text-[16px] font-semibold mb-[10px]">Catalogue</p>
 
-          <div className="grid grid-3-cols-1fr sm:grid-4-cols-1fr md:grid-5-cols-1fr lg:grid-6-cols-1fr xl:grid-7-cols-1fr gap-3">
+          <div className="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-5 lg:grid-cols-6 xl:grid-cols-7 gap-[3px]">
             {product?.productCatalogues?.map((item) => (
               <CatalogueMediaItem
                 key={item.id}

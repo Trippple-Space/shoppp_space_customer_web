@@ -50,14 +50,14 @@ const DeliveryOptions: FC<IDeliveryOptions> = ({
   const isComingSoon = (option: any) => option?.title === 'Same Day Delivery';
 
   return (
-    <div className="bg-white py-20 px-24 radius-8 border border-#00000014 flex flex-col md:gap-24 gap-16">
-      <h2 className="md:text-20 text-16 md:line-height-28 line-height-24 weight-600">
+    <div className="bg-white py-[20px] px-[24px] rounded-[8px] border border-[#00000014] flex flex-col md:gap-[24px] gap-[16px]">
+      <h2 className="md:text-[20px] text-[16px] md:leading-[28px] leading-[24px] font-semibold">
         Delivery options
       </h2>
       {selectedAddress ? (
         <div>
-          <div className="flex flex-wrap md:flex-col sm:flex-row flex-col gap-12">
-            <p>Asoebi Africa Delivery</p>
+          <div className="flex flex-wrap md:flex-col sm:flex-row flex-col gap-[12px]">
+            <p>Shoppp Space Delivery</p>
 
             {Object.entries(visibleOptions).map(([key, option]) => {
               const comingSoon = isComingSoon(option);
@@ -72,18 +72,18 @@ const DeliveryOptions: FC<IDeliveryOptions> = ({
                   label={
                     <div className="relative">
                       <div
-                        className="flex gap-8"
+                        className="flex gap-[8px]"
                         style={comingSoon ? { filter: 'blur(1px)' } : undefined}
                       >
-                        <div className="flex flex-col md:gap-4 gap-2">
-                          <h3 className="weight-600 md:text-16 text-14 md:line-height-24 line-height-22 capitalize">
+                        <div className="flex flex-col md:gap-[4px] gap-[2px]">
+                          <h3 className="font-semibold md:text-[16px] text-[14px] md:leading-[24px] leading-[22px] capitalize">
                             {option.title}
                           </h3>
                           {'price' in option &&
                           (isNaN((option as any).price) ||
                             (option as any).price === null) &&
                           !loading && !comingSoon ? (
-                            <p className="weight-400 text-14 line-height-22 flex a-items-center j-content-center gap-3">
+                            <p className="font-normal text-[14px] leading-[22px] flex items-center justify-center gap-[3px]">
                               <span>
                                 This service is currently unavailable.
                               </span>
@@ -95,7 +95,7 @@ const DeliveryOptions: FC<IDeliveryOptions> = ({
                               </span>
                             </p>
                           ) : (
-                            <p className="weight-400 text-14 line-height-22">
+                            <p className="font-normal text-[14px] leading-[22px]">
                               {'description' in option
                                 ? option.description
                                 : ''}
@@ -107,19 +107,19 @@ const DeliveryOptions: FC<IDeliveryOptions> = ({
                             (option as any).price !== null &&
                             !isNaN((option as any).price))) && (
                           <p
-                            className={`w-fit text-right px-10 py-2 h-fit radius-4 text-12 weight-400 line-height-20 ${
+                            className={`w-fit text-right px-[10px] py-[2px] h-fit rounded-[4px] text-[12px] font-normal leading-[20px] ${
                               loading && 'animate-pulse'
                             } ${
                               selectedDeliveryOption === key
-                                ? 'color-#0B9378 bg-#007B5D1F'
-                                : 'color-#000000E0 bg-#F5F5F5'
+                                ? 'text-[#0357EE] bg-[#007B5D1F]'
+                                : 'text-[#000000E0] bg-[#F5F5F5]'
                             }`}
                           >
                             {'price' in option &&
                             (option as any).price === 0 ? (
                               <span>Free</span>
                             ) : loading ? (
-                              <div className="w-50 h-24 radius-6"></div>
+                              <div className="w-[50px] h-[24px] rounded-[6px]"></div>
                             ) : (
                               <span>
                                 {'price' in option
@@ -132,7 +132,7 @@ const DeliveryOptions: FC<IDeliveryOptions> = ({
                       </div>
 
                       {comingSoon && (
-                        <span className="absolute r-0 t-0 border-none text-#D4280C bg-#FFDBD6 py-4 px-12 radius-4 text-12">
+                        <span className="absolute right-0 top-0 border-none text-[#D4280C] bg-[#FFDBD6] py-[4px] px-[12px] rounded-[4px] text-[12px]">
                           Coming soon
                         </span>
                       )}
@@ -158,8 +158,8 @@ const DeliveryOptions: FC<IDeliveryOptions> = ({
           </div>
 
           {showVendorSubSelect && (
-            <div className="mt-12 p-12 radius-8 gap-8 w-fit">
-              <div className="flex gap-8">
+            <div className="mt-[12px] p-[12px] rounded-[8px] gap-[8px] w-fit">
+              <div className="flex gap-[8px]">
                 {isAllActive(vendorManagedOption?.pickup) && (
                   <BoxRadio
                     id="vendor-pickup"
@@ -185,29 +185,29 @@ const DeliveryOptions: FC<IDeliveryOptions> = ({
           )}
 
           {selectedDeliveryOption === 'vendorManaged' && (
-            <div className="mt-12 p-12 radius-8 flex flex-col gap-8 w-full md:w-auto">
-              <div className="flex a-items-center gap-8 ">
-                <p className="weight-400 text-14 line-height-22 flex a-items-center gap-3 color-#00000099">
+            <div className="mt-[12px] p-[12px] rounded-[8px] flex flex-col gap-[8px] w-full md:w-auto">
+              <div className="flex items-center gap-[8px] ">
+                <p className="font-normal text-[14px] leading-[22px] flex items-center gap-[3px] text-[#00000099]">
                   Vendor’s Own Delivery (managed directly by the store)
                 </p>
-                <div className="hidden xl:block w-full border border-#E7E7E7"></div>
+                <div className="hidden xl:block w-full border border-[#E7E7E7]"></div>
               </div>
 
-              <div className="mt-8 flex flex-col gap-12">
+              <div className="mt-[8px] flex flex-col gap-[12px]">
                 {selectedVendorOptions.map((vendor, idx) => (
                   <div
                     key={idx}
-                    className="flex j-content-between a-items-center flex-wrap lg:flex-nowrap gap-4"
+                    className="flex justify-between items-center flex-wrap lg:flex-nowrap gap-[4px]"
                   >
-                    <p className="weight-400 text-12 lg:text-16 line-height-22 flex a-items-center gap-3 flex-wrap">
+                    <p className="font-normal text-[12px] lg:text-[16px] leading-[22px] flex items-center gap-[3px] flex-wrap">
                       {vendor.storeName}
                       {vendor.estimatedTime && (
-                        <span className="color-#00000099 text-10 lg:text-14">
+                        <span className="text-[#00000099] text-[10px] lg:text-[14px]">
                           ({vendor.estimatedTime})
                         </span>
                       )}
                     </p>
-                    <p className="weight-600 text-14 md:text-16">
+                    <p className="font-semibold text-[14px] md:text-[16px]">
                       {formatNumberAsPrice(vendor.fee)}
                     </p>
                   </div>
@@ -216,21 +216,21 @@ const DeliveryOptions: FC<IDeliveryOptions> = ({
             </div>
           )}
 
-          <div className="mt-12 p-12 radius-8 flex a-items-center gap-8 bg-#F5F5F5 w-full">
+          <div className="mt-[12px] p-[12px] rounded-[8px] flex items-center gap-[8px] bg-[#F5F5F5] w-full">
             <p
-              className="text-14 text-center color-#00000099"
+              className="text-[14px] text-center text-[#00000099]"
               style={{ fontStyle: 'italic' }}
             >
-              Asoebi Africa is only responsible for deliveries handled through
-              “Asoebi Africa Delivery.” For orders shipped via “Vendor’s Own
+              Shoppp Space is only responsible for deliveries handled through
+              “Shoppp Space Delivery.” For orders shipped via “Vendor’s Own
               Delivery,” please contact the store directly for delivery status
               or issues.
             </p>
           </div>
         </div>
       ) : (
-        <div className="flex j-content-center">
-          <p className="weight-400 text-16 line-height-24">
+        <div className="flex justify-center">
+          <p className="font-normal text-[16px] leading-[24px]">
             Please select a delivery address to continue.
           </p>
         </div>

@@ -1,6 +1,4 @@
-// "use client"
-
-import '../styles/styles.scss';
+import './globals.css';
 import Script from 'next/script';
 import {
   Inter,
@@ -13,12 +11,10 @@ import {
   Young_Serif,
 } from 'next/font/google';
 // import { useAuthGuard } from '@/modules/lib/utility/hooks/use-auth-guard';
-import GlobalArena from '@/modules/lib/components/global-arena/GlobalArena';
-import GlobalLaunchBanner from '@/modules/lib/components/global-launch-banner/GlobalLaunchBanner';
 import CookieConsentBanner from '@/modules/lib/components/cookie-consent-banner/CookieConsentBanner';
-import FloatingWidgets from '@/modules/lib/components/floating-widgets/FloatingWidgets';
+import { Suspense } from 'react';
 import { PHProvider } from './providers';
-import dynamic from 'next/dynamic';
+import PostHogPageView from './PostHogPageView';
 import '@smastrom/react-rating/style.css';
 
 const inter = Inter({
@@ -75,17 +71,13 @@ const robotoMono = Roboto_Mono({
 });
 
 export const metadata = {
-  title: 'Asoebi Africa',
-  description: 'Fashion commerce with the vibe 😎',
+  title: 'Shoppp Space',
+  description: 'A simple space to discover, sell, and grow.',
 };
 
 export interface ILayout {
   children: React.ReactNode;
 }
-
-const PostHogPageView = dynamic(() => import('./PostHogPageView'), {
-  ssr: false,
-});
 
 export default function RootLayout({
   children,
@@ -97,7 +89,7 @@ export default function RootLayout({
   return (
     <html
       lang="en"
-      className={`${inter.variable} ${roboto.variable} ${lora.variable} ${robotoMono.variable} ${dmSans.variable} ${volkhov.variable} ${poppins.variable} ${youngSerif.variable} bg-white font-inter h-full`}
+      className={`${inter.variable} ${roboto.variable} ${lora.variable} ${robotoMono.variable} ${dmSans.variable} ${volkhov.variable} ${poppins.variable} ${youngSerif.variable} bg-ground font-inter h-full`}
     >
       <head>
         <Script id="meta-pixel-client" strategy="afterInteractive">
@@ -113,7 +105,7 @@ fbq('init', '2220527635148334');
 fbq('track', 'PageView');`}
         </Script>
       </head>
-      <body className="@lo:weight-300 @lo:text-dimgrey h-full">
+      <body className="h-full bg-ground font-light text-ink">
         <noscript>
           <img
             height="1"
@@ -124,25 +116,10 @@ fbq('track', 'PageView');`}
           />
         </noscript>
         <PHProvider>
-          <PostHogPageView />
-          <GlobalArena />
-          <GlobalLaunchBanner />
+          <Suspense fallback={null}>
+            <PostHogPageView />
+          </Suspense>
           <CookieConsentBanner />
-          <FloatingWidgets />
-          {/* <div className="fixed w-full b-60 z-3">
-            <div className="max-w-1000 mx-auto flex text-14 l:text-16 bg-yellow-50 text-green p-10 max-w-1100 mx-auto ">
-              <BsInfoCircle className="inline-block w-fit text-26 mr-10 mt--2" />
-              <span>
-                This site is currently in test mode. No real purchases can be made
-                yet. However, we would appreciate your efforts to make this
-                product better. Missing a feature you would like? Or noticed
-                something not working? Kindly shoot us a mail at{" "}
-                <a className="bold underline" href="mailto:support@asoebi.africa">
-                  support@asoebi.africa
-                </a>
-              </span>
-            </div>
-          </div> */}
           {children}
         </PHProvider>
       </body>

@@ -105,11 +105,11 @@ const handlePaste = (e: React.ClipboardEvent<HTMLInputElement>) => {
   return (
     <div className="w-full">
       <div className="font-inter">
-        <h3 className="text-center text-20 weight-500 mb-10 text-grey-900">Email Verification</h3>
-        <p className="text-center text-14 text-grey-700">
+        <h3 className="text-center text-[20px] font-medium mb-[10px] text-[#1F1B17]">Email Verification</h3>
+        <p className="text-center text-[14px] text-[#6B6662]">
         Enter the 6-character alphanumeric code you received in your email.
         </p>
-        <div className="flex j-content-between  mt-30 w-full">
+        <div className="flex justify-between  mt-[30px] w-full">
             {otpDigits.map((value: string, index: number) => (
             <Input
                 type="input"
@@ -122,7 +122,7 @@ const handlePaste = (e: React.ClipboardEvent<HTMLInputElement>) => {
               onPaste={(e: React.ClipboardEvent<HTMLInputElement>) => handlePaste(e)}
                 handleKeyDown={(e: React.KeyboardEvent<HTMLInputElement>) => handleKeyDown(e as HandleKeyDownEvent, index)}
                 className='w-fit p-0'
-                inputClass={'h-45 w-45'}
+                inputClass={'h-[45px] w-[45px]'}
                 style={{
                   paddingRight: 0,
                   paddingTop: 0,
@@ -133,8 +133,8 @@ const handlePaste = (e: React.ClipboardEvent<HTMLInputElement>) => {
             ))}
         </div>
         <button
-          className={`btn text-center bg-green weight-500 text-16 l:btn-lg btn-lg font-inter mt-30 text-14 cursor-pointer g|transition:0.5s disabled:bg-grey ${
-            otpDigits.join('').length < 6 ? 'bg-whitesmoke text-black' : 'bg-green text-white  hover:bg-darkgreen'
+          className={`btn text-center bg-brand font-medium text-[16px] lg:btn-lg btn-lg font-inter mt-[30px] text-[14px] cursor-pointer transition-all duration-500 disabled:bg-[#676767] ${
+            otpDigits.join('').length < 6 ? 'bg-[#F5F5F5] text-black' : 'bg-brand text-white  hover:bg-brand-hover'
           }`}
           onClick={handleOtpSubmit}
           disabled = {formikOtp.isSubmitting}

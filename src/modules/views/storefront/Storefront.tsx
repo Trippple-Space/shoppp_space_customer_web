@@ -5,25 +5,25 @@ import React from 'react'
 const Storefront = ({ store }: { store: any }) => {
   return (
     <>
-      <div className='bg-light-yellow w-full g|padding-top:60px; g|margin-top:-6px;'>
+      <div className='bg-[#FFE68BB2] w-full [padding-top:60px] [margin-top:-6px]'>
         <StorefrontNavBar />
 
-        <div className='app-width mt-80 pb-70'>
+        <div className='app-width mt-[80px] pb-[70px]'>
           <div className=''>
-            <h2 className='weight-500 text-58 letter-spacing-3 line-height-70 max-w-840'>
+            <h2 className='font-medium text-[58px] letter-spacing-3 leading-[70px] max-w-[840px]'>
               Discover, style, and own {store.name}
             </h2>
-            <p className='text-22 weight-300 g|letter-spacing:1.2px; line-height-38 max-w-700 mt-30'>
+            <p className='text-[22px] font-light [letter-spacing:1.2px] leading-[38px] max-w-[700px] mt-[30px]'>
               {store.description}
             </p>
           </div>
 
-          <div className='mt-85 max-w-600 '>
-            <div className='flex space-between'>
+          <div className='mt-[85px] max-w-[600px] '>
+            <div className='flex justify-between'>
               {[0, 0, 0, 0, 0].map(() => (
-                <div className='bg-white w-fit round overflow-hidden border border-2 border-green p-1 '>
+                <div className='bg-white w-fit rounded-full overflow-hidden border border-[2px] border-brand p-[1px] '>
                   <div
-                    className='w-90 h-90 bg-white round bg-cover'
+                    className='w-[90px] h-[90px] bg-white rounded-full bg-cover'
                     style={{ background: `url(${store.thumbnail})` }}
                   ></div>
                 </div>
@@ -33,10 +33,10 @@ const Storefront = ({ store }: { store: any }) => {
         </div>
       </div>
       <div
-        className='w-450 hidden l:block
-                g|box-shadow:-2px|_|8px|_|50px|_|4px|_|rgba(0,0,0,0.20)|_|inset; 
-                bg-light-grey h-591 absolute r-0 b-0 radius-t-l-40 radius-b-l-40
-                bg-cover border border-5 g|border-color:rgba(217,217,217,0.70); border-r-0 
+        className='w-[450px] hidden lg:block
+                shadow-[-2px_8px_50px_4px_rgba(0,0,0,0.20)_inset] 
+                bg-[#A8A6A6] h-[591px] absolute right-0 bottom-0 rounded-tl-[40px] rounded-bl-[40px]
+                bg-cover border border-[5px] [border-color:rgba(217,217,217,0.70)] border-r-0 
             '
         style={{
           background: `url(${store.thumbnail})`,

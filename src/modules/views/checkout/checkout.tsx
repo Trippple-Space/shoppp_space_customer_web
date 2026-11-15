@@ -343,10 +343,10 @@ const CheckoutPage = () => {
   return (
     <>
       <HomepageNavBar parent={'checkout'} />
-      <div className="md:pt-69.6 pt-74.6 sm:mb-60 mb-111 overflow-hidden" style={{ height: 'calc(100dvh)' }}>
+      <div className="md:pt-[69.6px] pt-[74.6px] sm:mb-[60px] mb-[111px] overflow-hidden" style={{ height: 'calc(100dvh)' }}>
         {fetching ? (
           <div
-            className="w-100p flex flex-col a-items-center j-content-center mt-10"
+            className="w-full flex flex-col items-center justify-center mt-[10px]"
             style={{ height: 'calc(100dvh - 146px)' }}
           >
             <DotsLoader />
@@ -362,40 +362,40 @@ const CheckoutPage = () => {
             >
               <div
                 ref={rightScrollRef}
-                className={`flex-grow-1 l:w-54.2p md:w-50p h-full overflow-auto no-scrollbar md:pt-44 sm:pt-32 pt-24 xl:pl-80 l:pl-70 md:pl-60 sm:pl-40 pl-24 xl:pr-80 l:pr-70 sm:pr-40 pr-24 flex flex-col gap-28 bg-white md:pb-90 ${showSummary ? `${selectedAddress ? 'md:pb-320 sm:pb-370 pb-410' : 'md:pb-200 sm:pb-240 pb-327'}` : 'md:pb-99 sm:pb-121 pb-217'}`}
+                className={`grow lg:w-[54.2%] md:w-[50%] h-full overflow-auto no-scrollbar md:pt-[44px] sm:pt-[32px] pt-[24px] xl:pl-[80px] lg:pl-[70px] md:pl-[60px] sm:pl-[40px] pl-[24px] xl:pr-[80px] lg:pr-[70px] sm:pr-[40px] pr-[24px] flex flex-col gap-[28px] bg-white md:pb-[90px] ${showSummary ? `${selectedAddress ? 'md:pb-[320px] sm:pb-[370px] pb-[410px]' : 'md:pb-[200px] sm:pb-[240px] pb-[327px]'}` : 'md:pb-[99px] sm:pb-[121px] pb-[217px]'}`}
               >
-                <div className="flex flex-col gap-6">
-                  <h1 className="weight-600 md:text-24 text-20 md:line-height-32 line-heigth-28">
+                <div className="flex flex-col gap-[6px]">
+                  <h1 className="font-semibold md:text-[24px] text-[20px] md:leading-[32px] leading-[28px]">
                     Order Summary
                   </h1>
-                  <p className="weight-400 text-16 line-height-24">
+                  <p className="font-normal text-[16px] leading-[24px]">
                     Check your item and add your delivery address for better
                     delivery experience.
                   </p>
                 </div>
 
-                <div className="flex flex-col gap-8">
+                <div className="flex flex-col gap-[8px]">
                   <div
-                    className={`py-20 px-24 border flex flex-col gap-24 radius-8 ${devAddressError ? 'border-#D4280C border-2' : 'border-#00000014'}`}
+                    className={`py-[20px] px-[24px] border flex flex-col gap-[24px] rounded-[8px] ${devAddressError ? 'border-[#D4280C] border-[2px]' : 'border-[#00000014]'}`}
                   >
-                    <h2 className="color-#000000E0 md:text-20 text-16 weight-600 line-height-24">
+                    <h2 className="text-[#000000E0] md:text-[20px] text-[16px] font-semibold leading-[24px]">
                       Delivery address
                     </h2>
 
-                    <div className="flex l:flex-row md:flex-col sm:flex-row flex-col l:space-between md:j-content-start sm:space-between l:a-items-center md:a-items-start sm:a-items-center l:gap-0 md:gap-16 sm:gap-0 gap-16">
+                    <div className="flex lg:flex-row md:flex-col sm:flex-row flex-col lg:justify-between md:justify-start sm:justify-between lg:items-center md:items-start sm:items-center lg:gap-0 md:gap-[16px] sm:gap-0 gap-[16px]">
                       {selectedAddress && (
-                        <div className="flex flex-col gap-4">
-                          <p className="weight-400 text-16 line-height-24 color-#00000099">
+                        <div className="flex flex-col gap-[4px]">
+                          <p className="font-normal text-[16px] leading-[24px] text-[#00000099]">
                             {selectedAddress?.contactNo}
                             {selectedAddress?.secondaryContactNo && ', '}
                             {selectedAddress?.secondaryContactNo}
                           </p>
-                          <p className="weight-400 text-16 line-height-24 color-#00000099">
+                          <p className="font-normal text-[16px] leading-[24px] text-[#00000099]">
                             {selectedAddress?.address}, {selectedAddress?.city},{' '}
                             {selectedAddress?.state}
                           </p>
                           {selectedAddress?.notes && (
-                            <p className="weight-400 text-16 line-height-24 color-#00000099">
+                            <p className="font-normal text-[16px] leading-[24px] text-[#00000099]">
                               Delivery note: {selectedAddress?.notes}
                             </p>
                           )}
@@ -403,7 +403,7 @@ const CheckoutPage = () => {
                       )}
 
                       <p
-                        className="text-16 line-height-24 weight-500 color-#1677FF underline pointer w-fit"
+                        className="text-[16px] leading-[24px] font-medium text-[#1677FF] underline cursor-pointer w-fit"
                         onClick={() => {
                           openAddressModal();
                           setDevAddressError(false);
@@ -414,7 +414,7 @@ const CheckoutPage = () => {
                     </div>
                   </div>
                   {devAddressError && (
-                    <p className="weight-400 text-14 line-height-22 color-#D4280C">
+                    <p className="font-normal text-[14px] leading-[22px] text-[#D4280C]">
                       Delivery address is required!
                     </p>
                   )}
@@ -422,11 +422,11 @@ const CheckoutPage = () => {
 
                 {
                   selectedAddress && (
-                    <div className="py-20 px-24 border border-#00000014 flex flex-col gap-14 radius-8">
-                      <h2 className="color-#000000E0 md:text-20 text-16 weight-600 line-height-24">
+                    <div className="py-[20px] px-[24px] border border-[#00000014] flex flex-col gap-[14px] rounded-[8px]">
+                      <h2 className="text-[#000000E0] md:text-[20px] text-[16px] font-semibold leading-[24px]">
                         WhatsApp updates for this order
                       </h2>
-                      <label className="flex gap-10 a-items-start pointer w-fit">
+                      <label className="flex gap-[10px] items-start cursor-pointer w-fit">
                         <input
                           type="checkbox"
                           checked={enableOrderWhatsApp}
@@ -439,14 +439,14 @@ const CheckoutPage = () => {
                               setOrderWhatsAppNumber(selectedAddress.contactNo || '');
                             }
                           }}
-                          className="mt-4 accent-#0B9378"
+                          className="mt-[4px] accent-[#0357EE]"
                         />
-                        <span className="weight-400 text-14 line-height-22 color-#00000099">
+                        <span className="font-normal text-[14px] leading-[22px] text-[#00000099]">
                           Send WhatsApp notifications for this order.
                         </span>
                       </label>
                       {enableOrderWhatsApp && (
-                        <div className="flex flex-col gap-6">
+                        <div className="flex flex-col gap-[6px]">
                           <input
                             type="tel"
                             value={orderWhatsAppNumber}
@@ -455,13 +455,13 @@ const CheckoutPage = () => {
                               if (orderWhatsAppError) setOrderWhatsAppError('');
                             }}
                             placeholder="Enter WhatsApp number"
-                            className="w-full border border-#0000001F @lo:focus:border-#0B9378 @lo:outline-none radius-6 px-12 py-10 text-14 line-height-22"
+                            className="w-full border border-[#0000001F] focus:border-[#0357EE] outline-none rounded-[6px] px-[12px] py-[10px] text-[14px] leading-[22px]"
                           />
-                          <p className="weight-400 text-12 line-height-18 color-#00000099">
+                          <p className="font-normal text-[12px] leading-[18px] text-[#00000099]">
                             Use a different number only if needed.
                           </p>
                           {orderWhatsAppError && (
-                            <p className="weight-400 text-14 line-height-22 color-#D4280C">
+                            <p className="font-normal text-[14px] leading-[22px] text-[#D4280C]">
                               {orderWhatsAppError}
                             </p>
                           )}
@@ -487,23 +487,23 @@ const CheckoutPage = () => {
                 )}
 
                 <div className="md:hidden block">
-                  <div className="py-16 px-20 radius-8 border border-#F59E0B33 bg-#FFFBEB flex flex-col gap-6">
-                    <h2 className="text-16 line-height-24 weight-600 color-#92400E">
+                  <div className="py-[16px] px-[20px] rounded-[8px] border border-[#F59E0B33] bg-[#FFFBEB] flex flex-col gap-[6px]">
+                    <h2 className="text-[16px] leading-[24px] font-semibold text-[#92400E]">
                       Return policy
                     </h2>
-                    <p className="text-14 line-height-22 weight-400 color-#B45309">
+                    <p className="text-[14px] leading-[22px] font-normal text-[#B45309]">
                       Please inspect your order upon delivery. Returns can only be made while the rider is still present, and cannot be processed once the rider leaves.
                     </p>
                   </div>
                 </div>
 
-                <div className="flex flex-col gap-14">
+                <div className="flex flex-col gap-[14px]">
                   {allCartItems.storeGroups?.map((store, i: number) => (
-                    <div className="flex flex-col gap-16" key={i}>
+                    <div className="flex flex-col gap-[16px]" key={i}>
                       {store.items.length > 0 && (
-                        <div className="flex space-between a-items-center">
+                        <div className="flex justify-between items-center">
                           <h6
-                            className="text-14 weight-400 line-height-22 color-#00000099 pointer"
+                            className="text-[14px] font-normal leading-[22px] text-[#00000099] cursor-pointer"
                             onClick={() => {
                               setStoreAccordion(i);
                             }}
@@ -512,12 +512,12 @@ const CheckoutPage = () => {
                           </h6>
                           {store.visible ? (
                             <PiCaretDown
-                              className="w-18 h-18 pointer"
+                              className="w-[18px] h-[18px] cursor-pointer"
                               onClick={() => setStoreAccordion(i)}
                             />
                           ) : (
                             <PiCaretUp
-                              className="w-18 h-18 pointer"
+                              className="w-[18px] h-[18px] cursor-pointer"
                               onClick={() => setStoreAccordion(i)}
                             />
                           )}
@@ -536,36 +536,36 @@ const CheckoutPage = () => {
 
                           return (
                             <div
-                              className="flex flex-col gap-4"
+                              className="flex flex-col gap-[4px]"
                               key={j + cartItem?.id}
                             >
                               <div
-                                className={`gap-12 ${store.visible ? 'flex a-items-start' : 'hidden'}`}
+                                className={`gap-[12px] ${store.visible ? 'flex items-start' : 'hidden'}`}
                                 key={j}
                               >
-                                <div className="w-73 h-75 min-w-73 min-h-75 radius-6 relative overflow-hidden">
+                                <div className="w-[73px] h-[75px] min-w-[73px] min-h-[75px] rounded-[6px] relative overflow-hidden">
                                   {mediaType === 'image' ? (
                                     <Image
                                       src={cartItem.variant.media?.[0].url}
                                       alt="order image"
-                                      className="w-73 h-75 min-w-73 min-h-75 radius-6 border border-#00000014 object-fit"
+                                      className="w-[73px] h-[75px] min-w-[73px] min-h-[75px] rounded-[6px] border border-[#00000014] object-fit"
                                     />
                                   ) : (
                                     <VideoSrc
-                                      className="w-73 h-75 min-w-73 min-h-75 radius-6 border border-#00000014 object-fit"
+                                      className="w-[73px] h-[75px] min-w-[73px] min-h-[75px] rounded-[6px] border border-[#00000014] object-fit"
                                       src={cartItem.variant.media?.[0].url}
                                       hasLoader={true}
                                     />
                                   )}
                                 </div>
                                 <div
-                                  className={`min-w-0 flex-grow-1 flex flex-col ${Object.keys(cartItem?.variant?.properties ?? {}).length > 2 ? 'gap-2.8' : 'gap-6'} overflow-hidden white-space-nowrap text-overflow-ellipsis`}
+                                  className={`min-w-0 grow flex flex-col ${Object.keys(cartItem?.variant?.properties ?? {}).length > 2 ? 'gap-[2.8px]' : 'gap-[6px]'} overflow-hidden white-space-nowrap text-overflow-ellipsis`}
                                 >
-                                  <p className="min-w-0 w-full truncate weight-600 text-14 line-height-22 color-#000000E0">
+                                  <p className="min-w-0 w-full truncate font-semibold text-[14px] leading-[22px] text-[#000000E0]">
                                     {cartItem?.variant?.product?.name}
                                   </p>
                                   <p
-                                    className={`weight-400 color-#0000008C ${Object.keys(cartItem?.variant?.properties ?? {}).length > 2 ? 'text-13.5 line-height-16' : 'text-14 line-height-16.94'}`}
+                                    className={`font-normal text-[#0000008C] ${Object.keys(cartItem?.variant?.properties ?? {}).length > 2 ? 'text-[13.5px] leading-[16px]' : 'text-[14px] leading-[16.94px]'}`}
                                   >
                                     Quantity:{' '}
                                     {`${cartItem?.quantity} ${displayStockUnit(
@@ -574,14 +574,14 @@ const CheckoutPage = () => {
                                   </p>
                                   {cartItem?.variant?.properties?.color && (
                                     <p
-                                      className={`weight-400 color-#0000008C capitalize ${Object.keys(cartItem?.variant?.properties ?? {}).length > 2 ? 'text-13.5 line-height-16' : 'text-14 line-height-16.94'}`}
+                                      className={`font-normal text-[#0000008C] capitalize ${Object.keys(cartItem?.variant?.properties ?? {}).length > 2 ? 'text-[13.5px] leading-[16px]' : 'text-[14px] leading-[16.94px]'}`}
                                     >
                                       Color:{' '}
                                       {cartItem?.variant?.properties?.color[0] === '#' ? getClosestColorName(cartItem?.variant?.properties?.color) : cartItem?.variant?.properties?.color}
                                     </p>
                                   )}
                                   {cartItem?.variant?.size && (
-                                    <p className="weight-400 text-13.5 line-height-16 color-#0000008C">
+                                    <p className="font-normal text-[13.5px] leading-[16px] text-[#0000008C]">
                                       Size: {cartItem?.variant?.size}
                                     </p>
                                   )}
@@ -610,27 +610,27 @@ const CheckoutPage = () => {
                                       return (
                                         <p
                                           key={key}
-                                          className="weight-400 text-13.5 line-height-16 capitalize color-#0000008C"
+                                          className="font-normal text-[13.5px] leading-[16px] capitalize text-[#0000008C]"
                                         >
                                           {`${key}: ${Array.isArray(value) ? value.join(', ') : value}`}
                                         </p>
                                       );
                                     })}
                                 </div>
-                                <div className="flex flex-col gap-10 a-items-end">
-                                  <div className="flex sm:flex-row flex-col sm:a-items-center a-items-end gap-8">
+                                <div className="flex flex-col gap-[10px] items-end">
+                                  <div className="flex sm:flex-row flex-col sm:items-center items-end gap-[8px]">
                                     <p
-                                      className={`weight-600 md:text-20 sm:text-16 text-14 md:line-height-28 sm:line-height-24 line-height-22 ${cartItem.variant.status === 'OUT_OF_STOCK' ? 'color-#00000099' : ''}`}
+                                      className={`font-semibold md:text-[20px] sm:text-[16px] text-[14px] md:leading-[28px] sm:leading-[24px] leading-[22px] ${cartItem.variant.status === 'OUT_OF_STOCK' ? 'text-[#00000099]' : ''}`}
                                     >
                                       {formatNumberAsPrice(linePrices.displayPrice)}
                                     </p>
                                     {linePrices.hasSlash && (
-                                      <div className="flex flex-wrap gap-6 a-items-center">
+                                      <div className="flex flex-wrap gap-[6px] items-center">
                                         {getStrikethroughAmounts(linePrices).map(
                                           (amount, idx) => (
                                             <p
                                               key={idx}
-                                              className={`weight-400 md:text-16 sm:text-12 text-10 md:line-height-24 sm:line-height-20 line-height-18 line-through color-#00000099  ${cartItem.variant.status === 'OUT_OF_STOCK' ? 'color-#00000099' : ''}`}
+                                              className={`font-normal md:text-[16px] sm:text-[12px] text-[10px] md:leading-[24px] sm:leading-[20px] leading-[18px] line-through text-[#00000099]  ${cartItem.variant.status === 'OUT_OF_STOCK' ? 'text-[#00000099]' : ''}`}
                                             >
                                               {formatNumberAsPrice(amount)}
                                             </p>
@@ -640,7 +640,7 @@ const CheckoutPage = () => {
                                     )}
                                   </div>
                                   <p
-                                    className="weight-400 text-14 line-height-22 text-danger underline pointer"
+                                    className="font-normal text-[14px] leading-[22px] text-danger underline cursor-pointer"
                                     onClick={async () => {
                                       try {
                                         await removeFromCart(cartItem?.id);
@@ -659,9 +659,9 @@ const CheckoutPage = () => {
                                 store.visible &&
                                 Object.keys(cartItem.userConfigurations)
                                   .length > 0 && (
-                                  <div className="pb-12">
-                                    <div className="pt-10 flex flex-col gap-6">
-                                      <div className="flex gap-8 flex-wrap relative">
+                                  <div className="pb-[12px]">
+                                    <div className="pt-[10px] flex flex-col gap-[6px]">
+                                      <div className="flex gap-[8px] flex-wrap relative">
                                         {Object.entries(
                                           cartItem.userConfigurations
                                         ).map(([recordName, recordValue]) => {
@@ -696,10 +696,10 @@ const CheckoutPage = () => {
                 </div>
               </div>
 
-              <div className="relative bg-#F5F5F5 l:w-45.8p md:w-50p max-w-661">
+              <div className="relative bg-[#F5F5F5] lg:w-[45.8%] md:w-[50%] max-w-[661px]">
                 <div
                   ref={leftScrollRef}
-                  className={`m:h-full overflow-auto no-scrollbar bg-#F5F5F5 md:pt-44 md:pb-85 xl:pl-80 l:pl-70 md:pl-40 xl:pr-80 l:pr-70 md:pr-60 flex flex-col gap-16 ${devOptions === 'smaller' ? 'fixed l-0 r-0 b-0 z-4' : ''}`}
+                  className={`md:h-full overflow-auto no-scrollbar bg-[#F5F5F5] md:pt-[44px] md:pb-[85px] xl:pl-[80px] lg:pl-[70px] md:pl-[40px] xl:pr-[80px] lg:pr-[70px] md:pr-[60px] flex flex-col gap-[16px] ${devOptions === 'smaller' ? 'fixed left-0 right-0 bottom-0 z-[4px]' : ''}`}
                 >
                   {devOptions === 'larger' && (
                     <DeliveryOptions
@@ -716,12 +716,12 @@ const CheckoutPage = () => {
                     />
                   )}
 
-                  <div className="md:py-20 py-12 md:px-24 sm:px-40 px-24 md:border border-t border-#00000014 md:bg-white bg-#F5F5F5 md:radius-8 flex flex-col sm:gap-24 gap-20">
-                    <h2 className="color-#000000E0 text-20 line-height-28 weight-600 md:block hidden">
+                  <div className="md:py-[20px] py-[12px] md:px-[24px] sm:px-[40px] px-[24px] md:border border-t border-[#00000014] md:bg-white bg-[#F5F5F5] md:rounded-[8px] flex flex-col sm:gap-[24px] gap-[20px]">
+                    <h2 className="text-[#000000E0] text-[20px] leading-[28px] font-semibold md:block hidden">
                       Payment Summary
                     </h2>
                     <div
-                      className={`${showSummary ? 'block mt-40' : 'md:block hidden'}`}
+                      className={`${showSummary ? 'block mt-[40px]' : 'md:block hidden'}`}
                     >
                       <OrderSummary
                         subTotal={cart.subTotal}
@@ -747,35 +747,35 @@ const CheckoutPage = () => {
                         loading={calculatingFee}
                       />
                     </div>
-                    <div className="flex sm:flex-row flex-col sm:gap-0 gap-20 space-between a-items-center">
+                    <div className="flex sm:flex-row flex-col sm:gap-0 gap-[20px] justify-between items-center">
                       <div
-                        className={`absolute t-0 sm:w-fit w-full sm:px-0 px-24 bg-#F5F5F5 pt-12 md:hidden block ${showSummary ? 'pt-22' : ''}`}
+                        className={`absolute top-0 sm:w-fit w-full sm:px-0 px-[24px] bg-[#F5F5F5] pt-[12px] md:hidden block ${showSummary ? 'pt-[22px]' : ''}`}
                       >
                         <p
-                          className={`md:hidden flex gap-12 a-items-center color-#00000099 sm:w-fit w-full space-between pointer ${showSummary && 'border-b border-b-#00000014 sm:border-b-#F5F5F5 pb-20 sm:pb-0'}`}
+                          className={`md:hidden flex gap-[12px] items-center text-[#00000099] sm:w-fit w-full justify-between cursor-pointer ${showSummary && 'border-b border-b-[#00000014] sm:border-b-[#F5F5F5] pb-[20px] sm:pb-0'}`}
                           onClick={() => setshowSummary(!showSummary)}
                         >
-                          <span className="text-16 weight-400 line-height-24">
+                          <span className="text-[16px] font-normal leading-[24px]">
                             {showSummary
                               ? 'Hide payment summary'
                               : 'Show payment summary'}
                           </span>
                           {showSummary ? (
-                            <PiCaretDown className="w-20 h-20 mt-4" />
+                            <PiCaretDown className="w-[20px] h-[20px] mt-[4px]" />
                           ) : (
-                            <PiCaretUp className="w-20 h-20 mt-6" />
+                            <PiCaretUp className="w-[20px] h-[20px] mt-[6px]" />
                           )}
                         </p>
                       </div>
-                      <div className="flex flex-col gap-12 w-full sm:w-auto sm:items-end">
+                      <div className="flex flex-col gap-[12px] w-full sm:w-auto sm:items-end">
                         {!MARKETPLACE_PURCHASES_ENABLED && (
-                          <p className="text-14 line-height-20 weight-500 color-#0B9378 text-center sm:text-right">
+                          <p className="text-[14px] leading-[20px] font-medium text-[#0357EE] text-center sm:text-right">
                             Marketplace opens officially by {MARKETPLACE_OPENS_DATE}. Purchases are not available yet.
                           </p>
                         )}
-                        <div className="flex flex-col gap-12 a-items-end sm:j-content-end w-full">
+                        <div className="flex flex-col gap-[12px] items-end sm:justify-end w-full">
                           {!showSummary && (
-                            <span className="md:hidden sm:block hidden sm:weight-600 weight-700 sm:text-16 text-14 sm:line-height-22 line-height-19">
+                            <span className="md:hidden sm:block hidden sm:font-semibold font-bold sm:text-[16px] text-[14px] sm:leading-[22px] leading-[19px]">
                               {formatNumberAsPrice(
                                 cart.total +
                                 (selectedDeliveryOptionDetails &&
@@ -788,16 +788,16 @@ const CheckoutPage = () => {
                             </span>
                           )}
                           <div className="md:block hidden">
-                            <div className="py-16 px-20 radius-8 border border-#F59E0B33 bg-#FFFBEB flex flex-col gap-6">
-                              <h2 className="text-16 line-height-24 weight-600 color-#92400E">
+                            <div className="py-[16px] px-[20px] rounded-[8px] border border-[#F59E0B33] bg-[#FFFBEB] flex flex-col gap-[6px]">
+                              <h2 className="text-[16px] leading-[24px] font-semibold text-[#92400E]">
                                 Return policy
                               </h2>
-                              <p className="text-14 line-height-22 weight-400 color-#B45309">
+                              <p className="text-[14px] leading-[22px] font-normal text-[#B45309]">
                                 Please inspect your order upon delivery. Returns can only be made while the rider is still present, and cannot be processed once the rider leaves.
                               </p>
                             </div>
                           </div>
-                          <div className="flex md:flex-col sm:flex-row flex-col gap-14 a-items-center md:j-content-end justify-between w-full">
+                          <div className="flex md:flex-col sm:flex-row flex-col gap-[14px] items-center md:justify-end justify-between w-full">
                             <button
                               onClick={() => {
                                 if (!isAuthenticated) {
@@ -865,7 +865,7 @@ const CheckoutPage = () => {
                                   }
                                 }
                               }}
-                              className={`w-full border-none m:flex text-white md:text-16 text-14 weight-500 md:line-height-22 line-height-19 md:px-24 px-16 py-12 radius-6 l:float-right j-content-center ${!showSummary && 'sm:mt-0 mt-56'} ${canProceedToPayment ? 'bg-#D1D5DB opacity-80 g|box-shadow:inset|_|0px|_|2px|_|4px|_|#0000001A color-#6B7280 cursor-not-allowed' : 'bg-#0B9378 pointer'}`}
+                              className={`w-full border-none md:flex text-white md:text-[16px] text-[14px] font-medium md:leading-[22px] leading-[19px] md:px-[24px] px-[16px] py-[12px] rounded-[6px] lg:float-right justify-center ${!showSummary && 'sm:mt-0 mt-[56px]'} ${canProceedToPayment ? 'bg-[#D1D5DB] opacity-80 shadow-[inset_0px_2px_4px_#0000001A] text-[#6B7280] cursor-not-allowed' : 'bg-[#0357EE] cursor-pointer'}`}
                               title={
                                 !MARKETPLACE_PURCHASES_ENABLED
                                   ? `Purchases available from ${MARKETPLACE_OPENS_DATE}`
@@ -877,7 +877,7 @@ const CheckoutPage = () => {
                               <span className="">
                                 Proceed to payment{' '}
                                 {!showSummary && (
-                                  <span className="sm:hidden weight-700">
+                                  <span className="sm:hidden font-bold">
                                     (
                                     {formatNumberAsPrice(
                                       cart.total +
@@ -895,7 +895,7 @@ const CheckoutPage = () => {
                               <PuffLoader
                                 size={15}
                                 loading={isPaymentLoading}
-                                className="ml-10"
+                                className="ml-[10px]"
                               />
                             </button>
 
@@ -935,7 +935,7 @@ const CheckoutPage = () => {
                                   if (typeof navigator.share === 'function') {
                                     try {
                                       await navigator.share({
-                                        title: 'Asoebi checkout payment link',
+                                        title: 'Shoppp checkout payment link',
                                         text: 'Complete this order payment using the link below.',
                                         url: shareLink,
                                       });
@@ -966,7 +966,7 @@ const CheckoutPage = () => {
                                 }
                               }}
                               disabled={canProceedToPayment || isSharingPaymentLink}
-                              className={`w-full border md:text-16 text-14 weight-500 md:line-height-22 line-height-19 md:px-24 px-16 py-12 radius-6 m:flex a-items-center j-content-center gap-8 l:float-right ${canProceedToPayment || isSharingPaymentLink ? 'border-#D1D5DB color-#9CA3AF bg-#F9FAFB cursor-not-allowed' : 'border-#0B9378 color-#0B9378 bg-white pointer hover:bg-#F0FDF9'}`}
+                              className={`w-full border md:text-[16px] text-[14px] font-medium md:leading-[22px] leading-[19px] md:px-[24px] px-[16px] py-[12px] rounded-[6px] md:flex items-center justify-center gap-[8px] lg:float-right ${canProceedToPayment || isSharingPaymentLink ? 'border-[#D1D5DB] text-[#9CA3AF] bg-[#F9FAFB] cursor-not-allowed' : 'border-[#0357EE] text-[#0357EE] bg-white cursor-pointer hover:bg-[#F0FDF9]'}`}
                               title={
                                 canProceedToPayment
                                   ? 'Complete checkout details to share payment link'
@@ -977,7 +977,7 @@ const CheckoutPage = () => {
                               <PuffLoader
                                 size={14}
                                 loading={isSharingPaymentLink}
-                                className={isSharingPaymentLink ? 'ml-4' : 'hidden'}
+                                className={isSharingPaymentLink ? 'ml-[4px]' : 'hidden'}
                               />
                             </button>
                           </div>
@@ -985,10 +985,10 @@ const CheckoutPage = () => {
                       </div>
                     </div>
 
-                    <p className="text-16 line-height-24 weight-400 text-center md:block hidden">
+                    <p className="text-[16px] leading-[24px] font-normal text-center md:block hidden">
                       By clicking place order, you confirmed you have read and
                       acknowledge{' '}
-                      <Link href={'/checkout'} className="color-#1677FF">
+                      <Link href={'/checkout'} className="text-[#1677FF]">
                         all terms and policies.
                       </Link>
                     </p>

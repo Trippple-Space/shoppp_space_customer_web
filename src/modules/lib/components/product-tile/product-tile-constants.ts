@@ -16,7 +16,7 @@ export const PRODUCT_TILE_PILL_STYLES = {
   },
   'ready-to-wear': {
     pillBackground: 'rgba(11, 147, 120, 0.1)',
-    pillColor: '#0B9378',
+    pillColor: '#0357EE',
   },
   discount: {
     pillBackground: '#FFF1F0',

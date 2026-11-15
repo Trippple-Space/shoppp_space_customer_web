@@ -11,12 +11,14 @@ const allConfigs: {
 };
 
 const bruteCheckLocal = () => {
+  if (typeof window === "undefined") return false;
   return window.location.href.includes("localhost");
 };
 
 const bruteCheckProduction = () => {
+  if (typeof window === "undefined") return false;
   return (
-    window.location.href.includes("asoebi.africa") &&
+    window.location.href.includes("shoppp.space") &&
     !window.location.href.includes("staging")
   );
 };

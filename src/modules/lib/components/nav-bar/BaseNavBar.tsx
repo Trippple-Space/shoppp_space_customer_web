@@ -8,9 +8,7 @@ import { usePathname } from 'next/navigation';
 import { useNavbarView } from '../../utility/hooks/views/use-navbar-view';
 import { useAuthGuard } from '../../utility/hooks/use-auth-guard';
 
-import AsoebiLinksModal from './AsoebiLinksModal';
 import MobileNav from './mobile-nav/MobileNav';
-import { PiStorefrontBold } from 'react-icons/pi';
 import { SlArrowDown } from 'react-icons/sl';
 import UserProfileDropdown from './profile-modal/UserProfileDropdown';
 import Link from 'next/link';
@@ -34,7 +32,6 @@ const BaseNavBar: FC<IBaseNavBar> = ({ links, parent }) => {
 
   const [profileModal, setProfileModal] = useState<string>('');
 
-  const [asoebiModal, setAsoebiModal] = useState<boolean>(false);
   const pathname = usePathname();
   const { user } = useNavbarView();
   const { orders } = useOrders({
@@ -46,16 +43,12 @@ const BaseNavBar: FC<IBaseNavBar> = ({ links, parent }) => {
     setUserProfileDropdown((prev) => !prev);
   };
 
-  const handleAsoebiDropdown = () => {
-    setAsoebiModal((prev) => !prev);
-  };
-
   const handleCloseDropdown = () => {
     setUserProfileDropdown(false);
   };
 
   useEffect(() => {
-    if (asoebiModal || profileModal || userProfileDropdown) {
+    if (profileModal || userProfileDropdown) {
       document.body.style.overflow = 'hidden';
     } else {
       document.body.style.overflow = 'auto';
@@ -64,7 +57,7 @@ const BaseNavBar: FC<IBaseNavBar> = ({ links, parent }) => {
     return () => {
       document.body.style.overflow = 'auto';
     };
-  }, [asoebiModal, profileModal, userProfileDropdown]);
+  }, [profileModal, userProfileDropdown]);
 
   const [showonBoardingModal, setShowOnBoardingModal] = useState(false);
 
@@ -116,10 +109,10 @@ const BaseNavBar: FC<IBaseNavBar> = ({ links, parent }) => {
 
   return (
     <div
-      data-asoebi-main-nav="true"
-      className={`fixed w-full t-0 l-0 bg-white z-5 ${
+      data-shoppp-main-nav="true"
+      className={`fixed w-full top-0 left-0 bg-white z-[5px] ${
         (parent === 'checkout' || parent === 'orders') &&
-        'border-b border-b-#00000014 md:py-3 py-5.8625'
+        'border-b border-b-[#00000014] md:py-[3px] py-[5.8625px]'
       }`}
     >
       {showonBoardingModal && (
@@ -144,15 +137,15 @@ const BaseNavBar: FC<IBaseNavBar> = ({ links, parent }) => {
 
       <div
         className={cx(
-          'flex a-items-center relative app-width space-between py-12',
+          'flex items-center relative app-width justify-between py-[12px]',
           {
-            'max-w-1400!': pathname.startsWith('/products/'),
+            '!max-w-[1400px]': pathname.startsWith('/products/'),
           }
         )}
       >
         <Link href={'/'} className="w-fit">
           <Image
-            className="w-100! l:w-110! h-27!"
+            className="!w-[100px] lg:!w-[110px] !h-[27px]"
             src="Main logo green.svg"
             alt="logo"
             type="logo"
@@ -163,43 +156,18 @@ const BaseNavBar: FC<IBaseNavBar> = ({ links, parent }) => {
           />
         </Link>
 
-        <div className="flex md:j-content-center w-100p j-content-end">
+        <div className="flex md:justify-center w-full justify-end">
           {links}
         </div>
 
-        {asoebiModal && (
-          <>
-            <div
-              className="fixed inset-0 bg-black opacity-10 z-10"
-              onClick={handleAsoebiDropdown}
-            />
-
-            <div className="l:absolute r-180 t-70 l:p-10 bg-white z-20 radius-8">
-              <AsoebiLinksModal sellOnAsoebi={true} />
-            </div>
-          </>
-        )}
-
-        <div className="l:block flex l:flex a-items-center l:gap-30 gap-10 w-fit relative j-self-end">
-          <div
-            className={`l:cursor-pointer ${
-              parent === 'checkout' ? 'hidden' : 'hidden l:block'
-            }`}
-            onClick={handleAsoebiDropdown}
-          >
-            <p className="flex a-items-center  weight-500">
-              <PiStorefrontBold className="w-30" />
-              <span>Asoebi</span>
-              <SlArrowDown className="w-10 ml-5" />
-            </p>
-          </div>
-          <div className="flex sm:gap-24 gap-20 a-items-center">
+        <div className="lg:block flex lg:flex items-center lg:gap-[30px] gap-[10px] w-fit relative j-self-end">
+          <div className="flex sm:gap-[24px] gap-[20px] items-center">
             <div>
               <>
                 {showonBoardingModal && (
                   <div
                     onClick={(e) => e.stopPropagation()}
-                    className="l:w-200 w-100  l:p-10 p-5 l:mb-10 t-50  r-20"
+                    className="lg:w-[200px] w-[100px]  lg:p-[10px] p-[5px] lg:mb-[10px] top-[50px]  right-[20px]"
                     style={{
                       position: 'absolute',
                       background: 'white',
@@ -207,14 +175,14 @@ const BaseNavBar: FC<IBaseNavBar> = ({ links, parent }) => {
                       zIndex: 1000,
                     }}
                   >
-                    <p className="weight-400">
+                    <p className="font-normal">
                       This is where you find items you added to your cart
                     </p>
 
                     <div onClick={() => setShowOnBoardingModal(false)}>
                       <button
-                        className="bg-green text-white mt- l:mt-10 l:py-10 l:px-20 w-full py-5  radius-5 border-none hover:pointer text-13 l:text-14 font-inter 
-                hover:bg-darkgreen g|transition:0.5s  text-center"
+                        className="bg-brand text-white mt- lg:mt-[10px] lg:py-[10px] lg:px-[20px] w-full py-[5px]  rounded-[5px] border-none hover:cursor-pointer text-[13px] lg:text-[14px] font-inter 
+                hover:bg-brand-hover transition-all duration-500  text-center"
                       >
                         Close
                       </button>
@@ -231,21 +199,21 @@ const BaseNavBar: FC<IBaseNavBar> = ({ links, parent }) => {
               </>
             </div>
             <div
-              className="md:flex hidden gap-12 a-items-center text-black cursor-pointer"
+              className="md:flex hidden gap-[12px] items-center text-black cursor-pointer"
               onClick={handleUserProfileDropdown}
             >
               <div className="h-fit">
                 {user ? (
                   <Image
-                    className="w-34 h-34 border-solid border-2 border-grey-300 radius-50p"
+                    className="w-[34px] h-[34px] border-solid border-[2px] border-[#E4E1DF] rounded-full"
                     src={`https://api.dicebear.com/7.x/thumbs/png?seed=${user?.firstName}`}
                     alt="user"
                   />
                 ) : (
-                  <AiOutlineUser className="w-24 h-24" />
+                  <AiOutlineUser className="w-[24px] h-[24px]" />
                 )}
               </div>
-              <SlArrowDown className="w-12 h-12" />
+              <SlArrowDown className="w-[12px] h-[12px]" />
             </div>
 
             {userProfileDropdown && (

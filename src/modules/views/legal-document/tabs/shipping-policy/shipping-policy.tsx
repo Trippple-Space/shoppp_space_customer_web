@@ -7,46 +7,46 @@ function ShippingPolicy() {
   const TermsAndConditionJson:TermsAndConditionsJson = termsAndCondition;
 
   return (
-    <>      <div className='flex flex-col a-items-center'>
+    <>      <div className='flex flex-col items-center'>
         
 
       
-        <h1 className='text-24 l:text-36 line-height-40 my-15 weight-700 text-dimgrey pt-5 l:pt-30  border-3 border-b pb-5 '>Shipping Policy</h1>
+        <h1 className='text-[24px] lg:text-[36px] leading-[40px] my-[15px] font-bold text-[#333333] pt-[5px] lg:pt-[30px]  border-[3px] border-b pb-[5px] '>Shipping Policy</h1>
       
       </div>
       
       
 
-       <div className='p-20 flex flex-col a-items-center'>
-        <div className='l:w-60p'>
+       <div className='p-[20px] flex flex-col items-center'>
+        <div className='lg:w-[60%]'>
           
 
-        <div className='weight-400 pb-10 border-b mt-10 mb-10'>
+        <div className='font-normal pb-[10px] border-b mt-[10px] mb-[10px]'>
                  {termsAndCondition.schedule_1_shipping_policy.shipping_introduction}
            
                  </div>
                
-             <ol className='pb-10 border-b'>
-                 <li className='weight-500 text-20'>
+             <ol className='pb-[10px] border-b'>
+                 <li className='font-medium text-[20px]'>
           Shipping Location
                  </li>
-                 <div className='weight-400 pb-10 border-b mt-10 mb-10'>
+                 <div className='font-normal pb-[10px] border-b mt-[10px] mb-[10px]'>
                  {termsAndCondition.schedule_1_shipping_policy['1_shipping_locations']}
            
                  </div>
      
-                 <li className='weight-500 text-20'>
+                 <li className='font-medium text-[20px]'>
                  Processing Time
                  </li>
      
-                 <div className='pl-10 weight-400 border-b pb-10'>
+                 <div className='pl-[10px] font-normal border-b pb-[10px]'>
            
      
-                   <ul className='pl-10 p-5' style={{ listStyleType: 'disc' }}>
+                   <ul className='pl-[10px] p-[5px]' style={{ listStyleType: 'disc' }}>
                      <li>
            
      {' '}
-                  <p className='weight-400'>
+                  <p className='font-normal'>
                     
     {termsAndCondition.schedule_1_shipping_policy['2_processing_time'][0].split('1-3 business days')[0]}
               <span style={{ fontWeight: 600, color: '#333' }}>1-3 business days</span>
@@ -60,7 +60,7 @@ function ShippingPolicy() {
                      <li>
            
      {' '}
-                       <p className='weight-400'>
+                       <p className='font-normal'>
      
                      {termsAndCondition.schedule_1_shipping_policy['2_processing_time'][1]}
                        </p>
@@ -76,16 +76,16 @@ function ShippingPolicy() {
                 
                  </div>
      
-                 <li className='weight-500 text-20 mt-10  mb-10'>
+                 <li className='font-medium text-[20px] mt-[10px]  mb-[10px]'>
 Delivery Time                 </li>
-             <div className='pl-10 weight-400 border-b pb-10'>
+             <div className='pl-[10px] font-normal border-b pb-[10px]'>
            
      
-                   <ul className='pl-10 p-5' style={{ listStyleType: 'disc' }}>
+                   <ul className='pl-[10px] p-[5px]' style={{ listStyleType: 'disc' }}>
                      <li>
-                       <p className='weight-600'>Lagos State:
+                       <p className='font-semibold'>Lagos State:
      {' '}
-                       <span className='weight-400'>
+                       <span className='font-normal'>
      
                  
                       
@@ -103,17 +103,17 @@ Delivery Time                 </li>
                 
                  </div>
      
-                 <li className='weight-500 text-20 mt-10  mb-10'>
+                 <li className='font-medium text-[20px] mt-[10px]  mb-[10px]'>
                  Shipping Cost
                  </li>
-                 <div className='pl-10 weight-400 border-b pb-10'>
+                 <div className='pl-[10px] font-normal border-b pb-[10px]'>
              
      
-                 <ul className='pl-10 p-5' style={{ listStyleType: 'disc' }}>
+                 <ul className='pl-[10px] p-[5px]' style={{ listStyleType: 'disc' }}>
                      <li>
             
      {' '}
-                       <p className='weight-400'>
+                       <p className='font-normal'>
       {termsAndCondition.schedule_1_shipping_policy['4_shipping_costs']}
                        </p>
           
@@ -123,22 +123,22 @@ Delivery Time                 </li>
                    </ul>
                  </div>
               
-                 <li className='weight-500 text-20 mt-10  mb-10'>
+                 <li className='font-medium text-[20px] mt-[10px]  mb-[10px]'>
               Order Tracking
             </li>
 
-         <div className='weight-400 pb-10 border-b mt-10 mb-10'>
+         <div className='font-normal pb-[10px] border-b mt-[10px] mb-[10px]'>
                  {termsAndCondition.schedule_1_shipping_policy['5_order_tracking']}
            
                  </div>
 
             
                  
-                 <li className='weight-500 text-20 mt-10  mb-10'>
+                 <li className='font-medium text-[20px] mt-[10px]  mb-[10px]'>
          Failed Deliveries
              </li>
              
-             <div className='weight-400 pb-10 border-b mt-10 mb-10'>
+             <div className='font-normal pb-[10px] border-b mt-[10px] mb-[10px]'>
                  {termsAndCondition.schedule_1_shipping_policy['6_failed_deliveries']}
            
                  </div>
@@ -157,22 +157,22 @@ Delivery Time                 </li>
         
      
      
-                 <li className='weight-500 text-20 mt-10  mb-10'>
+                 <li className='font-medium text-[20px] mt-[10px]  mb-[10px]'>
      Contact Us
                  </li>
-                 <div className='weight-500 pb-10  mb-10 mt-10'>
+                 <div className='font-medium pb-[10px]  mb-[10px] mt-[10px]'>
                  For shipping inquiries, please contact our Customer Service team:
                  </div>
                  
-                 <div className='weight-400 pb-10 border-b mb-10 mt-10'>
-                   <div className='weight-600 mt-5 mb-5'>Email: {contactEmail }</div>
-                   <div className='weight-600 mt-5 mb-5'>Phone: {termsAndCondition.schedule_1_shipping_policy['7_contact_us'].phone}</div>
+                 <div className='font-normal pb-[10px] border-b mb-[10px] mt-[10px]'>
+                   <div className='font-semibold mt-[5px] mb-[5px]'>Email: {contactEmail }</div>
+                   <div className='font-semibold mt-[5px] mb-[5px]'>Phone: {termsAndCondition.schedule_1_shipping_policy['7_contact_us'].phone}</div>
      
             </div>
-            <p className='weight-500 text-20 mt-10  mb-10'>
+            <p className='font-medium text-[20px] mt-[10px]  mb-[10px]'>
 Return Policy
                  </p>
-           <p className='weight-400 mb-10 mt-10'>
+           <p className='font-normal mb-[10px] mt-[10px]'>
              
  {termsAndCondition.return_policy.description}
              </p>

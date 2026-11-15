@@ -18,17 +18,17 @@ const RecentlyViewedSection = ({
   if (recentlyViewedVariants?.length <= 0) return null;
 
   return (
-    <div className="flex flex-col gap-12 pb-15 pt-20">
-      <div className="flex a-items-center j-content-between">
-        <p className="text-16  weight-600">
+    <div className="flex flex-col gap-[12px] pb-[15px] pt-[20px]">
+      <div className="flex items-center justify-between">
+        <p className="text-[16px]  font-semibold">
           Customers who viewed this also viewed
         </p>
-        <p className="color-#1677FF cursor-pointer border-b hidden l:block">
+        <p className="text-[#1677FF] cursor-pointer border-b hidden lg:block">
           {' '}
           See all
         </p>
       </div>
-      <div className="flex gap-20 a-items-start overflow-auto w-full h-fit no-scrollbar">
+      <div className="flex gap-[20px] items-start overflow-auto w-full h-fit no-scrollbar">
         {recentlyViewedVariants?.map((variant, i) => (
           <div className="" key={i}>
             <VariantModal

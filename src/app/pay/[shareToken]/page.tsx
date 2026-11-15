@@ -44,20 +44,20 @@ const getSharedSummary = async (shareToken: string) => {
 export async function generateMetadata({
   params,
 }: {
-  params: SharePageParams;
+  params: Promise<SharePageParams>;
 }): Promise<Metadata> {
-  const shareToken = getToken(params.shareToken);
+  const shareToken = getToken((await params).shareToken);
   const summary = await getSharedSummary(shareToken);
 
   const firstItem = summary?.stores?.[0]?.items?.[0];
   const firstImage = firstItem?.variantImage;
   const sharerFirstName = getSharerFirstName(summary);
   const title = sharerFirstName
-    ? `${sharerFirstName} wants you to complete a payment on Asoebi Africa`
-    : 'Complete a payment on Asoebi Africa';
+    ? `${sharerFirstName} wants you to complete a payment on Shoppp Space`
+    : 'Complete a payment on Shoppp Space';
   const description =
     summary?.message ||
-    `Help complete this order payment on Asoebi Africa${firstItem?.productName ? ` - starting with ${firstItem.productName}` : ''}.`;
+    `Help complete this order payment on Shoppp Space${firstItem?.productName ? ` - starting with ${firstItem.productName}` : ''}.`;
 
   return {
     title,
@@ -66,8 +66,8 @@ export async function generateMetadata({
       title,
       description,
       images: firstImage ? [{ url: firstImage }] : undefined,
-      siteName: 'Asoebi Africa',
-      url: `https://asoebi.africa/pay/${shareToken}`,
+      siteName: 'Shoppp Space',
+      url: `https://shoppp.space/pay/${shareToken}`,
     },
     twitter: {
       card: firstImage ? 'summary_large_image' : 'summary',
@@ -78,8 +78,8 @@ export async function generateMetadata({
   };
 }
 
-const Page = async ({ params }: { params: SharePageParams }) => {
-  const shareToken = getToken(params.shareToken);
+const Page = async ({ params }: { params: Promise<SharePageParams> }) => {
+  const shareToken = getToken((await params).shareToken);
   return <SharedPaymentPage shareToken={shareToken} />;
 };
 

@@ -33,21 +33,21 @@ const Layout: FC<ILayout> = ({ children }) => {
   if (user && isAuthRoute) return null
 
   const VendorSignUp = () => (
-    <div className="hidden l:block text-right">
+    <div className="hidden lg:block text-right">
       <span>Not a vendor? </span>
-      <Link href={paths.signup} className="text-green-700 pointer">
+      <Link href={paths.signup} className="text-brand-hover cursor-pointer">
         Sign up here instead
       </Link>
     </div>
   )
 
   const CustomerSignUp = () => (
-    <div className="text-right relative hidden l:block">
+    <div className="text-right relative hidden lg:block">
       <span>Do you want to sell? </span>
       <Link
         href={config.VENDOR_CENTER_HOST}
         target="_blank"
-        className="text-green-700 cursor-pointer"
+        className="text-brand-hover cursor-pointer"
       >
         Join now
       </Link>
@@ -56,35 +56,27 @@ const Layout: FC<ILayout> = ({ children }) => {
 
   return (
     <>
-    { <div className="flex h-100vh w-full overflow-hidden">
-      <Link href="/" className="l:hidden w-full bg-green t-0 fixed z-10">
-        <Image
-          className="w-100 h-30 my-20 m-15"
-          src="new-asoebi-logo-white.svg"
-          alt="logo"
-          type="logo"
-          priority
-          fetchPriority='high'
-        />
+    { <div className="flex h-screen w-full overflow-hidden">
+      <Link
+        href="/"
+        className="lg:hidden w-full bg-brand top-0 fixed z-[10px] px-[15px] py-[18px] text-[20px] font-bold text-white"
+      >
+        Shoppp Space
       </Link>
 
-      <div className="l:w-50p hidden l:block p-15">
-        <div className="bg-green flex flex-col h-100p radius-15">
+      <div className="lg:w-1/2 hidden lg:block p-[15px]">
+        <div className="bg-brand flex flex-col h-full rounded-[15px]">
           <div>
-            <Link href="/">
-              <Image
-                className="w-160 h-50 mt-20 ml-20"
-                src="Main logo white.svg"
-                alt="logo"
-                type="logo"
-                priority
-                fetchPriority='high'
-              />
+            <Link
+              href="/"
+              className="inline-block mt-[20px] ml-[20px] text-[28px] font-bold text-white"
+            >
+              Shoppp Space
             </Link>
           </div>
-          <div className="relative w-100p h-100p">
+          <div className="relative w-full h-full">
             <Image
-              className="absolute h-95p! w-fit! r-0 b-0"
+              className="absolute !h-[95%] !w-fit right-0 bottom-0"
               src="carton-man-0.png"
               alt="Delivery"
               width={1000}
@@ -93,15 +85,15 @@ const Layout: FC<ILayout> = ({ children }) => {
         </div>
       </div>
 
-      <div className="w-full l:w-50p p-15 flex flex-col h-100p md:mt-50 mt-20 l:mt-0">
-        <div className="relative mx-5">
-          <div className="w-full h-100vh relative flex j-content-center">
+      <div className="w-full lg:w-1/2 p-[15px] flex flex-col h-full md:mt-[50px] mt-[20px] lg:mt-0">
+        <div className="relative mx-[5px]">
+          <div className="w-full h-screen relative flex justify-center">
             <div
               style={{ maxHeight: '' }}
-              className="flex flex-col overflow-auto j-content-center mb-10"
+              className="flex flex-col overflow-auto justify-center mb-[10px]"
             >
-              <div className="mb-20">
-                <div className="mt-10">
+              <div className="mb-[20px]">
+                <div className="mt-[10px]">
                   {pathName === paths.vendor_signup ? (
                     <VendorSignUp />
                   ) : (
@@ -117,16 +109,16 @@ const Layout: FC<ILayout> = ({ children }) => {
                 <div className='w-full overflow-auto'>
                 {children}
                     <>
-               {pathName != paths.google &&  <div className="flex j-content-between a-items-center text-grey-800 mt-20 mb-20">
-                  <div className="border border-#00000014 w-50p mr-10"></div>
+               {pathName != paths.google &&  <div className="flex justify-between items-center text-[#59534E] mt-[20px] mb-[20px]">
+                  <div className="border border-[#00000014] w-1/2 mr-[10px]"></div>
                   <span style={{ fontStyle: 'italic' }}>or</span>
-                  <div className="border border-#00000014 w-50p ml-10"></div>
+                  <div className="border border-[#00000014] w-1/2 ml-[10px]"></div>
                 </div>}
 
-                <div className="mb-20" onClick={googleOauthInitializer}>
-                  <div className="flex bg-whitesmoke a-items-center j-content-center p-10 gap-5 radius-5 cursor-pointer">
-                    <FcGoogle className="w-24 h-24" />
-                    <span className="weight-500">Continue with Google</span>
+                <div className="mb-[20px]" onClick={googleOauthInitializer}>
+                  <div className="flex bg-[#F5F5F5] items-center justify-center p-[10px] gap-[5px] rounded-[5px] cursor-pointer">
+                    <FcGoogle className="w-[24px] h-[24px]" />
+                    <span className="font-medium">Continue with Google</span>
                   </div>
                 </div>
               </>
@@ -136,16 +128,16 @@ const Layout: FC<ILayout> = ({ children }) => {
 
           
 
-              <p className="text-center text-14 pb-20 mt-20">
-                By continuing, you agree to the Asoebi.africa{' '}
+              <p className="text-center text-[14px] pb-[20px] mt-[20px]">
+                By continuing, you agree to the Shoppp Space{' '}
                 <Link
-                  className="color-link pointer"
+                  className="color-link cursor-pointer"
                   href={paths.legal_document}
                 >
                   Terms & Conditions
                 </Link>{' '}
                 and{' '}
-                <span className="color-link pointer">
+                <span className="color-link cursor-pointer">
                   <Link href={paths.legal_document}>Privacy Policy</Link>
                 </span>
               </p>

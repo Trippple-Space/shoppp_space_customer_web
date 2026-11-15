@@ -44,32 +44,32 @@ export const PriceFilter: React.FC<IPriceFilter> = ({ setFilteredPrice }) => {
 
     return (
         <>
-            <div className='flex gap-4 items-center'>
+            <div className='flex gap-[4px] items-center'>
                 <div className='relative'>
-                    <Input label={'Min'} inputClass={'p-12'} placeholder='0.00' type='number' name='min-value' value={isRadioChecked ? inputRange?.min : ''}
+                    <Input label={'Min'} inputClass={'p-[12px]'} placeholder='0.00' type='number' name='min-value' value={isRadioChecked ? inputRange?.min : ''}
                         handleChange={(e: any) => {
                             const newMin = e.target.value;
                             setPriceRange("min", newMin);
                         }}
                     />
-                    <span className='absolute w-30 h-19 bg-white r-12 b-12'></span>
+                    <span className='absolute w-[30px] h-[19px] bg-white right-[12px] bottom-[12px]'></span>
                 </div>
-                <GoArrowBoth className='w-24 h-24 mt-30 color-#00000026' />
+                <GoArrowBoth className='w-[24px] h-[24px] mt-[30px] text-[#00000026]' />
                 <div className='relative'>
-                    <Input label={'Max'} inputClass={'p-12'} placeholder='0.00' type='number' name='max-value' value={isRadioChecked ? inputRange?.max : ''}
+                    <Input label={'Max'} inputClass={'p-[12px]'} placeholder='0.00' type='number' name='max-value' value={isRadioChecked ? inputRange?.max : ''}
                         handleChange={(e: any) => {
                             const newMax = e.target.value;
                             setPriceRange("max", newMax);
                         }}
                     />
-                    <span className='absolute w-30 h-19 bg-white r-12 b-12'></span>
+                    <span className='absolute w-[30px] h-[19px] bg-white right-[12px] bottom-[12px]'></span>
                 </div>
             </div>
             <ul className='flex flex-col'>
                 {
                     priceOptions.map((prices) => (
-                        <li key={prices.label} className='flex gap-12 py-10'>
-                            <div className='h-fit w-fit color-#6A6A6A hover:color-#000000E0'>
+                        <li key={prices.label} className='flex gap-[12px] py-[10px]'>
+                            <div className='h-fit w-fit text-[#6A6A6A] hover:text-[#000000E0]'>
                                 <BoxRadio label={prices.label} className='filter' name='price-range' checked={prices?.min === radioRange.min && prices?.max === radioRange.max}
                                     onChange={() => {
                                         setFilteredPrice({ min: prices.min, max: prices.max })

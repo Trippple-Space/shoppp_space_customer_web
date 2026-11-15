@@ -1,5 +1,4 @@
 import { Store } from "./store.interface";
-import type { ProductFitSizeChart } from "@/modules/views/product-details/types/product-size-chart";
 
 export interface ICategory {
   name: string;
@@ -95,7 +94,6 @@ export interface Product {
   discount: Discount
   meta: any;
   productCatalogues?: ProductCatalogue[];
-  fitSizeChart?: ProductFitSizeChart;
 }
 
 export interface ProductsResponse {

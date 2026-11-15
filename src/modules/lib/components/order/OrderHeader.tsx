@@ -26,18 +26,18 @@ const OrderHeader = ({ orderStatus }: { orderStatus?: string }) => {
  
   return (
     <>
-      <div className='w-full h-fit flex a-items-center flex-col  l:gap-30'>
-        <div className='l:w-50p w-90p flex flex-col gap-50'>
-          <div className='flex a-items-center l:gap-10 bg-#F5F5F5 p-5 radius-6 '>
+      <div className='w-full h-fit flex items-center flex-col  lg:gap-[30px]'>
+        <div className='lg:w-1/2 w-[90%] flex flex-col gap-[50px]'>
+          <div className='flex items-center lg:gap-[10px] bg-[#F5F5F5] p-[5px] rounded-[6px] '>
             <div
-              className={classNames('w-100p radius-6 cursor-pointer p-10 weight-400', {
+              className={classNames('w-full rounded-[6px] cursor-pointer p-[10px] font-normal', {
                 'bg-white': activeTab === 'ONGOING'
               })}
               onClick={() => handleTabChange('ONGOING')}
             >
               <p
-                className={classNames('text-center font-inter text-bold text-16', {
-                  'weight-600': activeTab === 'ONGOING'
+                className={classNames('text-center font-inter text-bold text-[16px]', {
+                  'font-semibold': activeTab === 'ONGOING'
                 })}
               >
                 Ongoing
@@ -46,7 +46,7 @@ const OrderHeader = ({ orderStatus }: { orderStatus?: string }) => {
 
             <div
               className={classNames(
-                'w-100p cursor-pointer cursor-pointer p-10 radius-6 weight-400',
+                'w-full cursor-pointer cursor-pointer p-[10px] rounded-[6px] font-normal',
                 {
                   'bg-white': activeTab === 'DELIVERED'
                 }
@@ -54,8 +54,8 @@ const OrderHeader = ({ orderStatus }: { orderStatus?: string }) => {
               onClick={() => handleTabChange('DELIVERED')}
             >
               <p
-                className={classNames('text-center font-inter text-16', {
-                  'weight-600': activeTab === 'DELIVERED'
+                className={classNames('text-center font-inter text-[16px]', {
+                  'font-semibold': activeTab === 'DELIVERED'
                 })}
               >
                 Delivered
@@ -63,7 +63,7 @@ const OrderHeader = ({ orderStatus }: { orderStatus?: string }) => {
             </div>
             <div
               className={classNames(
-                'w-100p cursor-pointer p-10 radius-6 overflow-hidden whitespace-nowrap ',
+                'w-full cursor-pointer p-[10px] rounded-[6px] overflow-hidden whitespace-nowrap ',
                 {
                   'bg-white': activeTab === 'CANCELLED'
                 }
@@ -72,9 +72,9 @@ const OrderHeader = ({ orderStatus }: { orderStatus?: string }) => {
             >
               <p
                 className={classNames(
-                  'text-center font-inter text-16 overflow-hidden text-ellipsis weight-400',
+                  'text-center font-inter text-[16px] overflow-hidden text-ellipsis font-normal',
                   {
-                    'weight-600': activeTab === 'CANCELLED'
+                    'font-semibold': activeTab === 'CANCELLED'
                   }
                 )}
               >

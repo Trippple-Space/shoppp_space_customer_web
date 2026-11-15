@@ -20,15 +20,15 @@ const ShareProductModal: React.FC<ModalProps> = ({
   const shareOptions = [
     { mediaLogo: <BsTwitterX />, mediaName: 'Twitter' },
     {
-      mediaLogo: <IoMailOutline className="mb--4 s:text-28 text-24" />,
+      mediaLogo: <IoMailOutline className="-mb-[4px] sm:text-[28px] text-[24px]" />,
       mediaName: 'Email',
     },
     {
-      mediaLogo: <BsLinkedin className="color-#0E76A8" />,
+      mediaLogo: <BsLinkedin className="text-[#0E76A8]" />,
       mediaName: 'Linkedin',
     },
     {
-      mediaLogo: <BsFacebook className="color-#3b5998" />,
+      mediaLogo: <BsFacebook className="text-[#3b5998]" />,
       mediaName: 'Facebook',
     },
     { mediaLogo: <BsCopy />, mediaName: 'Copy link' },
@@ -47,20 +47,20 @@ const ShareProductModal: React.FC<ModalProps> = ({
             backgroundColor: 'transparent',
             borderRadius: '0px',
           }}
-          className="t-30p r-50p m:w-650 w-95p pb-60 radius-0"
+          className="top-[30%] right-[50%] md:w-[650px] w-[95%] pb-[60px] rounded-0"
         >
-          <div className="bg-white s:p-20 p-15 radius-10">
-            <div className="flex space-between a-items-center w-full s:pt-10 pt-5 s:mb-30 mb-15">
-              <p className="s:text-larger text-large weight-500">Share</p>
+          <div className="bg-white sm:p-[20px] p-[15px] rounded-[10px]">
+            <div className="flex justify-between items-center w-full sm:pt-[10px] pt-[5px] sm:mb-[30px] mb-[15px]">
+              <p className="sm:text-larger text-large font-medium">Share</p>
               <button
                 type="button"
-                className="border-none outline-none bg-transparent s:text-24 text-20 cursor-pointer"
+                className="border-none outline-none bg-transparent sm:text-[24px] text-[20px] cursor-pointer"
                 onClick={handleCloseModal}
               >
                 <SlClose />
               </button>
             </div>
-            <div className="grid grid-2-cols-auto s:gap-20 gap-10">
+            <div className="grid grid-cols-2 sm:gap-[20px] gap-[10px]">
               {shareOptions.map((option, i) => (
                 <ShareButton
                   key={i}

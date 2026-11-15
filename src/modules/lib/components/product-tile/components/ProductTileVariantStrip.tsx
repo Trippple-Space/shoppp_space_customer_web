@@ -43,10 +43,10 @@ const ProductTileVariantStrip = ({
   return (
     <div
       id="product varients"
-      className="l:mt-16 mt-14 l:h-51.2 h-45 flex flex-nowrap a-items-center j-content-start md:gap-6 gap-4 w-full min-w-0 overflow-hidden"
+      className="lg:mt-[16px] mt-[14px] lg:h-[51.2px] h-[45px] flex flex-nowrap items-center justify-start md:gap-[6px] gap-[4px] w-full min-w-0 overflow-hidden"
     >
       {(product?.productCatalogues?.length ?? 0) > 0 && (
-        <div className="shrink-0 a-self-center">
+        <div className="shrink-0 self-center">
           <ProductCatalogueDropdown
             productCatalogues={product?.productCatalogues}
             variantPreviewItems={variantPreviewItems}
@@ -65,21 +65,21 @@ const ProductTileVariantStrip = ({
           />
         </div>
       )}
-      <div className="flex-1 min-w-0 min-h-0 h-full overflow-x-auto g|overflow-y:hidden flex flex-nowrap a-items-center md:gap-6 gap-4 whitespace-nowrap no-scrollbar">
+      <div className="flex-1 min-w-0 min-h-0 h-full overflow-x-auto overflow-y-hidden flex flex-nowrap items-center md:gap-[6px] gap-[4px] whitespace-nowrap no-scrollbar">
         {variantPreviewItems.map(({ variant, media: mediaItem }, i: number) => (
           <div
             key={`${variant.id}-${mediaItem?.url}-${i}`}
-            className="l:w-35.2 l:min-w-35.2 l:h-35.2 w-31 min-w-31 h-31 pointer md:radius-4 radius-3 a-self-center relative"
+            className="lg:w-[35.2px] lg:min-w-[35.2px] lg:h-[35.2px] w-[31px] min-w-[31px] h-[31px] cursor-pointer md:rounded-[4px] rounded-[3px] self-center relative"
           >
             {mediaItem?.type === 'image' ? (
               <Image
                 key={`${variant.id}-${mediaItem.url}-${i}`}
                 className={classNames(
-                  `l:w-35.2 l:min-w-35.2 l:h-35.2 w-31 min-w-31 h-31 pointer md:radius-4 radius-3 a-self-center g|object-fit:cover ${variant?.status === 'OUT_OF_STOCK' && 'out-of-stock'}`,
+                  `lg:w-[35.2px] lg:min-w-[35.2px] lg:h-[35.2px] w-[31px] min-w-[31px] h-[31px] cursor-pointer md:rounded-[4px] rounded-[3px] self-center object-cover ${variant?.status === 'OUT_OF_STOCK' && 'out-of-stock'}`,
                   {
-                    'border border-2 border-black':
+                    'border border-[2px] border-black':
                       selectedImage == mediaItem?.url,
-                    [`border-${/*variant?.properties?.color?.toLocaleLowerCase() ||*/ '#0B9378'}`]:
+                    [`border-${/*variant?.properties?.color?.toLocaleLowerCase() ||*/ '#0357EE'}`]:
                       selectedImage == mediaItem?.url,
                   }
                 )}
@@ -87,16 +87,16 @@ const ProductTileVariantStrip = ({
                 onClick={() => handlePreviewMediaSelect(i)}
                 alt="product-image"
                 hasLoader={true}
-                pulseClassName="md:radius-4 radius-3"
+                pulseClassName="md:rounded-[4px] rounded-[3px]"
               />
             ) : (
               <VideoSrc
                 key={`${variant.id}-${mediaItem.url}-${i}`}
                 className={classNames(
-                  `l:w-35.2 l:min-w-35.2 l:h-35.2 w-31 min-w-31 h-31 pointer md:radius-4 radius-3 a-self-center g|object-fit:cover ${variant?.status === 'OUT_OF_STOCK' && 'out-of-stock'}`,
+                  `lg:w-[35.2px] lg:min-w-[35.2px] lg:h-[35.2px] w-[31px] min-w-[31px] h-[31px] cursor-pointer md:rounded-[4px] rounded-[3px] self-center object-cover ${variant?.status === 'OUT_OF_STOCK' && 'out-of-stock'}`,
                   {
-                    'border border-2': selectedImage == mediaItem?.url,
-                    [`border-${/*variant?.properties?.color?.toLocaleLowerCase() ||*/ '#0B9378'}`]:
+                    'border border-[2px]': selectedImage == mediaItem?.url,
+                    [`border-${/*variant?.properties?.color?.toLocaleLowerCase() ||*/ '#0357EE'}`]:
                       selectedImage == mediaItem?.url,
                   }
                 )}

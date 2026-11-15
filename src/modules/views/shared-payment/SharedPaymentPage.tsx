@@ -123,12 +123,12 @@ const SharedPaymentPage = ({ shareToken }: SharedPaymentPageProps) => {
     );
 
     return (
-      <div key={key} className="flex gap-12 a-items-center">
-        <div className="w-73 h-75 min-w-73 min-h-75 radius-6 overflow-hidden border border-#00000014 bg-#F5F5F5 flex a-items-center j-content-center">
+      <div key={key} className="flex gap-[12px] items-center">
+        <div className="w-[73px] h-[75px] min-w-[73px] min-h-[75px] rounded-[6px] overflow-hidden border border-[#00000014] bg-[#F5F5F5] flex items-center justify-center">
           {item.variantImage ? (
             mediaType === 'video' ? (
               <VideoSrc
-                className="w-73 h-75 min-w-73 min-h-75 object-fit"
+                className="w-[73px] h-[75px] min-w-[73px] min-h-[75px] object-fit"
                 src={item.variantImage}
                 hasLoader={true}
               />
@@ -136,30 +136,30 @@ const SharedPaymentPage = ({ shareToken }: SharedPaymentPageProps) => {
             <Image
               src={item.variantImage}
               alt={item.productName || 'Product image'}
-              className="w-73 h-75 min-w-73 min-h-75 object-fit"
+              className="w-[73px] h-[75px] min-w-[73px] min-h-[75px] object-fit"
             />
             )
           ) : (
-            <span className="text-12 color-#00000066">No image</span>
+            <span className="text-[12px] text-[#00000066]">No image</span>
           )}
         </div>
-        <div className="min-w-0 flex-grow-1 flex flex-col gap-4 overflow-hidden">
-          <p className="min-w-0 w-full truncate weight-600 text-14 line-height-22 color-#000000E0">
+        <div className="min-w-0 grow flex flex-col gap-[4px] overflow-hidden">
+          <p className="min-w-0 w-full truncate font-semibold text-[14px] leading-[22px] text-[#000000E0]">
             {item.productName}
           </p>
-          <p className="weight-400 sm:text-14 text-13.5 line-height-20 color-#0000008C">
+          <p className="font-normal sm:text-[14px] text-[13.5px] leading-[20px] text-[#0000008C]">
             Quantity:{' '}
             {`${item.quantity} ${displayStockUnit('piece')}${item.quantity > 1 ? 's' : ''}`}
           </p>
           {resolvedSize && (
-            <p className="weight-400 text-13 line-height-18 color-#0000008C">
+            <p className="font-normal text-[13px] leading-[18px] text-[#0000008C]">
               Size: {resolvedSize}
             </p>
           )}
           {visibleProperties.map(([propertyKey, propertyValue]) => (
             <p
               key={propertyKey}
-              className="weight-400 text-13 line-height-18 capitalize color-#0000008C"
+              className="font-normal text-[13px] leading-[18px] capitalize text-[#0000008C]"
             >
               {propertyKey}:{' '}
               {Array.isArray(propertyValue)
@@ -170,7 +170,7 @@ const SharedPaymentPage = ({ shareToken }: SharedPaymentPageProps) => {
             </p>
           ))}
         </div>
-        <p className="self-end sm:self-auto weight-600 sm:text-16 text-14 line-height-24 color-#000000E0">
+        <p className="self-end sm:self-auto font-semibold sm:text-[16px] text-[14px] leading-[24px] text-[#000000E0]">
           {formatNumberAsPrice(item.lineTotal)}
         </p>
       </div>
@@ -180,28 +180,28 @@ const SharedPaymentPage = ({ shareToken }: SharedPaymentPageProps) => {
   return (
     <>
       <HomepageNavBar />
-      <div className="bg-#F5F5F5 min-h-100vh sm:py-40 py-20 sm:pb-96 pb-76 sm:px-16 px-8 mt-64">
-        <div className="mx-auto max-w-760 bg-white radius-12 p-10 sm:p-24 md:p-32 flex flex-col gap-20">
-          <h1 className="text-24 line-height-32 weight-600">Shared payment</h1>
+      <div className="bg-[#F5F5F5] min-h-screen sm:py-[40px] py-[20px] sm:pb-[96px] pb-[76px] sm:px-[16px] px-[8px] mt-[64px]">
+        <div className="mx-auto max-w-[760px] bg-white rounded-[12px] p-[10px] sm:p-[24px] md:p-[32px] flex flex-col gap-[20px]">
+          <h1 className="text-[24px] leading-[32px] font-semibold">Shared payment</h1>
 
           {loading && (
-            <div className="flex a-items-center j-content-center py-24">
+            <div className="flex items-center justify-center py-[24px]">
               <PuffLoader loading size={28} />
             </div>
           )}
 
           {!loading && errorMessage && (
-            <div className="border border-#FECACA bg-#FEF2F2 radius-10 p-20 flex flex-col gap-12">
-              <div className="flex a-items-center gap-10">
-                <div className="w-28 h-28 radius-100p bg-#FEE2E2 color-#B91C1C flex a-items-center j-content-center weight-700">
+            <div className="border border-[#FECACA] bg-[#FEF2F2] rounded-[10px] p-[20px] flex flex-col gap-[12px]">
+              <div className="flex items-center gap-[10px]">
+                <div className="w-[28px] h-[28px] rounded-[100ppx] bg-[#FEE2E2] text-[#B91C1C] flex items-center justify-center font-bold">
                   !
                 </div>
-                <p className="text-18 line-height-26 weight-600 color-#991B1B">
+                <p className="text-[18px] leading-[26px] font-semibold text-[#991B1B]">
                   Payment link unavailable
                 </p>
               </div>
-              <p className="text-15 line-height-22 color-#B91C1C">{errorMessage}</p>
-              <p className="text-14 line-height-20 color-#991B1BCC">
+              <p className="text-[15px] leading-[22px] text-[#B91C1C]">{errorMessage}</p>
+              <p className="text-[14px] leading-[20px] text-[#991B1BCC]">
                 Please confirm the link is correct or request a new one from the user.
               </p>
             </div>
@@ -209,31 +209,31 @@ const SharedPaymentPage = ({ shareToken }: SharedPaymentPageProps) => {
 
           {!loading && !errorMessage && summary && (
             <>
-              <div className="flex flex-col gap-10">
-                <div className="flex a-items-center gap-8">
+              <div className="flex flex-col gap-[10px]">
+                <div className="flex items-center gap-[8px]">
                   <span
-                    className={`text-12 line-height-18 weight-600 px-10 py-4 radius-999 ${
+                    className={`text-[12px] leading-[18px] font-semibold px-[10px] py-[4px] rounded-[999px] ${
                       summary.paid
-                        ? 'bg-#ECFDF3 color-#027A48'
-                        : 'bg-#EFF8FF color-#175CD3'
+                        ? 'bg-[#ECFDF3] text-[#027A48]'
+                        : 'bg-[#EFF8FF] text-[#175CD3]'
                     }`}
                   >
                     {summary.status.replace('_', ' ') || (summary.paid ? 'PAID' : 'PENDING')}
                   </span>
                 </div>
                 {summary.message && (
-                  <p className="text-14 color-#00000099 line-height-20">{summary.message}</p>
+                  <p className="text-[14px] text-[#00000099] leading-[20px]">{summary.message}</p>
                 )}
               </div>
 
               {Array.isArray(summary.stores) && summary.stores.length > 0 && (
-                <div className="border border-#00000014 radius-10 p-10 sm:p-16 flex flex-col gap-16">
+                <div className="border border-[#00000014] rounded-[10px] p-[10px] sm:p-[16px] flex flex-col gap-[16px]">
                   {summary.stores.map((store) => (
-                    <div key={store.storeId} className="flex flex-col gap-10">
-                      <p className="text-16 weight-600 line-height-24 color-#00000099">
+                    <div key={store.storeId} className="flex flex-col gap-[10px]">
+                      <p className="text-[16px] font-semibold leading-[24px] text-[#00000099]">
                         {store.storeName}
                       </p>
-                      <div className="flex flex-col gap-8">
+                      <div className="flex flex-col gap-[8px]">
                         {store.items.map((item, index) =>
                           renderLineItem(item, `${store.storeId}-${item.variantId}-${index}`)
                         )}
@@ -244,26 +244,26 @@ const SharedPaymentPage = ({ shareToken }: SharedPaymentPageProps) => {
               )}
 
               {!summary.paid && (
-                <div className="border border-#00000014 radius-10 p-10 sm:p-16 flex flex-col gap-10">
-                  <div className="flex space-between text-14 line-height-20">
+                <div className="border border-[#00000014] rounded-[10px] p-[10px] sm:p-[16px] flex flex-col gap-[10px]">
+                  <div className="flex justify-between text-[14px] leading-[20px]">
                     <span>Subtotal</span>
                     <span>{formatNumberAsPrice(subtotal)}</span>
                   </div>
                   {discountValue > 0 && (
-                    <div className="flex space-between text-14 line-height-20">
+                    <div className="flex justify-between text-[14px] leading-[20px]">
                       <span>Discount</span>
                       <span>- {formatNumberAsPrice(discountValue)}</span>
                     </div>
                   )}
-                  <div className="flex space-between text-14 line-height-20">
+                  <div className="flex justify-between text-[14px] leading-[20px]">
                     <span>Delivery fee</span>
                     <span>{formatNumberAsPrice(summary.deliveryFee)}</span>
                   </div>
-                  {/* <div className="flex space-between text-14 line-height-20">
+                  {/* <div className="flex justify-between text-[14px] leading-[20px]">
                     <span>Cart total</span>
                     <span>{formatNumberAsPrice(summary.cartTotal)}</span>
                   </div> */}
-                  <div className="flex space-between text-16 line-height-24 weight-600 border-t border-#00000014 pt-10">
+                  <div className="flex justify-between text-[16px] leading-[24px] font-semibold border-t border-[#00000014] pt-[10px]">
                     <span>Total to pay</span>
                     <span>{formatNumberAsPrice(totalToPay)}</span>
                   </div>
@@ -271,32 +271,32 @@ const SharedPaymentPage = ({ shareToken }: SharedPaymentPageProps) => {
               )}
 
               {summary.paid ? (
-                <div className="border border-#A6F4C5 bg-#ECFDF3 radius-10 p-18 flex flex-col gap-8">
-                  <p className="text-18 line-height-26 color-#027A48 weight-600">
+                <div className="border border-[#A6F4C5] bg-[#ECFDF3] rounded-[10px] p-[18px] flex flex-col gap-[8px]">
+                  <p className="text-[18px] leading-[26px] text-[#027A48] font-semibold">
                     Payment already completed
                   </p>
-                  <p className="text-14 line-height-22 color-#027A48CC">
+                  <p className="text-[14px] leading-[22px] text-[#027A48CC]">
                     This checkout has already been paid. You do not need to make another payment.
                   </p>
                 </div>
               ) : (
-                <div className="flex flex-col gap-12">
+                <div className="flex flex-col gap-[12px]">
                   <input
                     type="email"
                     value={email}
                     onChange={(event) => setEmail(event.target.value)}
                     placeholder="Enter your email"
-                    className="border border-#0000001F radius-8 px-14 py-12 text-14 line-height-20 outline-none"
+                    className="border border-[#0000001F] rounded-[8px] px-[14px] py-[12px] text-[14px] leading-[20px] outline-none"
                   />
                   <button
                     onClick={handlePay}
                     disabled={paying}
-                    className={`border-none text-white text-16 weight-500 line-height-22 px-24 py-12 radius-6 m:flex a-items-center j-content-center ${
-                      paying ? 'bg-#D1D5DB color-#6B7280 cursor-not-allowed' : 'bg-#0B9378 pointer'
+                    className={`border-none text-white text-[16px] font-medium leading-[22px] px-[24px] py-[12px] rounded-[6px] md:flex items-center justify-center ${
+                      paying ? 'bg-[#D1D5DB] text-[#6B7280] cursor-not-allowed' : 'bg-[#0357EE] cursor-pointer'
                     }`}
                   >
                     Proceed to payment
-                    <PuffLoader loading={paying} size={14} className="ml-8" />
+                    <PuffLoader loading={paying} size={14} className="ml-[8px]" />
                   </button>
                 </div>
               )}

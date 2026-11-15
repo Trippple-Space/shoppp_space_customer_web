@@ -4,10 +4,8 @@ import { useEffect, useMemo, useState } from 'react';
 import { AiOutlineClose } from 'react-icons/ai';
 import Modal from '@/modules/lib/components/modal/modal';
 import SpinLoader from '@/modules/lib/components/spin-loader/SpinLoader';
-import { fitOracleService } from '@/modules/lib/utility/services/fit-oracle.service';
 import { cx } from '@/modules/lib/utility/utility';
 import type { ProductSizeChartResponse } from '../types/product-size-chart';
-import { isFullProductSizeChart } from '../utils/fit-size-chart';
 
 type DisplayUnit = 'cm' | 'inches';
 
@@ -41,44 +39,9 @@ const ProductSizeChartModal = ({
   const [chart, setChart] = useState<ProductSizeChartResponse | null>(null);
 
   useEffect(() => {
-    if (!isOpen || !productId) return;
-
-    if (isFullProductSizeChart(initialChart)) {
-      setChart(initialChart);
-      setLoading(false);
-      return;
-    }
-
-    let cancelled = false;
-    setLoading(true);
-    fitOracleService
-      .getSizeChart(productId)
-      .then((data) => {
-        if (!cancelled) setChart(data);
-      })
-      .catch(() => {
-        if (!cancelled) {
-          setChart({
-            showSizeChart: false,
-            available: false,
-            title: 'Size chart',
-            source: 'none',
-            sizeLabels: [],
-            measurementKeys: [],
-            rows: [],
-            accessorySummary: null,
-            footwearChart: null,
-            note: 'Unable to load size chart right now.',
-          });
-        }
-      })
-      .finally(() => {
-        if (!cancelled) setLoading(false);
-      });
-
-    return () => {
-      cancelled = true;
-    };
+    if (!isOpen) return;
+    setChart(initialChart ?? null);
+    setLoading(false);
   }, [isOpen, productId, initialChart]);
 
   const title = useMemo(() => {
@@ -98,38 +61,38 @@ const ProductSizeChartModal = ({
       onClose={onClose}
       extraClass={{ overflow: 'auto' }}
       extraModalClass={{ backgroundColor: '#00000073', zIndex: 60 }}
-      className="h-fit md:w-fit sm:w-90p w-95p no-scrollbar"
+      className="h-fit md:w-fit sm:w-[90%] w-[95%] no-scrollbar"
     >
       <div
-        className="l:w-720 md:w-650 w-full h-fit relative"
+        className="lg:w-[720px] md:w-[650px] w-full h-fit relative"
         style={{ maxHeight: 'calc(100dvh - 90px)' }}
       >
-        <div className="sticky z-3 t-0 l-0 r-0 bg-white flex space-between a-items-center py-12 px-24 border-solid border-b border-1 border-#00000014">
-          <h5 className="text-16 weight-600 line-height-24 pr-16">{title}</h5>
+        <div className="sticky z-[3px] top-0 left-0 right-0 bg-white flex justify-between items-center py-[12px] px-[24px] border-solid border-b border border-[#00000014]">
+          <h5 className="text-[16px] font-semibold leading-[24px] pr-[16px]">{title}</h5>
           <AiOutlineClose
-            className="pointer w-20 h-20 shrink-0"
+            className="cursor-pointer w-[20px] h-[20px] shrink-0"
             onClick={onClose}
           />
         </div>
 
-        <div className="px-20 py-20 flex flex-col gap-16 overflow-auto">
+        <div className="px-[20px] py-[20px] flex flex-col gap-[16px] overflow-auto">
           {loading ? (
-            <div className="flex a-items-center j-content-center py-40">
-              <SpinLoader size={28} color="#0B9378" loading />
+            <div className="flex items-center justify-center py-[40px]">
+              <SpinLoader size={28} color="#0357EE" loading />
             </div>
           ) : !chart?.available ? (
-            <p className="text-14 color-#00000099">
+            <p className="text-[14px] text-[#00000099]">
               {chart?.note || 'No size chart is available for this product yet.'}
             </p>
           ) : (
             <>
               {!isFootwearChart && (
-                <div className="flex a-items-center space-between gap-12 flex-wrap">
-                  <p className="text-12 weight-500 color-#00000099">
+                <div className="flex items-center justify-between gap-[12px] flex-wrap">
+                  <p className="text-[12px] font-medium text-[#00000099]">
                     All measurements below are in{' '}
                     {unit === 'cm' ? 'centimetres' : 'inches'}
                   </p>
-                  <div className="inline-flex a-items-center bg-#F5F5F5 radius-99 p-2 gap-2">
+                  <div className="inline-flex items-center bg-[#F5F5F5] rounded-[99px] p-[2px] gap-[2px]">
                     {(['cm', 'inches'] as DisplayUnit[]).map((option) => {
                       const active = unit === option;
                       return (
@@ -138,10 +101,10 @@ const ProductSizeChartModal = ({
                           type="button"
                           onClick={() => setUnit(option)}
                           className={cx(
-                            'border-none pointer px-12 py-5 radius-99 text-11 weight-500 uppercase g|transition:all|_0.2s|_ease',
+                            'border-none cursor-pointer px-[12px] py-[5px] rounded-[99px] text-[11px] font-medium uppercase [transition:all|_0.2s|_ease]',
                             active
-                              ? 'bg-white color-#0B9378 weight-600'
-                              : 'bg-transparent color-#6A6A6A',
+                              ? 'bg-white text-[#0357EE] font-semibold'
+                              : 'bg-transparent text-[#6A6A6A]',
                           )}
                         >
                           {option}
@@ -153,29 +116,29 @@ const ProductSizeChartModal = ({
               )}
 
               {isFootwearChart && (
-                <p className="text-12 weight-500 color-#00000099">
+                <p className="text-[12px] font-medium text-[#00000099]">
                   Product sizes with standard EU / UK / US conversions. Vendor
                   labels use {vendorShoeScale}.
                 </p>
               )}
 
               {chart.note && (
-                <p className="text-12 color-#8A5A00 bg-#FFF8E8 border border-#F0D9A8 radius-8 px-12 py-10">
+                <p className="text-[12px] text-[#8A5A00] bg-[#FFF8E8] border border-[#F0D9A8] rounded-[8px] px-[12px] py-[10px]">
                   {chart.note}
                 </p>
               )}
 
               {isFootwearChart && (
-                <div className="overflow-x-auto radius-10 border border-#E8D5D0">
-                  <table className="w-full border-collapse text-13 min-w-full">
+                <div className="overflow-x-auto rounded-[10px] border border-[#E8D5D0]">
+                  <table className="w-full border-collapse text-[13px] min-w-full">
                     <thead>
                       <tr>
                         {['EU', 'UK', 'US'].map((label) => (
                           <th
                             key={label}
                             className={cx(
-                              'bg-#8B3A3A color-white text-center px-12 py-10 weight-600 whitespace-nowrap',
-                              label === vendorShoeScale && 'bg-#6E2E2E',
+                              'bg-[#8B3A3A] text-white text-center px-[12px] py-[10px] font-semibold whitespace-nowrap',
+                              label === vendorShoeScale && 'bg-[#6E2E2E]',
                             )}
                           >
                             {label}
@@ -189,27 +152,27 @@ const ProductSizeChartModal = ({
                         <tr key={`${row.sizeLabel}-${index}`}>
                           <td
                             className={cx(
-                              'text-center px-12 py-10 color-#3D1F1F',
-                              index % 2 === 0 ? 'bg-white' : 'bg-#FFF9F8',
-                              vendorShoeScale === 'EU' && 'weight-600',
+                              'text-center px-[12px] py-[10px] text-[#3D1F1F]',
+                              index % 2 === 0 ? 'bg-white' : 'bg-[#FFF9F8]',
+                              vendorShoeScale === 'EU' && 'font-semibold',
                             )}
                           >
                             {row.eu}
                           </td>
                           <td
                             className={cx(
-                              'text-center px-12 py-10 color-#3D1F1F',
-                              index % 2 === 0 ? 'bg-white' : 'bg-#FFF9F8',
-                              vendorShoeScale === 'UK' && 'weight-600',
+                              'text-center px-[12px] py-[10px] text-[#3D1F1F]',
+                              index % 2 === 0 ? 'bg-white' : 'bg-[#FFF9F8]',
+                              vendorShoeScale === 'UK' && 'font-semibold',
                             )}
                           >
                             {row.uk}
                           </td>
                           <td
                             className={cx(
-                              'text-center px-12 py-10 color-#3D1F1F',
-                              index % 2 === 0 ? 'bg-white' : 'bg-#FFF9F8',
-                              vendorShoeScale === 'US' && 'weight-600',
+                              'text-center px-[12px] py-[10px] text-[#3D1F1F]',
+                              index % 2 === 0 ? 'bg-white' : 'bg-[#FFF9F8]',
+                              vendorShoeScale === 'US' && 'font-semibold',
                             )}
                           >
                             {row.us}
@@ -224,17 +187,17 @@ const ProductSizeChartModal = ({
               {!isFootwearChart &&
                 chart.rows.length > 0 &&
                 chart.sizeLabels.length > 0 && (
-                  <div className="overflow-x-auto radius-10 border border-#E8D5D0">
-                    <table className="w-full border-collapse text-13 min-w-full">
+                  <div className="overflow-x-auto rounded-[10px] border border-[#E8D5D0]">
+                    <table className="w-full border-collapse text-[13px] min-w-full">
                       <thead>
                         <tr>
-                          <th className="bg-#8B3A3A color-white text-left px-12 py-10 weight-600 whitespace-nowrap sticky l-0">
+                          <th className="bg-[#8B3A3A] text-white text-left px-[12px] py-[10px] font-semibold whitespace-nowrap sticky left-0">
                             {unit === 'cm' ? 'CM' : 'IN'}
                           </th>
                           {chart.sizeLabels.map((size) => (
                             <th
                               key={size}
-                              className="bg-#8B3A3A color-white text-center px-12 py-10 weight-600 whitespace-nowrap"
+                              className="bg-[#8B3A3A] text-white text-center px-[12px] py-[10px] font-semibold whitespace-nowrap"
                             >
                               {size}
                             </th>
@@ -246,8 +209,8 @@ const ProductSizeChartModal = ({
                           <tr key={row.key}>
                             <th
                               className={cx(
-                                'text-left px-12 py-10 weight-600 whitespace-nowrap sticky l-0 color-#5C2A2A',
-                                index % 2 === 0 ? 'bg-#F7EDEA' : 'bg-#F1E0DC',
+                                'text-left px-[12px] py-[10px] font-semibold whitespace-nowrap sticky left-0 text-[#5C2A2A]',
+                                index % 2 === 0 ? 'bg-[#F7EDEA]' : 'bg-[#F1E0DC]',
                               )}
                             >
                               {row.label}
@@ -256,8 +219,8 @@ const ProductSizeChartModal = ({
                               <td
                                 key={`${row.key}-${valueIndex}`}
                                 className={cx(
-                                  'text-center px-12 py-10 color-#3D1F1F',
-                                  index % 2 === 0 ? 'bg-white' : 'bg-#FFF9F8',
+                                  'text-center px-[12px] py-[10px] text-[#3D1F1F]',
+                                  index % 2 === 0 ? 'bg-white' : 'bg-[#FFF9F8]',
                                 )}
                               >
                                 {fromCm(value, unit)}
@@ -271,11 +234,11 @@ const ProductSizeChartModal = ({
                 )}
 
               {accessory && !isFootwearChart && (
-                <div className="flex flex-col gap-10">
-                  <p className="text-14 weight-600 color-#111">
+                <div className="flex flex-col gap-[10px]">
+                  <p className="text-[14px] font-semibold text-[#111]">
                     Accessory fit details
                   </p>
-                  <div className="grid gap-8 text-13 color-#333">
+                  <div className="grid gap-[8px] text-[13px] text-[#333]">
                     {!!accessory.necklaceLengthsCm?.length && (
                       <p>
                         Necklace lengths ({unit}):{' '}

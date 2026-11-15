@@ -79,32 +79,32 @@ const OrderedProductModal = ({
 
   return (
     <>
-      <div className="fixed inset-0 bg-#00000073 z-5 no-scrollbar" />
+      <div className="fixed inset-0 bg-[#00000073] z-[5px] no-scrollbar" />
       {order?.id && (
         <div
-          className="fixed t-10 flex inset-0 z-5 j-content-center a-items-center"
+          className="fixed top-[10px] flex inset-0 z-[5px] justify-center items-center"
           onClick={handleOrderModal}
         >
           <div
-            className={`absolute z-10 l-50p g|transform:translate(-50%) z-10 w-80p l:w-40p bg-white no-scrollbar overflow-auto radius-8 g|max-height:90vh l:h-fit`}
+            className={`absolute z-[10px] left-[50%] [transform:translate(-50%)] z-[10px] w-[80%] lg:w-[40%] bg-white no-scrollbar overflow-auto rounded-[8px] max-h-[90vh] lg:h-fit`}
             onClick={(e) => e.stopPropagation()}
           >
             <div className="overflow-auto no-scrollbar ">
               <div className="relative">
-                <div className="fixed w-100p bg-white border-b border-b-#00000026 flex a-items-center space-between p-15 radius-t-r-8 radius-t-l-8">
-                  <p className="weight-500">Order - Products</p>
+                <div className="fixed w-full bg-white border-b border-b-[#00000026] flex items-center justify-between p-[15px] rounded-tr-[8px] rounded-tl-[8px]">
+                  <p className="font-medium">Order - Products</p>
                   <IoMdClose
                     className="w-fit cursor-pointer"
                     onClick={handleOrderModal}
                   />
                 </div>
               </div>
-              <div className="p-15 px-25 flex a-items-center space-between border-b border-b-10 border-b-whitesmoke mt-50">
-                <p className="text-14 weight-500">
+              <div className="p-[15px] px-[25px] flex items-center justify-between border-b border-b-10 border-b-whitesmoke mt-[50px]">
+                <p className="text-[14px] font-medium">
                   #{getLastFiveIdChars(order.id.slice(-5))}
                 </p>
                 <button
-                  className="flex gap-10 a-items-center px-10 py-7 radius-5 border border-#00000026 bg-none cursor-pointer weight-500"
+                  className="flex gap-[10px] items-center px-[10px] py-[7px] rounded-[5px] border border-[#00000026] bg-transparent cursor-pointer font-medium"
                   onClick={() => buyOrdersAgain(activeCartItems)}
                 >
                   <PiArrowClockwise className="w-fit" />
@@ -113,17 +113,17 @@ const OrderedProductModal = ({
               </div>
               <div
                 className={classNames(
-                  'px-25 overflow-auto j-content-center no-scrollbar mb-20 mt-20',
+                  'px-[25px] overflow-auto justify-center no-scrollbar mb-[20px] mt-[20px]',
                   {
-                    'l:h-33vh': cartItems.length > 2,
-                    'h-250': cartItems.length > 2,
+                    'lg:h-[33vh]': cartItems.length > 2,
+                    'h-[250px]': cartItems.length > 2,
                   }
                 )}
                 key={order.id}
               >
                 <div
                   className={classNames(
-                    'flex flex-col gap-10 overflow-auto j-content-center no-scrollbar'
+                    'flex flex-col gap-[10px] overflow-auto justify-center no-scrollbar'
                   )}
                 >
                   {cartItems.map((item: CartItem & { lineStatus?: string }, i) => {
@@ -139,34 +139,34 @@ const OrderedProductModal = ({
 
                     return (
                       <div
-                        className={`flex flex-col gap-4 bg-whitesmoke radius-8 p-10 ${isRemoved ? 'opacity-70' : ''}`}
+                        className={`flex flex-col gap-[4px] bg-[#F5F5F5] rounded-[8px] p-[10px] ${isRemoved ? 'opacity-70' : ''}`}
                       >
                         <div
                           className={classNames(
-                            'gap-5 flex flex-col l:flex-row space-between a-items-start'
+                            'gap-[5px] flex flex-col lg:flex-row justify-between items-start'
                           )}
                           key={i}
                         >
-                          <div className="flex gap-10 l:w-60p relative">
-                            <div className='w-80 h-80 xl:w-70 xl:h-70 radius-8 relative overflow-hidden'>
+                          <div className="flex gap-[10px] lg:w-[60%] relative">
+                            <div className='w-[80px] h-[80px] xl:w-[70px] xl:h-[70px] rounded-[8px] relative overflow-hidden'>
                               {mediaType === 'image' ? (
                                 <Image
                                   src={item?.variant.media[0].url}
                                   alt={item.variant?.product?.name || ''}
-                                  className="w-80 h-80 xl:w-70 xl:h-70 radius-8 object-fit-cover"
+                                  className="w-[80px] h-[80px] xl:w-[70px] xl:h-[70px] rounded-[8px] object-fit-cover"
                                 />
                               ) : (
                                 <VideoSrc
-                                  className="w-80 h-80 xl:w-70 xl:h-70 radius-8 object-fit-cover"
+                                  className="w-[80px] h-[80px] xl:w-[70px] xl:h-[70px] rounded-[8px] object-fit-cover"
                                   src={item?.variant.media[0].url}
                                   hasLoader={true}
                                 />
                               )}
                             </div>
-                            <div className="flex flex-col gap-6">
-                              <div className="flex flex-col gap-3">
+                            <div className="flex flex-col gap-[6px]">
+                              <div className="flex flex-col gap-[3px]">
                                 <div
-                                  className="weight-600 text-12 flex flex-wrap items-center gap-2"
+                                  className="font-semibold text-[12px] flex flex-wrap items-center gap-[2px]"
                                   onClick={() => handleTextClick(item.id)}
                                 >
                                   <span className="xl:white-space-nowrap text-overflow-ellipsis">
@@ -177,24 +177,24 @@ const OrderedProductModal = ({
                                     )}
                                   </span>
                                   {isRemoved && (
-                                    <span className="text-[10px] uppercase font-semibold px-2 py-0.5 rounded bg-[#6C757D] text-white shrink-0">
+                                    <span className="text-[10px] uppercase font-semibold px-[2px] py-[0.5px] rounded bg-[#6C757D] text-white shrink-0">
                                       Removed
                                     </span>
                                   )}
                                 </div>
-                                <p className="color-#0000008C text-10 w-fit">
+                                <p className="text-[#0000008C] text-[10px] w-fit">
                                   {item.variant.product?.store.name}
                                 </p>
                               </div>
-                              <div className="flex flex-col gap-5">
+                              <div className="flex flex-col gap-[5px]">
                                 {' '}
                                 {item?.variant?.size ? (
-                                  <p className="color-#0000008C text-12 w-fit">
+                                  <p className="text-[#0000008C] text-[12px] w-fit">
                                     Size: {item?.variant?.size}
                                   </p>
                                 ) : null}
                                 {item.variant?.properties?.color && (
-                                  <p className="color-#0000008C text-12 w-fit">
+                                  <p className="text-[#0000008C] text-[12px] w-fit">
                                     Color: {item?.variant?.properties?.color[0] === '#' ? getClosestColorName(item?.variant?.properties?.color) : item?.variant?.properties?.color}
                                   </p>
                                 )}
@@ -221,7 +221,7 @@ const OrderedProductModal = ({
                                       return (
                                         <p
                                           key={key}
-                                          className="color-#0000008C text-14 w-fit"
+                                          className="text-[#0000008C] text-[14px] w-fit"
                                         >
                                           {`${key}: ${Array.isArray(value) ? value.join(', ') : value}`}
                                         </p>
@@ -231,18 +231,18 @@ const OrderedProductModal = ({
                               </div>
                             </div>
                           </div>
-                          <div className="l:grid flex flex-col a-items-end w-100p l:w-fit gap-5 mt-10 l:mt-0">
-                            <div className="flex flex-col a-items-end">
-                              <p className="text-14 weight-500">
+                          <div className="lg:grid flex flex-col items-end w-full lg:w-fit gap-[5px] mt-[10px] lg:mt-0">
+                            <div className="flex flex-col items-end">
+                              <p className="text-[14px] font-medium">
                                 {formatNumberAsPrice(linePrices.displayPrice)}
                               </p>
                               {linePrices.hasSlash && (
-                                <div className="flex flex-col gap-2 a-items-end">
+                                <div className="flex flex-col gap-[2px] items-end">
                                   {getStrikethroughAmounts(linePrices).map(
                                     (amount, idx) => (
                                       <p
                                         key={idx}
-                                        className="text-12 color-#00000099 line-through"
+                                        className="text-[12px] text-[#00000099] line-through"
                                       >
                                         {formatNumberAsPrice(amount)}
                                       </p>
@@ -251,7 +251,7 @@ const OrderedProductModal = ({
                                 </div>
                               )}
                             </div>
-                            <p className="text-12 weight-600 color-#0000008C text-right">
+                            <p className="text-[12px] font-semibold text-[#0000008C] text-right">
                               {' '}
                               X {item.quantity}
                             </p>
@@ -260,9 +260,9 @@ const OrderedProductModal = ({
 
                         {item?.userConfigurations &&
                           Object.keys(item.userConfigurations).length > 0 && (
-                            <div className="py-12">
-                              <div className="pt-10 flex flex-col gap-6">
-                                <div className="flex gap-8 flex-wrap relative">
+                            <div className="py-[12px]">
+                              <div className="pt-[10px] flex flex-col gap-[6px]">
+                                <div className="flex gap-[8px] flex-wrap relative">
                                   {Object.entries(item.userConfigurations).map(
                                     ([recordName, recordValue]) => {
                                       if (
@@ -293,39 +293,39 @@ const OrderedProductModal = ({
                   })}
                 </div>
               </div>
-              <div className={classNames('px-25 pb-20 flex flex-col gap-10')}>
-                <div className="grid gap-15">
-                  <div className="flex space-between">
-                    <p className="color-#000000E0 weight-400">Subtotal</p>
-                    <p className="text-16 weight-400">
+              <div className={classNames('px-[25px] pb-[20px] flex flex-col gap-[10px]')}>
+                <div className="grid gap-[15px]">
+                  <div className="flex justify-between">
+                    <p className="text-[#000000E0] font-normal">Subtotal</p>
+                    <p className="text-[16px] font-normal">
                       {formatNumberAsPrice(orderDisplaySubtotal)}
                     </p>
                   </div>
                   {orderDisplayDiscount > 0 ? (
-                    <div className="flex space-between">
-                      <p className="color-#000000E0 weight-400">Discount</p>
-                      <p className="text-16 weight-400">
+                    <div className="flex justify-between">
+                      <p className="text-[#000000E0] font-normal">Discount</p>
+                      <p className="text-[16px] font-normal">
                         − {formatNumberAsPrice(orderDisplayDiscount)}
                       </p>
                     </div>
                   ) : null}
-                  <div className="flex space-between border-b border-b-#00000014 pb-10">
-                    <p className="color-#000000E0 weight-400">Delivery</p>
-                    <p className="text-16 weight-400">
+                  <div className="flex justify-between border-b border-b-[#00000014] pb-[10px]">
+                    <p className="text-[#000000E0] font-normal">Delivery</p>
+                    <p className="text-[16px] font-normal">
                       {formatNumberAsPrice(order.deliveryFee)}
                     </p>
                   </div>
                 </div>
-                <div className="grid gap-15">
-                  <div className="flex space-between">
-                    <p className="color-#000000E0  weight-400">Total</p>
-                    <p className="text-16 weight-400">
+                <div className="grid gap-[15px]">
+                  <div className="flex justify-between">
+                    <p className="text-[#000000E0]  font-normal">Total</p>
+                    <p className="text-[16px] font-normal">
                       {formatNumberAsPrice(order.totalAmount)}
                     </p>
                   </div>
-                  <div className="flex space-between">
-                    <p className="color-#000000E0 weight-400">Payment Method</p>
-                    <p className="text-16 weight-400">Paid online</p>
+                  <div className="flex justify-between">
+                    <p className="text-[#000000E0] font-normal">Payment Method</p>
+                    <p className="text-[16px] font-normal">Paid online</p>
                   </div>
                 </div>
               </div>

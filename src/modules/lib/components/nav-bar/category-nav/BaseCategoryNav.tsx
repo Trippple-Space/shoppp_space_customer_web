@@ -36,7 +36,7 @@ const StickyWhenPassed = ({
   useLayoutEffect(() => {
     if (!enabled) return;
 
-    const nav = document.querySelector('[data-asoebi-main-nav]');
+    const nav = document.querySelector('[data-shoppp-main-nav]');
     if (!nav) return;
 
     const updateNav = () => setNavHeight(nav.getBoundingClientRect().height);
@@ -98,7 +98,7 @@ const StickyWhenPassed = ({
     <div
       ref={barRef}
       className={cx('bg-white', {
-        'fixed l-0 r-0 z-4 pt-12 pb-16 border-b border-whitesmoke': isStuck,
+        'fixed left-0 right-0 z-[4px] pt-[12px] pb-[16px] border-b border-[#F5F5F5]': isStuck,
       })}
       style={isStuck ? { top: navHeight } : undefined}
     >
@@ -146,14 +146,14 @@ const BaseCategoryNav: FC<IBaseCategoryNav> = ({
   return (
     <StickyWhenPassed enabled={page === 'home'}>
     <div
-      className={`flex a-items-center w-full relative ${
-        page === 'home' && 'j-content-center'
+      className={`flex items-center w-full relative ${
+        page === 'home' && 'justify-center'
       }`}
     >
       <div className="scroll-x no-scrollbar" ref={scrollRef}>
         <div
           className={`flex h-fit w-fit whitespace-nowrap ${
-            page === 'store' ? 's:gap-12 gap-8' : 'gap-8'
+            page === 'store' ? 'sm:gap-[12px] gap-[8px]' : 'gap-[8px]'
           }`}
         >
           {categories?.map((category, i) => {
@@ -168,8 +168,8 @@ const BaseCategoryNav: FC<IBaseCategoryNav> = ({
               <div
                 key={isSyntheticAll ? 'all' : i}
                 className={`${
-                  page === 'home' ? 's:min-w-90 min-w-71' : 's:min-w-116 min-w-96'
-                } flex j-content-center`}
+                  page === 'home' ? 'sm:min-w-[90px] min-w-[71px]' : 'sm:min-w-[116px] min-w-[96px]'
+                } flex justify-center`}
               >
                 <div
                   onClick={() => {
@@ -189,22 +189,22 @@ const BaseCategoryNav: FC<IBaseCategoryNav> = ({
                       filters: category.name,
                     });
                   }}
-                  className="flex flex-col a-items-center gap-7 space-between w-fit cursor-pointer"
+                  className="flex flex-col items-center gap-[7px] justify-between w-fit cursor-pointer"
                 >
                   {isSyntheticAll ? (
                     <div
                       className={cx(
-                        'flex a-items-center j-content-center bg-#00000008 border',
+                        'flex items-center justify-center bg-[#00000008] border',
                         page === 'home'
-                          ? 'w-47.02 h-46 round'
-                          : 's:w-100 w-80 h-64 radius-6',
-                        isActive ? 'border-2 border-green' : 'border-#00000026'
+                          ? 'w-[47.02px] h-[46px] rounded-full'
+                          : 'sm:w-[100px] w-[80px] h-[64px] rounded-[6px]',
+                        isActive ? 'border-[2px] border-brand' : 'border-[#00000026]'
                       )}
                     >
                       <span
                         className={cx(
-                          'weight-600 text-small capitalize',
-                          isActive ? 'text-green' : 'color-#00000099'
+                          'font-semibold text-small capitalize',
+                          isActive ? 'text-brand' : 'text-[#00000099]'
                         )}
                       >
                         All
@@ -214,19 +214,19 @@ const BaseCategoryNav: FC<IBaseCategoryNav> = ({
                     <ImageAlt
                       className={`${
                         page === 'home'
-                          ? 'w-47.02 h-46 round'
-                          : 's:w-100 w-80 h-64 radius-6'
+                          ? 'w-[47.02px] h-[46px] rounded-full'
+                          : 'sm:w-[100px] w-[80px] h-[64px] rounded-[6px]'
                       } border object-fit ${
-                        isActive ? 'border-2 border-green' : 'border-#00000026'
+                        isActive ? 'border-[2px] border-brand' : 'border-[#00000026]'
                       }`}
                       type={'image'}
                       src={category.images.picture}
                       iconClassName={`${
                         page === 'home'
-                          ? 'w-47.02 h-46 round'
-                          : 's:w-100 w-80 h-64 radius-6'
+                          ? 'w-[47.02px] h-[46px] rounded-full'
+                          : 'sm:w-[100px] w-[80px] h-[64px] rounded-[6px]'
                       } border object-fit ${
-                        isActive ? 'border-2 border-green' : 'border-#00000026'
+                        isActive ? 'border-[2px] border-brand' : 'border-[#00000026]'
                       }`}
                     />
                   ) : (
@@ -235,12 +235,12 @@ const BaseCategoryNav: FC<IBaseCategoryNav> = ({
 
                   <div
                     className={cx(
-                      'weight-600 text-small text-center capitalize g|max-width:90px',
-                      { 'text-green': isActive }
+                      'font-semibold text-small text-center capitalize max-w-[90px]',
+                      { 'text-brand': isActive }
                     )}
                   >
                     {category.name || (
-                      <SkeletonLoader className="block! h-10!" />
+                      <SkeletonLoader className="!block !h-[10px]" />
                     )}
                   </div>
                 </div>

@@ -28,14 +28,14 @@ const RecentlySearchItems: React.FC<ModalProps> = ({
     switch (option) {
       case 'open-orders':
         return (
-          <div className="text-16 weight-400 text-grey-700 h-full">
+          <div className="text-[16px] font-normal text-[#6B6662] h-full">
             {recentSearched.length === 0 ? (
-              <div className='h-full flex flex-col a-items-center j-content-center'>
+              <div className='h-full flex flex-col items-center justify-center'>
                 <NoResultMessage textContent="Continue shopping to discover our best deals!" />
               </div>
             ) : (
               recentSearched.map((recentVariant) => (
-                <div className="pb-20 mb-20 border-b border-1 border-grey-300">
+                <div className="pb-[20px] mb-[20px] border-b border border-[#E4E1DF]">
                   <SavedItemCard
                     recentVariant={recentVariant}
                     showRemove={false}
@@ -64,15 +64,15 @@ const RecentlySearchItems: React.FC<ModalProps> = ({
         <div className="relative w-full">
           <div className="w-full">
             <div
-              className="bg-white z-5 w-100p"
+              className="bg-white z-[5px] w-full"
               style={{
                 borderTopLeftRadius: '10px',
                 borderTopRightRadius: '10px',
               }}
             >
-              <div className="flex space-between items-center  px-48   border-b border-1 border-grey-300 text-18 weight-400 text-grey-700">
+              <div className="flex justify-between items-center  px-[48px]   border-b border border-[#E4E1DF] text-[18px] font-normal text-[#6B6662]">
                 <div
-                  className={`py-20 pointer w-fit ${action == 'open-orders' && 'text-green border-b border-2 border-green'}`}
+                  className={`py-[20px] cursor-pointer w-fit ${action == 'open-orders' && 'text-brand border-b border-[2px] border-brand'}`}
                   onClick={() => setAction('open-orders')}
                 >
                   Recently searched
@@ -80,17 +80,17 @@ const RecentlySearchItems: React.FC<ModalProps> = ({
               </div>
             </div>
             <div
-              className="p-20 overflow-auto no-scrollbar"
+              className="p-[20px] overflow-auto no-scrollbar"
               style={{ height: 'calc(100dvh - 230px)' }}
             >
               <div className="h-full">{selected(action)}</div>
             </div>
           </div>
         </div>
-        <div className="border-t border-#00000014">
-          <div className="p-20 flex gap-10 a-items-center j-content-end bg w-full">
+        <div className="border-t border-[#00000014]">
+          <div className="p-[20px] flex gap-[10px] items-center justify-end bg w-full">
             <button
-              className="px-25 py-10 radius-6 outline-none border-1 weight-500 bg-none color-black cursor-pointer"
+              className="px-[25px] py-[10px] rounded-[6px] outline-none border font-medium bg-transparent text-black cursor-pointer"
               onClick={handleCloseModal}
             >
               Close
@@ -98,7 +98,7 @@ const RecentlySearchItems: React.FC<ModalProps> = ({
 
             {recentSearched.length > 0 && (
               <button
-                className="px-25 py-10 radius-6 outline-none border-none bg-#D4280C color-white cursor-pointer"
+                className="px-[25px] py-[10px] rounded-[6px] outline-none border-none bg-[#D4280C] text-white cursor-pointer"
                 onClick={() => {
                   clearRecentVariants('search');
                 }}

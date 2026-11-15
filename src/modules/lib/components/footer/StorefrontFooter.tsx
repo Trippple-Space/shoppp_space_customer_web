@@ -15,23 +15,23 @@ const StorefrontFooter: React.FC<{ store: Store }> = ({ store }) => {
 
   return (
     <footer className="bg-black">
-      <div className="py-20 lg:px-80 sm:px-40 px-24 text-white flex flex-col sm:gap-35 gap-28 max-w-1440 mx-auto">
-        <div className="sm:py-40 py-24 l:gap-40 gap-30 flex sm:flex-row sm:flex-nowrap flex-reverse space-between a-items-center">
-          <div className="flex flex-col gap-20">
-            <h6 className="weight-600 text-20">Contact us</h6>
-            <p className="flex flex-col gap-14">
-              <Link href={`tel:${store?.user?.mobile || store?.profile?.phoneNumbers?.[0]}`} className="flex flex-row gap-8 w-fit">
-                <TbPhone className="w-24 h-24" />
-                <span className="text-16">{store?.user?.mobile || store?.profile?.phoneNumbers?.[0]}</span>
+      <div className="py-[20px] lg:px-[80px] sm:px-[40px] px-[24px] text-white flex flex-col sm:gap-[35px] gap-[28px] max-w-[1440px] mx-auto">
+        <div className="sm:py-[40px] py-[24px] lg:gap-[40px] gap-[30px] flex sm:flex-row sm:flex-nowrap flex-reverse justify-between items-center">
+          <div className="flex flex-col gap-[20px]">
+            <h6 className="font-semibold text-[20px]">Contact us</h6>
+            <p className="flex flex-col gap-[14px]">
+              <Link href={`tel:${store?.user?.mobile || store?.profile?.phoneNumbers?.[0]}`} className="flex flex-row gap-[8px] w-fit">
+                <TbPhone className="w-[24px] h-[24px]" />
+                <span className="text-[16px]">{store?.user?.mobile || store?.profile?.phoneNumbers?.[0]}</span>
               </Link>
               <Link
                 href={`https://maps.google.com/?q=${store?.meta?.settings?.location?.coordinates?.lat || store?.meta?.coordinates?.lat},${store?.meta?.settings?.location?.coordinates?.lon || store?.meta?.coordinates?.lon}`}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="flex flex-row gap-8 w-fit"
+                className="flex flex-row gap-[8px] w-fit"
               >
-                <HiOutlineLocationMarker className="w-24 min-w-24 h-24" />
-                <span className="text-16">
+                <HiOutlineLocationMarker className="w-[24px] min-w-[24px] h-[24px]" />
+                <span className="text-[16px]">
                   {store?.meta?.settings?.location?.address || JSON.parse(store?.registrationProposal?.data)?.storeAddress}
                 </span>
               </Link>
@@ -39,38 +39,38 @@ const StorefrontFooter: React.FC<{ store: Store }> = ({ store }) => {
           </div>
           <form
             onSubmit={handleNewsletterSubmit}
-            className="flex flex-col gap-12 l:max-w-461 max-w-416 w-full"
+            className="flex flex-col gap-[12px] lg:max-w-[461px] max-w-[416px] w-full"
           >
-            <p className="weight-600 text-16">Subscribe for latest updates</p>
-            <div className="flex j-content-end gap-8">
-              <div className="bg-white flex a-items-center gap-12 px-12 radius-6 border border-#00000026 sm:flex-grow-1 w-full">
-                <TbMail className="w-24 min-w-24 h-24 color-#00000099" />
+            <p className="font-semibold text-[16px]">Subscribe for latest updates</p>
+            <div className="flex justify-end gap-[8px]">
+              <div className="bg-white flex items-center gap-[12px] px-[12px] rounded-[6px] border border-[#00000026] sm:flex-grow-1 w-full">
+                <TbMail className="w-[24px] min-w-[24px] h-[24px] text-[#00000099]" />
                 <input
                   type="email"
                   name="email"
                   id="email"
                   placeholder="Enter your email"
-                  className="py-12 px-0 border-none outline-none @lo:placeholder:sm:text-16 @lo:placeholder:text-14 w-full"
+                  className="py-[12px] px-0 border-none outline-none placeholder:sm:text-[16px] placeholder:text-[14px] w-full"
                   onChange={clearNewsletterError}
                 />
               </div>
               <button
                 type="submit"
                 disabled={loading}
-                className="py-12 px-16 bg-#FACE33 radius-6 weight-600 text-16 border border-none text-#000000E0"
+                className="py-[12px] px-[16px] bg-[#FACE33] rounded-[6px] font-semibold text-[16px] border border-none text-[#000000E0]"
               >
                 {loading ? "Subscribing..." : "Subscribe"}
               </button>
             </div>
             {newsletterError && (
-              <p className="text-14 color-#FF7070">{newsletterError}</p>
+              <p className="text-[14px] text-[#FF7070]">{newsletterError}</p>
             )}
           </form>
         </div>
-        <hr className="bg-#FFFFFF4D" />
+        <hr className="bg-[#FFFFFF4D]" />
         <div>
-          <p className="text-16 text-center">
-            Powered by asoebi.africa
+          <p className="text-[16px] text-center">
+            Powered by Shoppp Space
           </p>
         </div>
       </div>

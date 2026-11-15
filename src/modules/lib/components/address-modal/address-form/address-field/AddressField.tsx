@@ -32,11 +32,11 @@ const AddressField: FC<AddressFieldProps> = ({
     (<div className="flex">
       {
         field?.toLocaleLowerCase()?.includes('contact') && (
-          <div className={`py-12 px-14 bg-#F3F3F3 border @lo:radius-t-l-8 @lo:radius-b-l-8 color-#545F71 text-16 h-47.2 flex flex-col a-self-center ${!!(formHandler.touched[field] && formHandler.errors[field]) ? 'l:mt-5 mt-3 border-red' : isFocused ? 'l:mt-29 mt-27 border-green' : 'l:mt-29 mt-27 border-#00000026'}`}>+234</div>
+          <div className={`py-[12px] px-[14px] bg-[#F3F3F3] border rounded-tl-[8px] rounded-bl-[8px] text-[#545F71] text-[16px] h-[47.2px] flex flex-col self-center ${!!(formHandler.touched[field] && formHandler.errors[field]) ? 'lg:mt-[5px] mt-[3px] border-[#DE3838]' : isFocused ? 'lg:mt-[29px] mt-[27px] border-brand' : 'lg:mt-[29px] mt-[27px] border-[#00000026]'}`}>+234</div>
         )
       }
       <Input
-        label={<span className={`text-14 weight-400 line-height-19 ${field?.toLocaleLowerCase()?.includes('contact') && 'ml--68.025'}`}>{label}</span>}
+        label={<span className={`text-[14px] font-normal leading-[19px] ${field?.toLocaleLowerCase()?.includes('contact') && '-ml-[68.025px]'}`}>{label}</span>}
         id={field}
         name={field}
         type={type || "text"}
@@ -56,14 +56,14 @@ const AddressField: FC<AddressFieldProps> = ({
         className={cx("w-full", className)}
         disabled={disabled}
         inputClass={cx(
-          "radius-r-6! p-12 w-full border border-1 text-16",
+          "rounded-r-[6px] p-[12px] w-full border border text-[16px]",
           {
-            "border-red": formHandler.touched[field] && formHandler.errors[field],
+            "border-[#DE3838]": formHandler.touched[field] && formHandler.errors[field],
           },
           inputClassName,
         )}
         after={
-          <div className={`${field?.toLocaleLowerCase()?.includes('contact') && 'ml--68.025 mt-1'}`}>
+          <div className={`${field?.toLocaleLowerCase()?.includes('contact') && '-ml-[68.025px] mt-[1px]'}`}>
             <InputAlert
               hasError={!!(formHandler.touched[field] && formHandler.errors[field])}
               errorMessage={formHandler.errors[field]}

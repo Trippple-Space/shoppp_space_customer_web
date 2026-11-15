@@ -14,7 +14,6 @@ import ProductCatalogueSection from './components/ProductCatalogueSection';
 import ProductAddToCart from './components/ProductAddToCart';
 import ProductInfoLeftColumn from './components/ProductInfoLeftColumn';
 import ProductVariationsPicker from './components/ProductVariationsPicker';
-import ProductFitRecommendationSection from './components/ProductFitRecommendationSection';
 import RecentlyViewedSection from './components/RecentlyViewedSection';
 import CustomerReviewsSection from './components/CustomerReviewsSection';
 
@@ -115,23 +114,13 @@ const ProductDetails = ({ product }: { product: Product }) => {
       decrement={decrement}
       isAddingToCart={isAddingToCart}
       isRemovingFromCart={isRemovingFromCart}
-      fitRecommendationSection={
-        <ProductFitRecommendationSection
-          productId={product.id}
-          productType={product.type}
-          selectedVariant={selectedVariant}
-          activeFilters={activeFilters}
-          fitSizeChart={product?.fitSizeChart}
-          variants={product.variants}
-        />
-      }
     />
   );
 
   return (
     <>
       <HomepageNavBar parent="" />
-      <div className="sm:mt-96 mt-88 l:max-w-1400 w-full mx-auto xl:px-60 md:px-50 sm:px-40 px-24">
+      <div className="sm:mt-[96px] mt-[88px] lg:max-w-[1400px] w-full mx-auto xl:px-[60px] md:px-[50px] sm:px-[40px] px-[24px]">
         <ProductDetailsHeader
           product={product}
           storeUrl={storeUrl}
@@ -174,7 +163,7 @@ const ProductDetails = ({ product }: { product: Product }) => {
         />
 
         <div
-          className={cx('flex flex-col l:flex-row l:j-content-between mt-20')}
+          className={cx('flex flex-col lg:flex-row lg:justify-between mt-[20px]')}
         >
           <ProductInfoLeftColumn
             product={product}
@@ -223,9 +212,6 @@ const ProductDetails = ({ product }: { product: Product }) => {
             onEditConfiguration={() => setIsEditingConfiguration(true)}
             selectedVariant={selectedVariant}
             addToCartSection={addToCartSection}
-            productId={product?.id}
-            productName={product?.name}
-            fitSizeChart={product?.fitSizeChart}
           />
         </div>
 

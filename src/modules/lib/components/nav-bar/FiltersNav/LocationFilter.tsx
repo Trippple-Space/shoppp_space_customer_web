@@ -16,8 +16,8 @@ export const LocationFilter: React.FC<ILocationFilter> = ({ setLocationFilter })
         <ul className='flex flex-col'>
             {
                 states.map((option) => (
-                    <li key={option} className='flex gap-12 py-10'>
-                        <div className='h-fit w-fit color-#6A6A6A hover:color-#000000E0'>
+                    <li key={option} className='flex gap-[12px] py-[10px]'>
+                        <div className='h-fit w-fit text-[#6A6A6A] hover:text-[#000000E0]'>
                             <BoxRadio label={option} className='filter' name='location' id='location' checked={option === location} onChange={() => { setLocationFilter(`${option}`); setLocation(`${option}`) }} />
                         </div>
                     </li>

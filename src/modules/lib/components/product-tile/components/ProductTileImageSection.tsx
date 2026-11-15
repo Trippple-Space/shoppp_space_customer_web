@@ -98,7 +98,7 @@ const ProductTileImageSection = ({
   return (
     <div
       id="image"
-      className="relative ratio-1 radius-10 g|overflow:hidden l:radius-15 w-full"
+      className="relative aspect-square rounded-[10px] overflow-hidden lg:rounded-[15px] w-full"
       onMouseOver={() => setOnProductTileHover(true)}
       onMouseOut={() => setOnProductTileHover(false)}
       onMouseDown={startLongPress}
@@ -118,7 +118,7 @@ const ProductTileImageSection = ({
           }
         }}
       >
-          <div className="relative w-full h-full g|overflow:hidden">
+          <div className="relative w-full h-full overflow-hidden">
             {variantPreviewItems.length > 0 && (
               <ProductTileMediaCarousel
                 key={product.id}
@@ -129,7 +129,7 @@ const ProductTileImageSection = ({
             )}
 
             {isOutOfStock && (
-              <div className="absolute w-100p h-100p text-white flex j-content-center a-items-center z-3 l:text-22 radius-6 pointer-events-none">
+              <div className="absolute w-full h-full text-white flex justify-center items-center z-[3px] lg:text-[22px] rounded-[6px] pointer-events-none">
                 Out of stock
               </div>
             )}
@@ -140,7 +140,7 @@ const ProductTileImageSection = ({
       {onProductTileHover && product && (
         <div
           id="add to cart button"
-          className="hidden l:block absolute z-2 b-0 l-0 ml-10 mt-20 l:mr-15 l:mb-15"
+          className="hidden lg:block absolute z-[2px] bottom-0 left-0 ml-[10px] mt-[20px] lg:mr-[15px] lg:mb-[15px]"
           onClick={() => {
             handleCloseProductModal();
             if (selectedVariant) {
@@ -148,7 +148,7 @@ const ProductTileImageSection = ({
             }
           }}
         >
-          <p className="bg-white radius-20 p-5 cursor-pointer text-12 flex a-items-center gap-5">
+          <p className="bg-white rounded-[20px] p-[5px] cursor-pointer text-[12px] flex items-center gap-[5px]">
             <FaEye className="w-fit" />
             Quick look
           </p>
@@ -158,7 +158,7 @@ const ProductTileImageSection = ({
       {/* ADD TO CART / ONBOARDING */}
       <div
         id="add to cart button"
-        className="absolute z-2 b-0 r-0 mr-10 mb-10 l:mr-15 l:mb-15"
+        className="absolute z-[2px] bottom-0 right-0 mr-[10px] mb-[10px] lg:mr-[15px] lg:mb-[15px]"
       >
         {selectedVariantItemInCart && !isAddingToCart ? (
           <QuantitySelector
@@ -194,7 +194,7 @@ const ProductTileImageSection = ({
             {showOnBoardingModal && indexCount && !isCheckoutOrOrdersPage && (
               <div
                 onClick={(e) => e.stopPropagation()}
-                className="l:w-200 w-100 l:p-10 p-5 l:mb-10 b-70p r-20"
+                className="lg:w-[200px] w-[100px] lg:p-[10px] p-[5px] lg:mb-[10px] bottom-[70%] right-[20px]"
                 style={{
                   position: 'absolute',
                   background: 'white',
@@ -202,11 +202,11 @@ const ProductTileImageSection = ({
                   zIndex: 1000,
                 }}
               >
-                <p className="weight-400">
+                <p className="font-normal">
                   Tap this button to add an item to your cart
                 </p>
                 <div onClick={handleOnboardingClose}>
-                  <button className="bg-green text-white mt-2 l:mt-10 l:py-10 l:px-20 w-full py-5 radius-5 border-none hover:pointer text-13 l:text-14 font-inter hover:bg-darkgreen transition-0.5s text-center">
+                  <button className="bg-brand text-white mt-[2px] lg:mt-[10px] lg:py-[10px] lg:px-[20px] w-full py-[5px] rounded-[5px] border-none hover:cursor-pointer text-[13px] lg:text-[14px] font-inter hover:bg-brand-hover transition-0.5s text-center">
                     Close
                   </button>
                 </div>
@@ -217,7 +217,7 @@ const ProductTileImageSection = ({
               style={
                 showOnBoardingModal && indexCount ? { zIndex: 1000 } : undefined
               }
-              className="round relative"
+              className="rounded-full relative"
             >
               {selectedVariant?.status !== 'OUT_OF_STOCK' && (
                 <button
@@ -251,15 +251,15 @@ const ProductTileImageSection = ({
                   }}
                   disabled={!selectedImage}
                   className={classNames(
-                    `bg-#FACE33 shadow-0-4-8-0-#00000033 hover:shadow-0-8-8-0-#00000033 text-black! 
+                    `bg-[#FACE33] shadow-0-4-8-0-#00000033 hover:shadow-0-8-8-0-#00000033 !text-black 
                     disabled:bg-gray-200 disabled:cursor-not-allowed  
-                    g|transition:0.5s g|will-change:transform font-roboto 
-                    border-hidden outline-none flex a-items-center j-items-center gap-10`,
+                    transition-all duration-500 will-change-transform font-roboto 
+                    border-hidden outline-none flex items-center justify-items-center gap-[10px]`,
                     {
-                      'round s:p-14 p-12': addToCartVariant === 'icon',
-                      'radius-10 px-10 py-5 s:py-10 s:px-16': addToCartVariant === 'text',
-                      'g|pointer-events:none': isAddingToCart,
-                      'pointer hover:scale-1.06': !isAddingToCart,
+                      'rounded-full sm:p-[14px] p-[12px]': addToCartVariant === 'icon',
+                      'rounded-[10px] px-[10px] py-[5px] sm:py-[10px] sm:px-[16px]': addToCartVariant === 'text',
+                      'pointer-events-none': isAddingToCart,
+                      'cursor-pointer hover:scale-1.06': !isAddingToCart,
                     }
                   )}
                 >
@@ -271,9 +271,9 @@ const ProductTileImageSection = ({
                       thickness={3}
                     />
                   ) : addToCartVariant === 'icon' ? (
-                    <PiShoppingCartFill className="s:w-22 w-20 s:h-22 h-20" />
+                    <PiShoppingCartFill className="sm:w-[22px] w-[20px] sm:h-[22px] h-[20px]" />
                   ) : (
-                    <span className="text-black font-roboto text-12 s:text-14 weight-500">Add to cart</span>
+                    <span className="text-black font-roboto text-[12px] sm:text-[14px] font-medium">Add to cart</span>
                   )}
                 </button>
               )}
@@ -285,7 +285,7 @@ const ProductTileImageSection = ({
       {/* FAVORITE ICON */}
       <div
         id="favorite icon"
-        className="absolute z-1 t-0 r-0 mr-10 mt-10 l:mr-15 l:mt-15 text-24 l:text-34"
+        className="absolute z-[1px] top-0 right-0 mr-[10px] mt-[10px] lg:mr-[15px] lg:mt-[15px] text-[24px] lg:text-[34px]"
         onClick={(e) => {
           e.preventDefault();
           e.stopPropagation();
@@ -309,15 +309,15 @@ const ProductTileImageSection = ({
 
       {/* DISCOUNT PILL */}
       {discountPill && (
-        <div className="absolute w-fit h-fit t-0 l-0 z-2">
+        <div className="absolute w-fit h-fit top-0 left-0 z-[2px]">
           <div
-            className="mt-10 l:ml-15 l:mt-15 whitespace-nowrap w-fit h-20 radius-20 flex a-items-center j-content-center px-10 py-15 ml-5"
+            className="mt-[10px] lg:ml-[15px] lg:mt-[15px] whitespace-nowrap w-fit h-[20px] rounded-[20px] flex items-center justify-center px-[10px] py-[15px] ml-[5px]"
             style={{
               backgroundColor: discountPill.pillBackground,
               color: discountPill.pillColor,
             }}
           >
-            <p className="text-10 l:text-12">{discountPill.text}</p>
+            <p className="text-[10px] lg:text-[12px]">{discountPill.text}</p>
           </div>
         </div>
       )}

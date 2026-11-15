@@ -37,10 +37,10 @@ const LightboxModal = ({
           aria-modal="true"
         >
           <div
-            className={`${styles.topBar} mt-20 md:mt-30 mx-5 sm:mx-20 md:mx-30 mb-5 md:mb-10 h-34 py-14 px-10 sm:px-24`}
+            className={`${styles.topBar} mt-[20px] md:mt-[30px] mx-[5px] sm:mx-[20px] md:mx-[30px] mb-[5px] md:mb-[10px] h-[34px] py-[14px] px-[10px] sm:px-[24px]`}
           >
             <button
-              className={`${styles.closeBtn} flex a-items-center gap-4 p-8 pr-10 radius-10 hover:bg-#b2b1b13c`}
+              className={`${styles.closeBtn} flex items-center gap-[4px] p-[8px] pr-[10px] rounded-[10px] hover:bg-[#b2b1b13c]`}
               onClick={() => {
                 setShowLightbox(false);
               }}
@@ -53,29 +53,29 @@ const LightboxModal = ({
             </div>
 
             <div className={styles.actions}>
-              <p className="p-8 flex a-items-center j-content-center radius-100p hover:bg-#b2b1b13c">
+              <p className="p-[8px] flex items-center justify-center rounded-[100ppx] hover:bg-[#b2b1b13c]">
                 <RxShare2
                   onClick={() => setShowShareModal(true)}
-                  className={`${styles.icon} w-20 h-20 min-w-20`}
+                  className={`${styles.icon} w-[20px] h-[20px] min-w-[20px]`}
                   size={20}
                 />
               </p>
 
               {isSaved ? (
-                <p className="p-8 flex a-items-center j-content-center radius-100p hover:bg-#b2b1b13c">
+                <p className="p-[8px] flex items-center justify-center rounded-[100ppx] hover:bg-[#b2b1b13c]">
                   <AiFillHeart
                     onClick={handleSave}
-                    className={`${styles.icon} w-20 h-20 min-w-20`}
+                    className={`${styles.icon} w-[20px] h-[20px] min-w-[20px]`}
                     size={20}
                   />
                 </p>
               ) : (
-                <p className="p-8 flex a-items-center j-content-center radius-100p hover:bg-#b2b1b13c">
+                <p className="p-[8px] flex items-center justify-center rounded-[100ppx] hover:bg-[#b2b1b13c]">
                   <AiOutlineHeart
                     onClick={() =>
                       isAuthenticated ? handleSave() : isLoginModal()
                     }
-                    className={`${styles.icon} w-20 h-20 min-w-20`}
+                    className={`${styles.icon} w-[20px] h-[20px] min-w-[20px]`}
                     size={20}
                   />
                 </p>
@@ -102,12 +102,12 @@ const LightboxModal = ({
                   )
                 }
               >
-                <MdOutlineNavigateBefore className="color-#fffafaec" />
+                <MdOutlineNavigateBefore className="text-[#fffafaec]" />
               </button>
 
               {currentMediaType === 'video' ? (
                 <VideoSrc
-                  className={`flex-grow-1 h-full w-full h-full a-self-center ${
+                  className={`grow h-full w-full h-full self-center ${
                     isOutOfStock && 'out-of-stock'
                   } ${styles.media}`}
                   src={lightboxImages[lightboxIndex]}
@@ -118,7 +118,7 @@ const LightboxModal = ({
               ) : (
                 <Image
                   src={lightboxImages[lightboxIndex]}
-                  className={`flex-grow-1 h-full w-full h-full a-self-center ${
+                  className={`grow h-full w-full h-full self-center ${
                     isOutOfStock && 'out-of-stock'
                   } ${styles.media}`}
                   alt={''}
@@ -133,7 +133,7 @@ const LightboxModal = ({
                   setLightboxIndex((lightboxIndex + 1) % lightboxImages.length)
                 }
               >
-                <MdOutlineNavigateNext className="color-#fffafaec" />
+                <MdOutlineNavigateNext className="text-[#fffafaec]" />
               </button>
             </div>
           </div>

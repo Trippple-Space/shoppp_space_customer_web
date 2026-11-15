@@ -39,12 +39,12 @@ function TileMediaLayer({
 
   const mediaType = checkMediaType(url) ?? 'image';
   const stockClass = outOfStock ? 'out-of-stock' : '';
-  const pulseClassName = 'radius-10 l:radius-15';
+  const pulseClassName = 'rounded-[10px] lg:rounded-[15px]';
 
   if (mediaType === 'video') {
     return (
       <VideoSrc
-        className={`absolute w-full h-full a-self-center g|object-fit:cover pointer transition-none ${stockClass}`}
+        className={`absolute w-full h-full self-center object-cover cursor-pointer transition-none ${stockClass}`}
         src={url}
         hasLoader={showLoader}
         pulseClassName={pulseClassName}
@@ -56,7 +56,7 @@ function TileMediaLayer({
   return (
     <Image
       ref={imgRef as React.Ref<HTMLImageElement> | undefined}
-      className={`absolute w-full h-full a-self-center g|object-fit:cover pointer transition-none ${stockClass}`}
+      className={`absolute w-full h-full self-center object-cover cursor-pointer transition-none ${stockClass}`}
       src={url}
       alt="product-image"
       width={10000}
@@ -222,7 +222,7 @@ export const ProductTileMediaCarousel = memo(function ProductTileMediaCarousel({
   const isIncomingBack = isFading || backSlot.url !== frontSlot.url;
 
   return (
-    <div className="absolute w-full h-full t-0 l-0 z-0">
+    <div className="absolute w-full h-full top-0 left-0 z-0">
       <div className="absolute w-full h-full" aria-hidden={isFading}>
         <TileMediaLayer
           key={`back-${backSlot.url}`}

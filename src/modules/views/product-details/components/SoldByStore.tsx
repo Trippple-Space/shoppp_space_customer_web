@@ -10,19 +10,19 @@ interface SoldByStoreProps {
 const SoldByStore = ({ product, storeUrl, variant }: SoldByStoreProps) => {
   if (variant === 'desktop-hidden') {
     return (
-      <div className="l:flex flex-col gap-12 border-b border-#00000014 mt--12 hidden">
-        <div className="flex a-items-center py-16 gap-12">
-          <div className="bg-black flex a-items-center j-content-center radius-999 color-white py-10 px-14 h-43 w-43">
+      <div className="lg:flex flex-col gap-[12px] border-b border-[#00000014] -mt-[12px] hidden">
+        <div className="flex items-center py-[16px] gap-[12px]">
+          <div className="bg-black flex items-center justify-center rounded-[999px] text-white py-[10px] px-[14px] h-[43px] w-[43px]">
             {product.store.name[0]}
           </div>
-          <div className="flex flex-col gap-2">
-            <p className="text-16 weight-500 line-height-24">
+          <div className="flex flex-col gap-[2px]">
+            <p className="text-[16px] font-medium leading-[24px]">
               Sold by {product.store.name}
             </p>
             <Link
               href={storeUrl}
               target="_blank"
-              className="color-#00000099 text-14 underline line-height-22 w-fit"
+              className="text-[#00000099] text-[14px] underline leading-[22px] w-fit"
             >
               Visit store home
             </Link>
@@ -33,19 +33,19 @@ const SoldByStore = ({ product, storeUrl, variant }: SoldByStoreProps) => {
   }
 
   return (
-    <div className="flex flex-col gap-12 border-b border-#00000014 mt--12 l:hidden">
-      <div className="flex a-items-center py-16 gap-12">
-        <div className="bg-black flex a-items-center j-content-center radius-999 color-white py-10 px-14 h-43 w-43">
+    <div className="flex flex-col gap-[12px] border-b border-[#00000014] -mt-[12px] lg:hidden">
+      <div className="flex items-center py-[16px] gap-[12px]">
+        <div className="bg-black flex items-center justify-center rounded-[999px] text-white py-[10px] px-[14px] h-[43px] w-[43px]">
           {product.store.name[0]}
         </div>
-        <div className="flex flex-col gap-2">
-          <p className="text-16 weight-500 line-height-24">
+        <div className="flex flex-col gap-[2px]">
+          <p className="text-[16px] font-medium leading-[24px]">
             Sold by {product.store.name}
           </p>
           <Link
             href={storeUrl}
             target="_blank"
-            className="color-#00000099 text-14 line-height-22 w-fit underline"
+            className="text-[#00000099] text-[14px] leading-[22px] w-fit underline"
           >
             Visit store home
           </Link>

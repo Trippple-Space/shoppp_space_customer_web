@@ -75,22 +75,22 @@ const ProductInfoLeftColumn = ({
   setShowFullDescription,
 }: ProductInfoLeftColumnProps) => {
   return (
-    <div className="l:w-40p flex flex-col gap-12">
-      <div className="flex flex-col gap-12 border-b  border-#00000014 pb-15">
-        <p className="weight-500 text-20">{product.name}</p>
+    <div className="lg:w-[40%] flex flex-col gap-[12px]">
+      <div className="flex flex-col gap-[12px] border-b  border-[#00000014] pb-[15px]">
+        <p className="font-medium text-[20px]">{product.name}</p>
       </div>
-      <div className="flex flex-col gap-16 border-b border-#00000014 pb-15">
-        <div className='flex flex-col gap-8'>
-          <p className="weight-400 md:text-32 text-28">
+      <div className="flex flex-col gap-[16px] border-b border-[#00000014] pb-[15px]">
+        <div className='flex flex-col gap-[8px]'>
+          <p className="font-normal md:text-[32px] text-[28px]">
             {formatNumberAsPrice(variantDisplayPrices.displayPrice)}
           </p>
           {variantDisplayPrices.hasSlash && (
-            <div className="flex flex-wrap gap-8 a-items-center">
+            <div className="flex flex-wrap gap-[8px] items-center">
               {getStrikethroughAmounts(variantDisplayPrices).map(
                 (amount, idx) => (
                   <p
                     key={idx}
-                    className="weight-400 text-16 color-#00000099 line-through"
+                    className="font-normal text-[16px] text-[#00000099] line-through"
                   >
                     {formatNumberAsPrice(amount)}
                   </p>
@@ -99,9 +99,9 @@ const ProductInfoLeftColumn = ({
             </div>
           )}
         </div>
-        <div className="flex flex-col l:flex-row l:a-items-center l:j-content-between gap-12 w-100p">
-          <div className="flex a-items-center gap-12">
-            <div className="flex gap-8 a-items-center">
+        <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-[12px] w-full">
+          <div className="flex items-center gap-[12px]">
+            <div className="flex gap-[8px] items-center">
               <Rating
                 style={{
                   maxWidth: 130,
@@ -117,14 +117,14 @@ const ProductInfoLeftColumn = ({
                 }}
                 readOnly
               />
-              <span className="weight-500 text-14">
+              <span className="font-medium text-[14px]">
                 {displayReviewStat.averageRating.toFixed(1)}
               </span>
             </div>
             <span className="color-" style={{ color: '#D9D9D9B2' }}>
               |
             </span>
-            <div className="color-#000000B2 text-12 flex a-items-center gap-5">
+            <div className="text-[#000000B2] text-[12px] flex items-center gap-[5px]">
               <MiniReview
                 id={selectedVariant?.id ?? ''}
                 isOpen={isOpen}
@@ -140,7 +140,7 @@ const ProductInfoLeftColumn = ({
 
           <div className="flex">
             <span
-              className="color-#1677FF text-12 border-b cursor-pointer"
+              className="text-[#1677FF] text-[12px] border-b cursor-pointer"
               onClick={() => {
                 isAuthenticated
                   ? setIsReviewModalOpen(true)
@@ -170,57 +170,54 @@ const ProductInfoLeftColumn = ({
         onEditConfiguration={() => setIsEditingConfiguration(true)}
         selectedVariant={selectedVariant}
         addToCartSection={addToCartSection}
-        productId={product?.id}
-        productName={product?.name}
-        fitSizeChart={product?.fitSizeChart}
       />
 
       <SoldByStore product={product} storeUrl={storeUrl} variant="mobile" />
 
-      <div className="flex flex-col gap-12 border-b  border-#00000014 pb-15 pt-15">
-        <p className="text-16 ">{product.shortDescription}</p>
+      <div className="flex flex-col gap-[12px] border-b  border-[#00000014] pb-[15px] pt-[15px]">
+        <p className="text-[16px] ">{product.shortDescription}</p>
       </div>
-      <div className="flex flex-col gap-30 border-b  border-#00000014 pb-15 pt-15">
-        <div className="flex gap-12">
-          <PiTruck className="w-32 h-32" />
-          <div className="flex flex-col gap-2">
-            <p className="weight-500 text-16">Delivery Within Lagos</p>
-            <p className="text-14 color-#00000099">
+      <div className="flex flex-col gap-[30px] border-b  border-[#00000014] pb-[15px] pt-[15px]">
+        <div className="flex gap-[12px]">
+          <PiTruck className="w-[32px] h-[32px]" />
+          <div className="flex flex-col gap-[2px]">
+            <p className="font-medium text-[16px]">Delivery Within Lagos</p>
+            <p className="text-[14px] text-[#00000099]">
               Receive your product within 24 -72 hours after payment
               confirmation.
             </p>
           </div>
         </div>
-        <div className="flex gap-12 a-items-center relative">
+        <div className="flex gap-[12px] items-center relative">
           <div
-            className="flex gap-12 a-items-center"
+            className="flex gap-[12px] items-center"
             style={{ filter: 'blur(1px)' }}
           >
-            <PiGlobeHemisphereEast className="w-32 h-32" />
-            <div className="flex flex-col gap-2">
-              <p className="weight-500 text-16">Delivery Outside Lagos</p>
-              <p className="text-14 color-#00000099">
+            <PiGlobeHemisphereEast className="w-[32px] h-[32px]" />
+            <div className="flex flex-col gap-[2px]">
+              <p className="font-medium text-[16px]">Delivery Outside Lagos</p>
+              <p className="text-[14px] text-[#00000099]">
                 Receive your product within 1-3 days after payment
                 confirmation.
               </p>
             </div>
           </div>
 
-          <button className="absolute border-none r-0 text-#D4280C bg-#FFDBD6 py-4 px-12 radius-4">
+          <button className="absolute border-none right-0 text-[#D4280C] bg-[#FFDBD6] py-[4px] px-[12px] rounded-[4px]">
             Coming soon
           </button>
         </div>
       </div>
 
-      <div className="flex flex-col gap-12 border-b  border-#00000014 pb-15 pt-15">
-        <p className="weight-500 text-16">Product Description</p>
+      <div className="flex flex-col gap-[12px] border-b  border-[#00000014] pb-[15px] pt-[15px]">
+        <p className="font-medium text-[16px]">Product Description</p>
         <p style={{ whiteSpace: 'pre-line' }}>
           {showLongDescElipsis(product.longDescription)}
           {descriptionLength > maxDisplayDescLength ? (
             <span onClick={() => setShowFullDescription((prev) => !prev)}>
               {!showFullDescription && '...'}
               <span
-                className="color-#1677FF border-b cursor-pointer"
+                className="text-[#1677FF] border-b cursor-pointer"
                 style={{ fontStyle: 'italic' }}
               >
                 {' '}
@@ -232,37 +229,37 @@ const ProductInfoLeftColumn = ({
           )}
         </p>
       </div>
-      <div className="flex flex-col gap-12  border-b  border-#00000014 pb-30 pt-15">
-        <p className="weight-500 text-16">Specifications</p>
+      <div className="flex flex-col gap-[12px]  border-b  border-[#00000014] pb-[30px] pt-[15px]">
+        <p className="font-medium text-[16px]">Specifications</p>
         <div>
           <div
-            className="w-full  flex a-items-center"
+            className="w-full  flex items-center"
             style={{ border: '0.5px solid #00000014' }}
           >
-            <div className="w-40p py-10 text-14 px-14 bg-#F5F5F5">
+            <div className="w-[40%] py-[10px] text-[14px] px-[14px] bg-[#F5F5F5]">
               Type
             </div>
-            <div className="w-60p pl-10 capitalize">{product.type}</div>
+            <div className="w-[60%] pl-[10px] capitalize">{product.type}</div>
           </div>
           <div
-            className="w-full  flex a-items-center"
+            className="w-full  flex items-center"
             style={{ border: '0.5px solid #00000014' }}
           >
-            <div className="w-40p py-10 mt-2 text-14 px-14 bg-#F5F5F5">
+            <div className="w-[40%] py-[10px] mt-[2px] text-[14px] px-[14px] bg-[#F5F5F5]">
               Material
             </div>
-            <div className="w-60p pl-10 capitalize">
+            <div className="w-[60%] pl-[10px] capitalize">
               {product?.meta?.material || ''}
             </div>
           </div>
           <div
-            className="w-full flex a-items-center"
+            className="w-full flex items-center"
             style={{ border: '0.5px solid #00000014' }}
           >
-            <div className="w-40p py-10 mt-2 text-14 px-14 bg-#F5F5F5">
+            <div className="w-[40%] py-[10px] mt-[2px] text-[14px] px-[14px] bg-[#F5F5F5]">
               Brand name
             </div>
-            <div className="w-60p pl-10 capitalize">
+            <div className="w-[60%] pl-[10px] capitalize">
               {product?.meta?.origin || ''}
             </div>
           </div>

@@ -45,11 +45,11 @@ const SignUpDetails = ({
   }, [formikInitial]);
   return (
     <div className="w-full">
-      <div className="font-inter mb-30">
-        <h3 className="text-center text-20 weight-500 mb-10 text-grey-900">
-          Welcome to Asoebi Africa
+      <div className="font-inter mb-[30px]">
+        <h3 className="text-center text-[20px] font-medium mb-[10px] text-[#1F1B17]">
+          Welcome to Shoppp Space
         </h3>
-        <p className="text-center text-14 text-grey-700">
+        <p className="text-center text-[14px] text-[#6B6662]">
           Enter your details to start a stress-free shopping.
         </p>
       </div>
@@ -63,7 +63,7 @@ const SignUpDetails = ({
           handleChange={formikInitial.handleChange}
           handleBlur={formikInitial.handleBlur}
           inputClass={cx({
-            'border-red':
+            'border-[#DE3838]':
               formikInitial.touched.fullname && formikInitial.errors.fullname,
           })}
           after={
@@ -84,28 +84,28 @@ const SignUpDetails = ({
           id="email"
           name="email"
           type="email"
-          className="l:mt-30 mt-18"
+          className="lg:mt-[30px] mt-[18px]"
           placeholder="your@email.com"
           handleChange={formikInitial.handleChange}
           handleBlur={formikInitial.handleBlur}
           inputClass={cx('', {
-            'border-red':
+            'border-[#DE3838]':
               formikInitial.touched.email && formikInitial.errors.email,
           })}
           value={formikInitial.values.email}
           after={
             <div
               className={cx(
-                'notice text-12 h-0 @one:flex gap-5 j-content-end w-full mt-12 text-danger',
+                'notice text-[12px] h-0 flex gap-[5px] justify-end w-full mt-[12px] text-danger',
                 {
-                  'hidden!': !(
+                  '!hidden': !(
                     formikInitial.touched.email && formikInitial.errors.email
                   ),
                 }
               )}
             >
-              <Icon name="alert-circle" className="w-14 a-self-center" />
-              <span className="a-self-center">
+              <Icon name="alert-circle" className="w-[14px] self-center" />
+              <span className="self-center">
                 {formikInitial.errors.email}
               </span>
             </div>
@@ -117,7 +117,7 @@ const SignUpDetails = ({
           }}
         />
         <button
-          className="btn text-center bg-green weight-500 text-16 l:btn-lg btn-lg font-inter mt-30 text-14 cursor-pointer   hover:bg-darkgreen g|transition:0.5s disabled:bg-grey"
+          className="btn text-center bg-brand font-medium text-[16px] lg:btn-lg btn-lg font-inter mt-[30px] text-[14px] cursor-pointer   hover:bg-brand-hover transition-all duration-500 disabled:bg-[#676767]"
           onClick={() => {
             formikInitial.handleSubmit();
           }}

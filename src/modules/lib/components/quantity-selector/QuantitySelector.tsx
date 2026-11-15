@@ -22,26 +22,26 @@ const QuantitySelector: FC<QuantitySelectorProps> = ({
   const isLocked = disabled || busy
 
   return (
-    <div className='relative mb-10'>
-      <div className='bg-#FACE33 text-black text-10 border border-rgba(245,245,245,0.9) weight-500 font-oblique w-fit px-10 py-3 radius-5 absolute s:l-18 l-20 s:b--20 b--18'>
+    <div className='relative mb-[10px]'>
+      <div className='bg-[#FACE33] text-black text-[10px] border border-rgba(245,245,245,0.9) font-medium font-oblique w-fit px-[10px] py-[3px] rounded-[5px] absolute sm:left-[18px] left-[20px] sm:-bottom-[20px] -bottom-[18px]'>
         {displayStockUnit(cartItem.variant.stockUnit)}{cartItem.quantity > 1 && "s"}
       </div>
-      <div className='text-black bg-rgba(245,245,245,0.9) flex a-items-center relative w-fit s:p-4 p-3 gap-10 radius-999'>
+      <div className='text-black bg-rgba(245,245,245,0.9) flex items-center relative w-fit sm:p-[4px] p-[3px] gap-[10px] rounded-[999px]'>
         <button
           onClick={() => { if (!isLocked) decrement() }}
           disabled={isLocked}
-          className='bg-#FACE33 active:bg-#e8b915! border-none shadow-0-4-8-0-#00000033 hover:shadow-0-5-8-0-#00000033 hover:scale-1.03 g|transition:0.5s g|will-change:transform focus:outline-none pointer s:p-8 p-6 flex a-items-center j-items-center gap-10 round disabled:opacity-60 disabled:cursor-not-allowed'
+          className='bg-[#FACE33] active:!bg-[#e8b915] border-none shadow-0-4-8-0-#00000033 hover:shadow-0-5-8-0-#00000033 hover:scale-1.03 transition-all duration-500 will-change-transform focus:outline-none cursor-pointer sm:p-[8px] p-[6px] flex items-center justify-items-center gap-[10px] rounded-full disabled:opacity-60 disabled:cursor-not-allowed'
           data-action='minus'
           type='button'
         >
           {cartItem?.quantity ===
             cartItem?.variant?.minPurchaseQuantity ? (
-            <PiTrashSimple className='s:w-24 w-22 s:h-24 h-22' />
+            <PiTrashSimple className='sm:w-[24px] w-[22px] sm:h-[24px] h-[22px]' />
           ) : (
-            <PiMinus className='s:w-24 w-22 s:h-24 h-22' />
+            <PiMinus className='sm:w-[24px] w-[22px] sm:h-[24px] h-[22px]' />
           )}
         </button>
-        <p className='w-20 s:w-24 inline-flex a-items-center j-content-center text-center weight-500 bg-transparent s:text-18 text-16 @lo:border-none h-full focus:outline-none no-arrows'>
+        <p className='w-[20px] sm:w-[24px] inline-flex items-center justify-center text-center font-medium bg-transparent sm:text-[18px] text-[16px] border-none h-full focus:outline-none no-arrows'>
           {busy ? (
             <SpinLoader size={16} color="#111111" trackColor="rgba(0,0,0,0.2)" thickness={3} />
           ) : (
@@ -52,11 +52,11 @@ const QuantitySelector: FC<QuantitySelectorProps> = ({
         <button
           onClick={() => { if (!isLocked) increment() }}
           disabled={isLocked}
-          className='bg-#FACE33 active:bg-#e8b915! border-none shadow-0-4-8-0-#00000033 hover:shadow-0-5-8-0-#00000033 hover:scale-1.03 g|transition:0.5s g|will-change:transform focus:outline-none pointer s:p-8 p-6 flex a-items-center j-items-center gap-10 round disabled:opacity-60 disabled:cursor-not-allowed'
+          className='bg-[#FACE33] active:!bg-[#e8b915] border-none shadow-0-4-8-0-#00000033 hover:shadow-0-5-8-0-#00000033 hover:scale-1.03 transition-all duration-500 will-change-transform focus:outline-none cursor-pointer sm:p-[8px] p-[6px] flex items-center justify-items-center gap-[10px] rounded-full disabled:opacity-60 disabled:cursor-not-allowed'
           data-action='add'
           type='button'
         >
-          <PiPlus className='s:w-24 w-22 s:h-24 h-22' />
+          <PiPlus className='sm:w-[24px] w-[22px] sm:h-[24px] h-[22px]' />
         </button>
       </div>
     </div>

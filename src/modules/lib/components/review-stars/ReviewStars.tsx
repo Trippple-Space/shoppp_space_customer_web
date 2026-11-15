@@ -33,8 +33,8 @@ const ReviewStars = ({rating, classNames}: {rating: number, classNames?: string}
 const HalfStar = ({classNames}: {classNames?: string}) => {
     return (
         <div className={cx('relative w-full', classNames)}>
-            <BsStarFill color='lightgrey' className='absolute t-0 l-0 h-full' />
-            <FaStarHalf color='' className='absolute t-0 l-0 h-full' />
+            <BsStarFill color='lightgrey' className='absolute top-0 left-0 h-full' />
+            <FaStarHalf color='' className='absolute top-0 left-0 h-full' />
         </div>
     )
 }

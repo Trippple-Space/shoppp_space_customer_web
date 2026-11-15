@@ -20,17 +20,17 @@ const ProductDetailsHeader = ({
   onSave,
 }: ProductDetailsHeaderProps) => {
   return (
-    <div className="flex a-items-center j-content-between gap-10">
-      <div className="flex a-items-center gap-5 min-w-0 flex-grow-1 overflow-hidden">
-        <PiStorefront className="flex-shrink-0 w-fit color-#00000066 w-15 h-15" />
+    <div className="flex items-center justify-between gap-[10px]">
+      <div className="flex items-center gap-[5px] min-w-0 grow overflow-hidden">
+        <PiStorefront className="shrink-0 w-fit text-[#00000066] w-[15px] h-[15px]" />
         <div
-          className="grid min-w-0 flex-grow-1 gap-5 a-items-center overflow-hidden"
+          className="grid min-w-0 grow gap-[5px] items-center overflow-hidden"
           style={{ gridTemplateColumns: 'fit-content(58%) minmax(0, 1fr)' }}
         >
           <Link
             href={storeUrl}
             target="_blank"
-            className="text-14 color-#00000066 min-w-0 overflow-hidden white-space-nowrap text-ellipsis block"
+            className="text-[14px] text-[#00000066] min-w-0 overflow-hidden white-space-nowrap text-ellipsis block"
             title={product?.store?.name}
           >
             {product?.store?.name} /
@@ -44,24 +44,24 @@ const ProductDetailsHeader = ({
         </div>
       </div>
 
-      <div className="flex gap-16 a-items-center flex-shrink-0">
+      <div className="flex gap-[16px] items-center shrink-0">
         <p
-          className="cursor-pointer flex a-items-center gap-8 text-14 weight-400 color-#00000099"
+          className="cursor-pointer flex items-center gap-[8px] text-[14px] font-normal text-[#00000099]"
           onClick={onShare}
         >
-          <RxShare2 className="shadow w-20 h-20" />
-          <span className="border-b hidden l:block">Share</span>
+          <RxShare2 className="shadow w-[20px] h-[20px]" />
+          <span className="border-b hidden lg:block">Share</span>
         </p>
         <p
-          className="cursor-pointer flex a-items-center gap-8 text-15 weight-400 color-#00000099"
+          className="cursor-pointer flex items-center gap-[8px] text-[15px] font-normal text-[#00000099]"
           onClick={onSave}
         >
           {isSaved ? (
-            <AiFillHeart className="w-20 h-20" />
+            <AiFillHeart className="w-[20px] h-[20px]" />
           ) : (
-            <AiOutlineHeart className="w-20 h-20" />
+            <AiOutlineHeart className="w-[20px] h-[20px]" />
           )}
-          <span className="border-b hidden l:block">Save</span>
+          <span className="border-b hidden lg:block">Save</span>
         </p>
       </div>
     </div>

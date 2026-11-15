@@ -43,21 +43,21 @@ const ProductImageGallery = ({
   onResetToDefault,
 }: ProductImageGalleryProps) => {
   return (
-    <div className="flex flex-col l:flex-row a-items-start j-content-between mt-20 gap-6 l:g|max-height:480px relative">
+    <div className="flex flex-col lg:flex-row items-start justify-between mt-[20px] gap-[6px] lg:[max-height:480px] relative">
       {allImages.length > 4 && (
-        <div className="hidden l:block absolute r-0 b-0 p-20 z-2 cursor-pointer">
+        <div className="hidden lg:block absolute right-0 bottom-0 p-[20px] z-[2px] cursor-pointer">
           <div
-            className="bg-white flex gap-8 radius-8  a-items-center border px-16 py-10"
+            className="bg-white flex gap-[8px] rounded-[8px]  items-center border px-[16px] py-[10px]"
             onClick={onShowAllPhotos}
           >
             <LuGrid2X2 className="w-fit flex" />
-            <p className="text-14 weight-500">Show all photos</p>
+            <p className="text-[14px] font-medium">Show all photos</p>
           </div>
         </div>
       )}
-      <div className="w-full h-270 md:h-420 sm:h-350 relative">
+      <div className="w-full h-[270px] md:h-[420px] sm:h-[350px] relative">
         {isOutOfStock && (
-          <div className="absolute w-100p h-100p text-white flex j-content-center a-items-center z-1 l:text-22 radius-6">
+          <div className="absolute w-full h-full text-white flex justify-center items-center z-[1px] lg:text-[22px] rounded-[6px]">
             Out of stock
           </div>
         )}
@@ -73,12 +73,12 @@ const ProductImageGallery = ({
             aria-label="Open gallery"
           >
             <div
-              className={`absolute inset-0 bg-black hover:bg-black opacity-0 hover:opacity-20 g|transition-property:opacity g|transition-duration:0.2s z-1 radius-8 l:radius-t-l-16 l:radius-b-l-16 l:radius-b-r-0 l:radius-t-r-0`}
+              className={`absolute inset-0 bg-black hover:bg-black opacity-0 hover:opacity-20 [transition-property:opacity] duration-200 z-[1px] rounded-[8px] lg:rounded-tl-[16px] lg:rounded-bl-[16px] lg:rounded-br-[0px] lg:rounded-tr-[0px]`}
             ></div>
             {mediaType === 'image' ? (
               <Image
                 src={selectedImage ?? ''}
-                className={`flex-grow-1 h-full radius-8 l:radius-t-l-16 l:radius-b-l-16 l:radius-b-r-0 l:radius-t-r-0 w-full h-full a-self-center object-fit-cover ${isOutOfStock && 'out-of-stock'}`}
+                className={`grow h-full rounded-[8px] lg:rounded-tl-[16px] lg:rounded-bl-[16px] lg:rounded-br-[0px] lg:rounded-tr-[0px] w-full h-full self-center object-fit-cover ${isOutOfStock && 'out-of-stock'}`}
                 alt={''}
                 ref={imgRef}
                 width={10000}
@@ -86,7 +86,7 @@ const ProductImageGallery = ({
               />
             ) : (
               <VideoSrc
-                className={`flex-grow-1 h-full radius-8 l:radius-t-l-16 l:radius-b-l-16 l:radius-b-r-0 l:radius-t-r-0   w-full h-full a-self-center object-fit-cover ${isOutOfStock && 'out-of-stock'}`}
+                className={`grow h-full rounded-[8px] lg:rounded-tl-[16px] lg:rounded-bl-[16px] lg:rounded-br-[0px] lg:rounded-tr-[0px]   w-full h-full self-center object-fit-cover ${isOutOfStock && 'out-of-stock'}`}
                 src={selectedImage ?? ''}
                 hasLoader={true}
               />
@@ -96,7 +96,7 @@ const ProductImageGallery = ({
       </div>
 
       <div
-        className="w-100p flex l:grid grid-2-cols-1fr l:grid-2-row-auto gap-6 no-scrollbar l:overflow-visible overflow-auto"
+        className="w-full flex lg:grid grid-cols-2 lg:grid-2-row-auto gap-[6px] no-scrollbar lg:overflow-visible overflow-auto"
         style={{ width: '100%' }}
       >
         {(uniqueVariantsFromProductImages?.length ?? 0) > 0 && (
@@ -129,16 +129,16 @@ const ProductImageGallery = ({
                     filters: buildFiltersFromVariant(vari),
                   });
                 }}
-                className={`l:h-207 ${vari?.status === 'OUT_OF_STOCK' && 'out-of-stock'} relative ${idx <= 3 ? 'block' : 'l:hidden block'}`}
+                className={`lg:h-[207px] ${vari?.status === 'OUT_OF_STOCK' && 'out-of-stock'} relative ${idx <= 3 ? 'block' : 'lg:hidden block'}`}
               >
                 {mediaItem?.type === 'image' ? (
                   <Image
                     src={mediaItem?.url ?? ''}
                     alt="product-image"
                     className={cx(
-                      'object-fit w-50 h-50 radius-4 l:w-full l:h-full pointer l:radius-t-l-0 l:radius-b-l-0  l:radius-t-r-0 l:radius-b-r-0',
+                      'object-fit w-[50px] h-[50px] rounded-[4px] lg:w-full lg:h-full cursor-pointer lg:rounded-tl-[0px] lg:rounded-bl-[0px]  lg:rounded-tr-[0px] lg:rounded-br-[0px]',
                       {
-                        'border border-green border-2':
+                        'border border-brand border-[2px]':
                           Boolean(
                             getMediaDedupeKey(mediaItem) &&
                             selectedVariant?.media?.some(
@@ -147,8 +147,8 @@ const ProductImageGallery = ({
                                 getMediaDedupeKey(mediaItem)
                             )
                           ),
-                        'l:radius-t-r-16': idx === 1,
-                        'l:radius-b-r-16': idx === 3,
+                        'lg:rounded-tr-[16px]': idx === 1,
+                        'lg:rounded-br-[16px]': idx === 3,
                       }
                     )}
                     width={10000}
@@ -157,9 +157,9 @@ const ProductImageGallery = ({
                 ) : (
                   <VideoSrc
                     className={cx(
-                      'object-fit w-50 h-50 radius-4 l:w-full l:h-full pointer l:radius-t-l-0 l:radius-b-l-0  l:radius-t-r-0 l:radius-b-r-0',
+                      'object-fit w-[50px] h-[50px] rounded-[4px] lg:w-full lg:h-full cursor-pointer lg:rounded-tl-[0px] lg:rounded-bl-[0px]  lg:rounded-tr-[0px] lg:rounded-br-[0px]',
                       {
-                        'border border-green border-2':
+                        'border border-brand border-[2px]':
                           Boolean(
                             getMediaDedupeKey(mediaItem) &&
                             selectedVariant?.media?.some(
@@ -168,8 +168,8 @@ const ProductImageGallery = ({
                                 getMediaDedupeKey(mediaItem)
                             )
                           ),
-                        'l:radius-t-r-16': idx === 1,
-                        'l:radius-b-r-16': idx === 3,
+                        'lg:rounded-tr-[16px]': idx === 1,
+                        'lg:rounded-br-[16px]': idx === 3,
                       }
                     )}
                     src={mediaItem?.url ?? ''}

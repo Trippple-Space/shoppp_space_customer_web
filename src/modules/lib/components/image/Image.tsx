@@ -70,7 +70,7 @@ const Image = React.forwardRef<HTMLImageElement, IImageProps>(
       <>
         {!loaded && hasLoader && (
           <div
-            className={`absolute g|inset:0px z-1 pulsing-multi-color-bg ${pulseClassName}`}
+            className={`absolute inset-0 z-[1px] pulsing-multi-color-bg ${pulseClassName}`}
           />
         )}
 

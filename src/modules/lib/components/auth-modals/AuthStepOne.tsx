@@ -38,46 +38,46 @@ export default function StepOne({ email, setEmail, onContinue, isLoading }: Step
   };
 
   return (
-    <div className="flex flex-col gap-16 sm:gap-26 weight-400">
+    <div className="flex flex-col gap-[16px] sm:gap-[26px] font-normal">
       <div>
-        <h2 className="text-30 sm:text-36 weight-600 text-black mb-10">
+        <h2 className="text-[30px] sm:text-[36px] font-semibold text-black mb-[10px]">
           NICE CHOICE{' '}
           <Image
-            className="w-50 sm:w-64 h-60 sm:h-74 mb--10"
+            className="w-[50px] sm:w-[64px] h-[60px] sm:h-[74px] -mb-[10px]"
             src={'thumbs-up.svg'}
             alt="thumbs-up"
             type="icon"
           />
         </h2>
-        <p className="text-18 sm:text-24 weight-400 text-black mb-10">
+        <p className="text-[18px] sm:text-[24px] font-normal text-black mb-[10px]">
           JUST A SEC — Let’s get you in
         </p>
       </div>
 
       <div className="w-full relative" onClick={googleOauthInitializer}>
-        <div className="flex p-14 pr-40 w-full a-items-center j-content-center gap-5 radius-14 border border-#ddd cursor-pointer hover:bg-whitesmoke g|transition-property:all g|transition-duration:0.2s">
-          <FcGoogle className="w-24 h-24" />
-          <span className="weight-400 text-14">Continue with Google</span>
-          <HiOutlineArrowNarrowRight className="w-24 h-24 text-#374957 absolute r-26 t-16" />
+        <div className="flex p-[14px] pr-[40px] w-full items-center justify-center gap-[5px] rounded-[14px] border border-[#ddd] cursor-pointer hover:bg-[#F5F5F5] transition-all duration-200">
+          <FcGoogle className="w-[24px] h-[24px]" />
+          <span className="font-normal text-[14px]">Continue with Google</span>
+          <HiOutlineArrowNarrowRight className="w-[24px] h-[24px] text-[#374957] absolute right-[26px] top-[16px]" />
         </div>
       </div>
 
-      <div className="flex a-items-center w-full my-10">
-        <div className="grow w-full h-1 bg-#ddd" />
+      <div className="flex items-center w-full my-[10px]">
+        <div className="grow w-full h-[1px] bg-[#ddd]" />
         <span
-          className="px-4 text-14 weight-400 text-black w-fit"
+          className="px-[4px] text-[14px] font-normal text-black w-fit"
           style={{ textWrap: 'nowrap' }}
         >
           Or login with email
         </span>
-        <div className="grow w-full h-1 bg-#ddd" />
+        <div className="grow w-full h-[1px] bg-[#ddd]" />
       </div>
 
       <div className="w-full">
-        <div className="border border-#ccc radius-14 pl-14 overflow-hidden flex a-items-center w-full">
-          <CiMail className="w-24 h-24 color-#B3B3B3" />
+        <div className="border border-[#ccc] rounded-[14px] pl-[14px] overflow-hidden flex items-center w-full">
+          <CiMail className="w-[24px] h-[24px] text-[#B3B3B3]" />
           <input
-            className="py-14 border-none outline-none grow w-full px-14"
+            className="py-[14px] border-none outline-none grow w-full px-[14px]"
             placeholder="Enter your email here"
             value={email}
             type="email"
@@ -89,23 +89,23 @@ export default function StepOne({ email, setEmail, onContinue, isLoading }: Step
           />
         </div>
 
-        {error && <p className="text-red text-12 mt-6">{error}</p>}
+        {error && <p className="text-[#DE3838] text-[12px] mt-[6px]">{error}</p>}
       </div>
 
       <button
         onClick={handleContinue}
         disabled={isLoading}
-        className="bg-green text-white p-12 l:py-15 radius-14 w-full border text-14 mt-10 hover:pointer font-inter hover:bg-darkgreen g|transition:0.5s disabled:bg-grey disabled:cursor-not-allowed weight-400 flex a-items-center j-content-center gap-5"
+        className="bg-brand text-white p-[12px] lg:py-[15px] rounded-[14px] w-full border text-[14px] mt-[10px] hover:cursor-pointer font-inter hover:bg-brand-hover transition-all duration-500 disabled:bg-[#676767] disabled:cursor-not-allowed font-normal flex items-center justify-center gap-[5px]"
       >
         Continue with Email
-        <HiOutlineArrowNarrowRight className="w-24 h-24 text-#374957" />
+        <HiOutlineArrowNarrowRight className="w-[24px] h-[24px] text-[#374957]" />
       </button>
 
-      <p className="text-14 text-black text-center">
+      <p className="text-[14px] text-black text-center">
         By continuing, you agree to our{' '}
         <Link
           href={paths.legal_document}
-          className="color-#0EA17F weight-600"
+          className="text-[#0EA17F] font-semibold"
           target="_blank"
         >
           Terms of Service
@@ -113,18 +113,18 @@ export default function StepOne({ email, setEmail, onContinue, isLoading }: Step
         and{' '}
         <Link
           href={paths.legal_document}
-          className="color-#0EA17F weight-600"
+          className="text-[#0EA17F] font-semibold"
           target="_blank"
         >
           Privacy Policy.
         </Link>
       </p>
 
-      <p className="text-14 text-black text-center">
+      <p className="text-[14px] text-black text-center">
         Don’t have an account?{' '}
         <Link
           href={paths.signup}
-          className="color-#0EA17F weight-600"
+          className="text-[#0EA17F] font-semibold"
           target="_blank"
         >
           Sign up

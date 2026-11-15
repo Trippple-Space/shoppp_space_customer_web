@@ -3,18 +3,21 @@ import type {
   ProductSizeChartResponse,
 } from '../types/product-size-chart';
 
-export const shouldShowProductSizeChart = (
-  fitSizeChart?: ProductFitSizeChart | null,
-): boolean => {
-  if (!fitSizeChart) return false;
-  if ('showSizeChart' in fitSizeChart)
-    return fitSizeChart.showSizeChart ?? false;
-  return fitSizeChart.available;
-};
-
 export const isFullProductSizeChart = (
-  fitSizeChart?: ProductFitSizeChart | null,
-): fitSizeChart is ProductSizeChartResponse =>
-  !!fitSizeChart &&
-  'rows' in fitSizeChart &&
-  Array.isArray(fitSizeChart.rows);
+  value: ProductFitSizeChart | null | undefined,
+): value is ProductSizeChartResponse =>
+  Boolean(
+    value &&
+      typeof value === 'object' &&
+      'available' in value &&
+      'sizeLabels' in value &&
+      'rows' in value,
+  );
+
+export const shouldShowProductSizeChart = (
+  value: ProductFitSizeChart | null | undefined,
+) => {
+  if (!value) return true;
+  if (value.showSizeChart === false) return false;
+  return !isFullProductSizeChart(value) || value.available;
+};

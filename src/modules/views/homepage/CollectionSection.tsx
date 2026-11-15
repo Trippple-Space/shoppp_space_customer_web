@@ -114,7 +114,7 @@ const CollectionSection = ({
 
   const { products, loading, query, updateHomePageFilter, setSearch, fetchingError, refetch } = useProducts(
     {
-      filters: { ...(isStoreBased ? {} : { type }), status: { In: "ACTIVE,OUT_OF_STOCK" }, channel: "ASOEBI_STORE" },
+      filters: { ...(isStoreBased ? {} : { type }), status: { In: "ACTIVE,OUT_OF_STOCK" }, channel: "LEGACY_MARKETPLACE_STORE" },
       order: { priorityScore: "DESC", createdAt: "DESC" },
       pagination: { page: 1, limit: productFetchLimit },
       allFilters: initialFiltersForCollection,
@@ -174,8 +174,8 @@ const CollectionSection = ({
   );
   const shimmerPerRow = Math.max(1, Math.ceil(shimmerCount / effectiveLayoutRows));
    const isCollectionEmpty = collection.productCount === 0 || showEmptyState;
-  const headingHasWeightClass = /\bweight-\S+/.test(headingClassName);
-  const subHeadingHasWeightClass = /\bweight-\S+/.test(subHeadingClassName);
+  const headingHasWeightClass = /\bfont-\S+/.test(headingClassName);
+  const subHeadingHasWeightClass = /\bfont-\S+/.test(subHeadingClassName);
 
    useEffect(() => {
      onCollectionEmptyStateChange?.(collection.id, isCollectionEmpty);
@@ -187,14 +187,14 @@ const CollectionSection = ({
   return (
     <section
       style={{ background: theme.bg }}
-      className={`radius-16 sm:p-24 p-20 flex flex-col md:gap-24 sm:gap-20 gap-24 w-full relative`}
+      className={`rounded-[16px] sm:p-[24px] p-[20px] flex flex-col md:gap-[24px] sm:gap-[20px] gap-[24px] w-full relative`}
     >
-      <div className="flex flex-row j-content-between a-items-center gap-24">
-        <div className='flex flex-col gap-2'>
+      <div className="flex flex-row justify-between items-center gap-[24px]">
+        <div className='flex flex-col gap-[2px]'>
           <h3
             className={cx(
-              "text-16 md:text-20 md:line-height-28 line-height-24 color-#000000E0",
-              !headingHasWeightClass && "weight-600",
+              "text-[16px] md:text-[20px] md:leading-[28px] leading-[24px] text-[#000000E0]",
+              !headingHasWeightClass && "font-semibold",
               headingClassName
             )}
           >
@@ -202,8 +202,8 @@ const CollectionSection = ({
           </h3>
           <p
             className={cx(
-              "color-#00000099 text-14",
-              !subHeadingHasWeightClass && "weight-400",
+              "text-[#00000099] text-[14px]",
+              !subHeadingHasWeightClass && "font-normal",
               subHeadingClassName
             )}
           >
@@ -216,10 +216,10 @@ const CollectionSection = ({
             onClick={() => {
               handleShowMore(collection.slug)
             }}
-            className="pointer"
+            className="cursor-pointer"
           >
-            <span style={{ background: theme.button, color: theme.text }} className='w-36 h-36 radius-999 flex flex-col a-items-center j-content-center'>
-              <LuArrowRight className='w-20 h-20' />
+            <span style={{ background: theme.button, color: theme.text }} className='w-[36px] h-[36px] rounded-[999px] flex flex-col items-center justify-center'>
+              <LuArrowRight className='w-[20px] h-[20px]' />
             </span>
 
           </p>
@@ -228,30 +228,30 @@ const CollectionSection = ({
       </div>
       {hasError ? (
         <div
-          className="flex flex-col a-items-center j-content-center gap-20 py-40 px-24 radius-12 border border-#E8E8E8 bg-#FAFAFA min-w-280 max-w-100p"
+          className="flex flex-col items-center justify-center gap-[20px] py-[40px] px-[24px] rounded-[12px] border border-[#E8E8E8] bg-[#FAFAFA] min-w-[280px] max-w-[100%]"
           role="alert"
           aria-live="polite"
         >
-          <span className="flex a-items-center j-content-center w-48 h-48 radius-999 bg-#FFF3F1 color-#D4280C">
-            <TbAlertCircle className="w-28 h-28" aria-hidden />
+          <span className="flex items-center justify-center w-[48px] h-[48px] rounded-[999px] bg-[#FFF3F1] text-[#D4280C]">
+            <TbAlertCircle className="w-[28px] h-[28px]" aria-hidden />
           </span>
-          <div className="flex flex-col a-items-center gap-8 text-center">
-            <h4 className="text-16 weight-600 color-#000000E0">
+          <div className="flex flex-col items-center gap-[8px] text-center">
+            <h4 className="text-[16px] font-semibold text-[#000000E0]">
               Couldn’t load products
             </h4>
-            <p className="text-14 weight-400 color-#00000099">
+            <p className="text-[14px] font-normal text-[#00000099]">
               Something went wrong loading this collection. Try again.
             </p>
           </div>
 
-          <Button onClick={() => refetch()} className="px-24 py-8 min-w-120 flex items-center justify-center gap-8">
-            <TbRefresh className="w-18 h-18" aria-hidden />
+          <Button onClick={() => refetch()} className="px-[24px] py-[8px] min-w-[120px] flex items-center justify-center gap-[8px]">
+            <TbRefresh className="w-[18px] h-[18px]" aria-hidden />
             Try again
           </Button>
         </div>
       ) : (
         <ProductTileGalleryProvider products={displayedProducts}>
-          <div className="flex flex-col gap-38 s:gap-40 md:gap-44">
+          <div className="flex flex-col gap-[38px] sm:gap-[40px] md:gap-[44px]">
           {(showShimmers ? Array.from({ length: effectiveLayoutRows }, (_, idx) => idx) : productRows.map((_, idx) => idx)).map((rowIndex) => {
             const rowProducts = showShimmers
               ? []
@@ -265,9 +265,9 @@ const CollectionSection = ({
                     className={`h-fit ${horizontalScroll
                       ? 'flex'
                       : shouldSpan
-                        ? 'grid xxlgrid-5-cols xl:grid-4-cols-1fr s:grid-3-cols-1fr grid-2-cols-1fr flex-wrap'
-                        : 'grid xxlgrid-3-cols-1fr grid-2-cols-1fr flex-wrap'} ${showShimmers ? (horizontalScroll ? 'w-fit' : 'w-100p') : showProducts ? (horizontalScroll ? 'w-fit' : 'w-100p') : showEmptyState ? 'w-100p a-items-center j-content-center' : ''
-                      } ${horizontalScroll ? 'whitespace-nowrap' : ''} gap-18 s:gap-20 md:gap-24`}
+                        ? 'grid xxlgrid-5-cols xl:grid-cols-4 sm:grid-cols-3 grid-cols-2 flex-wrap'
+                        : 'grid xxlgrid-3-cols-1fr grid-cols-2 flex-wrap'} ${showShimmers ? (horizontalScroll ? 'w-fit' : 'w-full') : showProducts ? (horizontalScroll ? 'w-fit' : 'w-full') : showEmptyState ? 'w-full items-center justify-center' : ''
+                      } ${horizontalScroll ? 'whitespace-nowrap' : ''} gap-[18px] sm:gap-[20px] md:gap-[24px]`}
                   >
                     {showShimmers
                       ? Array.from({ length: shimmerPerRow }, (_, i) => (
@@ -280,7 +280,7 @@ const CollectionSection = ({
                       : rowProducts.map((product, i) => (
                         <div
                           key={`${product.id}-${i}`}
-                          className={`${horizontalScroll ? "l:w-290 md:w-250 sm:w-220 w-150" : "min-w-0"} l:mt--20 mt--30`}
+                          className={`${horizontalScroll ? "lg:w-[290px] md:w-[250px] sm:w-[220px] w-[150px]" : "min-w-0"} lg:-mt-[20px] -mt-[30px]`}
                         >
                           <ProductTile
                             product={product}

@@ -24,54 +24,54 @@ const RecentViewModal: React.FC<ModalProps> = ({modalOpen, handleCloseModal, dat
   return (
     <div>
       <Modal isOpen={modalOpen} onClose={handleCloseModal}>
-       <div className='w-330 l:w-1000 py-5 l:py-20 scroll'>
-        <div className='flex space-between py-10 relative'>
-         <div className='w-5p l:w-3p py-5 border-2 border-b border-faint-grey'></div>
-         <div className='flex weight-500 w-50p l:w-17p space-between text-16 l:text-18 text-green'>
-            <p className='px-18 l:px-25 pt-10 pb-15 pointer border-3 border-b border-green'>Recently viewied</p>
+       <div className='w-[330px] lg:w-[1000px] py-[5px] lg:py-[20px] scroll'>
+        <div className='flex justify-between py-[10px] relative'>
+         <div className='w-[5%] lg:w-[3%] py-[5px] border-[2px] border-b border-[#DADADA]'></div>
+         <div className='flex font-medium w-1/2 lg:w-[17%] justify-between text-[16px] lg:text-[18px] text-brand'>
+            <p className='px-[18px] lg:px-[25px] pt-[10px] pb-[15px] cursor-pointer border-[3px] border-b border-brand'>Recently viewied</p>
          </div>
-         <div className='w-60p l:w-80p pt-5 pb-15 border-2 border-b border-faint-grey'></div>
-         <div className='absolute flex gap-15 t-15 l:t-10 r-10 l:r-40 pointer' onClick={handleCloseModal}>
-            <button className='bg-none border-none text-16 text-dimgrey'>Clear all</button>
-            <AiOutlineClose className='w-15 h-15 l:w-22 l:h-22' />
+         <div className='w-[60%] lg:w-[80%] pt-[5px] pb-[15px] border-[2px] border-b border-[#DADADA]'></div>
+         <div className='absolute flex gap-[15px] top-[15px] lg:top-[10px] right-[10px] lg:right-[40px] cursor-pointer' onClick={handleCloseModal}>
+            <button className='bg-transparent border-none text-[16px] text-[#333333]'>Clear all</button>
+            <AiOutlineClose className='w-[15px] h-[15px] lg:w-[22px] lg:h-[22px]' />
          </div>
         </div>
 
         {!data ? (
-          <div className='flex mx-auto my-auto h-70vh text-center flex items-center j-content-center'>
-          <p className='text-16'>You don’t have any recent orders yet</p>
+          <div className='flex mx-auto my-auto h-[70vh] text-center flex items-center justify-center'>
+          <p className='text-[16px]'>You don’t have any recent orders yet</p>
         </div>
         ) : (
-         <div className='px-10 l:px-40 pb-40'>
+         <div className='px-[10px] lg:px-[40px] pb-[40px]'>
           {[0,0,0].map((data: any) => (
-            <div className='l:flex space-between items-center py-20 border-b border-lighter-grey'>
-              <div className='flex w-100p l:w-50p gap-15 l:gap-30 items-center'>
-                <div className='w-115 h-115'>
+            <div className='lg:flex justify-between items-center py-[20px] border-b border-[#D9D9D9]'>
+              <div className='flex w-full lg:w-1/2 gap-[15px] lg:gap-[30px] items-center'>
+                <div className='w-[115px] h-[115px]'>
                 <Image
-                  className='w-fit h-100p radius-5 l:radius-10'
+                  className='w-fit h-full rounded-[5px] lg:rounded-[10px]'
                   src='order-product.png'
                   alt='product'
                   type='image'
                 />
                 </div>
-                <div className='line-height-27'>
-                  <h2 className='text-16 l:text-18 weight-400'>24 Karat Gold Plated Ring</h2>
-                  <h1 className='text-16 weight-400'>NGN 26,000</h1>
-                  <p className='text-12'>January 15th, 2023</p>
+                <div className='leading-[27px]'>
+                  <h2 className='text-[16px] lg:text-[18px] font-normal'>24 Karat Gold Plated Ring</h2>
+                  <h1 className='text-[16px] font-normal'>NGN 26,000</h1>
+                  <p className='text-[12px]'>January 15th, 2023</p>
 
                 </div>
               </div>
 
-              <div className='flex space-between w-100p l:w-30p'>
-                <div className='flex space-between w-100p'>
-                  <div className='flex w-50p items-center'>
-                    <Icon name='decr' className='w-25 h-25' />
-                    <input type="number" className='border-none w-55 text-16 text-center' placeholder='1' />
-                    <Icon name='incr' className='w-25 h-25' />
+              <div className='flex justify-between w-full lg:w-[30%]'>
+                <div className='flex justify-between w-full'>
+                  <div className='flex w-1/2 items-center'>
+                    <Icon name='decr' className='w-[25px] h-[25px]' />
+                    <input type="number" className='border-none w-[55px] text-[16px] text-center' placeholder='1' />
+                    <Icon name='incr' className='w-[25px] h-[25px]' />
                   </div>
 
-                  <div className='flex j-content-center w-50p p-15 text-15 l:text-20 text-black'>
-                    <select name="" id="" className='border-none text-15 l:text-17 text-black weight-500'>
+                  <div className='flex justify-center w-1/2 p-[15px] text-[15px] lg:text-[20px] text-black'>
+                    <select name="" id="" className='border-none text-[15px] lg:text-[17px] text-black font-medium'>
                       <option value="">Bundle</option>
                       <option value="">Bale</option>
 
@@ -80,8 +80,8 @@ const RecentViewModal: React.FC<ModalProps> = ({modalOpen, handleCloseModal, dat
                 </div>
               </div>
 
-              <div className='flex space-between gap-20 w-100p l:w-15p'>
-                <button className='w-100p border-none bg-green text-white text-15 py-10 px-20 radius-5 weight-400  hover:bg-darkgreen'>Add to cart</button>
+              <div className='flex justify-between gap-[20px] w-full lg:w-[15%]'>
+                <button className='w-full border-none bg-brand text-white text-[15px] py-[10px] px-[20px] rounded-[5px] font-normal  hover:bg-brand-hover'>Add to cart</button>
               </div>
           </div>
           ))}

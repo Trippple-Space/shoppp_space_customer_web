@@ -1,15 +1,9 @@
 import { DisplayProductConfigurations } from '@/modules/lib/components/product-detail-modal/productConfigurationsHelper';
-import { Product } from '@/modules/lib/utility/types/product.interface';
 import { ProductVariant } from '@/modules/lib/utility/types/product.interface';
 import { cx } from '@/modules/lib/utility/utility';
 import classNames from 'classnames';
-import { ReactNode, useState } from 'react';
-import ProductSizeChartModal from '../modals/ProductSizeChartModal';
+import { ReactNode } from 'react';
 import ColorSwatch from '@/modules/lib/components/color-swatch/ColorSwatch';
-import {
-  isFullProductSizeChart,
-  shouldShowProductSizeChart,
-} from '../utils/fit-size-chart';
 
 interface ProductVariationsPickerProps {
   layout: 'mobile' | 'desktop';
@@ -26,9 +20,6 @@ interface ProductVariationsPickerProps {
   onEditConfiguration: () => void;
   selectedVariant: ProductVariant | undefined;
   addToCartSection: ReactNode;
-  productId?: string;
-  productName?: string;
-  fitSizeChart?: Product['fitSizeChart'];
 }
 
 const ProductVariationsPicker = ({
@@ -46,48 +37,31 @@ const ProductVariationsPicker = ({
   onEditConfiguration,
   selectedVariant,
   addToCartSection,
-  productId,
-  productName,
-  fitSizeChart,
 }: ProductVariationsPickerProps) => {
   const isMobile = layout === 'mobile';
-  const [sizeChartOpen, setSizeChartOpen] = useState(false);
-  const showSizeChartLink = shouldShowProductSizeChart(fitSizeChart);
-  const embeddedChart = isFullProductSizeChart(fitSizeChart) ? fitSizeChart : null;
 
   const colorSwatchClass = isMobile
-    ? 'w-32 h-32 round border border-lightgray transition'
-    : 'w-36 min-w-36 h-36 flex round border border-lightgray transition';
+    ? 'w-[32px] h-[32px] rounded-full border border-lightgray transition'
+    : 'w-[36px] min-w-[36px] h-[36px] flex rounded-full border border-lightgray transition';
 
   const colorActiveClass = isMobile
-    ? 'border-3 border-#0B9378! border-solid'
-    : 'border-3 border-#0B9378! border-solid w-34 min-w-34 h-34 flex';
+    ? 'border-[3px] !border-[#0357EE] border-solid'
+    : 'border-[3px] !border-[#0357EE] border-solid w-[34px] min-w-[34px] h-[34px] flex';
 
   const optionButtonClass = isMobile
-    ? 'px-10 py-7 radius-6 border transition whitespace-nowrap text-12'
-    : 'px-15 py-8 radius-6 border transition text-12 whitespace-nowrap weight-400';
-
-  const sizeChartLink =
-    productId && showSizeChartLink ? (
-      <button
-        type="button"
-        onClick={() => setSizeChartOpen(true)}
-        className="text-12 weight-500 color-#0B9378 underline underline-offset-2 bg-transparent border-none pointer p-0"
-      >
-        View size chart
-      </button>
-    ) : null;
+    ? 'px-[10px] py-[7px] rounded-[6px] border transition whitespace-nowrap text-[12px]'
+    : 'px-[15px] py-[8px] rounded-[6px] border transition text-[12px] whitespace-nowrap font-normal';
 
   const variationsContent = (
     <>
       {allPropertiesWithSize?.color?.filter((v) => v.trim() !== '')
         ?.length > 0 && (
           <div>
-            <p className="text-left text-12 weight-400 color-#000000B2 mb-12">
+            <p className="text-left text-[12px] font-normal text-[#000000B2] mb-[12px]">
               Select color:
             </p>
             <div
-              className="flex gap-6 a-items-center no-scrollbar"
+              className="flex gap-[6px] items-center no-scrollbar"
               style={{ width: '100%', overflow: 'auto' }}
             >
               {allPropertiesWithSize.color?.map((color) => {
@@ -119,10 +93,10 @@ const ProductVariationsPicker = ({
 
         return (
           <div key={prop}>
-            <p className="text-left text-12 weight-400 color-#000000B2 mb-12">
+            <p className="text-left text-[12px] font-normal text-[#000000B2] mb-[12px]">
               Select {prop}:
             </p>
-            <div className="flex gap-10 flex-wrap">
+            <div className="flex gap-[10px] flex-wrap">
               {values.map((value) => {
                 const active = activeFilters[prop] === value;
                 const compatible = isOptionCompatible(prop, value);
@@ -136,12 +110,12 @@ const ProductVariationsPicker = ({
                     className={cx(
                       optionButtonClass,
                       active &&
-                      'bg-#DEFFF9! color-#0B9378! border-#0B9378 border-3 border-solid',
+                      '!bg-[#DEFFF9] !text-[#0357EE] border-[#0357EE] border-[3px] border-solid',
                       !active &&
                       compatible &&
-                      'bg-white border-grey-300 hover:border-black',
+                      'bg-white border-[#E4E1DF] hover:border-black',
                       !compatible &&
-                      'bg-grey-100 text-grey-400 border-grey-200 cursor-not-allowed'
+                      'bg-[#F7F6F5] text-[#C8C6C3] border-[#F5F3F1] cursor-not-allowed'
                     )}
                   >
                     {value}
@@ -167,25 +141,14 @@ const ProductVariationsPicker = ({
       )}
 
       {addToCartSection}
-
-      {productId && showSizeChartLink && (
-        <ProductSizeChartModal
-          isOpen={sizeChartOpen}
-          onClose={() => setSizeChartOpen(false)}
-          productId={productId}
-          productName={productName}
-          fitSizeChart={embeddedChart}
-        />
-      )}
     </>
   );
 
   if (isMobile) {
     return (
-      <div className="l:hidden flex flex-col gap-12 border-b  border-#00000014 pb-15">
-        <div className="flex a-items-center space-between gap-10 border-b border-#00000014 pb-15 pt-15">
-          <p className="weight-600">VARIATIONS</p>
-          {sizeChartLink}
+      <div className="lg:hidden flex flex-col gap-[12px] border-b  border-[#00000014] pb-[15px]">
+        <div className="flex items-center justify-between gap-[10px] border-b border-[#00000014] pb-[15px] pt-[15px]">
+          <p className="font-semibold">VARIATIONS</p>
         </div>
         {variationsContent}
       </div>
@@ -193,17 +156,16 @@ const ProductVariationsPicker = ({
   }
 
   return (
-    <div className="hidden l:block l:w-40p w-full">
+    <div className="hidden lg:block lg:w-[40%] w-full">
       <div
-        className="w-full flex flex-col gap-12 bg-white p-24 border radius-12 border-#00000014
+        className="w-full flex flex-col gap-[12px] bg-white p-[24px] border rounded-[12px] border-[#00000014]
             "
         style={{ boxShadow: '-4px -4px 8px 2px #EDFCF766' }}
       >
-        <div className="flex a-items-center space-between gap-10 border-b border-#00000014 pb-10">
-          <p className="weight-600">VARIATIONS</p>
-          {sizeChartLink}
+        <div className="flex items-center justify-between gap-[10px] border-b border-[#00000014] pb-[10px]">
+          <p className="font-semibold">VARIATIONS</p>
         </div>
-        <div className="flex flex-col gap-28">
+        <div className="flex flex-col gap-[28px]">
           {variationsContent}
         </div>
       </div>

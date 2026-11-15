@@ -9,22 +9,22 @@ const QuantitySelector2: FC<QuantitySelectorProps> = ({
   decrement
 }) => {
   return (
-    <div className='flex bg-grey-200 w-fit px-27 py-17 radius-30 gap-40 text-green'>
+    <div className='flex bg-[#F5F3F1] w-fit px-[27px] py-[17px] rounded-[30px] gap-[40px] text-brand'>
       <button
         onClick={() => decrement()}
-        className='text-18 bg-none border-none text-green weight-600'
+        className='text-[18px] bg-transparent border-none text-brand font-semibold'
       >
         -
       </button>
       <input
         type='number'
-        className='w-40 border-none bg-none text-center bold l:text-22 text-18 text-green outline-none no-arrows'
+        className='w-[40px] border-none bg-transparent text-center font-bold lg:text-[22px] text-[18px] text-brand outline-none no-arrows'
         value={cartItem.quantity}
         readOnly
       />
       <button
         onClick={() => increment()}
-        className='text-18 bg-none border-none text-green weight-600'
+        className='text-[18px] bg-transparent border-none text-brand font-semibold'
       >
         +
       </button>

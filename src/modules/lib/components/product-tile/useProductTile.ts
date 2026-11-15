@@ -90,12 +90,12 @@ export const useProductTile = ({
     const host = window.location.hostname;
     const slug = product.store?.slug;
 
-    if (host === "asoebi.africa") {
-      return `https://${slug}.asoebi.africa`;
+    if (host === "shoppp.space") {
+      return `https://${slug}.shoppp.space`;
     }
 
-    if (host === "staging.asoebi.africa") {
-      return `https://staging.asoebi.africa/${slug}`;
+    if (host === "staging.shoppp.space") {
+      return `https://staging.shoppp.space/${slug}`;
     }
 
     return `/${slug}`;

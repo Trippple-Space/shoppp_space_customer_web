@@ -151,11 +151,11 @@ const Collections = ({
 
   const containerClassName = cx(
     !isStoreBased
-      ? "w-100p"
+      ? "w-full"
       : hasAppWidth
-        ? "app-width max-w-1440 mx-auto"
+        ? "app-width max-w-[1440px] mx-auto"
         : "",
-    !allCollectionsEmpty && !isStoreBased && "md:mt-32 mt-24",
+    !allCollectionsEmpty && !isStoreBased && "md:mt-[32px] mt-[24px]",
     !allCollectionsEmpty && hasMargin,
     "flex flex-col"
   );
@@ -166,23 +166,23 @@ const Collections = ({
     return (
       <div className={containerClassName}>
         <div
-          className="flex flex-col items-center justify-center gap-20 py-48 px-24 rounded-16 bg-#FAFAFA"
+          className="flex flex-col items-center justify-center gap-[20px] py-[48px] px-[24px] rounded-16 bg-[#FAFAFA]"
           role="alert"
           aria-live="polite"
         >
-          <span className="flex items-center justify-center w-56 h-56 rounded-full bg-#FFF3F1 text-#D4280C">
-            <TbAlertCircle className="w-32 h-32" aria-hidden />
+          <span className="flex items-center justify-center w-[56px] h-[56px] rounded-full bg-[#FFF3F1] text-[#D4280C]">
+            <TbAlertCircle className="w-[32px] h-[32px]" aria-hidden />
           </span>
-          <div className="flex flex-col items-center gap-8 text-center max-w-400">
-            <h3 className="text-18 weight-600 color-#000000E0">
+          <div className="flex flex-col items-center gap-[8px] text-center max-w-[400px]">
+            <h3 className="text-[18px] font-semibold text-[#000000E0]">
               Couldn’t load collections
             </h3>
-            <p className="text-14 weight-400 color-#00000099">
+            <p className="text-[14px] font-normal text-[#00000099]">
               Something went wrong. Please try again.
             </p>
           </div>
-          <Button onClick={retry} className="px-24 py-8 min-w-120 flex items-center justify-center gap-8">
-            <TbRefresh className="w-18 h-18" aria-hidden />
+          <Button onClick={retry} className="px-[24px] py-[8px] min-w-[120px] flex items-center justify-center gap-[8px]">
+            <TbRefresh className="w-[18px] h-[18px]" aria-hidden />
             Try again
           </Button>
         </div>
@@ -193,14 +193,14 @@ const Collections = ({
   return (
     collections.length > 0 ? (
       <div className={containerClassName}>
-        <div className='grid md:gap-24 gap-20 lg:grid-2-cols-1fr'>
+        <div className='grid md:gap-[24px] gap-[20px] lg:grid-cols-2'>
           {sortedCollections.map((collection, index) => {
             const visibleIndex = visibleCollectionIds.indexOf(collection.id);
             const isVisible = visibleIndex !== -1;
             const shouldSpan = shouldSpanByCollectionId[collection.id] === true;
 
             return (
-              <div key={collection.id} className={cx(shouldSpan && 'lg:grid-col-span-2', !isVisible && 'hidden')} style={{
+              <div key={collection.id} className={cx(shouldSpan && 'lg:col-span-2', !isVisible && 'hidden')} style={{
                 minWidth: 0
               }}>
                 <CollectionSection

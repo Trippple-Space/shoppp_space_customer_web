@@ -50,16 +50,16 @@ const SearchModal = ({
 
   return (
     <>
-      <div className="h-100p w-100p">
+      <div className="h-full w-full">
         {searchResults && (
-          <div className=" l:mt-0  flex flex-col a-items-start w-100p h-100p gap-15">
-            {/*  <p className='color-#00000099 text-left text-12 p-10'>Results</p> */}
-            <h6 className="font-inter weight-700 text-14">Products</h6>
-            <div className="overflow-auto w-100p flex flex-col gap-3 no-scrollbar">
+          <div className=" lg:mt-0  flex flex-col items-start w-full h-full gap-[15px]">
+            {/*  <p className='text-[#00000099] text-left text-[12px] p-[10px]'>Results</p> */}
+            <h6 className="font-inter font-bold text-[14px]">Products</h6>
+            <div className="overflow-auto w-full flex flex-col gap-[3px] no-scrollbar">
               {searchResults.slice(0, 5).map((product) => (
                 <div
                   key={product.slug}
-                  className="flex j-content-start gap-8 p-10 cursor-pointer hover:bg-#eee radius-8"
+                  className="flex justify-start gap-[8px] p-[10px] cursor-pointer hover:bg-[#eee] rounded-[8px]"
                   onClick={() => {
                     if (isAuthenticated) {
                       addVariant(product.variants[0].id, 'search');
@@ -69,7 +69,7 @@ const SearchModal = ({
                   }}
                 >
 
-                  <div className="w-50 min-w-50 h-50 radius-6 object-fit-cover relative">
+                  <div className="w-[50px] min-w-[50px] h-[50px] rounded-[6px] object-fit-cover relative">
                     {
                       product?.variants?.[product?.variants?.length - 1 || 0]
                         ?.media?.[0]?.type === 'image' ? (
@@ -78,7 +78,7 @@ const SearchModal = ({
                             product?.variants?.[product?.variants?.length - 1 || 0]
                               ?.media?.[0]?.url
                           }
-                          className="w-50 min-w-50 h-50 radius-6 object-fit-cover"
+                          className="w-[50px] min-w-[50px] h-[50px] rounded-[6px] object-fit-cover"
                           alt={product.name}
                         />
                       ) : (
@@ -87,22 +87,22 @@ const SearchModal = ({
                             product?.variants?.[product?.variants?.length - 1 || 0]
                               ?.media?.[0]?.url
                           }
-                          className="w-50 min-w-50 h-50 radius-6 object-fit-cover"
+                          className="w-[50px] min-w-[50px] h-[50px] rounded-[6px] object-fit-cover"
                           hasLoader={true}
                         />
                       )
                     }
                   </div>
-                  <div className="flex flex-col a-items-start gap-4">
-                    <p className="color-#000000 text-left text-14 weight-500">
+                  <div className="flex flex-col items-start gap-[4px]">
+                    <p className="text-[#000000] text-left text-[14px] font-medium">
                       {product.name}
                     </p>
-                    <p className="weight-500 flex gap-6 a-items-center text-12">
+                    <p className="font-medium flex gap-[6px] items-center text-[12px]">
                       {formatNumberAsPrice(
                         product?.variants?.[product?.variants?.length - 1 || 0]
                           ?.finalPrice
                       )}
-                      <span className="color-#00000099 font-inter weight-400 text-10">
+                      <span className="text-[#00000099] font-inter font-normal text-[10px]">
                         per {displayStockUnit(product.stockUnit)}
                       </span>
                     </p>
@@ -113,9 +113,9 @@ const SearchModal = ({
             {searchResults.length > 5 && (
               <p
                 onClick={handleShowMore}
-                className="bg-#F3F3F3 hover:bg-#eee h-34 w-fit mx-auto px-20 py-8 radius-999 flex flex-col gap-8 a-items-center j-content-center pointer"
+                className="bg-[#F3F3F3] hover:bg-[#eee] h-[34px] w-fit mx-auto px-[20px] py-[8px] rounded-[999px] flex flex-col gap-[8px] items-center justify-center cursor-pointer"
               >
-                <span className="text-14 weight-500">Show more</span>
+                <span className="text-[14px] font-medium">Show more</span>
               </p>
             )}
           </div>

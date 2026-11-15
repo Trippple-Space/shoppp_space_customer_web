@@ -9,7 +9,7 @@ const OverlappingImages = ({ orderItem }: any) => {
   const maxVisibleItems = 4
 
   return (
-    <div className='flex gap-10 a-items-center relative'>
+    <div className='flex gap-[10px] items-center relative'>
       {cartItems.slice(0, maxVisibleItems).map((variant: any, idx: number) => {
         const media = variant.variant.media?.[0]
         const mediaType = checkMediaType(variant.variant.media?.[0].url) ?? 'image';
@@ -18,7 +18,7 @@ const OverlappingImages = ({ orderItem }: any) => {
           media && (
             <div
               className={classNames(
-                `absolute radius-100 border border-2 border-white overflow-hidden bg-white w-40 h-40 relative`
+                `absolute rounded-[100px] border border-[2px] border-white overflow-hidden bg-white w-[40px] h-[40px] relative`
               )}
               style={{
                 right: `${idx * 15}px`, // Position from left
@@ -31,12 +31,12 @@ const OverlappingImages = ({ orderItem }: any) => {
                   <Image
                     src={media.url}
                     alt={`image-${idx}`}
-                    className='w-40 h-40 object-cover'
+                    className='w-[40px] h-[40px] object-cover'
                     type={media.type}
                   />
                   :
                   <VideoSrc
-                    className='w-40 h-40 object-contain'
+                    className='w-[40px] h-[40px] object-contain'
                     src={media.url}
                     hasLoader={true}
                   />
@@ -47,13 +47,13 @@ const OverlappingImages = ({ orderItem }: any) => {
       })}
       {cartItems.length > maxVisibleItems && (
         <div
-          className='w-40 h-40 radius-100 flex a-items-center j-content-center bg-#F5F5F5 text-12 weight-500'
+          className='w-[40px] h-[40px] rounded-[100px] flex items-center justify-center bg-[#F5F5F5] text-[12px] font-medium'
           style={{
             left: `${maxVisibleItems * 15}px`, // Place "+X" after last image
             zIndex: maxVisibleItems
           }}
         >
-          <p className='color-#00000099'>
+          <p className='text-[#00000099]'>
             +{cartItems.length - maxVisibleItems}
           </p>
         </div>

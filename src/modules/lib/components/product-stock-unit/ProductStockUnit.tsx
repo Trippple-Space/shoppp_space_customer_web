@@ -17,17 +17,17 @@ function ProductStockUnit ({ product }: { product: Product }) {
   return (
     <>
       {product.availableUnit && (
-        <div className='l:mt-40 mt-30 border-b border-green-100 pb-30'>
-          <div className='text-grey-500 l:text-16 text-14 weight-500'>
+        <div className='lg:mt-[40px] mt-[30px] border-b border-brand-tint pb-[30px]'>
+          <div className='text-[#A39F9C] lg:text-[16px] text-[14px] font-medium'>
             Select {product.stockUnit ?? getStockUnitLabel(product.type)}
           </div>
-          <div className='mt-20 l:flex grid grid-3-cols-1fr gap-12'>
+          <div className='mt-[20px] lg:flex grid grid-cols-3 gap-[12px]'>
             {product.availableUnit.map((text, i) => (
               <label
                 className={cx(
-                  'flex gap-8 text-14 bg-#F3F3F3 color-#726C6C px-10 py-7 radius-8',
+                  'flex gap-[8px] text-[14px] bg-[#F3F3F3] text-[#726C6C] px-[10px] py-[7px] rounded-[8px]',
                   {
-                    'bg-green-100! text-green!': text === selectedSize
+                    '!bg-brand-tint !text-brand': text === selectedSize
                   }
                 )}
               >
@@ -35,7 +35,7 @@ function ProductStockUnit ({ product }: { product: Product }) {
                   type='radio'
                   name='size'
                   onClick={() => setSelectedSize(text)}
-                  className={cx('accent-green')}
+                  className={cx('accent-brand')}
                 />
                 <span className='whitespace-nowrap'>{text}</span>
               </label>

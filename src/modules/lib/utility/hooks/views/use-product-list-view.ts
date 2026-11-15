@@ -41,7 +41,7 @@ export const useProductListView = () => {
     filters: {
       type,
       status: { In: "ACTIVE,OUT_OF_STOCK" },
-      channel: "ASOEBI_STORE",
+      channel: "LEGACY_MARKETPLACE_STORE",
     },
     order: {
       priorityScore: "DESC",

@@ -43,18 +43,18 @@ const ProductDetailModalFooter = ({
 
   return (
     <div
-      className={`flex-shrink-0 bg-white border-t border-#00000014 px-16 ${showQuantity ? 'pt-14 pb-24' : 'py-14'}`}
+      className={`shrink-0 bg-white border-t border-[#00000014] px-[16px] ${showQuantity ? 'pt-[14px] pb-[24px]' : 'py-[14px]'}`}
     >
       {isAddingToCart || !selectedVariantItemInCart ? (
         <button
           className={classNames(
-            'w-full font-roboto border-hidden py-16 px-20 radius-8 text-16 weight-500 flex a-items-center j-content-center',
+            'w-full font-roboto border-hidden py-[16px] px-[20px] rounded-[8px] text-[16px] font-medium flex items-center justify-center',
             {
-              'bg-#F3F3F3 color-gray cursor-not-allowed':
+              'bg-[#F3F3F3] color-gray cursor-not-allowed':
                 !canAdd && !isAddingToCart,
-              'bg-#0B9378 color-white': canAdd || isAddingToCart,
-              'hover:bg-darkgreen pointer': canAdd && !isAddingToCart,
-              'g|pointer-events:none': isAddingToCart,
+              'bg-[#0357EE] text-white': canAdd || isAddingToCart,
+              'hover:bg-brand-hover cursor-pointer': canAdd && !isAddingToCart,
+              'pointer-events-none': isAddingToCart,
             }
           )}
           disabled={!canAdd && !isAddingToCart}
@@ -76,7 +76,7 @@ const ProductDetailModalFooter = ({
           )}
         </button>
       ) : (
-        <div className="flex a-items-end space-between gap-12">
+        <div className="flex items-end justify-between gap-[12px]">
           <QuantitySelector
             disabled={hasPendingImageUploads}
             busy={isRemovingFromCart}
@@ -99,10 +99,10 @@ const ProductDetailModalFooter = ({
           <Link
             href={paths.checkout}
             onClick={onClose}
-            className="flex a-items-center gap-4 text-12 sm:text-13 weight-500 color-#0B9378 flex-shrink-0 underline"
+            className="flex items-center gap-[4px] text-[12px] sm:text-[13px] font-medium text-[#0357EE] shrink-0 underline"
           >
             <span className="">Head to checkout</span>
-            <GoArrowRight className="w-14 h-14 sm:w-16 sm:h-16" />
+            <GoArrowRight className="w-[14px] h-[14px] sm:w-[16px] sm:h-[16px]" />
           </Link>
         </div>
       )}

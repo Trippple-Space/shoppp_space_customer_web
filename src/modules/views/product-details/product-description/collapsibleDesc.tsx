@@ -39,24 +39,24 @@ const CollapsibleDesc: FC<ICollapsibleDesc> = ({ product }) => {
   }, [product?.longDescription]);
 
   return (
-    <div className="l:text-14 text-12 text-light-grey mt-15">
+    <div className="lg:text-[14px] text-[12px] text-[#A8A6A6] mt-[15px]">
       <p
         ref={descRef}
         className={`overflow-hidden white-space-pre-line ${
           isExpanded
-            ? "g|max-height:1000px"
-            : "l:g|max-height:67px g|max-height:58px"
-        } g|transition-property:max-height g|transition-duration:0.2s g|transition-timing-function:ease`}
+            ? "[max-height:1000px]"
+            : "lg:[max-height:67px] [max-height:58px]"
+        } [transition-property:max-height] duration-200 [transition-timing-function:ease]`}
       >
         {product?.longDescription}
       </p>
 
       {showButton && (
         <button
-          className="bg-none border-none outline-none flex text-14 weight-500 mt-10 cursor-pointer"
+          className="bg-transparent border-none outline-none flex text-[14px] font-medium mt-[10px] cursor-pointer"
           onClick={() => setIsExpanded(!isExpanded)}
         >
-          <span className="underline pr-5">
+          <span className="underline pr-[5px]">
             {isExpanded ? "Show less" : "Show more"}
           </span>
         </button>

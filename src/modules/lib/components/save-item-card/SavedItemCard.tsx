@@ -35,14 +35,14 @@ const SavedVariantsCard: React.FC<any> = ({ savedVariant, removeSavedVariant, re
     savedVariant?.variant.media?.[0] ?? recentVariant?.productVariant.media?.[0]
   const mediaUrl = media?.url ?? ''
   const mediaType = media?.type ?? checkMediaType(mediaUrl) ?? 'image'
-  const mediaClassName = `w-full h-full a-self-center radius-6 g|object-fit:cover pointer ${isOutOfStock ? 'out-of-stock' : ''}`
+  const mediaClassName = `w-full h-full self-center rounded-[6px] object-cover cursor-pointer ${isOutOfStock ? 'out-of-stock' : ''}`
 
   return (
-    <div className='l:flex space-between items-center'>
-      <div className='flex w-100p l:w-50p gap-10 l:gap-30 items-center mb-10'>
-        <div className='l:w-115 l:min-w-115 l:h-115 w-70 min-w-70 relative g|overflow:hidden radius-6'>
+    <div className='lg:flex justify-between items-center'>
+      <div className='flex w-full lg:w-1/2 gap-[10px] lg:gap-[30px] items-center mb-[10px]'>
+        <div className='lg:w-[115px] lg:min-w-[115px] lg:h-[115px] w-[70px] min-w-[70px] relative overflow-hidden rounded-[6px]'>
           {isOutOfStock
-            && <div className="absolute w-100p h-100p text-white flex j-content-center a-items-center z-1 radius-6">
+            && <div className="absolute w-full h-full text-white flex justify-center items-center z-[1px] rounded-[6px]">
               Out of stock
             </div>}
           {mediaType === 'video' ? (
@@ -50,7 +50,7 @@ const SavedVariantsCard: React.FC<any> = ({ savedVariant, removeSavedVariant, re
               className={mediaClassName}
               src={mediaUrl}
               hasLoader={true}
-              pulseClassName="radius-6"
+              pulseClassName="rounded-[6px]"
             />
           ) : (
             <Image
@@ -63,10 +63,10 @@ const SavedVariantsCard: React.FC<any> = ({ savedVariant, removeSavedVariant, re
           )}
 
         </div>
-        <div className='line-height-28'>
-          <h2 className='text-16 l:text-18 weight-400 text-grey-900'>{savedVariant?.variant.product?.name || recentVariant?.productVariant.product?.name}</h2>
-          <h1 className='text-16 weight-400 text-grey-900'>{formatNumberAsPrice(savedVariant?.variant.product?.price ?? 0) || formatNumberAsPrice(recentVariant?.productVariant.product?.price ?? 0)}</h1>
-          <p className='text-12'>
+        <div className='leading-[28px]'>
+          <h2 className='text-[16px] lg:text-[18px] font-normal text-[#1F1B17]'>{savedVariant?.variant.product?.name || recentVariant?.productVariant.product?.name}</h2>
+          <h1 className='text-[16px] font-normal text-[#1F1B17]'>{formatNumberAsPrice(savedVariant?.variant.product?.price ?? 0) || formatNumberAsPrice(recentVariant?.productVariant.product?.price ?? 0)}</h1>
+          <p className='text-[12px]'>
             {savedVariant
               ? formatDate(parseApiInstant(savedVariant?.savedAt))
               : formatDate(parseApiInstant(recentVariant.createdAt))}
@@ -74,16 +74,16 @@ const SavedVariantsCard: React.FC<any> = ({ savedVariant, removeSavedVariant, re
 
           {
             showRemove &&
-            <div className='hidden l:flex gap-10 text-danger text-12 items-center pointer' onClick={() => removeSavedVariant(savedVariant?.variantId)}>
-              <Icon name='delete' className='w-17 h-17' />
+            <div className='hidden lg:flex gap-[10px] text-danger text-[12px] items-center cursor-pointer' onClick={() => removeSavedVariant(savedVariant?.variantId)}>
+              <Icon name='delete' className='w-[17px] h-[17px]' />
               <p>Remove</p>
             </div>
           }
         </div>
       </div>
 
-      <div className='flex j-content-end a-items-center gap-20 w-100p l:w-15p'>
-        {showRemove && <button className='flex j-content-center l:hidden border-1 border-red bg-none text-danger text-16 py-10 px-20 radius-5 weight-400' onClick={() => removeSavedVariant(savedVariant.variantId)}>Remove</button>}
+      <div className='flex justify-end items-center gap-[20px] w-full lg:w-[15%]'>
+        {showRemove && <button className='flex justify-center lg:hidden border border-[#DE3838] bg-transparent text-danger text-[16px] py-[10px] px-[20px] rounded-[5px] font-normal' onClick={() => removeSavedVariant(savedVariant.variantId)}>Remove</button>}
 
         <div>
 
@@ -93,8 +93,8 @@ const SavedVariantsCard: React.FC<any> = ({ savedVariant, removeSavedVariant, re
               increment={() => increment(selectedVariantInCart)}
               cartItem={selectedVariantInCart}
             />
-          ) : <button className={classNames('border-none bg-green text-white text-15 py-10 px-20 radius-5 weight-400 pointer h-full', {
-            "bg-#F3F3F3 disabled:bg-yellow-200 disabled:cursor-not-allowed pointer font-roboto text-grey-900 border-hidden": isOutOfStock
+          ) : <button className={classNames('border-none bg-brand text-white text-[15px] py-[10px] px-[20px] rounded-[5px] font-normal cursor-pointer h-full', {
+            "bg-[#F3F3F3] disabled:bg-yellow-200 disabled:cursor-not-allowed cursor-pointer font-roboto text-[#1F1B17] border-hidden": isOutOfStock
           }
           )} onClick={() => {
             if (!isOutOfStock) {

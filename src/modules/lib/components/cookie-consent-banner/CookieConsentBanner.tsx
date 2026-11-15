@@ -4,7 +4,7 @@ import { useEffect, useState } from 'react';
 import Link from 'next/link';
 import { paths } from '@/modules/lib/utility/paths';
 
-const STORAGE_KEY = 'asoebi_cookie_consent';
+const STORAGE_KEY = 'shoppp_cookie_consent';
 
 export default function CookieConsentBanner() {
   const [accepted, setAccepted] = useState(true);
@@ -29,7 +29,7 @@ export default function CookieConsentBanner() {
       data-cookie-consent="true"
       onMouseDown={(e) => e.stopPropagation()}
       onClick={(e) => e.stopPropagation()}
-      className="fixed b-0 l-0 r-0 flex flex-wrap items-center justify-center gap-6 px-16 py-10 text-center md:flex-nowrap md:justify-between md:gap-10"
+      className="fixed bottom-0 left-0 right-0 flex flex-wrap items-center justify-center gap-[6px] px-[16px] py-[10px] text-center md:flex-nowrap md:justify-between md:gap-[10px]"
       style={{
         background: '#f5f5f5',
         color: '#333',
@@ -39,12 +39,12 @@ export default function CookieConsentBanner() {
       role="dialog"
       aria-label="Cookie consent"
     >
-      <p className="text-13 md:text-14 text-dimgrey">
+      <p className="text-[13px] md:text-[14px] text-[#333333]">
         By continuing to use this site, you consent to our use of cookies and
         similar technologies as described in our{' '}
         <Link
           href={paths.legal_document}
-          className="underline underline-on-hover weight-500"
+          className="underline underline-on-hover font-medium"
         >
           Privacy and cookies
         </Link>{' '}
@@ -56,7 +56,7 @@ export default function CookieConsentBanner() {
           e.stopPropagation();
           handleAccept();
         }}
-        className="shrink-0 rounded-6 bg-black px-16 py-8 text-13 font-medium text-white hover:opacity-90"
+        className="shrink-0 rounded-6 bg-black px-[16px] py-[8px] text-[13px] font-medium text-white hover:opacity-90"
       >
         Accept
       </button>

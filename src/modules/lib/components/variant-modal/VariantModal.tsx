@@ -112,10 +112,10 @@ const VariantModal = ({
 
   return (
     <>
-      <div className="mt-30 l:mt-20 w-full">
+      <div className="mt-[30px] lg:mt-[20px] w-full">
         <div
           id="image"
-          className="relative ratio-1 radius-10 g|overflow:hidden l:radius-15 l:w-250 w-200 relative"
+          className="relative aspect-square rounded-[10px] overflow-hidden lg:rounded-[15px] lg:w-[250px] w-[200px] relative"
           onMouseOver={() => setOnProductTileHover(true)}
           onMouseOut={() => setOnProductTileHover(false)}
         >
@@ -123,12 +123,12 @@ const VariantModal = ({
             {mediaType === 'image' ? (
               <>
                 {variant.productVariant?.status === 'OUT_OF_STOCK' && (
-                  <div className="absolute w-full h-full z-1 flex a-items-center j-content-center color-white text-16 weight-400 text-left">
+                  <div className="absolute w-full h-full z-[1px] flex items-center justify-center text-white text-[16px] font-normal text-left">
                     Out of stock
                   </div>
                 )}
                 <Image
-                  className={` w-full h-full a-self-center g|object-fit:cover pointer ${variant.productVariant.status === 'OUT_OF_STOCK' && 'out-of-stock'}`}
+                  className={` w-full h-full self-center object-cover cursor-pointer ${variant.productVariant.status === 'OUT_OF_STOCK' && 'out-of-stock'}`}
                   src={selectedImage}
                   alt="product-image"
                   width={10000}
@@ -137,7 +137,7 @@ const VariantModal = ({
               </>
             ) : (
               <VideoSrc
-                className={`absolute w-full h-full a-self-center g|object-fit:cover pointer ${variant.productVariant.status === 'OUT_OF_STOCK' && 'out-of-stock'}`}
+                className={`absolute w-full h-full self-center object-cover cursor-pointer ${variant.productVariant.status === 'OUT_OF_STOCK' && 'out-of-stock'}`}
                 src={selectedImage}
                 hasLoader={true}
               />
@@ -153,10 +153,10 @@ const VariantModal = ({
             {onProductTileHover && variant.productVariant.product && (
               <div
                 id="add to cart button"
-                className="hidden l:block absolute z-1 t-0 l-0 ml-10 mt-15 l:mr-15 l:mb-15"
+                className="hidden lg:block absolute z-[1px] top-0 left-0 ml-[10px] mt-[15px] lg:mr-[15px] lg:mb-[15px]"
                 onClick={handleCloseProductModal}
               >
-                <p className="bg-white radius-20 p-5 cursor-pointer text-12 flex a-items-center gap-5">
+                <p className="bg-white rounded-[20px] p-[5px] cursor-pointer text-[12px] flex items-center gap-[5px]">
                   <FaEye className="w-fit" />
                   Quick look
                 </p>
@@ -164,7 +164,7 @@ const VariantModal = ({
             )}
             <div
               id="add to cart button"
-              className="absolute b-0 r-0 mr-10 mb-10 l:mr-15 l:mb-15"
+              className="absolute bottom-0 right-0 mr-[10px] mb-[10px] lg:mr-[15px] lg:mb-[15px]"
             >
               {selectedVariantItemInCart ? (
                 <QuantitySelector
@@ -192,10 +192,10 @@ const VariantModal = ({
                       }}
                       disabled={!selectedImage}
                       className={classNames(
-                        'bg-#FACE33 shadow-0-4-8-0-#00000033 hover:shadow-0-8-8-0-#00000033 text-black! disabled:bg-gray-200 disabled:cursor-not-allowed hover:scale-1.06 g|transition:0.5s g|will-change:transform pointer font-roboto border-hidden outline-none s:p-14 p-12 round flex a-items-center j-items-center gap-10'
+                        'bg-[#FACE33] shadow-0-4-8-0-#00000033 hover:shadow-0-8-8-0-#00000033 !text-black disabled:bg-gray-200 disabled:cursor-not-allowed hover:scale-1.06 transition-all duration-500 will-change-transform cursor-pointer font-roboto border-hidden outline-none sm:p-[14px] p-[12px] rounded-full flex items-center justify-items-center gap-[10px]'
                       )}
                     >
-                      <PiShoppingCartFill className="s:w-22 w-20 s:h-22 h-20" />
+                      <PiShoppingCartFill className="sm:w-[22px] w-[20px] sm:h-[22px] h-[20px]" />
                     </button>
                   ) : (
                     ''
@@ -206,30 +206,30 @@ const VariantModal = ({
           </div>
           <div
             id="favorite icon"
-            className="absolute t-0 r-0 mr-5 mt-10 l:mr-10 text-24 text-white cursor-pointer"
+            className="absolute top-0 right-0 mr-[5px] mt-[10px] lg:mr-[10px] text-[24px] text-white cursor-pointer"
             onClick={handleSave}
           >
             {isSaved ? (
-              <AiFillHeart className="shadow w-25 h-25" />
+              <AiFillHeart className="shadow w-[25px] h-[25px]" />
             ) : (
-              <AiOutlineHeart className="shadow w-25 h-25" />
+              <AiOutlineHeart className="shadow w-[25px] h-[25px]" />
             )}
           </div>
         </div>
         {/* <div className="scroll-x no-scrollbar">
         <div
           id="product varients"
-          className="md:mt-16 mt-14 flex a-items-center md:gap-6 gap-4 w-200 overlow-auto whitespace-nowrap"
+          className="md:mt-[16px] mt-[14px] flex items-center md:gap-[6px] gap-[4px] w-[200px] overlow-auto whitespace-nowrap"
         >
       
             {variant.productVariant.media.map((mediaItem: any) =>
               mediaItem?.type === "image" ? (
                 <Image
                   className={classNames(
-                    `l:w-35.2 l:h-35.2 w-31 h-31 pointer md:radius-4 radius-3 a-self-center g|object-fit:cover ${variant?.status === 'OUT_OF_STOCK' && 'greyscale'}`,
+                    `lg:w-[35.2px] lg:h-[35.2px] w-[31px] h-[31px] cursor-pointer md:rounded-[4px] rounded-[3px] self-center object-cover ${variant?.status === 'OUT_OF_STOCK' && 'greyscale'}`,
                     {
-                      "border border-2": selectedImage == mediaItem?.url,
-                      [`border-${'#0B9378'}`]:
+                      "border border-[2px]": selectedImage == mediaItem?.url,
+                      [`border-${'#0357EE'}`]:
                         selectedImage == mediaItem?.url,
                     }
                   )}
@@ -245,10 +245,10 @@ const VariantModal = ({
               ) : (
                 <VideoSrc
                   className={classNames(
-                    "l:w-35.2 l:h-35.2 w-31 h-31 pointer md:radius-4 radius-3 a-self-center g|object-fit:cover",
+                    "lg:w-[35.2px] lg:h-[35.2px] w-[31px] h-[31px] cursor-pointer md:rounded-[4px] rounded-[3px] self-center object-cover",
                     {
-                      "border border-2": selectedImage == mediaItem?.url,
-                      [`border-${'#0B9378'}`]:
+                      "border border-[2px]": selectedImage == mediaItem?.url,
+                      [`border-${'#0357EE'}`]:
                         selectedImage == mediaItem?.url,
                     }
                   )}
@@ -266,7 +266,7 @@ const VariantModal = ({
       </div> */}
         <div
           id="product details"
-          className="md:mt-16 mt-20 l:max-w-250 max-w-200 overflow-hidden l:w-full white-space-nowrap text-overflow-ellipsis flex flex-col gap-8"
+          className="md:mt-[16px] mt-[20px] lg:max-w-[250px] max-w-[200px] overflow-hidden lg:w-full white-space-nowrap text-overflow-ellipsis flex flex-col gap-[8px]"
         >
           <div title={variant.productVariant.product?.name}>
             <Link
@@ -283,34 +283,34 @@ const VariantModal = ({
               {variant.productVariant?.product?.name || 'No name'}
             </Link>
           </div>
-          <div className="flex a-items-center gap-10 l:gap-18 text-dimgrey py-6 border-y border-#00000014">
+          <div className="flex items-center gap-[10px] lg:gap-[18px] text-[#333333] py-[6px] border-y border-[#00000014]">
             <Link
               href={`/${variant.productVariant?.product?.store.slug}`}
-              className="flex gap-6 a-items-center color-#00000099 capitalize"
+              className="flex gap-[6px] items-center text-[#00000099] capitalize"
             >
-              <PiStorefront className="md:w-16 w-14 md:h-16 h-14" />
-              <p className="md:text-12 text-10 weight-400 md:line-height-20 line-height-12.1">
+              <PiStorefront className="md:w-[16px] w-[14px] md:h-[16px] h-[14px]" />
+              <p className="md:text-[12px] text-[10px] font-normal md:leading-[20px] leading-[12.1px]">
                 {variant.productVariant?.product?.store?.name}
               </p>
             </Link>
             {/* {!!product.reviewRating && (
-            <div className="flex gap-3 items-center">
-              <AiFillStar className="w-12" />
-              <span className="l:text-16 text-12">{product.reviewRating}</span>
+            <div className="flex gap-[3px] items-center">
+              <AiFillStar className="w-[12px]" />
+              <span className="lg:text-[16px] text-[12px]">{product.reviewRating}</span>
             </div>
           )} */}
           </div>
-          <div className="flex md:gap-8 md:a-items-center gap-6">
-            <p className="md:text-16 text-12 weight-600 md:line-height-24 line-height-20">
+          <div className="flex md:gap-[8px] md:items-center gap-[6px]">
+            <p className="md:text-[16px] text-[12px] font-semibold md:leading-[24px] leading-[20px]">
               {formatNumberAsPrice(variantDisplayPrices.displayPrice)}
             </p>
             {variantDisplayPrices.hasSlash && (
-              <div className="flex flex-wrap gap-6 md:gap-8 a-items-center">
+              <div className="flex flex-wrap gap-[6px] md:gap-[8px] items-center">
                 {getStrikethroughAmounts(variantDisplayPrices).map(
                   (amount, idx) => (
                     <p
                       key={idx}
-                      className="md:text-12 text-10 weight-400 md:line-height-20 color-#00000099 line-through"
+                      className="md:text-[12px] text-[10px] font-normal md:leading-[20px] text-[#00000099] line-through"
                     >
                       {formatNumberAsPrice(amount)}
                     </p>
@@ -325,7 +325,7 @@ const VariantModal = ({
                 );
                 return stockUnitSuffix ? (
                   <span
-                    className="sm:text-10 text-8 weight-400 md:line-height-20 line-height-12.1 md:mb-0 mb-2"
+                    className="sm:text-[10px] text-[8px] font-normal md:leading-[20px] leading-[12.1px] md:mb-0 mb-[2px]"
                     style={{ alignSelf: 'flex-end' }}
                   >
                     {stockUnitSuffix}
@@ -333,10 +333,10 @@ const VariantModal = ({
                 ) : null;
               })()}
           </div>
-          {/* <div className="flex flex-wrap gap-4">
+          {/* <div className="flex flex-wrap gap-[4px]">
           {product?.tags?.map((tag: any, i: number) => (
             <span
-              className="text-green md:text-12 text-10 inline-block radius-5 mx-2 my-1 pointer hover:underline lowercase"
+              className="text-brand md:text-[12px] text-[10px] inline-block rounded-[5px] mx-[2px] my-[1px] cursor-pointer hover:underline lowercase"
               key={i}
             >
               {!tag.label.includes("pill:") && "#" + tag.label}

@@ -9,12 +9,12 @@ interface IBoxSelect {
 }
 const BoxSelect: FC<IBoxSelect> = ({id, name, value, label, className}) => {
   return (
-    <label className='flex border-1 border-solid border-grey-300 px-16 w-full radius-5 g|transition:0.5s pointer hover:border-grey-500 g|:has(:checked)|border-color:#0B9378!'>
-        <div className='flex gap-16 text-12 content-center'>
-            <div className="w-fit h-fit a-self-center">
-              <input type="checkbox" className='accent-#0B9378 w-20 h-20 border-1 border-red' value={value} name={name} id={id || name} />
+    <label className='flex border border-solid border-[#E4E1DF] px-[16px] w-full rounded-[5px] transition-all duration-500 cursor-pointer hover:border-[#A39F9C] has-checked:!border-brand'>
+        <div className='flex gap-[16px] text-[12px] content-center'>
+            <div className="w-fit h-fit self-center">
+              <input type="checkbox" className='accent-[#0357EE] w-[20px] h-[20px] border border-[#DE3838]' value={value} name={name} id={id || name} />
             </div>
-            <div className='h-fit a-self-center '>{label}</div>
+            <div className='h-fit self-center '>{label}</div>
         </div>
     </label>
   )

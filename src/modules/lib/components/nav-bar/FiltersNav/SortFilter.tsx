@@ -18,8 +18,8 @@ export const SortFilter: React.FC<ISortFilter> = ({ setSortFilter }) => {
         <ul className='flex flex-col'>
             {
                 sortOptions.map((sortBy) => (
-                    <li key={sortBy} className='flex gap-12 py-10'>
-                        <div className='h-fit w-fit color-#6A6A6A hover:color-#000000E0'>
+                    <li key={sortBy} className='flex gap-[12px] py-[10px]'>
+                        <div className='h-fit w-fit text-[#6A6A6A] hover:text-[#000000E0]'>
                             <BoxRadio label={sortBy} className='filter' name='sortBy' id='sortBy' checked={sortBy === sort} onChange={() => { setSortFilter(`${sortBy}`); setSort(`${sortBy}`) }} />
                         </div>
                     </li>

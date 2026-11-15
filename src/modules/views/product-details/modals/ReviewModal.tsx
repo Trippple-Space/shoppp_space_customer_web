@@ -15,16 +15,16 @@ const ReviewModal = ({
       onClose={onClose}
       extraClass={{ overflow: 'auto' }}
       extraModalClass={{ backgroundColor: '#00000073' }}
-      className="h-fit md:w-fit sm:w-90p w-95p no-scrollbar"
+      className="h-fit md:w-fit sm:w-[90%] w-[95%] no-scrollbar"
     >
       <div
-        className="l:w-720 md:w-650 h-fit relative"
+        className="lg:w-[720px] md:w-[650px] h-fit relative"
         style={{ maxHeight: 'calc(100dvh - 90px)' }}
       >
         <div className="relative w-full">
-          <div className="sticky z-3 t-0 l-0 r-0 bg-white flex space-between a-items-center py-12 px-24 border-solid border-b border-1 border-#00000014">
-            <h5 className="text-16 weight-600 line-height-24">Give a Review</h5>
-            <AiOutlineClose className="pointer w-20 h-20" onClick={onClose} />
+          <div className="sticky z-[3px] top-0 left-0 right-0 bg-white flex justify-between items-center py-[12px] px-[24px] border-solid border-b border border-[#00000014]">
+            <h5 className="text-[16px] font-semibold leading-[24px]">Give a Review</h5>
+            <AiOutlineClose className="cursor-pointer w-[20px] h-[20px]" onClick={onClose} />
           </div>
           <AddReview
             id={selectedVariantId}

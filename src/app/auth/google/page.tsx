@@ -1,6 +1,6 @@
 'use client'
 
-import { useEffect } from 'react'
+import { Suspense, useEffect } from 'react'
 import { useSearchParams } from 'next/navigation'
 import { toast } from 'sonner'
 import { useAuthGuard } from '@/modules/lib/utility/hooks/use-auth-guard'
@@ -12,7 +12,7 @@ import { useCartStore } from '@/modules/lib/utility/store/cart.store'
 import useAddressStore from '@/modules/lib/utility/store/address.store'
 import { useSavedVariantStore } from '@/modules/lib/utility/store/savedVariant.store'
 
-function Page() {
+function GoogleAuthPage() {
   const searchParams = useSearchParams()
   const { user } = useAuthGuard()
   const { authenticateUser } = useUserStore()
@@ -72,4 +72,10 @@ function Page() {
   return null
 }
 
-export default Page
+export default function Page() {
+  return (
+    <Suspense fallback={null}>
+      <GoogleAuthPage />
+    </Suspense>
+  )
+}

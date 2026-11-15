@@ -11,7 +11,7 @@ const HomepageNavBar = ({ parent }: { parent?: any }) => {
       links={
         parent !== "checkout" && (
           <SearchInput
-            placeholder={"Search asoebi.africa"}
+            placeholder={"Search Shoppp Space"}
             component={"home"}
           ></SearchInput>
         )

@@ -5,27 +5,27 @@ import React from 'react';
 
 const PageNotFound = () => {
   return (
-    <div className="w-100p min-h-100vh mx-auto flex flex-col a-items-center j-content-center gap-12 p-20 l:p-70">
+    <div className="w-full min-h-screen mx-auto flex flex-col items-center justify-center gap-[12px] p-[20px] lg:p-[70px]">
       <Image
         src="404.png"
-        className="w-80p max-w-400 l:w-50p h-auto my-10 object-fit-scale-down"
+        className="w-[80%] max-w-[400px] lg:w-1/2 h-auto my-[10px] object-fit-scale-down"
         alt="Page not found"
       />
 
-      <div className="flex flex-col a-items-center gap-8 max-w-400 text-center">
-        <p className="text-14 weight-600 line-height-20 color-#00000066 uppercase">
+      <div className="flex flex-col items-center gap-[8px] max-w-[400px] text-center">
+        <p className="text-[14px] font-semibold leading-[20px] text-[#00000066] uppercase">
           404
         </p>
 
         <h1
-          className="text-24 l:text-30 line-height-40 weight-700 text-center"
+          className="text-[24px] lg:text-[30px] leading-[40px] font-bold text-center"
           style={{ textWrap: 'balance' }}
         >
           Oops, nothing to see here
         </h1>
 
         <p
-          className="text-14 l:text-16 weight-400 line-height-22 color-#00000073 px-12"
+          className="text-[14px] lg:text-[16px] font-normal leading-[22px] text-[#00000073] px-[12px]"
           style={{ textWrap: 'balance' }}
         >
           The page you&apos;re looking for doesn&apos;t exist or may have been
@@ -34,7 +34,7 @@ const PageNotFound = () => {
 
         <Link
           href={paths.homepage}
-          className="bg-green radius-10 text-white text-16 weight-500 mt-8 py-12 px-24 pointer"
+          className="bg-brand rounded-[10px] text-white text-[16px] font-medium mt-[8px] py-[12px] px-[24px] cursor-pointer"
           style={{ textDecoration: 'none' }}
         >
           Go back home

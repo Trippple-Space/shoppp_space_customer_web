@@ -78,22 +78,22 @@ const Input: React.ForwardRefExoticComponent<Omit<IInput, 'ref'> & React.RefAttr
       {label && (
         <label
           htmlFor={id}
-          className='block w-fit mb-8 l:weight-400 weight-500 l:text-14 text-12 text-grey-800'
+          className='block w-fit mb-[8px] lg:font-normal font-medium lg:text-[14px] text-[12px] text-[#59534E]'
         >
           {label}
         </label>
       )}
-      <div className='flex a-items-center relative'>
+      <div className='flex items-center relative'>
         <Component
           type={type === 'password' ? (viewPassword ? 'text' : 'password') : type}
           className={`
-            block font-inter @lo:w-full @lo:bg-white
-            @lo:border-solid @lo:border-1 @lo:border-grey-300 l:@lo:py-17 @lo:py-12 @lo:px-20 @lo:l:text-16 @lo:weight-400 @lo:outline-none
-            @lo:placeholder:text-grey-400 @lo:text-grey-700
-            @lo:focus:border-green @lo:placeholder:l:text-12 @lo:placeholder:text-12 disabled:bg-#F3F3F3 resize-none ${inputClassNames} ${
+            block font-inter w-full bg-white
+            border-solid border border-[#E4E1DF] lg:py-[17px] py-[12px] px-[20px] lg:text-[16px] font-normal outline-none
+            placeholder:text-[#C8C6C3] text-[#6B6662]
+            focus:border-brand placeholder:lg:text-[12px] placeholder:text-[12px] disabled:bg-[#F3F3F3] resize-none ${inputClassNames} ${
             id?.toLocaleLowerCase()?.includes('contact')
-              ? '@lo:radius-t-r-8 @lo:radius-b-r-8 border-l-0'
-              : '@lo:radius-8'
+              ? 'rounded-tr-[8px] rounded-br-[8px] border-l-0'
+              : 'rounded-[8px]'
             }`}
           ref={ref}
           placeholder={placeholder}
@@ -107,10 +107,10 @@ const Input: React.ForwardRefExoticComponent<Omit<IInput, 'ref'> & React.RefAttr
         />
         {type === 'password' && (
           <div
-            className='absolute  flex r-10 a-items-center j-content-center text-right cursor-pointer ml-10 h-30 bg-inherit w-30'
+            className='absolute  flex right-[10px] items-center justify-center text-right cursor-pointer ml-[10px] h-[30px] bg-inherit w-[30px]'
             onClick={() => setViewPassword(view => !view)}
           >
-            {!viewPassword ? <LuEye className='w-20 h-20'/>  : <LuEyeOff  className='w-20 h-20'/>}
+            {!viewPassword ? <LuEye className='w-[20px] h-[20px]'/>  : <LuEyeOff  className='w-[20px] h-[20px]'/>}
           </div>
         )}
       </div>

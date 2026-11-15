@@ -30,25 +30,25 @@ const StorefrontAbout = ({ store }: { store: Store }) => {
   return (
     <>
       <StorefrontNavBar store={store} />
-      <div className="bg-white w-full mt-132">
-        <div className="flex flex-col app-width max-w-1440 mx-auto">
-          <section className="flex flex-row j-content-between gap-30">
-            <div className="flex flex-col gap-32 l:w-500">
-              <div className="flex flex-row gap-14">
+      <div className="bg-white w-full mt-[132px]">
+        <div className="flex flex-col app-width max-w-[1440px] mx-auto">
+          <section className="flex flex-row justify-between gap-[30px]">
+            <div className="flex flex-col gap-[32px] lg:w-[500px]">
+              <div className="flex flex-row gap-[14px]">
                 <Image
                   src={store?.thumbnail}
                   alt="store thumbnail"
-                  className="sm:w-80 w-68 sm:h-80 h-68 round object-fit"
+                  className="sm:w-[80px] w-[68px] sm:h-[80px] h-[68px] rounded-full object-fit"
                 />
-                <div className="flex flex-col gap-8">
-                  <h2 className="sm:text-32 text-20 weight-500">
+                <div className="flex flex-col gap-[8px]">
+                  <h2 className="sm:text-[32px] text-[20px] font-medium">
                     {store?.name}
                   </h2>
-                  <p className="flex flex-row a-items-center gap-12">
-                    {/* <span className="text-14 weight-400">{followersCount} followers</span> */}
+                  <p className="flex flex-row items-center gap-[12px]">
+                    {/* <span className="text-[14px] font-normal">{followersCount} followers</span> */}
                     <span 
-                      className="text-12 weight-600 bg-black text-white py-4 px-16 radius-999 pointer flex 
-                      flex-row a-items-center j-content-between gap-8" 
+                      className="text-[12px] font-semibold bg-black text-white py-[4px] px-[16px] rounded-[999px] cursor-pointer flex 
+                      flex-row items-center justify-between gap-[8px]" 
                       onClick={() => {
                         isAuthenticated ?
                           isFollowing ? unFollowStore() : followStore()
@@ -70,27 +70,27 @@ const StorefrontAbout = ({ store }: { store: Store }) => {
                   </p>
                 </div>
               </div>
-              <div className="flex flex-col gap-12 w-fit">
-                <h1 className="sm:text-35 text-24 weight-600">
+              <div className="flex flex-col gap-[12px] w-fit">
+                <h1 className="sm:text-[35px] text-[24px] font-semibold">
                   {store.heading}
                 </h1>
-                <p className="sm:text-16 text-14 weight-400">
+                <p className="sm:text-[16px] text-[14px] font-normal">
                   {store?.subHeading}
                 </p>
-                {/* <div className="text-14 weight-400 flex flex-row sm:gap-23 gap-8">
-                  <p className="flex flex-row a-items-center sm:gap-8 gap-5">
-                    <span className="sm:text-16 text-14 weight-600">
+                {/* <div className="text-[14px] font-normal flex flex-row sm:gap-[23px] gap-[8px]">
+                  <p className="flex flex-row items-center sm:gap-[8px] gap-[5px]">
+                    <span className="sm:text-[16px] text-[14px] font-semibold">
                       {visit ? (
                         visit?.totalCount
                       ) : (
-                        <div className="h-16 w-24 animate-pulse bg-#e3e3e3"></div>
+                        <div className="h-[16px] w-[24px] animate-pulse bg-[#e3e3e3]"></div>
                       )}
                     </span>
                     <span>Monthly Visits</span>
                   </p>
-                  <p className="h-24 w-1 bg-#00000014"></p>
-                  <p className="flex flex-row a-items-center sm:gap-8 gap-5">
-                   <span className="sm:text-16 text-14 weight-600">
+                  <p className="h-[24px] w-[1px] bg-[#00000014]"></p>
+                  <p className="flex flex-row items-center sm:gap-[8px] gap-[5px]">
+                   <span className="sm:text-[16px] text-[14px] font-semibold">
                       {productSold || 0}
                     </span>
                     <span>
@@ -101,7 +101,7 @@ const StorefrontAbout = ({ store }: { store: Store }) => {
                 </div> */}
               </div>
             </div>
-            <div className="l:grid hidden grid-2-cols-auto grid-2-rows-auto gap-12 h-fit">
+            <div className="lg:grid hidden grid-cols-2 grid-2-rows-auto gap-[12px] h-fit">
               {heroImages && (
                 <>
                   {Object.values(heroImages).map((image, index) => (
@@ -109,7 +109,7 @@ const StorefrontAbout = ({ store }: { store: Store }) => {
                       key={index}
                       src={image}
                       alt={`hero img ${index + 1}`}
-                      className="w-161.6 l:h-131.6 md:h-125 border border-#00000014 radius-12 object-fit"
+                      className="w-[161.6px] lg:h-[131.6px] md:h-[125px] border border-[#00000014] rounded-[12px] object-fit"
                     />
                   ))}
                 </>

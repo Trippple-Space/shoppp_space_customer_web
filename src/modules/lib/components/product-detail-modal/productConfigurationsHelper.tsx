@@ -28,11 +28,6 @@ import {
   safePolygon,
   FloatingPortal,
 } from '@floating-ui/react';
-import { usePersonalizationStore } from '../../utility/store/personalization.store';
-import {
-  buildPersonalizationPrefill,
-  countPersonalizationPrefillMatches,
-} from '../../utility/personalization-prefill';
 
 export const isEmptyValue = (v: any) => {
   if (v === null || v === undefined) return true;
@@ -69,7 +64,7 @@ export const renderCustomerField = (
   const fieldKey = vf.fieldName;
 
   const commonClass =
-    'w-full radius-6 border border-#00000014 bg-#FAFAFA px-10 py-8 text-12 color-#000000 outline-none';
+    'w-full rounded-[6px] border border-[#00000014] bg-[#FAFAFA] px-[10px] py-[8px] text-[12px] text-[#000000] outline-none';
 
   if (vf.type === 'string' || vf.type === 'number') {
     const isNotesField = /note/i.test(
@@ -81,7 +76,7 @@ export const renderCustomerField = (
           placeholder={vf.placeholder || ''}
           required={vf.required}
           value={configurationValues[fieldKey] ?? ''}
-          className={`${commonClass} mt-2 min-h-90 resize-none`}
+          className={`${commonClass} mt-[2px] min-h-[90px] resize-none`}
           onChange={(e) => handleConfigChange(fieldKey, e.target.value)}
           style={{ minHeight: '90px' }}
         />
@@ -113,10 +108,10 @@ export const renderCustomerField = (
       (configurationValues[fieldKey] as Record<string, any>) || {};
 
     return (
-      <div className="flex flex-col gap-8">
+      <div className="flex flex-col gap-[8px]">
         {keys.map((k) => (
-          <div key={k} className="flex flex-col gap-4">
-            <label className="text-11 color-#00000099">{k}</label>
+          <div key={k} className="flex flex-col gap-[4px]">
+            <label className="text-[11px] text-[#00000099]">{k}</label>
 
             <input
               type="text"
@@ -216,7 +211,7 @@ const CustomerImagesUploader: FC<{
   const uploadInputId = `cfg-array-images-${fieldKey}`;
 
   return (
-    <div className="flex flex-wrap gap-10 a-items-start">
+    <div className="flex flex-wrap gap-[10px] items-start">
       {list.map((item, idx) => {
         const isFile = item instanceof File;
         const isUploadingThis = isFile && uploadingFiles.has(item);
@@ -224,9 +219,9 @@ const CustomerImagesUploader: FC<{
         return (
           <div
             key={`${fieldKey}-img-${idx}`}
-            className="flex flex-col a-items-center gap-4"
+            className="flex flex-col items-center gap-[4px]"
           >
-            <div className="relative h-46 w-46 shrink-0 overflow-hidden radius-8 border border-#ddd bg-#fafafa">
+            <div className="relative h-[46px] w-[46px] shrink-0 overflow-hidden rounded-[8px] border border-[#ddd] bg-[#fafafa]">
               <button
                 type="button"
                 className="h-full w-full border-none bg-transparent p-0 cursor-zoom-in"
@@ -262,12 +257,12 @@ const CustomerImagesUploader: FC<{
               </button>
               <button
                 type="button"
-                className="absolute r-2 t-2 radius-999 bg-red flex flex-col a-items-center j-content-center p-2 text-10 text-white border-none disabled:opacity-30 disabled:cursor-not-allowed"
+                className="absolute right-[2px] top-[2px] rounded-[999px] bg-[#DE3838] flex flex-col items-center justify-center p-[2px] text-[10px] text-white border-none disabled:opacity-30 disabled:cursor-not-allowed"
                 aria-label="Remove"
                 disabled={isUploadingThis}
                 onClick={() => removeAt(idx)}
               >
-                <IoMdClose className="h-10 w-10 color-#FFFFFF" aria-hidden />
+                <IoMdClose className="h-[10px] w-[10px] text-[#FFFFFF]" aria-hidden />
               </button>
             </div>
             {isFile && (
@@ -275,11 +270,11 @@ const CustomerImagesUploader: FC<{
                 type="button"
                 disabled={isUploadingThis}
                 onClick={() => startUpload(item)}
-                className="bg-transparent border-none p-0 text-10 weight-500 color-#0B9378 underline cursor-pointer disabled:opacity-60 disabled:cursor-not-allowed flex a-items-center gap-3"
+                className="bg-transparent border-none p-0 text-[10px] font-medium text-[#0357EE] underline cursor-pointer disabled:opacity-60 disabled:cursor-not-allowed flex items-center gap-[3px]"
               >
                 {isUploadingThis ? (
                   <>
-                    <SpinLoader size={10} color="#0B9378" loading />
+                    <SpinLoader size={10} color="#0357EE" loading />
                     <span>Uploading…</span>
                   </>
                 ) : (
@@ -294,9 +289,9 @@ const CustomerImagesUploader: FC<{
         htmlFor={uploadInputId}
         aria-label="Add images"
         style={{ position: 'relative' }}
-        className="flex h-44 w-44 shrink-0 cursor-pointer a-items-center j-content-center radius-8 border border-dashed border-#0B9378 bg-#fafafa color-#0B9378 hover:bg-#EDFCF7"
+        className="flex h-[44px] w-[44px] shrink-0 cursor-pointer items-center justify-center rounded-[8px] border border-dashed border-[#0357EE] bg-[#fafafa] text-[#0357EE] hover:bg-[#EDFCF7]"
       >
-        <HiPlus className="h-24 w-24" aria-hidden />
+        <HiPlus className="h-[24px] w-[24px]" aria-hidden />
         <input
           id={uploadInputId}
           type="file"
@@ -309,7 +304,7 @@ const CustomerImagesUploader: FC<{
             width: '100%',
             height: '100%',
             opacity: 0,
-            cursor: 'pointer',
+            cursor: 'cursor-pointer',
           }}
           onChange={(e) => {
             const files = e.target.files;
@@ -437,48 +432,6 @@ export const DisplayProductConfigurations: FC<
   onEditConfiguration,
 }) => {
     const [fullViewUrl, setFullViewUrl] = useState<string | null>(null);
-    const [measurementsApplied, setMeasurementsApplied] = useState(false);
-    const isPersonalizationSetup = usePersonalizationStore(
-      (state) => state.isPersonalizationSetup
-    );
-    const dimensions = usePersonalizationStore((state) => state.dimensions);
-    const unit = usePersonalizationStore((state) => state.unit);
-    const shoeScale = usePersonalizationStore((state) => state.shoeScale);
-
-    const canPrefill =
-      isPersonalizationSetup &&
-      (!userConfigurations || isEditingConfiguration) &&
-      countPersonalizationPrefillMatches(
-        configurationRecords,
-        dimensions,
-        unit,
-        shoeScale
-      ) > 0;
-
-    const applyMeasurements = () => {
-      const patch = buildPersonalizationPrefill(
-        configurationRecords,
-        dimensions,
-        unit,
-        shoeScale
-      );
-      Object.entries(patch).forEach(([key, value]) => {
-        if (value && typeof value === 'object' && !Array.isArray(value)) {
-          handleConfigChange(key, {
-            ...(configurationValues[key] ?? {}),
-            ...value,
-          });
-          return;
-        }
-        handleConfigChange(key, value);
-      });
-      setMeasurementsApplied(true);
-    };
-
-    useEffect(() => {
-      setMeasurementsApplied(false);
-    }, [configurationRecords]);
-
     useEffect(() => {
       if (!fullViewUrl) return;
       const onKey = (e: KeyboardEvent) => {
@@ -492,30 +445,7 @@ export const DisplayProductConfigurations: FC<
 
     return (
       <>
-        <div className="flex flex-col gap-16">
-          {canPrefill && (
-            <button
-              type="button"
-              onClick={applyMeasurements}
-              className="flex a-items-center j-content-between gap-10 w-full px-12 py-10 radius-8 border border-#0B937833 bg-#DEFFF9 pointer"
-            >
-              <span className="flex flex-col a-items-start gap-2 text-left">
-                <span className="text-12 weight-600 color-#0B9378">
-                  {measurementsApplied
-                    ? 'Measurements applied'
-                    : 'Use my measurements'}
-                </span>
-                <span className="text-11 weight-400 color-#0B9378">
-                  {measurementsApplied
-                    ? 'Matching fields were filled from your saved profile. You can still edit them.'
-                    : `Prefill matching fields from your saved profile${unit ? ` (${unit})` : ''}.`}
-                </span>
-              </span>
-              <span className="text-11 weight-600 color-#0B9378 underline flex-shrink-0">
-                {measurementsApplied ? 'Apply again' : 'Prefill'}
-              </span>
-            </button>
-          )}
+        <div className="flex flex-col gap-[16px]">
           {configurationRecords.map((record) => {
             const customerFields =
               record.customerDataForm?.filter((f: any) =>
@@ -538,17 +468,17 @@ export const DisplayProductConfigurations: FC<
             return (
               <div
                 key={record.id}
-                className={`flex flex-col ${userConfigurations && !isEditingConfiguration ? 'gap-4' : 'gap-12'}`}
+                className={`flex flex-col ${userConfigurations && !isEditingConfiguration ? 'gap-[4px]' : 'gap-[12px]'}`}
               >
-                <div className="flex flex-col gap-6 p-10 radius-6 bg-#F0F9FF border border-#91D5FF">
-                  <p className="text-12 weight-500 color-#003A8C mb-4">
+                <div className="flex flex-col gap-[6px] p-[10px] rounded-[6px] bg-[#F0F9FF] border border-[#91D5FF]">
+                  <p className="text-[12px] font-medium text-[#003A8C] mb-[4px]">
                     This product is a{' '}
-                    <span className="weight-700">{record.description}</span>{' '}
+                    <span className="font-bold">{record.description}</span>{' '}
                     product.
                   </p>
 
                   {visibleVendorFields.length > 0 && (
-                    <div className="flex flex-col gap-5">
+                    <div className="flex flex-col gap-[5px]">
                       {visibleVendorFields.map((field: any) => {
                         const value = field.valueFormat?.defaultValue;
                         const vf = field.valueFormat;
@@ -562,17 +492,17 @@ export const DisplayProductConfigurations: FC<
                           return (
                             <div
                               key={field.valueFormat.fieldName}
-                              className="text-12 color-#003A8C"
+                              className="text-[12px] text-[#003A8C]"
                             >
-                              <span className="weight-700">
+                              <span className="font-bold">
                                 {field.keyFormat?.defaultValue}:
                               </span>
-                              <div className="mt-2 flex flex-wrap gap-2">
+                              <div className="mt-[2px] flex flex-wrap gap-[2px]">
                                 {(value as string[]).map((url, i) => (
                                   <button
                                     key={i}
                                     type="button"
-                                    className="h-64 w-64 cursor-zoom-in overflow-hidden rounded border border-#91D5FF p-0 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-#1677FF"
+                                    className="h-[64px] w-[64px] cursor-zoom-in overflow-hidden rounded border border-[#91D5FF] p-0 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-#1677FF"
                                     onClick={() => setFullViewUrl(url)}
                                     aria-label="View image full size"
                                   >
@@ -596,9 +526,9 @@ export const DisplayProductConfigurations: FC<
                         return (
                           <div
                             key={field.valueFormat.fieldName}
-                            className="text-12 color-#003A8C"
+                            className="text-[12px] text-[#003A8C]"
                           >
-                            <span className="weight-700">
+                            <span className="font-bold">
                               {field.keyFormat?.defaultValue}:
                             </span>{' '}
                             <span>{displayValue}</span>
@@ -610,7 +540,7 @@ export const DisplayProductConfigurations: FC<
 
                   {!userConfigurations &&
                     customerFields.some((f: any) => f.valueFormat?.required) && (
-                      <p className="text-11 color-#003A8C mt-5">
+                      <p className="text-[11px] text-[#003A8C] mt-[5px]">
                         Please fill all required fields below to continue.
                       </p>
                     )}
@@ -639,7 +569,7 @@ export const DisplayProductConfigurations: FC<
                         onEdit={onEditConfiguration ?? (() => { })}
                       />
                     ) : (
-                      <div className="flex flex-col gap-10">
+                      <div className="flex flex-col gap-[10px]">
                         {customerFields.map((field: any) => {
                           const hasError =
                             field.valueFormat?.required &&
@@ -666,9 +596,9 @@ export const DisplayProductConfigurations: FC<
                           return (
                             <div
                               key={field.valueFormat.fieldName}
-                              className="flex flex-col gap-5"
+                              className="flex flex-col gap-[5px]"
                             >
-                              <label className="text-12 weight-500">
+                              <label className="text-[12px] font-medium">
                                 {field.keyFormat?.defaultValue}
                                 {field.valueFormat?.required && (
                                   <span style={{ color: 'red' }}> {hasError ? '(required)' : '*'}</span>
@@ -683,7 +613,7 @@ export const DisplayProductConfigurations: FC<
                               )}
 
                               {/* {hasError && (
-                              <span className="text-11 color-#D4380D">
+                              <span className="text-[11px] text-[#D4380D]">
                                 This field is required
                               </span>
                             )} */}
@@ -701,7 +631,7 @@ export const DisplayProductConfigurations: FC<
         {fullViewUrl &&
           createPortal(
             <div
-              className="fixed inset-0 flex items-center justify-center overflow-auto p-16"
+              className="fixed inset-0 flex items-center justify-center overflow-auto p-[16px]"
               style={{ zIndex: 100_000, backgroundColor: 'rgba(0, 0, 0, 0.65)' }}
               role="dialog"
               aria-modal="true"
@@ -710,7 +640,7 @@ export const DisplayProductConfigurations: FC<
             >
               <button
                 type="button"
-                className="absolute flex a-items-center j-content-center radius-99 bg-white pointer"
+                className="absolute flex items-center justify-center rounded-[99px] bg-white cursor-pointer"
                 style={{
                   top: 'max(12px, env(safe-area-inset-top, 0px))',
                   right: 'max(12px, env(safe-area-inset-right, 0px))',
@@ -726,7 +656,7 @@ export const DisplayProductConfigurations: FC<
                   setFullViewUrl(null);
                 }}
               >
-                <IoMdClose className="w-28 h-28 color-black" aria-hidden />
+                <IoMdClose className="w-[28px] h-[28px] text-black" aria-hidden />
               </button>
               <img
                 src={fullViewUrl}
@@ -783,13 +713,13 @@ const renderConfigurationValueForSummary = (value: any): ReactNode => {
       v.every((x) => typeof x === 'string' && /^https?:\/\//i.test(x));
     if (allHttpUrls) {
       return (
-        <span className="flex flex-wrap gap-1 justify-end">
+        <span className="flex flex-wrap gap-[1px] justify-end">
           {(v as string[]).map((url, i) => (
             <img
               key={i}
               src={url}
               alt=""
-              className="h-12 w-12 rounded border object-cover"
+              className="h-[12px] w-[12px] rounded border object-cover"
               style={{ objectFit: 'cover', objectPosition: 'top' }}
             />
           ))}
@@ -799,14 +729,14 @@ const renderConfigurationValueForSummary = (value: any): ReactNode => {
     return <span>{stringifyForSummary(v)}</span>;
   }
   if (v && typeof v === 'object') {
-    return <span className="text-11">{stringifyForSummary(v)}</span>;
+    return <span className="text-[11px]">{stringifyForSummary(v)}</span>;
   }
   return <span>{String(v ?? '')}</span>;
 };
 
 const summarizeConfigurationEntry = (_key: string, value: any): ReactNode => {
   return (
-    <span className="weight-500 color-#000000">
+    <span className="font-medium text-[#000000]">
       {renderConfigurationValueForSummary(value)}
     </span>
   );
@@ -817,7 +747,7 @@ const looksLikeImageUrl = (v: unknown): v is string => {
   const trimmed = v.trim();
   if (!trimmed) return false;
   if (/^https?:\/\//i.test(trimmed)) return true;
-  return /\.(png|jpe?g|gif|webp|avif|svg|bmp)(\?.*)?$/i.test(trimmed);
+  return /\.(pn[g]|jpe?[g]|gif|webp|avif|sv[g]|bmp)(\?.*)?$/i.test(trimmed);
 };
 
 const renderSummaryValue = (
@@ -835,7 +765,7 @@ const renderSummaryValue = (
         <img
           src={value}
           alt=""
-          className="h-32 w-32 radius-6 border border-#00000014 object-cover inline-block"
+          className="h-[32px] w-[32px] rounded-[6px] border border-[#00000014] object-cover inline-block"
           style={{ objectFit: 'cover', objectPosition: 'top' }}
         />
       </button>
@@ -848,7 +778,7 @@ const renderSummaryValue = (
     value.every((x) => looksLikeImageUrl(x))
   ) {
     return (
-      <span className="inline-flex flex-wrap gap-4 j-content-end">
+      <span className="inline-flex flex-wrap gap-[4px] justify-end">
         {(value as string[]).map((url, i) => (
           <button
             key={i}
@@ -860,7 +790,7 @@ const renderSummaryValue = (
             <img
               src={url}
               alt=""
-              className="h-32 w-32 radius-6 border border-#00000014 object-cover"
+              className="h-[32px] w-[32px] rounded-[6px] border border-[#00000014] object-cover"
               style={{ objectFit: 'cover', objectPosition: 'top' }}
             />
           </button>
@@ -903,13 +833,13 @@ const UserConfigurationSummary = ({
   );
 
   return (
-    <div className="flex flex-col gap-10">
+    <div className="flex flex-col gap-[10px]">
       {Object.entries(userConfigurations).map(([schemaName, fields]) => (
         <div
           key={schemaName}
-          className="p-10 radius-6 border border-#0B9378 bg-#EDFCF7 flex flex-col gap-6"
+          className="p-[10px] rounded-[6px] border border-[#0357EE] bg-[#EDFCF7] flex flex-col gap-[6px]"
         >
-          <div className="flex flex-col gap-4">
+          <div className="flex flex-col gap-[4px]">
             {Object.entries(fields as Record<string, any>)
               .filter(([key]) =>
                 customerOrBothFieldNames.size === 0
@@ -919,16 +849,16 @@ const UserConfigurationSummary = ({
               .map(([key, value]) => (
                 <div
                   key={key}
-                  className="flex flex-col gap-4 text-12"
+                  className="flex flex-col gap-[4px] text-[12px]"
                 >
                   <span
-                    className="color-#000000 weight-400 capitalize"
+                    className="text-[#000000] font-normal capitalize"
                     style={{ textWrap: 'nowrap' }}
                   >
                     {key.replaceAll('_', ' ')}:
                   </span>
 
-                  <span className="weight-500 color-#00000099">
+                  <span className="font-medium text-[#00000099]">
                     {renderSummaryValue(value, onPreviewImage)}
                   </span>
                 </div>
@@ -940,7 +870,7 @@ const UserConfigurationSummary = ({
       <button
         type="button"
         onClick={onEdit}
-        className="self-start text-12 color-#0B9378 weight-500 underline border-none bg-transparent cursor-pointer"
+        className="self-start text-[12px] text-[#0357EE] font-medium underline border-none bg-transparent cursor-pointer"
       >
         Edit user data
       </button>
@@ -964,13 +894,13 @@ const renderConfigLeaf = (v: any): ReactNode => {
     if (v.length === 0) return null;
     if (isHttpUrlArray(v)) {
       return (
-        <span className="inline-flex flex-wrap gap-3 justify-end">
+        <span className="inline-flex flex-wrap gap-[3px] justify-end">
           {v.map((url, i) => (
             <img
               key={i}
               src={url}
               alt=""
-              className="h-30 w-30 radius-6 border border-#00000014 object-cover"
+              className="h-[30px] w-[30px] rounded-[6px] border border-[#00000014] object-cover"
               style={{ objectFit: 'cover', objectPosition: 'top' }}
             />
           ))}
@@ -979,7 +909,7 @@ const renderConfigLeaf = (v: any): ReactNode => {
     }
     return (
       <span
-        className="weight-500 color-#000000E0 min-w-0 max-w-100p text-right"
+        className="font-medium text-[#000000E0] min-w-0 max-w-[100%] text-right"
         style={configDetailBreakStyle}
       >
         {v.join(', ')}
@@ -994,18 +924,18 @@ const renderConfigLeaf = (v: any): ReactNode => {
     if (hasVendor || hasCustomer) {
       return (
         <span
-          className="flex max-w-100p min-w-0 flex-col gap-2 items-end text-right"
+          className="flex max-w-[100%] min-w-0 flex-col gap-[2px] items-end text-right"
           style={configDetailBreakStyle}
         >
           {hasVendor && (
-            <span className="flex max-w-100p min-w-0 flex-col gap-1 items-end">
-              <span className="text-10 color-#00000099">Seller reference</span>
+            <span className="flex max-w-[100%] min-w-0 flex-col gap-[1px] items-end">
+              <span className="text-[10px] text-[#00000099]">Seller reference</span>
               {renderConfigLeaf(vo.vendor)}
             </span>
           )}
           {hasCustomer && (
-            <span className="flex max-w-100p min-w-0 flex-col gap-1 items-end">
-              <span className="text-10 color-#00000099">Customer</span>
+            <span className="flex max-w-[100%] min-w-0 flex-col gap-[1px] items-end">
+              <span className="text-[10px] text-[#00000099]">Customer</span>
               {renderConfigLeaf(vo.customer)}
             </span>
           )}
@@ -1013,17 +943,17 @@ const renderConfigLeaf = (v: any): ReactNode => {
       );
     }
     return (
-      <span className="ml-6 flex max-w-100p min-w-0 flex-col gap-1">
+      <span className="ml-[6px] flex max-w-[100%] min-w-0 flex-col gap-[1px]">
         {Object.entries(v).map(([nk, nv]) => (
           <span
             key={nk}
-            className="flex w-100p min-w-0 space-between gap-12 text-12 color-#00000099"
+            className="flex w-full min-w-0 justify-between gap-[12px] text-[12px] text-[#00000099]"
           >
-            <span className="flex-shrink-0 capitalize">
+            <span className="shrink-0 capitalize">
               {nk.replaceAll('_', ' ')}
             </span>
             <span
-              className="weight-500 color-#000000E0 min-w-0 max-w-100p flex-grow-1 text-right"
+              className="font-medium text-[#000000E0] min-w-0 max-w-[100%] grow text-right"
               style={configDetailBreakStyle}
             >
               {renderConfigLeaf(nv) ?? String(nv)}
@@ -1035,7 +965,7 @@ const renderConfigLeaf = (v: any): ReactNode => {
   }
   return (
     <span
-      className="weight-500 color-#000000E0 min-w-0 max-w-100p"
+      className="font-medium text-[#000000E0] min-w-0 max-w-[100%]"
       style={configDetailBreakStyle}
     >
       {String(v)}
@@ -1056,7 +986,7 @@ const renderConfigDetails = (value: any) => {
   if (typeof value !== 'object' || Array.isArray(value)) {
     return (
       <span
-        className="block max-w-100p min-w-0 text-12 color-#00000099"
+        className="block max-w-[100%] min-w-0 text-[12px] text-[#00000099]"
         style={configDetailBreakStyle}
       >
         {renderConfigLeaf(value)}
@@ -1067,8 +997,8 @@ const renderConfigDetails = (value: any) => {
   return Object.entries(value).map(([k, v]) => {
     if (Array.isArray(v) && isHttpUrlArray(v)) {
       return (
-        <div key={k} className="flex w-100p min-w-0 flex-col gap-2 text-12">
-          <span className="flex-shrink-0 capitalize color-#00000099">
+        <div key={k} className="flex w-full min-w-0 flex-col gap-[2px] text-[12px]">
+          <span className="shrink-0 capitalize text-[#00000099]">
             {k.replaceAll('_', ' ')}
           </span>
           <span className="min-w-0">{renderConfigLeaf(v)}</span>
@@ -1080,13 +1010,13 @@ const renderConfigDetails = (value: any) => {
       return (
         <div
           key={k}
-          className="flex w-100p min-w-0 gap-12 space-between text-12"
+          className="flex w-full min-w-0 gap-[12px] justify-between text-[12px]"
         >
-          <span className="flex-shrink-0 capitalize color-#00000099">
+          <span className="shrink-0 capitalize text-[#00000099]">
             {k.replaceAll('_', ' ')}
           </span>
           <span
-            className="flex min-w-0 flex-grow-1 flex-col items-end text-right"
+            className="flex min-w-0 grow flex-col items-end text-right"
             style={configDetailBreakStyle}
           >
             {renderConfigLeaf(v)}
@@ -1104,13 +1034,13 @@ const renderConfigDetails = (value: any) => {
       return (
         <div
           key={k}
-          className="flex w-100p min-w-0 gap-12 space-between text-12"
+          className="flex w-full min-w-0 gap-[12px] justify-between text-[12px]"
         >
-          <span className="flex-shrink-0 capitalize color-#00000099">
+          <span className="shrink-0 capitalize text-[#00000099]">
             {k.replaceAll('_', ' ')}
           </span>
           <span
-            className="flex min-w-0 flex-grow-1 flex-col items-end text-right"
+            className="flex min-w-0 grow flex-col items-end text-right"
             style={configDetailBreakStyle}
           >
             {renderConfigLeaf(v)}
@@ -1120,8 +1050,8 @@ const renderConfigDetails = (value: any) => {
     }
 
     return (
-      <span key={k} className="flex max-w-100p min-w-0 flex-col gap-2">
-        <span className="text-12 capitalize color-#00000099">
+      <span key={k} className="flex max-w-[100%] min-w-0 flex-col gap-[2px]">
+        <span className="text-[12px] capitalize text-[#00000099]">
           {k.replaceAll('_', ' ')}
         </span>
         <span className="min-w-0" style={configDetailBreakStyle}>
@@ -1160,7 +1090,7 @@ export const ConfigPill = ({ title, value }: { title: string; value: any }) => {
         ref={refs.setReference}
         {...getReferenceProps()}
         data-modal-ignore-outside-click="true"
-        className="text-12 weight-500 hover:pointer inline-block"
+        className="text-[12px] font-medium hover:cursor-pointer inline-block"
         style={{
           padding: '6px 10px',
           borderRadius: 999,
@@ -1184,13 +1114,13 @@ export const ConfigPill = ({ title, value }: { title: string; value: any }) => {
             }}
             {...getFloatingProps()}
             data-modal-ignore-outside-click="true"
-            className="z-50 radius-6 border border-#00000014 bg-white p-10 flex flex-col gap-6 min-w-250 max-w-400"
+            className="z-[50px] rounded-[6px] border border-[#00000014] bg-white p-[10px] flex flex-col gap-[6px] min-w-[250px] max-w-[400px]"
           >
-            <span className="inline-block text-12 weight-600 capitalize color-#000000E0">
+            <span className="inline-block text-[12px] font-semibold capitalize text-[#000000E0]">
               {title}
             </span>
 
-            <span className="flex max-w-100p min-w-0 flex-col gap-4">
+            <span className="flex max-w-[100%] min-w-0 flex-col gap-[4px]">
               {renderConfigDetails(value)}
             </span>
           </p>

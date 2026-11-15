@@ -18,54 +18,54 @@ const MobileFilterModal: React.FC<ModalProps> = ({modalOpen, handleCloseModal, d
   return (
     <div>
       <Modal isOpen={modalOpen} onClose={handleCloseModal}>
-       <div className='w-330 l:w-1000 py-5 l:py-20 scroll'>
-        <div className='flex space-between py-10 relative'>
-         <div className='w-10p l:w-3p py-5 border-b border-2 border-faint-grey'></div>
-         <div className='flex weight-400 border-b border-3 border-green w-20p text-16 text-green'>
-            <p className=' py-10 px-10 pointr'>Filter</p>
+       <div className='w-[330px] lg:w-[1000px] py-[5px] lg:py-[20px] scroll'>
+        <div className='flex justify-between py-[10px] relative'>
+         <div className='w-[10%] lg:w-[3%] py-[5px] border-b border-[2px] border-[#DADADA]'></div>
+         <div className='flex font-normal border-b border-[3px] border-brand w-[20%] text-[16px] text-brand'>
+            <p className=' py-[10px] px-[10px] pointr'>Filter</p>
          </div>
-         <div className='w-70p l:w-68p py-5 border-b border-2 border-faint-grey'></div>
-         <div className='absolute t-15 l:t-0 r-10 l:r-15 pointer' onClick={handleCloseModal}>
-            <AiOutlineClose className='w-15 h-15 l:w-25 l:h-25' />
+         <div className='w-[70%] lg:w-[68%] py-[5px] border-b border-[2px] border-[#DADADA]'></div>
+         <div className='absolute top-[15px] lg:top-0 right-[10px] lg:right-[15px] cursor-pointer' onClick={handleCloseModal}>
+            <AiOutlineClose className='w-[15px] h-[15px] lg:w-[25px] lg:h-[25px]' />
          </div>
         </div>
 
-        <div className="px-15 space-between">
+        <div className="px-[15px] justify-between">
 
-              <div className='w-100p my-10 h-55 mt-20 weight-400 text-18 text-dimgrey border border-deep-grey radius-10'>
-                  <div className='flex h-100p px-10 space-between items-center w-fit gap-10 pointer'>
-                      <select name="" id="" className='border-none bg-white text-15 l:text-17 text-black weight-500'>
+              <div className='w-full my-[10px] h-[55px] mt-[20px] font-normal text-[18px] text-[#333333] border border-[#A6A6A6] rounded-[10px]'>
+                  <div className='flex h-full px-[10px] justify-between items-center w-fit gap-[10px] cursor-pointer'>
+                      <select name="" id="" className='border-none bg-white text-[15px] lg:text-[17px] text-black font-medium'>
                       <option value="">Popular</option>
                       <option value="">Trending</option>
 
-                      <span><RxCaretDown className='w-30 h-30' /></span>
+                      <span><RxCaretDown className='w-[30px] h-[30px]' /></span>
 
 
                     </select>
                   </div>
               </div>
-              <div className='w-100p my-20'>
-                  <p className='text-dimgrey pb-10 text-16 text-left'>Minimum price (NGN)</p>
-                  <div className=" w-100p px-25 flex overflow-hidden text-22 space-between h-100p py-7 border border-deep-grey radius-5 ">
-                      <input type="text" placeholder='5,000' className='border-none h-42 w-100p text-16 text-light-grey'/>
+              <div className='w-full my-[20px]'>
+                  <p className='text-[#333333] pb-[10px] text-[16px] text-left'>Minimum price (NGN)</p>
+                  <div className=" w-full px-[25px] flex overflow-hidden text-[22px] justify-between h-full py-[7px] border border-[#A6A6A6] rounded-[5px] ">
+                      <input type="text" placeholder='5,000' className='border-none h-[42px] w-full text-[16px] text-[#A8A6A6]'/>
                   </div>
               </div>
 
-              <div className='w-100p my-20'>
-                  <p className='text-dimgrey pb-10 text-16 text-left'>Maximum price (NGN)</p>
-                  <div className=" w-100p px-25 flex overflow-hidden text-22 space-between h-100p py-7 border border-deep-grey radius-5 ">
-                      <input type="text" placeholder='100,000' className='border-none h-42 w-100p text-16 text-light-grey'/>
+              <div className='w-full my-[20px]'>
+                  <p className='text-[#333333] pb-[10px] text-[16px] text-left'>Maximum price (NGN)</p>
+                  <div className=" w-full px-[25px] flex overflow-hidden text-[22px] justify-between h-full py-[7px] border border-[#A6A6A6] rounded-[5px] ">
+                      <input type="text" placeholder='100,000' className='border-none h-[42px] w-full text-[16px] text-[#A8A6A6]'/>
                   </div>
               </div>
 
         </div>
 
-        <div className='flex j-content-end gap-10 px-15 py-10'>
-        <div className='h-100p'>
-            <button className='w-100p h-100p border-none bg-white text-dimgrey text-16 py-10 px-20 radius-5 weight-400'>Discard</button>
+        <div className='flex justify-end gap-[10px] px-[15px] py-[10px]'>
+        <div className='h-full'>
+            <button className='w-full h-full border-none bg-white text-[#333333] text-[16px] py-[10px] px-[20px] rounded-[5px] font-normal'>Discard</button>
         </div>
-        <div className='h-100p'>
-            <button className='w-100p h-100p border-none bg-green text-white text-16 py-10 px-20 radius-5 weight-400'>Filter</button>
+        <div className='h-full'>
+            <button className='w-full h-full border-none bg-brand text-white text-[16px] py-[10px] px-[20px] rounded-[5px] font-normal'>Filter</button>
         </div>
         </div>
 

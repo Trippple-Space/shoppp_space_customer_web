@@ -19,19 +19,19 @@ const RadioGroup: React.FC<RadioGroupProps> = ({
   selectedValue
 }) => {
   return (
-    <div className='flex flex-col gap-20'>
+    <div className='flex flex-col gap-[20px]'>
       {options.map((option, index) => (
         <div className='' key={index}>
-          <label className='flex a-items-center gap-10'>
+          <label className='flex items-center gap-[10px]'>
             <input
               type='radio'
               name={name}
               value={option.label}
               checked={selectedValue === option.label}
                       onChange={e => onChange(e.target.value)}
-                      className='accent-#0B9378'
+                      className='accent-[#0357EE]'
             />
-            <span className='weight-400'>{option.label}</span>
+            <span className='font-normal'>{option.label}</span>
           </label>
         </div>
       ))}

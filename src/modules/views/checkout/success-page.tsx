@@ -15,26 +15,26 @@ const SuccessMessage = () => {
     <>
       <HomepageNavBar parent='checkout' />
       {order ? (
-        <div className="w-100p h-100p mx-auto flex flex-col items-center j-content-center p-20 l:p-70">
-          <Icon name="amico" className="w-80p l:100p h-250 my-10" />
-          <h1 className="text-24 l:text-30 line-height-40 my-15 weight-700" key={order?.id}>
+        <div className="w-full h-full mx-auto flex flex-col items-center justify-center p-[20px] lg:p-[70px]">
+          <Icon name="amico" className="w-[80%] lg:100p h-[250px] my-[10px]" />
+          <h1 className="text-[24px] lg:text-[30px] leading-[40px] my-[15px] font-bold" key={order?.id}>
             Success! Order number #{getLastFiveIdChars(order?.id)}
           </h1>
-          <p className="text-16 l:text-18 line-height-30">
+          <p className="text-[16px] lg:text-[18px] leading-[30px]">
             we have already started preparing your order.
           </p>
-          <p className="text-16 l:text-18 line-height-30">
+          <p className="text-[16px] lg:text-[18px] leading-[30px]">
             Delivery within {Number(order?.deliveryFee) === 6_500 ? "24" : "72"} hrs
           </p>
           <Link
             href={"/"}
-            className="bg-green radius-10 text-white text-16 weight-500 my-20 py-12 px-20"
+            className="bg-brand rounded-[10px] text-white text-[16px] font-medium my-[20px] py-[12px] px-[20px]"
           >
             Go Home
           </Link>
         </div>
       ) : (
-        <div className="w-100p h-100p mx-auto flex items-center j-content-center my-3">
+        <div className="w-full h-full mx-auto flex items-center justify-center my-[3px]">
          <DotsLoader />
         </div>
       )}

@@ -48,8 +48,8 @@ const UseCurrentLocationButton = ({ formhandler, setUserLocation, setSuggestionI
     };
 
     return (
-        <div className='py-12 sm:px-24 px-12 flex a-items-center sm:gap-10 gap-5 radius-6 bg-#F5F5F5 w-fit mx-auto weight-500 sm:text-16 text-14 line-height-22 pointer' onClick={handleGetLocation}>
-            <SlLocationPin className='sm:w-24 w-20 sm:h-24 h-20' />
+        <div className='py-[12px] sm:px-[24px] px-[12px] flex items-center sm:gap-[10px] gap-[5px] rounded-[6px] bg-[#F5F5F5] w-fit mx-auto font-medium sm:text-[16px] text-[14px] leading-[22px] cursor-pointer' onClick={handleGetLocation}>
+            <SlLocationPin className='sm:w-[24px] w-[20px] sm:h-[24px] h-[20px]' />
             <p>{loading ? 'loading' : 'Use current location'}</p>
         </div>
     );

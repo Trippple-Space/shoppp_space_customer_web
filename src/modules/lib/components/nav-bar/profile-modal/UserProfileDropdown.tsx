@@ -44,41 +44,41 @@ const UserProfileDropdown: FC<IUserProfileDropdown> = ({
     <>
       {/* Overlay */}
       <div
-        className="fixed inset-0 bg-black opacity-10 z-10 sm:block hidden"
+        className="fixed inset-0 bg-black opacity-10 z-[10px] sm:block hidden"
         onClick={handleCloseDropdown}
       />
 
       {/* Dropdown */}
       <div
-        className="absolute font-inter r-0 l:t-54 t-50 w-360 z-20 sm:block hidden pb-64"
+        className="absolute font-inter right-0 lg:top-[54px] top-[50px] w-[360px] z-[20px] sm:block hidden pb-[64px]"
         style={{ height: isAuthenticated ? 'calc(100dvh - 64px)' : '336px' }}
       >
-        <div className="bg-white g|box-shadow:0px|_|8px|_|16px|_|#494F5E1F; radius-8 border border-#00000014 color-#000000E0 h-full g|max-height:500px; scroll-y no-scrollbar">
+        <div className="bg-white shadow-[0px_8px_16px_#494F5E1F] rounded-[8px] border border-[#00000014] text-[#000000E0] h-full max-h-[500px] scroll-y no-scrollbar">
           <div className="">
             {isAuthenticated && (
               <>
-                <div className="flex items-center gap-8 p-24">
+                <div className="flex items-center gap-[8px] p-[24px]">
                   <div className="">
                     <img
-                      className="l:w-60 l:h-60 w-40 h-40 border-solid border-0.5 border-#00000014 radius-50p"
+                      className="lg:w-[60px] lg:h-[60px] w-[40px] h-[40px] border-solid border-0.5 border-[#00000014] rounded-full"
                       src={`https://api.dicebear.com/7.x/thumbs/png?seed=${user?.firstName}`}
                       alt="user"
                     />
                   </div>
 
                   <div className="">
-                    <p className="capitalize weight-600 text-14 line-height-22">{`${user?.profile?.firstName || ''} ${user?.profile?.lastName || ''}`}</p>
-                    <p className="text-12 line-height-20 color-#00000099 weight-400">
+                    <p className="capitalize font-semibold text-[14px] leading-[22px]">{`${user?.profile?.firstName || ''} ${user?.profile?.lastName || ''}`}</p>
+                    <p className="text-[12px] leading-[20px] text-[#00000099] font-normal">
                       {user?.email}
                     </p>
                   </div>
                 </div>
 
-                <div className="border-t border-1 border-#00000014 py-20">
+                <div className="border-t border border-[#00000014] py-[20px]">
                   {profileModals.map((modal, i) => (
                     <div
                       key={i}
-                      className="py-10 px-24 hover:bg-grey-100 g|transition:0.3s pointer flex items-center gap-10 text-16"
+                      className="py-[10px] px-[24px] hover:bg-[#F7F6F5] transition-all duration-300 cursor-pointer flex items-center gap-[10px] text-[16px]"
                       onClick={() => {
                         setProfileModal(modal === 'orders' ? '' : modal);
                         handleCloseDropdown();
@@ -87,12 +87,12 @@ const UserProfileDropdown: FC<IUserProfileDropdown> = ({
                       {modal === 'orders' ? (
                         <Link
                           href={'/orders'}
-                          className="line-height-24 weight-400 capitalize w-full"
+                          className="leading-[24px] font-normal capitalize w-full"
                         >
                           Orders ({orders.length})
                         </Link>
                       ) : (
-                        <p className="line-height-24 weight-400 capitalize">
+                        <p className="leading-[24px] font-normal capitalize">
                           {modal === 'saved items'
                             ? `Saved items (${savedVariants.length})`
                             : modal}
@@ -102,10 +102,10 @@ const UserProfileDropdown: FC<IUserProfileDropdown> = ({
                   ))}
 
                   <div
-                    className="py-10 px-24 hover:bg-red-100 g|transition:0.3s pointer flex items-center gap-10 text-16"
+                    className="py-[10px] px-[24px] hover:bg-red-100 transition-all duration-300 cursor-pointer flex items-center gap-[10px] text-[16px]"
                     onClick={() => signOut()}
                   >
-                    <p className="line-height-24 weight-400 color-#D4280C g|transition:0.5s">
+                    <p className="leading-[24px] font-normal text-[#D4280C] transition-all duration-500">
                       Logout
                     </p>
                   </div>
@@ -114,9 +114,9 @@ const UserProfileDropdown: FC<IUserProfileDropdown> = ({
             )}
 
             {!isAuthenticated && (
-              <div className="flex flex-col gap-8 p-24 text-14">
+              <div className="flex flex-col gap-[8px] p-[24px] text-[14px]">
                 <button
-                  className="bg-green text-white py-12 px-16 radius-6 line-height-19 border border-none weight-500 pointer w-full hover:bg-darkgreen g|transition:0.5s disabled:bg-grey"
+                  className="bg-brand text-white py-[12px] px-[16px] rounded-[6px] leading-[19px] border border-none font-medium cursor-pointer w-full hover:bg-brand-hover transition-all duration-500 disabled:bg-[#676767]"
                   onClick={() => {
                     router.push(paths.login);
                   }}
@@ -124,7 +124,7 @@ const UserProfileDropdown: FC<IUserProfileDropdown> = ({
                   Login
                 </button>
                 <Link
-                  className="bg-#F5F5F5 text-#333333 py-12 px-16 radius-6 line-height-19 text-center w-full weight-500 border border-none hover:pointer"
+                  className="bg-[#F5F5F5] text-[#333333] py-[12px] px-[16px] rounded-[6px] leading-[19px] text-center w-full font-medium border border-none hover:cursor-pointer"
                   href={paths.signup}
                 >
                   Sign Up
@@ -132,18 +132,18 @@ const UserProfileDropdown: FC<IUserProfileDropdown> = ({
               </div>
             )}
 
-            <div className="flex flex-col py-20 weight-400 text-16 line-height-24 border-t border-1 border-#00000014">
+            <div className="flex flex-col py-[20px] font-normal text-[16px] leading-[24px] border-t border border-[#00000014]">
               <Link
                 href={config.VENDOR_CENTER_SIGNUP}
                 target="_blank"
-                className="py-10 px-24 hover:bg-grey-100 g|transition:0.3s"
+                className="py-[10px] px-[24px] hover:bg-[#F7F6F5] transition-all duration-300"
               >
-                Sell on Asoebi Africa
+                Sell on Shoppp Space
               </Link>
               <Link
                 href={paths.contact_us}
                 target="_blank"
-                className="py-10 px-24 hover:bg-grey-100 g|transition:0.3s"
+                className="py-[10px] px-[24px] hover:bg-[#F7F6F5] transition-all duration-300"
               >
                 Help Center
               </Link>
